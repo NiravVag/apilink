@@ -1,0 +1,100 @@
+.accordion-container{
+	margin: 0 40px 30px;
+
+	@media only screen and (min-width: $mobile-min-width) and (max-width: $mobile-max-width){
+		margin: 0 0 30px;
+	}
+
+	.card{
+		border: none;
+
+		.card-header{
+			border: none;
+			background-color: $white;
+			margin-bottom: 0 !important;
+			border-bottom: solid 1px rgba(189, 210, 226, 0.8);
+
+			.btn-link{
+				color: #143743;
+				font-size: 18px;
+				line-height: 1.28;
+				text-decoration: none;
+				font-family: $roboto-light;
+
+				&:hover{
+					text-decoration: none;
+				}
+			}
+		}
+	}
+
+	.profile-upload-thumb{
+		width: 240px;
+		margin: auto;
+		padding: 40px;
+		cursor: pointer;
+		text-align: center;
+		border-radius: 4px;
+		background-color: #fbfbfb;
+		box-shadow: 0 0 8px 0 rgba(189, 210, 226, 0.16);
+
+		@media only screen and (min-width: $mobile-min-width) and (max-width: $mobile-max-width){
+			width: 230px;
+			padding: 30px 40px;
+		}
+
+		img{
+			margin: auto;
+			display: block;
+			margin-bottom: 40px;
+		}
+
+		span{
+			display: inline-block;
+		}
+	}
+}
+
+.head-arrow{
+	position: absolute;
+	left: 10px;
+	top: 18px;
+	transform: rotate(180deg);
+}
+
+.custom-file-uploader{
+	display: block;
+
+	img{
+		vertical-align: top;
+		display: inline-block;
+	}
+
+	.text{
+		margin-left: 14px;
+		display: inline-block;
+
+		.title{
+			margin: 0;
+			line-height: 1;
+			color: #203b4e;
+			font-size: 12px;
+			margin-bottom: 4px;
+			font-family: $roboto-medium;
+		}
+
+		.small-title{
+			margin: 0;
+			line-height: 1;
+			font-size: 12px;
+			font-style: italic;
+			margin-bottom: 10px;
+			color: rgba(#203b4e, 0.4);
+			font-family: $roboto-light;
+		}
+
+		input[type="file"]{
+			display: none;
+		}
+	}
+}

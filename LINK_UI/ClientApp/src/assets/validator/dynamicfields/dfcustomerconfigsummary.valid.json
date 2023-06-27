@@ -1,0 +1,21 @@
+{
+    "model": "dfcustomerconfigsummary.model",
+    "fields": {
+      "customerDataList": [
+        {
+          "type": "required",
+          "fieldType": "N",
+          "ressource": "EDIT_DF_CONFIG.MSG_CUSTOMER_REQ"
+        }
+      ],
+      "moduleId": [
+        {
+          "type": "required",
+          "fieldType": "N",
+          "ressource": "EDIT_DF_CONFIG.MSG_MODULE_REQ"
+        }
+      ]
+    }
+  
+  }
+  

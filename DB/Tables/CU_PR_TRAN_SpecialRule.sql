@@ -1,0 +1,26 @@
+﻿CREATE TABLE [dbo].[CU_PR_TRAN_SpecialRule]
+(
+	[Id] INT IDENTITY(1,1) PRIMARY KEY,	  
+	  [Cu_Price_Id] [int],	
+	  [MandayProductivity] [int],	
+	  [MandayReports] [int],	
+	  [UnitPrice] [Float],	
+	  [PieceRate_Billing_Q_Start] [int],		   
+	  [Piecerate_Billing_Q_End] [int],	   
+	  [AdditionalFee] [Float],	   
+	  [Piecerate_MinBilling] [Float],
+	  [PerInterventionRange1] [int],
+	  [PerInterventionRange2] [int],
+	  [Max_Style_Per_Day] [Float],
+	  [Max_Style_Per_Week] [Float],	
+	  [Max_Style_Per_Month] [Float],	
+	  [InterventionFee] [Float],
+	  [Active] BIT,
+	  [CreatedBy] INT NULL, 
+      [CreatedOn] DATETIME NULL,     
+	  [DeletedBy] [INT] NULL, 
+      [DeletedOn] [DATETIME] NULL,
+	  CONSTRAINT CU_PR_TRAN_SpecialRule_Cu_Price_Id FOREIGN KEY ([Cu_Price_Id]) REFERENCES [dbo].[CU_PR_Details](Id),
+	  CONSTRAINT CU_PR_TRAN_SpecialRule_CreatedBy	FOREIGN KEY ([CreatedBy]) REFERENCES [dbo].[IT_UserMaster](Id),
+	  CONSTRAINT CU_PR_TRAN_SpecialRule_DeletedBy	FOREIGN KEY ([DeletedBy]) REFERENCES [dbo].[IT_UserMaster](Id)
+)

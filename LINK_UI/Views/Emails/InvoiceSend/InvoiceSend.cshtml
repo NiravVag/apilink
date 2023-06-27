@@ -1,0 +1,164 @@
+﻿
+@{
+    ViewData["Title"] = "InvoiceSendEmail";
+}
+@model DTO.EmailSend.EmailBody
+<table>
+    <tr>
+        <td style="font-size:13px; font-family:tahoma;">
+
+            <div style="padding-bottom: 5px; margin-bottom:5px;">
+                Dear @Model.RecipientName ,
+            </div>
+
+
+            <br />
+            <div class="div-style">
+                @Model.PreInvoiceEmailContent1
+            </div>
+            <br />
+        </td>
+    </tr>
+    @if (@Model.ReportList.Count > 0)
+    {
+        <tr>
+            <td>
+
+                <div style="padding-bottom: 20px;margin-bottom: 20px;">
+                    <table id='TblList' style="border:solid 1px #d4d0c8;border-collapse:collapse;font-size:12px; font-family:tahoma;" cellspacing='0' cellpadding='1' rules='all' align='left' border='1' width='100%'>
+                        <tr>
+
+                            <th bgcolor=#f8f4f3 style="font-size:12px;text-align:center;" width='5%' height=35>Invoice #</th>
+                            <th bgcolor=#f8f4f3 style="font-size:12px;text-align:center;" width='5%' height=35>Total Amount</th>
+                            <th bgcolor=#f8f4f3 style="font-size:12px;text-align:center;" width='5%' height=35>Download</th>
+
+                        </tr>
+                        @foreach (var item in @Model.ReportList.Select((value, i) => new { i = i + 1, value }))
+                        {
+                            <tr>
+                                <td align=center style="font-size: 12px;" height=30>@item.value.InvoiceNo</td>
+                                <td align=center style="font-size: 12px;" height=30>
+                                    @Math.Round(item.value.TotalInvoiceFees, 2, MidpointRounding.AwayFromZero) (@item.value.InvoiceCurrencyCode)
+                                </td>
+                                <td align=center style="font-size: 12px; text-align:center;" height=30>
+                                    <a style="color:blue !important" href="@item.value.ReportLink" target="_blank" rel="noopener noreferrer">
+                                        <div style="height:100%;width:100%">
+                                            Download
+                                        </div>
+                                    </a>
+                                </td>
+                            </tr>
+                        }
+
+                    </table>
+                </div>
+
+            </td>
+
+        </tr>
+    }
+
+
+    <tr>
+        <td style="font-size:13px; font-family:tahoma;">
+
+            <br />
+            <div class="div-style">
+                Please make payment available by transfer (T/T) to:
+            </div>
+            <br />
+
+            <div class="div-style">
+                Account Name: @Model?.InvoiceBank?.AccountName
+            </div>
+
+            <div class="div-style">
+                Account Nr: @Model?.InvoiceBank?.AccountNumber
+            </div>
+
+            <div class="div-style">
+                Swift Code: @Model?.InvoiceBank?.SwiftCode
+            </div>
+            <br />
+            <div class="div-style">
+                Bank Name: @Model?.InvoiceBank?.BankName
+            </div>
+            <div class="div-style">
+                Bank Address: @Model?.InvoiceBank?.BankAddress
+            </div>
+            <br />
+            <br />
+        </td>
+    </tr>
+
+    <tr>
+        <td class="td-table" style="font-size:13px; font-family:tahoma;">
+            @Html.Raw(System.Web.HttpUtility.HtmlDecode(@Model.PreInvoiceEmailContent2))
+        </td>
+        <br />
+    </tr>
+    <tr>
+        <td class="td-table" style="font-size:13px; font-family:tahoma;">
+            @Model.EntityName Contact:- @Model.QuotationInternalContact
+        </td>
+        <br />
+
+    </tr>
+
+
+    @if (@Model.UserUploadFileList.Count > 0)
+    {
+        <tr>
+            <td>
+                <div contenteditable="true" style="padding-bottom: 5px; margin-bottom:5px; font-weight: bold;">
+                    Additional Files:
+                </div>
+                <br />
+                <div style="padding-bottom: 20px;margin-bottom: 20px;">
+                    <table id='TblList' style="border:solid 1px #d4d0c8;border-collapse:collapse;font-size:12px; font-family:tahoma;" cellspacing='0' cellpadding='1' rules='all' align='left' border='1' width='100%'>
+                        <tr>
+                            <th bgcolor=#f8f4f3 style="font-size:12px;text-align:center;" width='5%' height=35> #</th>
+                            <th bgcolor=#f8f4f3 style="font-size:12px;text-align:center;" width='5%' height=35>File Type</th>
+                            <th bgcolor=#f8f4f3 style="font-size:12px;text-align:center;" width='5%' height=35>File Link</th>
+
+                        </tr>
+                        @foreach (var item in @Model.UserUploadFileList.Select((value, i) => new { i = i + 1, value }))
+                        {
+                            <tr>
+                                <td align=center style="font-size: 12px;" height=30>@item.i</td>
+                                <td align=center style="font-size: 12px;" height=30>
+                                    @item.value.FileType
+                                </td>
+                                <td align=center style="font-size: 12px; text-align:center;" height=30>
+                                    <a style="color:blue !important" href="@item.value.FileLink" target="_blank" rel="noopener noreferrer">
+                                        <div style="height:100%;width:100%">
+                                            @item.value.FileName
+                                        </div>
+                                    </a>
+                                </td>
+                            </tr>
+                        }
+
+                    </table>
+                </div>
+                <br />
+
+            </td>
+
+        </tr>
+    }
+
+    <tr>
+        <td class="td-table" style="font-size:13px; font-family:tahoma;">
+            <br />
+            <div class="div-style">
+                Thanks
+            </div>
+            <div class="div-style">
+                @Model.EntityName -Team
+            </div>
+
+            <span style="font-size:13px; font-family:tahoma;"> Note: - This receipt is auto generated from @Model.EntityName. Please do not reply to this message.</span>
+        </td>
+    </tr>
+</table>

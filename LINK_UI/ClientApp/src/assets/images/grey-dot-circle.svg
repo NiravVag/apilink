@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="34" height="34" viewBox="0 0 34 34">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: #f3f5fa;
+      }
+
+      .cls-2 {
+        fill: #cacfdb;
+      }
+    </style>
+  </defs>
+  <g id="Group_2376" data-name="Group 2376" transform="translate(-873 -970)">
+    <circle id="Ellipse_355" data-name="Ellipse 355" class="cls-1" cx="17" cy="17" r="17" transform="translate(873 970)"/>
+    <circle id="Ellipse_360" data-name="Ellipse 360" class="cls-2" cx="7" cy="7" r="7" transform="translate(883 980)"/>
+  </g>
+</svg>

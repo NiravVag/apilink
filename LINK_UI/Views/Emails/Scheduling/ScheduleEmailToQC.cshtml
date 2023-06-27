@@ -1,0 +1,296 @@
+﻿@{
+    ViewData["Title"] = "ScheduleEmailQC";
+    int counter = 0;
+}
+@model DTO.Schedule.ScheduleQCEmailTemplate
+@using Entities.Enums;
+
+<style>
+    .th-table {
+        color: black;
+        vertical-align: top;
+        font-size: 13px;
+        font-family: tahoma;
+    }
+
+    .td-table {
+        font-size: 13px;
+        font-family: tahoma;
+    }
+
+    .margintop2 {
+        margin-top: 2%
+    }
+
+    .margintop7 {
+        margin-top: 7%
+    }
+</style>
+<table>
+    <tr>
+        <td style="font-size:13px; font-family:tahoma;">
+
+            Dear @Model.QCName
+            <br /><br />
+            @if (Model.IsFromScheduler)
+            {
+                <div style="padding-bottom: 5px; margin-bottom:5px;">
+                    Please refer the next @Model.TotalNumberofDays days assignment.
+                </div>
+            }
+            else
+            {
+                <div style="padding-bottom: 5px; margin-bottom:5px;">
+                    Please refer schedule assignment.
+                </div>
+            }
+            <br />
+
+            @foreach (var scheduleQcServiceDate in Model.ScheduleQcServiceDateList)
+            {
+
+                @if (scheduleQcServiceDate.ServiceDate.Date == DateTime.Now.AddDays(1).Date)
+                {
+                    <div class="@(counter == 0?"margintop2":"margintop7")" style="padding-bottom: 20px;">
+                        Schedule On Tomorrow <span style="color:red;background-color:yellow"><b>@scheduleQcServiceDate.ServiceDate.ToString("dd/MM/yyyy")</b></span>
+                    </div>
+                }
+                else if (scheduleQcServiceDate.ServiceDate.Date == DateTime.Now.AddDays(2).Date)
+                {
+                    <div style="padding-bottom: 20px;margin-top: 2%;">
+                        Schedule On Day After Tomorrow <span style="color:cadetblue;background-color:yellow"><b>@scheduleQcServiceDate.ServiceDate.ToString("dd/MM/yyyy")</b></span>
+                    </div>
+                }
+                else
+                {
+                    <div style="padding-bottom: 20px;margin-top: 2%;">
+                        Schedule On <b>@scheduleQcServiceDate.ServiceDate.ToString("dd/MM/yyyy")</b>
+                    </div>
+                }
+
+
+                counter = counter + 1;
+
+                <br />
+                <div style="padding-bottom: 20px;margin-bottom: 20px;">
+                    <table id='TblList' style="border:solid 1px #d4d0c8;border-collapse:collapse;font-size:12px; font-family:tahoma;margin-bottom:40px" cellspacing='0' cellpadding='1' rules='all' align='left' border='1' cellspacing=0 cellpadding=0 width='100%'>
+                        <tr>
+                            <th bgcolor=#f8f4f3 style="color: black; font-size:13px;" align=center width='10%' height=35>Area</th>
+                            <th bgcolor=#f8f4f3 style="color: black; font-size:13px;" align=center width='5%' height=35>Booking No</th>
+                            <th bgcolor=#f8f4f3 style="color: black; font-size:13px;" align=center width='5%' height=35>Report Title</th>
+                            <th bgcolor=#f8f4f3 style="color: black; font-size:13px;" align=center width='5%' height=35>Service</th>
+                            <th bgcolor=#f8f4f3 style="color: black; font-size:13px;" align=center width='15%' height=35>PO</th>
+                            <th bgcolor=#f8f4f3 style="color: black; font-size:13px;" align=center width='15%' height=35>Product Ref</th>
+                            @if (scheduleQcServiceDate.IsShowSoftLineItems)
+                            {
+                                <th bgcolor=#f8f4f3 style="color: black; font-size:13px;" align=center width='15%' height=35>Color</th>
+                                <th bgcolor=#f8f4f3 style="color: black; font-size:13px;" align=center width='5%' height=35>Order Qty</th>
+                                <th bgcolor=#f8f4f3 style="color: black; font-size:13px;" align=center width='5%' height=35>Unit</th>
+                                <th bgcolor=#f8f4f3 style="color: black; font-size:13px;" align=center width='15%' height=35>Product Name</th>
+                            }
+                            <th bgcolor=#f8f4f3 style="color: black; font-size:13px;" align=center width='7%' height=35>Customer Name</th>
+                            <th bgcolor=#f8f4f3 style="color: black; font-size:13px;" align=center width='5%' height=35>Supplier Name</th>
+                            <th bgcolor=#f8f4f3 style="color: black; font-size:13px;" align=center width='20%' height=35>Factory Name</th>
+                            <th bgcolor=#f8f4f3 style="color: black; font-size:13px;" align=center width='25%' height=35>Factory Address</th>
+                            <th bgcolor=#f8f4f3 style="color: black; font-size:13px;" align=center width='5%' height=35>Product Category</th>
+                            <th bgcolor=#f8f4f3 style="color: black; font-size:13px;" align=center width='5%' height=35>Service Type</th>
+                            <th bgcolor=#f8f4f3 style="color: black; font-size:13px;" align=center width='5%' height=35> Products# / Reports#</th>
+                            <th bgcolor=#f8f4f3 style="color: black; font-size:13px;" align=center width='10%' height=35>QC Names</th>
+                            <th bgcolor=#f8f4f3 style="color: black; font-size:13px;" align=center width='7%' height=35>Report Checker</th>
+                            <th bgcolor=#f8f4f3 style="color: black; font-size:13px;" align=center width='6%' height=35>AE/CS</th>
+                            <th bgcolor=#f8f4f3 style="color: black; font-size:13px;" align=center width='5%' height=35>Service Date</th>
+                            <th bgcolor=#f8f4f3 style="color: black; font-size:13px;" align=center width='5%' height=35>Sample Size</th>
+                            <th bgcolor=#f8f4f3 style="color: black; font-size:13px;" align=center width='15%' height=35>Comments</th>
+                            @if (scheduleQcServiceDate.IsShowSoftLineItems)
+                            {
+                                <th bgcolor=#f8f4f3 style="color: black; font-size:13px;" align=center width='15%' height=35>Office</th>
+                            }
+                        </tr>
+                        @foreach (var item in scheduleQcServiceDate.ScheduleQCEmailDetail)
+                        {
+                            <tr>
+
+                                <td align=center style="font-size: 12px;" height=30>
+                                    @String.Concat(item.FactoryProvince, "/", item.FactoryCity, "/", item.FactoryCounty, "/", @item.FactoryTown)
+                                </td>
+                                <td align=center style="font-size: 12px;" height=30>
+                                    <a href="@item.MisssionUrl"> @item.BookingId</a>
+                                </td>
+                                <td align=center style="font-size: 12px;" height=30>
+                                    @item.ReportTitle
+                                </td>
+                                <td align=center style="font-size: 12px;" height=30>
+                                    @item.Service
+                                </td>
+                                <td align=center style="font-size: 12px;" height=30>
+                                    @item.PONumber
+                                </td>
+                                <td align=center style="font-size: 12px;" height=30>
+                                    @item.ProductCode
+                                </td>
+                                @if (scheduleQcServiceDate.IsShowSoftLineItems)
+                                {
+                                    <td align=center style="font-size: 12px;" height=30>
+                                        @item.Color
+                                    </td>
+                                    <td align=center style="font-size: 12px;" height=30>
+                                        @item.OrderQty
+                                    </td>
+                                    <td align=center style="font-size: 12px;" height=30>
+                                        @item.Unit
+                                    </td>
+                                    <td align=center style="font-size: 12px;" height=30>
+                                        @item.ProductSubCategory2
+                                    </td>
+                                }
+                                <td align=center style="font-size: 12px;" height=30>
+                                    @item.CustomerName
+                                </td>
+                                <td align=center style="font-size: 12px;" height=30>
+                                    @String.Concat(@item.SupplierName, " ( " + @item.SupplierContactName, "/ " + @item.SupplierContactPhone, " )")
+                                </td>
+                                @if (!string.IsNullOrEmpty(item.FactoryRegionalName))
+                                {
+                                    <td align=center style="font-size: 12px;" height=30>
+                                        @String.Concat(item.FactoryName, " ( ", item.FactoryRegionalName, " )")
+                                    </td>
+                                }
+                                else
+                                {
+                                    <td align=center style="font-size: 12px;" height=30>
+                                        @String.Concat(item.FactoryName)
+                                    </td>
+                                }
+                                <td align=center style="font-size: 12px;" height=30>
+                                    @String.Concat(item.FactoryAddressEnglish, " ( ", item.FactoryAddressRegional, " )", ", ", item.FactoryPhNo, " (", item.FactoryContactName, "/ ", item.FactoryContactPhone, ")")
+                                </td>
+                                <td align=center style="font-size: 12px;" height=30>
+                                    @item.ProductCategory
+                                </td>
+                                <td align=center style="font-size: 12px;" height=30>
+                                    @item.ServiceType
+                                </td>
+                                <td align=center style="font-size: 12px;" height=30>
+                                    @if (item.ServiceId == (int)Service.InspectionId)
+                                    {
+                                        @String.Concat(item.TotalNumberofProducts, "/", item.TotalNumberofReports)
+                                    }
+                                    else if (item.ServiceId == (int)Service.AuditId)
+                                    {
+                                        @string.Format("1")
+                                    }
+
+                                </td>
+                                <td align=center style="font-size: 12px;" height=30>
+                                    @item.QCNames
+                                </td>
+                                <td align=center style="font-size: 12px;" height=30>
+                                    @item.CsNames
+                                </td>
+                                <td align=center style="font-size: 12px;" height=30>
+                                    @item.AEName
+                                </td>
+                                <td align=center style="font-size: 12px;" height=30>
+                                    @scheduleQcServiceDate.ServiceDate.ToString("dd/MM/yyyy")
+                                </td>
+
+                                <td align=center style="font-size: 12px;" height=30>
+                                    @item.SampleSize.GetValueOrDefault()
+                                </td>
+
+                                <td align=center style="font-size: 12px;" height=30>
+                                    @String.Concat(item.QCBookingComments, " . ", item.ScheduleComments)
+                                </td>
+                                @if (scheduleQcServiceDate.IsShowSoftLineItems)
+                                {
+                                    <td align=center style="font-size: 12px;" height=30>
+                                        @item.BookingOfficeLocation
+                                    </td>
+                                }
+                            </tr>
+
+                        }
+
+                    </table>
+
+                </div>
+
+                <br />
+                <br />
+
+            }
+
+            <br />
+            @if (Model.ScheduleQcServiceDateList.SelectMany(y => y.BookingAttachments).Any())
+            {
+                <div style="padding-bottom: 5px; margin-bottom:5px;">
+                    <b> Booking Attachments</b>
+                </div>
+                <table style="border:solid 1px #d4d0c8;border-collapse:collapse;font-size:12px; font-family:tahoma;" cellspacing='0' cellpadding='1' rules='all' align='left' border='1' width='60%'>
+                    <tr>
+                        <th bgcolor=#f8f4f3 style="color: black; font-size:13px;" align=center width='10%' height=35>Booking</th>
+                        <th bgcolor=#f8f4f3 style="color: black; font-size:13px;" align=center width='10%' height=35>Service</th>
+                        <th bgcolor=#f8f4f3 style="color: black; font-size:13px;" align=center width='10%' height=35>Service Date</th>
+                        <th bgcolor=#f8f4f3 style="color: black; font-size:13px;" align=center width='10%' height=35>File Name</th>
+                        <th bgcolor=#f8f4f3 style="color: black; font-size:13px;" align=center width='10%' height=35>File Description</th>
+                    </tr>
+                    @foreach (var item in Model.ScheduleQcServiceDateList.SelectMany(y => y.BookingAttachments))
+                    {
+                        <tr>
+                            <td width="10%" align=center rowspan="@(item.Attachments.Count()+1)">
+                                @item.BookingId
+                            </td>
+                            <td width="10%" align=center rowspan="@(item.Attachments.Count()+1)">
+                                @item.Service
+                            </td>
+                            <td width="10%" align=center rowspan="@(item.Attachments.Count()+1)">
+                                @item.ServiceDate.ToString("dd/MM/yyyy")
+                            </td>
+                        </tr>
+                        @foreach (var attachment in item.Attachments)
+                        {
+                            <tr>
+                                <td width="40%"> <a href="@attachment.FileUrl" target="_blank"> @attachment.FileName</a></td>
+                                <td width="40%"> @attachment.FileDescription</td>
+                            </tr>
+
+                        }
+
+                    }
+                </table>
+
+            }
+
+        </td>
+    </tr>
+
+
+    <tr>
+        <td class="td-table">
+            <br />
+            <div style="padding-bottom: 5px; margin-bottom:5px;">
+                If any questions related to above orders , please contact related office Schedule In charge or Planning Manager,thanks!
+            </div>
+            <br />
+            @if (Model.IsChinaCountry)
+            {
+                <div style="padding-bottom: 5px; margin-bottom:5px;">
+                    If the above inspection arrangement is scheduled on Saturday or Sunday, the company will arrange compensation leave in priority. The working days are not scheduled inspection are considered as compensation leave for Saturday or Sunday inspection (no need to apply by inspector).
+                </div>
+                <br />
+            }
+            <div style="padding-bottom: 5px; margin-bottom:5px;">
+                Thanks
+            </div>
+            <div style="padding-bottom: 5px; margin-bottom:5px;">
+                IT-Team
+            </div>
+            <br />
+            <span style="font-style:normal"> Note: - This receipt is auto generated from Link Booking System. Please do not reply to this message.</span>
+        </td>
+    </tr>
+</table>
+
+
+
+

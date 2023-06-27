@@ -1,0 +1,225 @@
+<div class="main-wrapper">
+    <div class="wrapper dashboard-wrapper">
+        <div class="my-container">
+            <div class="master-body">
+                <div class="title-container">
+                    <div class="header-back-button"
+                        *ngIf="modelsummary.customerDisabled && !modelsummary.saveLoading && !loading">
+                        <img src="assets/images/back-red.png" alt="back" (click)="return('cussearch/customer-summary')">
+                    </div>
+                    <h3 class="main-title">{{ 'CUSTOMER_CHECK_POINTS.TITLE' | translate }}</h3>
+                </div>
+                <div class="content-container quotation-container">
+                    <div class="row searchFormPadding">
+                        <div class="col-sm-12">
+                            <div class="row">
+                                <div class="col-sm-3 col-md-3 col-lg-3">
+                                    <div class="my-input-group">
+                                        <label class="required">{{ 'CUSTOMER_CHECK_POINTS.LBL_CUSTOMER' | translate
+                                            }}</label>
+                                        <ng-select [items]="modelsummary.customerList" [multiple]="false"
+                                            [closeOnSelect]="true" [searchable]="true" bindLabel="name" bindValue="id"
+                                            [loading]="modelsummary.customerLoading"
+                                            placeholder="--- {{ 'COMMON.LBL_SELECT' | translate }} ---"
+                                            [(ngModel)]="modelAdd.customerId" [disabled]="modelsummary.customerDisabled"
+                                            [ngClass]="{'is-invalid': !validator.isValid('customerId')}"
+                                            (ngModelChange)="onChangeCustomer($event)">
+                                        </ng-select>
+                                        <div *ngIf="!validator.isValid('customerId')" class="invalid-feedback">
+                                            <div *ngFor="let error of validator.getErrors('customerId')">
+                                                {{ error | translate }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-3 col-md-3 col-lg-3 mobile-margin-top-15">
+                                    <div class="my-input-group">
+                                        <label class="required">{{ 'CUSTOMER_CHECK_POINTS.LBL_SERVICE' | translate
+                                            }}</label>
+                                        <ng-select [items]="modelsummary.serviceList" [multiple]="false"
+                                            [closeOnSelect]="true" [searchable]="true" bindLabel="name" bindValue="id"
+                                            [loading]="modelsummary.serviceLoading"
+                                            placeholder="--- {{ 'COMMON.LBL_SELECT' | translate }} ---"
+                                            [(ngModel)]="modelAdd.serviceId"
+                                            [ngClass]="{'is-invalid': !validator.isValid('serviceId')}"
+                                            (ngModelChange)="onChangeService($event)">
+                                        </ng-select>
+                                        <div *ngIf="!validator.isValid('serviceId')" class="invalid-feedback">
+                                            <div *ngFor="let error of validator.getErrors('serviceId')">
+                                                {{ error | translate }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-3 col-md-3 col-lg-3 mobile-margin-top-15">
+                                    <div class="my-input-group">
+                                        <label class="required">{{ 'CUSTOMER_CHECK_POINTS.LBL_CHECKPOINT' | translate
+                                            }}</label>
+                                        <ng-select [items]="modelsummary.checkPointList" [multiple]="false"
+                                            [closeOnSelect]="true" [searchable]="true" bindLabel="name" bindValue="id"
+                                            [loading]="modelsummary.customerCPLoading"
+                                            placeholder="--- {{ 'COMMON.LBL_SELECT' | translate }} ---"
+                                            [(ngModel)]="modelAdd.checkPointId" (change)="changeCheckPoint($event)"
+                                            [ngClass]="{'is-invalid': !validator.isValid('checkPointId')}">
+                                        </ng-select>
+                                        <div *ngIf="!validator.isValid('checkPointId')" class="invalid-feedback">
+                                            <div *ngFor="let error of validator.getErrors('checkPointId')">
+                                                {{ error | translate }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-3 col-md-3 col-lg-3 mobile-margin-top-15">
+                                    <div class="my-input-group">
+                                        <label>{{ 'CUSTOMER_SUMMARY.LBL_BRAND' | translate }}</label>
+                                        <ng-select [items]="modelsummary.customerBrandList" [multiple]="true"
+                                            class="multiple" [closeOnSelect]="true" [searchable]="true" bindLabel="name"
+                                            bindValue="id" [loading]="modelsummary.customerBrandLoading"
+                                            placeholder="--- {{(modelsummary.customerBrandList!=null && modelsummary.customerBrandList.length!=0? 'COMMON.LBL_SELECT':'COMMON.LBL_NO_DATA')  | translate }} ---"
+                                            [(ngModel)]="modelAdd.brandId">
+                                        </ng-select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row marginTop15">
+                                <div class="col-sm-3 col-md-3 col-lg-3 mobile-margin-top-15">
+                                    <div class="my-input-group">
+                                        <label>{{ 'CUSTOMER_SUMMARY.LBL_DEPARTMENT' | translate }}</label>
+                                        <ng-select [items]="modelsummary.customerDeptList" [multiple]="true"
+                                            class="multiple" [closeOnSelect]="true" [searchable]="true" bindLabel="name"
+                                            bindValue="id" [loading]="modelsummary.customerDeptLoading"
+                                            placeholder="--- {{(modelsummary.customerDeptList!=null && modelsummary.customerDeptList.length!=0? 'COMMON.LBL_SELECT':'COMMON.LBL_NO_DATA')  | translate }} ---"
+                                            [(ngModel)]="modelAdd.deptId">
+                                        </ng-select>
+                                    </div>
+                                </div>
+                                <div class="col-sm-3 col-md-3 col-lg-3 mobile-margin-top-15">
+                                    <div class="my-input-group">
+                                        <label>{{ 'CUSTOMER_SERVICECONFIG.ServiceType' | translate }}</label>
+                                        <ng-select [items]="modelsummary.serviceTypeList" [multiple]="true"
+                                            class="multiple" [closeOnSelect]="true" [searchable]="true" bindLabel="name"
+                                            bindValue="id" [loading]="modelsummary.serviceTypeLoading"
+                                            placeholder="--- {{ 'COMMON.LBL_SELECT' | translate }} ---"
+                                            [(ngModel)]="modelAdd.serviceTypeId">
+                                        </ng-select>
+                                    </div>
+                                </div>
+                                <div class="col-sm-3 col-md-3 col-lg-3 mobile-margin-top-15">
+                                    <div class="my-input-group">
+                                        <label>{{ 'CUSTOMER_CHECK_POINTS.LBL_REMARKS' | translate }}</label>
+                                        <input [(ngModel)]="modelAdd.remarks" type="text" maxlength="1000"
+                                            placeholder="{{ 'CUSTOMER_CHECK_POINTS.LBL_REMARKS' | translate }}" />
+                                    </div>
+                                </div>
+
+                                <div class="col-sm-3 col-md-3 col-lg-3 mobile-margin-top-15">
+                                    <div class="my-input-group" *ngIf="modelAdd.checkPointId == checkPointTypeEnum.QuotationRequired 
+                                        || modelAdd.checkPointId == checkPointTypeEnum.AutoCustomerDecisionForPassReportResult">
+                                      <label for="">{{ 'BOOKING_SUMMARY.LBL_FACTORY_COUNTRY' | translate}}</label>
+                                      <ng-select appendTo="body" [items]="modelsummary.countryList" [virtualScroll]="true"
+                                        [loading]="modelsummary.countryLoading" bindLabel="name" bindValue="id"
+                                        placeholder="--- {{ (modelsummary.countryList!=null && modelsummary.countryList.length!=0? 'COMMON.LBL_SELECT':'COMMON.LBL_NO_DATA' ) | translate }} ---"
+                                        [typeahead]="modelsummary.countryInput" [minTermLength]="3"
+                                        [multiple]="true" class="multiple" [(ngModel)]="modelAdd.countryIdList"
+                                        (scrollToEnd)="getCountryData()" #select (change)="changeCountryData($event)">
+                                        <ng-template ng-option-tmp let-item="item" let-index="index" let-search="searchTerm">
+                                          <span>{{item.name}}</span>
+                                        </ng-template>
+                                      </ng-select>
+                                    </div>
+                                  </div>
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="master-search-cta-container">
+                        <div class="column">
+                            <!--    <button type="button" class="secondary-cta small"
+                                [disabled]="modelsummary.saveLoading || loading"
+                                (click)="return('cussearch/customer-summary')" *ngIf="modelsummary.customerDisabled">
+                                <i class="fa fa-undo"></i>&nbsp;&nbsp;{{ 'COMMON.LBL_RETURN' | translate }}
+                            </button> -->
+                        </div>
+                        <div class="column text-right">
+                            <button class="secondary-cta small" [disabled]="modelsummary.saveLoading || loading"
+                                [hidden]="modelsummary.isNewItem" (click)="refresh()">
+                                {{ 'COMMON.LBL_CONFIRMCANCEL' | translate }}
+                            </button>
+                            <button class="primary-cta small" (click)="save()" [disabled]="modelsummary.saveLoading || modelsummary.customerCPLoading ||
+              modelsummary.customerLoading ||modelsummary.serviceLoading  || loading">
+                                {{ modelsummary.isNewItem ? ('COMMON.LBL_SUBMIT' | translate) : ('COMMON.LBL_UPDATE' |
+                                translate) }}
+                                <span *ngIf="modelsummary.saveLoading">
+                                    <i class="fa fa-refresh fa-spin" aria-hidden="true"></i>
+                                </span>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="quotation-search-container"
+                        *ngIf="(modelsummary.items && modelsummary.items.length>0)">
+                        <div class="table-container">
+                            <table class="pagination-table simple-table bordered">
+                                <thead>
+                                    <tr class="sticky-top-row">
+                                        <th class="width-60"></th>
+                                        <th>{{ 'CUSTOMER_CHECK_POINTS.LBL_CUSTOMER' | translate }}</th>
+                                        <th>{{ 'CUSTOMER_CHECK_POINTS.LBL_SERVICE' | translate }}</th>
+                                        <th>{{ 'CUSTOMER_CHECK_POINTS.LBL_CHECKPOINT' | translate }}</th>
+                                        <th>{{ 'CUSTOMER_SUMMARY.LBL_BRAND' | translate }}</th>
+                                        <th>{{ 'CUSTOMER_SUMMARY.LBL_DEPARTMENT' | translate }}</th>
+                                        <th>{{ 'CUSTOMER_SERVICECONFIG.ServiceType' | translate }}</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr *ngFor="let item of modelsummary.items">
+                                        <td class="Center-Middle-Table">
+                                            <span class="table-cta icon-cta common-tooltip"
+                                                (click)="openEdit(item)" data-tooltip="Edit">
+                                                <img src="assets/images/cta-edit.svg" alt="Edit">
+                                            </span>
+                                            <span class="table-cta icon-cta common-tooltip" 
+                                              (click)="openConfirm(item,content)" data-tooltip="Delete">
+                                              <img src="assets/images/cta-delete.svg" alt="Delete">
+                                            </span>
+
+                                            <!-- <button (click)="openEdit(item)" class="secondary-cta x-small">
+                                                {{'COMMON.LBL_EDIT' | translate}}
+                                            </button>
+                                            <button (click)="openConfirm(item,content)" class="secondary-cta x-small">
+                                                {{'COMMON.LBL_DELETE' | translate}}
+                                            </button> -->
+                                        </td>
+                                        <td>{{item.customerName}}</td>
+                                        <td>{{item.serviceName}}</td>
+                                        <td>{{item.checkPointName}}</td>
+                                        <td>{{item.brandNames}}</td>
+                                        <td>{{item.deptNames}}</td>
+                                        <td>{{item.serviceTypeNames}}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="no-result-container" *ngIf="modelsummary.noFound">
+                        <img src="assets/images/no-data.png" alt="" class="icon">
+                        <h4 class="title">{{ 'COMMON.LBL_NOITEMS' | translate }}</h4>
+                        <p>{{ 'COMMON.LBL_NODATA' | translate }}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<ng-template #content let-modal>
+    <div class="modal-body">
+        <div class="small-model">
+            <h2 class="title">{{ 'CUSTOMER_CHECK_POINTS.LBL_CONFIRMDELETION' | translate }}</h2>
+            <p>{{ 'CUSTOMER_CHECK_POINTS.MSG_CONFRMDELETE' | translate }}</p>
+            <button class="secondary-cta" (click)="modal.dismiss('Cross click')">
+                {{ 'COMMON.LBL_CONFIRMCANCEL' | translate }}</button>
+            <button class="primary-cta" (click)="delete(modelsummary.deleteId);">{{ 'COMMON.LBL_OK' | translate
+                }}</button>
+
+        </div>
+    </div>
+</ng-template>

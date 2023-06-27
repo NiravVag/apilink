@@ -1,0 +1,12 @@
+{
+    "model":"Provincesummarymodel",
+    "fields":{
+        "CountryValues":[
+            {
+                "type":"required",
+                "fieldType":"A",
+                "ressource":"PROVINCE_SUMMARY.MSG_COUNTRY_REQ"
+            }
+        ]
+    }
+}

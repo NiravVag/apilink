@@ -1,0 +1,480 @@
+<div class="main-wrapper">
+  <div class="wrapper dashboard-wrapper">
+    <div class="my-container">
+      <div class="master-body">
+        <div class="title-container">
+          <div class="header-back-button" *ngIf="fromSummary && !ICModel.saveLoading">
+            <img src="assets/images/back-red.png" alt="back" (click)="returnToSummary()">
+          </div>
+          <h3 class="main-title" *ngIf="model && model.id!=null && model.id>0 && model.icNo !=null">
+            {{ 'EDIT_INSPECTION_CERTIFICATE.LBL_EDIT' | translate }}
+            {{ 'EDIT_INSPECTION_CERTIFICATE.TITLE' | translate }}
+          </h3>
+          <h3 class="main-title" *ngIf="!model || model.id==null || !(model.id>0)">
+            {{ 'EDIT_INSPECTION_CERTIFICATE.TITLE' | translate }}
+            {{ 'EDIT_INSPECTION_CERTIFICATE.LBL_REGISTER' | translate }}
+          </h3>
+          <!-- need to enable below code after edit scenrio show Ic No and status name while edit -->
+          <span class="audit-id" *ngIf="model && model.id!=null && model.id>0 && model.icNo !=null">
+            #{{model.icNo}}
+          </span>
+          <!-- {{model.statusLabel}} -->
+        </div>
+        <div class="content-container quotation-container">
+          <div class="container-head">
+            <img class="head-icon" src="assets/images/general.png" alt="">
+            {{ 'EDIT_INSPECTION_CERTIFICATE.LBL_MAIN' | translate }}
+            <span style="float:right">{{model == null ? "Request" : model.icStatusName }}</span>
+          </div>
+          <div class="row formPadding editMode">
+            <div class="col-sm-12">
+              <div class="row">
+                <div class="col-sm-4 col-md-4 col-lg-4">
+                  <div class="my-input-group">
+                    <label class="required">{{ 'EDIT_INSPECTION_CERTIFICATE.LBL_CUSTOMER' | translate }}</label>
+                    <ng-select appendTo="body" [multiple]="false" [clearable]="false" class="multiple"
+                      [closeOnSelect]="true" [searchable]="true" [loading]="ICModel.customerLoading" bindLabel="name"
+                      placeholder="--- {{(ICModel.customerList!=null && ICModel.customerList.length>0? 'EDIT_INSPECTION_CERTIFICATE.LBL_SELECT':'COMMON.LBL_NO_DATA')  | translate }} ---"
+                      [ngClass]="{ 'is-invalid': !validator.isValid('customerId')}" [items]="ICModel.customerList"
+                      (change)="setSupplierCustomerChange($event)" [(ngModel)]="model.customerId" bindValue="id">
+                      <ng-template ng-option-tmp let-item="item">
+                        <div class="text-wrap">{{ item.name }}</div>
+                      </ng-template>
+
+                    </ng-select>
+                    <div *ngIf="!validator.isValid('customerId')" class="invalid-feedback">
+                      <div *ngFor="let error of validator.getErrors('customerId')">
+                        {{ error | translate }}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-sm-4 col-md-6 col-lg-4 mobile-margin-top-15">
+                  <div class="my-input-group">
+                    <label>{{ 'EDIT_INSPECTION_CERTIFICATE.LBL_BUYER_NAME' | translate }}</label>
+                    <input type="text" maxlength="400" [(ngModel)]="model.buyerName"
+                      [ngClass]="{ 'is-invalid':  !validator.isValid('buyerName')}"
+                      placeholder="{{ 'EDIT_INSPECTION_CERTIFICATE.LBL_BUYER_NAME' | translate }}">
+                    <div *ngIf="!validator.isValid('buyerName')" class="invalid-feedback">
+                      <div *ngFor="let error of validator.getErrors('buyerName')">{{ error | translate }}</div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-sm-4 col-md-4 col-lg-4 mobile-margin-top-15">
+                  <div class="my-input-group">
+                    <label>{{ 'EDIT_INSPECTION_CERTIFICATE.LBL_APPROVALDATE' | translate }}</label>
+                    <div class="calendar-wrapper">
+                      <input type="text" maxlength="10" [ngClass]="{ 'is-invalid':  !validator.isValid('approvalDate')}"
+                        readonly=readonly placeholder="{{ 'EDIT_INSPECTION_CERTIFICATE.LBL_APPROVALDATE' | translate }}"
+                        ngbDatepicker #ad="ngbDatepicker" (click)="ad.toggle()" [(ngModel)]="model.approvalDate">
+                      <img src="assets/images/calendar-icon.svg" alt="" class="calendar-icon" (click)="ad.toggle()">
+                    </div>
+                    <div *ngIf="!validator.isValid('approvalDate')" class="invalid-feedback">
+                      <div *ngFor="let error of validator.getErrors('approvalDate')">
+                        {{ error | translate }}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-sm-12">
+              <div class="row marginTop25">
+                <div class="col-sm-4 col-md-4 col-lg-4 mobile-margin-top-15">
+                  <div class="my-input-group">
+                    <label class="required">{{ 'EDIT_INSPECTION_CERTIFICATE.LBL_IC_TITLE' | translate }}</label>
+                    <ng-select appendTo="body" [multiple]="false" [clearable]="false" [closeOnSelect]="true"
+                      [searchable]="true"
+                      placeholder="--- {{(ICModel.icTitleList!=null && ICModel.icTitleList.length>0? 'EDIT_INSPECTION_CERTIFICATE.LBL_SELECT':'COMMON.LBL_NO_DATA')  | translate }} ---"
+                      bindLabel="name" [(ngModel)]="model.icTitleId" bindValue="id"
+                      [ngClass]="{ 'is-invalid': !validator.isValid('icTitleId')}" [items]="ICModel.icTitleList"
+                      [loading]="ICModel.icTitleLoading">
+                      <ng-template ng-option-tmp let-item="item">
+                        <div class="text-wrap">{{ item.name }}</div>
+                      </ng-template>
+                    </ng-select>
+                    <div *ngIf="!validator.isValid('icTitleId')" class="invalid-feedback">
+                      <div *ngFor="let error of validator.getErrors('icTitleId')">
+                        {{ error | translate }}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-sm-4 col-md-6 col-lg-4">
+                  <div class="my-input-group">
+                    <label class="required">{{ 'EDIT_INSPECTION_CERTIFICATE.LBL_SUPPLIER' | translate }}</label>
+                    <ng-select appendTo="body" [multiple]="false" [clearable]="false" [closeOnSelect]="true"
+                      [searchable]="true"
+                      placeholder="--- {{(ICModel.supplierList!=null && ICModel.supplierList.length>0? 'EDIT_INSPECTION_CERTIFICATE.LBL_SELECT':'COMMON.LBL_NO_DATA')  | translate }} ---"
+                      bindLabel="name" [(ngModel)]="model.supplierId" bindValue="id"
+                      [ngClass]="{ 'is-invalid': !validator.isValid('supplierId')}"
+                      (change)="setAddressSupplierChange($event)" [items]="ICModel.supplierList"
+                      [loading]="ICModel.supplierLoading">
+                      <ng-template ng-option-tmp let-item="item">
+                        <div class="text-wrap">{{ item.name }}</div>
+                      </ng-template>
+                    </ng-select>
+                    <div *ngIf="!validator.isValid('supplierId')" class="invalid-feedback">
+                      <div *ngFor="let error of validator.getErrors('supplierId')">
+                        {{ error | translate }}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-sm-4 col-md-6 col-lg-4 mobile-margin-top-15">
+                  <div class="my-input-group">
+                    <label>{{ 'EDIT_INSPECTION_CERTIFICATE.LBL_BENEFICIARY_NAME' | translate }}</label>
+                    <input type="text" maxlength="400" [(ngModel)]="model.beneficiaryName"
+                      placeholder="{{ 'EDIT_INSPECTION_CERTIFICATE.LBL_BENEFICIARY_NAME' | translate }}">
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-sm-12">
+              <div class="row marginTop25">
+                <div class="col-sm-6 col-md-6 col-lg-6">
+                  <div class="my-input-group">
+                    <label>{{ 'EDIT_INSPECTION_CERTIFICATE.LBL_SUPPLIER_ADDRESS' | translate }}</label>
+                    <textarea maxlength="1800" [(ngModel)]="model.supplierAddress"></textarea>
+                    <div *ngIf="!validator.isValid('supplierAddress')" class="invalid-feedback">
+                      <div *ngFor="let error of validator.getErrors('supplierAddress')">
+                        {{ error | translate }}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-sm-6 col-md-6 col-lg-6">
+                  <div class="my-input-group">
+                    <label>{{ 'EDIT_INSPECTION_CERTIFICATE.LBL_COMMENT' | translate }}</label>
+                    <textarea maxlength="1800" [(ngModel)]="model.comment"></textarea>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-sm-12">
+              <div class="row">
+                <div class="col-sm-4">
+                  <button id="btnSearch" *ngIf="ICModel.isICRoleAccess && icuserAccessData.isInternalUser &&
+                            model.icStatus != icStatus.Canceled" class="primary-cta small"
+                    (click)="addBooking(contentd)" [disabled]=addProductButtonDisable()>
+                    {{ 'EDIT_INSPECTION_CERTIFICATE.LBL_ADD_PRODUCT' | translate }}
+                  </button>
+                </div>
+              </div>
+              <div class="row marginTop25">
+                <div class="col-sm-4 col-md-6 col-lg-4" *ngIf="!(model.id>0)">
+                  <div class="my-input-group">
+                    <label>{{ 'EDIT_INSPECTION_CERTIFICATE.LBL_PO_NUMBER' | translate }}</label>
+
+                    <ng-select appendTo="body" [multiple]="true" [clearable]="true" [hideSelected]="true"
+                      [closeOnSelect]="true" [searchable]="true" class="multiple"
+                      placeholder="--- {{(ICModel.poList && ICModel.poList.length>0? 'COMMON.LBL_ALL':'COMMON.LBL_NO_DATA')  | translate }} ---"
+                      bindLabel="name" [(ngModel)]="ICModel.poId" bindValue="id" (change)="setProductPoChange($event)"
+                      [items]="ICModel.poList" [loading]="ICModel.poLoading">
+                      <ng-template ng-header-tmp>
+                        <button type="button" (click)="selectAllPO()" class="btn btn-link">
+                          {{ 'COMMON.LBL_SELECT_ALL' | translate }}
+                        </button>
+                        <button type="button" (click)="unselectAllPO()" class="btn btn-link">
+                          {{ 'COMMON.LBL_UN_SELECT_ALL' | translate }}
+                        </button>
+                      </ng-template>
+                      <ng-template ng-option-tmp let-item="item">
+                        <div class="text-wrap">{{ item.name }}</div>
+                      </ng-template>
+                    </ng-select>
+                  </div>
+                </div>
+              </div>
+              <div class="col-lg-12 table-container marginTop25" #scrollableICTable>
+                <table class="pagination-table" *ngIf="model.icBookingList != null
+                       && model.icBookingList.length> 0">
+                  <thead>
+                    <tr>
+                      <th class="desktop-hide Center_Middle width-100"> </th>
+                      <th class="width-60">
+                        {{ 'EDIT_INSPECTION_CERTIFICATE.LBL_BOOKING_NO' | translate }}
+                      </th>
+                      <th class="width-100">
+                        {{ 'EDIT_INSPECTION_CERTIFICATE.LBL_PO_NO' | translate }}
+                      </th>
+                      <th class="width-100">
+                        {{ 'EDIT_INSPECTION_CERTIFICATE.LBL_PRODUCT_CODE' | translate }}
+                      </th>
+                      <th class="width-150">
+                        {{ 'EDIT_INSPECTION_CERTIFICATE.LBL_PRODUCT_DESC' | translate }}
+                      </th>
+                      <th class="width-150" *ngIf="businessLine==_businessLines.SoftLine">
+                        {{ 'EDIT_INSPECTION_CERTIFICATE.LBL_COLOR_NAME' | translate }}
+                      </th>
+                      <th class="width-150" *ngIf="businessLine==_businessLines.SoftLine">
+                        {{ 'EDIT_INSPECTION_CERTIFICATE.LBL_COLOR_CODE' | translate }}
+                      </th>
+                      <th class="width-100">
+                        {{ 'EDIT_INSPECTION_CERTIFICATE.LBL_DESTINATION_COUNTRY' | translate }}
+                      </th>
+                      <th class="width-100 required">
+                        {{ 'EDIT_INSPECTION_CERTIFICATE.LBL_SHIPMENT_QTY' | translate }}
+                      </th>
+                      <th class="width-100">
+                        {{ 'EDIT_INSPECTION_CERTIFICATE.LBL_REMAINING_QTY' | translate }}
+                      </th>
+                      <th class="width-60">
+                        {{ 'EDIT_INSPECTION_CERTIFICATE.LBL_UNIT' | translate }}
+                      </th>
+                      <th class="mobile-hide tablet-hide Center_Middle width-100"> </th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr *ngFor="let icBookingItem of icProductValidators;let idx = index">
+                      <td class="desktop-hide Center_Middle width-100">
+                        <button class="secondary-cta x-small">
+                          {{ 'EDIT_INSPECTION_CERTIFICATE.LBL_DELETE' | translate }}
+                        </button>
+                      </td>
+                      <td class="width-60">{{icBookingItem.icBookingProduct.bookingNumber}}</td>
+                      <td class="width-100 wordbreak">{{icBookingItem.icBookingProduct.poNo}}</td>
+                      <td class="width-100 wordbreak">{{icBookingItem.icBookingProduct.productCode}}</td>
+                      <td class="width-150 wordbreak">{{icBookingItem.icBookingProduct.productDescription}}</td>
+                      <td class="width-150 wordbreak" *ngIf="businessLine == _businessLines.SoftLine"> {{icBookingItem.icBookingProduct.color}}</td>
+                      <td class="width-150 wordbreak" *ngIf="businessLine == _businessLines.SoftLine"> {{icBookingItem.icBookingProduct.colorCode}}</td>
+                      <td class="width-100 wordbreak">{{icBookingItem.icBookingProduct.destinationCountry}}</td>
+
+                      <td class="width-100">
+                        <input type="number" min="1" max="100000"
+                          [(ngModel)]="icBookingItem.icBookingProduct.shipmentQty"
+                          [ngClass]="{ 'is-invalid':!icBookingItem.validator.isValid('shipmentQty')}" />
+
+                        <div *ngIf="!icBookingItem.validator.isValid('shipmentQty')" class="invalid-feedback"
+                          style="display:block">
+                          <div *ngFor="let error of icBookingItem.validator.getErrors('shipmentQty')">
+                            {{ error | translate }}
+                          </div>
+                        </div>
+                      </td>
+                      <td class="width-100 Center_Middle"> {{icBookingItem.icBookingProduct.remainingQty}}</td>
+                      <td class="width-60">{{icBookingItem.icBookingProduct.unit}}</td>
+                      <td class="mobile-hide tablet-hide Center_Middle width-100">
+                        <button class="secondary-cta x-small" (click)="deleteIC(idx)">
+                          {{ 'EDIT_INSPECTION_CERTIFICATE.LBL_DELETE' | translate }}
+                        </button>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+            <div class="col-sm-12">
+              <div class="row form-action-container">
+                <div class="col-sm-12">
+                  <button class="secondary-cta MarginR-20" (click)="preview(false)"
+                    *ngIf="model && model.id!=null && model.id>0 && model.icStatus != icStatus.Canceled"
+                    [disabled]="buttonDisable()">
+                    {{'EDIT_INSPECTION_CERTIFICATE.LBL_PREVIEW' | translate}}
+                    <span *ngIf="ICModel.previewLoading">
+                      <i class="fa fa-refresh fa-spin" aria-hidden="true"></i>
+                    </span>
+                  </button>
+                  <button class="secondary-cta MarginR-20" (click)="preview(true)"
+                    *ngIf="model && model.id!=null && model.id>0" [disabled]="buttonDisable()">
+                    {{'EDIT_INSPECTION_CERTIFICATE.LBL_DRAFT' | translate}}
+                    <span *ngIf="ICModel.draftLoading">
+                      <i class="fa fa-refresh fa-spin" aria-hidden="true"></i>
+                    </span>
+                  </button>
+                  <button
+                    *ngIf="ICModel.isICRoleAccess && icuserAccessData.isInternalUser && model.icStatus != icStatus.Canceled"
+                    class="primary-cta MarginR-20" (click)="save()" [disabled]="buttonDisable()">
+                    {{'EDIT_INSPECTION_CERTIFICATE.LBL_SAVE' | translate}}
+                    <span *ngIf="ICModel.saveLoading">
+                      <i class="fa fa-refresh fa-spin" aria-hidden="true"></i>
+                    </span>
+                  </button>
+                  <button class="secondary-cta MarginR-20" (click)="cancel()" [disabled]="buttonDisable()" *ngIf="model && model.id!=null && model.id>0 && ICModel.isICRoleAccess &&
+                                        icuserAccessData.isInternalUser && model.icStatus != icStatus.Canceled">
+                    {{'EDIT_INSPECTION_CERTIFICATE.LBL_CANCEL' | translate}}
+                    <span *ngIf="ICModel.cancelLoading">
+                      <i class="fa fa-refresh fa-spin" aria-hidden="true"></i>
+                    </span>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <ng-template #contentd let-modal>
+      <div class="modal-header custom-modal-header">
+        <h4 class="modal-title" id="modal-title">
+          {{ 'EDIT_INSPECTION_CERTIFICATE.LBL_BOOKING_SEARCH' | translate }}
+        </h4>
+        <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body custom-modal-body">
+        <div class="table-container">
+          <div class="row">
+            <div class="col-sm-3 col-md-3 col-lg-3">
+              <div class="my-input-group">
+                <label>{{ 'EDIT_INSPECTION_CERTIFICATE.LBL_BOOKING_NO' | translate }}</label>
+                <input type="number" maxlength="10" [ngClass]="{ 'is-invalid':  !validator.isValid('bookingNo')}"
+                  placeholder="{{ 'EDIT_INSPECTION_CERTIFICATE.LBL_BOOKING_NO' | translate }}"
+                  [(ngModel)]="modelSearch.bookingId">
+              </div>
+            </div>
+            <div class="col-sm-3 col-md-3 col-lg-3">
+              <div class="my-input-group">
+                <label class="required">{{ 'EDIT_INSPECTION_CERTIFICATE.LBL_SERVICE_DATE_FROM' | translate }}</label>
+                <div class="calendar-wrapper">
+                  <input type="text" maxlength="10" readonly=readonly [(ngModel)]="modelSearch.serviceFromDate"
+                    placeholder="{{ 'EDIT_INSPECTION_CERTIFICATE.LBL_SERVICE_DATE_FROM' | translate }}" ngbDatepicker
+                    #fd="ngbDatepicker" (click)="fd.toggle()">
+                  <img src="assets/images/calendar-icon.svg" alt="" class="calendar-icon" (click)="fd.toggle()">
+                </div>
+              </div>
+            </div>
+            <div class="col-sm-3 col-md-3 col-lg-3">
+              <div class="my-input-group">
+                <label class="required">{{ 'EDIT_INSPECTION_CERTIFICATE.LBL_SERVICE_DATE_TO' | translate }}</label>
+                <div class="calendar-wrapper">
+                  <input type="text" maxlength="10" readonly=readonly [(ngModel)]="modelSearch.serviceToDate"
+                    placeholder="{{ 'EDIT_INSPECTION_CERTIFICATE.LBL_SERVICE_DATE_TO' | translate }}" ngbDatepicker
+                    #td="ngbDatepicker" (click)="td.toggle()">
+                  <img src="assets/images/calendar-icon.svg" alt="" class="calendar-icon" (click)="td.toggle()">
+                </div>
+              </div>
+            </div>
+            <div class="col-sm-3 col-md-3 col-lg-3 mobile-margin-top-15 marignT-20"
+              *ngIf="(model.customerId >0 && model.supplierId >0)">
+              <button id="btnSearch" class="primary-cta small" (click)="search()" [disabled]="ICModel.customerLoading ||
+                      ICModel.supplierLoading || ICModel.bookingSearchLoading
+                      || !(model.customerId > 0 || model.supplierId > 0)">
+                {{ 'EDIT_INSPECTION_CERTIFICATE.LBL_SEARCH' | translate }}
+                <span *ngIf="ICModel.bookingSearchLoading">
+                  <i class="fa fa-refresh fa-spin" aria-hidden="true"></i>
+                </span>
+              </button>
+            </div>
+          </div>
+          <div class="col-lg-12 table-container marginTop25" #scrollableTable
+            style="max-height:350px;overflow-y: auto;">
+            <table class="pagination-table" *ngIf="ICModel.bookingSearchList != null &&
+                   ICModel.bookingSearchList.length>
+              0">
+              <thead>
+                <tr>
+                  <th></th>
+                  <th>
+                    <div class="styled-checkbox-container">
+                      <input *ngIf="ICModel.selectedAllCheckBoxEnable" type="checkbox" class="styled-checkbox"
+                        id="checkboxbookingall" [(ngModel)]="ICModel.selectedAllBooking"
+                        (change)="selectAllBooking();" />
+                      <label for="checkboxbookingall"></label>
+                    </div>
+                  </th>
+                  <th class="width-60">{{ 'EDIT_INSPECTION_CERTIFICATE.LBL_BOOKING_NO' | translate }}</th>
+                  <th class="width-100">{{ 'EDIT_INSPECTION_CERTIFICATE.LBL_SERVICE_DATE_FROM' | translate }}</th>
+                  <th class="width-100">{{ 'EDIT_INSPECTION_CERTIFICATE.LBL_SERVICE_DATE_TO' | translate }}</th>
+                  <th class="width-140">{{ 'EDIT_INSPECTION_CERTIFICATE.LBL_CUSTOMER' | translate }}</th>
+                  <th class="width-140">{{ 'EDIT_INSPECTION_CERTIFICATE.LBL_SUPPLIER' | translate }}</th>
+                  <th class="width-140"> {{ 'EDIT_INSPECTION_CERTIFICATE.LBL_FACTORY' | translate }}</th>
+                  <th class="width-100">{{ 'EDIT_INSPECTION_CERTIFICATE.LBL_SERVICE_TYPE' | translate }}</th>
+                </tr>
+              </thead>
+              <tbody>
+                <ng-container *ngFor="let bookingItem of ICModel.bookingSearchList;let idx = index">
+                  <tr>
+                    <td>
+                      <a *ngIf="!bookingItem.isExpand" style="cursor:pointer"
+                        (click)="expand(bookingItem.bookingNumber)">
+                        <i class="fa fa-plus-circle"></i>
+                      </a>
+
+                      <a *ngIf="bookingItem.productList != null && bookingItem.productList.length > 0
+                                        && bookingItem.isExpand" style="cursor:pointer"
+                        (click)="collapse(bookingItem.bookingNumber)">
+                        <i class="fa fa-minus-circle"></i>
+                      </a>
+                    </td>
+                    <td class="Center_Middle">
+                      <div class="styled-checkbox-container">
+                        <input type="checkbox" class="styled-checkbox" id="checkboxorder-{{bookingItem.bookingNumber}}"
+                          *ngIf="bookingItem.enableCheckbox" [(ngModel)]="bookingItem.checked"
+                          (change)="bookingDataSelect(bookingItem);">
+                        <label for="checkboxorder-{{bookingItem.bookingNumber}}"></label>
+                      </div>
+                    </td>
+                    <td class="width-60">{{bookingItem.bookingNumber}}</td>
+                    <td class="width-100">{{bookingItem.serviceFromDate}}</td>
+                    <td class="width-100">{{bookingItem.serviceToDate}}</td>
+                    <td class="width-140 wordbreak">{{bookingItem.customerName}}</td>
+                    <td class="width-140 wordbreak">{{bookingItem.supplierName}}</td>
+                    <td class="width-140 wordbreak">{{bookingItem.factoryName}}</td>
+                    <td class="width-100 wordbreak">{{bookingItem.serviceType}}</td>
+                  </tr>
+
+                  <ng-container *ngIf="bookingItem.productList != null &&
+                                bookingItem.productList.length>0  && bookingItem.isExpand">
+                    <tr>
+                      <td></td>
+                      <td class="Center_Middle">
+                      </td>
+                      <td class="width-100 table-td-header">{{ 'EDIT_INSPECTION_CERTIFICATE.LBL_PO_NO' | translate }}
+                      </td>
+                      <td class="width-100 table-td-header">{{ 'EDIT_INSPECTION_CERTIFICATE.LBL_PRODUCT_CODE' |
+                        translate }}</td>
+                      <td class="width-150 table-td-header">{{ 'EDIT_INSPECTION_CERTIFICATE.LBL_PRODUCT_DESC' |
+                        translate }}</td>
+                      <td class="width-60 table-td-header">{{ 'EDIT_INSPECTION_CERTIFICATE.LBL_PRESENTED_QTY' |
+                        translate }}</td>
+                      <td class="width-60 table-td-header">{{ 'EDIT_INSPECTION_CERTIFICATE.LBL_REMAINING_QTY' |
+                        translate }}</td>
+                      <td class="width-100 table-td-header" colspan="2">
+                        {{ 'EDIT_INSPECTION_CERTIFICATE.LBL_DESTINATION_COUNTRY' | translate }}
+                      </td>
+                    </tr>
+                    <tr *ngFor="let bookingProductItem of bookingItem.productList;let i = index">
+                      <td></td>
+                      <td class="Center_Middle">
+                        <div class="styled-checkbox-container">
+                          <input type="checkbox" class="styled-checkbox" *ngIf="bookingProductItem.enableCheckbox"
+                            (change)="PODataSelect(bookingItem)"
+                            id="checkboxorder-{{bookingProductItem.inspPOTransactionId}}-{{i}}"
+                            [(ngModel)]="bookingProductItem.checked">
+                          <label for="checkboxorder-{{bookingProductItem.inspPOTransactionId}}-{{i}}"></label>
+                        </div>
+                      </td>
+                      <td class="width-100 wordbreak"> {{bookingProductItem.poNo}}</td>
+                      <td class="width-100 wordbreak"> {{bookingProductItem.productCode}}</td>
+                      <td class="width-150 wordbreak"> {{bookingProductItem.productDescription}}</td>
+                      <td class="width-60 Center_Middle"> {{bookingProductItem.presentedQty}}</td>
+                      <td class="width-60 Center_Middle"> {{bookingProductItem.remainingQty}}</td>
+                      <td class="width-100 wordbreak" colspan="2"> {{bookingProductItem.destinationCountry}}</td>
+                    </tr>
+                  </ng-container>
+                </ng-container>
+              </tbody>
+            </table>
+          </div>
+          <!-- no data found  -->
+          <div class="no-result-table" *ngIf="ICModel.noDataBooking">
+            <img src="assets/images/no-data.png" alt="" class="icon">
+            <h4 class="title">
+              {{'COMMON.LBL_NOITEMS' | translate}}
+            </h4>
+            <p>{{'COMMON.LBL_NODATA' | translate}} </p>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="primary-cta small" *ngIf="this.ICModel.bookingSearchList != null &&
+                this.ICModel.bookingSearchList.length>0" (click)="selectICProduct()">
+          {{'EDIT_INSPECTION_CERTIFICATE.LBL_ADD_TO_IC' | translate}}
+        </button>
+        <button type="button" class="secondary-cta small" (click)="modal.dismiss('cancel click')">
+          {{ 'COMMON.LBL_CONFIRMCANCEL' | translate }}
+        </button>
+      </div>
+    </ng-template>

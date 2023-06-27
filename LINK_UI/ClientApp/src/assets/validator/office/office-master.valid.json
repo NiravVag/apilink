@@ -1,0 +1,13 @@
+{
+  "model": "officesummary.model",
+  "fields": {
+    "typeValues": [
+      {
+        "type": "required",
+        "fieldType": "A",
+        "ressource": "OFFICE_SUMMARY.MSG_TYPES_REQ"
+      }
+    ]
+  }
+
+}

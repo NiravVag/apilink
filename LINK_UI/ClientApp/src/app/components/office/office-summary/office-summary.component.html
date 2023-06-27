@@ -1,0 +1,114 @@
+<div class="main-wrapper">
+  <div class="wrapper dashboard-wrapper">
+    <div class="my-container">
+      <div class="master-body">
+        <div class="title-container">
+          <h3 class="main-title">{{ 'OFFICE_SUMMARY.LBL_SEARCH' | translate }}</h3>
+        </div>
+        <div class="content-container quotation-container">
+          <div  [@expandCollapse]="isFilterOpen ? 'open' : 'close'" class="centerContainerPadding common-filter-container">
+            <div class="animated-icon-container" (click)="toggleFilterSection()" *ngIf="(model.items && model.items.length>0)">
+              <img src="assets/images/cta-close-grey.svg" alt="close">
+            </div>
+              <div class="row">
+                <div class="col-sm-6 col-lg-3">
+                  <div class="my-input-group">
+                    <label for="">{{ 'OFFICE_SUMMARY.LBL_OFFICE' | translate }}</label>
+                    <ng-select [items]="data.officeList" class="multiple" [hideSelected]="true" [multiple]="true" [closeOnSelect]="false"
+                      [loading]="loading" [searchable]="true" bindLabel="name" [(ngModel)]="model.OfficeValues" appendTo="body"
+                      placeholder="--- {{ 'OFFICE_SUMMARY.LBL_SELECT' | translate }} ---">
+                    </ng-select>
+                  </div>
+                </div>
+                <div class="col-sm-6 col-md-8 col-lg-9"></div>
+              </div>
+            
+          
+              <div class="row marginTop25">
+                <div class="col-12 col-sm-12 text-right mt-3 mt-sm-0"> 
+              <button id="btnAdd" class="secondary-cta small" (click)="NavigatenewPath('office/new-office')">
+                + {{
+                  'COMMON.LBL_NEW' | translate
+                }}
+              </button>
+              &nbsp;
+              <button id="btnSearch" [disabled]="searchloading || loading" class="primary-cta small" (click)="search()">
+                {{
+                'OFFICE_SUMMARY.LBL_SEARCH' | translate
+              }}
+                <span *ngIf="searchloading">
+                  <i class="fa fa-refresh fa-spin" aria-hidden="true"></i>
+                </span>
+              </button>
+            </div>
+          </div>
+        </div>
+          <div class="centerContainerPadding float-left" *ngIf="model && model.items && model.items.length>0">
+            
+            <div class="row">
+              <div class="col-6 col-sm-4 col-xl-2 d-flex">
+                <p  class="search-trigger-heading" [innerHtml]="showPaginationText()"></p>
+              </div>
+              <div class="col-6 col-sm-8 col-xl-10 text-right">
+                <div class="animated-icon-container" *ngIf="!isFilterOpen" (click)="toggleFilterSection()">
+                  <img src="assets/images/cta-search-grey.svg" alt="search">
+                </div>
+              </div>
+            </div>
+            <div class="quotation-search-container">
+              <div class="table-container h-scroll table-max-height-400">
+                <table class="pagination-table simple-table bordered">
+                <thead>
+                  <tr class="sticky-top-row">
+                    <th class="width-20"></th>
+                    <th>{{ 'OFFICE_SUMMARY.LBL_OFFICE' | translate }}</th>
+                    <th class="width-200 text-wrap">{{ 'OFFICE_SUMMARY.LBL_ADDRESS1' | translate }}</th>
+                    <th>{{ 'OFFICE_SUMMARY.LBL_ADDRESS2' | translate }}</th>
+                    <th>{{ 'OFFICE_SUMMARY.LBL_OFFICE_TYPE' | translate }}</th>
+                    <th>{{ 'OFFICE_SUMMARY.LBL_OFFICE_COUNTRY_CITY' | translate }}</th>
+                    <th>{{ 'OFFICE_SUMMARY.LBL_OFFICE_OPERATION_COUNTRIES' | translate }}</th>
+                    
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let iteminfo of model.items">
+                    <td class="Center_Middle">
+                      <span class="table-cta icon-cta common-tooltip" 
+                      (click)="getDetails(iteminfo.id)" data-tooltip="Edit">
+                        <img src="assets/images/cta-edit.svg" alt="Edit">
+                      </span>
+                    </td>
+                    <td>{{iteminfo.officename}}</td>
+                    <td>{{iteminfo.address1}}</td>
+                    <td>{{iteminfo.address2}}</td>
+                    <td>{{iteminfo.locationtypename}}</td>
+                    <td>{{iteminfo.country}} / {{iteminfo.city}}</td>
+                    <td>{{iteminfo.operationcountriesname}}</td>
+                     
+                  </tr>
+                </tbody>
+              </table>
+              </div>
+            </div>
+            <div class="pagination-container">
+              <select class="small" [(ngModel)]="selectedPageSize" (change)="SearchDetails()">
+                <option *ngFor="let item of pagesizeitems" [ngValue]=item>{{item}}</option>
+              </select>
+              <ngb-pagination (pageChange)="onPager($event)" [pageSize]="model.pageSize"
+                [collectionSize]="model.totalCount" [(page)]="model.index" [maxSize]="5"></ngb-pagination>
+            </div>
+          </div>
+         
+          <div class="centerContainerPadding" *ngIf="model.noFound">
+            <div class="error-container">
+              <img src="assets/images/no-result.svg" alt="" class="thumbnail">
+              <h4 class="title">{{'OFFICE_SUMMARY.LBL_No_ITEM' | translate}}</h4>
+              <p class="error-subtitle">{{'CS_CONFIG_SUMMARY.LBL_NODATA' | translate}}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>

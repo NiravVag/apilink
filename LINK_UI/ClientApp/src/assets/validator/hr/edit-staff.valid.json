@@ -1,0 +1,285 @@
+{
+ "model": "edit-staff.model",
+  "fields": {
+    "employeeNo": [
+      {
+        "type": "required",
+        "ressource": "EDIT_STAFF.MSG_EMPLOYEENO_REQ"
+      }
+    ],
+    "dateBirth": [
+      {
+        "type": "date",
+        "ressource": "EDIT_STAFF.MSG_BIRTHDATE_DATE"
+      }
+    ],
+    "countryId": [
+      {
+        "type": "required",
+        "fieldType": "N",
+        "ressource": "EDIT_STAFF.MSG_COUNTRY_REQ"
+      }
+    ],
+    "staffName": [
+      {
+        "type": "required",
+        "ressource": "EDIT_STAFF.MSG_PERSONNAME_REQ"
+      }
+    ],
+    "qualificationId": [
+      {
+        "type": "required",
+        "fieldType": "N",
+        "ressource": "EDIT_STAFF.MSG_QUALIFICATION_REQ"
+      }
+    ],
+    "gender": [
+      {
+        "type": "required",
+        "fieldType": "N",
+        "ressource": "EDIT_STAFF.MSG_GENDER_REQ"
+      }
+    ],
+    "graduateDate": [
+      {
+        "type": "date",
+        "ressource": "EDIT_STAFF.MSG_GRADUATEDATE_DATE"
+      }
+    ],
+    "martial": [
+      {
+        "type": "required",
+        "fieldType": "N",
+        "ressource": "EDIT_STAFF.MSG_MARTIAL_STATUS_REQ"
+      }
+    ],
+    "email": [
+      {
+        "type": "required",
+        "fieldType": "T",
+        "ressource": "EDIT_STAFF.MSG_EMAIL_REQ"
+      },
+      {
+        "type": "email",
+        "ressource": "EDIT_STAFF.MSG_EMAIL_EMAIL"
+      }
+    ],
+    "phone": [
+      {
+        "type": "required",
+        "fieldType": "T",
+        "ressource": "EDIT_STAFF.MSG_CONTACTPHONE_REQ"
+      }
+    ],
+    "joinDate": [
+      {
+        "type": "required",
+        "fieldType": "D",
+        "ressource": "EDIT_STAFF.MSG_JOINDATE_REQ"
+      },
+      {
+        "type": "date",
+        "ressource": "EDIT_STAFF.MSG_JOINDATE_DATE"
+      }
+    ],
+    "positionId": [
+      {
+        "type": "required",
+        "fieldType": "N",
+        "ressource": "EDIT_STAFF.MSG_POSITION_REQ"
+      }
+    ],
+    "companyEmail": [
+      {
+        "type": "required",
+        "fieldType": "T",
+        "ressource": "EDIT_STAFF.MSG_COMPANYEMAIL_REQ"
+      },
+      {
+        "type": "email",
+        "ressource": "EDIT_STAFF.MSG_COMPANYEMAIL_EMAIL"
+      }
+    ],
+    "reportHeadId": [
+      {
+        "type": "required",
+        "fieldType": "N",
+        "ressource": "EDIT_STAFF.MSG_REPORTHEAD_REQ"
+      }
+    ],
+    "profileItems": [
+      {
+        "type": "required",
+        "fieldType": "A",
+        "ressource": "EDIT_STAFF.MSG_PROFILE_REQ"
+      }
+    ],
+    "employeeTypeId": [
+      {
+        "type": "required",
+        "fieldType": "N",
+        "ressource": "EDIT_STAFF.MSG_EMPLOYEETYPE_REQ"
+      }
+    ],
+    "officeId": [
+      {
+        "type": "required",
+        "fieldType": "N",
+        "ressource": "EDIT_STAFF.MSG_OFFICE_REQ"
+      }
+    ],
+    "probExpDate": [
+      {
+        "type": "date",
+        "ressource": "EDIT_STAFF.MSG_PROBEXPDAT_DATE"
+      }
+    ],
+    "opCountryItems": [
+      {
+        "type": "required",
+        "fieldType": "A",
+        "ressource": "EDIT_STAFF.MSG_OPCOUNTRY_REQ"
+      }
+    ],
+    "departmentId": [
+      {
+        "type": "required",
+        "fieldType": "N",
+        "ressource": "EDIT_STAFF.MSG_DEPARTMENT_REQ"
+      }
+    ],
+    "payrollCurrencyId": [
+      {
+        "type": "required",
+        "fieldType": "N",
+        "ressource": "EDIT_STAFF.MSG_PAYROLL_REQ"
+      }
+    ],
+    "homeCountryId": [
+      {
+        "type": "required",
+        "fieldType": "N",
+        "ressource": "EDIT_STAFF.MSG_HOMECOUNTRY_REQ"
+      }
+    ],
+    "homeStateId": [
+      {
+        "type": "required",
+        "fieldType": "N",
+        "ressource": "EDIT_STAFF.MSG_HOMESTATE_REQ"
+      }
+    ],
+    "homeCityId": [
+      {
+        "type": "required",
+        "fieldType": "N",
+        "ressource": "EDIT_STAFF.MSG_HOMECITY_REQ"
+      }
+    ],
+    "homeAddress": [
+      {
+        "type": "required",
+        "fieldType": "T",
+        "ressource": "EDIT_STAFF.MSG_HOMEADDR_REQ"
+      }
+    ],
+    "currentCountryId": [
+      {
+        "type": "required",
+        "fieldType": "N",
+        "ressource": "EDIT_STAFF.MSG_CURRCOUNTRY_REQ"
+      }
+    ],
+    "currentStateId": [
+      {
+        "type": "required",
+        "fieldType": "N",
+        "ressource": "EDIT_STAFF.MSG_CURRSTATE_REQ"
+      }
+    ],
+    "currentCityId": [
+      {
+        "type": "required",
+        "fieldType": "N",
+        "ressource": "EDIT_STAFF.MSG_CURRCITY_REQ"
+      }
+    ],
+    "currentCountyId": [
+      {
+        "type": "required",
+        "fieldType": "N",
+        "ressource": "EDIT_STAFF.MSG_CURRCOUNTY_REQ"
+      }
+    ],
+    "currentAddress": [
+      {
+        "type": "required",
+        "fieldType": "T",
+        "ressource": "EDIT_STAFF.MSG_CURRADDR_REQ"
+      }
+    ],
+    "salary": [
+      {
+        "type": "number",
+        "ressource": "EDIT_STAFF.MSG_SALARY_NUMBER"
+      }
+    ],
+    "startWkDate": [
+      {
+        "type": "date",
+        "ressource": "EDIT_STAFF.MSG_STARTWK_DATE"
+      }
+    ],
+    "apiEntityIds": [
+      {
+        "type": "required",
+        "fieldType": "N",
+        "ressource": "EDIT_STAFF.MSG_ENTITY_REQ"
+      }
+    ],
+    "apiServiceIds": [
+      {
+        "type": "required",
+        "fieldType": "N",
+        "ressource": "EDIT_STAFF.MSG_SERVICE_REQ"
+      }
+    ],
+    "primaryEntity": [
+      {
+        "type": "required",
+        "fieldType": "N",
+        "ressource": "EDIT_STAFF.MSG_PRIMARY_REQ"
+      }
+    ],
+    "bandId": [
+      {
+        "type": "required",
+        "fieldType": "N",
+        "ressource": "EDIT_STAFF.MSG_BAND"
+      }
+    ],
+    "entityServiceIds": [
+      {
+        "type": "required",
+        "fieldType": "N",
+        "ressource": "EDIT_STAFF.MSG_ENTITY_AND_SERVICE_REQUIRED"
+      }
+    ],
+    "companyId": [
+      {
+        "type": "required",
+        "fieldType": "N",
+        "ressource": "EDIT_STAFF.MSG_COMPANY_REQ"
+      }
+    ],
+    "payrollCompany": [
+      {
+        "type": "required",
+        "fieldType": "N",
+        "ressource": "EDIT_STAFF.MSG_PAYROLL_COMPANY_REQ"
+      }
+    ]
+
+  }
+
+}

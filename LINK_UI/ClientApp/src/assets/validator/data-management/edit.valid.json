@@ -1,0 +1,19 @@
+{
+ "model": "dm.model",
+  "fields": {
+    "idCustomer": [
+      {
+        "type": "required",
+        "fieldType": "N",
+        "ressource": "DATA_MANAGEMENT.MSG_CUSTOMER_REQ"
+      }
+    ],
+    "fileName": [
+      {
+        "type": "required",
+        "ressource": "DATA_MANAGEMENT.MSG_FILE_REQ"
+      }
+    ]
+  }
+
+}

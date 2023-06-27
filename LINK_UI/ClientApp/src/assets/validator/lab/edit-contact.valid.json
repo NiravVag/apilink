@@ -1,0 +1,31 @@
+{
+  "model": "edit-lab.model",
+  "fields": {
+    "contactName": [
+      {
+        "type": "required",
+        "fieldType": "T",
+        "ressource": "EDIT_LAB.MSG_CONTACTNAME_REQ"
+      }
+    ],
+    "contactEmail": [
+      {
+        "type": "required",
+        "fieldType": "T",
+        "ressource": "EDIT_SUPPLIER.MSG_CONTACTEMAIL_REQ"
+      },
+      {
+        "type": "email",
+        "ressource": "EDIT_LAB.MSG_CONTACTEMAIL_EMAIL"
+      }
+    ],
+    "customerList": [
+      {
+        "type": "required",
+        "fieldType": "A",
+        "ressource": "EDIT_LAB.MSG_CUSTOMERS_REQ"
+      }
+    ]
+  }
+
+}

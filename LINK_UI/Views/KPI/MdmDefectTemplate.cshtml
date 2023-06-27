@@ -1,0 +1,64 @@
+﻿@using DTO.Common; 
+@{
+    ViewData["Title"] = "MdmDefectTemplate";
+}
+
+@model DTO.Kpi.ExportResult
+
+<xls-sheet name="MDM Defect KPI">
+    <table xls-begin="A:1" style="border-style:solid">
+        <tr style="background-color:#f5f5f5;font-weight:bold;text-align:center">
+            <th>InspectionID</th>
+            <th>Department</th>
+            <th>Service Date</th>
+            <th>Customer</th>
+            <th>Supplier</th>
+            <th>Factory</th>
+            <th>Factory Country</th>
+            <th>Service Type</th>
+            <th>Status</th>
+            <th>Product Name</th>
+            <th>Product Desc</th>
+            <th>PO #</th>
+            <th>PO Qty</th>
+            <th>Inspected Qty</th>
+            <th>Total Defects</th>
+            <th>Total Critical</th>
+            <th>Total Major</th>
+            <th>Total Minor</th>
+            <th>Reworked</th>
+            <th>Replaced</th>
+            <th>Rejected</th>
+            <th>Final Result</th>
+            <th>Product ID</th>
+        </tr>
+        @foreach (var item in Model.Data)
+        {
+        <tr>
+            <td width="150px" xls-type="number">@item.BookingNo</td>
+            <td width="150px">@Html.Raw(@item.DeptCode)</td>
+            <td width="250px">@item.ServiceDate</td>
+            <td width="150px">@Html.Raw(@item.CustomerName)</td>
+            <td width="150px">@Html.Raw(@item.SupplierName)</td>
+            <td width="150px">@Html.Raw(@item.FactoryName)</td>
+            <td width="150px">@Html.Raw(@item.FactoryCountry)</td>
+            <td width="150px">@Html.Raw(item.ServiceTypeName)</td>
+            <td width="250px">@item.bookingStatus</td>
+            <td width="250px">@Html.Raw(@item.ProductName)</td>
+            <td width="250px">@Html.Raw(@item.ProductDescription)</td>
+            <td width="250px">@item.PONumber</td>
+            <td width="150px" style="text-align:center" xls-type="number">@item.PoQuantity</td>
+            <td width="150px" style="text-align:center" xls-type="number">@item.InspectedQty</td>
+            <td width="150px" style="text-align:center" xls-type="number">@item.TotalDefects</td>
+            <td width="150px" style="text-align:center" xls-type="number">@item.CriticalDefect</td>
+            <td width="150px" style="text-align:center" xls-type="number">@item.MajorDefect</td>
+            <td width="150px" style="text-align:center" xls-type="number">@item.MinorDefect</td>
+            <td width="150px" style="text-align:center" xls-type="number">@item.TotalQtyReworked</td>
+            <td width="150px" style="text-align:center" xls-type="number">@item.TotalQtyReplaced</td>
+            <td width="150px" style="text-align:center" xls-type="number">@item.TotalQtyRejected</td>
+            <td width="250px">@item.FinalReportStatus</td>
+            <td width="150px" xls-type="number">@item.ProductId</td>
+        </tr>
+        }
+    </table>
+</xls-sheet>

@@ -1,0 +1,19 @@
+{
+    "model": "EditExtraFeeType",
+    "fields": {       
+        "typeId": [
+            {
+                "type": "required",
+                "fieldType": "N",
+                "ressource": "EXTRA_FEE.MSG_TYPE_REQ"
+            }
+        ],
+        "fees": [
+            {
+                "type": "required",
+                "fieldType": "N",
+                "ressource": "EXTRA_FEE.MSG_FEES_REQ"
+            }
+        ]
+    }
+}

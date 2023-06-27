@@ -1,0 +1,23 @@
+<form [formGroup]="form">
+
+    <!--   <div  class="row marginTop25">
+            <div class="col-sm-3 col-md-6 col-lg-3" *ngFor="let dynamiccontrol of dynamicControls">
+                  <div class="my-input-group">
+                        <app-dynamic-controls [dynamiccontrol]="dynamiccontrol" [dynamiccontrols]="dynamicControls"
+                              [form]="form"></app-dynamic-controls>
+                  </div>
+            </div>
+      </div> -->
+
+      <ng-template ngFor let-item [ngForOf]="dynamicControlBaseData" let-i="index">
+            <div  class="row marginTop15">
+                  <div class="col-sm-3 col-md-6 col-lg-3" *ngFor="let dynamiccontrol of dynamicControlBaseData[i]">
+                        <div class="my-input-group">
+                              <app-dynamic-controls [dynamiccontrol]="dynamiccontrol" [dynamiccontrols]="dynamicControls"
+                                    [form]="form"></app-dynamic-controls>
+                        </div>
+                  </div>
+            </div>
+      </ng-template>
+
+</form>

@@ -1,0 +1,19 @@
+{
+    "model": "TCFDocumentUpload",
+    "fields": {
+        "standardIds": [
+            {
+                "type": "required",
+                "fieldType": "A",
+                "ressource": "Standard Values are required"
+            }
+        ],
+        "issueDate": [
+            {
+                "type": "required",
+                "fieldType": "D",
+                "ressource": "Issue Date is required"
+            }
+        ]
+    }
+}

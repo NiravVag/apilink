@@ -1,0 +1,794 @@
+<div class="main-wrapper">
+  <div class="wrapper dashboard-wrapper">
+    <div class="my-container">
+      <div class="master-body">
+        <div class="title-container">
+          <h3 class="main-title">Quotation Search</h3>
+          <div class="view-change-container" *ngIf="!_IsInternalUser">
+            <div *ngIf="!_IsInternalUser" (click)="toggleResultContainer()" [ngClass]="{'active': !isListResultView }"
+              class="tile"><img src="assets/images/cta-tile-color.svg" alt=""></div>
+            <div [ngClass]="{'active': isListResultView }" (click)="toggleResultContainer()" class="tile"><img
+                src="assets/images/cta-list-grey.svg" alt=""></div>
+          </div>
+        </div>
+        <div class="content-container quotation-container">
+          <div [@expandCollapse]="isFilterOpen ? 'open' : 'close'"
+            class="centerContainerPadding common-filter-container">
+            <div class="animated-icon-container" (click)="toggleFilterSection()"
+              *ngIf="(model.items && model.items.length>0)">
+              <img src="assets/images/cta-close-grey.svg" alt="close">
+            </div>
+            <div class="row">
+              <div class="col-sm-8 col-md-8 col-lg-4">
+                <div class="my-input-group">
+                  <div class="styled-radio-container"
+                    *ngFor="let item of masterModel.quotationSearchTypeList;let idx = index">
+                    <input type="radio" class="styled-radio" [value]="item.id" id="{{item.id}}" name="radio-group"
+                      (change)="SetSearchTypemodel(item)" [(ngModel)]="model.searchtypeid" [checked]="idx === 0">
+                    <label for="{{item.id}}"> {{item.name}} </label>
+                  </div>
+                  <input maxlength="200" (ngModelChange)="BookingNoValidation()" [(ngModel)]="model.searchtypetext"
+                    type="text" [ngClass]="{ 'is-invalid': model.searchtypetext!='' && _customvalidationforbookid}" />
+                  <div *ngIf="model.searchtypetext!='' && _customvalidationforbookid" class="invalid-feedback">
+                    <div>{{ 'BOOKING_SUMMARY.MSG_BOOKINGNO_ERROR' | translate }}</div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-sm-6 col-md-8 col-xl-8 mobile-margin-top-15">
+                <div class="my-input-group">
+                  <div class="styled-radio-container">
+                    <input type="radio" class="styled-radio" id="serviceDate" name="radio-group1" value="serviceDate"
+                      [checked]="true" (change)="SetSearchDatetype('serviceDate')">
+                    <label for="serviceDate">{{ 'QUOTATION_SUMMARY.LBL_SERVICEDATE' | translate }}</label>
+                  </div>
+                  <div class="styled-radio-container">
+                    <input type="radio" class="styled-radio" id="quotationDate" name="radio-group1"
+                      value="quotationDate" [checked]="false" (change)="SetSearchDatetype('quotationDate')">
+                    <label for="quotationDate">{{ 'QUOTATION_SUMMARY.LBL_QUOTATIONDATE' | translate }}</label>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="my-input-group col-sm-3 col-md-6 col-lg-3">
+                    <div class="calendar-wrapper">
+                      <input type="text" maxlength="10" container="body"
+                        [ngClass]="{ 'is-invalid':  !validator.isValidIf('fromdate',IsDateValidationRequired())}"
+                        readonly=readonly [(ngModel)]="model.fromdate" ngbDatepicker #sdf="ngbDatepicker"
+                        (click)="sdf.toggle()">
+                      <img src="assets/images/cta-close-grey.svg" alt="" class="close-icon"
+                        (click)="clearDateInput('Fromdate')" *ngIf="model.fromdate">
+                      <img src="assets/images/calendar-icon.svg" alt="" class="calendar-icon" (click)="sdf.toggle()">
+                    </div>
+                    <div *ngIf="!validator.isValidIf('fromdate',IsDateValidationRequired())" class="invalid-feedback">
+                      <div *ngFor="let error of validator.getErrors('fromdate')">{{ error | translate }}</div>
+                    </div>
+                  </div>
+                  <div class="my-input-group col-sm-3 col-md-6 col-lg-3">
+                    <div class="calendar-wrapper">
+                      <input type="text" maxlength="10" container="body"
+                        [ngClass]="{ 'is-invalid':  !validator.isValidIf('todate',IsDateValidationRequired())}"
+                        readonly=readonly [(ngModel)]="model.todate" ngbDatepicker #sdt="ngbDatepicker"
+                        (click)="sdt.toggle()">
+                      <img src="assets/images/cta-close-grey.svg" alt="" class="close-icon"
+                        (click)="clearDateInput('Todate')" *ngIf="model.todate">
+                      <img src="assets/images/calendar-icon.svg" alt="" class="calendar-icon" (click)="sdt.toggle()">
+                    </div>
+                    <div *ngIf="!validator.isValidIf('todate',IsDateValidationRequired())" class="invalid-feedback">
+                      <div *ngFor="let error of validator.getErrors('todate')">{{ error | translate }}</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+            <div class="row">
+              <div class="col-sm-12">
+                <div class="row marginTop15">
+                  <div class="col-sm-3">
+                    <div class="my-input-group">
+                      <label for="">{{ 'QUOTATION_SUMMARY.LBL_CUSTOMER' | translate }}</label>
+                      <ng-select #customer [searchable]="true" [items]="customerList" bindLabel="name" appendTo="body"
+                        (change)="ChangeCustomer($event)" [loading]="Initialloading" [clearable]="!_IsCustomerUser"
+                        [ngClass]="{ 'is-invalid': !validator.isValidIf('customerid', model.advancedsearchtypetext)}"
+                        bindValue="id" [hideSelected]="true" (clear)="ClearCustomer()"
+                        placeholder="--- {{(customerList!=null && customerList.length!=0? 'QUOTATION_SUMMARY.LBL_SELECT':'QUOTATION_SUMMARY.MSG_NO_DATA')  | translate }} ---"
+                        [(ngModel)]="model.customerid">
+                        <ng-template ng-option-tmp let-item="item">
+                          <div class="text-wrap">{{ item.name }}</div>
+                        </ng-template>
+                      </ng-select>
+                      <div *ngIf="!validator.isValidIf('customerid', model.advancedsearchtypetext)"
+                        class="invalid-feedback">
+                        <div *ngFor="let error of validator.getErrors('customerid')">{{ error | translate }}</div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-sm-3 mobile-margin-top-15">
+                    <div class="my-input-group">
+                      <label for="">{{ 'QUOTATION_SUMMARY.LBL_STATUS' | translate }}</label>
+                      <ng-select [multiple]="true" [searchable]="true" [loading]=Initialloading [items]="statusList"
+                        appendTo="body" class="multiple" bindLabel="label" bindValue="id" [hideSelected]="true"
+                        placeholder="--- {{ (statusList!=null && statusList.length!=0? 'QUOTATION_SUMMARY.LBL_SELECT':'QUOTATION_SUMMARY.MSG_NO_DATA' ) | translate }} ---"
+                        [(ngModel)]="model.statusidlst">
+                        <ng-template ng-option-tmp let-item="item">
+                          <div class="text-wrap">{{ item.label }}</div>
+                        </ng-template>
+                      </ng-select>
+                    </div>
+                  </div>
+                  <div class="col-sm-3 mobile-margin-top-15">
+                    <div class="my-input-group">
+                      <label for="">{{ 'QUOTATION_SUMMARY.LBL_OFFICE' | translate }}</label>
+                      <ng-select [searchable]="true" [loading]="Initialloading" [items]="officeList" bindLabel="name"
+                        appendTo="body" bindValue="id" [hideSelected]="true" [multiple]="true" class="multiple"
+                        placeholder="--- {{(officeList!=null && officeList.length!=0? 'QUOTATION_SUMMARY.LBL_SELECT':'QUOTATION_SUMMARY.MSG_NO_DATA')  | translate }} ---"
+                        [(ngModel)]="model.officeidlst">
+                        <ng-template ng-option-tmp let-item="item">
+                          <div class="text-wrap">{{ item.name }}</div>
+                        </ng-template>
+                      </ng-select>
+                    </div>
+                  </div>
+                  <div class="col-sm-3 mobile-margin-top-15">
+                    <div class="my-input-group">
+                      <label class="required">{{ 'QUOTATION_SUMMARY.LBL_SERVICE' | translate }}</label>
+                      <ng-select [searchable]="true" [loading]="Initialloading" [items]="serviceList" bindLabel="name"
+                        appendTo="body" bindValue="id" [hideSelected]="true" [multiple]="false" class="multiple"
+                        (clear)="ClearServiceType()" (change)="ChangeService()"
+                        placeholder="--- {{(serviceList!=null && serviceList.length!=0? 'QUOTATION_SUMMARY.LBL_SELECT':'QUOTATION_SUMMARY.MSG_NO_DATA')  | translate }} ---"
+                        [(ngModel)]="model.serviceId" [ngClass]="{ 'is-invalid':  !validator.isValid('serviceId')}">
+                        <ng-template ng-option-tmp let-item="item">
+                          <div class="text-wrap">{{ item.name }}</div>
+                        </ng-template>
+                      </ng-select>
+                      <div *ngIf="!validator.isValid('serviceId')" class="invalid-feedback">
+                        <div *ngFor="let error of validator.getErrors('serviceId')">{{ error | translate }}</div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-sm-12" *ngIf="toggleFormSection">
+                <div class="row marginTop25">
+                  <div class="col-sm-3 col-lg-3 quotation-supplier-margin">
+                    <div class="my-input-group">
+                      <div class="styled-radio-container">
+                        <input type="radio" class="styled-radio" id="factory" name="radio-group2" value="factory"
+                          [checked]="true" (change)="SetSearchTypeText('factoryRef')">
+                        <label for="factory">{{'QUOTATION_SUMMARY.LBL_FACTORY_REFERENCE' | translate}}</label>
+                      </div>
+                      <div class="styled-radio-container">
+                        <input type="radio" class="styled-radio" id="product" name="radio-group2" value="product"
+                          [checked]="false" (change)="SetSearchTypeText('product')">
+                        <label for="product">{{'QUOTATION_SUMMARY.LBL_PRODUCT' | translate}}</label>
+                      </div>
+                      <input type="text" maxlength="200" [(ngModel)]="model.advancedsearchtypetext">
+                    </div>
+                  </div>
+                  <div class="col-sm-3" style="margin-top:7px">
+                    <div class="my-input-group">
+                      <label for="" class="">{{'QUOTATION_SUMMARY.LBL_SERVICETYPE' | translate}}</label>
+                      <ng-select [items]="serviceTypeList" class="multiple" multiple="true" bindLabel="name"
+                        appendTo="body" bindValue="id" [clearable]="false" [(ngModel)]="model.serviceTypelst"
+                        [loading]="masterModel.servicetypeLoading"
+                        placeholder=" ---{{ (serviceTypeList!=null && serviceTypeList.length!=0? 'QUOTATION_SUMMARY.LBL_SELECT':'QUOTATION_SUMMARY.MSG_NO_DATA' ) | translate }}---">
+                        <ng-template ng-option-tmp let-item="item">
+                          <div class="text-wrap">{{ item.name }}</div>
+                        </ng-template>
+                      </ng-select>
+                    </div>
+                  </div>
+                  <div class="col-sm-3 col-md-3 col-lg-3 quotation-supplier-margin">
+                    <div class="my-input-group">
+                      <div class="styled-radio-container" *ngFor="let item of supplierTypeList;let idx = index">
+                        <input type="radio" class="styled-radio" id="{{item.id}}" name="radio-group3" [value]="item.id"
+                          [checked]="true" [(ngModel)]="model.supplierTypeId" (change)="changeSupplierType(item)">
+                        <label for="{{item.id}}">{{item.name}}</label>
+                      </div>
+                    </div>
+                    <div class="my-input-group">
+                      <ng-select [multiple]="false" [closeOnSelect]="true" [searchable]="true" [virtualScroll]="true"
+                        (change)="ChangeSupplier($event)" [hideSelected]="true" [loading]=masterModel.supplierLoading
+                        bindLabel="name" appendTo="body" bindValue="id" [items]="masterModel.supplierList"
+                        (scrollToEnd)="getSupplierData()" [typeahead]="masterModel.supInput" [minTermLength]="3"
+                        (clear)="clearSupplier()"
+                        placeholder="--- {{ (masterModel.supplierList!=null && masterModel.supplierList.length!=0? 'QUOTATION_SUMMARY.LBL_SELECT':'QUOTATION_SUMMARY.MSG_NO_DATA' ) | translate }} ---"
+                        [(ngModel)]="model.supplierid">
+                        <ng-template ng-option-tmp let-item="item">
+                          <div class="text-wrap">{{ item.name }}</div>
+                        </ng-template>
+                      </ng-select>
+                    </div>
+                  </div>
+                  <div class="col-sm-3 col-md-3 col-lg-3" style="margin-top:7px">
+                    <div class="my-input-group">
+                      <label for="">{{ 'QUOTATION_SUMMARY.LBL_FACTORY' | translate }}</label>
+                      <ng-select [multiple]="true" class="multiple" [searchable]="true" [loading]="factloading"
+                        appendTo="body" [items]="factoryList" bindLabel="name" bindValue="id" [hideSelected]="true"
+                        placeholder="--- {{ (factoryList!=null && factoryList.length!=0? 'QUOTATION_SUMMARY.LBL_SELECT':'QUOTATION_SUMMARY.MSG_NO_DATA' ) | translate }} ---"
+                        [(ngModel)]="model.factoryidlst">
+                        <ng-template ng-option-tmp let-item="item">
+                          <div class="text-wrap">{{ item.name }}</div>
+                        </ng-template>
+                      </ng-select>
+                    </div>
+                  </div>
+                </div>
+                <div class="row marginTop25">
+                  <div class="col-sm-3 col-lg-3">
+                    <div class="my-input-group">
+                      <label for="" class="">{{'QUOTATION_SUMMARY.LBL_BRAND' | translate}}</label>
+                      <ng-select appendTo="body" [items]="masterModel.brandList" [virtualScroll]="true"
+                        [loading]="masterModel.brandLoading" bindLabel="name" bindValue="id"
+                        placeholder="--- {{ (masterModel.brandList && masterModel.brandList.length>0? 'COMMON.LBL_SELECT':'COMMON.LBL_NO_DATA' ) | translate }} ---"
+                        [typeahead]="masterModel.brandInput" [minTermLength]="3" [(ngModel)]="model.brandIdList"
+                        [multiple]="true" class="multiple" (scrollToEnd)="getBrandData()" #select>
+                        <ng-template ng-option-tmp let-item="item" let-index="index" let-search="searchTerm">
+                          <span>{{item.name}}</span>
+                        </ng-template>
+                        <ng-template ng-multi-label-tmp let-items="model.brandIdList" let-clear="clear">
+                          <div class="ng-value" *ngIf="model.brandIdList && model.brandIdList.length > 0">
+                            <span class="ng-value-label">{{model.brandIdList.length}}
+                              {{'COMMON.LBL_SELECTED' | translate }}</span>
+                          </div>
+                        </ng-template>
+                      </ng-select>
+                    </div>
+                  </div>
+                  <div class="col-sm-3 mobile-margin-top-15">
+                    <div class="my-input-group">
+                      <label for="" class="">{{'QUOTATION_SUMMARY.LBL_DEPARTMENT' | translate}}</label>
+                      <ng-select appendTo="body" [items]="masterModel.deptList" [virtualScroll]="true"
+                        [loading]="masterModel.deptLoading" bindLabel="name" bindValue="id"
+                        placeholder="--- {{ (masterModel.deptList && masterModel.deptList.length>0? 'COMMON.LBL_SELECT':'COMMON.LBL_NO_DATA' ) | translate }} ---"
+                        [typeahead]="masterModel.deptInput" [minTermLength]="3" [(ngModel)]="model.deptIdList"
+                        [multiple]="true" class="multiple" (scrollToEnd)="getDeptData()" #select>
+                        <ng-template ng-option-tmp let-item="item" let-index="index" let-search="searchTerm">
+                          <span>{{item.name}}</span>
+                        </ng-template>
+                        <ng-template ng-multi-label-tmp let-items="model.deptIdList" let-clear="clear">
+                          <div class="ng-value" *ngIf="model.deptIdList && model.deptIdList.length > 0">
+                            <span class="ng-value-label">{{model.deptIdList.length}}
+                              {{'COMMON.LBL_SELECTED' | translate }}</span>
+                          </div>
+                        </ng-template>
+                      </ng-select>
+                    </div>
+                  </div>
+                  <div class="col-sm-3 mobile-margin-top-15" *ngIf="!masterModel.isAuditService">
+                    <div class="my-input-group">
+                      <label for="">{{ 'QUOTATION_SUMMARY.LBL_BUYER' | translate }}</label>
+                      <ng-select appendTo="body" [items]="masterModel.buyerList" [virtualScroll]="true"
+                        [loading]="masterModel.buyerLoading" bindLabel="name" bindValue="id"
+                        placeholder="--- {{ (masterModel.buyerList && masterModel.buyerList.length>0? 'COMMON.LBL_SELECT':'COMMON.LBL_NO_DATA' ) | translate }} ---"
+                        [typeahead]="masterModel.buyerInput" [minTermLength]="3" [(ngModel)]="model.buyerIdList"
+                        [multiple]="true" class="multiple" (scrollToEnd)="getBuyerData()" #select>
+                        <ng-template ng-option-tmp let-item="item" let-index="index" let-search="searchTerm">
+                          <span>{{item.name}}</span>
+                        </ng-template>
+                        <ng-template ng-multi-label-tmp let-items="model.buyerIdList" let-clear="clear">
+                          <div class="ng-value" *ngIf="model.buyerIdList && model.buyerIdList.length > 0">
+                            <span class="ng-value-label">{{model.buyerIdList.length}}
+                              {{'COMMON.LBL_SELECTED' | translate }}</span>
+                          </div>
+                        </ng-template>
+                      </ng-select>
+                    </div>
+                  </div>
+
+                  <div class="col-sm-3 col-md-3 col-lg-2" *ngIf="masterModel.entityId==masterModel.entityAccess.AQF">
+                    <div class="my-input-group marginTop25">
+                      <div class="styled-checkbox-container">
+                        <input class="styled-checkbox" id="checkbox-eaqf" type="checkbox" [(ngModel)]="model.isEAQF">
+                        <label for="checkbox-eaqf">{{'E-AQF.LBL_EAQF' | translate}}</label>
+                      </div>
+                    </div>
+                  </div>
+
+                </div>
+              </div>
+            </div>
+            <!-- Advance Search -->
+            <div class="row marginTop25">
+              <div class="col-12 col-sm-6">
+                <button class="tertiary-cta small" (click)="toggleSection()">
+                  <span class="icon" *ngIf="!toggleFormSection">+</span>
+                  <span class="icon" *ngIf="toggleFormSection">-</span>
+                  {{'QUOTATION_SUMMARY.LBL_ADVANCED_SEARCH' | translate}}
+                </button>
+              </div>
+              <div class="col-12 col-sm-6 text-right mt-3 mt-sm-0">
+
+                <button class="category-cta small mr-2 common-tooltip common-tooltip-top-2" data-tooltip="Reset"
+                  [disabled]="searchloading || Initialloading || masterModel.supplierLoading || factloading 
+                || exportDataLoading" (click)="Reset()">
+                  <img src="assets/images/reload-new.svg" alt="Reset">
+                  <span>{{ 'QUOTATION_SUMMARY.LBL_RESET' | translate}}</span>
+                </button>
+                <button class="secondary-cta small mr-2" (click)="export()"
+                  [disabled]="exportDataLoading || searchloading"
+                  *ngIf="model.items != null && model.items.length != 0  && !model.noFound">
+                  {{ 'QUOTATION_SUMMARY.LBL_EXPORT' | translate }}
+                  <span *ngIf="exportDataLoading">
+                    <i class="fa fa-refresh fa-spin" aria-hidden="true"></i>
+                  </span>
+                </button>
+                <button class="primary-cta small" [disabled]="searchloading || Initialloading || masterModel.supplierLoading || factloading 
+                || exportDataLoading" (click)="SearchDetails()"> {{ 'QUOTATION_SUMMARY.LBL_SEARCH_BTN' | translate }}
+                  <span *ngIf="searchloading">
+                    <i class="fa fa-refresh fa-spin" aria-hidden="true"></i>
+                  </span>
+                </button>
+              </div>
+            </div>
+
+
+            <!-- Advance Search -->
+          </div>
+          <div class="centerContainerPadding" *ngIf="model.noFound">
+            <div class="error-container">
+              <img src="assets/images/no-result.svg" alt="" class="thumbnail">
+              <h4 class="error-title">{{'QUOTATION_SUMMARY.MSG_NO_ITEM_FOUND' | translate}}</h4>
+              <p class="error-subtitle">{{'CS_CONFIG_SUMMARY.LBL_NODATA' | translate}}</p>
+
+              <button (click)="Reset()" class="category-cta">
+                <img src="assets/images/reload-new.svg" alt="reload">
+                <span> {{'QUOTATION_SUMMARY.MSG_CLEAR_SEARCH' | translate}}</span></button>
+            </div>
+          </div>
+          <div class="centerContainerPadding float-left" *ngIf="(model.items && model.items.length>0)">
+            <div class="row">
+              <div class="col-6 col-sm-3 col-xl-2 d-flex">
+                <p class="search-trigger-heading" [innerHtml]="showPaginationText()"></p>
+              </div>
+              <div class="col-6 col-sm-9 col-xl-10 text-right">
+                <ul class="table-badge-container mobile-hide tablet-hide">
+                  <li (click)="SearchByStatus(status.id)" [ngStyle]="{'background-color': status.statusColor}"
+                    *ngFor="let status of statusListColor | slice:0:3">
+                    <span>{{status.totalCount}}</span> <span>{{status.statusName}}</span>
+                  </li>
+                  <ng-container *ngIf="statusListColor.length>3">
+                    <li class="more has-dropdown">
+                      <img src="assets/images/cta-menu-grey.svg" alt="">
+                      <ul class="cta-dropdown bottom-left">
+                        <li (click)="SearchByStatus(status.id)" [ngStyle]="{'color': status.statusColor}"
+                          *ngFor="let status of statusListColor | slice:3:statusListColor.length">
+                          <span>{{status.totalCount}}</span> <span>{{status.statusName}}</span>
+                        </li>
+                      </ul>
+                    </li>
+                  </ng-container>
+                </ul>
+                <div class="animated-icon-container" *ngIf="!isFilterOpen" (click)="toggleFilterSection()">
+                  <img src="assets/images/cta-search-grey.svg" alt="search">
+                </div>
+              </div>
+            </div>
+            <div class="row mt-3 desktop-hide">
+              <div class="col-sm-12">
+                <ul class="table-badge-container">
+                  <li (click)="SearchByStatus(status.id)" style="margin: 2px;"
+                    [ngStyle]="{'background-color': status.statusColor}" *ngFor="let status of statusListColor">
+                    <span>{{status.totalCount}}</span> <span>{{status.statusName}}</span>
+                  </li>
+                </ul>
+              </div>
+            </div>
+            <div class="quotation-search-container">
+              <div *ngIf="isListResultView" style="overflow-y:hidden" class="table-container scroll-x">
+                <table class="pagination-table simple-table bordered">
+                  <thead>
+                    <tr>
+                      <th *ngIf="!masterModel.isCustomerLogin" class="Center_Middle width-100"></th>
+                      <th>{{ 'QUOTATION_SUMMARY.LBL_QUOTNP' | translate }}</th>
+                      <th *ngIf="model.serviceId == apiService.Inspection" class="sticky-left-column">{{
+                        'QUOTATION_SUMMARY.LBL_INSP_NO_CUS_BOOKING_NO' | translate }}</th>
+                      <th *ngIf="model.serviceId == apiService.Audit" class="sticky-left-column"> {{
+                        'QUOTATION_SUMMARY.LBL_BOOKINGNO' | translate }}</th>
+                      <th>{{ 'QUOTATION_SUMMARY.LBL_QUOTATIONDATE' | translate }}</th>
+                      <th>{{ 'QUOTATION_SUMMARY.LBL_SERVICEDATE' | translate }}</th>
+                      <th class="width-160">{{ 'QUOTATION_SUMMARY.LB_CUSTOMER' | translate }}</th>
+                      <th class="width-100">{{ 'QUOTATION_SUMMARY.LBL_BRAND' | translate }}</th>
+                      <th class="width-100">{{ 'QUOTATION_SUMMARY.LBL_DEPARTMENT' | translate }}</th>
+                      <th class="width-180">{{ 'QUOTATION_SUMMARY.LBL_SUPPLIER' | translate }}</th>
+                      <th class="width-180">{{ 'QUOTATION_SUMMARY.LBL_FACTORY' | translate }}</th>
+                      <th>{{ 'QUOTATION_SUMMARY.LBL_STATUS' | translate }}</th>
+                      <th>{{ 'QUOTATION_SUMMARY.LBL_OFFICE' | translate }}</th>
+                      <th>{{ 'QUOTATION_SUMMARY.LBL_SERVICETYPE' | translate }}</th>
+                      <th>{{ 'QUOTATION_SUMMARY.LBL_MANDAY' | translate }}</th>
+                      <th>{{ 'QUOTATION_SUMMARY.LBL_INSPECTIONCOST' | translate }}</th>
+                      <th>{{ 'QUOTATION_SUMMARY.LBL_TRAVELCOST' | translate }}</th>
+                      <th>{{ 'QUOTATION_SUMMARY.LBL_TOTALFEES' | translate }}</th>
+                      <th>{{ 'QUOTATION_SUMMARY.LBL_VALIDATED_BY_EXT' | translate }}</th>
+                      <th>{{ 'QUOTATION_SUMMARY.LBL_VALIDATED_ON' | translate }}</th>
+                      <!-- <th class="mobile-hide tablet-hide Center_Middle"></th> -->
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <ng-template ngFor let-iteminfo [ngForOf]="model.items" let-i="index">
+
+                      <tr style="border-left: 5px solid #fff;" [ngClass]="i%2 !== 0?'even':'odd' "
+                        [ngStyle]="{'border-left-color': GetStatusColor(iteminfo.statusId)}">
+                        <td class="Center_Middle" *ngIf="!masterModel.isCustomerLogin">
+                          <span class="table-cta icon-cta common-tooltip" (click)="getDetails(iteminfo.quotationId)"
+                            data-tooltip="Edit">
+                            <img src="assets/images/cta-edit.svg" alt="Edit">
+                          </span>
+
+                          <span class="table-cta icon-cta common-tooltip"
+                            *ngIf="iteminfo.isAdeoClient && isUserHasVerifiedRole"
+                            (click)="getClientQuotation(iteminfo.quotationId)" data-tooltip="Adeo quotation">
+                            <img src="assets/images/cta-quotation-white.svg" alt="Adeo quotation">
+                          </span>
+
+                          <span class="table-cta icon-cta common-tooltip"
+                            *ngIf="iteminfo.abilities && iteminfo.abilities.indexOf(ability.CanApprove) >= 0"
+                            (click)="openModalPopup(quotationstatus,_status.ManagerApproved,iteminfo,true)"
+                            data-tooltip="Approve">
+                            <img src="assets/images/cta-tick-green.svg" alt="Approve">
+                          </span>
+
+                          <span class="table-cta icon-cta common-tooltip"
+                            *ngIf="iteminfo.abilities && iteminfo.abilities.indexOf(ability.CanApprove) >= 0"
+                            (click)="openModalPopup(quotationstatus,_status.ManagerRejected,iteminfo,false)"
+                            data-tooltip="Reject">
+                            <img src="assets/images/cta-close.svg" alt="Reject">
+                          </span>
+                          <!-- <span  class="table-cta icon-cta common-tooltip"
+                            *ngIf="iteminfo.statusId == _status.CustomerValidated && hasAccountingRole"
+                            (click)="openInvoicePopUp(invoice, iteminfo.quotationId)" data-tooltip="Invoice Details">
+                            <img src="assets/images/invoice-red.svg" alt="Invoice Details">
+                          </span> -->
+
+
+
+
+                          <!-- <button class="secondary-cta x-small" [disabled]="adeoDataLoading"
+                            *ngIf="iteminfo.isAdeoClient && isUserHasVerifiedRole"
+                            (click)="getClientQuotation(iteminfo.quotationId)">{{'QUOTATION_SUMMARY.LBL_ADEO_QUOTATION' | translate}}</button> -->
+                          <!-- <custom-button customClass="secondary-cta x-small"
+                            *ngIf="iteminfo.abilities && iteminfo.abilities.indexOf(ability.CanApprove) >= 0"
+                            label="{{'QUOTATION.LBL_APPROVE' | translate}}"
+                            (onclick)="openModalPopup(quotationstatus,status.Approved,iteminfo)"></custom-button> -->
+                          <!-- <custom-button customClass="secondary-cta x-small"
+                            *ngIf="iteminfo.abilities && iteminfo.abilities.indexOf(ability.CanApprove) >= 0"
+                            label="{{'QUOTATION.LBL_REJECT' | translate}}"
+                            (onclick)="openModalPopup(quotationstatus,status.ManagerRejected,iteminfo)"></custom-button> -->
+                          <!-- <button class="secondary-cta x-small"
+                            *ngIf="iteminfo.statusId == _status.CustomerValidated && hasAccountingRole"
+                            [disabled]="isInvoiceLoading"
+                            (click)="openInvoicePopUp(invoice, iteminfo.quotationId)">{{'QUOTATION.LBL_INVOICE' | translate}}</button> -->
+                          <!-- <custom-button customClass="secondary-cta x-small" *ngIf="iteminfo.abilities && iteminfo.abilities.indexOf(ability.CanCancel) >= 0" label="{{'QUOTATION.LBL_CANCEL' | translate}}" (onclick)="openModalPopup(quotationstatus,status.Canceled,iteminfo)"></custom-button> -->
+                        </td>
+                        <td class="width-60">{{iteminfo.quotationId}}</td>
+                        <ng-template #statusPopContent>
+                          <div class="popoverScroll" style="height: auto !important;">
+                            <div style="width: 150px;" *ngFor="let item of iteminfo.bookingIdStatusColorList">
+                              <span class="text">{{item.bookingId}} - <span
+                                  [ngStyle]="{'color': item.statusColor}">{{item.statusName}}</span></span>
+                            </div>
+                          </div>
+                        </ng-template>
+                        <td class="width-80 text text-wrap sticky-left-column"><span
+                            *ngFor="let item of iteminfo.bookingIdStatusColorList;  let isLast=last"><a
+                              [ngbPopover]="statusPopContent" placement="right" [autoClose]="'outside'" container="body"
+                              popoverTitle="Booking Status" triggers="mouseenter:mouseleave"><span
+                                [ngStyle]="{'color': item.statusColor}">{{item.bookingId}}{{isLast ? '' : ',
+                                '}}</span>
+                            </a>
+                          </span>
+                          <span class="width-100" *ngIf="iteminfo.isEAQF">
+                            <img src="assets/images/E-AQF-Logo.svg" alt="">
+                          </span>
+
+                        </td>
+                        <td class="width-100">{{iteminfo.quotationDate}}</td>
+                        <td class="width-100 wordbreak">{{iteminfo.serviceDateList}}</td>
+                        <td class="wordbreak width-100">{{iteminfo.customerName}}</td>
+                        <td class="wordbreak width-100">{{iteminfo.brandName}}</td>
+                        <td class="wordbreak width-100">{{iteminfo.departmentName}}</td>
+                        <td class="wordbreak width-100 textcaps">{{iteminfo.supplierName}}</td>
+                        <td class="wordbreak width-100 textcaps">{{iteminfo.factoryName}}</td>
+                        <td class="wordbreak width-100">{{iteminfo.statusName}}</td>
+                        <td class="width-100">{{iteminfo.office}}</td>
+                        <td class="width-100">{{iteminfo.serviceType}}</td>
+                        <td class="width-60">{{iteminfo.estimatedManDay}}</td>
+                        <td class="width-60">{{iteminfo.inspectionFees}}</td>
+                        <td class="width-60">{{iteminfo.travelCost}}</td>
+                        <td class="width-60">{{iteminfo.totalCost}}</td>
+                        <td class="wordbreak width-100 textcaps">{{iteminfo.validatedMsgTbl}}</td>
+                        <td class="width-100">{{iteminfo.validatedOn}}</td>
+                      </tr>
+                    </ng-template>
+                  </tbody>
+                </table>
+              </div>
+              <div *ngIf="!isListResultView">
+                <ng-template ngFor let-iteminfo [ngForOf]="model.items" let-i="index">
+                  <div class="quotation-card">
+                    <div class="row">
+                      <div class="col-sm-12 marginBottom24">
+                        <div class="quotation-number">{{iteminfo.bookingNoCusBookingNo}}</div>
+                        <span class="timestamp">{{iteminfo.quotationDate}}</span>
+                      </div>
+                      <div class="col-sm-7">
+                        <div class="info-list business">
+                          <span> {{ 'QUOTATION_SUMMARY.LBL_SUPPLIER' | translate }} <img
+                              *ngIf="iteminfo.billPaidById == billPaidBy.Supplier"
+                              src="assets/images/payment-card-active.svg" alt=""></span>
+                          <span class="dark">
+                            {{iteminfo.supplierNameTrim}}
+                          </span>
+                        </div>
+                        <div class="info-list business">
+                          <span>{{ 'QUOTATION_SUMMARY.LBL_FACTORY' | translate }}
+                            <img *ngIf="iteminfo.billPaidById == billPaidBy.Factory"
+                              src="assets/images/payment-card-active.svg" alt=""></span>
+                          <span class="dark">{{iteminfo.factoryNameTrim}}</span>
+                        </div>
+                        <div class="info-list business">
+                          <span>{{ 'QUOTATION_SUMMARY.LBL_SERVICEDATE' | translate }}</span>
+                          <span>{{iteminfo.serviceDateListTrim}}</span>
+                        </div>
+                        <div class="info-list business">
+                          <span>{{ 'QUOTATION_SUMMARY.LBL_SERVICETYPE' | translate }}</span>
+                          <span>{{iteminfo.serviceType}}</span>
+                        </div>
+                        <div class="info-list business">
+                          <span>Product No</span>
+                          <span>{{iteminfo.productCount}}</span>
+                        </div>
+                        <div class="info-list business">
+                          <span>Billing method</span>
+                          <span>{{iteminfo.billMethodName}}</span>
+                        </div>
+                        <ng-container *ngIf="!isMobile">
+                          <button *ngIf="iteminfo.statusId == _status.SentToClient" class="primary-cta small mr-2"
+                            (click)="openModalPopup(customerpopup,_status.CustomerValidated,iteminfo,true)">{{'QUOTATION.LBL_APPROVE'
+                            | translate}}</button>
+
+                          <div *ngIf="iteminfo.statusId == _status.CustomerValidated" class="info-list business">
+                            <span>{{ 'QUOTATION_SUMMARY.LBL_VALIDATED_ON' | translate }}</span>
+                            <span>{{iteminfo.validatedOn}}</span>
+                          </div>
+                          <button *ngIf="iteminfo.statusId == _status.CustomerValidated"
+                            class="secondary-cta green no-cursor small mr-2 text-transform-none">
+                            {{ 'QUOTATION_SUMMARY.LBL_VALIDATED_BY_EXT' | translate }} {{iteminfo.validatedMsg}}
+                          </button>
+
+
+                          <!-- <button *ngIf="iteminfo.statusId == _status.CustomerValidated && iteminfo.validatedUser == ''"
+                         class="secondary-cta green no-cursor small mr-2">
+                          {{ 'QUOTATION_SUMMARY.LBL_VALIDATED_BY' | translate }}
+                          {{  (_IsInternalUser) ? "API" : "Client"
+                      }}
+                        {{  (_IsInternalUser) ? {{ 'QUOTATION_SUMMARY.LBL_API' | translate }}
+                          : {{ 'QUOTATION_SUMMARY.LBL_CLIENT' | translate }} }} 
+                        </button> -->
+                          <button [disabled]="iteminfo.isPreview" *ngIf="iteminfo.statusId != _status.CustomerValidated"
+                            class="secondary-cta small mr-2" (click)="preview(iteminfo)">
+                            {{'QUOTATION.LBL_PREVIEW' | translate}}
+                            <span *ngIf="iteminfo.isPreview">
+                              <i class="fa fa-refresh fa-spin" aria-hidden="true"></i>
+                            </span>
+                          </button>
+                          <button *ngIf="iteminfo.statusId != _status.CustomerValidated"
+                            class="category-cta small has-dropdown position-relative">
+                            <img src="assets/images/cta-menu-grey.svg" alt="reload">
+                            <ul class="cta-dropdown bottom-right">
+                              <li (click)="openModalPopup(customerpopup,_status.CustomerRejected,iteminfo,false)">
+                                <img class="icon" src="assets/images/cta-close-grey.svg" alt="">
+                                <span>
+                                  {{'QUOTATION.LBL_REJECT' | translate}}</span>
+                              </li>
+                            </ul>
+                          </button>
+                        </ng-container>
+                      </div>
+                      <div class="col-sm-5 dashed-border">
+                        <div class="info-list amount">
+                          <span class="dark">{{ 'QUOTATION_SUMMARY.LBL_MANDAY' | translate }}</span>
+                          <span class="text-right dark">{{iteminfo.estimatedManDay}}</span>
+                        </div>
+                        <div class="info-list amount">
+                          <span class="dark">{{ 'QUOTATION_SUMMARY.LBL_INSPECTIONCOST' | translate }}</span>
+                          <span class="text-right dark">{{iteminfo.inspectionFees}}</span>
+                        </div>
+                        <div class="info-list amount marginBottom24">
+                          <span class="dark">{{ 'QUOTATION_SUMMARY.LBL_TRAVELCOST' | translate }}</span>
+                          <span class="text-right dark">{{iteminfo.travelCost}}</span>
+                        </div>
+                        <div class="info-list amount other-cost">
+                          <span class="dark">Other cost</span>
+                          <span class="text-right dark">{{iteminfo.otherCost}}</span>
+                        </div>
+                        <div class="info-list amount discount">
+                          <span class="dark">Discount</span>
+                          <span class="text-right dark">{{iteminfo.discount}}</span>
+                        </div>
+                        <div class="info-list amount big">
+                          <span class="dark">{{ 'QUOTATION_SUMMARY.LBL_TOTALFEES' | translate }}</span>
+                          <span class="text-right dark">{{iteminfo.totalCost}}&nbsp;{{iteminfo.currencyName}}</span>
+                        </div>
+                        <ng-container *ngIf="isMobile">
+                          <button *ngIf="iteminfo.statusId == _status.SentToClient" class="primary-cta small mr-2"
+                            (click)="openModalPopup(customerpopup,_status.CustomerValidated,iteminfo,true)">{{'QUOTATION.LBL_APPROVE'
+                            | translate}}</button>
+                          <button *ngIf="iteminfo.statusId == _status.CustomerValidated"
+                            class="secondary-cta green no-cursor small mr-2">
+                            {{ 'QUOTATION_SUMMARY.LBL_VALIDATED_BY' | translate }}
+                            {{ (_IsInternalUser) ? "API" : "Client"
+                            }}
+                          </button>
+                          <button *ngIf="iteminfo.statusId != _status.CustomerValidated"
+                            class="secondary-cta small mr-2" (click)="preview(iteminfo)"
+                            [disabled]="iteminfo.isPreview">{{'QUOTATION.LBL_PREVIEW' | translate}}
+                            <span *ngIf="iteminfo.isPreview">
+                              <i class="fa fa-refresh fa-spin" aria-hidden="true"></i>
+                            </span>
+                          </button>
+                          <button *ngIf="iteminfo.statusId != _status.CustomerValidated"
+                            class="category-cta small has-dropdown position-relative">
+                            <img src="assets/images/cta-menu-grey.svg" alt="reload">
+                            <ul class="cta-dropdown bottom-right">
+                              <li>
+                                <img class="icon" src="assets/images/cta-leader-grey.svg" alt="">
+                                <span (click)="openModalPopup(customerpopup,_status.CustomerRejected,iteminfo,false)">
+                                  {{'QUOTATION.LBL_REJECT' | translate}}</span>
+                              </li>
+                            </ul>
+                          </button>
+                        </ng-container>
+                      </div>
+                    </div>
+                  </div>
+                </ng-template>
+              </div>
+            </div>
+            <div class="pagination-container">
+              <select class="small" [(ngModel)]="selectedPageSize" (change)="SearchDetails()">
+                <option *ngFor="let item of pagesizeitems" [ngValue]=item>{{item}}</option>
+              </select>
+              <ngb-pagination (pageChange)="onPager($event)" [pageSize]="model.pageSize"
+                [collectionSize]="model.totalCount" [(page)]="model.index" [maxSize]="5"></ngb-pagination>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<ng-template #quotationstatus let-modal>
+  <div class="modal-body">
+    <div class="small-model">
+      <h2 class="title">{{ 'QUOTATION.LBL_CONFIRMSTATUSTITLE' | translate }}</h2>
+      <p>{{ MessagePopup }} !!!</p>
+      <button class="secondary-cta" [disabled]=popuploading (click)="modal.dismiss('Cross click');">{{
+        'COMMON.LBL_CONFIRMCANCEL' | translate }}
+      </button>
+      <button class="primary-cta" [disabled]=popuploading (click)="setStatus();">{{ 'COMMON.LBL_OK' | translate }}
+        <span *ngIf="popuploading">
+          <i class="fa fa-refresh fa-spin" aria-hidden="true"></i>
+        </span>
+      </button>
+    </div>
+  </div>
+</ng-template>
+<ng-template #quotationdatechange let-modal>
+  <div class="modal-body">
+    <div class="small-model">
+      <h2 class="title">{{ 'QUOTATION.LBL_SERVICE_DATE_CHANGE' | translate }}</h2>
+      <p>{{ ServicedatechangePopup }}<br> {{ 'QUOTATION.MSG_CONTACT_QUO_TEAM' | translate }}</p>
+      <button class="secondary-cta" [disabled]=popuploading (click)="modal.dismiss('Cross click');">{{
+        'COMMON.LBL_CONFIRMCANCEL' | translate }}
+      </button>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #invoice let-modal>
+  <div class="modal-body">
+    <div class="small-model">
+      <h2 class="title">{{ 'QUOTATION.LBL_INVOICE' | translate }}</h2>
+      <p class="marginTop15">{{ MessagePopup }}</p>
+      <div *ngIf="isInvoicePopUpLoading">
+        <div class="thumbnail animate"></div>
+        <div class="info">
+          <div class="box animate"></div>
+          <div class="box small animate"></div>
+        </div>
+        <!-- <span *ngIf="isInvoicePopUpLoading">
+        <i class="fa fa-refresh fa-spin" aria-hidden="true"></i>
+      </span> -->
+      </div>
+      <div class="my-input-group" *ngIf="!isInvoicePopUpLoading">
+        <label class="required float-left">{{ 'QUOTATION.LBL_INVOICE_NO' | translate }}</label>
+        <div>
+          <input type="text" maxlength="1000" [(ngModel)]="model.invoiceNo"
+            [ngClass]="{ 'is-invalid':  model.invoiceNo != '' &&  isInvoiceLoading}">
+          <div *ngIf="model.invoiceNo != '' &&  isInvoiceLoading" class="invalid-feedback">
+            <div *ngFor="let error of validator.getErrors('invoiceNo')">{{ error | translate }}</div>
+          </div>
+        </div>
+        <div class="marginTop15">
+          <label class="required float-left">{{ 'QUOTATION.LBL_INVOICE_DATE' | translate }}</label>
+          <div class="calendar-wrapper">
+            <input type="text" maxlength="10" [ngClass]="{ 'is-invalid':  !validator.isValid('invoiceDate')}"
+              readonly=readonly placeholder="{{ 'QUOTATION.LBL_INVOICE_DATE' | translate }}"
+              [(ngModel)]="model.invoiceDate" ngbDatepicker #fd="ngbDatepicker" (click)="fd.toggle()">
+            <img src="assets/images/calendar-icon.svg" alt="" class="calendar-icon" style="margin-top: 20px;"
+              (click)="fd.toggle()">
+          </div>
+          <div *ngIf="!validator.isValid('invoiceDate')" class="invalid-feedback">
+            <div *ngFor="let error of validator.getErrors('invoiceDate')">{{ error | translate }}</div>
+          </div>
+        </div>
+        <div class="marginTop15">
+          <label class="float-left">{{'QUOTATION.LBL_REMARKS' | translate}}</label>
+          <input type="text" maxlength="2000" [(ngModel)]="invoiceModel.invoiceRemarks">
+        </div>
+      </div>
+      <div class="marginTop15">
+        <button class="secondary-cta" [disabled]=popuploading (click)="resetInvoiceModel()">{{
+          'COMMON.LBL_CONFIRMCANCEL' | translate }}
+        </button>
+        <button class="primary-cta" [disabled]=popuploading (click)="invoiceSave();">{{ 'QUOTATION.LBL_SAVE' | translate
+          }}
+          <span *ngIf="popuploading">
+            <i class="fa fa-refresh fa-spin" aria-hidden="true"></i>
+          </span>
+        </button>
+      </div>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #customerpopup let-modal>
+  <div class="modal-body common-modal-body approve-modal-container">
+    <div class="animated-icon-container transparent" (click)="modal.dismiss('Cross click')">
+      <img src="assets/images/cta-close-grey.svg" alt="close">
+    </div>
+    <h4 class="modal-title">{{ 'QUOTATION.LBL_CONFIRMSTATUSTITLE' | translate }}</h4>
+    <p class="message">{{MessagePopup}}</p>
+    <div class="details">
+      <span class="label">Booking No</span>
+      <span class="value">{{this.modalStatus.item.bookingNoCusBookingNo}}</span>
+    </div>
+    <div class="details">
+      <span class="label">Supplier</span>
+      <span class="value">{{this.modalStatus.item.supplierName}}</span>
+    </div>
+    <div class="details">
+      <span class="label">Bill Paid By</span>
+      <span class="value">{{this.modalStatus.item.billPaidByName}}</span>
+    </div>
+    <div class="input-group">
+      <textarea [(ngModel)]="modalStatus.item.customerRemark" type="text" maxlength="600"
+        placeholder="{{ 'QUOTATION.LBLCUSTREMARK' | translate }}"></textarea>
+    </div>
+    <div class="cta-container">
+      <button [disabled]="popuploading" class="tertiary-cta small mr-2" (click)="modal.dismiss('Cross click')"> {{
+        'COMMON.LBL_CONFIRMCANCEL' | translate }}</button>
+      <button [disabled]="popuploading" *ngIf="isApprove" class="primary-cta small" (click)="setStatus(successModal);">
+        <span *ngIf="popuploading">
+          <i class="fa fa-refresh fa-spin" aria-hidden="true"></i>
+        </span>
+        {{'QUOTATION.LBL_APPROVE' | translate}}
+      </button>
+      <button [disabled]="popuploading" *ngIf="!isApprove" class="primary-cta small" (click)="setStatus(successModal);">
+        {{'QUOTATION.LBL_REJECT' | translate}}
+        <span *ngIf="popuploading">
+          <i class="fa fa-refresh fa-spin" aria-hidden="true"></i>
+        </span>
+      </button>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #successModal let-modal>
+  <div class="modal-body success-modal-body">
+    <img src="assets/images/success-tick-big.svg" alt="">
+  </div>
+</ng-template>

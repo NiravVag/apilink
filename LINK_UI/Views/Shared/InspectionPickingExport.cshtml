@@ -1,0 +1,44 @@
+﻿
+@{
+    ViewData["Title"] = "Inspection Picking";
+}
+
+@model List<DTO.Kpi.InspectionPickingReport>
+
+<xls-sheet name="InspectionPicking">
+    <table xls-begin="A:1" style="border-style:solid">
+        <tr style="background-color:#f5f5f5;font-weight:bold;text-align:center">
+            <th>Customer</th>
+            <th>Supplier</th>
+            <th>Factory</th>
+            <th>Booking Number</th>
+            <th>Service Date</th>
+            <th>Po Number</th>
+            <th>Product Id</th>
+            <th>Product Category</th>
+            <th>Product SubCategory</th>
+            <th>Picking Qty</th>
+            <th>Lab Name</th>
+            <th>Tracking Number</th>
+        </tr>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td width="200px">@item.CustomerName</td>
+                <td width="200px">@Html.Raw(item.SupplierName)</td>
+                <td width="200px">@Html.Raw(item.FactoryName)</td>
+                <td width="150px" xls-type="number">@item.InspectionId</td>
+                <td width="150px">@item.ServiceDate</td>
+                <td width="150px">@item.PoNumber</td>
+                <td width="150px">@item.ProductName</td>
+                <td width="150px">@item.ProductCategory</td>
+                <td width="150px">@item.ProductSubCategory</td>
+                <td width="150px" xls-type="number">@item.PickingQuantity</td>
+                <td width="150px">@Html.Raw(item.LabName)</td>
+                <td width="150px"></td>
+            </tr>
+        }
+    </table>
+</xls-sheet>
+
+

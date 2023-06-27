@@ -1,0 +1,85 @@
+<div class="main-wrapper">
+    <div class="wrapper dashboard-wrapper">
+        <div class="my-container">
+            <div class="master-body">
+                <div class="title-container">
+                    <div class="header-back-button" *ngIf="fromSummary">
+                        <img src="assets/images/back-red.png" alt="back" (click)="this.return('productsub2category/product-category-sub2-summary');">
+                    </div>
+                    <h3 class="main-title">
+                        {{model.id==null?('COMMON.LBL_ADD' | translate):('COMMON.LBL_EDIT' | translate)}}&nbsp;
+                        {{ 'INTERNAL_PRODUCT.TITLE' | translate }}</h3>
+                </div>
+                <div class="content-container">
+                    <h4 class="container-head">{{ 'INTERNAL_PRODUCT.LBL_DETAILS' | translate }}</h4>
+                    <div class="formPadding">
+                        <div class="row">
+                            <div class="col-sm-3">
+                                <div class="my-input-group">
+                                    <label class="required">{{ 'INTERNAL_PRODUCT.LBL_PRODUCT' | translate }}</label>
+                                    <ng-select [items]="productCategoryList" [hideSelected]="true" [multiple]="false"
+                                        [closeOnSelect]="true" [loading]="loading" [searchable]="true"
+                                        [ngClass]="{'is-invalid': !validator.isValid('productCategoryId')}"
+                                        bindLabel="name" bindValue="id" [(ngModel)]="model.productCategoryId"
+                                        (ngModelChange)="onChange($event)"
+                                        placeholder="--- {{ 'COMMON.LBL_SELECT' | translate }} ---">
+                                    </ng-select>
+                                    <div *ngIf="!validator.isValid('productCategoryId')" class="invalid-feedback"
+                                        style="display:block">
+                                        <div *ngFor="let error of validator.getErrors('productCategoryId')">
+                                            {{ error | translate }}</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-3 mobile-margin-top-15">
+                                <div class="my-input-group">
+                                    <label class="required">{{ 'INTERNAL_PRODUCT.LBL_SUB_PRODUCT' | translate }}</label>
+                                    <ng-select [items]="productSubCategoryList" [hideSelected]="true" [multiple]="false"
+                                        [closeOnSelect]="true" [loading]="loading" [searchable]="true"
+                                        [ngClass]="{'is-invalid': !validator.isValid('productSubCategoryId')}"
+                                        bindLabel="name" bindValue="id" [(ngModel)]="model.productSubCategoryId"
+                                        placeholder="--- {{ 'COMMON.LBL_SELECT' | translate }} ---">
+                                    </ng-select>
+                                    <div *ngIf="!validator.isValid('productSubCategoryId')" class="invalid-feedback"
+                                        style="display:block">
+                                        <div *ngFor="let error of validator.getErrors('productSubCategoryId')">
+                                            {{ error | translate }}</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-3 mobile-margin-top-15">
+                                <div class="my-input-group">
+                                    <label
+                                        class="required">{{ 'INTERNAL_PRODUCT.LBL_PRODUCT_TYPE' | translate }}</label>
+                                    <input maxlength="200" [(ngModel)]="model.name"
+                                        placeholder="{{ 'INTERNAL_PRODUCT.PH_NAME' | translate }}" type="text"
+                                        [ngClass]="{'is-invalid': !validator.isValid('name')}" />
+                                    <div *ngIf="!validator.isValid('name')" class="invalid-feedback">
+                                        <div *ngFor="let error of validator.getErrors('name')">{{ error | translate }}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-action-container">
+                       
+                          <button class="category-cta small mr-2 common-tooltip common-tooltip-top-2" data-tooltip="Reset"
+                          (click)="Reset()">
+                            <img src="assets/images/reload-new.svg" alt="Reset">
+                            <span>{{'COMMON.LBL_RESET'| translate}}</span>
+                            </button>
+                        <button class="primary-cta small" [disabled]="loading" (click)="save()">
+                            {{
+                                          'COMMON.LBL_SAVE' | translate
+                                        }}
+                            <span *ngIf="loading">
+                                <i class="fa fa-refresh fa-spin" aria-hidden="true"></i>
+                            </span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

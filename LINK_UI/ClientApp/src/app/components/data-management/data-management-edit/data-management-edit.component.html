@@ -1,0 +1,282 @@
+<div class="main-wrapper">
+  <div class="wrapper dashboard-wrapper">
+    <div class="page-head-container whiteBackground">
+      <div class="my-container">
+        <div class="column">
+          <h2 class="page-title">{{ 'DATA_MANAGEMENT.LBL_DATA_MANAGEMENT' | translate }}</h2>
+        </div>
+      </div>
+    </div>
+    <div class="my-container">
+      <div class="card-wrapper tree-view-overflow">
+        <div class="card-container">
+          <div class="card-header-container">
+            <div class="card-header-text">
+              <h6>{{ 'DATA_MANAGEMENT.EDIT_TITLE' | translate }}</h6>
+            </div>
+          </div>
+          <div class="row">
+
+            <div class="col-sm-3 marginTop15">
+              <ngx-dropdown-treeview [config]="config" [items]="items" [itemTemplate]="itemTemplate"
+                [buttonClass]="buttonClass">
+              </ngx-dropdown-treeview>
+            </div>
+
+            <div class="col-sm-3 mobile-margin-top-15" *ngIf="showCustomer">
+              <div class="my-input-group">
+                <label for="">{{ 'BOOKING_SUMMARY.LBL_CUSTOMER' | translate }}</label>
+                <ng-select #customer [searchable]="true" [items]="customerList" bindLabel="name"
+                  [loading]="customerLoading" bindValue="id" [hideSelected]="true" appendTo="body"
+                  (change)="changeCustomer($event)" (clear)="clearCustomer()" [virtualScroll]="true"
+                  (scrollToEnd)="getCustomerData(true)" [typeahead]="customerInput" [minTermLength]="3"
+                  placeholder="--- {{(customerList!=null && customerList.length!=0? 'BOOKING_SUMMARY.LBL_SELECT':'BOOKING_SUMMARY.MSG_NO_DATA')  | translate }} ---"
+                  [(ngModel)]="model.idCustomer">
+                  <ng-template ng-option-tmp let-item="item">
+                    <div class="text-wrap">{{ item.name }}</div>
+                  </ng-template>
+                </ng-select>
+                <div *ngIf="false" class="invalid-feedback">
+                  <div *ngFor="let error of validator.getErrors('idCustomer')">{{ error | translate }}</div>
+                </div>
+              </div>
+            </div>
+            <div class="col-sm-3 col-md-3 col-lg-3" *ngIf="showCustomer && model.idCustomer">
+              <div class="my-input-group">
+                <label for="">{{ 'BOOKING_SUMMARY.LBL_CUS_BRAND' | translate}}</label>
+                <ng-select appendTo="body" [items]="brandList" [loading]="brandLoading" bindLabel="name" bindValue="id"
+                  placeholder="--- {{ (brandList && brandList.length>0? 'COMMON.LBL_SELECT':'COMMON.LBL_NO_DATA' ) | translate }} ---"
+                  [(ngModel)]="model.brandIds" [multiple]="true" class="multiple" #select>
+                  <ng-template ng-option-tmp let-item="item" let-index="index" let-search="searchTerm">
+                    <span>{{item.name}}</span>
+                  </ng-template>
+                </ng-select>
+              </div>
+            </div>
+            <div class="col-sm-3 col-md-3 col-lg-3" *ngIf="showCustomer  && model.idCustomer">
+              <div class="my-input-group">
+                <label for="">{{ 'BOOKING_SUMMARY.LBL_CUS_DEPARTMENT' | translate}}</label>
+                <ng-select appendTo="body" [items]="deptList" [loading]="deptLoading" bindLabel="name" bindValue="id"
+                  placeholder="--- {{ (deptList && deptList.length > 0 ? 'COMMON.LBL_SELECT':'COMMON.LBL_NO_DATA' ) | translate }} ---"
+                  [(ngModel)]="model.departmentIds" [multiple]="true" class="multiple" #department>
+                  <ng-template ng-option-tmp let-item="item" let-index="index" let-search="searchTerm">
+                    <span>{{item.name}}</span>
+                  </ng-template>
+                </ng-select>
+              </div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-12">
+              <p class="selected-row" style="color: #00a7ff;">{{selectedPath}}</p>
+            </div>
+          </div>
+
+          <div class="row marginTop15">
+
+            <div class="col-sm-12 col-md-4 col-lg-4">
+              <div class="my-input-group">
+                <label>{{ 'DATA_MANAGEMENT.LBL_DESC' | translate }}</label>
+                <textarea maxlength="1000" type="text" [(ngModel)]="model.description"></textarea>
+              </div>
+
+            </div>
+
+            <div class="col-sm-4 col-md-4  col-lg-4 marginTop15" *ngIf="treeviewList.length>0">
+
+              <div class="drag-drop-container type-two" (click)="uploadFileData()">
+                <img src="assets/images/upload-icon.svg" class="icon" alt="drag drop">
+                <div class="info">
+                  <h4 class="title">{{ 'EDIT_CUSTOMER_PRODUCT.LBL_SELECT_FILE' | translate }}, <span> {{
+                      'EDIT_CUSTOMER_PRODUCT.LBL_BROWSE' | translate }}</span></h4>
+                </div>
+              </div>
+
+            </div>
+
+
+
+          </div>
+
+          <div class="row">
+
+            <div class="col-sm-4 col-md-4 col-lg-4"></div>
+
+            <div class="col-sm-4 col-md-4 col-lg-8" *ngIf="attachements && attachements.length>0">
+              <div class="file-attachment-container" style="margin-top:0%">
+                <h6 class="files-count" *ngIf="attachements.length>0">
+                  {{attachements.length }} Files uploaded</h6>
+
+                <div class="file-attached-container">
+                  <div class="attachment" *ngFor="let file of attachements; let j = index">
+                    <a (click)="getFile(file)">
+                      <img [src]="getImageIcon(file)">
+                      <span class="file-name">{{file.fileName}}</span>
+                    </a>
+                    <img src="assets/images/new-set/close.svg" class="close-icon" (click)="removeAttachment(j)">
+                  </div>
+
+                </div>
+              </div>
+
+            </div>
+
+          </div>
+
+
+        </div>
+      </div>
+      <div class="card-wrapper">
+        <div class="card-container">
+          <div class="card-header-container">
+            <div class="card-header-text">
+              <h6>{{ 'DATA_MANAGEMENT.EMAIL_SEND' | translate }}</h6>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-sm-4 col-md-4 col-lg-4">
+              <div class="my-input-group">
+                <label>{{ 'DATA_MANAGEMENT.LBL_OFFICES' | translate }}</label>
+
+                <ng-select [items]="officeList" class="multiple" multiple="true" bindValue="id"
+                  placeholder="--- {{ 'COMMON.LBL_SELECT' | translate }} ---" [loading]="officeListLoading"
+                  [(ngModel)]="model.offices" bindLabel="name" [closeOnSelect]="false" appendTo="body">
+
+                  <ng-template ng-label-tmp let-item="item">
+                    <span class="ng-value-label">{{item.name}}</span>
+                    <span class="ng-value-icon right" (click)="unselectOffice(item)" aria-hidden="true">
+                      <img src="assets/images/new-set/close-ng-select.svg" alt="">
+                    </span>
+                  </ng-template>
+
+                  <ng-template ng-header-tmp>
+
+                    <div>
+                      <button class="secondary-cta x-small-new" (click)="onSelectAllOffices()">Select All</button>
+                      <button class="secondary-cta x-small-new" style="margin-left:0.5%"
+                        (click)="onClearAllOffices()">Clear All</button>
+                    </div>
+
+                  </ng-template>
+
+                  <ng-template ng-option-tmp let-item="item" let-item$="item$" let-index="index">
+                    <div class="d-flex align-items-center">
+                      <div class="ng-dropdown-user-card">
+                        <div class="user-info">
+                          <div class="name">
+                            {{item.name}}
+                          </div>
+                        </div>
+                      </div>
+                      <!-- <div class="styled-checkbox-container">
+                        <input class="styled-checkbox" id="item-{{index}}" type="checkbox" [ngModel]="item$.selected">
+                        <label for="checkbox-2"></label>
+                      </div> -->
+                    </div>
+                  </ng-template>
+
+                </ng-select>
+
+              </div>
+            </div>
+            <div class="col-sm-4 col-md-4 col-lg-4">
+              <div class="my-input-group">
+                <label>{{ 'DATA_MANAGEMENT.LBL_JOBS' | translate }}</label>
+
+                <ng-select [items]="positionList" class="multiple" multiple="true" bindValue="id"
+                  placeholder="--- {{ 'COMMON.LBL_SELECT' | translate }} ---" [loading]="jobsLoading"
+                  [(ngModel)]="model.positions" bindLabel="name" [closeOnSelect]="false" appendTo="body">
+
+                  <ng-template ng-label-tmp let-item="item">
+                    <span class="ng-value-label">{{item.name}}</span>
+                    <span class="ng-value-icon right" (click)="unselectPosition(item)" aria-hidden="true">
+                      <img src="assets/images/new-set/close-ng-select.svg" alt="">
+                    </span>
+                  </ng-template>
+
+                  <ng-template ng-header-tmp>
+
+                    <div>
+                      <button class="secondary-cta x-small-new" (click)="onSelectAllPositions()">Select All</button>
+                      <button class="secondary-cta x-small-new" style="margin-left:0.5%"
+                        (click)="onClearAllPositions()">Clear All</button>
+                    </div>
+
+                  </ng-template>
+
+                  <ng-template ng-option-tmp let-item="item" let-item$="item$" let-index="index">
+                    <div class="d-flex align-items-center">
+                      <div class="ng-dropdown-user-card">
+                        <div class="user-info">
+                          <div class="name">
+                            {{item.name}}
+                          </div>
+                        </div>
+                      </div>
+                      <!-- <div class="styled-checkbox-container">
+                        <input class="styled-checkbox" id="item-{{index}}" type="checkbox" [ngModel]="item$.selected">
+                        <label for="checkbox-2"></label>
+                      </div> -->
+                    </div>
+                  </ng-template>
+
+                </ng-select>
+
+              </div>
+            </div>
+
+            <div class="col-sm-4 col-md-4 col-lg-4">
+              <div class="my-input-group">
+                <label>Country</label>
+
+                <ng-select [items]="dataManagementMaster.countryList" bindLabel="name" bindValue="id"
+                  [virtualScroll]="true" [typeahead]="dataManagementMaster.countryInput" [minTermLength]="3"
+                  (scrollToEnd)="getCountryData()" appendTo="body" [multiple]="true" class="multiple"
+                  [loading]="dataManagementMaster.countryLoading" [(ngModel)]="model.countryIds"
+                  placeholder="--- {{ (dataManagementMaster.countryList!=null && dataManagementMaster.countryList.length!=0? 'COMMON.LBL_SELECT':'COMMON.LBL_NO_DATA' ) | translate }} ---">
+
+                </ng-select>
+
+              </div>
+            </div>
+
+          </div>
+
+        </div>
+      </div>
+
+      <div class="form-action-container" style="text-align: right;padding-top: 1%">
+
+        <button class="category-cta small mr-2 common-tooltip common-tooltip-top-2"
+          data-tooltip="Reset" [disabled]="_saveloader" (click)="reset()">
+          <img src="assets/images/reload-new.svg" alt="Reset">
+          <span>{{ 'DATA_MANAGEMENT.LBL_RESET' | translate}}</span>
+        </button>
+
+        <button class="primary-cta small" (click)="save()" [disabled]="_saveloader">
+          {{'EDIT_CUSTOMER_PRODUCT.LBL_SAVE' | translate}}
+          <span *ngIf="_saveloader">
+            <i class="fa fa-refresh fa-spin" aria-hidden="true"></i>
+          </span>
+        </button>
+      </div>
+
+
+    </div>
+
+  </div>
+</div>
+
+
+<ng-template #itemTemplate let-item="item" let-onCollapseExpand="onCollapseExpand"
+  let-onCheckedChange="onCheckedChange">
+  <div class="text-nowrap row-item" *ngIf="!isEdit">
+    <span class="toggle-arrow item-container" [ngClass]="{'hide': item.collapsed}" *ngIf="item.children"
+      (click)="onCollapseExpand()">
+      <img src="assets/images/new-set/down-arrow-dark.svg" alt="">
+    </span>
+    <label class="form-check-label" [ngClass]="{'selected': item.value == selectedValue, 'leaf-node': !item.children}"
+      (click)="select(item)">{{ item.text }}</label>
+  </div>
+</ng-template>

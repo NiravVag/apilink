@@ -1,0 +1,19 @@
+{
+  "model": "customercollection.model",
+  "fields": {
+    "id": [
+      {
+        "type": "required",
+        "fieldType": "N",
+        "ressource": "CUSTOMER_COLLECTION.MSG_ID_REQ"
+      }
+    ],
+      "name": [
+        {
+          "type": "required",
+          "fieldType": "N",
+          "ressource": "CUSTOMER_COLLECTION.MSG_NAME_REQ"
+        }
+    ]
+  }
+}

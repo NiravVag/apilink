@@ -1,0 +1,38 @@
+{
+ "model": "holiday-master.model",
+  "fields": {
+    "holidayName": [
+      {
+        "type": "required",
+        "fieldType": "T",
+        "ressource": "HOLIDAY_MASTER.MSG_DESCRIPTION_REQ"
+      }
+    ],
+    "startDate": [
+      {
+        "type": "date",
+        "ressource": "HOLIDAY_MASTER.MSG_STARTDATE_DATE"
+      },
+      {
+        "type": "isLessOrEqual",
+        "ressource": "HOLIDAY_MASTER.MSG_STARTDATE_GERAT_ENDDATE",
+        "fieldType": "D",
+        "fieldCible": "endDate"
+      }
+    ],
+    "endDate": [
+      {
+        "type": "date",
+        "ressource": "HOLIDAY_MASTER.MSG_ENDDATE_DATE"
+      },
+      {
+        "type": "isGreatOrEqual",
+        "ressource": "HOLIDAY_MASTER.MSG_ENDDATE_LESS_STARTDATE",
+        "fieldType": "D",
+        "fieldCible": "startDate"
+      }
+    ]
+
+  }
+
+}

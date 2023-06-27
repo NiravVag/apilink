@@ -1,0 +1,251 @@
+<div class="main-wrapper">
+    <div class="wrapper dashboard-wrapper">
+        <div class="my-container">
+            <div class="master-body">
+                <div class="title-container">
+                    <h3 class="main-title">
+                        {{'SCHEDULE_SUMMARY.LBL_MANDAY_FORECAST' | translate}}</h3>
+                </div>
+                <div class="content-container quotation-container">
+                    <div 
+                            class="centerContainerPadding common-filter-container">
+                            
+                            <div class="row">
+                                <div class="col-sm-3 col-md-3 col-lg-3">
+                                    <div class="my-input-group">
+                                        <label for="">{{ 'SCHEDULE_SUMMARY.LBL_OFFICE' | translate }}</label>
+                                        <ng-select [searchable]="true" [loading]="officeLoading" [items]="data"
+                                            bindLabel="name" bindValue="id" [hideSelected]="true" [multiple]="true"
+                                            class="multiple" appendTo="body" (change)="getZoneChanges(model.officeidlst)"
+                                            placeholder="--- {{officePlaceHolder | translate }} ---"
+                                            [(ngModel)]="model.officeidlst">
+                                        </ng-select>
+                                    </div>
+                                </div>
+                                <div class="col-sm-2 col-md-3 col-lg-2 mobile-margin-top-15">
+                                    <div class="my-input-group">
+                                        
+                                            <label>{{'INSPECTION_CANCEL.LBL_SERVICEDATE_FROM' | translate}}</label>
+                                            <div class="calendar-wrapper"> 
+                                            <input type="text" maxlength="10" [(ngModel)]="model.fromdate" container="body"
+                                                readonly=readonly ngbDatepicker #sdf="ngbDatepicker"
+                                                (click)="sdf.toggle()"
+                                                [ngClass]="{ 'is-invalid':  !validator.isValid('fromdate')}">
+                                                    <img src="assets/images/cta-close-grey.svg" alt="" class="close-icon" (click)="clearDateInput('Fromdate')" *ngIf="model.fromdate">
+                                                <img src="assets/images/calendar-icon.svg" alt="" class="calendar-icon"
+                                                (click)="sdf.toggle()">
+                                        </div>
+                                        <div *ngIf="!validator.isValid('fromdate')" class="invalid-feedback">
+                                            <div *ngFor="let error of validator.getErrors('fromdate')">
+                                                {{ error | translate }}</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!---->
+                                <div class="col-sm-2 col-md-3 col-lg-2 mobile-margin-top-15">
+                                    <div class="my-input-group">
+                                        
+                                        
+                                        <label for="">{{'INSPECTION_CANCEL.LBL_SERVICEDATE_TO' | translate}}</label>
+                                        <div class="calendar-wrapper"> 
+                                        <input type="text" maxlength="10" readonly=readonly ngbDatepicker container="body"
+                                                [(ngModel)]="model.todate" #sdt="ngbDatepicker" (click)="sdt.toggle()"
+                                                [ngClass]="{ 'is-invalid':  !validator.isValidIf('todate',IsDateValidationRequired())}">
+                                                 <img src="assets/images/cta-close-grey.svg" alt="" class="close-icon" (click)="clearDateInput('Todate')" *ngIf="model.todate">
+                                                <img src="assets/images/calendar-icon.svg" alt="" class="calendar-icon"
+                                                (click)="sdt.toggle()">
+                                        </div>
+                                        <div *ngIf="!validator.isValidIf('todate',IsDateValidationRequired())"
+                                            class="invalid-feedback">
+                                            <div *ngFor="let error of validator.getErrors('todate')">
+                                                {{ error | translate }}</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-3 col-md-4 col-lg-3">
+                                    <div class="my-input-group">
+                                        <label for="">Zone</label>
+                                        <ng-select [items]="mandayZoneFilterRequest.zoneList" [virtualScroll]="true"  appendTo="body"
+                                            [loading]="mandayZoneFilterRequest.zoneLoading" bindLabel="name" bindValue="id"
+                                            placeholder="--- {{ (mandayZoneFilterRequest.zoneList!=null && mandayZoneFilterRequest.zoneList.length!=0? 'BOOKING_SUMMARY.LBL_SELECT':'BOOKING_SUMMARY.MSG_NO_DATA' ) | translate }} ---"
+                                            [typeahead]="mandayZoneFilterRequest.zoneInput"  
+                                            [(ngModel)]="model.zoneIdlst" [multiple]="true"
+                                            class="multiple" (scrollToEnd)="getZoneData(true)" #select>
+                                            <ng-template ng-option-tmp let-item="item" let-index="index"
+                                                let-search="searchTerm">
+                                                <!-- <b>{{index}} </b><span>{{item.name}}</span> -->
+                                                <span>{{item.name}}</span>
+                                            </ng-template>
+                                            <ng-template ng-multi-label-tmp
+                                                let-items="model.zoneIdlst" let-clear="clear">
+                                                <div class="ng-value"
+                                                    *ngIf="model.zoneIdlst && model.zoneIdlst.length > 0">
+                                                    <span
+                                                        class="ng-value-label">{{model.zoneIdlst.length}}
+                                                        {{'MANDAY_UTILIZATION_DASHBOARD.LBL_SELECTED' | translate }}</span>
+                                                </div>
+                                            </ng-template>
+                                        </ng-select>
+                                    </div>
+                                </div>
+                            </div>
+
+                   
+                            <div class="row marginTop25">
+                                <div class="col-12 col-sm-12 text-right mt-3 mt-sm-0">
+                                    <button class="secondary-cta small mr-2" (click)="export()"
+                                    [disabled]="exportDataLoading || loading || officeLoading"
+                                    *ngIf="distinctDates != null && distinctDates.length != 0">
+                                    <img src="assets/images/red-export.svg" alt="export"> {{ 'COMMON.LBL_EXPORT' | translate }}
+                                    <span *ngIf="exportDataLoading">
+                                      <i class="fa fa-refresh fa-spin" aria-hidden="true"></i>
+                                    </span>
+                                  </button>
+                            <button class="primary-cta small" (click)="GetSearchData()"
+                                [disabled]="loading || officeLoading">
+                                {{ 'SCHEDULE_SUMMARY.LBL_SEARCH_BTN' | translate }}
+                                <span *ngIf="loading">
+                                    <i class="fa fa-refresh fa-spin" aria-hidden="true"></i>
+                                </span>
+                            </button>
+                           
+                        </div>
+                    </div>
+                </div>
+                
+
+                <div class="content-container allocation-location-container"
+                    *ngIf="searchData != null && searchData.length > 0">
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="allocation-filter-container">
+                                <div class="filter">
+                                    <div class="box orange">&nbsp;</div>
+                                    <span class="text">{{'SCHEDULE_SUMMARY.LBL_QC_LESSTHAN20' | translate}}</span>
+                                </div>
+                                <div class="filter">
+                                    <div class="box green">&nbsp;</div>
+                                    <span class="text">{{'SCHEDULE_SUMMARY.LBL_QC_GREATERTHAN20' | translate}}</span>
+                                </div>
+                                <div class="filter">
+                                    <div class="box red">&nbsp;</div>
+                                    <span class="text">{{'SCHEDULE_SUMMARY.LBL_QC_LESSTHAN10' | translate}}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-12">
+                            <div class="header-2 text-center">
+                                <p class="small">{{'QUOTATION_SUMMARY.LBL_MANDAY' | translate}} <span>/</span>
+                                    {{'SCHEDULE_SUMMARY.LBL_QC_AVAILABLE' | translate}} <span> (</span>
+                                    {{'LEAVE_SUMMARY.LBL_LEAVE' | translate}} <span>)</span></p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="content-body row">
+                        <div class="col-4 col-sm-3 col-md-3 col-lg-2 allocation-fix-column">
+                            <div class="header-1">
+                                <div class="head first"></div>
+                            </div>
+                            <div class="days-row" *ngFor="let item of distinctDates">
+                                <div class="value-column first" >
+                                    <p class="value text-center">{{item.date}} <span class="light">{{item.dayOftheWeek}}</span></p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-8 col-sm-9 col-md-9 col-lg-10 allocation-scrollable-column">
+                            <div class="allocation-row header-1" >
+                                <div class="allocation-column head" *ngFor="let location of locationNames">{{location.name}}</div>
+                            </div>
+                            <div class="allocation-row days-row" *ngFor="let item of distinctDates" >
+                                <div class="allocation-column value-column" *ngFor="let location of locationNames">
+                                    <p class="value" [ngStyle]='{"color" : GetColor(item.date, location)}'>
+                                        {{GetMandayValue(item.date, location)}} <a [routerLink]=""
+                                            (click)="OpenPopUp(qcOnLeave, item.date, location)"
+                                            style="display: inline;">{{GetQconLeaveDetails(item.date, location)}}</a>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                
+
+                 <div class="centerContainerPadding" *ngIf="modelNotFound">
+              <div class="error-container">
+              <img src="assets/images/no-result.svg" alt="" class="thumbnail">
+              <h4 class="title">{{'BOOKING_SUMMARY.MSG_NO_ITEM_FOUND' | translate}}</h4>
+              <p class="error-subtitle">{{'CS_CONFIG_SUMMARY.LBL_NODATA' | translate}}</p>
+          </div>
+        </div>
+            </div>
+
+            <div class="footer independent">
+                <div class="column">
+                    <p class="text">© 2019 All rights reserved. api - hk.com</p>
+                </div>
+                <div class="column">
+                    <ul class="footer-item">
+                        <li><a href="">User Guide</a></li>
+                        <li><a href="">Contact</a></li>
+                        <li><a href="">Help</a></li>
+                        <li><a href="">Terms</a></li>
+                    </ul>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<ng-template #qcOnLeave let-modal>
+    <div class="modal-body header-small-modal ">
+        <div class="small-model">
+            <div class="head custom-modal-header">
+                <h4 class="title">{{'SCHEDULE_SUMMARY.LBL_QC_LEAVE_DETAILS' | translate }}</h4>
+            </div>
+            <div class="body no-padding">
+                <div *ngIf="popUpLoading">
+                    <div class="thumbnail animate"></div>
+                    <div class="info">
+                        <div class="box animate"></div>
+                        <div class="box small animate"></div>
+                    </div>
+                </div>
+                <div class="modal-body custom-modal-body" *ngIf="!popUpLoading">
+                    <table class="pagination-table bordered ">
+                        <thead>
+                            <tr>
+                                <th class="width-240">{{'SCHEDULE_SUMMARY.LBL_QC' | translate}}</th>
+                                <th class="width-240">{{'LEAVE_REQUEST.LBL_LEAVEDAYS' | translate}}</th>
+                                <th class="width-240">{{'LEAVE_REQUEST.LBL_LEAVETYPE' | translate}}</th>
+                                <th class="width-240">{{'EDIT_BOOKING.LBL_Remarks' | translate}}</th>
+                                <th class="width-240">{{'MANDAY_FORECAST.LBL_LEAVE_STATUS' | translate}}</th>
+                            </tr>
+                        </thead>
+                        <tbody *ngFor="let item of staffList">
+                            <tr>
+                                <td class="width-240 wordbreak">{{item.staffName}}</td>
+                                <td class="width-240" *ngIf="item.beginDate != item.endDate">
+                                    {{item.beginDate | date:'dd/MM/yyyy'}} - {{item.endDate | date:'dd/MM/yyyy'}}
+                                </td>
+                                <td class="width-240" *ngIf="item.beginDate == item.endDate">
+                                    {{item.beginDate | date:'dd/MM/yyyy'}}</td>
+                                <td class="width-240">{{item.leaveTypeName}}</td> 
+                                <td class="width-240 wordbreak">{{item.remarks}}</td>
+                                <td class="width-240 wordbreak">{{item.leaveStatus}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="modal-footer">
+                    <button class="secondary-cta"
+                        (click)="modal.dismiss('Cross click');">{{ 'COMMON.LBL_CONFIRMCANCEL' | translate }}
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</ng-template>

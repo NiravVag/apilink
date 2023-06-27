@@ -1,0 +1,20 @@
+{
+    "model":"Townsummarymodel",
+    "fields":{
+       
+        "townValues" : [
+            {
+                "type":"required",
+                "fieldType":"N",
+                "ressource":"TOWN_SUMMARY.MSG_CITY_REQ"
+            }
+        ],
+        "cityValues" : [
+            {
+                "type":"required",
+                "fieldType":"N",
+                "ressource":"TOWN_SUMMARY.MSG_CITY_REQ"
+            }
+        ]
+    }
+}

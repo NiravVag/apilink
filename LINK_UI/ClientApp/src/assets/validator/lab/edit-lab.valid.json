@@ -1,0 +1,33 @@
+{
+  "model": "edit-lab.model",
+  "fields": {
+    "name": [
+      {
+        "type": "required",
+        "fieldType": "T",
+        "ressource": "EDIT_LAB.MSG_NAME_REQ"
+      }
+    ],
+    "typeId": [
+      {
+        "type": "required",
+        "fieldType": "N",
+        "ressource": "EDIT_LAB.MSG_TYPE_REQ"
+      }
+    ],
+    "email": [     
+      {
+        "type": "email",
+        "ressource": "EDIT_LAB.MSG_EMAIL_EMAIL"
+      }
+    ],
+    "contactPersonName": [
+      {
+        "type": "required",
+        "fieldType": "T",
+        "ressource": "EDIT_LAB.MSG_CONTACT_REQ"
+      }
+    ]
+  }
+
+}

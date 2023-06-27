@@ -1,0 +1,32 @@
+{
+    "model": "FinanceDashboardRequestModel",
+    "fields": {
+        
+      "serviceDateFrom": [
+        {
+            "type": "required",
+            "fieldType": "D",
+            "ressource": "QC_DASHBOARD.MSG_SERVICE_FROMDATE_REQ"
+        },
+        {
+            "type": "isLessOrEqual",
+            "fieldType": "D",
+            "fieldCible": "serviceDateTo",
+            "ressource": "QC_DASHBOARD.MSG_SERVICE_FROMDATE_GREATER_REQ"
+        }
+    ],
+    "serviceDateTo": [
+        {
+            "type": "required",
+            "fieldType": "D",
+            "ressource": "QC_DASHBOARD.MSG_SERVICE_TODATE_REQ"
+        },
+        {
+            "type": "isGreatOrEqual",
+            "fieldType": "D",
+            "fieldCible": "serviceDateFrom",
+            "ressource": "QC_DASHBOARD.MSG_SERVICE_TODATE_LESS_REQ" 
+        }
+    ]
+    }    
+  }

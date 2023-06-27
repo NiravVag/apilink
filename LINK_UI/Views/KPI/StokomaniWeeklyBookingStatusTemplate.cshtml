@@ -1,0 +1,48 @@
+﻿@using DTO.Common; 
+@{
+    ViewData["Title"] = "StokomaniWeeklyBookingStatus";
+}
+
+@model DTO.Kpi.ExportResult
+
+<xls-sheet name="Weekly Booking Status">
+    <table xls-begin="A:1" style="border-style:solid">
+        <tr style="background-color:#f5f5f5;font-weight:bold;text-align:center">
+            <th>InspectionID</th>
+            <th>CompanyName</th>
+            <th>Inspection office</th>
+            <th>SupplierName</th>
+            <th>FactoryName</th>
+            <th>ServiceRequest</th>
+            <th>Status</th>
+            <th>InspectionAdvDate</th>
+            <th>CategoryName</th>
+            <th>SubcategoryName</th>
+            <th>ProductID</th>
+            <th>ManDays</th>
+            <th>PONo</th>
+            <th>Merchandiser</th>
+        </tr>
+
+        @foreach (var item in Model.Data)
+        {
+            var totalTravelCost = @item.TravellingCost + @item.HotelFee;
+        <tr>
+            <td width="150px" xls-type="number" style="text-align:center">@item.BookingNo</td>
+            <td width="150px">Stokomani</td>
+            <td width="250px">@Html.Raw(@item.Office)</td>
+            <td width="150px">@Html.Raw(@item.SupplierName)</td>
+            <td width="150px">@Html.Raw(@item.FactoryName)</td>
+            <td width="150px">@Html.Raw(@item.ServiceTypeName)</td>
+            <td width="150px">@item.bookingStatus</td>
+            <td width="150px" xls-type="date" xls-format="@ApiCommonData.StandardDateFormat">@item.InspectionStartDate</td>
+            <td width="150px">@Html.Raw(@item.ProductCategory)</td>
+            <td width="150px">@Html.Raw(@item.ProductSubCategory)</td>
+            <td width="150px">@Html.Raw(@item.ProductName)</td>
+            <td width="150px" xls-type="number" style="text-align:center">@item.ManDay</td>
+            <td width="250px">@Html.Raw(@item.PONumber)</td>
+            <td width="150px">@Html.Raw(@item.Merchandise)</td>
+        </tr>
+        }
+    </table>
+</xls-sheet>

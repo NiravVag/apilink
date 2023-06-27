@@ -1,0 +1,1906 @@
+<div class="main-wrapper">
+  <div class="wrapper dashboard-wrapper">
+    <div class="filter-bar-container" *ngIf="filterDataShown">
+      <div class="my-container" *ngIf="!isMobile">
+        <p class="heading"><img src="assets/images/new-set/applier-filter-search.svg" alt="">Search By</p>
+        <ul class="applied-filter-list">
+          <li *ngIf="model.fromdate || model.todate">
+            <span *ngIf="model.fromdate">
+              {{bookingMasterData.DateName}} :
+              {{model.fromdate.day}}/
+              {{model.fromdate.month}}/
+              {{model.fromdate.year}}
+            </span>
+            <span *ngIf="model.todate" class="ml-2">
+              to
+              {{model.todate.day}}/
+              {{model.todate.month}}/
+              {{model.todate.year}}
+            </span>
+          </li>
+          <li *ngIf="model.customerid && model.customerid >0">
+            <span>{{ 'BOOKING_SUMMARY.LBL_CUSTOMER' | translate }}
+              : {{bookingMasterData.customerName}}
+            </span>
+          </li>
+          <li *ngIf="model.supplierid && model.supplierid >0">
+            <span>{{ 'BOOKING_SUMMARY.LBL_SUPPLIER' | translate }} :
+              {{bookingMasterData.supplierName}}
+            </span>
+          </li>
+          <li *ngIf="model.statusidlst && model.statusidlst.length >0">
+            <span>{{ 'BOOKING_SUMMARY.LBL_STATUS' | translate }} :
+              {{bookingMasterData.statusNameList}}
+            </span>
+          </li>
+          <li *ngIf="model.officeidlst && model.officeidlst.length >0">
+            <span>{{'BOOKING_SUMMARY.LBL_OFFICE' | translate }} :
+              {{bookingMasterData.officeNameList}}
+            </span>
+          </li>
+          <li *ngIf="(model.selectedBrandIdList && model.selectedBrandIdList.length >0) ||
+              (model.selectedBuyerIdList && model.selectedBuyerIdList.length >0) ||
+              (model.serviceTypelst && model.serviceTypelst.length >0) ||
+              (model.factoryidlst && model.factoryidlst.length >0) ||
+              (model.selectedCountryIdList && model.selectedCountryIdList.length >0) ||
+              (model.selectedDeptIdList && model.selectedDeptIdList.length >0) ||
+              (model.userIdList && model.userIdList.length >0) ||
+              (model.selectedCollectionIdList && model.selectedCollectionIdList.length >0) ||
+              (model.selectedPriceCategoryIdList && model.selectedPriceCategoryIdList.length >0) ||
+              (model.quotationsStatusIdlst && model.quotationsStatusIdlst.length >0) ||
+              (model.barcode && model.barcode.length >0) || (model.advancedsearchtypetext &&
+               model.advancedsearchtypetext.length > 0) ||(model.isPicking) || (model.isEcoPack)">
+            {{ 'COMMON.LBL_MORE' | translate}}
+            ...
+          </li>
+        </ul>
+        <span class="reset-link" (click)="Reset()">Reset</span>
+      </div>
+      <div class="my-container" *ngIf="isMobile">
+        <p class="heading"> {{filterCount}}
+          {{'COMMON.LBL_FILTER_SELECTED' | translate}}
+        </p>
+      </div>
+    </div>
+    <div class="page-head-container whiteBackground">
+      <div class="my-container">
+        <div class="column">
+          <h3 *ngIf="!isReInspection && !isReBooking && !isQuotationPending" class="page-title">
+            {{ 'BOOKING_SUMMARY.LBL_BOOKINGSEARCH' | translate }}
+          </h3>
+          <h3 *ngIf="isReInspection" class="page-title">
+            {{ 'BOOKING_SUMMARY.LBL_PREVBOOKINGSEARCH' | translate }}
+          </h3>
+          <h3 *ngIf="isReBooking" class="page-title"> {{ 'BOOKING_SUMMARY.LBL_REBOOKINGSEARCH' | translate }} </h3>
+          <h3 *ngIf="isQuotationPending" class="page-title">
+            {{ 'BOOKING_SUMMARY.LBL_QUOTATION_PENDING' | translate }}
+          </h3>
+        </div>
+        <div class="column text-right d-flex align-items-start justify-content-end">
+          <div class="custom-dropdown">
+            <span class="selected-value">{{bookingMasterData.selectedNumber}}</span>
+            <ul class="dropdown-list-container width-220">
+              <li *ngFor="let item of bookingSearchtypelst;let idx = index" [value]="item.id" id="{{item.id}}"
+                name="radio-group" (click)="SetSearchTypemodel(item)" [(ngModel)]="model.searchtypeid">
+                <span>({{item.shortName}})</span>
+                {{item.name}}
+              </li>
+            </ul>
+          </div>
+          <div class="my-input-group search-input inline">
+            <div class="inline position-relative">
+              <input maxlength="200" (ngModelChange)="BookingNoValidation($event)" [(ngModel)]="model.searchtypetext"
+                [placeholder]="bookingMasterData.selectedNumberPlaceHolder" type="text"
+                [ngClass]="{ 'is-invalid': model.searchtypetext!='' && _customvalidationforbookid}" />
+
+              <div class="icon-container">
+                <img (click)="getSearchDetails()" src="assets/images/new-set/search-lens.svg" alt="" class="icon"
+                  [ngClass]="{'active': bookingMasterData.isShowSearchLens }">
+              </div>
+            </div>
+            <span *ngIf="model.searchtypetext!='' && _customvalidationforbookid" class="invalid-feedback">
+              {{ 'BOOKING_SUMMARY.MSG_BOOKINGNO_ERROR' | translate }}
+            </span>
+          </div>
+          <div class="filter-cta style-4 common-tooltip" *ngIf="!isFilterOpen" (click)="toggleFilterSection()"
+            data-tooltip="filter">
+            <img src="assets/images/cta-filter-grey.svg" alt="">
+          </div>
+          <div class="filter-cta style-4 active" *ngIf="isFilterOpen" (click)="toggleFilterSection()">
+            <img src="assets/images/cta-filter-grey.svg" alt="">
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="filter-container style-3" [@expandCollapse]="isFilterOpen ? 'open' : 'close'" [@.disabled]="isMobile">
+      <div class="my-container customer-dashboard-mobile-filter">
+        <div class="row">
+          <div class="col-sm-12 col-md-12 col-lg-4 mobile-margin-top-15">
+            <div class="my-input-group">
+              <div class="styled-radio-container" *ngFor="let item of datetypelst;let idx = index">
+                <input type="radio" class="styled-radio" id="{{item.id}}" name="radio-group1" [value]="item.id"
+                  [checked]="true" (change)="SetSearchDatetype(item)" [(ngModel)]="model.datetypeid">
+                <label for="{{item.id}}">{{item.name}}</label>
+              </div>
+            </div>
+            <div class="my-input-group">
+              <div class="d-flex my-input-group">
+                <div class="calendar-wrapper flex-fill mr-2">
+                  <input type="text" maxlength="10" container="body"
+                    [ngClass]="{ 'is-invalid':  !validator.isValidIf('fromdate',IsDateValidationRequired())}"
+                    readonly=readonly [(ngModel)]="model.fromdate" ngbDatepicker #sdf="ngbDatepicker"
+                    (click)="sdf.toggle()">
+                  <img src="assets/images/cta-close-grey.svg" alt="" class="close-icon"
+                    (click)="clearDateInput('Fromdate');isfilterData()" *ngIf="model.fromdate">
+                  <img src="assets/images/cta-calendar-grey.svg" alt="" class="calendar-icon" (click)="sdf.toggle()">
+
+                  <div *ngIf="!validator.isValidIf('fromdate',IsDateValidationRequired())" class="invalid-feedback">
+                    <div *ngFor="let error of validator.getErrors('fromdate')">{{ error | translate }}</div>
+                  </div>
+
+                </div>
+
+                <div class="calendar-wrapper flex-fill">
+                  <input type="text" maxlength="10" container="body"
+                    [ngClass]="{ 'is-invalid':  !validator.isValidIf('todate',IsDateValidationRequired())}"
+                    readonly=readonly [(ngModel)]="model.todate" ngbDatepicker #sdt="ngbDatepicker"
+                    (click)="sdt.toggle()">
+                  <img src="assets/images/cta-close-grey.svg" alt="" class="close-icon"
+                    (click)="clearDateInput('Todate');isfilterData()" *ngIf="model.todate">
+                  <img src="assets/images/cta-calendar-grey.svg" alt="" class="calendar-icon" (click)="sdt.toggle()">
+
+                  <div *ngIf="!validator.isValidIf('todate',IsDateValidationRequired())" class="invalid-feedback">
+                    <div *ngFor="let error of validator.getErrors('todate')">{{ error | translate }}</div>
+                  </div>
+
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-sm-12 col-md-4 col-lg-3 marginTop15 mobile-margin-top-15">
+            <div class="my-input-group">
+              <label for="">{{ 'BOOKING_SUMMARY.LBL_CUSTOMER' | translate }}</label>
+              <ng-select #customer [searchable]="true" [items]="bookingMasterData.customerList" bindLabel="name"
+                (change)="ChangeCustomer($event);isfilterData();" (clear)="clearCustomer()"
+                [loading]="bookingMasterData.customerLoading" [clearable]="!_IsCustomerUser"
+                [ngClass]="{ 'is-invalid':_IsInternalUser && !validator.isValidIf('customerid', model.searchtypetext) && model.searchtypeid!=1}"
+                bindValue="id" [hideSelected]="true" appendTo="body" [virtualScroll]="true"
+                (scrollToEnd)="getCustomerData(true)" [typeahead]="bookingMasterData.customerInput" [minTermLength]="3"
+                placeholder="--- {{(bookingMasterData.customerList!=null && bookingMasterData.customerList.length!=0? 'BOOKING_SUMMARY.LBL_SELECT':'BOOKING_SUMMARY.MSG_NO_DATA')  | translate }} ---"
+                [(ngModel)]="model.customerid">
+                <ng-template ng-option-tmp let-item="item">
+                  <div class="text-wrap">{{ item.name }}</div>
+                </ng-template>
+              </ng-select>
+              <div
+                *ngIf="_IsInternalUser && !validator.isValidIf('customerid', model.searchtypetext) && model.searchtypeid!=1"
+                class="invalid-feedback">
+                <div *ngFor="let error of validator.getErrors('customerid')">{{ error | translate }}</div>
+              </div>
+            </div>
+          </div>
+          <div class="col-sm-12 col-md-4 col-lg-3 mobile-margin-top-15">
+            <div class="my-input-group">
+              <div class="styled-radio-container" *ngFor="let item of supplierTypeList;let idx = index">
+                <input type="radio" class="styled-radio" id="{{item.id}}" name="radio-group3" [value]="item.id"
+                  [checked]="true" [(ngModel)]="model.supplierTypeId" (change)="changeSupplierType(item)">
+                <label for="{{item.id}}">{{item.name}}</label>
+              </div>
+            </div>
+            <div class="my-input-group">
+              <div class="d-flex my-input-group">
+                <div class="calendar-wrapper flex-fill mr-2">
+                  <ng-select [multiple]="false" [closeOnSelect]="true" [searchable]="true" [clearable]="true"
+                    (change)="ChangeSupplier($event);isfilterData();" (clear)="clearSupplier()" [hideSelected]="true"
+                    [virtualScroll]="true" (scrollToEnd)="getSupplierData()" [typeahead]="bookingMasterData.supInput"
+                    [minTermLength]="3" [loading]="bookingMasterData.supLoading" bindLabel="name" bindValue="id"
+                    [items]="bookingMasterData.supplierList" appendTo="body"
+                    placeholder="--- {{ (bookingMasterData.supplierList!=null && bookingMasterData.supplierList.length!=0? 'BOOKING_SUMMARY.LBL_SELECT':'BOOKING_SUMMARY.MSG_NO_DATA' ) | translate }} ---"
+                    [(ngModel)]="model.supplierid">
+                    <ng-template ng-option-tmp let-item="item">
+                      <div class="text-wrap">{{ item.name }}</div>
+                    </ng-template>
+                  </ng-select>
+                </div>
+              </div>
+              <!-- <div class="d-flex my-input-group">
+              </div> -->
+            </div>
+          </div>
+          <div class="col-sm-12 col-md-4 col-lg-2 marginTop15 mobile-margin-top-15" *ngIf="_IsInternalUser">
+            <div class="my-input-group">
+              <label for="">{{ 'BOOKING_SUMMARY.LBL_OFFICE' | translate }}</label>
+              <ng-select [searchable]="true" [loading]="officeLoading" [items]="bookingMasterData.officeList"
+                (change)="isfilterData()" appendTo="body" bindLabel="name" bindValue="id" [hideSelected]="true"
+                [multiple]="true" class="multiple"
+                placeholder="--- {{(bookingMasterData.officeList!=null && bookingMasterData.officeList.length!=0? 'BOOKING_SUMMARY.LBL_SELECT':'BOOKING_SUMMARY.MSG_NO_DATA')  | translate }} ---"
+                [(ngModel)]="model.officeidlst" (change)="officeChange($event)">
+              </ng-select>
+            </div>
+          </div>
+        </div>
+        <div [hidden]="!toggleFormSection">
+          <div class="row">
+            <div class="col-sm-12">
+              <div class="row marginTop10">
+                <div class="col-sm-12 col-md-12 col-lg-3">
+                  <div class="my-input-group">
+                    <div class="styled-radio-container"
+                      *ngFor="let item of bookingAdvanceSearchtypelst;let idx = index">
+                      <input type="radio" class="styled-radio" id="{{item.id}}" name="radio-group2" [value]="item.id"
+                        (change)="SetSearchTypeText(item.id)" [checked]="true" [(ngModel)]="model.advancedSearchtypeid">
+                      <label for="{{item.id}}">{{item.name}}</label>
+                      <!-- [checked]="idx === 0" -->
+                    </div>
+                    <input type="text" maxlength="200" [(ngModel)]="model.advancedsearchtypetext"
+                      (change)="isfilterData()" placeholder="Please Enter">
+                  </div>
+                </div>
+                <div class="col-sm-12 col-md-4 col-lg-3">
+                  <div class="my-input-group marginTop10">
+                    <label for="" id="lbl_servicetype">{{'BOOKING_SUMMARY.LBL_SERVICETYPE' | translate}}</label>
+                    <ng-select [items]="bookingMasterData.serviceTypeList" class="multiple" multiple="true"
+                      bindLabel="name" bindValue="id" [clearable]="false" [(ngModel)]="model.serviceTypelst"
+                      appendTo="body" [loading]="bookingMasterData.serviceTypeLoading"
+                      placeholder=" ---{{ (bookingMasterData.serviceTypeList!=null && bookingMasterData.serviceTypeList.length!=0? 'QUOTATION_SUMMARY.LBL_SELECT':'QUOTATION_SUMMARY.MSG_NO_DATA' ) | translate }}---"
+                      (change)="isfilterData()">
+                      <ng-template ng-option-tmp let-item="item">
+                        <div class="text-wrap">{{ item.name }}</div>
+                      </ng-template>
+                    </ng-select>
+                  </div>
+                </div>
+                <div class="col-sm-12 col-md-4 col-lg-3 mobile-margin-top-15">
+                  <div class="my-input-group marginTop10">
+                    <label class="" for="">{{ 'BOOKING_SUMMARY.LBL_STATUS' | translate }}</label>
+                    <ng-select [multiple]="true" [searchable]="true" [loading]="bookingMasterData.statusLoading"
+                      [items]="bookingMasterData.bookingStatusList" class="multiple" bindLabel="statusName"
+                      bindValue="id" [hideSelected]="true" [disabled]="disableStatusList" appendTo="body"
+                      placeholder="--- {{ (bookingMasterData.bookingStatusList!=null && bookingMasterData.bookingStatusList.length!=0? 'BOOKING_SUMMARY.LBL_SELECT':'BOOKING_SUMMARY.MSG_NO_DATA' ) | translate }} ---"
+                      [(ngModel)]="model.statusidlst" (change)="statusChange($event);isfilterData()">
+                    </ng-select>
+                  </div>
+                </div>
+                <div class="col-sm-12 col-md-4 col-lg-3" *ngIf="_IsInternalUser">
+                  <div class="my-input-group marginTop10">
+                    <label for="">{{'BOOKING_SUMMARY.LBL_AE' | translate}}</label>
+                    <ng-select [items]="bookingMasterData.aeUserList" class="multiple" multiple="true" bindLabel="name"
+                      [searchable]="true" bindValue="id" [clearable]="false" [(ngModel)]="model.userIdList"
+                      [hideSelected]="true" appendTo="body"
+                      placeholder=" ---{{ (bookingMasterData.aeUserList!=null && bookingMasterData.aeUserList.length!=0? 'QUOTATION_SUMMARY.LBL_SELECT':'QUOTATION_SUMMARY.MSG_NO_DATA' ) | translate }}---"
+                      (change)="isfilterData()">
+                      <ng-template ng-option-tmp let-item="item">
+                        <div class="text-wrap">{{ item.name }}</div>
+                      </ng-template>
+                    </ng-select>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-sm-12">
+              <div class="row marginTop10">
+                <div class="col-sm-3 col-md-3 col-lg-3">
+                  <div class="my-input-group marginTop10">
+                    <label for="">{{ 'BOOKING_SUMMARY.LBL_FACTORY' | translate }}</label>
+                    <ng-select [multiple]="true" class="multiple" [searchable]="true"
+                      [loading]="bookingMasterData.facLoading" [items]="bookingMasterData.factoryList" bindLabel="name"
+                      bindValue="id" [hideSelected]="true" appendTo="body" [virtualScroll]="true"
+                      (scrollToEnd)="getFactoryData()" [typeahead]="bookingMasterData.facInput" [minTermLength]="3"
+                      [loading]="bookingMasterData.facLoading"
+                      placeholder="--- {{ (bookingMasterData.factoryList!=null && bookingMasterData.factoryList.length!=0? 'BOOKING_SUMMARY.LBL_SELECT':'BOOKING_SUMMARY.MSG_NO_DATA' ) | translate }} ---"
+                      [(ngModel)]="model.factoryidlst" (change)="isfilterData()">
+                      <ng-template ng-option-tmp let-item="item">
+                        <div class="text-wrap">{{ item.name }}</div>
+                      </ng-template>
+                    </ng-select>
+                  </div>
+                </div>
+                <div class="col-sm-3 col-md-3 col-lg-3">
+                  <div class="my-input-group marginTop10">
+                    <label for="">{{ 'BOOKING_SUMMARY.LBL_FACTORY_COUNTRY' | translate}}</label>
+                    <ng-select appendTo="body" [items]="bookingMasterData.countryList" [virtualScroll]="true"
+                      [loading]="bookingMasterData.countryLoading" bindLabel="name" bindValue="id"
+                      placeholder="--- {{ (bookingMasterData.countryList!=null && bookingMasterData.countryList.length!=0? 'COMMON.LBL_SELECT':'COMMON.LBL_NO_DATA' ) | translate }} ---"
+                      [typeahead]="bookingMasterData.countryInput" [minTermLength]="3"
+                      [(ngModel)]="model.selectedCountryIdList" [multiple]="true" class="multiple"
+                      (change)="changeCountryData()" (scrollToEnd)="getCountryData()" #select>
+                      <ng-template ng-option-tmp let-item="item" let-index="index" let-search="searchTerm">
+                        <span>{{item.name}}</span>
+                      </ng-template>
+                    </ng-select>
+                  </div>
+                </div>
+
+                <div class="col-sm-3 col-md-3 col-lg-3">
+                  <div class="my-input-group marginTop10">
+                    <label for="">{{ 'BOOKING_SUMMARY.LBL_PROVINCE' | translate}}</label>
+                    <ng-select [items]="bookingMasterData.provinceList" class="multiple" multiple="true"
+                      bindLabel="name" [searchable]="true" bindValue="id" [clearable]="false"
+                      (change)="changeProvinceData()" [(ngModel)]="model.selectedProvinceIdList" [hideSelected]="true"
+                      appendTo="body"
+                      placeholder=" ---{{ (bookingMasterData.provinceList!=null && bookingMasterData.provinceList.length!=0? 'QUOTATION_SUMMARY.LBL_SELECT':'QUOTATION_SUMMARY.MSG_NO_DATA' ) | translate }}---">
+                      <ng-template ng-option-tmp let-item="item">
+                        <div class="text-wrap">{{ item.name }}</div>
+                      </ng-template>
+                    </ng-select>
+                  </div>
+                </div>
+
+                <div class="col-sm-3 col-md-3 col-lg-3">
+                  <div class="my-input-group marginTop10">
+                    <label for="">{{ 'BOOKING_SUMMARY.LBL_CITY' | translate}}</label>
+                    <ng-select [items]="bookingMasterData.cityList" class="multiple" multiple="true" bindLabel="name"
+                      [searchable]="true" bindValue="id" [clearable]="false" (change)="changeCityData()"
+                      [(ngModel)]="model.selectedCityIdList" [hideSelected]="true" appendTo="body"
+                      placeholder=" ---{{ (bookingMasterData.cityList!=null && bookingMasterData.cityList.length!=0? 'QUOTATION_SUMMARY.LBL_SELECT':'QUOTATION_SUMMARY.MSG_NO_DATA' ) | translate }}---">
+                      <ng-template ng-option-tmp let-item="item">
+                        <div class="text-wrap">{{ item.name }}</div>
+                      </ng-template>
+                    </ng-select>
+                  </div>
+                </div>
+
+
+
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-sm-12">
+              <div class="row marginTop10">
+
+                <div class="col-sm-3 col-md-3 col-lg-3">
+                  <div class="my-input-group marginTop10">
+                    <label for="">{{ 'BOOKING_SUMMARY.LBL_CUS_BRAND' | translate}}</label>
+                    <ng-select appendTo="body" [items]="bookingMasterData.brandList" [virtualScroll]="true"
+                      [loading]="bookingMasterData.brandLoading" bindLabel="name" bindValue="id"
+                      placeholder="--- {{ (bookingMasterData.brandList && bookingMasterData.brandList.length>0? 'COMMON.LBL_SELECT':'COMMON.LBL_NO_DATA' ) | translate }} ---"
+                      [typeahead]="bookingMasterData.brandInput" [minTermLength]="3"
+                      [(ngModel)]="model.selectedBrandIdList" [multiple]="true" class="multiple"
+                      (change)="isfilterData()" (scrollToEnd)="getBrandData()" #select>
+                      <ng-template ng-option-tmp let-item="item" let-index="index" let-search="searchTerm">
+                        <span>{{item.name}}</span>
+                      </ng-template>
+                      <ng-template ng-multi-label-tmp let-items="model.selectedBrandIdList" let-clear="clear">
+                        <div class="ng-value" *ngIf="model.selectedBrandIdList && model.selectedBrandIdList.length > 0">
+                          <span class="ng-value-label">
+                            {{model.selectedBrandIdList.length}}
+                            {{'COMMON.LBL_SELECTED' | translate }}
+                          </span>
+                        </div>
+                      </ng-template>
+                    </ng-select>
+                  </div>
+                </div>
+
+                <div class="col-sm-3 col-md-3 col-lg-3">
+                  <div class="my-input-group marginTop10">
+                    <label for="">{{ 'BOOKING_SUMMARY.LBL_CUS_DEPARTMENT' | translate}}</label>
+                    <!-- (clear)="clearDept()" -->
+                    <ng-select appendTo="body" [items]="bookingMasterData.deptList" [virtualScroll]="true"
+                      [loading]="bookingMasterData.deptLoading" bindLabel="name" bindValue="id"
+                      placeholder="--- {{ (bookingMasterData.deptList && bookingMasterData.deptList.length>0? 'COMMON.LBL_SELECT':'COMMON.LBL_NO_DATA' ) | translate }} ---"
+                      [typeahead]="bookingMasterData.deptInput" [minTermLength]="3"
+                      [(ngModel)]="model.selectedDeptIdList" [multiple]="true" class="multiple"
+                      (change)="isfilterData()" (scrollToEnd)="getDeptData()" #department>
+                      <ng-template ng-option-tmp let-item="item" let-index="index" let-search="searchTerm">
+                        <span>{{item.name}}</span>
+                      </ng-template>
+                      <ng-template ng-multi-label-tmp let-items="model.selectedDeptIdList" let-clear="clear">
+                        <div class="ng-value" *ngIf="model.selectedDeptIdList && model.selectedDeptIdList.length > 0">
+                          <span class="ng-value-label">
+                            {{model.selectedDeptIdList.length}}
+                            {{'COMMON.LBL_SELECTED' | translate }}
+                          </span>
+                        </div>
+                      </ng-template>
+                    </ng-select>
+                  </div>
+                </div>
+
+                <div class="col-sm-3 col-md-3 col-lg-3">
+                  <div class="my-input-group marginTop10">
+                    <label for="">{{ 'BOOKING_SUMMARY.LBL_CUS_COLLECTION' | translate}}</label>
+                    <ng-select appendTo="body" [items]="bookingMasterData.collectionList" [virtualScroll]="true"
+                      [loading]="bookingMasterData.collectionLoading" bindLabel="name" bindValue="id"
+                      placeholder="--- {{ (bookingMasterData.collectionList && bookingMasterData.collectionList.length>0? 'COMMON.LBL_SELECT':'COMMON.LBL_NO_DATA' ) | translate }} ---"
+                      [typeahead]="bookingMasterData.collectionInput" [minTermLength]="3"
+                      [(ngModel)]="model.selectedCollectionIdList" [multiple]="true" class="multiple"
+                      (change)="isfilterData()" (scrollToEnd)="getCollectionData()" #select>
+                      <ng-template ng-option-tmp let-item="item" let-index="index" let-search="searchTerm">
+                        <span>{{item.name}}</span>
+                      </ng-template>
+                      <ng-template ng-multi-label-tmp let-items="model.selectedCollectionIdList" let-clear="clear">
+                        <div class="ng-value"
+                          *ngIf="model.selectedCollectionIdList && model.selectedCollectionIdList.length > 0">
+                          <span class="ng-value-label">
+                            {{model.selectedCollectionIdList.length}}
+                            {{'COMMON.LBL_SELECTED' | translate }}
+                          </span>
+                        </div>
+                      </ng-template>
+                    </ng-select>
+                  </div>
+                </div>
+                <div class="col-sm-3 col-md-3 col-lg-3">
+                  <div class="my-input-group marginTop10">
+                    <label for="">{{ 'BOOKING_SUMMARY.LBL_CUS_BUYER' | translate}}</label>
+                    <ng-select appendTo="body" [items]="bookingMasterData.buyerList" [virtualScroll]="true"
+                      [loading]="bookingMasterData.buyerLoading" bindLabel="name" bindValue="id"
+                      placeholder="--- {{ (bookingMasterData.buyerList && bookingMasterData.buyerList.length>0? 'COMMON.LBL_SELECT':'COMMON.LBL_NO_DATA' ) | translate }} ---"
+                      [typeahead]="bookingMasterData.buyerInput" [minTermLength]="3"
+                      [(ngModel)]="model.selectedBuyerIdList" [multiple]="true" class="multiple"
+                      (change)="isfilterData()" (scrollToEnd)="getBuyerData()" #select>
+                      <ng-template ng-option-tmp let-item="item" let-index="index" let-search="searchTerm">
+                        <span>{{item.name}}</span>
+                      </ng-template>
+                      <ng-template ng-multi-label-tmp let-items="model.selectedBuyerIdList" let-clear="clear">
+                        <div class="ng-value" *ngIf="model.selectedBuyerIdList && model.selectedBuyerIdList.length > 0">
+                          <span class="ng-value-label">
+                            {{model.selectedBuyerIdList.length}}
+                            {{'COMMON.LBL_SELECTED' | translate }}
+                          </span>
+                        </div>
+                      </ng-template>
+                    </ng-select>
+                  </div>
+                </div>
+
+                <!-- <div class="col-sm-3 col-md-3 col-lg-3">
+                  <div class="my-input-group marginTop10">
+                    <label for="">{{ 'BOOKING_SUMMARY.LBL_BAR_CODE' | translate}}</label>
+                    <input maxlength="200" [(ngModel)]="model.barcode" type="text" placeholder="Please Enter"
+                      (change)="isfilterData()" />
+                  </div>
+                </div> -->
+
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-sm-12">
+              <div class="row marginTop10">
+
+                <div class="col-sm-3 col-md-3 col-lg-3">
+                  <div class="my-input-group">
+                    <label for="">{{ 'BOOKING_SUMMARY.LBL_CUS_PRICE_CATEGORY' | translate}}</label>
+                    <ng-select appendTo="body" [items]="bookingMasterData.priceCategoryList" [virtualScroll]="true"
+                               [loading]="bookingMasterData.priceCategoryLoading" bindLabel="name" bindValue="id"
+                               placeholder="--- {{ (bookingMasterData.priceCategoryList && bookingMasterData.priceCategoryList.length>0? 'COMMON.LBL_SELECT':'COMMON.LBL_NO_DATA' ) | translate }} ---"
+                               [typeahead]="bookingMasterData.priceCategoryInput" [minTermLength]="3"
+                               [(ngModel)]="model.selectedPriceCategoryIdList" [multiple]="true" class="multiple"
+                               (change)="isfilterData()" (scrollToEnd)="getPriceCategoryData()" #select>
+                      <ng-template ng-option-tmp let-item="item" let-index="index" let-search="searchTerm">
+                        <span>{{item.name}}</span>
+                      </ng-template>
+                      <ng-template ng-multi-label-tmp let-items="model.selectedPriceCategoryIdList" let-clear="clear">
+                        <div class="ng-value"
+                             *ngIf="model.selectedPriceCategoryIdList && model.selectedPriceCategoryIdList.length > 0">
+                          <span class="ng-value-label">
+                            {{model.selectedPriceCategoryIdList.length}}
+                            {{'COMMON.LBL_SELECTED' | translate }}
+                          </span>
+                        </div>
+                      </ng-template>
+                    </ng-select>
+                  </div>
+                </div>
+                <div class="col-sm-3 col-md-3 col-lg-3" *ngIf="_IsInternalUser">
+                  <div class="my-input-group">
+                    <label class="" for="">{{'BOOKING_SUMMARY.LBL_QuotationStatus' | translate}}</label>
+                    <ng-select [items]="bookingMasterData.quotationStatusList" class="multiple"
+                               [loading]="bookingMasterData.statusLoading" multiple="true" bindLabel="label" [searchable]="true"
+                               bindValue="id" [clearable]="false" [(ngModel)]="model.quotationsStatusIdlst" [hideSelected]="true"
+                               appendTo="body" (change)="isfilterData()"
+                               placeholder=" ---{{ (bookingMasterData.quotationStatusList!=null && bookingMasterData.quotationStatusList.length!=0? 'QUOTATION_SUMMARY.LBL_SELECT':'QUOTATION_SUMMARY.MSG_NO_DATA' ) | translate }}---">
+                    </ng-select>
+                  </div>
+                </div>
+                <div class="col-sm-3 col-md-3 col-lg-3" *ngIf="_IsInternalUser || _IsCustomerUser">
+                  <div class="my-input-group">
+                    <label class="" for="">{{'BOOKING_SUMMARY.LBL_BOOKING_TYPE' | translate}}</label>
+                    <ng-select [items]="bookingMasterData.inspectionBookingTypes" bindLabel="name" bindValue="id"
+                               [multiple]="false" [closeOnSelect]="true" [searchable]="true" [hideSelected]="true"
+                               [(ngModel)]="model.bookingType" appendTo="body"
+                               placeholder="--- {{ (bookingMasterData.inspectionBookingTypes && bookingMasterData.inspectionBookingTypes.length>0? 'COMMON.LBL_SELECT':'COMMON.LBL_NO_DATA' ) | translate }} ---">
+                      <ng-template ng-option-tmp let-item="item">
+                        <div class="text-wrap">{{ item.name }}</div>
+                      </ng-template>
+                    </ng-select>
+                  </div>
+                </div>
+                <div class="col-sm-3 col-md-3 col-lg-1">
+                  <div class="my-input-group marginTop25">
+                    <div class="styled-checkbox-container">
+                      <input class="styled-checkbox" id="checkboxa-2" type="checkbox" [(ngModel)]="model.isPicking"
+                             (change)="isfilterData()">
+                      <label for="checkboxa-2">{{ 'BOOKING_SUMMARY.LBL_PICKING' | translate }}</label>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-sm-3 col-md-3 col-lg-1">
+                  <div class="my-input-group marginTop25">
+                    <div class="styled-checkbox-container">
+                      <input class="styled-checkbox" id="checkboxb-1" type="checkbox" [(ngModel)]="model.isEcoPack"
+                             (change)="isfilterData()">
+                      <label for="checkboxb-1">{{ 'BOOKING_SUMMARY.LBL_ECHOPACK' | translate }}</label>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="col-sm-3 col-md-3 col-lg-1"
+                     *ngIf="bookingMasterData.entityId == bookingMasterData.entityAccess.AQF">
+                  <div class="my-input-group marginTop25">
+                    <div class="styled-checkbox-container">
+                      <input class="styled-checkbox" id="checkbox-eaqf" type="checkbox" [(ngModel)]="model.isEAQF">
+                      <label for="checkbox-eaqf">{{ 'E-AQF.LBL_EAQF' | translate }}</label>
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Advance Search starts-->
+        <div class="row filter-cta-container">
+          <div class="col-6">
+            <div class="advanced-search" (click)="toggleSection()">
+              <img class="icon" src="assets/images/expand-new.svg" alt="" *ngIf="!toggleFormSection">
+              <img class="icon" src="assets/images/collapse-new.svg" alt="" *ngIf="toggleFormSection">
+              {{'QUOTATION_SUMMARY.LBL_ADVANCED_SEARCH' | translate}}
+            </div>
+          </div>
+          <div class="col-6 text-right">
+            <button class="primary-cta small" [disabled]="_quotationloading"
+              [ngStyle]='{"display" : isBookingSelected ? "inline-block":"none"}'
+              (click)="RedirectPage(_bookingredirectpage.Quotation,model)">
+              {{ 'BOOKING_SUMMARY.LBL_NEW_QUOTATION' | translate}}
+            </button>
+            <button class="category-cta small mr-2 common-tooltip common-tooltip-top-2" data-tooltip="Reset"
+              [disabled]="cancelLoading" (click)="Reset()">
+              <img src="assets/images/reload-new.svg" alt="Reset">
+              <span>{{ 'QUOTATION_SUMMARY.LBL_RESET' | translate}}</span>
+            </button>
+            <button class="secondary-cta small mr-2" (click)="export()" [disabled]="exportDataLoading || cancelLoading"
+              *ngIf="model.items != null && model.items.length != 0  && !model.noFound">
+              {{ 'QUOTATION_SUMMARY.LBL_EXPORT' | translate }}
+              <span *ngIf="exportDataLoading">
+                <i class="fa fa-refresh fa-spin" aria-hidden="true"></i>
+              </span>
+            </button>
+            <button class="primary-cta small float-right"
+              [disabled]="searchloading || bookingMasterData.customerLoading || bookingMasterData.supLoading
+                          || bookingMasterData.countryLoading || bookingMasterData.officeLoading || bookingMasterData.statusLoading || bookingMasterData.aeUserLoading"
+              (click)="SearchDetails()">
+              {{ 'QUOTATION_SUMMARY.LBL_SEARCH_BTN' | translate }}
+              <span *ngIf="searchloading">
+                <i class="fa fa-refresh fa-spin" aria-hidden="true"></i>
+              </span>
+            </button>
+          </div>
+        </div>
+        <!-- Advance Search end-->
+      </div>
+    </div>
+    <div class="my-container">
+      <ng-container *ngIf="searchloading">
+        <div class="master-body">
+          <div class="content-container tracking-container transparent-bg">
+            <div class="record-count pl-0 pr-0">
+            </div>
+            <div class="table-container">
+              <table class="pagination-table">
+                <thead>
+                  <tr class="sticky-top-row">
+                    <th class="sticky-left-column width60 whitespacenormal"></th>
+                    <th class="width-100" *ngIf="isQuotationPending && model.isQuotationRequestRole && _IsInternalUser">
+                    </th>
+                    <th class="Center_Middle whitespacenormal" [ngClass]="bookingMasterData.setIconWidth"></th>
+                    <th class="width-150 whitespacenormal sticky-left-column">
+                      {{
+                      'BOOKING_SUMMARY.LBL_BOOKING_CUS_NO' | translate
+                      }}
+                    </th>
+                    <th *ngIf="!_IsCustomerUser" class="width-180 whitespacenormal">{{ 'BOOKING_SUMMARY.LBL_CUSTOMER' |
+                      translate }}</th>
+                    <th *ngIf="_IsCustomerUser" class="width-180 whitespacenormal">{{ 'BOOKING_SUMMARY.LBL_PO_NUMBER' |
+                      translate }}</th>
+                    <th *ngIf="_IsCustomerUser" class="width-180 whitespacenormal">{{
+                      'BOOKING_SUMMARY.LBL_PRODUCT_RFEERENCE' | translate }}</th>
+                    <th class="width-200 whitespacenormal">{{ 'BOOKING_SUMMARY.LBL_SUPPLIER' | translate }}</th>
+                    <th class="width-200 whitespacenormal">{{ 'BOOKING_SUMMARY.LBL_FACTORY' | translate }}</th>
+                    <th class="width-180 whitespacenormal">{{ 'BOOKING_SUMMARY.LBL_SERVICETYPE' | translate }}</th>
+                    <th class="width-180 whitespacenormal">
+                      {{ 'BOOKING_SUMMARY.LBL_SERVICEDATE_FROM_TO' | translate }}
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>
+                      <div class="rect-common animate width30"></div>
+                    </td>
+                    <td>
+                      <div class="rect-common animate width30"></div>
+                    </td>
+                    <td>
+                      <div class="rect-common animate width20"></div>
+                    </td>
+                    <td>
+                      <div class="rect-common animate width50"></div>
+                    </td>
+                    <td *ngIf="_IsCustomerUser">
+                      <div class="rect-common animate width20"></div>
+                    </td>
+                    <td>
+                      <div class="rect-common animate width30"></div>
+                    </td>
+                    <td>
+                      <div class="rect-common animate width30"></div>
+                    </td>
+                    <td>
+                      <div class="rect-common animate width30"></div>
+                    </td>
+                    <td>
+                      <div class="rect-common animate width30"></div>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>
+                      <div class="rect-common animate width30"></div>
+                    </td>
+                    <td>
+                      <div class="rect-common animate width30"></div>
+                    </td>
+                    <td>
+                      <div class="rect-common animate width20"></div>
+                    </td>
+                    <td>
+                      <div class="rect-common animate width50"></div>
+                    </td>
+                    <td *ngIf="_IsCustomerUser">
+                      <div class="rect-common animate width20"></div>
+                    </td>
+                    <td>
+                      <div class="rect-common animate width30"></div>
+                    </td>
+                    <td>
+                      <div class="rect-common animate width30"></div>
+                    </td>
+                    <td>
+                      <div class="rect-common animate width30"></div>
+                    </td>
+                    <td>
+                      <div class="rect-common animate width30"></div>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>
+                      <div class="rect-common animate width30"></div>
+                    </td>
+                    <td>
+                      <div class="rect-common animate width30"></div>
+                    </td>
+                    <td>
+                      <div class="rect-common animate width20"></div>
+                    </td>
+                    <td>
+                      <div class="rect-common animate width50"></div>
+                    </td>
+                    <td *ngIf="_IsCustomerUser">
+                      <div class="rect-common animate width20"></div>
+                    </td>
+                    <td>
+                      <div class="rect-common animate width30"></div>
+                    </td>
+                    <td>
+                      <div class="rect-common animate width30"></div>
+                    </td>
+                    <td>
+                      <div class="rect-common animate width30"></div>
+                    </td>
+                    <td>
+                      <div class="rect-common animate width30"></div>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>
+                      <div class="rect-common animate width30"></div>
+                    </td>
+                    <td>
+                      <div class="rect-common animate width30"></div>
+                    </td>
+                    <td>
+                      <div class="rect-common animate width20"></div>
+                    </td>
+                    <td>
+                      <div class="rect-common animate width50"></div>
+                    </td>
+                    <td *ngIf="_IsCustomerUser">
+                      <div class="rect-common animate width20"></div>
+                    </td>
+                    <td>
+                      <div class="rect-common animate width30"></div>
+                    </td>
+                    <td>
+                      <div class="rect-common animate width30"></div>
+                    </td>
+                    <td>
+                      <div class="rect-common animate width30"></div>
+                    </td>
+                    <td>
+                      <div class="rect-common animate width30"></div>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>
+                      <div class="rect-common animate width30"></div>
+                    </td>
+                    <td>
+                      <div class="rect-common animate width30"></div>
+                    </td>
+                    <td>
+                      <div class="rect-common animate width20"></div>
+                    </td>
+                    <td>
+                      <div class="rect-common animate width50"></div>
+                    </td>
+                    <td *ngIf="_IsCustomerUser">
+                      <div class="rect-common animate width20"></div>
+                    </td>
+                    <td>
+                      <div class="rect-common animate width30"></div>
+                    </td>
+                    <td>
+                      <div class="rect-common animate width30"></div>
+                    </td>
+                    <td>
+                      <div class="rect-common animate width30"></div>
+                    </td>
+                    <td>
+                      <div class="rect-common animate width30"></div>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </ng-container>
+      <ng-container *ngIf="(model.items && model.items.length>0); else noDataContainer">
+        <div class="master-body">
+          <div class="content-container tracking-container transparent-bg">
+            <div class="record-count pl-0 pr-0">
+              <div class="column">
+                <p class="count" [innerHtml]="showPaginationText()"></p>
+              </div>
+              <div class="column text-right">
+                <ul class="table-badge-container">
+                  <li *ngFor="let status of _statuslist| slice:0:_statuslist.length" (click)="clickStatus(status.id)"
+                    [class]="status.statusColor" [ngClass]="{'active': changeStatus(status.id)}">
+                    {{status.statusName}}<span>{{status.totalCount}}</span>
+                    <img *ngIf="changeStatus(status.id)" src="assets/images/white-close.svg" alt="">
+                  </li>
+                </ul>
+              </div>
+            </div>
+            <div class="table-container" [ngClass]="{'expanded-table' : bookingMasterData.isShowColumn}">
+              <table class="pagination-table collapsed-table">
+                <thead>
+                  <tr class="sticky-top-row">
+                    <th class="width60 whitespacenormal"></th>
+                    <th class="width-100" *ngIf="isQuotationPending && model.isQuotationRequestRole && _IsInternalUser">
+                    </th>
+                    <th class="Center_Middle whitespacenormal" [ngClass]="bookingMasterData.setIconWidth"></th>
+                    <th class="width-150 whitespacenormal sticky-left-column">
+                      {{
+                      'BOOKING_SUMMARY.LBL_BOOKING_CUS_NO' | translate
+                      }}
+                    </th>
+                    <th *ngIf="!_IsCustomerUser" class="width-180 whitespacenormal">{{ 'BOOKING_SUMMARY.LBL_CUSTOMER' |
+                      translate }}</th>
+                    <th *ngIf="_IsCustomerUser" class="width-180 whitespacenormal">{{ 'BOOKING_SUMMARY.LBL_PO_NUMBER' |
+                      translate }}</th>
+                    <th *ngIf="_IsCustomerUser" class="width-180 whitespacenormal">{{
+                      'BOOKING_SUMMARY.LBL_PRODUCT_RFEERENCE' | translate }}</th>
+                    <th class="width-200 whitespacenormal">{{ 'BOOKING_SUMMARY.LBL_SUPPLIER' | translate }}</th>
+                    <th class="width-200 whitespacenormal">{{ 'BOOKING_SUMMARY.LBL_FACTORY' | translate }}</th>
+                    <th class="width-180 whitespacenormal">{{ 'BOOKING_SUMMARY.LBL_SERVICETYPE' | translate }}</th>
+                    <th class="width-180 whitespacenormal">
+                      {{ 'BOOKING_SUMMARY.LBL_SERVICEDATE_FROM_TO' | translate }}
+                    </th>
+                    <th class="extra-column width-100 whitespacenormal">
+                      {{
+                      'BOOKING_SUMMARY.LBL_CUS_DEPARTMENT' |
+                      translate
+                      }}
+                    </th>
+                    <th *ngIf="_IsInternalUser" class="extra-column whitespacenormal width-180">
+                      {{ 'BOOKING_SUMMARY.LBL_FIRST_SERVICEDATE_FROM_TO' | translate }}
+                    </th>
+                    <th class="extra-column width-100 whitespacenormal">
+                      {{
+                      'BOOKING_SUMMARY.LBL_APPLYDATE' | translate
+                      }}
+                    </th>
+
+                    <th class="extra-column width-100 whitespacenormal" *ngIf="_IsInternalUser">
+                      {{
+                      'BOOKING_SUMMARY.LBL_CS' | translate
+                      }}
+                    </th>
+                    <th class="extra-column width-150 whitespacenormal" *ngIf="_IsInternalUser">
+                      {{
+                      'BOOKING_SUMMARY.LBL_OFFICE' | translate
+                      }}
+                    </th>
+                    <th class="extra-column width-100 whitespacenormal" *ngIf="_IsInternalUser">
+                      {{ 'BOOKING_SUMMARY.LBL_QuotationStatus' | translate }}
+                    </th>
+                    <th class="extra-column width-180 whitespacenormal">
+                      {{ 'INVOICE_SUMMARY.LBL_CREATED_BY' | translate }}
+                    </th>
+                    <th class="text-center">
+                      <img class="cursor-pointer" [attr.data-tooltip]="bookingMasterData.showColumnTooltip"
+                        (click)="isShownColumn()" [src]="bookingMasterData.isShowColumnImagePath" alt="">
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <ng-template ngFor let-iteminfo [ngForOf]="model.items" let-i="index">
+                    <tr [ngClass]="{ 'selected': iteminfo.isRowSelected}">
+                      <td class="width60 whitespacenormal">
+                        <div class="product-count" (click)=toggleExpandBooking($event,i,iteminfo)>
+                          {{iteminfo.productCount}}
+                        </div>
+                      </td>
+                      <td class="width-100 whitespacenormal"
+                        *ngIf="isQuotationPending && model.isQuotationRequestRole && _IsInternalUser">
+                        <div class="styled-checkbox-container">
+                          <input class="styled-checkbox" id="checkbookid-{{iteminfo.bookingId}}" type="checkbox"
+                            [(ngModel)]="iteminfo.isQuotSelected" (ngModelChange)="Getbookingids(iteminfo)">
+                          <label for="checkbookid-{{iteminfo.bookingId}}"></label>
+                        </div>
+                      </td>
+                      <td class="Center_Middle whitespacenormal" [ngClass]="bookingMasterData.setIconWidth">
+                        <div class="align-space-between-td">
+                          <!-- edit, verifty,confirm -->
+                          <span class="table-action common-tooltip-table"
+                            *ngIf="!isReInspection && !isReBooking && !isQuotationPending"
+                            (click)="RedirectPage(_bookingredirectpage.Edit,iteminfo)"
+                            [attr.data-tooltip]="iteminfo.editBtnText">
+                            <img [src]="iteminfo.editImagePath" alt="Edit">
+                          </span>
+                          <!-- combine -->
+                          <span class="table-action common-tooltip-table"
+                            *ngIf="iteminfo.statusId != _BookingStatus.Cancel && iteminfo.isCombineVisible && !isReInspection && !isReBooking && !isQuotationPending && iteminfo.serviceTypeId!=inspectionServiceType.Container"
+                            (click)="RedirectPage(_bookingredirectpage.CombineProduct,iteminfo)" data-tooltip="Combine">
+                            <img src="assets/images/new-set/combine-dark.svg" alt="Combine">
+                          </span>
+                          <!-- picking -->
+                          <span class="table-action common-tooltip-table" data-tooltip="Picking"
+                            *ngIf="iteminfo.isPickingButtonVisible && !isReInspection && !isReBooking && !isQuotationPending"
+                            (click)="redirectPickingProducts(iteminfo.bookingId,iteminfo.customerId,iteminfo.customerName, iteminfo.statusId)">
+                            <img src="assets/images/new-set/hand-drop-dark.svg" alt="Picking">
+                          </span>
+                          <!-- reInspection -->
+                          <span class="table-action common-tooltip-table"
+                            *ngIf="isReInspection && !isReBooking && !isQuotationPending"
+                            (click)="RedirectPage(_bookingredirectpage.ReInspectionBooking,iteminfo)"
+                            data-tooltip="ReInspection">
+                            <img src="assets/images/new-set/report-details-dark.svg" alt="ReInspection">
+                          </span>
+                          <!-- ReBooking -->
+                          <span class="table-action common-tooltip-table" *ngIf="isReBooking && !isQuotationPending"
+                            (click)="RedirectPage(_bookingredirectpage.ReBooking,iteminfo)" data-tooltip="ReBooking">
+                            <img src="assets/images/new-set/report-details-dark.svg" alt="ReBooking">
+                          </span>
+                          <!-- quotation -->
+                          <span class="table-action common-tooltip-table" *ngIf="isQuotationPending"
+                            (click)="RedirectPage(_bookingredirectpage.ViewBookingForQuotation,iteminfo)"
+                            data-tooltip="View">
+                            <img src="assets/images/new-set/view-dark.svg" alt="View">
+                          </span>
+                        </div>
+                      </td>
+                      <td class="wordbreak width-150 whitespacenormal sticky-left-column"
+                          [attr.data-tooltip]="iteminfo.statusName"
+                          *ngIf="(!model.isBookingRequestRole && !model.isBookingVerifyRole) && (iteminfo.customerBookingNo == '' || iteminfo.customerBookingNo == null)">
+                        <span class="number-badge" [class]="GetStatusColor(iteminfo.statusId)">
+                          {{
+                          iteminfo.bookingId
+                          }}</span>
+                        <span class="common-tooltip width-100" *ngIf="iteminfo.bookingType == bookingTypes.UnAnnounced"
+                              data-tooltip="un announced inspection">
+                          <img src="assets/images/un-announced.svg" alt="">
+                        </span>
+                        <span class="width-100" *ngIf="iteminfo.isEAQF">
+                          <img src="assets/images/E-AQF-Logo.svg" alt="">
+                        </span>
+                      </td>
+                      <td class="wordbreak width-150 whitespacenormal sticky-left-column"
+                        *ngIf="(model.isBookingRequestRole || model.isBookingVerifyRole) && (iteminfo.customerBookingNo == '' || iteminfo.customerBookingNo == null)"
+                        [attr.data-tooltip]="iteminfo.statusName">
+                        <a style="color: blue;" triggers="mouseenter:mouseleave"
+                           (click)="RedirectToEdit(iteminfo.bookingId)" class="right-link">
+                          <span class="number-badge" [class]="GetStatusColor(iteminfo.statusId)">
+                            {{ iteminfo.bookingId}}
+                          </span>
+                          <span class="common-tooltip width-100"
+                                *ngIf="iteminfo.bookingType == bookingTypes.UnAnnounced"
+                                data-tooltip="un announced inspection">
+                            <img src="assets/images/un-announced.svg" alt="">
+                          </span>
+                          <span class="width-100" *ngIf="iteminfo.isEAQF">
+                            <img src="assets/images/E-AQF-Logo.svg" alt="">
+                          </span>
+                        </a>
+                      </td>
+                      <td class="width-150 whitespacenormal sticky-left-column"
+                        *ngIf="(!model.isBookingRequestRole && !model.isBookingVerifyRole) && (iteminfo.customerBookingNo != '' && iteminfo.customerBookingNo != null)"
+                        [attr.data-tooltip]="iteminfo.statusName">
+                        <span class="number-badge" [class]="GetStatusColor(iteminfo.statusId)">
+                          {{ iteminfo.bookingId}}
+                          / {{iteminfo.customerBookingNo }}
+                        </span>
+                      </td>
+                      <td class="wordbreak whitespacenormal width-150 sticky-left-column"
+                        *ngIf="(model.isBookingRequestRole || model.isBookingVerifyRole) && (iteminfo.customerBookingNo != '' && iteminfo.customerBookingNo != null)"
+                        [attr.data-tooltip]="iteminfo.statusName">
+                        <a style="color: blue;" triggers="mouseenter:mouseleave"
+                          (click)="RedirectToEdit(iteminfo.bookingId)" class="right-link">
+                          <span class="number-badge" [class]="GetStatusColor(iteminfo.statusId)">
+                            {{
+                            iteminfo.bookingId
+                            }} / {{iteminfo.customerBookingNo }}
+                          </span>
+                          <span class="common-tooltip width-100"
+                            *ngIf="iteminfo.bookingType == bookingTypes.UnAnnounced"
+                            data-tooltip="un announced inspection">
+                            <img src="assets/images/un-announced.svg" alt="">
+                          </span>
+                        </a>
+                      </td>
+                      <td class="wordbreak whitespacenormal width-180 medium" *ngIf="!_IsCustomerUser"
+                        [ngClass]="{'text-tooltip-table': iteminfo.isCustomerTooltipShow }"
+                        [attr.data-tooltip]="iteminfo.customerName">
+                        {{iteminfo.customerNameTrim}}
+                      </td>
+                      <td class="wordbreak whitespacenormal width-180 medium" *ngIf="_IsCustomerUser"
+                        [ngClass]="{'text-tooltip-table': iteminfo.isCustomerTooltipShow }"
+                        [attr.data-tooltip]="iteminfo.poNumber">
+                        {{iteminfo.poNumber}}
+                      </td>
+                      <td class="wordbreak whitespacenormal width-180 medium" *ngIf="_IsCustomerUser"
+                        [ngClass]="{'text-tooltip-table': iteminfo.isCustomerTooltipShow }"
+                        [attr.data-tooltip]="iteminfo.productRefId">
+                        {{iteminfo.productRefId}}
+                      </td>
+                      <td class="wordbreak whitespacenormal width-200"
+                        [ngClass]="{'text-tooltip-table': iteminfo.isSupplierTooltipShow }"
+                        *ngIf="!model.isBookingRequestRole && !model.isBookingVerifyRole"
+                        [attr.data-tooltip]="iteminfo.supplierName">
+                        {{iteminfo.supplierNameTrim}}
+                      </td>
+                      <td class="active-link wordbreak whitespacenormal width-200 cursor-pointer"
+                        [ngClass]="{'text-tooltip-table':iteminfo.isSupplierTooltipShow }"
+                        *ngIf="model.isBookingRequestRole || model.isBookingVerifyRole"
+                        [attr.data-tooltip]="iteminfo.supplierName" (click)="RedirectToSupplier(iteminfo.supplierId)">
+                        <ng-container>
+                          {{iteminfo.supplierNameTrim}}
+                        </ng-container>
+                      </td>
+                      <td class="wordbreak whitespacenormal width-200"
+                        [ngClass]="{'text-tooltip-table': iteminfo.isFactoryTooltipShow }"
+                        *ngIf="!model.isBookingRequestRole && !model.isBookingVerifyRole"
+                        [attr.data-tooltip]="iteminfo.factoryName">
+                        {{iteminfo.factoryNameTrim}}
+                      </td>
+                      <td class="active-link wordbreak whitespacenormal width-200 cursor-pointer"
+                        [ngClass]="{'text-tooltip-table': iteminfo.isFactoryTooltipShow }"
+                        *ngIf="model.isBookingRequestRole || model.isBookingVerifyRole"
+                        [attr.data-tooltip]="iteminfo.factoryName" (click)="RedirectToSupplier(iteminfo.factoryId)">
+                        <ng-container>
+                          {{iteminfo.factoryNameTrim}}
+                        </ng-container>
+                      </td>
+                      <td class="whitespacenormal width-180"
+                        [ngClass]="{'text-tooltip-table': iteminfo.isServiceTypeShow }"
+                        [attr.data-tooltip]="iteminfo.serviceType">
+                        <span class="highlight-badge">{{iteminfo.serviceTypeTrim}}</span>
+                      </td>
+                      <td *ngIf="iteminfo.serviceDateFrom == iteminfo.serviceDateTo" class="width-180 whitespacenormal">
+                        <span (click)="openOrderTracking(OrderTrackingTemplate, iteminfo)"
+                          class="tracking-badge common-tooltip-table width-100" data-tooltip="Order Tracking">
+                          <img src="assets/images/new-set/clock-primary.svg" alt="">
+                        </span>
+                        <span class="highlight-badge">
+                          {{iteminfo.serviceDateFrom}}
+                        </span>
+                      </td>
+                      <td class="width-180 whitespacenormal" *ngIf="iteminfo.serviceDateFrom != iteminfo.serviceDateTo">
+                        <div class="d-flex align-items-start">
+                          <span (click)="openOrderTracking(OrderTrackingTemplate, iteminfo)"
+                            class="tracking-badge common-tooltip-table" data-tooltip="Order Tracking">
+                            <img src="assets/images/new-set/clock-primary.svg" alt="">
+                          </span>
+                          <span class="highlight-badge">
+                            {{iteminfo.serviceDateFrom}} - <br> {{iteminfo.serviceDateTo}}
+                          </span>
+                        </div>
+                      </td>
+                      <td class="extra-column width-100 whitespacenormal">
+                        {{iteminfo.deptNames}}
+                      </td>
+                      <td class="extra-column width-180 whitespacenormal"
+                        *ngIf="_IsInternalUser && iteminfo.firstServiceDateFrom == iteminfo.firstServiceDateTo">
+                        {{iteminfo.firstServiceDateFrom}}
+                      </td>
+                      <td class="extra-column width-180 whitespacenormal"
+                        *ngIf="_IsInternalUser && iteminfo.firstServiceDateFrom != iteminfo.firstServiceDateTo">
+                        <span>
+                          {{iteminfo.firstServiceDateFrom}} - <br> {{iteminfo.firstServiceDateTo}}
+                        </span>
+                      </td>
+                      <td class="extra-column whitespacenormal width-100">{{iteminfo.applyDate}}</td>
+
+                      <td class="extra-column whitespacenormal wordbreak width-100" *ngIf="_IsInternalUser"
+                        [ngClass]="{'text-tooltip-table': iteminfo.isAETooltipShow }"
+                        [attr.data-tooltip]="iteminfo.csName">
+                        {{iteminfo.AETrim}}
+                      </td>
+                      <td class="extra-column width-150 whitespacenormal" *ngIf="_IsInternalUser"
+                        [ngClass]="{'text-tooltip-table': iteminfo.isOfficeTooltipShow }"
+                        [attr.data-tooltip]="iteminfo.office">
+                        {{iteminfo.OfficeTrim}}
+                      </td>
+                      <td class="extra-column width-100 whitespacenormal"
+                        [ngStyle]="{'color': GetQuotationStatusColor(iteminfo.quotationStatus)}"
+                        *ngIf="_IsInternalUser">
+                        {{iteminfo.quotationStatus}}
+                      </td>
+                      <td class="extra-column width-180 whitespacenormal"
+                        [ngClass]="{'text-tooltip-table': iteminfo.isCreatedByShow }"
+                        [attr.data-tooltip]="iteminfo.createdByName">
+                        <div class="column-align">
+                          <span class="name-initial" [ngClass]="(i%2) == 0 ? 'created-name-even':'created-name-odd'">
+
+                            {{iteminfo.bookingCreatedFirstName}}</span>
+                          {{iteminfo.CreatedByTrim}}
+                        </div>
+                        <!-- style="background-color: #c8a4ea" -->
+                      </td>
+                      <td>
+                        <span id="booking-{{iteminfo.bookingId}}" appBodyDropdown>
+                          <span class="more-badge">
+                            <img class="dot-menu" src="assets/images/three-dots.svg" alt="">
+                          </span>
+                          <ul class="cta-dropdown dark">
+                            <li class="cursor-pointer"
+                              *ngIf="iteminfo.rescheduleBtnShow && !isReInspection && !isReBooking && !isQuotationPending"
+                              (click)="RedirectPage(_bookingredirectpage.Reschedule,iteminfo)">
+                              <img src="assets/images/new-set/reschedule-white.svg" alt="" class="icon">
+                              <span>
+                                Reschedule
+                              </span>
+                            </li>
+                            <li class="cursor-pointer"
+                              *ngIf="iteminfo.cancelBtnShow && !isReInspection && !isReBooking && !isQuotationPending"
+                              (click)="RedirectPage(_bookingredirectpage.Cancel,iteminfo)">
+                              <img src="assets/images/new-set/cancel-white.svg" alt="" class="icon">
+                              <span>Cancel</span>
+                            </li>
+                            <li class="cursor-pointer"
+                              *ngIf="iteminfo.isSplitBookingButtonVisible && !isReInspection && !isReBooking && !isQuotationPending && iteminfo.serviceTypeId!=inspectionServiceType.Container"
+                              (click)="RedirectPage(_bookingredirectpage.SplitBooking,iteminfo)">
+                              <img src="assets/images/new-set/split-booking-white.svg" alt="" class="icon">
+                              <span>Split Booking</span>
+                            </li>
+                          </ul>
+                        </span>
+                      </td>
+                    </tr>
+                    <ng-container *ngIf="iteminfo.serviceTypeId!=inspectionServiceType.Container">
+                      <ng-template [ngTemplateOutlet]="productListTemplate"
+                        [ngTemplateOutletContext]="{ iteminfo: iteminfo, i:i}">
+                      </ng-template>
+                    </ng-container>
+
+                    <ng-container *ngIf="iteminfo.serviceTypeId==inspectionServiceType.Container">
+                      <ng-template [ngTemplateOutlet]="containerListTemplate"
+                        [ngTemplateOutletContext]="{ iteminfo: iteminfo, i:i}">
+                      </ng-template>
+                    </ng-container>
+
+                  </ng-template>
+                </tbody>
+              </table>
+            </div>
+            <div class="pagination-container">
+              <div class="page-count-list">
+                <select class="small" [(ngModel)]="selectedPageSize" (change)="SearchDetails()">
+                  <option *ngFor="let item of pagesizeitems" [ngValue]=item>{{item}}</option>
+                </select>
+                <span> Records per page</span>
+              </div>
+              <div class="pagination-action-container text-right">
+                <ngb-pagination [pageSize]="model.pageSize" [collectionSize]="model.totalCount" [boundaryLinks]="true"
+                  [(page)]="model.index" [maxSize]="5" (pageChange)="onPager($event)">
+                  <ng-template ngbPaginationFirst>
+                    <img src="assets/images/new-set/double-arrow.svg" alt="">
+                  </ng-template>
+                  <ng-template ngbPaginationPrevious>
+                    <img src="assets/images/new-set/single-arrow.svg" alt="" class="left-arrow">
+                  </ng-template>
+                  <ng-template ngbPaginationNext>
+                    <img src="assets/images/new-set/single-arrow.svg" alt="" class="right-arrow">
+                  </ng-template>
+                  <ng-template ngbPaginationLast>
+                    <img src="assets/images/new-set/double-arrow.svg" alt="" class="right-most-arrow">
+                  </ng-template>
+                </ngb-pagination>
+              </div>
+            </div>
+          </div>
+        </div>
+      </ng-container>
+      <ng-template #noDataContainer>
+        <div class="master-body" *ngIf="model.noFound">
+          <div class="error-container plain page-level">
+            <img src="assets/images/no-result.svg" alt="" class="thumbnail">
+            <h4 class="error-title">{{'BOOKING_SUMMARY.MSG_NO_ITEM_FOUND' | translate}}</h4>
+            <p class="error-subtitle">{{'CS_CONFIG_SUMMARY.LBL_NODATA' | translate}}</p>
+            <button (click)="Reset()" class="secondary-cta link to-primary text-transform-initial">
+              {{'COMMON.MSG_CLEAR_SEARCH' | translate}}
+            </button>
+          </div>
+        </div>
+      </ng-template>
+    </div>
+    <div class="footer landing-footer stick-to-bottom">
+      <div class="my-container">
+        <div class="column">
+          <p class="text">{{'COMMON.LBL_RIGHTS_RESERVED' | translate}}</p>
+        </div>
+        <div class="column">
+          <img src="../assets/images/footer-logo.png" alt="logo" class="footer-logo">
+        </div>
+        <div class="column">
+          <ul class="footer-item">
+            <li><a href="">{{'COMMON.LBL_USER_GUIDE' | translate}}</a></li>
+            <li><a href="">{{'COMMON.LBL_CONTACT' | translate}}</a></li>
+            <li><a href="">{{'COMMON.LBL_HELP' | translate}}</a></li>
+            <li><a href="">{{'COMMON.LBL_TERMS' | translate}}</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="loader-overlay" *ngIf="bookingMasterData.pageLoader">
+      <div class="loader-container">
+        <img src="assets/images/reload.svg" alt="">
+        <span>{{'COMMON.LBL_LOADER' | translate}}</span>
+      </div>
+    </div>
+  </div>
+</div>
+<ng-template #conformBooking let-modal>
+  <div class="modal-header" style="background-color: #c02655;color:#fff">
+    <h4 class="modal-title" id="modal-title">{{'BOOKING_SUMMARY.TITLE_CONFIRM' | translate}}</h4>
+    <button type="button" class="close" aria-describedby="modal-title" (click)="modal.dismiss('Cross click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <p>{{'BOOKING_SUMMARY.MSG_BOOKING_CONFIRM' | translate}}</p>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-outline-secondary" (click)="modal.dismiss('cancel click')">
+      {{
+      'COMMON.LBL_CONFIRMCANCEL' | translate
+      }}
+    </button>
+    <button type="button" class="btn btn-danger" (click)="updateConfirmBooking();">
+      {{
+      'COMMON.LBL_OK' | translate
+      }}
+    </button>
+  </div>
+</ng-template>
+<ng-template #cancelresheduleBooking let-modal>
+  <div class="modal-body">
+    <div class="small-model">
+      <h2 class="title">
+        {{titlePopup}}
+        {{ 'BOOKING_SUMMARY.LBL_POPUP_TITLE' | translate }}
+      </h2>
+      <p>{{ 'BOOKING_SUMMARY.LBL_POPUP_INFO' | translate }} </p>
+      <button class="secondary-cta" (click)="modal.dismiss('Cross click')">{{ 'COMMON.LBL_OK' | translate }}</button>
+
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #productImage let-modal>
+  <div class="modal-header custom-modal-header">
+    <h4 class="modal-title" id="modal-basic-title">Photo</h4>
+    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body custom-modal-body">
+    <ngx-gallery [options]="productGalleryOptions" [images]="productGalleryImages"></ngx-gallery>
+  </div>
+</ng-template>
+
+<ng-template #productListTemplate let-iteminfo="iteminfo" let-i="i">
+  <tr [ngClass]="{'expandable-row': iteminfo.isPlaceHolderVisible}" [attr.data-expand-id]="'booking' + i">
+    <td colspan="11" *ngIf="iteminfo.isPlaceHolderVisible">
+      <button class="secondary-cta child-table-cta mb-2 mr-2" (click)="downloadFbReport(iteminfo.productList);"
+        *ngIf="downloadBtnShow(iteminfo.productList)">
+        <img src="assets/images/new-set/download-primary.svg" alt="">Download
+      </button>
+      <button class="secondary-cta child-table-cta mb-2" (click)="getBookingDetailsView(iteminfo.productList);"
+        *ngIf="reportBtnShow(iteminfo.productList)">
+        <img src="assets/images/new-set/report-small.svg" alt="">Report Details
+      </button>
+      <div class="table-container child-table h-scroll table-max-height-450">
+        <table class="pagination-table">
+          <thead>
+            <tr class="sticky-top-row">
+              <th>
+                <div class="styled-checkbox-container"
+                  *ngIf="(iteminfo.statusId == _BookingStatus.ReportSent || _IsInternalUser) && headerCheckboxShow(iteminfo.productList)">
+                  <input type="checkbox" class="styled-checkbox" id="checkboxalla-{{i}}"
+                    [(ngModel)]="iteminfo.isAllProductSelected"
+                    (change)="selectAllProducts(iteminfo.productList,i,$event.target.checked);" />
+                  <label for="checkboxalla-{{i}}"></label>
+                </div>
+              </th>
+              <th>{{'EDIT_BOOKING.LBL_PRODUCT_SERIAL' | translate }}</th>
+              <th> {{'BOOKING_SUMMARY.LBL_PRODUCT_ID' | translate }} </th>
+              <th>{{'BOOKING_SUMMARY.LBL_PRODUCT_DESC' | translate }}</th>
+              <th>PO</th>
+              <th>{{'BOOKING_SUMMARY.LBL_SAMPLE_SIZE' | translate }}</th>
+              <th>{{'BOOKING_SUMMARY.LBL_PRODUCT_ORDER_QTY' | translate}}</th>
+              <th *ngIf="_IsInternalUser || _IsCustomerUser">
+                {{'BOOKING_SUMMARY.LBL_PRODUCT_INSP_QTY' | translate }}
+              </th>
+              <th *ngIf="!isQuotationPending">{{'PRODUCT_CATEGORY.TITLE' | translate}}</th>
+              <th>{{'BOOKING_SUMMARY.LBL_REPORT_INSPECTION_DATE' | translate }}</th>
+              <th *ngIf="_IsInternalUser || _IsCustomerUser">
+                {{'INSPECTION_CERTIFICATE_SUMMARY.LBL_REPORT_STATUS' |translate }}
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngIf="iteminfo.isPlaceHolderVisible && (!iteminfo.productList || iteminfo.productList.length <=0)">
+              <td>
+                <div class="rect-common animate width30"></div>
+              </td>
+              <td>
+                <div class="rect-common animate width30"></div>
+              </td>
+              <td>
+                <div class="rect-common animate width20"></div>
+              </td>
+              <td>
+                <div class="rect-common animate width50"></div>
+              </td>
+              <td>
+                <div class="rect-common animate width20"></div>
+              </td>
+              <td>
+                <div class="rect-common animate width30"></div>
+              </td>
+              <td>
+                <div class="rect-common animate width30"></div>
+              </td>
+              <td>
+                <div class="rect-common animate width30"></div>
+              </td>
+              <td>
+                <div class="rect-common animate width30"></div>
+              </td>
+              <td>
+                <div class="rect-common animate width30"></div>
+              </td>
+              <td>
+                <div class="rect-common animate width30"></div>
+              </td>
+            </tr>
+            <tr *ngIf="iteminfo.isPlaceHolderVisible && (!iteminfo.productList || iteminfo.productList.length <=0)">
+              <td>
+                <div class="rect-common animate width40"></div>
+              </td>
+              <td>
+                <div class="rect-common animate width40"></div>
+              </td>
+              <td>
+                <div class="rect-common animate width40"></div>
+              </td>
+              <td>
+                <div class="rect-common animate width40"></div>
+              </td>
+              <td>
+                <div class="rect-common animate width40"></div>
+              </td>
+              <td>
+                <div class="rect-common animate width40"></div>
+              </td>
+              <td>
+                <div class="rect-common animate width40"></div>
+              </td>
+              <td>
+                <div class="rect-common animate width40"></div>
+              </td>
+              <td>
+                <div class="rect-common animate width40"></div>
+              </td>
+              <td>
+                <div class="rect-common animate width40"></div>
+              </td>
+              <td>
+                <div class="rect-common animate width40"></div>
+              </td>
+            </tr>
+            <ng-template ngFor let-product [ngForOf]="iteminfo.productList" let-p="index">
+              <tr [ngClass]="(product.combineProductId!=0 && (((product.combineProductId) % 2)== 0))
+                    ?'group-even':
+                product.combineProductId!=0 ?
+                'group-odd':''">
+                <td [attr.rowspan]="product.combineProductCount" *ngIf="product.isParentProduct">
+                  <div class="styled-checkbox-container"
+                    *ngIf="(iteminfo.statusId == _BookingStatus.ReportSent || _IsInternalUser) && product.reportStatus=='Validated'">
+                    <input type="checkbox" id="checkbox{{i}}-{{p}}" class="styled-checkbox"
+                      [(ngModel)]="product.selected"
+                      (change)="checkIfAllProductsSelected(iteminfo.productList,iteminfo,product,$event.target.checked);">
+                    <label for="checkbox{{i}}-{{p}}"></label>
+                  </div>
+                </td>
+                <td class="Center_Middle light">{{p+1}}</td>
+                <td>
+                  <div class="image-container">
+                    <img *ngIf="product.productImageUrl!=null && product.combineProductCount==1"
+                      (click)="getPreviewProductImage(product.productImageUrl,productImage)"
+                      src={{product.productImageUrl}} alt="image">
+                    <img *ngIf="product.productImageUrl==null ||  product.combineProductCount>1"
+                      src="assets/images/new-set/no-product-icon.svg" alt="image">
+                    <span class="medium">{{product.productName}}</span>
+                  </div>
+                </td>
+
+                <td class="medium width-180 whitespacenormal"
+                  [ngClass]="{'text-tooltip-table': product.isProductDescTooltipShow }"
+                  [attr.data-tooltip]="product.productDescription">
+                  {{product.productDescTrim}}
+                </td>
+                <td class="active-link"
+                  (click)="openProductDetail(PODataTemplate,product.id,product,null,iteminfo.serviceTypeId,iteminfo.bookingId)">
+                  <ng-container>
+                    <span class="medium">#{{product.poNumberShow}}</span>
+                    <span class="light">
+                      {{product.poNumberCountDisplay}}
+                    </span>
+                  </ng-container>
+                </td>
+                <td>
+                  <span class="highlight-badge" *ngIf="product.combineProductId==0">{{product.aqlQuantity}}</span>
+                  <span class="highlight-badge"
+                    *ngIf="product.combineProductId!=0">{{product.combineAqlQuantity}}</span>
+                </td>
+                <td>
+                  <span class="highlight-badge">
+                    {{product.bookingQuantity}}
+                  </span>
+                </td>
+                <td *ngIf="_IsInternalUser || _IsCustomerUser">
+                  <span *ngIf="product.reportStatus=='Validated'"
+                    class="highlight-badge">{{product.inspectedQuantity}}</span>
+                </td>
+                <td class="width-140 whitespacenormal" *ngIf="!isQuotationPending">
+                  <span class="medium">{{product.productCategory}}</span>
+                  <span class="d-block light">{{product.productSubCategory}}</span>
+                </td>
+                <td class="width-60">
+                  <span ngClass="{'highlight-badge':product.inspectionDate && product.inspectionDate != ''}">
+                    {{product.inspectionDate}}
+                  </span>
+                </td>
+
+                <td class="width-60" *ngIf="(_IsInternalUser || _IsCustomerUser) && product.isParentProduct"
+                  [attr.rowspan]="product.combineProductCount">
+                  <span *ngIf="product.reportStatus=='Draft'" class="status draft">
+                    {{'BOOKING_SUMMARY.LBL_REPORT_INPROGRESS' | translate }}
+                    <span class="progress-bar"><span class="complete"></span></span>
+                  </span>
+                  <span *ngIf="product.reportStatus=='InValidated'" class="status invalid">
+                    {{'BOOKING_SUMMARY.LBL_REPORT_INVALIDATED' | translate }}
+                    <span class="progress-bar"><span class="complete"></span></span>
+                  </span>
+
+                  <span *ngIf="product.reportStatus=='Validated' && product.reportResultId==fbReportResult.Pass"
+                    class="result pass">
+                    <img src="assets/images/new-set/pass-white.svg" alt="">
+                    {{'BOOKING_SUMMARY.LBL_REPORT_PASS' | translate }}
+                  </span>
+
+                  <span class="result fail"
+                    *ngIf="product.reportStatus=='Validated' && product.reportResultId==fbReportResult.Fail">
+                    <img src="assets/images/new-set/fail-white.svg" alt="">
+                    {{'BOOKING_SUMMARY.LBL_REPORT_FAIL' | translate }}
+                  </span>
+                  <span *ngIf="product.reportStatus=='Validated' && product.reportResultId==fbReportResult.Pending"
+                    class="result pending">
+                    <img src="assets/images/new-set/pending-white.svg" alt="">
+                    {{'BOOKING_SUMMARY.LBL_REPORT_PENDING' | translate }}
+                  </span>
+                  <span class="result not-applicable"
+                    *ngIf="product.reportStatus=='Validated' && product.reportResultId==fbReportResult.Not_Applicable">
+                    <img src="assets/images/new-set/missing-white.svg" alt="">
+                    {{'BOOKING_SUMMARY.LBL_REPORT_NA' | translate }}
+                  </span>
+                  <span class="result missing"
+                    *ngIf="product.reportStatus=='Validated' && product.reportResultId==fbReportResult.Missing">
+                    <img src="assets/images/new-set/missing-white.svg" alt="">
+                    {{'BOOKING_SUMMARY.LBL_REPORT_MISSING' | translate }}
+                  </span>
+                  <span *ngIf="product.reportStatus=='Validated' && product.reportResultId==fbReportResult.Conformed"
+                    class="result pass">
+                    <img src="assets/images/new-set/pass-white.svg" alt="">
+                    {{'BOOKING_SUMMARY.LBL_REPORT_CONFORMED' | translate }}
+                  </span>
+                  <span class="result fail"
+                    *ngIf="product.reportStatus=='Validated' && product.reportResultId==fbReportResult.NotConformed">
+                    <img src="assets/images/new-set/fail-white.svg" alt="">
+                    {{'BOOKING_SUMMARY.LBL_REPORT_NOT_CONFORMED' | translate }}
+                  </span>
+                  <span *ngIf="product.reportStatus=='Validated' && product.reportResultId==fbReportResult.Delay"
+                    class="result pending">
+                    <img src="assets/images/new-set/pending-white.svg" alt="">
+                    {{'BOOKING_SUMMARY.LBL_REPORT_DELAY' | translate }}
+                  </span>
+                  <span class="result missing"
+                    *ngIf="product.reportStatus=='Validated' && product.reportResultId==fbReportResult.Note">
+                    <img src="assets/images/new-set/missing-white.svg" alt="">
+                    {{'BOOKING_SUMMARY.LBL_REPORT_NOTE' | translate }}
+                  </span>
+                </td>
+              </tr>
+            </ng-template>
+
+          </tbody>
+        </table>
+      </div>
+    </td>
+  </tr>
+</ng-template>
+
+<ng-template #containerListTemplate let-iteminfo="iteminfo" let-i="i">
+  <tr [ngClass]="{'expandable-row': iteminfo.isPlaceHolderVisible}" [attr.data-expand-id]="'booking' + i">
+    <td colspan="11" *ngIf="iteminfo.isPlaceHolderVisible">
+
+      <button class="secondary-cta child-table-cta mb-2 mr-2" (click)="downloadFbReport(iteminfo.containerList);"
+        *ngIf="downloadBtnShow(iteminfo.containerList)">
+        <img src="assets/images/new-set/download-primary.svg" alt="">Download
+      </button>
+      <button class="secondary-cta child-table-cta mb-2" (click)="getBookingDetailsView(iteminfo.containerList);"
+        *ngIf="reportBtnShow(iteminfo.containerList)">
+        <img src="assets/images/new-set/report-small.svg" alt="">Report Details
+      </button>
+      <div class="table-container child-table h-scroll table-max-height-450">
+        <table class="pagination-table">
+          <thead>
+            <tr class="sticky-top-row">
+              <th>
+                <div class="styled-checkbox-container"
+                  *ngIf="(iteminfo.statusId == _BookingStatus.ReportSent || _IsInternalUser) && headerCheckboxShow(iteminfo.containerList)">
+                  <input type="checkbox" class="styled-checkbox" [(ngModel)]="iteminfo.isAllProductSelected"
+                    id="checkboxallco-{{i}}"
+                    (change)="selectAllProducts(iteminfo.containerList,i,$event.target.checked);" />
+                  <label for="checkboxallco-{{i}}"></label>
+                </div>
+              </th>
+              <th>{{'EDIT_BOOKING.LBL_PRODUCT_SERIAL' | translate }}</th>
+              <th>{{'EDIT_BOOKING.LBL_CONTAINER_NAME' | translate }}</th>
+              <th>{{'EDIT_BOOKING.LBL_CONTAINER_SIZE' | translate }}</th>
+              <th>{{'EDIT_BOOKING.LBL_CONTAINER_TOTAL_BOOKING_QTY' | translate }}</th>
+              <th *ngIf="_IsInternalUser || _IsCustomerUser">
+                {{'BOOKING_SUMMARY.LBL_INSPECTED_QUANTITY' | translate }}
+              </th>
+              <th>{{'BOOKING_SUMMARY.LBL_REPORT_INSPECTION_DATE' | translate }}</th>
+              <th *ngIf="_IsInternalUser || _IsCustomerUser">
+                {{'INSPECTION_CERTIFICATE_SUMMARY.LBL_REPORT_STATUS' |translate }}
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngIf="iteminfo.isPlaceHolderVisible && (!iteminfo.containerList || iteminfo.containerList.length <=0)">
+              <td>
+                <div class="rect-common animate width30"></div>
+              </td>
+              <td>
+                <div class="rect-common animate width30"></div>
+              </td>
+              <td>
+                <div class="rect-common animate width20"></div>
+              </td>
+              <td>
+                <div class="rect-common animate width50"></div>
+              </td>
+              <td>
+                <div class="rect-common animate width20"></div>
+              </td>
+              <td>
+                <div class="rect-common animate width30"></div>
+              </td>
+              <td>
+                <div class="rect-common animate width30"></div>
+              </td>
+              <td>
+                <div class="rect-common animate width30"></div>
+              </td>
+            </tr>
+            <tr *ngIf="iteminfo.isPlaceHolderVisible && (!iteminfo.containerList || iteminfo.containerList.length <=0)">
+              <td>
+                <div class="rect-common animate width40"></div>
+              </td>
+              <td>
+                <div class="rect-common animate width40"></div>
+              </td>
+              <td>
+                <div class="rect-common animate width40"></div>
+              </td>
+              <td>
+                <div class="rect-common animate width40"></div>
+              </td>
+              <td>
+                <div class="rect-common animate width40"></div>
+              </td>
+              <td>
+                <div class="rect-common animate width40"></div>
+              </td>
+              <td>
+                <div class="rect-common animate width40"></div>
+              </td>
+              <td>
+                <div class="rect-common animate width40"></div>
+              </td>
+            </tr>
+            <ng-template ngFor let-container [ngForOf]="iteminfo.containerList" let-c="index">
+              <tr>
+                <td>
+                  <div class="styled-checkbox-container"
+                    *ngIf="(iteminfo.statusId == _BookingStatus.ReportSent || _IsInternalUser) && container.reportStatus=='Validated'">
+                    <input type="checkbox" id="checkboxchildco-{{i}}-{{c}}" class="styled-checkbox"
+                      [(ngModel)]="container.selected"
+                      (change)="checkIfAllProductsSelected(iteminfo.containerList,iteminfo);">
+                    <label for="checkboxchildco-{{i}}-{{c}}"></label>
+                  </div>
+                </td>
+
+                <td class="Center_Middle">{{c+1}}</td>
+
+                <td class="width-140 active-link cursor-pointer"
+                  (click)=toggleExpandRowContainer(true,container,producPOtDataTemplate,iteminfo)>
+                  {{getContainerName(container.containerId)}}
+                </td>
+
+                <td class="Center_Middle width-60">
+                  {{container.containerSize}}
+                </td>
+
+                <td class="Center_Middle width-60">
+                  {{container.totalBookingQuantity}}
+                </td>
+
+                <td *ngIf="_IsInternalUser || _IsCustomerUser" class="Center_Middle width-60">
+                  <span *ngIf="container.reportStatus=='Validated'">{{container.inspectedQuantity}}</span>
+                </td>
+
+                <td class="width-60">
+                  {{container.inspectionDate}}
+                </td>
+
+                <td class="width-60" *ngIf="(_IsInternalUser || _IsCustomerUser)">
+                  <span *ngIf="container.reportStatus=='Draft'" class="status draft">
+                    {{'BOOKING_SUMMARY.LBL_REPORT_INPROGRESS' | translate }}
+                    <span class="progress-bar"><span class="complete"></span></span>
+                  </span>
+                  <span *ngIf="container.reportStatus=='InValidated'" class="status invalid">
+                    {{'BOOKING_SUMMARY.LBL_REPORT_INVALIDATED' | translate }}
+                    <span class="progress-bar"><span class="complete"></span></span>
+                  </span>
+
+                  <span *ngIf="container.reportStatus=='Validated' && container.reportResultId==1" class="result pass">
+                    <img src="assets/images/new-set/pass-white.svg" alt="">
+                    {{'BOOKING_SUMMARY.LBL_REPORT_PASS' | translate }}
+                  </span>
+
+                  <span class="result fail" *ngIf="container.reportStatus=='Validated' && container.reportResultId==2">
+                    <img src="assets/images/new-set/fail-white.svg" alt="">
+                    {{'BOOKING_SUMMARY.LBL_REPORT_FAIL' | translate }}
+                  </span>
+                  <span *ngIf="container.reportStatus=='Validated' && container.reportResultId==3"
+                    class="result pending">
+                    <img src="assets/images/new-set/pending-white.svg" alt="">
+                    {{'BOOKING_SUMMARY.LBL_REPORT_PENDING' | translate }}
+                  </span>
+                </td>
+              </tr>
+            </ng-template>
+          </tbody>
+        </table>
+        <!-- <div class="pagination-container child-table">
+          <span class="small"></span>
+          <span class="dark"></span>
+        </div> -->
+      </div>
+    </td>
+  </tr>
+</ng-template>
+
+<ng-template #producPOtDataTemplate let-modal>
+  <div class="order-tracking-popup-container">
+    <ng-container *ngIf="bookingMasterData.isproductOrPODetails; else poDetails">
+      <button type="button" class="close" aria-describedby="modal-title" (click)="modal.dismiss('Cross click')">
+        <img src="assets/images/black-close.svg" alt="" (click)="modal.dismiss('Cross click')">
+      </button>
+      <h3 class="title">
+        Product Details<span class="number-badge pass">{{bookingMasterData.bookingItem.bookingId}}</span>
+      </h3>
+      <p class="subtitle">
+        Container Name :
+        {{getContainerName(bookingMasterData.containerItem.containerId)}}
+      </p>
+      <div class="record-count">
+        <div class="column">
+          <p class="count">Showing {{bookingMasterData.containerProductList.length}} records</p>
+        </div>
+        <div class="column"></div>
+      </div>
+      <div class="table-container h-scroll table-max-height-450">
+        <table class="pagination-table simple-table bordered">
+          <thead>
+            <tr class="sticky-top-row">
+              <th> {{'BOOKING_SUMMARY.LBL_PRODUCT_ID' | translate }} </th>
+              <th>{{'BOOKING_SUMMARY.LBL_PRODUCT_DESC' | translate }}</th>
+              <th *ngIf="!isQuotationPending">{{'PRODUCT_CATEGORY.TITLE' | translate}}</th>
+              <th>{{'PRODUCT_SUB_CATEGORY.TITLE' | translate}}</th>
+
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngIf="(!bookingMasterData.containerProductList || bookingMasterData.containerProductList.length <=0)">
+              <td>
+                <div class="rect-common animate width30"></div>
+              </td>
+              <td>
+                <div class="rect-common animate width30"></div>
+              </td>
+              <td>
+                <div class="rect-common animate width20"></div>
+              </td>
+              <td>
+                <div class="rect-common animate width50"></div>
+              </td>
+            </tr>
+            <tr *ngIf="(!bookingMasterData.containerProductList || bookingMasterData.containerProductList.length <=0)">
+              <td>
+                <div class="rect-common animate width40"></div>
+              </td>
+              <td>
+                <div class="rect-common animate width40"></div>
+              </td>
+              <td>
+                <div class="rect-common animate width40"></div>
+              </td>
+              <td>
+                <div class="rect-common animate width40"></div>
+              </td>
+            </tr>
+            <ng-template ngFor let-product [ngForOf]="bookingMasterData.containerProductList" let-p="index">
+              <tr *ngIf="(bookingMasterData.containerProductList && bookingMasterData.containerProductList.length > 0)">
+                <td (click)=toggleExpandRowProduct(false,$event,product,producPOtDataTemplate) class="active-link">
+                  <div class="image-container">
+                    <img *ngIf="product.productImageUrl!=null"
+                      (click)="getPreviewProductImage(product.productImageUrl,productImage)"
+                      src={{product.productImageUrl}} alt="image">
+                    <img *ngIf="product.productImageUrl==null" src="assets/images/new-set/no-product-icon.svg"
+                      alt="image">
+                    <span class="medium">{{product.productName}}</span>
+                  </div>
+                </td>
+
+                <td class="width-220 whitespacenormal"
+                  [ngClass]="{'text-tooltip-table': product.isProductDescTooltipShow }"
+                  [attr.data-tooltip]="product.productDescription">
+                  {{product.productDescTrim}}
+                </td>
+
+                <td class="width-140 whitespacenormal" *ngIf="!isQuotationPending">
+                  {{product.productCategory}}
+                </td>
+                <td class="width-140 whitespacenormal">
+                  {{product.productSubCategory}}
+                </td>
+
+              </tr>
+            </ng-template>
+          </tbody>
+        </table>
+      </div>
+    </ng-container>
+    <ng-template #poDetails>
+      <div class="po-details-container">
+        <div class="back-container"
+          (click)=toggleExpandRowContainer(false,bookingMasterData.containerItem,producPOtDataTemplate,bookingMasterData.bookingItem)>
+          <img src="assets/images/new-set/back-dark.svg" alt="">
+        </div>
+        <div class="info-container">
+          <button type="button" class="close" aria-describedby="modal-title" (click)="modal.dismiss('Cross click')">
+            <img src="assets/images/black-close.svg" alt="" (click)="modal.dismiss('Cross click')">
+          </button>
+          <h3 class="title">
+            PO Details<span class="number-badge pass">
+              {{bookingMasterData.bookingNumber}}
+            </span>
+          </h3>
+          <p class="subtitle">Container Name : {{getContainerName(bookingMasterData.containerItem.containerId)}}</p>
+          <p class="subtitle">Product ID : {{bookingMasterData.productName}}</p>
+          <div class="record-count">
+            <div class="column">
+              <p class="count">Showing {{bookingMasterData.containerPOList.length}} records</p>
+            </div>
+            <div class="column"></div>
+          </div>
+          <div class="table-container h-scroll table-max-height-450">
+            <table class="pagination-table simple-table bordered">
+              <thead>
+                <tr class="sticky-top-row">
+                  <th> {{'BOOKING_SUMMARY.LBL_PO_NUMBER' | translate }} </th>
+                  <th>{{'BOOKING_COMBINEORDERS.LBL_ORDERQTY' | translate}}</th>
+                  <th *ngIf="_IsInternalUser || _IsCustomerUser">
+                    {{'BOOKING_SUMMARY.LBL_INSPECTED_QUANTITY' | translate }}
+                  </th>
+                  <th>{{'PURCHASEORDER_SUMMARY.LBL_ETD' | translate }}</th>
+                  <th>{{'EDIT_BOOKING.LBL_DESTINATION_COUNTRY' | translate }}</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngIf="(!bookingMasterData.containerPOList || bookingMasterData.containerPOList.length <=0)">
+                  <td>
+                    <div class="rect-common animate width40"></div>
+                  </td>
+                  <td>
+                    <div class="rect-common animate width40"></div>
+                  </td>
+                  <td>
+                    <div class="rect-common animate width40"></div>
+                  </td>
+                  <td>
+                    <div class="rect-common animate width40"></div>
+                  </td>
+                  <td>
+                    <div class="rect-common animate width40"></div>
+                  </td>
+                </tr>
+                <tr *ngIf="(!bookingMasterData.containerPOList || bookingMasterData.containerPOList.length <=0)">
+                  <td>
+                    <div class="rect-common animate width40"></div>
+                  </td>
+                  <td>
+                    <div class="rect-common animate width40"></div>
+                  </td>
+                  <td>
+                    <div class="rect-common animate width40"></div>
+                  </td>
+                  <td>
+                    <div class="rect-common animate width40"></div>
+                  </td>
+                  <td>
+                    <div class="rect-common animate width40"></div>
+                  </td>
+                </tr>
+                <ng-template ngFor let-po [ngForOf]="bookingMasterData.containerPOList" let-p="index">
+                  <tr *ngIf="(bookingMasterData.containerPOList && bookingMasterData.containerPOList.length > 0)">
+                    <td>{{po.poNumber}}</td>
+                    <td><span class="highlight-badge">{{po.bookingQuantity}}</span></td>
+                    <td *ngIf="(_IsInternalUser || _IsCustomerUser)">
+                      <span *ngIf="po.reportStatus=='Validated'" class="highlight-badge">
+                        {{po.inspectedQuantity}}
+                      </span>
+                    </td>
+                    <td><span [ngClass]="{'highlight-badge':po.etd && po.etd != ''}">{{po.etd}}</span></td>
+                    <td>
+                      <span>{{po.destinationCountry}}</span>
+                    </td>
+                  </tr>
+                </ng-template>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </ng-template>
+  </div>
+</ng-template>
+
+<ng-template #PODataTemplate let-modal>
+  <div class="order-tracking-popup-container">
+    <div class="po-details-container">
+      <div class="info-container">
+        <button type="button" class="close" aria-describedby="modal-title" (click)="modal.dismiss('Cross click')">
+          <img src="assets/images/black-close.svg" alt="" (click)="modal.dismiss('Cross click')">
+        </button>
+        <h3 class="title">PO Details<span class="number-badge pass">{{bookingMasterData.bookingNumber}} </span></h3>
+        <p class="subtitle">Product ID : {{bookingMasterData.productId}} </p>
+        <div class="record-count">
+          <div class="column">
+            <p class="count">Showing {{bookingMasterData.poList.length}} records</p>
+          </div>
+          <div class="column"></div>
+        </div>
+        <div class="table-container h-scroll table-max-height-450">
+          <table class="pagination-table simple-table bordered">
+            <thead>
+              <tr class="sticky-top-row">
+                <th> {{'BOOKING_SUMMARY.LBL_PO_NUMBER' | translate }} </th>
+                <th>{{'BOOKING_COMBINEORDERS.LBL_ORDERQTY' | translate}}</th>
+                <th *ngIf="_IsInternalUser || _IsCustomerUser">
+                  {{'BOOKING_SUMMARY.LBL_INSPECTED_QUANTITY' | translate }}
+                </th>
+                <th>{{'PURCHASEORDER_SUMMARY.LBL_ETD' | translate }}</th>
+                <th>{{'EDIT_BOOKING.LBL_DESTINATION_COUNTRY' | translate }}</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let po of bookingMasterData.poList">
+                <td>{{po.poNumber}}</td>
+                <td><span class="highlight-badge">{{po.bookingQuantity}}</span></td>
+                <td *ngIf="_IsInternalUser || _IsCustomerUser">
+                  <span *ngIf="po.reportStatus=='Validated'" class="highlight-badge">{{po.inspectedQuantity}}</span>
+                </td>
+                <td><span [ngClass]="{'highlight-badge': (po.etd && po.etd != '')}">{{po.etd}}</span></td>
+                <td>
+                  <span>{{po.destinationCountry}}</span>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #OrderTrackingTemplate let-modal>
+  <div class="order-tracking-popup-container">
+    <button type="button" class="close" aria-describedby="modal-title" (click)="modal.dismiss('Cross click')">
+      <img src="assets/images/black-close.svg" alt="" (click)="modal.dismiss('Cross click')">
+    </button>
+    <h3 class="title">
+      {{'BOOKING_SUMMARY.LBL_ORDER_TRACKING' | translate}}<span class="number-badge pass">
+        {{bookingMasterData.bookingNumber}}
+      </span>
+    </h3>
+    <p class="subtitle">{{'BOOKING_SUMMARY.LBL_ORDER_TRACKING_MESSAGE' | translate}}</p>
+    <div class="order-timeline">
+      <div class="timeline-block" *ngFor="let status of bookingMasterData.statusList">
+        <div class="status">
+          <span
+            [ngClass]="status.iconType == 'done'?'complete' : status.iconType == 'in_progress'  ? 'pending':'inactive'"></span>
+        </div>
+        <div class="info">
+          <h4 class="status-title" [ngClass]="status.iconType == 'not_started' || status.iconType == 'in_progress'  ?
+          'light-title':''">{{status.statusName}}</h4>
+          <span class="" [ngClass]="status.iconType == 'done'?'highlight-badge' : status.iconType == 'in_progress'  ?
+             'highlight-badge in-progress light':'light'">{{status.statusDate}}</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-template>

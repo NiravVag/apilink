@@ -1,0 +1,29 @@
+{
+    "model": "ManualInvoiceSummaryModel",
+    "fields": {
+        "fromDate": [{
+                "type": "required",
+                "fieldType": "D",
+                "ressource": "MANUAL_INVOICE_SUMMARY.MSG_FROMDATE_REQ"
+            },
+            {
+                "type": "isLessOrEqual",
+                "fieldType": "D",
+                "fieldCible": "toDate",
+                "ressource": "MANUAL_INVOICE_SUMMARY.MSG_FROMDATE_GREATER_REQ"
+            }
+        ],
+        "toDate": [{
+                "type": "required",
+                "fieldType": "D",
+                "ressource": "MANUAL_INVOICE_SUMMARY.MSG_TODATE_REQ"
+            },
+            {
+                "type": "isGreatOrEqual",
+                "fieldType": "D",
+                "fieldCible": "fromDate",
+                "ressource": "MANUAL_INVOICE_SUMMARY.MSG_TODATE_LESS_REQ"
+            }
+        ]
+    }
+}

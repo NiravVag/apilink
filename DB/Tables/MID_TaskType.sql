@@ -1,0 +1,6 @@
+﻿CREATE TABLE MID_TaskType (
+	Id INT NOT NULL  PRIMARY KEY, 
+	Label NVARCHAR(100) NOT NULL,
+	[EntityId] INT NULL,
+	FOREIGN KEY([EntityId]) REFERENCES [AP_Entity](Id)
+)

@@ -1,0 +1,27 @@
+﻿CREATE TABLE [dbo].[CU_Address]
+(
+	[Id] INT IDENTITY(1,1) NOT NULL PRIMARY KEY, 
+    [Address_Type] INT NOT NULL, 
+    [Address] NVARCHAR(max) NOT NULL, 
+    [Box_Post] NVARCHAR(100) NULL, 
+    [Zip_Code] NVARCHAR(20) NULL, 
+    [Country_Id] INT NULL, 
+    [City_Id] INT NULL, 
+    [Customer_Id] INT NULL, 
+    [CreatedBy] INT NULL, 
+    [CreatedOn] DATETIME NULL, 
+    [UpdatedBy] INT NULL, 
+    [UpdatedOn] DATETIME NULL, 
+    [DeletedBy] INT NULL, 
+    [DeletedOn] NCHAR(10) NULL, 
+	[Active] BIT,
+	[EntityId] INT NULL,
+    FOREIGN KEY([Customer_Id]) REFERENCES [dbo].[CU_Customer](Id),
+	FOREIGN KEY ([Country_Id]) REFERENCES [dbo].[REF_Country](Id),
+	FOREIGN KEY ([City_Id]) REFERENCES [dbo].[REF_City](Id),
+	FOREIGN KEY ([Address_Type]) REFERENCES [dbo].[REF_AddressType](Id),
+	FOREIGN KEY ([CreatedBy]) REFERENCES [dbo].[IT_UserMaster](Id),
+	FOREIGN KEY ([UpdatedBy]) REFERENCES [dbo].[IT_UserMaster](Id),
+	FOREIGN KEY ([DeletedBy]) REFERENCES [dbo].[IT_UserMaster](Id),
+	CONSTRAINT CU_Address_EntityId  FOREIGN KEY(EntityId) REFERENCES [dbo].[AP_Entity](Id)
+)

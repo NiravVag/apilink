@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="43.9" height="43.9" viewBox="0 0 43.9 43.9">
+  <defs>
+    <style>
+      .cls-1 {
+        opacity: 0.4;
+      }
+
+      .cls-2, .cls-3 {
+        fill: #879ea7;
+        stroke: #fff;
+        stroke-miterlimit: 10;
+      }
+
+      .cls-2 {
+        stroke-width: 0.9px;
+      }
+
+      .cls-3 {
+        stroke-width: 0.5px;
+      }
+    </style>
+  </defs>
+  <g id="Group_1958" data-name="Group 1958" class="cls-1" transform="translate(-143.55 -459.55)">
+    <g id="Group_1853" data-name="Group 1853" transform="translate(144 460)">
+      <path id="Path_1349" data-name="Path 1349" class="cls-2" d="M422.142,630.352h-2.105v-3.266H417.08v3.266H393.692v-3.266h-2.957v3.266h-2.105a4.736,4.736,0,0,0-4.737,4.736v30.246a4.75,4.75,0,0,0,4.737,4.752h33.511a4.763,4.763,0,0,0,4.752-4.752V635.088A4.75,4.75,0,0,0,422.142,630.352Zm1.8,34.982a1.8,1.8,0,0,1-1.8,1.8H388.631a1.794,1.794,0,0,1-1.78-1.8V642.116h37.087Zm0-26.175H386.85v-4.071a1.78,1.78,0,0,1,1.78-1.78h2.105v3.25h2.957v-3.25H417.08v3.25h2.956v-3.25h2.105a1.784,1.784,0,0,1,1.8,1.78Z" transform="translate(-383.894 -627.086)"/>
+      <rect id="Rectangle_832" data-name="Rectangle 832" class="cls-3" width="2.956" height="2.956" transform="translate(9.287 18.76)"/>
+      <rect id="Rectangle_833" data-name="Rectangle 833" class="cls-3" width="2.956" height="2.956" transform="translate(15.819 18.76)"/>
+      <rect id="Rectangle_834" data-name="Rectangle 834" class="cls-3" width="2.956" height="2.956" transform="translate(9.287 25.277)"/>
+      <rect id="Rectangle_835" data-name="Rectangle 835" class="cls-3" width="2.956" height="2.956" transform="translate(15.819 25.277)"/>
+    </g>
+  </g>
+</svg>

@@ -1,0 +1,33 @@
+{
+    "model": "edit-customerserviceconfig.model",
+    "fields": {
+      "service": [
+        {
+          "type": "required",
+          "fieldType": "N",
+          "ressource": "EDIT_CUSTOMER_SERVICECONFIG.MSG_SERVICE_REQ"
+        }
+      ],
+     
+  
+      "serviceType": [
+        {
+          "type": "required",
+          "fieldType": "N",
+          "ressource": "EDIT_CUSTOMER_SERVICECONFIG.MSG_SERVICETYPE_REQ"
+        }
+      ],
+      
+  
+      "productCategory": [
+        {
+          "type": "required",
+          "fieldType": "N",
+          "ressource": "EDIT_CUSTOMER_SERVICECONFIG.MSG_PRODUCTCATEGORY_REQ"
+        }
+      ]
+      
+    }
+  
+  }
+  

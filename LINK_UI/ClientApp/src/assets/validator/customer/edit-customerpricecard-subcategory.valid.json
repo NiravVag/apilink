@@ -1,0 +1,119 @@
+{
+  "model": "PriceSubCategory",
+  "fields": {
+    "mandayProductivity": [
+      {
+        "type": "required",
+        "fieldType": "NU",
+        "ressource": "EDIT_CUSTOMER_PRICE_CARD.MSG_PRICE_MandayProductivity"
+      }
+    ],
+    "mandayReports": [
+      {
+        "type": "required",
+        "fieldType": "NU",
+        "ressource": "EDIT_CUSTOMER_PRICE_CARD.MSG_PRICE_MandayReports"
+      }
+    ],
+    "mandayBuffer": [
+      {
+        "type": "required",
+        "fieldType": "NU",
+        "ressource": "EDIT_CUSTOMER_PRICE_CARD.MSG_PRICE_MandayBuffer"
+      }
+    ],
+    "unitPrice": [
+      {
+        "type": "required",
+        "fieldType": "NU",
+        "ressource": "EDIT_CUSTOMER_PRICE_CARD.MSG_PRICE_UnitPrice"
+      }
+    ],
+    "aqL_QTY_8": [
+      {
+          "type": "required",
+          "fieldType": "NU",
+          "ressource": "EDIT_CUSTOMER_PRICE_CARD.MSG_PRICE_AqL_QTY_8"
+      }
+  ],
+    "aqL_QTY_13": [
+      {
+        "type": "required",
+        "fieldType": "NU",
+        "ressource": "EDIT_CUSTOMER_PRICE_CARD.MSG_PRICE_AqL_QTY_13"
+      }
+    ],
+    "aqL_QTY_20": [
+      {
+        "type": "required",
+        "fieldType": "NU",
+        "ressource": "EDIT_CUSTOMER_PRICE_CARD.MSG_PRICE_AqL_QTY_20"
+      }
+    ],
+  
+    "aqL_QTY_32": [
+      {
+        "type": "required",
+        "fieldType": "NU",
+        "ressource": "EDIT_CUSTOMER_PRICE_CARD.MSG_PRICE_AqL_QTY_32"
+      }
+    ],
+    "aqL_QTY_50": [
+      {
+        "type": "required",
+        "fieldType": "NU",
+        "ressource": "EDIT_CUSTOMER_PRICE_CARD.MSG_PRICE_AqL_QTY_50"
+      }
+    ],
+    "aqL_QTY_80": [
+      {
+        "type": "required",
+        "fieldType": "NU",
+        "ressource": "EDIT_CUSTOMER_PRICE_CARD.MSG_PRICE_AqL_QTY_80"
+      }
+    ],
+    "aqL_QTY_125": [
+      {
+        "type": "required",
+        "fieldType": "NU",
+        "ressource": "EDIT_CUSTOMER_PRICE_CARD.MSG_PRICE_AqL_QTY_125"
+      }
+    ],
+    "aqL_QTY_200": [
+      {
+        "type": "required",
+        "fieldType": "NU",
+        "ressource": "EDIT_CUSTOMER_PRICE_CARD.MSG_PRICE_AqL_QTY_200"
+      }
+    ],
+
+    "aqL_QTY_315": [
+      {
+        "type": "required",
+        "fieldType": "NU",
+        "ressource": "EDIT_CUSTOMER_PRICE_CARD.MSG_PRICE_AqL_QTY_315"
+      }
+    ]  ,
+    "aqL_QTY_500": [
+      {
+        "type": "required",
+        "fieldType": "NU",
+        "ressource": "EDIT_CUSTOMER_PRICE_CARD.MSG_PRICE_AqL_QTY_500"
+      }
+    ]  ,
+    "aqL_QTY_800": [
+      {
+        "type": "required",
+        "fieldType": "NU",
+        "ressource": "EDIT_CUSTOMER_PRICE_CARD.MSG_PRICE_AqL_QTY_800"
+      }
+    ] ,
+    "aqL_QTY_1250": [
+      {
+        "type": "required",
+        "fieldType": "NU",
+        "ressource": "EDIT_CUSTOMER_PRICE_CARD.MSG_PRICE_AqL_QTY_1250"
+      }
+    ]  
+  }
+}

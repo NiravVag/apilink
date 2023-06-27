@@ -1,0 +1,101 @@
+﻿
+@{
+    ViewData["Title"] = "ManDayEmployeeTypeChartExport";
+}
+
+@model DTO.Manday.MandayEmployeeTypeChartExport
+
+<style>
+    .table {
+        empty-cells: show;
+        border-style: 1px solid;
+    }
+
+    td {
+        border-style: solid;
+    }
+</style>
+
+<xls-sheet name="EmployeeType-Manday">
+    <table xls-begin="A:1" style="border-style:solid; empty-cells: show;">
+        <tr>
+            <td style="font-weight:bold">Service :</td>
+            <td width="100px">@Model.RequestFilters.Service</td>
+
+            <td width="130px" style="font-weight:bold">Service Date From :</td>
+            <td width="110px">@Model.RequestFilters.ServiceDateFrom</td>
+
+            <td width="120px" style="font-weight:bold">Service Date To :</td>
+            <td width="100px">@Model.RequestFilters.ServiceDateTo</td>
+
+            @if (!string.IsNullOrEmpty(@Model.RequestFilters.CountryIdList))
+            {
+                <td width="100px" style="font-weight: bold">Country :</td>
+                <td width="100px">@Model.RequestFilters.CountryIdList</td>
+            }
+            @if (!string.IsNullOrEmpty(@Model.RequestFilters.OfficeIdList))
+            {
+                <td style="font-weight: bold">Office :</td>
+                <td width="100px">@Model.RequestFilters.OfficeIdList</td>
+            }
+            @if (!string.IsNullOrEmpty(@Model.RequestFilters.CustomerList))
+            {
+                <td style="font-weight: bold">Customer :</td>
+                <td width="100px">@Html.Raw(@Model.RequestFilters.CustomerList)</td>
+            }
+            @if (!string.IsNullOrEmpty(@Model.RequestFilters.MandayEmployeeTypeSubCustomer))
+            {
+                <td width="100px" style="font-weight: bold">SubCountry :</td>
+                <td width="100px">@Model.RequestFilters.MandayEmployeeTypeSubCustomer</td>
+            }
+            @if (@Model.RequestFilters.MandayEmployeeTypeSubYear > 0)
+            {
+                <td style="font-weight: bold">SubYear :</td>
+                <td width="100px">@Model.RequestFilters.MandayEmployeeTypeSubYear</td>
+            }
+        </tr>
+        <tr>
+            <td></td>
+        </tr>
+        <tr style="background-color:#f5f5f5;font-weight:bold;text-align:center">
+            <th style="border-style:solid">Month</th>
+
+
+            @foreach (var emptype in Model.EmployeeTypeNames)
+            {
+                <th style="border-style:solid">@emptype</th>
+            }
+
+            <th style="border-style:solid; text-align:center">Total Manday %</th>
+        </tr>
+
+        @foreach (var item in Model.Data)
+        {
+        <tr>
+            <td style="border-style:solid">@item.MonthName</td>
+
+                @foreach (var emptype in Model.EmployeeTypeNames)
+                {
+                    var dataper = item.Data.Where(x => x.EmployeeType == emptype).FirstOrDefault();
+                    if (dataper == null)
+                    {
+                        <td width="100px" style="text-align:center; border-style:solid" xls-type="number"></td>
+                    }
+
+                    else
+                    {
+                        <td width="100px" style="text-align:center; border-style:solid" xls-type="number">@dataper.MandayPercentage</td>
+                    }
+                }
+
+            <td width="100px" style="text-align:center; border-style:solid" xls-type="number">@item.MonthCount</td>
+        </tr>
+        }
+            <tr>
+                @{var count = @Model.EmployeeTypeNames.Count + 1;}
+                <td style="font-weight:bold; border-style:solid; text-align:center" colspan= @count>Total</td>
+                <td style="text-align:center; border-style:solid" xls-type="number">100</td>
+            </tr>
+    </table>
+</xls-sheet>
+

@@ -1,0 +1,25 @@
+{
+    "model": "eidt-purchaseorder.model",
+    "fields": {
+      "supplierId": [
+        {
+          "type": "required",
+          "fieldType": "N",
+          "ressource": "PURCHASEORDER_SUMMARY.MSG_SUPPLIER_REQ"
+        }
+      ], "productId": [
+        {
+          "type": "required",
+          "fieldType": "N",
+          "ressource": "PURCHASEORDER_SUMMARY.MSG_PRODUCT_REQ"
+        }
+      ],
+      "quantity": [
+        {
+          "type": "required",
+          "fieldType": "N",
+          "ressource": "PURCHASEORDER_SUMMARY.MSG_QUANTITY_REQ"
+        }
+      ]
+    }    
+  }

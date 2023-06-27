@@ -1,0 +1,12 @@
+{
+    "model": "QCBlockEdit",
+    "fields": {
+        "qcId": [
+            {
+                "type": "required",
+                "fieldType": "N",
+                "ressource": "EDIT_QC_BLOCK.LBL_QC_REQUIRED"
+            }
+        ]
+    }
+}

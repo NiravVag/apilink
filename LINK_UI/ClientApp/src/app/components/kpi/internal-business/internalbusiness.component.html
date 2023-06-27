@@ -1,0 +1,156 @@
+<div class="main-wrapper">
+  <div class="wrapper dashboard-wrapper">
+    <div class="my-container">
+      <div class="master-body">
+        <div class="title-container">
+          <h3 class="main-title"> {{ 'Internal business process'}}</h3>
+        </div>
+        <div class="content-container">
+          <div class="row searchFormPadding">
+            <div class="col-sm-12">
+              <div class="row">
+                <div class="col-sm-3 col-md-3 col-lg-3">
+                  <div class="my-input-group marginTop15">
+                    <label class="required">{{ 'Customer' }}</label>
+                    <ng-select [items]="customerList" [multiple]="false" [closeOnSelect]="true" [searchable]="true"
+                      bindLabel="name" [loading]="loading" (change)="changeCustomer($event)" bindValue="id"
+                      placeholder="--- {{ 'SELECT' }} ---" [(ngModel)]="model.idCustomer"
+                      [ngClass]="{ 'is-invalid': !validator.isValid('idCustomer')}">
+                    </ng-select>
+                    <div *ngIf="!validator.isValid('idCustomer')" class="invalid-feedback" style="display:block">
+                      <div *ngFor="let error of validator.getErrors('idCustomer')">{{ error | translate }}</div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-sm-4 col-md-4 col-lg-4 mobile-margin-top-15">
+
+                  <div class="my-input-group">
+                    <div class="styled-radio-container" *ngFor="let item of invoiceDateTypeList;let idx = index">
+                      <input type="radio" class="styled-radio" id="{{item.id}}" name="radio-group1" [value]="item.id"
+                        [checked]="idx === 0" [(ngModel)]="model.searchDateTypeId"
+                        (change)="SetSearchDatetype(item.id)">
+                      <label class="required" for="{{item.id}}">{{item.name}}</label>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="my-input-group col-sm-12 col-lg-6">
+                      <div class="calendar-wrapper">
+                        <input type="text" maxlength="10" [ngClass]="{ 'is-invalid':  !validator.isValid('beginDate')}"
+                          (click)="fd.toggle()" readonly=readonly container="body" placeholder="{{  'SELECT DATE' }}"
+                          [(ngModel)]="model.beginDate" ngbDatepicker #fd="ngbDatepicker">
+                        <img src="assets/images/calendar-icon.svg" alt="" class="calendar-icon" (click)="fd.toggle()">
+                        <img src="assets/images/cta-close-grey.svg" alt="" class="close-icon"
+                          (click)="clearDateInput('beginDate')" *ngIf="model.beginDate">
+                      </div>
+                      <div *ngIf="!validator.isValid('beginDate')" class="invalid-feedback">
+                        <div *ngFor="let error of validator.getErrors('beginDate')">{{ error | translate }}</div>
+                      </div>
+                    </div>
+                     <div class="my-input-group col-sm-12 col-lg-6">
+                      <div class="calendar-wrapper">
+                        <input type="text" maxlength="10" container="body" readonly=readonly
+                          [ngClass]="{ 'is-invalid':  !validator.isValid('endDate')}" (click)="ed.toggle()"
+                          placeholder="{{  'SELECT DATE' }}" [(ngModel)]="model.endDate" ngbDatepicker
+                          #ed="ngbDatepicker">
+                        <img src="assets/images/calendar-icon.svg" alt="" class="calendar-icon" (click)="ed.toggle()">
+                        <img src="assets/images/cta-close-grey.svg" alt="" class="close-icon"
+                          (click)="clearDateInput('endDate')" *ngIf="model.endDate">
+                      </div>
+                      <div *ngIf="!validator.isValid('endDate')" class="invalid-feedback">
+                        <div *ngFor="let error of validator.getErrors('endDate')">{{ error | translate }}</div>
+                      </div>
+                     </div>
+                  </div>
+                </div>
+               
+                <div class="col-sm-2 col-md-2 col-lg-2 mobile-margin-top-15" style="margin-top:20px">
+                  <div class="styled-checkbox-container">
+                    <input [(ngModel)]="model.loadDepartment" class="styled-checkbox" id="checkbox-1" type="checkbox">
+                    <label for="checkbox-1">Load departments</label>
+                  </div>
+                  <div class="styled-checkbox-container">
+                    <input [(ngModel)]="model.loadFactory" class="styled-checkbox" id="checkbox-2" type="checkbox">
+                    <label for="checkbox-2">Load Factories</label>
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-sm-3 col-md-3 col-lg-3 mobile-margin-top-15">
+                  <div class="my-input-group marginTop10">
+                    <label for="">{{ 'BOOKING_SUMMARY.LBL_CUS_BRAND' | translate}}</label>
+                    <ng-select appendTo="body" [items]="brandList" [virtualScroll]="true" [loading]="brandLoading"
+                      bindLabel="name" bindValue="id"
+                      placeholder="--- {{ (brandList && brandList.length>0? 'COMMON.LBL_SELECT':'COMMON.LBL_NO_DATA' ) | translate }} ---"
+                      [typeahead]="brandInput" [minTermLength]="3" [(ngModel)]="model.brandList" [multiple]="true"
+                      (scrollToEnd)="getBrandData()" #select class="multiple">
+                      <ng-template ng-option-tmp let-item="item" let-index="index" let-search="searchTerm">
+                        <span>{{item.name}}</span>
+                      </ng-template>
+                      <ng-template ng-multi-label-tmp let-items="model.brandList" let-clear="clear">
+                        <div class="ng-value" *ngIf="model.brandList && model.brandList.length > 0">
+                          <span class="ng-value-label">
+                            {{model.brandList.length}}
+                            {{'COMMON.LBL_SELECTED' | translate }}
+                          </span>
+                        </div>
+                      </ng-template>
+                    </ng-select>
+                  </div>
+                </div>
+                <div class="col-sm-3 col-md-3 col-lg-3 mobile-margin-top-15">
+                  <div class="my-input-group marginTop10">
+                    <label for="">{{ 'BOOKING_SUMMARY.LBL_CUS_DEPARTMENT' | translate}}</label>
+                    <ng-select appendTo="body" [items]="deptList" [virtualScroll]="true" [loading]="deptLoading"
+                      bindLabel="name" bindValue="id"
+                      placeholder="--- {{ (deptList && deptList.length>0? 'COMMON.LBL_SELECT':'COMMON.LBL_NO_DATA' ) | translate }} ---"
+                      [typeahead]="deptInput" [minTermLength]="3" [(ngModel)]="model.deptList" [multiple]="true"
+                      (scrollToEnd)="getDeptData()" #selectDept class="multiple">
+                      <ng-template ng-option-tmp let-item="item" let-index="index" let-search="searchTerm">
+                        <span>{{item.name}}</span>
+                      </ng-template>
+                      <ng-template ng-multi-label-tmp let-items="model.deptList" let-clear="clear">
+                        <div class="ng-value" *ngIf="model.deptList && model.deptList.length > 0">
+                          <span class="ng-value-label">
+                            {{model.deptList.length}}
+                            {{'COMMON.LBL_SELECTED' | translate }}
+                          </span>
+                        </div>
+                      </ng-template>
+                    </ng-select>
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-sm-2 col-md-2 col-lg-2 mobile-margin-top-15">
+                  <div class="column" style="margin-top:20px">
+                    <button id="btnSearch" class="primary-cta small" [disabled]="loading || downloading"
+                      (click)="download()">
+                      {{ "Download" }}
+                      <span *ngIf="downloading">
+                        {{progressPercent}}%
+                      </span>
+                    </button>
+                  </div>
+                </div>
+                <!-- <div class="col-sm-6 col-md-6 col-lg-6 mobile-margin-top-15">
+                  <progress-bar *ngIf="downloading" [progress]="progressPercent" [color-degraded]="{'0': '#00cbcb',  '15': '#f9c3d3', '25': '#fd8c8e'}">
+                  </progress-bar>                 
+                </div>
+                <div  *ngIf="downloading" class="col-sm-4 col-md-4 col-lg-4 mobile-margin-top-15" style="margin-top:25px">
+                  <div class="my-input-group">
+                    <label>{{progressMessage}}</label>
+                    </div>
+                  </div> -->
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="loader-overlay" *ngIf="downloading">
+          <div class="loader-container">
+            <span>{{progressPercent}}% {{'COMMON.LBL_LOADER' | translate}} </span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

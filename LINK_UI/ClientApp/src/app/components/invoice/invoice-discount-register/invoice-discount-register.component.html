@@ -1,0 +1,214 @@
+<div class="main-wrapper">
+    <div class="wrapper dashboard-wrapper">
+        <div class="my-container">
+            <div class="master-body">
+                <div class="title-container">
+                    <div class="header-back-button" *ngIf="!saveloading">
+                        <img src="assets/images/back-red.png" alt="back"
+                            (click)="this.return('invoicediscountsearch/invoice-discount-summary');">
+                    </div>
+                    <h3 class="main-title"> {{ title | translate }}</h3>
+                </div>
+                <div class="content-container">
+                    <div class="formPadding">
+                        <div class="row">
+                            <div class="col-sm-4 col-md-4 col-lg-4">
+                                <div class="my-input-group">
+                                    <label class="required">{{ 'INV_DIS_REGISTER.LBL_Customer' | translate }}</label>
+                                    <ng-select [items]="customerList" [multiple]="false" [closeOnSelect]="true"
+                                        [searchable]="true" bindLabel="name" bindValue="id" [loading]="customerLoading"
+                                        (change)="changeCustomerData($event)"
+                                        placeholder="--- {{ 'COMMON.LBL_SELECT' | translate }} ---"
+                                        [(ngModel)]="model.customerId"
+                                        [ngClass]="{ 'is-invalid': !validator.isValid('customerId')}">
+                                    </ng-select>
+                                    <div *ngIf="!validator.isValid('customerId')" class="invalid-feedback"
+                                        style="display:block">
+                                        <div *ngFor="let error of validator.getErrors('customerId')">{{ error |
+                                            translate }}</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-4 col-md-4 col-lg-4">
+                                <div class="my-input-group">
+                                    <label class="required">{{ 'INV_DIS_REGISTER.LBL_DISCOUNT_TYPE' | translate
+                                        }}</label>
+                                    <ng-select [items]="invDisTypeList" [multiple]="false" [closeOnSelect]="true"
+                                        [searchable]="true" bindLabel="name" bindValue="id"
+                                        [loading]="invDisTypeLoading"
+                                        placeholder="--- {{ 'COMMON.LBL_SELECT' | translate }} ---"
+                                        [(ngModel)]="model.discountType"
+                                        [ngClass]="{ 'is-invalid': !validator.isValid('discountType')}">
+                                    </ng-select>
+                                    <div *ngIf="!validator.isValid('discountType')" class="invalid-feedback"
+                                        style="display:block">
+                                        <div *ngFor="let error of validator.getErrors('discountType')">{{ error |
+                                            translate }}</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-4 col-md-4 col-lg-4">
+                                <div class="my-input-group">
+                                    <label class="control-label required">{{ 'INV_DIS_REGISTER.LBL_COUNTRY' | translate
+                                        }}</label>
+                                    <ng-select [items]="countryList" [multiple]="true" [closeOnSelect]="false"
+                                        [searchable]="true" bindLabel="name" bindValue="id" [loading]="countryLoading"
+                                        class="multiple" [ngClass]="{ 'is-invalid': !validator.isValid('countryIds')}"
+                                        placeholder="--- {{ (countryList!=null && countryList.length!=0? 'COMMON.LBL_SELECT':'COMMON.LBL_NO_DATA' ) | translate }} ---"
+                                        [(ngModel)]="model.countryIds">
+                                    </ng-select>
+                                    <div *ngIf="!validator.isValid('countryIds')" class="invalid-feedback"
+                                        style="display:block">
+                                        <div *ngFor="let error of validator.getErrors('countryIds')">{{ error |
+                                            translate }}</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row marginTop15">
+                            <div class="col-sm-2 col-md-2 col-lg-2">
+                                <div class="my-input-group">
+                                    <label for="" class="required">{{ 'INV_DIS_REGISTER.LBL_PERIOD_FROM' | translate
+                                        }}</label>
+                                    <div class="calendar-wrapper flex-fill mr-2">
+                                        <input type="text" container="body"
+                                            [ngClass]="{ 'is-invalid':  !validator.isValid('periodFrom')}"
+                                            [(ngModel)]="model.periodFrom" ngbDatepicker #fromDate="ngbDatepicker"
+                                            (click)="fromDate.toggle()">
+                                        <img src="assets/images/calendar-icon.svg" alt="" class="calendar-icon"
+                                            (click)="fromDate.toggle()">
+                                        <div *ngIf="!validator.isValid('periodFrom')" class="invalid-feedback">
+                                            <div *ngFor="let error of validator.getErrors('periodFrom')">{{ error |
+                                                translate }}</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-2 col-md-2 col-lg-2">
+                                <div class="my-input-group">
+                                    <label for="" class="required">{{ 'INV_DIS_REGISTER.LBL_PERIOD_TO' | translate
+                                        }}</label>
+                                    <div class="calendar-wrapper flex-fill">
+                                        <input type="text" container="body"
+                                            [ngClass]="{ 'is-invalid':  !validator.isValid('periodTo')}"
+                                            readonly=readonly [(ngModel)]="model.periodTo" ngbDatepicker
+                                            #toDate="ngbDatepicker" (click)="toDate.toggle()">
+                                        <img src="assets/images/calendar-icon.svg" alt="" class="calendar-icon"
+                                            (click)="toDate.toggle()">
+                                        <div *ngIf="!validator.isValid('periodTo')" class="invalid-feedback">
+                                            <div *ngFor="let error of validator.getErrors('periodTo')">{{ error |
+                                                translate }}</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-6 col-md-6 col-lg-6 marginTop25">
+                                <div class=" my-input-group ">
+                                    <div class="styled-checkbox-container ">
+                                        <input class="styled-checkbox" id="checkbox-1" type="checkbox"
+                                            [(ngModel)]="model.applyToNewCountry" />
+                                        <label for="checkbox-1">{{ 'INV_DIS_REGISTER.LBL_APPLYTONEWCOUNTRY' | translate
+                                            }}</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row marginTop15">
+                            <div class="col">
+                                <div class="table-container">
+                                    <table class="pagination-table bordered">
+                                        <thead>
+                                            <tr>
+                                                <th>{{ 'INV_DIS_REGISTER.LBL_LIMIT_FROM' | translate }}
+                                                </th>
+                                                <th>{{ 'INV_DIS_REGISTER.LBL_LIMIT_TO' | translate }}
+                                                </th>
+                                                <th class="Center_Middle">{{ 'INV_DIS_REGISTER.LBL_EMAIL_SENT' |
+                                                    translate }}
+                                                </th>
+                                                <th></th>
+                                            </tr>
+
+                                        </thead>
+                                        <tbody>
+                                            <ng-container *ngFor="let item of limitValidators;  let i = index">
+                                                <tr>
+                                                    <td class="required">
+                                                        <input type="number" [(ngModel)]="item.limit.limitFrom"
+                                                            (keypress)="numericValidation($event)" (paste)="onPaste($event,10)"
+                                                            (input)="validateDecimal(item.limit,'limitFrom')"
+                                                            placeholder="{{ 'INV_DIS_REGISTER.LBL_LIMIT_FROM' | translate }}"
+                                                            min="1" max="9999999999" 
+                                                            [ngClass]="{ 'is-invalid':!item.validator.isValid('limitFrom')}">
+                                                        <div *ngIf="!item.validator.isValid('limitFrom')"
+                                                            class="invalid-feedback">
+                                                            <div
+                                                                *ngFor="let error of item.validator.getErrors('limitFrom')">
+                                                                {{ error | translate }}</div>
+                                                        </div>
+                                                        <div *ngIf="limitFromValidateLimitTo(i)"
+                                                            class="invalid-feedback">
+                                                            {{'INV_DIS_REGISTER.MSG_LIMITFROM_GREATER' | translate}}
+                                                        </div>
+                                                    </td>
+                                                    <td class="required">
+                                                        <input type="number" [(ngModel)]="item.limit.limitTo"
+                                                            (input)="validateDecimal(item.limit,'limitTo')" min="1"
+                                                            max="9999999999" (keypress)="numericValidation($event)"
+                                                            (paste)="onPaste($event,10)"
+                                                            [ngClass]="{ 'is-invalid':!item.validator.isValid('limitTo')}"
+                                                            placeholder="{{ 'INV_DIS_REGISTER.LBL_LIMIT_TO'| translate }}">
+                                                        <div *ngIf="!item.validator.isValid('limitTo')"
+                                                            class="invalid-feedback">
+                                                            <div
+                                                                *ngFor="let error of item.validator.getErrors('limitTo')">
+                                                                {{ error | translate }}</div>
+                                                        </div>
+                                                    </td>
+                                                    <td class="Center_Middle">
+                                                        <div class="styled-checkbox-container">
+                                                            <input class="styled-checkbox"
+                                                                id="notification-checkbox-{{i}}" type="checkbox"
+                                                                [(ngModel)]="item.limit.notification" />
+                                                            <label for="notification-checkbox-{{i}}"></label>
+                                                        </div>
+                                                    </td>
+                                                    <td>
+                                                        <button *ngIf="limitValidators.length>1"
+                                                            (click)="removeLimit(i)" class="secondary-cta x-small"
+                                                            style="margin-left:10px">
+                                                            <i class="fa fa-trash"></i>
+                                                        </button>
+                                                    </td>
+
+                                                </tr>
+
+                                            </ng-container>
+                                        </tbody>
+                                    </table>
+                                    <div class="marginTop25">
+                                        <span>
+                                            <button class="secondary-cta x-small" (click)="addLimit()">
+                                                +
+                                                {{ 'EDIT_SUPPLIER.LBL_ADD' | translate }}
+                                            </button>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-action-container ">
+                        <button id="btnSearch " class="primary-cta small " [disabled]="saveloading "
+                            style="margin-right: 5px; " (click)="save() ">
+                            {{ 'COMMON.LBL_SUBMIT' | translate }}
+                            <span *ngIf="saveloading ">
+                                <i class="fa fa-refresh fa-spin " aria-hidden="true "></i>
+                            </span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

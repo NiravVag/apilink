@@ -1,0 +1,40 @@
+{
+    "model": "inspectionbooking.model",
+    "fields": {
+        "labOrCustomerId": [
+            {
+                "type": "required",
+                "fieldType": "N",
+                "ressource": "BOOKING_INSPECTIONPICKING.MSG_LAB_REQ"
+            }
+        ],
+        "labOrCustomerAddressId": [
+            {
+                "type": "required",
+                "fieldType": "A",
+                "ressource": "BOOKING_INSPECTIONPICKING.MSG_LAB_ADDRESS_REQ"
+            }
+        ],
+        "labOrCustomerContactIds": [
+            {
+                "type": "required",
+                "fieldType": "A",
+                "ressource": "BOOKING_INSPECTIONPICKING.MSG_LAB_CONTACT_REQ"
+            }
+        ],
+        "pickingQuantity": [
+            {
+                "type": "required",
+                "fieldType": "N",
+                "ressource": "BOOKING_INSPECTIONPICKING.MSG_LAB_PICKINGQTY_REQ"
+            }
+        ],
+        "remarks": [
+            {
+                "type": "required",
+                "fieldType": "T",
+                "ressource": "BOOKING_INSPECTIONPICKING.MSG_PICKING_REMARK_VALID"
+            }
+        ]
+    }
+}

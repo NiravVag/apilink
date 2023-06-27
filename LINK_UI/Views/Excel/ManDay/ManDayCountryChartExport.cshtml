@@ -1,0 +1,107 @@
+﻿
+@{
+    ViewData["Title"] = "ManDayCountryChartExport";
+}
+
+@model DTO.Manday.MandayCountryChartExportResponse
+
+<style>
+    .table {
+        empty-cells: show;
+        border-style: 1px solid;
+    }
+
+    td {
+        border-style: solid;
+    }
+</style>
+
+<xls-sheet name="Country-Manday">
+    <table xls-begin="A:1" style="border-style:solid">
+        <tr>
+            <td style="font-weight:bold">Service :</td>
+            <td width="100px">@Model.RequestFilters.Service</td>
+
+            <td width="130px" style="font-weight:bold">Service Date From :</td>
+            <td width="100px">@Model.RequestFilters.ServiceDateFrom</td>
+
+            <td width="120px" style="font-weight:bold">Service Date To :</td>
+            <td width="100px">@Model.RequestFilters.ServiceDateTo</td>
+
+            <td width="130px" style="font-weight:bold">Compared Service Date From :</td>
+            <td width="100px">@Model.RequestFilters.ComparedServiceDateFrom</td>
+
+            <td width="120px" style="font-weight:bold">Compared Service Date To :</td>
+            <td width="100px">@Model.RequestFilters.ComparedServiceDateTo</td>
+            @if (!string.IsNullOrEmpty(@Model.RequestFilters.CountryIdList))
+            {
+                <td width="100px" style="font-weight: bold">Country :</td>
+                <td width="100px">@Model.RequestFilters.CountryIdList</td>
+            }
+            @if (!string.IsNullOrEmpty(@Model.RequestFilters.OfficeIdList))
+            {
+                <td style="font-weight: bold">Office :</td>
+                <td width="100px">@Model.RequestFilters.OfficeIdList</td>
+            }
+            @if (!string.IsNullOrEmpty(@Model.RequestFilters.CustomerList))
+            {
+                <td style="font-weight: bold">Customer :</td>
+                <td width="100px">@Html.Raw(@Model.RequestFilters.CustomerList)</td>
+            }
+            @if (!string.IsNullOrEmpty(@Model.RequestFilters.MandayCountrySubCountry))
+            {
+                <td width="100px" style="font-weight: bold">SubCountry :</td>
+                <td width="100px">@Model.RequestFilters.MandayCountrySubCountry</td>
+            }
+            @if (!string.IsNullOrEmpty(@Model.RequestFilters.MandayCountrySubProvince))
+            {
+                <td width="100px" style="font-weight: bold">SubProvince :</td>
+                <td width="100px">@Html.Raw(@Model.RequestFilters.MandayCountrySubProvince)</td>
+            }
+        </tr>
+        <tr>
+            <td></td>
+        </tr>
+        <tr style="background-color:#f5f5f5;font-weight:bold;text-align:center">
+            <th style="border-style:solid">Country</th>
+            @if (!String.IsNullOrEmpty(Model.RequestFilters.MandayCountrySubCountry))
+            {
+                <th style="border-style:solid">Province</th>
+            }
+            <th style="border-style:solid; text-align:center">Man Day</th>
+            @if (Model.IsCompareData)
+            {
+                <th style="border-style:solid; text-align:center">Compared Man Day</th>
+            }
+        </tr>
+
+        @foreach (var item in Model.Data)
+        {
+            <tr>
+                <td style="border-style:solid">@item.CountryName</td>
+                @if (!String.IsNullOrEmpty(Model.RequestFilters.MandayCountrySubCountry))
+                {
+                    <td width="100px" style="border-style:solid">@item.ProvinceName</td>
+                }
+                <td style="text-align:center; border-style:solid" xls-type="number">@item.MandayCount</td>
+                @if (Model.IsCompareData)
+                {
+                    <td style="text-align:center; border-style:solid" xls-type="number">@item.ComparedMandayCount</td>
+                }
+            </tr>
+        }
+
+        <tr>
+            @if (!String.IsNullOrEmpty(Model.RequestFilters.MandayCountrySubCountry))
+            {
+                <td style="font-weight:bold; border-style:solid;text-align:center" colspan="2">Total</td>
+            }
+            else
+            {
+                <td style="font-weight:bold; border-style:solid; text-align:center">Total</td>
+            }
+            <td style="text-align:center; border-style:solid" xls-type="number">@Model.Total</td>
+        </tr>
+    </table>
+</xls-sheet>
+

@@ -1,0 +1,345 @@
+<div class="main-wrapper">
+  <div class="wrapper dashboard-wrapper">
+    <div class="my-container">
+      <div class="master-body">
+        <div class="title-container">
+          <h3 class="main-title">{{ 'PURCHASEORDER_UPLOAD.TITLE' | translate }}</h3>
+        </div>
+        <div class="content-container quotation-container">
+          <div class="centerContainerPadding common-filter-container">
+            <div class="row">
+              <div class="col-sm-4 col-md-4 col-lg-4">
+                <div class="my-input-group">
+                  <label class="control-label">{{ 'PURCHASEORDER_SUMMARY.LBL_CUSTOMER_LIST' | translate }}</label>
+                  <ng-select [items]="customerList" [multiple]="false" [closeOnSelect]="true" [searchable]="true"
+                    bindLabel="name" [loading]="initialLoading" (change)="onChangeCustomer()" bindValue="id"
+                    placeholder="--- {{ 'CUSTOMER_SUMMARY.LBL_SELECT' | translate }} ---" [disabled]="initialLoading"
+                    appendTo="body" [(ngModel)]="model.customerId"
+                    [ngClass]="{ 'is-invalid': !validator.isValid('customerId')}">
+                    <ng-template ng-option-tmp let-item="item">
+                      <div class="text-wrap">{{ item.name }}</div>
+                    </ng-template>
+                  </ng-select>
+
+                  <div *ngIf="!validator.isValid('customerId')" class="invalid-feedback" style="display:block">
+                    <div *ngFor="let error of validator.getErrors('customerId')">{{ error | translate }}</div>
+                  </div>
+                </div>
+              </div>
+
+              <ng-container *ngIf="model.purchaseOrderAttachments != null && model.purchaseOrderAttachments.length>0">
+                <div class="col-lg-3">
+                  <div class="drag-drop-files-container">
+                    <div class="file" *ngFor="let file of model.purchaseOrderAttachments ;  let j = index">
+                      <a (click)="getFile(file)"><img src="assets/images/uploaded-files.svg" class="icon" alt=""></a>
+                      <div class="info">
+                        <h4 class="file-title">{{file.fileName}}</h4>
+                      </div>
+                      <img src="assets/images/red-close.svg" alt="" (click)="removeAttachment(j)" class="close">
+                    </div>
+                  </div>
+                </div>
+              </ng-container>
+              <div class="col-sm-5 col-md-5 col-lg-5">
+                <div class="my-input-group">
+                  <label class="control-label"></label>
+                 
+                  <app-drag-drop [fileLimit]="uploadLimit" [fileSizeLimit]="fileSize"  [Bigupload]="false"
+                  [SmallUploadImage]="uploadfileimage" [SmallUploadTitle]="SmallUploadTitle" [SmallUploadSubTitle]=" "
+                    [fileExtension]="uploadFileExtensions" (fileUpload)="selectFiles($event)"></app-drag-drop>
+
+                </div>
+              </div>
+
+            </div>
+
+            <div class="row marginTop25">
+
+              <div class="col-12 col-sm-12 text-right mt-3 mt-sm-0">
+                <button class="primary-cta small" [disabled]="processFileLoading || initialLoading"
+                  (click)="processFile()">
+                  {{'PURCHASEORDER_UPLOAD.PROCESS_FILE' | translate }}
+                  <span *ngIf="processFileLoading">
+                    <i class="fa fa-refresh fa-spin" aria-hidden="true"></i>
+                  </span>
+                </button>
+              </div>
+            </div>
+          </div>
+          <div class=" result-container">
+            <div class="row">
+              <div class="col-md-12">
+                <div class="accordion-container accordionCustomMargin">
+
+                  <ngb-accordion #acc="ngbAccordion" [activeIds]="activeIds" (panelChange)="toggleAccordian1($event)">
+
+                    <ngb-panel *ngIf="isproductListNew" id="ngb-panel-0"
+                      title="{{'PURCHASEORDER_UPLOAD.LBL_PO_NEW_PRODUCTS' | translate }}">
+
+                      <ng-template ngbPanelTitle>
+                        <div class="head-arrow">
+                          <img src="assets/images/grey-arrow.svg" alt="">
+                        </div>
+                      </ng-template>
+                      <ng-template ngbPanelContent>
+                        <div class="result-container">
+                          <div class="table-container scroll-x scroll-ytable">
+                            <table class="pagination-table">
+                              <thead>
+                                <tr>
+                                  <th>
+                                    <div class="styled-checkbox-container">
+                                      <input class="styled-checkbox" id="checkboxproductall" type="checkbox"
+                                        [(ngModel)]="selectednewAll" (change)="selectnewAll();">
+                                      <label for="checkboxproductall"></label>
+                                    </div>
+
+                                  </th>
+                                  <th>{{'PURCHASEORDER_SUMMARY.LBL_PO_NO' | translate }}</th>
+                                  <th>{{ 'EDIT_PURCHASEORDER.LBL_PRODUCT' | translate }}</th>
+                                  <th>{{'PURCHASEORDER_SUMMARY.LBL_PRODCUT_DESC' | translate }}</th>
+
+                                </tr>
+                              </thead>
+                              <tbody>
+                                <tr *ngFor="let item of newpolist; let j=index">
+                                  <td>
+
+                                    <div class="styled-checkbox-container">
+                                      <input class="styled-checkbox" id="checkboxProduct-{{j}}" type="checkbox"
+                                        [(ngModel)]="item.selected" (change)="checkIfAllnewSelected()">
+                                      <label for="checkboxProduct-{{j}}"></label>
+                                    </div>
+
+                                  </td>
+                                  <td style="overflow: hidden;max-width:200px;word-wrap: break-word;">{{item.pono}}</td>
+                                  <td>{{item.product}}</td>
+                                  <td class="wordbreak width-180">{{item.productDescription}}</td>
+
+                                </tr>
+                              </tbody>
+                            </table>
+                          </div>
+                          <div class="form-action-container marginTop15">
+
+                            <button [disabled]="saveProductButtonLoading" class="primary-cta small"
+                              (click)="saveCustomerProduct();">
+                              <i class="fa fa-plus"></i>{{ 'CUSTOMER_PRODUCT_SUMMARY.LBL_ADDNEW_PRODUCT' | translate }}
+                              <!-- <span *ngIf="saveProductButtonLoading">
+                                <i class="fa fa-refresh fa-spin" aria-hidden="true"></i>
+                              </span> -->
+                            </button>
+
+                          </div>
+                        </div>
+                      </ng-template>
+                    </ngb-panel>
+
+                    <ngb-panel *ngIf="duplicatePoProducts.length>0 && isPoExist" id="ngb-panel-1" style="color: red"
+                      title="{{'PURCHASEORDER_UPLOAD.LBL_DUPLICATE_ERROR' | translate }}">
+                      <ng-template ngbPanelTitle>
+                        <div class="head-arrow">
+                          <img src="assets/images/grey-arrow.svg" alt="">
+                        </div>
+                      </ng-template>
+                      <ng-template ngbPanelContent>
+                        <div class="result-container">
+                          <div class="table-container scroll-x scroll-ytable">
+                            <table class="pagination-table">
+                              <thead>
+                                <tr>
+                                  <th>
+                                    {{'PURCHASEORDER_UPLOAD.LBL_PONUMBER' | translate }}
+                                  </th>
+
+                                  <th>
+                                    {{'PURCHASEORDER_UPLOAD.LBL_PRODUCT' | translate }}
+                                  </th>
+                                  <th>
+                                    {{'PURCHASEORDER_UPLOAD.LBL_ERROR_DESC' | translate }}
+                                  </th>
+                                </tr>
+                              </thead>
+                              <tbody>
+                                <tr *ngFor="let item of duplicatePoProducts; let j=index">
+                                  <td>{{item.poId}}</td>
+                                  <td>{{item.productId}}</td>
+                                  <td style="color: red">{{item.error}}</td>
+                                </tr>
+                              </tbody>
+                            </table>
+                          </div>
+
+                        </div>
+                      </ng-template>
+                    </ngb-panel>
+
+                  </ngb-accordion>
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+          <div class="result-container" *ngIf="existingpolist!=null && existingpolist.length>0 && isPoExist">
+
+            <div class="booking-title-container">
+              <div class="stats-container float-right">
+                <span>
+                  {{'PURCHASEORDER_UPLOAD.LBL_TOTAL_UPLOAD_RECORDS' | translate }}
+                </span>
+                <span style="color: green" class="big">
+                  {{totalUploadRecords}}
+                </span>
+                <span>
+                  {{'PURCHASEORDER_UPLOAD.LBL_TOTAL_NON_UPLOAD_RECORDS' | translate }}
+                </span>
+                <span style="color: red" class="big">
+                  {{totalNonUploadRecords}}
+                </span>
+                <span>
+                  {{'PURCHASEORDER_UPLOAD.LBL_TOTAL_RECORDS' | translate }}
+                </span>
+                <span class="big">
+                  {{totalRecords}}
+                </span>
+                <span>
+                  {{'PURCHASEORDER_UPLOAD.LBL_TOTAL_PO' | translate }}
+                </span>
+                <span class="big">
+                  {{totalPO}}
+                </span>
+              </div>
+            </div>
+
+
+            <div class="table-container clsDivTableHeaderFix scroll-x scroll-ytable">
+              <table class="pagination-table clsTablheaderFix">
+                <thead>
+                  <tr>
+                    <th>
+                      <div class="styled-checkbox-container">
+                        <input class="styled-checkbox" id="checkboxall" type="checkbox" [(ngModel)]="selectedAll"
+                          (click)="selectAll($event);">
+                        <label for="checkboxall"></label>
+                      </div>
+                    </th>
+                    <th>{{'PURCHASEORDER_SUMMARY.LBL_PO_NO' | translate }}</th>
+                    <th class="required">{{ 'EDIT_PURCHASEORDER.LBL_PRODUCT' | translate }}</th>
+                    <th>{{'PURCHASEORDER_SUMMARY.LBL_PRODCUT_DESC' | translate }}</th>
+                    <th>{{ 'EDIT_PURCHASEORDER.LBL_ETD' | translate }}</th>
+                    <th>{{ 'EDIT_PURCHASEORDER.LBL_QUANTITY' | translate }}</th>
+                    <th>{{ 'EDIT_PURCHASEORDER.LBL_DESTINATION_COUNTRY' | translate }}</th>
+                    <th class="required">{{ 'EDIT_PURCHASEORDER.LBL_SUPPLIER' | translate }}</th>
+                    <th>{{ 'EDIT_PURCHASEORDER.LBL_STATUS' | translate }}</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let item of existingpolist;let i = index">
+                    <td>
+
+                      <div class="styled-checkbox-container">
+                        <input class="styled-checkbox" id="checkbox-{{i}}" type="checkbox" [(ngModel)]="item.selected"
+                          (click)="checkIfAllSelected($event,item)">
+                        <label for="checkbox-{{i}}"></label>
+                      </div>
+                    </td>
+                    <td>
+                      <ng-select [items]="poList" [multiple]="false" [closeOnSelect]="true" [searchable]="true"
+                        class="width-150" bindLabel="pono" bindValue="id" disabled="newpolist!=null"
+                        [disabled]="initialLoading"
+                        placeholder="--- {{ 'PURCHASEORDER_SUMMARY.LBL_SELECT' | translate }} ---" appendTo="body"
+                        (change)="onChangePO()" [(ngModel)]="item.poId">
+                        <ng-template ng-option-tmp let-item="item">
+                          <div class="text-wrap">{{ item.pono }}</div>
+                        </ng-template>
+                      </ng-select>
+
+                      <div *ngIf="!checkPOList(item.poId)" class="invalid-feedback" style="display:block">
+                        <div>{{ item.pono}}</div>
+                      </div>
+
+                    </td>
+                    <td>
+                      <ng-select [items]="productList" [multiple]="false" disabled="newpolist!=null" class="width-150"
+                        [closeOnSelect]="true" [searchable]="true" bindLabel="productId" bindValue="id"
+                        (change)="onChangeProduct()" [disabled]="initialLoading"
+                        placeholder="--- {{ 'PURCHASEORDER_SUMMARY.LBL_SELECT' | translate }} ---" appendTo="body"
+                        [(ngModel)]="item.productId">
+                        <ng-template ng-option-tmp let-item="item">
+                          <div class="text-wrap">{{ item.productId }}</div>
+                        </ng-template>
+                      </ng-select>
+
+
+                      <div *ngIf="!checkProductList(item.productId)" class="invalid-feedback" style="display:block">
+                        <div>{{ item.product}}</div>
+                      </div>
+                    </td>
+                    <td class="wordbreak width-180">{{item.productDescription}}</td>
+                    <td>{{item.etd}}</td>
+                    <td>{{item.quantity}}</td>
+                    <td>
+                      <ng-select [items]="destinationCountryList" [multiple]="false" [closeOnSelect]="true"
+                        class="width-150" [searchable]="true" bindLabel="countryName" bindValue="id"
+                        (clear)="clearCountry(item)" (change)="onChangeCountry()" [disabled]="initialLoading"
+                        appendTo="body" placeholder="--- {{ 'PURCHASEORDER_SUMMARY.LBL_SELECT' | translate }} ---"
+                        [(ngModel)]="item.countryId">
+                        <ng-template ng-option-tmp let-item="item">
+                          <div class="text-wrap">{{ item.countryName }}</div>
+                        </ng-template>
+                      </ng-select>
+
+                      <div *ngIf="!checkCountryList(item.countryId)" class="invalid-feedback" style="display:block">
+                        <div>{{ item.destinationCountry}}</div>
+                      </div>
+
+                    </td>
+                    <td>
+                      <ng-select [items]="supplierList" [multiple]="false" [closeOnSelect]="true" [searchable]="true"
+                        class="width-150" bindLabel="name" bindValue="id" (clear)="clearSupplier(item)"
+                        (change)="onChangeSupplier()" appendTo="body"
+                        placeholder="--- {{ 'PURCHASEORDER_SUMMARY.LBL_SELECT' | translate }} ---"
+                        [disabled]="initialLoading" [(ngModel)]="item.supplierId">
+                        <ng-template ng-option-tmp let-item="item">
+                          <div class="text-wrap">{{ item.name }}</div>
+                        </ng-template>
+                      </ng-select>
+
+                      <div *ngIf="!checkSupplierList(item.supplierId)" class="invalid-feedback" style="display:block">
+                        <div>{{ item.supplier}}</div>
+                      </div>
+                    </td>
+                    <td *ngIf="(item.purchaseOrderStatus==1)" style="text-align: center">
+                      <img src="assets/img/correct.svg" alt=" {{'PURCHASEORDER_UPLOAD.LBL_NOT_UPLOADED' | translate }}">
+                    </td>
+
+                    <td *ngIf="(item.purchaseOrderStatus==2)" style="text-align: center">
+                      <img src="assets/img/warning.png" alt=" {{'PURCHASEORDER_UPLOAD.LBL_NOT_UPLOADED' | translate }}">
+                    </td>
+
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <div class="form-action-container marginTop15">
+              <button id="btnExport" *ngIf="isExportButton" class="secondary-cta small"
+                [disabled]="exportDataLoading || initialLoading" (click)="export()">{{ 'EXPENSE_SUMMARY.LBL_EXPORT' |
+                translate }}
+                <span *ngIf="exportDataLoading">
+                  <i class="fa fa-refresh fa-spin" aria-hidden="true"></i>
+                </span>
+              </button>
+              <button id="btnSave" class="primary-cta small" [disabled]="saveButtonLoading || initialLoading"
+                (click)="savePOList()">{{ 'EDIT_PURCHASEORDER.LBL_SAVE' | translate }}
+                <span *ngIf="saveButtonLoading">
+                  <i class="fa fa-refresh fa-spin" aria-hidden="true"></i>
+                </span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>

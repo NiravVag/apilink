@@ -1,0 +1,5 @@
+﻿
+CREATE TABLE [dbo].[SU_Level](
+	[Id] [int] IDENTITY(1,1) NOT FOR REPLICATION NOT NULL PRIMARY KEY,
+	[Level] [nvarchar](50) NOT NULL
+)

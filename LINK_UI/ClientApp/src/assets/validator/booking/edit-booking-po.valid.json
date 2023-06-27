@@ -1,0 +1,103 @@
+{
+    "model": "inspectionbooking.model",
+    "fields": {
+        "poId": [
+            {
+                "type": "required",
+                "fieldType": "N",
+                "ressource": "EDIT_BOOKING.MSG_PO_NO_REQ"
+            }
+        ],
+        "productId": [
+            {
+                "type": "required",
+                "fieldType": "N",
+                "ressource": "EDIT_BOOKING.MSG_PRD_REQ"
+            }
+        ],
+        "productCategoryId": [
+            {
+                "type": "required",
+                "fieldType": "N",
+                "ressource": "EDIT_CUSTOMER_PRODUCT.MSG_PRODUCTCATEGORY_REQ"
+            }
+        ],
+        "productSubCategoryId": [
+            {
+                "type": "required",
+                "fieldType": "N",
+                "ressource": "EDIT_CUSTOMER_PRODUCT.MSG_PRODUCTSUBCATEGORY_REQ"
+            }
+        ],
+        "productCategorySub2Id": [
+            {
+                "type": "required",
+                "fieldType": "N",
+                "ressource": "EDIT_BOOKING.MSG_CUS_PRODUCTCATEGORY_SUB2_REQ"
+            }
+        ],
+        "bookingQuantity": [
+            {
+                "type": "required",
+                "fieldType": "A",
+                "ressource": "EDIT_BOOKING.BookingQty_MSG_REQ"
+            }
+        ],
+        "unit": [
+            {
+                "type": "required",
+                "fieldType": "N",
+                "ressource": "EDIT_BOOKING.Unit_MSG_REQ"
+            }
+        ],
+        "unitCount": [
+            {
+                "type": "required",
+                "fieldType": "N",
+                "ressource": "EDIT_BOOKING.Unit_COUNT_MSG_REQ"
+            }
+        ],
+        "aql": [
+            {
+                "type": "required",
+                "fieldType": "N",
+                "ressource": "EDIT_BOOKING.AQL_MSG_REQ"
+            }
+        ],
+        "etd": [
+            {
+                "type": "required",
+                "fieldType": "N",
+                "ressource": "PURCHASEORDER_SUMMARY.MSG_ETD_REQ"
+            }
+        ],
+        "containerId": [
+            {
+                "type": "required",
+                "fieldType": "N",
+                "ressource": "EDIT_BOOKING.Booking_CONTAINER_REQ"
+            }
+        ],
+        "colorCode": [
+            {
+                "type": "required",
+                "fieldType": "T",
+                "ressource": "EDIT_BOOKING.MSG_COLOR_CODE_REQ"
+            }
+        ],
+        "colorName": [
+            {
+                "type": "required",
+                "fieldType": "T",
+                "ressource": "EDIT_BOOKING.MSG_COLOR_NAME_REQ"
+            }
+        ],
+        "aqlQuantity": [
+            {
+                "type": "required",
+                "fieldType": "T",
+                "ressource": "EDIT_BOOKING.MSG_SAMPLE_QTY_REQ"
+            }
+        ]
+    }
+}

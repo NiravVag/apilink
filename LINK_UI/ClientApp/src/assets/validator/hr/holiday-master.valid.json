@@ -1,0 +1,28 @@
+{
+ "model": "holiday-master.model",
+  "fields": {
+    "countryId": [
+      {
+        "type": "required",
+        "fieldType": "N",
+        "ressource": "HOLIDAY_MASTER.MSG_COUNTRY_REQ"
+      }
+    ],
+    "branchId": [
+      {
+        "type": "required",
+        "fieldType": "N",
+        "ressource": "HOLIDAY_MASTER.MSG_LOCATION_REQ"
+      }
+    ],
+    "year": [
+      {
+        "type": "required",
+        "fieldType": "N",
+        "ressource": "HOLIDAY_MASTER.MSG_YEAR_REQ"
+      }
+    ]
+
+  }
+
+}

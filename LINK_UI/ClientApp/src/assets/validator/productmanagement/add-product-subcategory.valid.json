@@ -1,0 +1,18 @@
+{
+    "model": "AddProductSubCategoryModel",
+    "fields": {
+      "name": [
+        {
+          "type": "required",
+          "ressource": "PRODUCT_SUB_CATEGORY.MSG_NAME_REQ"
+        }
+      ],
+      "productCategoryId": [
+        {
+          "type": "required",
+          "fieldType": "N",
+          "ressource": "PRODUCT_SUB_CATEGORY.MSG_CAT_REQ"
+        }
+      ]
+    }
+}

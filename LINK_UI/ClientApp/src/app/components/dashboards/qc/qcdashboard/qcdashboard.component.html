@@ -1,0 +1,457 @@
+<div class="main-wrapper">
+	<!-- <app-header></app-header> -->
+	<div class="wrapper dashboard-wrapper mandays-dashboard-wrapper">
+		<div class="my-dashboard-container">
+			<div class="dashboard-body dashbaord-placeholder-container maydays-dashboard-placeholder-container"*ngIf="isLoading">
+				<div class="title-container row">
+					<div class="col-md-12 col-lg-12 col-xl-1">
+						<div class="content-container">
+							<div class="rect-title animate"></div>
+						</div>
+					</div>
+					<div class="col-md-12 col-lg-12 col-xl-11 text-sm-right">
+					</div>
+				</div>
+				<div class="row mandays-dashboard-container">
+					<div class="col-sm-12">
+						<div class="dashboard-stats-card">
+							<img src="assets/images/donut-placeholder.png" alt="graph">
+							<div class="content-container">
+								<div class="rect animate"></div>
+							</div>
+						</div>
+						<div class="dashboard-stats-card">
+							<img src="assets/images/donut-placeholder.png" alt="graph">
+							<div class="content-container">
+								<div class="rect animate"></div>
+							</div>
+						</div>
+						<div class="dashboard-stats-card">
+							<img src="assets/images/donut-placeholder.png" alt="graph">
+							<div class="content-container">
+								<div class="rect animate"></div>
+							</div>
+						</div>
+						<div class="dashboard-stats-card">
+							<img src="assets/images/donut-placeholder.png" alt="graph">
+							<div class="content-container">
+								<div class="rect animate"></div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="row mandays-dashboard-graph-wrapper">
+					<div class="col-lg-7 grid-column col-md-12">
+						<div class="dashboard-graph-container">
+							<div class="row graph-body">
+								<div class="col-sm-4">
+									<img class="graph-icon" src="assets/images/donut-placeholder.png" alt="graph">
+								</div>
+								<div class="col-sm-8">
+									<div class="legend-wrapper">
+										<div class="content-container">
+											<div class="rect width250 animate"></div>
+											<div class="rect width80 animate"></div>
+										</div>
+										<div class="legend-item  content-container">
+											<div class="label">
+												<span class="tile"></span><span class="text rect width100 animate"></span>
+											</div>
+											<span class="count rect width60 animate"></span>
+										</div>
+										<div class="legend-item  content-container">
+											<div class="label">
+												<span class="tile"></span><span class="text rect width100 animate"></span>
+											</div>
+											<span class="count rect width60 animate"></span>
+										</div>
+										<div class="legend-item  content-container">
+											<div class="label">
+												<span class="tile"></span><span class="text rect width100 animate"></span>
+											</div>
+											<span class="count rect width60 animate"></span>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="dashboard-graph-container">
+							<div class="row graph-body">
+								<div class="col-sm-4">
+									<img class="graph-icon" src="assets/images/donut-placeholder.png" alt="graph">
+								</div>
+								<div class="col-sm-8">
+									<div class="legend-wrapper">
+										<div class="content-container">
+											<div class="rect width250 animate"></div>
+											<div class="rect width80 animate"></div>
+										</div>
+										<div class="legend-item content-container">
+											<div class="label">
+												<span class="tile"></span><span class="text rect width100 animate"></span>
+											</div>
+											<span class="count rect width60 animate"></span>
+										</div>
+										<div class="legend-item content-container">
+											<div class="label">
+												<span class="tile"></span><span class="text rect width100 animate"></span>
+											</div>
+											<span class="count rect width60 animate"></span>
+										</div>
+										<div class="legend-item content-container">
+											<div class="label">
+												<span class="tile"></span><span class="text rect width100 animate"></span>
+											</div>
+											<span class="count rect width60 animate"></span>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-lg-5 grid-column col-md-12">
+						<div class="dashboard-graph-container single-big">
+							<div class="graph-head">
+								<div class="graph-title-container">
+									<div class="content-container">
+										<div class="rect width80 animate"></div>
+									</div>
+								</div>
+								<div class="graph-filter filter-input-group text-right">
+									<div class="content-container">
+										<div class="rect width80 animate"></div>
+									</div>
+								</div>
+							</div>
+							<div class="row graph-body">
+								<div class="col-sm-12 text-center mb-4">
+									<img class="graph-icon" src="assets/images/donut-placeholder.png" alt="graph">
+								</div>
+								<div class="col-sm-12">
+									<div class="legend-wrapper no-left-spacing">
+										<div class="legend-item content-container">
+											<div class="label">
+												<span class="tile"></span><span class="text rect width100 animate"></span>
+											</div>
+											<span class="count rect width60 animate"></span>
+											<span class="percent">
+												<span class="rect width60 animate"></span>
+											</span>
+										</div>
+										<div class="legend-item content-container">
+											<div class="label">
+												<span class="tile"></span><span class="text rect width100 animate"></span>
+											</div>
+											<span class="count rect width60 animate"></span>
+											<span class="percent">
+												<span class="rect width60 animate"></span>
+											</span>
+										</div>
+										<div class="legend-item content-container">
+											<div class="label">
+												<span class="tile"></span><span class="text rect width100 animate"></span>
+											</div>
+											<span class="count rect width60 animate"></span>
+											<span class="percent">
+												<span class="rect width60 animate"></span>
+											</span>
+										</div>
+										<div class="legend-item content-container">
+											<div class="label">
+												<span class="tile"></span><span class="text rect width100 animate"></span>
+											</div>
+											<span class="count rect width60 animate"></span>
+											<span class="percent">
+												<span class="rect width60 animate"></span>
+											</span>
+										</div>
+										<div class="legend-item content-container">
+											<div class="label">
+												<span class="tile"></span><span class="text rect width100 animate"></span>
+											</div>
+											<span class="count rect width60 animate"></span>
+											<span class="percent">
+												<span class="rect width60 animate"></span>
+											</span>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="dashboard-body qc-dashboard" *ngIf="!isLoading">
+				<div class="row">
+					<div class="col-12">
+						<div class="stats-header">
+							<div class="nagivate-reset">
+								{{'QC_DASHBOARD.LBL_TODAY' | translate}} &nbsp;&nbsp;<span>{{dashboardCalendar.todayCount}}</span>
+							</div>
+							<ul class="qc-stats-list">
+								<li>{{'QC_DASHBOARD.LBL_TOMORROW' | translate}}<span>{{dashboardCalendar.tomorrowCount}}</span></li>
+								<li>{{'QC_DASHBOARD.LBL_UPCOMING_ALLOCATED' | translate}}<span>{{dashboardCalendar.upcomingAllocatedCount}}</span></li>
+								 
+							</ul>
+							 
+						</div>
+					</div>
+					<div class="col-12">
+						<div class="qc-calendar-wrapper">
+							<div class="navigate navigate-backward" (click)="slidePrevious()">
+								<img src="assets/images/cta-up-arrow-grey.svg" alt="">
+							</div>
+							<div class="qc-calendar-body">
+								<div class="qc-calendar-slider-container"  #slideContainer>
+									<ng-template ngFor let-iteminfo [ngForOf]="qcCalendar" let-i="index"> 
+									  <div [ngClass]="iteminfo.dayClass">
+										<div class="slide-head">
+											<p>{{iteminfo.calendarDayName}} <span>{{iteminfo.calendarDate}}  {{iteminfo.calendarMonthName}}</span></p>
+										</div>
+										<div class="slide-body" *ngIf="iteminfo.qcCalendarSchedule.length>0">
+											<div class="qc-card" *ngFor="let item of iteminfo.qcCalendarSchedule">
+												<div class="qc-card-head">
+													<div [ngClass]="item.bookingIdClass" [attr.data-tooltip]="item.tooltipIds">{{item.bookingIds}}</div>
+													<img class="booking-file" (click)="RedirectToFbReports()" data-tooltip="Report"
+													src="assets/images/cta-file-pink.svg" alt="Report">
+												 
+												</div>
+												<p class="heading-two">{{item.factoryName}}</p>
+												<p class="heading-three">{{item.factoryAddress}}</p>
+											</div>
+										</div>
+										<div class="slide-body no-data" *ngIf="iteminfo.qcCalendarSchedule.length==0">
+											<div class="qc-card">
+												<img src="assets/images/no-inspection.svg" alt="">
+												<p class="heading-one">NO INSPECTION SCHEDULED</p>
+											</div>
+										</div>
+									</div>
+									</ng-template>
+								</div>
+							</div>
+							<div class="navigate navigate-forward" (click)="slideNext()">
+								<img src="assets/images/cta-up-arrow-grey.svg" alt="">
+							</div>
+						</div>
+					</div>
+					<div class="col-12 text-right qc-filter-container">
+						<div class="filter-cta style-2 common-tooltip" *ngIf="!filterOpen" (click)="toggleFilter()" data-tooltip="Filter">
+							<img src="assets/images/cta-filter-grey.svg" alt="">
+						</div>
+						<div class="filter-cta filter-active" *ngIf="filterOpen" (click)="toggleFilter()" data-tooltip="Cancel">
+							<img src="assets/images/cta-close-white.svg" alt="">
+						</div>
+						<!-- <div class="my-input-group qc-filter-dropdown">
+							<ng-select class="multiple small" multiple="true" bindLabel="name" bindValue="id" [clearable]="false" placeholder="Select" appendTo="body"></ng-select>
+						</div> -->
+					</div>
+					<div class="col-12">
+					<div class="filter-container style-2" [@expandCollapse] = "filterOpen ? 'open' : 'close'" [@.disabled]="isMobile">
+						<div class="my-dashboard-container" style="padding-left: 28px;">
+							<div class="row">
+								<div class="col-sm-3 mobile-margin-top-15">
+									<div class="my-input-group">
+										<label for="">{{'QC_DASHBOARD.LBL_SERVICE_DATE' | translate}}</label>
+										<div class="d-flex">
+											<div class="calendar-wrapper inline mr-2">
+												<input type="text" maxlength="10" readonly=readonly container="body"
+													[(ngModel)]="model.serviceDateFrom" ngbDatepicker
+													placeholder="{{  'QC_DASHBOARD.LBL_SERVICE_DATE_FROM'  | translate }}"
+													#sdf="ngbDatepicker" (click)="sdf.toggle()"
+													[ngClass]="{ 'is-invalid':  !validator.isValid('serviceDateFrom')}">
+													<img src="assets/images/cta-close-grey.svg" alt="" class="close-icon" (click)="clearDateInput('Fromdate')" *ngIf="model.serviceDateFrom">
+												<img src="assets/images/calendar-icon.svg" alt=""
+													class="calendar-icon" (click)="sdf.toggle()">
+											</div>
+											<div class="calendar-wrapper inline">
+												<input type="text" maxlength="10" readonly=readonly container="body"
+														[ngClass]="{ 'is-invalid':  !validator.isValid('serviceDateTo')}"
+														placeholder="{{  'QC_DASHBOARD.LBL_SERVICE_DATE_To'  | translate }}"
+														[(ngModel)]="model.serviceDateTo" ngbDatepicker
+														#sdt="ngbDatepicker" (click)="sdt.toggle()">
+													<img src="assets/images/cta-close-grey.svg" alt="" class="close-icon" (click)="clearDateInput('Todate')" *ngIf="model.serviceDateTo">
+													<img src="assets/images/calendar-icon.svg" alt=""
+														class="calendar-icon" (click)="sdt.toggle()">
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="col-sm-3 mobile-margin-top-15 marginTop20 align-self-center text-right mobile-hide">
+									<button class="category-cta small mr-2 common-tooltip common-tooltip-top-2" data-tooltip="Reset"
+									(click)="reset()">
+									<img src="assets/images/reload-new.svg" alt="Reset">  
+									<span>{{'COMMON.LBL_RESET'| translate}}</span>
+								  </button>
+								  <button class="primary-cta small float-right"
+								  (click)="search()"  >
+								  {{'COMMON.LBL_SEARCH' | translate }}</button>
+								</div>
+								<div class="col-12 filter-cta-container">
+									<button class="primary-cta small float-right" (click)="search();toggleFilter()">{{'COMMON.LBL_SEARCH' | translate }}</button>
+									<button class="tertiary-cta small float-right mr-2" (click)="toggleFilter()">{{'COMMON.LBL_RESET'| translate}}</button>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+					<div class="col-12">
+						<div class="qc-stats-container">
+							<div class="stats-card">
+								<img class="icon" src="assets/images/qc-customer.svg" alt="">
+								<div class="stats-info">
+									<p class="title">{{'QC_DASHBOARD.LBL_CUSTOMERS' | translate}}</p>
+									<p class="count">{{dashboardCount.customerCount}}</p>
+								</div>
+							</div>
+							<div class="stats-card">
+								<img class="icon" src="assets/images/qc-factory.svg" alt="">
+								<div class="stats-info">
+									<p class="title">{{'QC_DASHBOARD.LBL_FACTORIES' | translate}}</p>
+									<p class="count">{{dashboardCount.factoryCount}}</p>
+								</div>
+							</div>
+							<div class="stats-card">
+								<img class="icon" src="assets/images/qc-inspection.svg" alt="">
+								<div class="stats-info">
+									<p class="title">{{'QC_DASHBOARD.LBL_INSPECTIONS' | translate}}</p>
+									<p class="count">{{dashboardCount.inspectionCount}}</p>
+								</div>
+							</div>
+							<div class="stats-card">
+								<img class="icon" src="assets/images/qc-report.svg" alt="">
+								<div class="stats-info">
+									<p class="title">{{'QC_DASHBOARD.LBL_REPORTS' | translate}}</p>
+									<p class="count">{{dashboardCount.reportCount}}</p>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-12">
+						<div class="qc-graph-wrapper">
+							<div class="qc-graph-container">
+								<div class="graph-head">
+									<div class="graph-title-container">
+										<h3 class="title">{{'QC_DASHBOARD.LBL_PRODUCTIVITY' | translate}}</h3>
+									</div>
+								</div>
+								<div class="row graph-body"	*ngIf="!masterModel.isProductivityChartRender">
+									<div class="col-md-6 col-lg-6 col-xl-6 mb-3 mb-xl-0">
+										<img src="assets/images/graph-nodata.svg" alt="no data" class="ml-xl-4">
+									</div>
+									<div class="col-md-6 col-lg-6 col-xl-6 vertical-center">
+										<div class="no-data-wrapper">
+											<img src="assets/images/empty-bucket.svg" alt="no data" class="icon">
+											<h4 class="no-data-title">
+												{{'QC_DASHBOARD.LBL_NO_DATA_FOUND' | translate}}</h4>
+											<p class="no-data-text"> {{'QC_DASHBOARD.LBL_NO_DATA'| translate}}</p>
+										</div>
+									</div>
+								</div>
+								<div class="row graph-body" *ngIf="masterModel.isProductivityChartRender">
+									<div class="col-md-12 col-lg-12 col-xl-12 mb-3 mb-xl-0">
+									<ng-container *ngIf="masterModel.productivityChartLoading">
+										<div class="loadingChart"></div>
+									</ng-container>
+									<div id="productivityGraph" style="width: 100%; height: 200px"></div>
+								</div>
+								</div>
+							</div>
+							<div class="qc-graph-container">
+								<div class="graph-head">
+									<div class="graph-title-container">
+										<h3 class="title">{{'QC_DASHBOARD.LBL_REJECTION_RATE' | translate}}</h3>
+									</div>
+								</div>
+
+								<div class="row graph-body"	*ngIf="QcRejectionChartModel.inspectedBooking==0">
+									<div class="col-md-6 col-lg-6 col-xl-6 mb-3 mb-xl-0">
+										<img src="assets/images/graph-nodata.svg" alt="no data" class="ml-xl-4">
+									</div>
+									<div class="col-md-6 col-lg-6 col-xl-6 vertical-center">
+										<div class="no-data-wrapper">
+											<img src="assets/images/empty-bucket.svg" alt="no data" class="icon">
+											<h4 class="no-data-title">
+												{{'QC_DASHBOARD.LBL_NO_DATA_FOUND' | translate}}</h4>
+											<p class="no-data-text"> {{'QC_DASHBOARD.LBL_NO_DATA'| translate}}</p>
+										</div>
+									</div>
+								</div>	
+
+
+								<div class="row graph-body" *ngIf="QcRejectionChartModel.inspectedBooking!=0">
+									<div class="col-md-12 col-lg-12 col-xl-6 mb-3 mb-xl-0">
+										<ng-container *ngIf="masterModel.rejectionChartLoading">
+											<div class="loadingChart"></div>
+										</ng-container>
+										<div id="rejectionChart" style="width: 100%; height: 200px"></div>
+									</div>
+									<div class="col-md-12 col-lg-12 col-xl-6 vertical-center">
+									<div class="legend-container">
+										<div class="legend-title for-qc">
+											<span>{{'QC_DASHBOARD.LBL_INSPECTIONS_DONE' | translate}}</span>
+											<p class="count">{{QcRejectionChartModel.inspectedBooking}}</p>
+										</div>
+										<div class="legend-wrapper two-column">
+											<div class="legend-item">
+												<div class="label">
+													<span class="tile" style="background-color: #68b8dc"></span><span class="text">{{'QC_DASHBOARD.LBL_API_REJECTION' | translate}}</span>
+												</div>
+												<span class="count">{{QcRejectionChartModel.rejectionBooking}}</span>
+											</div>
+											<div class="legend-item">
+												<div class="label">
+													<span class="tile" style="background-color: #6794dd"></span><span class="text">{{'QC_DASHBOARD.LBL_YOUR_REJECTION' | translate}}</span>
+												</div>
+												<span class="count">{{QcRejectionChartModel.qcRejectionBooking}}</span>
+											</div>
+										</div>
+										<div class="legend-title for-qc pt-2">
+											<span>{{'QC_DASHBOARD.LBL_AVERAGE_REJECTIONS' | translate}} :</span>
+											<span class="count">{{QcRejectionChartModel.qcRejectionPercentage}}%</span>
+										</div>
+									</div>
+								</div>
+								</div>
+							</div>
+							<div class="qc-graph-container">
+								<div class="graph-head">
+									<div class="graph-title-container">
+										<h3 class="title">{{'QC_DASHBOARD.LBL_CLAIMS_COMPLAINTS' | translate}}</h3>
+									</div>
+								</div>
+								 <div class="graph-body">
+									<div class="inspection-details">
+										 <div class="col-md-12 col-lg-12 col-xl-12 mb-3 mb-xl-0 vertical-center">
+									<div class="error-container">
+									<img src="assets/images/no-result.svg" alt="" class="thumbnail">
+									<h4 class="error-title">{{ 'QC_DASHBOARD.LBL_NO_DATA_FOUND' | translate }}
+									</h4>
+								</div>
+								</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="footer independent">
+				<div class="column">
+					<p class="text">© 2019  All rights reserved. api - hk.com</p>
+				</div>
+				<div class="column">
+					<ul class="footer-item">
+						<li><a href="">User Guide</a></li>
+						<li><a href="">Contact</a></li>
+						<li><a href="">Help</a></li>
+						<li><a href="">Terms</a></li>
+					</ul>
+				</div>
+			</div>
+		</div>
+	</div>
+	 
+</div>
+ 
+ 

@@ -1,0 +1,436 @@
+<div class="main-wrapper">
+  <div class="wrapper dashboard-wrapper">
+    <div class="my-container">
+      <div class="master-body">
+        <div class="title-container">
+          <div class="header-back-button" *ngIf="fromSummary && !savedataloading && !initialLoading">
+            <img src="assets/images/back-red.png" alt="back" (click)="this.return('posearch/purchaseorder-summary');">
+          </div>
+          <h3 class="main-title" *ngIf="poModel.id==0">
+            {{ 'EDIT_PURCHASEORDER.ADD_TITLE' | translate }}
+          </h3>
+          <h3 class="main-title" *ngIf="poModel.id != 0">
+            {{ 'EDIT_PURCHASEORDER.EDIT_TITLE' | translate }}
+          </h3>
+        </div>
+        <div class="content-container">
+          <h4 class="container-head">{{ 'EDIT_PURCHASEORDER.LBL_MAIN' | translate }}</h4>
+          <div class="formPadding">
+            <div class="row marginTop15">
+              <div class="col-sm-3">
+                <div class="my-input-group">
+                  <label class="control-label required">{{ 'EDIT_PURCHASEORDER.LBL_PONO' | translate }}</label>
+                  <input [(ngModel)]="poModel.pono" [ngClass]="{ 'is-invalid':  !validator.isValid('pono')}" type="text"
+                    maxlength="300" placeholder="{{ 'EDIT_PURCHASEORDER.LBL_PONO' | translate }}" />
+                  <div *ngIf="!validator.isValid('pono')" class="invalid-feedback">
+                    <div *ngFor="let error of validator.getErrors('pono')">{{ error | translate }}</div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-sm-3 mobile-margin-top-15">
+                <div class="my-input-group">
+                  <label class="control-label required">{{ 'PURCHASEORDER_SUMMARY.LBL_CUSTOMER_LIST' | translate
+                    }}</label>
+                  <ng-select appendTo="body" [items]="listModel.customerList" [virtualScroll]="true" appendTo="body"
+                    [loading]="listModel.customerLoading" bindLabel="name" bindValue="id" (change)="onChangeCustomer()"
+                    placeholder="--- {{ (listModel.customerList!=null && listModel.customerList.length!=0? 'COMMON.LBL_SELECT':'COMMON.LBL_NO_DATA' ) | translate }} ---"
+                    [typeahead]="listModel.customerInput" [minTermLength]="3" [(ngModel)]="poModel.customerId"
+                    [ngClass]="{ 'is-invalid':  !validator.isValid('customerId')}"
+                    [multiple]="false" (clear)="clearCustomer()" [clearable]="false" (scrollToEnd)="getCustomerData()"
+                    #select>
+                    <ng-template ng-option-tmp let-item="item">
+                      <div class="text-wrap"><span>{{item.name}}</span></div>
+                    </ng-template>
+                  </ng-select>
+                  <div *ngIf="!validator.isValid('customerId')" class="invalid-feedback" style="display:block">
+                    <div *ngFor="let error of validator.getErrors('customerId')">{{ error | translate }}</div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-sm-3">
+                <div class="my-input-group">
+                  <label class="required">{{ 'EDIT_PURCHASEORDER.LBL_SUPPLIER' | translate }}</label>
+                  <ng-select class="multiple" appendTo="body" [items]="purchaseOrderMaster.supplierList"
+                    [virtualScroll]="true" [loading]="purchaseOrderMaster.supplierLoading" bindLabel="name"
+                    bindValue="id" (clear)="clearSupplier()"
+                    [ngClass]="{ 'is-invalid':  !validator.isValid('supplierIds')}"
+                    placeholder="--- {{ (purchaseOrderMaster.supplierList!=null && purchaseOrderMaster.supplierList.length!=0? 'COMMON.LBL_SELECT':'COMMON.LBL_NO_DATA' ) | translate }} ---"
+                    [typeahead]="purchaseOrderMaster.supplierInput" [minTermLength]="3"
+                    [(ngModel)]="poModel.supplierIds" [multiple]="true" (scrollToEnd)="getSupplierData()" #select>
+                    <ng-template ng-option-tmp let-item="item">
+                      <div class="text-wrap"><span>{{item.name}}</span></div>
+                    </ng-template>
+                  </ng-select>
+                  <div *ngIf="!validator.isValid('supplierIds')" class="invalid-feedback">
+                    <div *ngFor="let error of validator.getErrors('supplierIds')">{{ error | translate }}</div>
+                  </div>
+                </div>
+
+              </div>
+
+              <div class="col-sm-3">
+                <div class="my-input-group">
+                  <label class="control-label">{{ 'EDIT_PURCHASEORDER.LBL_FACTORY' | translate }}</label>
+                  <ng-select class="multiple" appendTo="body" [items]="purchaseOrderMaster.factoryList"
+                    [virtualScroll]="true" [loading]="purchaseOrderMaster.factoryLoading" bindLabel="name"
+                    bindValue="id" (clear)="clearFactory()"
+                    placeholder="--- {{ (purchaseOrderMaster.factoryList!=null && purchaseOrderMaster.factoryList.length!=0? 'COMMON.LBL_SELECT':'COMMON.LBL_NO_DATA' ) | translate }} ---"
+                    [typeahead]="purchaseOrderMaster.factoryInput" [minTermLength]="3" [(ngModel)]="poModel.factoryIds"
+                    [multiple]="true" (scrollToEnd)="getFactoryData()" #select>
+                    <ng-template ng-option-tmp let-item="item">
+                      <div class="text-wrap"><span>{{item.name}}</span></div>
+                    </ng-template>
+                  </ng-select>
+                </div>
+              </div>
+
+
+             
+
+            </div>
+            <div class="row marginTop15">
+              <div class="col-sm-3 mobile-margin-top-15" *ngIf="!listModel.isCustomer">
+                <div class="my-input-group">
+                  <label class="control-label">{{ 'EDIT_PURCHASEORDER.LBL_DEPARTMENT' | translate }}</label>
+                  <ng-select [items]="departmentList" [multiple]="false" [closeOnSelect]="true" [searchable]="true"
+                    bindLabel="name" [loading]="deptLoading" bindValue="id"
+                    placeholder="--- {{ 'PURCHASEORDER_SUMMARY.LBL_SELECT' | translate }} ---"
+                    [(ngModel)]="poModel.departmentId" [ngClass]="{ 'is-invalid': !validator.isValid('departmentId')}">
+                    <ng-template ng-option-tmp let-item="item">
+                      <div class="text-wrap">{{ item.name }}</div>
+                    </ng-template>
+                  </ng-select>
+                </div>
+              </div>
+              <div class="col-sm-3" *ngIf="!listModel.isCustomer">
+                <div class="my-input-group">
+                  <label class="control-label">{{ 'EDIT_PURCHASEORDER.LBL_BRAND' | translate }}</label>
+                  <ng-select [items]="brandList" [multiple]="false" [closeOnSelect]="true" [searchable]="true"
+                    [loading]="brandLoading" bindLabel="name" bindValue="id"
+                    placeholder="--- {{ 'PURCHASEORDER_SUMMARY.LBL_SELECT' | translate }} ---"
+                    [(ngModel)]="poModel.brandId" [ngClass]="{ 'is-invalid': !validator.isValid('brandId')}">
+                    <ng-template ng-option-tmp let-item="item">
+                      <div class="text-wrap">{{ item.name }}</div>
+                    </ng-template>
+                  </ng-select>
+                </div>
+              </div>
+
+              <div class="col-sm-3">
+                <div class="my-input-group">
+                  <label class="control-label">{{ 'EDIT_PURCHASEORDER.LBL_CUSTOMER_REFERENCE_PO' | translate }}</label>
+                  <input [(ngModel)]="poModel.customerReferencePo" type="text" maxlength="300"
+                    placeholder="{{ 'EDIT_PURCHASEORDER.LBL_CUSTOMER_REFERENCE_PO' | translate }}" />
+                </div>
+              </div>
+              <div class="col-sm-3 mobile-margin-top-15" *ngIf="!listModel.isCustomer">
+                <div class="my-input-group">
+                  <label class="control-label">{{ 'EDIT_PURCHASEORDER.LBL_OFFICE' | translate }}</label>
+                  <ng-select [items]="officeList" [multiple]="false" [closeOnSelect]="true" [searchable]="true"
+                    bindLabel="name" bindValue="id" [loading]="initialLoading"
+                    placeholder="--- {{ 'PURCHASEORDER_SUMMARY.LBL_SELECT' | translate }} ---"
+                    [(ngModel)]="poModel.officeId" [ngClass]="{ 'is-invalid': !validator.isValid('officeId')}">
+                    <ng-template ng-option-tmp let-item="item">
+                      <div class="text-wrap">{{ item.name }}</div>
+                    </ng-template>
+                  </ng-select>
+                </div>
+              </div>
+
+           
+
+
+            </div>
+            <div class="row marginTop15">
+              <div class="col-sm-6">
+                <div class="my-input-group mobile-margin-top-15">
+                  <label class="control-label">{{ 'EDIT_PURCHASEORDER.LBL_CUSTOMER_REMARKS' | translate }}</label>
+                  <textarea [(ngModel)]="poModel.customerRemarks"
+                    placeholder="{{ 'EDIT_PURCHASEORDER.LBL_CUSTOMER_REMARKS' | translate }}"></textarea>
+                </div>
+              </div>
+              <div class="col-sm-6 mobile-margin-top-15" *ngIf="listModel.isInternalUser">
+                <div class="my-input-group">
+                  <label class="control-label">{{ 'EDIT_PURCHASEORDER.LBL_INTERNAL_REMARKS' | translate }}</label>
+                  <textarea [(ngModel)]="poModel.internalRemarks"
+                    placeholder="{{ 'EDIT_PURCHASEORDER.LBL_INTERNAL_REMARKS' | translate }}"></textarea>
+                </div>
+              </div>
+            </div>
+
+            <div class="row marginTop15">
+              <div class="col-sm-8">
+                <div class="my-input-group">
+                  <label>{{ 'EDIT_PURCHASEORDER.PO_ATTACHMENT' | translate }}</label>
+                </div>
+              </div>
+
+            </div>
+
+            <div class="row marginTop15">
+              <ng-container
+                *ngIf="poModel.purchaseOrderAttachments != null && poModel.purchaseOrderAttachments.length>0">
+                <div class="col-lg-3">
+                  <div class="drag-drop-files-container">
+                    <div class="file" *ngFor="let file of poModel.purchaseOrderAttachments ;  let j = index">
+                      <a (click)="getFile(file)"><img src="assets/images/uploaded-files.svg" class="icon" alt=""></a>
+                      <div class="info">
+                        <h4 class="file-title">{{file.fileName}}</h4>
+                        <!-- <p class="file-text">04 MB</p> -->
+                      </div>
+                      <img src="assets/images/red-close.svg" alt="" (click)="removeAttachment(j)" class="close">
+                    </div>
+                  </div>
+                </div>
+              </ng-container>
+              <div class="col-sm-8 col-md-12 col-lg-5">
+                <app-drag-drop [fileLimit]="uploadLimit" [fileSizeLimit]="fileSize"
+                  [fileExtension]="uploadFileExtensions" (fileUpload)="selectFiles($event)"></app-drag-drop>
+              </div>
+            </div>
+
+          </div>
+
+
+          <div class="tab-container">
+            <ul class="tab-switch-container">
+              <li class="active">{{ 'EDIT_PURCHASEORDER.TAB_HEADER' | translate }}</li>
+            </ul>
+            <div class="tab-content-container">
+              <div class="tab-content active" id="tab1">
+                <div class="row marginTop10 marginBottom10">
+                  <div class="col-sm-3">
+                    <div class="my-input-group">
+                      <label class="control-label">{{ 'EDIT_PURCHASEORDER.LBL_DESTINATION_COUNTRY' | translate
+                        }}</label>
+
+                      <ng-select appendTo="body" [items]="listModel.countryList" [virtualScroll]="true" appendTo="body"
+                        [loading]="listModel.countryLoading" bindLabel="name" bindValue="id"
+                        placeholder="--- {{ (listModel.countryList!=null && listModel.countryList.length!=0? 'COMMON.LBL_SELECT':'COMMON.LBL_NO_DATA' ) | translate }} ---"
+                        [typeahead]="listModel.countryInput" [minTermLength]="3"
+                        [(ngModel)]="poModel.destinationCountryId" [multiple]="false" (scrollToEnd)="getCountryData()"
+                        (change)="applyCountryToPODetail($event)" #select>
+                        <ng-template ng-option-tmp let-item="item">
+
+                          <div class="text-wrap"><span>{{item.name}}</span></div>
+                        </ng-template>
+                      </ng-select>
+                    </div>
+                  </div>
+                  <!--   <div class="col-sm-3">
+                    <div class="my-input-group">
+                      <label class="control-label">{{ 'EDIT_PURCHASEORDER.LBL_SUPPLIER' | translate }}</label>
+
+                      <ng-select appendTo="body" [items]="listModel.supplierList" [virtualScroll]="true" appendTo="body"
+                        [loading]="listModel.supplierLoading" bindLabel="name" bindValue="id"
+                        placeholder="--- {{ (listModel.supplierList!=null && listModel.supplierList.length!=0? 'COMMON.LBL_SELECT':'COMMON.LBL_NO_DATA' ) | translate }} ---"
+                        [typeahead]="listModel.supplierInput" [minTermLength]="3" [(ngModel)]="poModel.supplierId"
+                        [multiple]="false" (scrollToEnd)="getSupplierData()" (change)="applySupplierToPODetail($event)"
+                        #select (clear)="clearSupplier()">
+                        <ng-template ng-option-tmp let-item="item">
+                          <div class="text-wrap">{{ item.name }}</div>
+                        </ng-template>
+                      </ng-select>
+                    </div>
+                  </div> -->
+                  <div class="my-input-group col-lg-3">
+                    <label for="">{{ 'EDIT_PURCHASEORDER.LBL_ETD' | translate }}</label>
+                    <div class="calendar-wrapper ">
+                      <input type="text" maxlength="10" (click)="rsd.toggle()"
+                        placeholder="{{ 'EDIT_PURCHASEORDER.LBL_ETD' | translate }}" [(ngModel)]="poModel.etd"
+                        ngbDatepicker #rsd="ngbDatepicker" (ngModelChange)="applyETDToPODetail($event)"
+                        container='body'>
+                      <img src="assets/images/calendar-icon.svg" alt="" class="calendar-icon" (click)="rsd.toggle()">
+                    </div>
+                  </div>
+
+                </div>
+
+                <div class="table-action mobile-action desktop-hide tablet-hide">
+                  <button class="secondary-cta x-small" (click)="addPurchaseOrderDetail()">
+                    {{ 'EDIT_PURCHASEORDER.LBL_ADD_PO_DETAIL' | translate }}</button>
+                </div>
+                <div class="row" *ngIf="model.totalCount">
+                  <div class="col-6 col-sm-3 col-xl-2 d-flex">
+                    <p class="search-trigger-heading" [innerHtml]="showPaginationText()"></p>
+                  </div>
+                </div>
+                <br>
+                <table class="info-table">
+                  <thead>
+                    <tr>
+                      <th class="required">{{ 'EDIT_PURCHASEORDER.LBL_PRODUCT' | translate }}</th>
+                      <th style="width:25%">{{ 'EDIT_PURCHASEORDER.LBL_PRODUCTDESCRIPTION' | translate }}</th>
+                      <th>{{ 'EDIT_PURCHASEORDER.LBL_DESTINATION_COUNTRY' | translate }}</th>
+                      <th>{{ 'EDIT_PURCHASEORDER.LBL_ETD' | translate }}</th>
+                      <!-- <th class="required">{{ 'EDIT_PURCHASEORDER.LBL_SUPPLIER' | translate }}</th>
+                      <th>{{ 'EDIT_PURCHASEORDER.LBL_FACTORY' | translate }}</th> -->
+                      <!-- <th>{{ 'EDIT_PURCHASEORDER.LBL_FACTORY_REFERENCE' | translate }}</th> -->
+                      <th class="required">{{ 'EDIT_PURCHASEORDER.LBL_QUANTITY' | translate }}</th>
+
+                      <th></th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr *ngFor="let item of poDetailValidators;  let i = index">
+                      <td>
+                        <div class="my-input-group">
+                          <label for="">{{ 'EDIT_PURCHASEORDER.LBL_PRODUCT' | translate }}</label>
+                          <ng-select appendTo="body" [items]="item.poDetails.productList" [virtualScroll]="true"
+                            [loading]="item.poDetails.productLoading" bindLabel="productId" bindValue="id"
+                            class="width-180" [disabled]="(item.poDetails.bookingStatus != 3)"
+                            placeholder="--- {{ (item.poDetails.productList!=null && item.poDetails.productList.length!=0? 'COMMON.LBL_SELECT':'COMMON.LBL_NO_DATA' ) | translate }} ---"
+                            [typeahead]="item.poDetails.productInput" [minTermLength]="3"
+                            [(ngModel)]="item.poDetails.productId" [multiple]="false"
+                            (scrollToEnd)="getProductListData(item,true)"
+                            (change)="changeProduct(item.poDetails,$event)" (clear)="clearProduct(item)" #select
+                            [ngClass]="{ 'is-invalid':  !item.validator.isValid('item.poDetails.productId')}">
+                            <ng-template ng-option-tmp let-item="item">
+                              <div class="text-wrap">{{ item.productId }}</div>
+                            </ng-template>
+                          </ng-select>
+                          <div *ngIf="!item.validator.isValid('productId')" class="invalid-feedback"
+                            style="display:block">
+                            <div *ngFor="let error of item.validator.getErrors('productId')">{{ error | translate }}
+                            </div>
+                          </div>
+                        </div>
+
+                      </td>
+                      <td style="max-width:250px;word-wrap: break-word; white-space:normal;">
+                        <div class="my-input-group">
+                          <label for="">{{ 'EDIT_PURCHASEORDER.LBL_PRODUCTDESCRIPTION' | translate }}</label>
+                          {{item.poDetails.productDesc}}
+                          <!-- {{ (item.poDetails.productDesc.length>25)? (item.poDetails.productDesc | slice:0:25)+'..':(item.poDetails.productDesc) }} -->
+                        </div>
+                      </td>
+                      <td>
+                        <div class="my-input-group">
+                          <label for="">{{ 'EDIT_PURCHASEORDER.LBL_DESTINATION_COUNTRY' | translate }}</label>
+
+                          <ng-select appendTo="body" [items]="item.poDetails.countryList" [virtualScroll]="true"
+                            appendTo="body" [loading]="item.poDetails.countryLoading" bindLabel="name" bindValue="id"
+                            [disabled]="(item.poDetails.bookingStatus != 3)" (clear)="getCountryListDataBySearch(item)"
+                            placeholder="--- {{ (item.poDetails.countryList!=null && item.poDetails.countryList.length!=0? 'COMMON.LBL_SELECT':'COMMON.LBL_NO_DATA' ) | translate }} ---"
+                            [typeahead]="item.poDetails.countryInput" [minTermLength]="3"
+                            [(ngModel)]="item.poDetails.destinationCountryId" [multiple]="false"
+                            (scrollToEnd)="getCountryListData(item,true)" #select
+                            [ngClass]="{ 'is-invalid':  !item.validator.isValid('item.poDetails.destinationCountryId')}">
+                            <ng-template ng-option-tmp let-item="item">
+                              <div class="text-wrap"><span>{{item.name}}</span></div>
+                            </ng-template>
+                          </ng-select>
+                        </div>
+
+                      </td>
+                      <td>
+                        <div class="my-input-group">
+                          <label for="">{{ 'EDIT_PURCHASEORDER.LBL_ETD' | translate }}</label>
+                          <div class="calendar-wrapper">
+                            <input readonly=readonly type="text" class="width-180"
+                              [ngClass]="{ 'is-invalid':!item.validator.isValid('address')}" maxlength="10"
+                              (click)="rsd.toggle()" placeholder="{{ 'EDIT_PURCHASEORDER.LBL_ETD' | translate }}"
+                              [(ngModel)]="item.poDetails.etd" ngbDatepicker #rsd="ngbDatepicker"
+                              [disabled]="(item.poDetails.bookingStatus != 3)" container='body'>
+                            <img src="assets/images/calendar-icon.svg" alt="" class="calendar-icon"
+                              (click)="rsd.toggle()">
+                          </div>
+
+
+                          <div *ngIf="!item.validator.isValid('etd')" class="invalid-feedback" style="display:block">
+                            <div *ngFor="let error of item.validator.getErrors('etd')">{{ error | translate }}</div>
+                          </div>
+                        </div>
+
+                      </td>
+
+                     
+                      <td>
+                        <div class="my-input-group">
+                          <label for="">{{ 'EDIT_PURCHASEORDER.LBL_QUANTITY' | translate }}</label>
+                          <!-- [disabled]="(item.poDetails.bookingStatus != 3)" -->
+                          <input class="width-180" type="text" [(ngModel)]="item.poDetails.quantity"
+                            [ngClass]="{ 'is-invalid':!item.validator.isValid('address')}" maxlength="300"
+                            placeholder="{{ 'EDIT_PURCHASEORDER.LBL_QUANTITY' | translate }}">
+
+                          <div *ngIf="!item.validator.isValid('quantity')" class="invalid-feedback"
+                            style="display:block">
+                            <div *ngFor="let error of item.validator.getErrors('quantity')">{{ error | translate }}
+                            </div>
+                          </div>
+                        </div>
+
+                      </td>
+                      <td>
+                        <button *ngIf="poDetailValidators.length > 1 || model.index>1"
+                          (click)="removePurchaseOrderDetail(i,item.poDetails.id,ConfirmRemove)"
+                          [disabled]="(item.poDetails.isBooked)" class="secondary-cta x-small" style="margin-left:10px">
+                          <i class="fa fa-trash"></i>
+                        </button>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+                <div class="table-action mobile-hide">
+                  <span><button class="secondary-cta x-small" (click)="addPurchaseOrderDetail()">+
+                      {{ 'EDIT_PURCHASEORDER.LBL_ADD_PO_DETAIL' | translate }}</button> </span>
+                </div>
+              </div>
+
+              <div class="pagination-container" *ngIf="model.totalCount">
+                <select class="small" [(ngModel)]="selectedPageSize" (change)="SearchDetails()">
+                  <option *ngFor="let item of pagesizeitems" [ngValue]=item>{{item}}</option>
+                </select>
+                <ngb-pagination (pageChange)="onPager($event)" [pageSize]="model.pageSize"
+                  [collectionSize]="model.totalCount" [(page)]="model.index" [maxSize]="5"></ngb-pagination>
+              </div>
+
+
+            </div>
+          </div>
+
+          <div class="form-action-container">
+
+            <button [disabled]="savedataloading ||initialLoading" class="secondary-cta small"
+              (click)="openAddProduct(0,null,content)">
+              {{ 'CUSTOMER_PRODUCT_SUMMARY.LBL_ADDNEW_PRODUCT' | translate }}
+            </button>
+
+            <button [disabled]="savedataloading ||initialLoading" class="primary-cta small" (click)="save()">
+              {{'EDIT_CUSTOMER_PRODUCT.LBL_SAVE' | translate}}
+              <span *ngIf="savedataloading">
+                <i class="fa fa-refresh fa-spin" aria-hidden="true"></i>
+              </span>
+            </button>
+          </div>
+          
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<ng-template #content let-modal>
+  <div class="modal-header custom-modal-header">
+    <h4 class="modal-title" id="modal-basic-title">{{ 'EDIT_CUSTOMER_PRODUCT.ADD_NEW_TITLE' | translate }}</h4>
+    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body custom-modal-body">
+    <app-editCustomerProduct [modelData]="modalInputData"></app-editCustomerProduct>
+  </div>
+</ng-template>
+<ng-template #ConfirmRemove let-modal>
+  <div class="modal-body">
+    <div class="small-model">
+      <h2 class="title">{{ 'EDIT_PURCHASEORDER.LBL_CONFIRMDELETION' | translate }}</h2>
+      <p>{{ 'EDIT_PURCHASEORDER.MSG_CONFRMDELETE' | translate }} </p>
+      <button class="secondary-cta" (click)="modal.dismiss('Cross click')">{{ 'COMMON.LBL_CONFIRMCANCEL' | translate
+        }}</button>
+      <button class="primary-cta" (click)="RemovePoDetailConfirm(productRemoveModel);">{{ 'COMMON.LBL_OK' | translate
+        }}</button>
+
+    </div>
+  </div>
+</ng-template>

@@ -1,0 +1,122 @@
+<div class="main-wrapper">
+    <div class="wrapper dashboard-wrapper">
+      <div class="my-container">
+        <div class="master-body">
+          <div class="title-container">
+            <h3 class="main-title">{{ 'INV_BANK_SUMMARY.LBL_TITLE' | translate }}</h3>
+          </div>
+          <div class="content-container quotation-container">
+            <div class="centerContainerPadding common-filter-container">
+            <div class="row marginTop25">
+              <div class="col-12 col-sm-12 text-right mt-3 mt-sm-0"> 
+                  <button id="btnAdd" class="secondary-cta small" 
+                  (click)="getEditDetails(0)">
+                       +{{ 'COMMON.LBL_NEW' | translate }}
+                 </button>
+              </div> 
+              </div>
+            </div>
+  
+            <div class="centerContainerPadding float-left" *ngIf="(model.items && model.items.length>0)">
+              <div class="row">
+                <div class="col-6 col-sm-3 col-xl-2 d-flex">
+                  <p  class="search-trigger-heading" [innerHtml]="showPaginationText()"></p>
+                </div>
+                </div>
+               
+                <div class="quotation-search-container">
+                  <div  class="table-container h-scroll table-max-height-400"> 
+                      <table class="pagination-table simple-table bordered">
+                      <thead>
+                        <tr class="sticky-top-row">
+                          <th class="width-100"></th>
+                      <th>{{ 'INV_BANK_SUMMARY.LBL_ACC_NAME' | translate }}</th>
+                      <th>{{ 'INV_BANK_SUMMARY.LBL_ACC_NUMBER' | translate }}</th>
+                      <th>{{ 'INV_BANK_SUMMARY.LBL_BANK_NAME' | translate }}</th>
+                      <th>{{ 'INV_BANK_SUMMARY.LBL_SWIFT_CODE' | translate }}</th>
+                      <th>{{ 'INV_BANK_SUMMARY.LBL_BANK_ADDRESS' | translate }}</th>
+                      <th>{{ 'INV_BANK_SUMMARY.LBL_ACC_CURRENCY' | translate }}</th>
+                      <th>{{ 'INV_BANK_SUMMARY.LBL_ACC_REMARKS' | translate }}</th>
+                    </tr>
+         
+                  </thead>
+                  <tbody>          
+                    <ng-container *ngFor="let iteminfo of model.items">
+                      <tr>  
+                        <!-- <td>
+                          <button (click)="getEditDetails(iteminfo.id)" class="secondary-cta x-small">
+                            {{'CUSTOMER_CONTACT_SUMMARY.LBL_EDIT' | translate}}
+                         </button>
+                         <button (click)="confirmBankDelete(bankConfirmModal,iteminfo.id,iteminfo.accountNumber)" class="secondary-cta x-small">
+                          delete
+                       </button>
+                        </td>  -->
+                        
+                        <td class="Center_Middle">
+                          
+                          <span class="table-cta icon-cta common-tooltip" 
+                          (click)="getEditDetails(iteminfo.id)"  data-tooltip="Edit">
+                          <img src="assets/images/cta-edit.svg" alt="Edit">
+                        </span>
+                        &nbsp;
+                          <span class="table-cta icon-cta common-tooltip" 
+                          (click)="confirmBankDelete(bankConfirmModal,iteminfo.id,iteminfo.accountNumber)" data-tooltip="Delete">
+                          <img src="assets/images/cta-delete.svg" alt="Delete">
+                        </span>
+                        </td>
+                        <td>{{iteminfo.accountName}}</td>
+                        <td>{{iteminfo.accountNumber}}</td>    
+                        <td>{{iteminfo.bankName}}</td>
+                        <td>{{iteminfo.swiftCode}}</td>    
+                        <td>{{iteminfo.bankAddress}}</td>
+                        <td>{{iteminfo.accountCurrencyName}}</td>    
+                        <td>{{iteminfo.remarks}}</td>   
+                                          
+                      </tr>  
+                    </ng-container>
+                  </tbody>
+                </table>
+                </div>
+              </div>
+              <div class="pagination-container">
+                <ngb-pagination (pageChange)="onPager($event)" [pageSize]="model.pageSize"
+                  [collectionSize]="model.totalCount" [(page)]="model.index" [maxSize]="5"></ngb-pagination>
+              </div>
+            </div> 
+          
+          <div class="centerContainerPadding" *ngIf="model.noFound">
+            <div class="error-container">
+            <img src="assets/images/no-result.svg" alt="" class="thumbnail">
+            <h4 class="title">{{'EDIT_INV_BANK.MSG_NO_ITEM_FOUND' | translate}}</h4>
+            <p class="error-subtitle">{{'CS_CONFIG_SUMMARY.LBL_NODATA' | translate}}</p>
+            </div>
+        </div>
+          </div>
+        </div>
+        
+        <div class="loader-overlay" *ngIf="pageLoader">
+          <div class="loader-container">
+            <img src="assets/images/reload.svg" alt="">
+            <span>{{'COMMON.LBL_LOADER' | translate}}</span>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+  
+  <ng-template #bankConfirmModal let-modal>
+    <div class="modal-body">
+        <div class="small-model">
+            <h2 class="title">{{'INV_BANK_SUMMARY.LBL_DELETE_BANK' | translate}}</h2>
+            <p>{{'INV_BANK_SUMMARY.LBL_DELETE_BANK_CONFIRM' | translate}} {{accountNumber}}
+                ? 
+            </p>
+            <button class="secondary-cta"
+                (click)="modal.dismiss('Cross click')">{{ 'COMMON.LBL_CONFIRMCANCEL' | translate }}</button>
+            <button class="primary-cta" (click)="deleteBank();">
+                {{ 'COMMON.LBL_OK' | translate }}</button>
+        </div>
+    </div>
+
+</ng-template>

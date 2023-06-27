@@ -1,0 +1,117 @@
+{
+  "model": "EditExtraFee",
+  "fields": {
+    "customerId": [
+      {
+        "type": "required",
+        "fieldType": "N",
+        "ressource": "EXTRA_FEE.MSG_CUSTOMER_REQ"
+      }
+    ],
+    "billedToId": [
+      {
+        "type": "required",
+        "fieldType": "N",
+        "ressource": "EXTRA_FEE.MSG_BILLED_TO_REQ"
+      }
+    ],
+    "serviceId": [
+      {
+        "type": "required",
+        "fieldType": "N",
+        "ressource": "EXTRA_FEE.MSG_SERVICE_REQ"
+      }
+    ],
+    "bookingNumberId": [
+      {
+        "type": "required",
+        "fieldType": "N",
+        "ressource": "EXTRA_FEE.MSG_BOOKING_NUMBER_REQ"
+      }
+    ],
+    "paymentStatusId": [
+      {
+        "type": "required",
+        "fieldType": "N",
+        "ressource": "EXTRA_FEE.MSG_PAYMENT_STATUS_REQ"
+      }
+    ],
+    "currencyId": [
+      {
+        "type": "required",
+        "fieldType": "N",
+        "ressource": "EXTRA_FEE.MSG_CURRENCY_REQ"
+      }
+    ],
+    "invoiceReportTemplateId": [
+      {
+        "type": "required",
+        "fieldType": "N",
+        "ressource": "EXTRA_FEE.MSG_TEMPLATE_REQ"
+      }
+    ],
+    "officeId": [
+      {
+        "type": "required",
+        "fieldType": "N",
+        "ressource": "EXTRA_FEE.MSG_OFF_REQ"
+      }
+    ],
+    "contactIdList": [
+      {
+        "type": "required",
+        "fieldType": "N",
+        "ressource": "EDIT_USER_ACCOUNT.CONTACT_REQUIRED"
+      }
+    ],
+    "extraFeeInvoiceDate": [
+      {
+        "type": "required",
+        "fieldType": "D",
+        "ressource": "EXTRA_FEE.MSG_EXTRA_FEE_INVOICE_DATE_REQUIRED"
+      }
+    ],
+    "exchangeRate": [
+      {
+        "type": "required",
+        "fieldType": "N",
+        "ressource": "EXTRA_FEE.LBL_EXCHANGE_RATE_MINVALUE"
+      }
+    ],
+    "invoiceCurrencyId": [
+      {
+        "type": "required",
+        "fieldType": "N",
+        "ressource": "EXTRA_FEE.LBL_INVOICE_CURRENCY"
+      }
+    ],
+    "billedAddress":[
+      {
+       "type": "required",
+        "fieldType": "N",
+        "ressource": "EXTRA_FEE.MSG_BILLADDRESSVALUE_REQ"
+    }
+    ],
+    "paymentTermsId":[
+      {
+        "type": "required",
+        "fieldType": "N",
+        "ressource": "EXTRA_FEE.MSG_PAYMENTTERMS_REQ"
+      }
+    ],
+    "billedAddressId":[
+      {
+        "type": "required",
+        "fieldType": "N",
+        "ressource": "EXTRA_FEE.MSG_BILLEDADDRESS_REQ"
+      }
+    ],
+    "paymentTerms":[
+      {
+        "type": "required",
+        "fieldType": "N",
+        "ressource": "EXTRA_FEE.MSG_PAYMENTTERMSVALUE_REQ"
+      }
+    ]
+  }
+}

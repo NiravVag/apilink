@@ -1,0 +1,108 @@
+﻿
+@{
+    ViewData["Title"] = "OrderStatusLog";
+}
+
+@model DTO.Kpi.ExportResult
+
+<xls-sheet name="Order Status Log">
+    <table xls-begin="A:1" style="border-style:solid">
+        <tr style="background-color:#f5f5f5;font-weight:bold;text-align:center">
+            <th>Branch Name</th>
+            <th>Customer Name</th>
+            <th>Brand</th>
+            <th>Department</th>
+            <th>Product Sub Category</th>
+            <th>Customer Product Category</th>
+            <th>Booking No</th>
+            <th>Style/Product</th>
+            <th>Report No</th>
+            <th>Service From Date</th>
+            <th>Service To Date</th>
+            <th>Season</th>
+            <th>Season Year</th>
+            <th>Produced Qty</th>
+            <th>Order Qty</th>
+            <th>Inspected Qty</th>
+            <th>Service Type</th>
+            <th>Category</th>
+            <th>Service</th>
+            <th>Color</th>
+            <th>Supplier</th>
+            <th>Factory</th>
+            <th>City</th>
+            <th>Inspection Country</th>
+            <th>Office Country</th>
+            <th>Booking Creation Date</th>
+            <th>Booking Creation By</th>
+            <th>Invoice No</th>
+            <th>Invoice Currency</th>
+            <th>Billing Mode</th>
+            <th>Invoice To</th>
+            <th>Unit Price</th>
+            <th>Billing Man Days</th>
+            <th>Invoice Contact</th>
+            <th>Inspection Fee</th>
+            <th>Land Transport Cost</th>
+            <th>Air Cost</th>
+            <th>Hotel Cost</th>
+            <th>Travel Expense</th>
+            <th>Total Staff</th>
+            <th>Report Status</th>
+            <th>Booking Status</th>
+            <th>Invoice Sent Date</th>
+            <th>Inspectors</th>
+            <th>Inspection Location</th>
+        </tr>
+        @foreach (var item in Model.Data)
+        {
+    <tr>
+        <td width="150px">@item.Office</td>
+        <td width="150px">@item.CustomerName</td>
+        <td width="150px">@item.BrandName</td>
+        <td width="150px">@Html.Raw(item.DeptCode)</td>
+        <td width="150px">@item.ProductSubCategory</td>
+        <td width="150px">@item.CustomerProductCategory</td>
+        <td width="150px" xls-type="number">@item.BookingNo</td>
+        <td width="150px">@item.ProductName</td>
+        <td width="150px">@item.ReportNo</td>
+        <td width="150px" xls-type="date">@item.ServiceFromDate</td>
+        <td width="150px" xls-type="date">@item.ServiceToDate</td>
+        <td width="150px">@item.Season</td>
+        <td width="150px">@item.SeasonYear</td>
+        <td width="150px" xls-type="number">@item.ProducedQty</td>
+        <td width="150px" xls-type="number">@item.OrderQty</td>
+        <td width="150px" xls-type="number">@item.InspectedQty</td>
+        <td width="150px">@item.ServiceTypeName</td>
+        <td width="150px">@item.ProductCategory</td>
+        <td width="150px">@item.ServiceName</td>
+        <td width="150px">@Html.Raw(@item.Color)</td>
+        <td width="150px">@Html.Raw(@item.SupplierName)</td>
+        <td width="150px">@Html.Raw(@item.FactoryName)</td>
+        <td width="150px">@Html.Raw(@item.FactoryCity)</td>
+        <td width="150px">@item.FactoryCountry</td>
+        <td width="150px">@item.OfficeCountry</td>
+        <td width="150px" xls-type="date">@item.BookingCreationDate</td>
+        <td width="150px">@item.BookingCreatedBy</td>
+        <td width="150px">@item.InvoiceNumber</td>
+        <td width="150px">@item.Invoice_Currency</td>
+        <td width="150px">@item.BillingMode</td>
+        <td width="150px">@item.InvoiceTo</td>
+        <td width="150px" xls-type="number">@item.UnitPrice</td>
+        <td width="150px" xls-type="number">@item.BillingManDays</td>
+        <td width="150px">@item.InvoiceContact</td>
+        <td width="150px" xls-type="number">@item.Invoice_InspectionFee</td>
+        <td width="150px" xls-type="number">@item.Invoice_TravelLandFee</td>
+        <td width="150px" xls-type="number">@item.AirTicket</td>
+        <td width="150px" xls-type="number">@item.Invoice_HotelFee</td>
+        <td width="150px" xls-type="number">@item.Invoice_TravelFee</td>
+        <td width="150px" xls-type="number">@item.TotalStaff</td>
+        <td width="150px">@item.ReportStatus</td>
+        <td width="150px">@item.bookingStatus</td>
+        <td width="150px"></td>
+        <td width="150px">@item.Inspectors</td>
+        <td width="150px">@item.InspectionLocation</td>
+    </tr>
+        }
+    </table>
+</xls-sheet>

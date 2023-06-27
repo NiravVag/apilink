@@ -1,0 +1,350 @@
+<div class="main-wrapper">
+  <div class="wrapper dashboard-wrapper">
+    <div class="my-container">
+      <div class="master-body">
+        <div class="title-container">
+          <h3 class="main-title">
+            {{ 'EXTRA_FEE_SUMMARY.LBL_TITLE' | translate }}
+          </h3>
+        </div>
+        <div class="content-container quotation-container">
+          <div [@expandCollapse]="isFilterOpen ? 'open' : 'close'"
+               class="centerContainerPadding common-filter-container">
+            <div class="animated-icon-container" (click)="toggleFilterSection()"
+                 *ngIf="(model.items && model.items.length>0)">
+              <img src="assets/images/cta-close-grey.svg" alt="close">
+            </div>
+            <div class="row">
+              <div class="col-sm-6 col-md-4 col-lg-3">
+                <div class="my-input-group">
+                  <div class="styled-radio-container"
+                       *ngFor="let item of extrafeeSearchTypeList;let idx = index">
+                    <input type="radio" class="styled-radio" id="{{item.id}}" name="radio-group"
+                           [value]="item.id" [checked]="idx === 0" [(ngModel)]="model.searchTypeId"
+                           (change)="SetSearchTypemodel(item.id)">
+                    <label for="{{item.id}}">{{item.name}}</label>
+                  </div>
+                  <input maxlength="200" (ngModelChange)="BookingNoValidation()"
+                         [(ngModel)]="model.searchTypeText" type="text"
+                         [ngClass]="{ 'is-invalid': model.searchTypeText!='' && _customValidationForInvoiceNo}" />
+                  <div *ngIf="model.searchTypeText!='' && _customValidationForInvoiceNo"
+                       class="invalid-feedback">
+                    <div>{{ 'EXTRA_FEE_SUMMARY.MSG_BOOKINGNO_ERROR' | translate }}</div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-sm-6 col-md-8 col-lg-9">
+                <div class="my-input-group">
+                  <div class="styled-radio-container"
+                       *ngFor="let item of extrafeeDateTypeList;let idx = index">
+                    <input type="radio" class="styled-radio" id="{{item.id}}" name="radio-group1"
+                           [value]="item.id" [checked]="idx === 0" [(ngModel)]="model.datetypeid"
+                           (change)="SetSearchDatetype(item.id)">
+                    <label for="{{item.id}}">{{item.name}}</label>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="my-input-group col-sm-3 col-md-5 col-lg-3">
+                    <div class="my-input-group">
+                      <div class="calendar-wrapper">
+                        <input type="text" maxlength="10" [(ngModel)]="model.fromDate"
+                               readonly=readonly ngbDatepicker #sdf="ngbDatepicker"
+                               container="body" (click)="sdf.toggle()"
+                               [ngClass]="{ 'is-invalid':  !validator.isValidIf('fromDate',IsDateValidationRequired())}">
+                        <img src="assets/images/cta-close-grey.svg" alt="" class="close-icon" (click)="clearDateInput('Fromdate')" *ngIf="model.fromDate">
+                        <img src="assets/images/calendar-icon.svg" alt="" class="calendar-icon"
+                             (click)="sdf.toggle()">
+                      </div>
+                      <div *ngIf="!validator.isValidIf('fromDate',IsDateValidationRequired())"
+                           class="invalid-feedback">
+                        <div *ngFor="let error of validator.getErrors('fromDate')">
+                          {{ error | translate }}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="my-input-group col-sm-3 col-md-5 col-lg-3">
+                    <div class="my-input-group">
+                      <div class="calendar-wrapper">
+                        <input type="text" maxlength="10" readonly=readonly ngbDatepicker
+                               [(ngModel)]="model.toDate" #sdt="ngbDatepicker"
+                               container="body" (click)="sdt.toggle()"
+                               [ngClass]="{ 'is-invalid':  !validator.isValidIf('toDate',IsDateValidationRequired())}">
+                        <img src="assets/images/cta-close-grey.svg" alt="" class="close-icon" (click)="clearDateInput('Todate')" *ngIf="model.toDate">
+                        <img src="assets/images/calendar-icon.svg" alt="" class="calendar-icon"
+                             (click)="sdt.toggle()">
+                      </div>
+                      <div *ngIf="!validator.isValidIf('toDate',IsDateValidationRequired())"
+                           class="invalid-feedback">
+                        <div *ngFor="let error of validator.getErrors('toDate')">
+                          {{ error | translate }}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+            <div class="row">
+              <div class="col-sm-3 col-md-3 col-lg-3">
+                <div class="my-input-group marginTop10">
+                  <div class="my-input-group">
+                    <label for="">{{ 'EXTRA_FEE_SUMMARY.LBL_BILL_TO' | translate }}</label>
+                    <ng-select #customer [searchable]="true" [(ngModel)]="model.billedTo"
+                               bindLabel="name"
+                               [loading]="masterModel.billPaidByListLoading" appendTo="body"
+                               [items]="masterModel.billPaidByList" (clear)="clearBillTo()"
+                               bindValue="id" [hideSelected]="true"
+                               placeholder="---{{(masterModel.billPaidByList!=null && masterModel.billPaidByList.length!=0 ? 'BOOKING_SUMMARY.LBL_SELECT':'QUOTATION_SUMMARY.MSG_NO_DATA')  | translate }} ---">
+                      <ng-template ng-option-tmp let-item="item">
+                        <div class="text-wrap">{{ item.name }}</div>
+                      </ng-template>
+                    </ng-select>
+                  </div>
+                </div>
+
+              </div>
+              <div class="col-sm-3 col-md-4 col-lg-3">
+                <div class="my-input-group marginTop10">
+                  <label for="" class="required"
+                         id="lbl_servicetype">{{'CUSTOMER_SERVICECONFIG.Service' | translate}}</label>
+                  <ng-select [items]="masterModel.serviceList" bindLabel="name"
+                             bindValue="id" [clearable]="true" appendTo="body"
+                             [ngClass]="{ 'is-invalid':  !validator.isValid('serviceId')}"
+                             [(ngModel)]="model.serviceId" [loading]="masterModel.serviceLoading"
+                             placeholder=" ---{{ (masterModel.serviceList!=null && masterModel.serviceList.length!=0? 'QUOTATION_SUMMARY.LBL_SELECT':'QUOTATION_SUMMARY.MSG_NO_DATA' ) | translate }}---">
+                    <ng-template ng-option-tmp let-item="item">
+                      <div class="text-wrap">{{ item.name }}</div>
+                    </ng-template>
+                  </ng-select>
+                  <div *ngIf="!validator.isValid('serviceId')" class="invalid-feedback">
+                    <div *ngFor="let error of validator.getErrors('serviceId')">
+                      {{ error | translate }}
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-sm-3 col-md-4 col-lg-3">
+                <div class="my-input-group marginTop10 select-for-filter">
+                  <label>{{ 'EXTRA_FEE_SUMMARY.LBL_CUSTOMER' | translate }}</label>
+                  <ng-select [items]="masterModel.customerList" [virtualScroll]="true"
+                             [loading]="masterModel.customerLoading"
+                             bindLabel="name" bindValue="id" appendTo="body"
+                             placeholder="--- {{ (masterModel.customerList!=null && masterModel.customerList.length!=0? 'BOOKING_SUMMARY.LBL_SELECT':'BOOKING_SUMMARY.MSG_NO_DATA' ) | translate }} ---"
+                             [typeahead]="masterModel.customerInput" [minTermLength]="3"
+                             (clear)="clearCustomerSelection()" [clearable]="true"
+                             [(ngModel)]="model.customerId" [multiple]="false"
+                             (scrollToEnd)="getCustomerData(true)" #select>
+                    <ng-template ng-option-tmp let-item="item">
+                      <div class="text-wrap"><span>{{item.name}}</span></div>
+                    </ng-template>
+                  </ng-select>
+                </div>
+              </div>
+              <div class="col-sm-3 col-md-4 col-lg-3">
+                <div class="my-input-group marginTop10 select-for-filter">
+                  <label>{{ 'EXTRA_FEE_SUMMARY.LBL_EXTRA_FEE_STATUS' | translate }}</label>
+                  <ng-select [searchable]="true" [(ngModel)]="model.statuslst" bindLabel="name"
+                             class="multiple" [multiple]="true" [loading]="masterModel.statusLoading"
+                             appendTo="body" [items]="masterModel.extrafeeStatusList" bindValue="id"
+                             [hideSelected]="true"
+                             placeholder="---{{(masterModel.extrafeeStatusList!=null && masterModel.extrafeeStatusList.length!=0 ? 'BOOKING_SUMMARY.LBL_SELECT':'QUOTATION_SUMMARY.MSG_NO_DATA')  | translate }} ---">
+                    <ng-template ng-option-tmp let-item="item">
+                      <div class="text-wrap">{{ item.name }}</div>
+                    </ng-template>
+                  </ng-select>
+                </div>
+              </div>
+            </div>
+            <div class="row" *ngIf="toggleFormSection">
+              <div class="col-sm-3 col-md-4 col-lg-3">
+                <div class="my-input-group marginTop10 select-for-filter">
+                  <label>{{ 'EXTRA_FEE_SUMMARY.LBL_SUPPLIER' | translate }}</label>
+                  <ng-select [items]="masterModel.supplierList" [virtualScroll]="true"
+                             [loading]="masterModel.supplierLoading" bindLabel="name" bindValue="id"
+                             placeholder="--- {{ (masterModel.supplierList!=null && masterModel.supplierList.length!=0? 'BOOKING_SUMMARY.LBL_SELECT':'BOOKING_SUMMARY.MSG_NO_DATA' ) | translate }} ---"
+                             [typeahead]="masterModel.supplierInput" [minTermLength]="4" appendTo="body"
+                             (clear)="clearSupplierSelection()" [clearable]="true"
+                             [(ngModel)]="model.supplierId" [multiple]="false"
+                             (scrollToEnd)="getSupplierData(true)" #select>
+                    <ng-template ng-option-tmp let-item="item">
+                      <div class="text-wrap"><span>{{item.name}}</span></div>
+                    </ng-template>
+                  </ng-select>
+                </div>
+              </div>
+            </div>
+
+            <div class="row marginTop25">
+              <div class="col-12 col-sm-6">
+                <button class="tertiary-cta small" (click)="toggleSection()">
+                  <span class="icon" *ngIf="!toggleFormSection">
+                    +
+                  </span>
+                  <span class="icon" *ngIf="toggleFormSection">
+                    -
+                  </span>
+                  {{'COMMON.LBL_ADVANCED_SEARCH' | translate}}
+                </button>
+
+              </div>
+              <div class="col-12 col-sm-6 text-right mt-3 mt-sm-0">
+
+                <button class="category-cta small mr-2 common-tooltip common-tooltip-top-2" data-tooltip="Reset"
+                        [disabled]="masterModel.exportDataLoading || masterModel.searchloading || masterModel.billPaidByListLoading || masterModel.serviceLoading"
+                        (click)="Reset()">
+                  <img src="assets/images/reload-new.svg" alt="Reset">
+                  <span>{{'COMMON.LBL_RESET'| translate}}</span>
+                </button>
+                <button id="btnAdd" class="secondary-cta small" (click)="NavigatenewPath('extrafeesedit/edit-extra-fees')">
+                  + {{
+                                  'COMMON.LBL_NEW' | translate
+                  }}
+                </button>
+                &nbsp;
+                <button class="secondary-cta small mr-2" (click)="export()"
+                        [disabled]="masterModel.exportDataLoading"
+                        *ngIf="model.items != null && model.items.length != 0  && !model.noFound">
+                  <img src="assets/images/red-export.svg" alt="export">
+                  {{ 'COMMON.LBL_EXPORT' | translate }}
+                  <span *ngIf="masterModel.exportDataLoading">
+                    <i class="fa fa-refresh fa-spin" aria-hidden="true"></i>
+                  </span>
+                </button>
+                <button class="primary-cta small"
+                        [disabled]="masterModel.searchloading || masterModel.billPaidByListLoading || masterModel.serviceLoading"
+                        (click)="SearchDetails()">
+                  {{ 'COMMON.LBL_SEARCH' | translate }}
+                  <span *ngIf="masterModel.searchloading">
+                    <i class="fa fa-refresh fa-spin" aria-hidden="true"></i>
+                  </span>
+                </button>
+              </div>
+            </div>
+          </div>
+          <div class="centerContainerPadding float-left" *ngIf="(model.items && model.items.length>0)">
+            <div class="row">
+              <div class="col-6 col-sm-3 col-xl-2 d-flex">
+                <p class="search-trigger-heading" [innerHtml]="showPaginationText()"></p>
+              </div>
+              <div class="col-6 col-sm-9 col-xl-10 text-right">
+                <ul class="table-badge-container mobile-hide tablet-hide">
+                  <li (click)="SearchByStatus(status.id)"
+                      [ngStyle]="{'background-color': status.statusColor}"
+                      *ngFor="let status of masterModel._statuslist | slice:0:4">
+                    <span>{{status.totalCount}}</span> <span>{{status.statusName}}</span>
+                  </li>
+                  <ng-container *ngIf="masterModel._statuslist.length>4">
+                    <li class="more has-dropdown">
+                      <img src="assets/images/cta-menu-grey.svg" alt="">
+                      <ul class="cta-dropdown bottom-left">
+                        <li (click)="SearchByStatus(status.id)"
+                            [ngStyle]="{'color': status.statusColor}"
+                            *ngFor="let status of masterModel._statuslist | slice:4:masterModel._statuslist.length">
+                          <span>{{status.totalCount}}</span>
+                          <span>{{status.statusName}}</span>
+                        </li>
+                      </ul>
+                    </li>
+                  </ng-container>
+                </ul>
+                <div class="animated-icon-container" *ngIf="!isFilterOpen"
+                     (click)="toggleFilterSection()">
+                  <img src="assets/images/cta-search-grey.svg" alt="search">
+                </div>
+              </div>
+            </div>
+            <div class="row mt-3 desktop-hide">
+              <div class="col-sm-12">
+                <ul class="table-badge-container">
+                  <li (click)="SearchByStatus(status.id)"
+                      [ngStyle]="{'background-color': status.statusColor}"
+                      *ngFor="let status of masterModel._statuslist">
+                    <span>{{status.totalCount}}</span> <span>{{status.statusName}}</span>
+                  </li>
+                </ul>
+              </div>
+            </div>
+
+            <div class="quotation-search-container">
+              <div class="table-container h-scroll table-max-height-550">
+                <table class="pagination-table simple-table bordered">
+                  <thead>
+                    <tr class="sticky-top-row">
+                      <th class="width-60">{{'COMMON.LBL_MODIFY' | translate}}</th>
+
+                      <th class="width-100 sticky-left-column">{{'EXTRA_FEE_SUMMARY.LBL_BOOKNO' | translate }}</th>
+                      <th class="width-100">{{'EXTRA_FEE_SUMMARY.LBL_CUS_BOOKNO' | translate }}</th>
+                      <th class="width-100">{{'EXTRA_FEE_SUMMARY.LBL_SERVICE' | translate}}</th>
+                      <th class="width-160">{{'EXTRA_FEE_SUMMARY.LBL_EXTRA_FEE_TYPE' | translate}}</th>
+                      <th class="width-140">{{'EXTRA_FEE_SUMMARY.LBL_CUSTOMER' | translate}}</th>
+                      <th class="width-140">{{'EXTRA_FEE_SUMMARY.LBL_SUPPLIER' | translate}}</th>
+                      <th class="width-140">{{'EXTRA_FEE_SUMMARY.LBL_INVOICE_CURRENCY' | translate}}</th>
+                      <th class="width-140">{{'EXTRA_FEE_SUMMARY.LBL_EXCHANGE_RATE' | translate}}</th>
+                      <th class="width-100">{{ 'EXTRA_FEE_SUMMARY.LBL_TOTAL_AMT' | translate }}</th>
+                      <th class="width-80">{{ 'EXTRA_FEE_SUMMARY.LBL_CURRENCY' | translate }}</th>
+                      <th class="width-100">{{'EXTRA_FEE_SUMMARY.LBL_INVOICE_NUMBER' | translate}}</th>
+                      <th class="width-100">
+                        {{'EXTRA_FEE_SUMMARY.LBL_EXTRAFEE_INVOICE_NO' | translate}}
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody>
+
+                    <ng-template ngFor let-iteminfo [ngForOf]="model.items" let-i="index">
+                      <tr [ngClass]="(((i+1) % 2)== 0)?'even':'odd'"
+                          style="border-left: 5px solid #fff;"
+                          [ngStyle]="{'border-left-color': GetStatusColor(iteminfo.statusId)}">
+                        <td class="Center_Middle">
+                          <a (click)="redirectToEditextrafees(iteminfo.extrafeeid)">
+                            <span class="table-cta icon-cta common-tooltip"
+                                  data-tooltip="Modify">
+                              <img src="assets/images/cta-edit.svg" alt="Modify">
+                            </span>
+                          </a>
+                        </td>
+                        <td class="sticky-left-column">{{iteminfo.bookingId}}</td>
+                        <td>{{iteminfo.customerBookingNo}}</td>
+                        <td>{{iteminfo.service}}</td>
+                        <td>{{iteminfo.extraFeeType}}</td>
+                        <td>{{iteminfo.customerName}}</td>
+                        <td>{{iteminfo.supplierName}}</td>
+                        <td>{{iteminfo.invoiceCurrency}}</td>
+                        <td>{{iteminfo.exchangeRate}}</td>
+                        <td>{{iteminfo.totalAmount}}</td>
+                        <td>{{iteminfo.currency}}</td>
+                        <td>{{iteminfo.invoiceno}}</td>
+                        <td>{{iteminfo.extrafeeinvoiceno}}</td>
+                      </tr>
+                    </ng-template>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+            <div class="pagination-container">
+              <select class="small" [(ngModel)]="selectedPageSize" (change)="SearchDetails()">
+                <option *ngFor="let item of pagesizeitems" [ngValue]=item>{{item}}</option>
+              </select>
+              <ngb-pagination (pageChange)="onPager($event)" [pageSize]="model.pageSize"
+                              [collectionSize]="model.totalCount" [(page)]="model.index" [maxSize]="5">
+              </ngb-pagination>
+            </div>
+          </div>
+          <div class="centerContainerPadding" *ngIf="model.noFound">
+            <div class="error-container">
+              <img src="assets/images/no-result.svg" alt="" class="thumbnail">
+              <h4 class="error-title">{{'EXTRA_FEE_SUMMARY.MSG_NO_ITEM_FOUND' | translate}}</h4>
+              <p class="error-subtitle">{{'COMMON.LBL_NODATA' | translate}}</p>
+
+              <button (click)="Reset()" class="category-cta">
+                <img src="assets/images/reload-new.svg" alt="reload">
+                <span> {{'COMMON.MSG_CLEAR_SEARCH' | translate}}</span>
+              </button>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>

@@ -1,0 +1,35 @@
+﻿
+@{
+    ViewData["Title"] = "CustomerProducts";
+}
+
+
+@model IEnumerable<DTO.CustomerProducts.CustomerProductExportData>
+
+<xls-sheet name="Customer Products">
+    <table xls-begin="A:1" style="border-style:solid">
+        <tr style="background-color:#f5f5f5;font-weight:bold;text-align:center">
+            <th>Customer</th>
+            <th>Style Code</th>
+            <th>Style Description</th>
+            <th>Category</th>
+            <th>Sub Category (Sub Category 1)</th>
+            <th>Product Name (Sub Category 2)</th>          
+            <th>New Style</th>
+            <th>Remarks</th>
+        </tr>
+        @foreach (var item in Model)
+        {
+        <tr>
+            <td height="200px" width="250px">@item.CustomerName</td>
+            <td height="200px" width="250px">@item.ProductId</td>
+            <td width="150px">@item.ProductDescription</td>
+            <td width="250px">@item.ProductCategory</td>
+            <td width="100px">@item.ProductSubCategory</td>
+            <td width="150px">@item.ProductCategorySub2</td>
+            <td width="100px">@item.IsNewProduct</td>
+            <td width="250px">@item.Remarks</td>
+        </tr>
+        }
+    </table>
+</xls-sheet>

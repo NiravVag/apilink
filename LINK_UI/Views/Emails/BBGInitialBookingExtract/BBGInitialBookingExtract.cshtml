@@ -1,0 +1,37 @@
+﻿@{
+    ViewData["Title"] = "BBGInitialBookingExtract";
+}
+@model DTO.ScheduleJob.InitialBookingExtract
+<style>
+    .th-table {
+        color: black;
+        vertical-align: top;
+        font-size: 13px;
+        font-family: tahoma;
+    }
+
+    .td-table {
+        font-size: 13px;
+        font-family: tahoma;
+    }
+</style>
+<table>
+    <tr>
+        <td style="font-size:13px; font-family:tahoma;">
+            <div style="padding-bottom: 20px;margin-top: 2%;">
+                The attached file is the initial booking information for @Model.FromDate.ToString("dd/MM/yyyy") - @Model.ToDate.ToString("dd/MM/yyyy") (@Model.IntervalDay days).
+            </div>
+        </td>
+    </tr>
+    <tr>
+        <td class="td-table">
+            <br />
+            <div style="padding-bottom: 5px; margin-bottom:5px;">
+                Thanks
+            </div>
+            <div style="padding-bottom: 5px; margin-bottom:5px;">
+                IT-Team
+            </div>
+        </td>
+    </tr>
+</table>

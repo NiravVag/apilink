@@ -1,0 +1,323 @@
+<div class="main-wrapper">
+  <div class="wrapper dashboard-wrapper">
+    <div class="my-container">
+      <div class="master-body">
+        <div class="title-container">
+          <h3 class="main-title"> {{ 'AUDIT_CUS_REPORT.TITLE' | translate }}</h3>
+        </div>
+        <div class="content-container quotation-container">
+          <div [@expandCollapse]="isFilterOpen ? 'open' : 'close'"
+            class="centerContainerPadding common-filter-container">
+            <div class="animated-icon-container" (click)="toggleFilterSection()"
+              *ngIf="(model.items && model.items.length>0)">
+              <img src="assets/images/cta-close-grey.svg" alt="close">
+            </div>
+            <div class="row">
+              <div class="col-sm-8 col-md-5 col-lg-4">
+                <div class="my-input-group">
+                  <div class="styled-radio-container" *ngFor="let item of _searchtypelst;let idx = index">
+                    <input type="radio" class="styled-radio" id="{{item.id}}" name="radio-group" [value]="item.id"
+                      [checked]="idx === 0" (change)="SetSearchTypemodel(item.id)">
+                    <label for="{{item.id}}">{{item.name}}</label>
+                  </div>
+                  <input maxlength="200" (ngModelChange)="BookingNoValidation()" [(ngModel)]="model.searchtypetext"
+                    type="text" [ngClass]="{ 'is-invalid': model.searchtypetext!='' && _customvalidationforbookid}" />
+                  <div *ngIf="model.searchtypetext!='' && _customvalidationforbookid" class="invalid-feedback">
+                    <div>{{ 'AUDIT_CUS_REPORT.MSG_BOOKINGNO_ERROR' | translate }}</div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-sm-6 col-md-8 col-xl-8 mobile-margin-top-15">
+                <div class="my-input-group">
+                  <div class="styled-radio-container" *ngFor="let item of _datetypelst;let idx = index">
+                    <input type="radio" class="styled-radio" id="{{item.id}}" name="radio-group1" [value]="item.id"
+                      [checked]="idx === 0" (change)="SetSearchDatetype(item.id)">
+                    <label for="{{item.id}}">{{item.name}}</label>
+                  </div>
+                </div>
+
+                <div class="row">
+                  <div class="my-input-group col-sm-5 col-lg-3">
+                    <div class="calendar-wrapper">
+                      <input type="text" maxlength="10" container="body"
+                        [ngClass]="{ 'is-invalid':  !validator.isValidIf('fromdate',IsDateValidationRequired())}"
+                        readonly=readonly [(ngModel)]="model.fromdate" ngbDatepicker #sdf="ngbDatepicker"
+                        (click)="sdf.toggle()">
+                      <img src="assets/images/cta-close-grey.svg" alt="" class="close-icon"
+                        (click)="clearDateInput('Fromdate')" *ngIf="model.fromdate">
+                      <img src="assets/images/calendar-icon.svg" alt="" class="calendar-icon" (click)="sdf.toggle()">
+                    </div>
+                    <div *ngIf="!validator.isValidIf('fromdate',IsDateValidationRequired())" class="invalid-feedback">
+                      <div *ngFor="let error of validator.getErrors('fromdate')">{{ error | translate }}</div>
+                    </div>
+                  </div>
+                  <div class="my-input-group col-sm-5 col-lg-3">
+                    <div class="calendar-wrapper">
+                      <input type="text" maxlength="10" container="body"
+                        [ngClass]="{ 'is-invalid':  !validator.isValidIf('todate',IsDateValidationRequired())}"
+                        readonly=readonly [(ngModel)]="model.todate" ngbDatepicker #sdt="ngbDatepicker"
+                        (click)="sdt.toggle()">
+                      <img src="assets/images/cta-close-grey.svg" alt="" class="close-icon"
+                        (click)="clearDateInput('Todate')" *ngIf="model.todate">
+                      <img src="assets/images/calendar-icon.svg" alt="" class="calendar-icon" (click)="sdt.toggle()">
+                    </div>
+                    <div *ngIf="!validator.isValidIf('todate',IsDateValidationRequired())" class="invalid-feedback">
+                      <div *ngFor="let error of validator.getErrors('todate')">{{ error | translate }}</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+
+            <!-- <div class="col-sm-12 marginTop25">
+              <div class="section-toggle-container" (click)=toggleSection()>
+                <p>
+                  <img src="assets/images/expand-circle.png" alt="expand" *ngIf="!toggleFormSection">
+                  <img src="assets/images/collapse-circle.png" alt="collapse" *ngIf="toggleFormSection">
+                  {{'AUDIT_CUS_REPORT.LBL_ADVANCED_SEARCH' | translate}}</p>
+              </div>
+            </div> -->
+
+            <div *ngIf="toggleFormSection">
+              <div class="row marginTop15">
+                <div class="col-sm-3 col-md-3 col-lg-3">
+                  <div class="my-input-group">
+                    <label for="">{{ 'AUDIT_CUS_REPORT.LBL_CUSTOMER' | translate }}</label>
+                    <ng-select #customer [searchable]="true" [items]="masterdate.customerlist" bindLabel="name"
+                      appendTo="body" [loading]="loadingmodel.cusloading" (change)="SetCusonchange($event)"
+                      bindValue="id" [hideSelected]="true" (clear)="clearCustomer()"
+                      placeholder="--- {{(masterdate.customerlist!=null && masterdate.customerlist.length!=0? 'AUDIT_CUS_REPORT.LBL_SELECT':'AUDIT_CUS_REPORT.MSG_NO_DATA')  | translate }} ---"
+                      [(ngModel)]="model.customerid">
+                    </ng-select>
+                  </div>
+                </div>
+                <div class="col-sm-3 col-md-3 col-lg-3 mobile-margin-top-15">
+                  <div class="my-input-group">
+                    <label for="">{{ 'AUDIT_CUS_REPORT.LBL_SUPPLIER' | translate }}</label>
+                    <ng-select [multiple]="false" [closeOnSelect]="true" [searchable]="true" appendTo="body"
+                      (change)="setSupplieronchange($event)" [hideSelected]="true"
+                      [loading]="loadingmodel.supplierloading" bindLabel="name" bindValue="id"
+                      [items]="masterdate.supplierlist"
+                      placeholder="--- {{ (masterdate.supplierlist!=null && masterdate.supplierlist.length!=0? 'AUDIT_CUS_REPORT.LBL_SELECT':'AUDIT_CUS_REPORT.MSG_NO_DATA' ) | translate }} ---"
+                      [(ngModel)]="model.supplierid">
+                    </ng-select>
+                  </div>
+                </div>
+                <div class="col-sm-3 col-md-3 col-lg-3 mobile-margin-top-15">
+                  <div class="my-input-group">
+                    <label for="">{{ 'AUDIT_CUS_REPORT.LBL_FACTORY' | translate }}</label>
+                    <ng-select [multiple]="true" class="multiple" [searchable]="true" appendTo="body"
+                      [loading]="loadingmodel.factloading" [items]="masterdate.factorylist" bindLabel="name"
+                      bindValue="id" [hideSelected]="true"
+                      placeholder="--- {{ (masterdate.factorylist!=null && masterdate.factorylist.length!=0? 'AUDIT_CUS_REPORT.LBL_SELECT':'AUDIT_CUS_REPORT.MSG_NO_DATA' ) | translate }} ---"
+                      [(ngModel)]="model.factoryidlst">
+                    </ng-select>
+                  </div>
+                </div>
+                <div class="col-sm-3 col-md-3 col-lg-3 mobile-margin-top-15">
+                  <div class="my-input-group">
+                    <label for="">{{ 'AUDIT_CUS_REPORT.LBL_STATUS' | translate }}</label>
+                    <ng-select [multiple]="true" [searchable]="true" [loading]=loadingmodel.statusloading
+                      [items]="masterdate.statuslist" class="multiple" bindLabel="statusName" bindValue="id"
+                      appendTo="body" [hideSelected]="true"
+                      placeholder="--- {{ (masterdate.statuslist!=null && masterdate.statuslist.length!=0? 'AUDIT_CUS_REPORT.LBL_SELECT':'AUDIT_CUS_REPORT.MSG_NO_DATA' ) | translate }} ---"
+                      [(ngModel)]="model.statusidlst">
+                    </ng-select>
+                  </div>
+                </div>
+              </div>
+              <div class="row marginTop15">
+                <div class="col-sm-3 col-md-4 col-lg-3">
+                  <div class="my-input-group">
+                    <label for="">{{ 'AUDIT_CUS_REPORT.LBL_SERVICETYPE' | translate }}</label>
+                    <ng-select [searchable]="true" [loading]="loadingmodel.auditservicetypeloading" appendTo="body"
+                      [items]="masterdate.auditservicetypelist" bindLabel="name" bindValue="id" [hideSelected]="true"
+                      [multiple]="true" class="multiple"
+                      placeholder="--- {{(masterdate.auditservicetypelist!=null && masterdate.auditservicetypelist.length!=0? 'AUDIT_CUS_REPORT.LBL_SELECT':'AUDIT_CUS_REPORT.MSG_NO_DATA')  | translate }} ---"
+                      [(ngModel)]="model.serviceTypelst">
+                    </ng-select>
+                  </div>
+                </div>
+                <div class="col-sm-3 col-md-4 col-lg-3" *ngIf="_IsInternalUser">
+                  <div class="my-input-group">
+                    <label for="">{{ 'AUDIT_CUS_REPORT.LBL_OFFICE' | translate }}</label>
+                    <ng-select [searchable]="true" [loading]="loadingmodel.officeloading" appendTo="body"
+                      [items]="masterdate.officelist" bindLabel="name" bindValue="id" [hideSelected]="true"
+                      [multiple]="true" class="multiple"
+                      placeholder="--- {{(masterdate.officelist!=null && masterdate.officelist.length!=0? 'AUDIT_CUS_REPORT.LBL_SELECT':'AUDIT_CUS_REPORT.MSG_NO_DATA')  | translate }} ---"
+                      [(ngModel)]="model.officeidlst">
+                    </ng-select>
+                  </div>
+                </div>
+                <!-- factory country -->
+                <div class="col-sm-3 col-md-4 col-lg-3">
+                  <div class="my-input-group">
+                    <label for="">{{ 'AUIDT_SUMMARY.LBL_FACTORY_COUNTRY' | translate }}</label>
+                    <ng-select appendTo="body" [items]="masterdate.countryList" [virtualScroll]="true"
+                      [loading]="loadingmodel.countryLoading" bindLabel="name" bindValue="id"
+                      (change)="onChangeCountry($event)"
+                      placeholder="--- {{ (masterdate.countryList!=null && masterdate.countryList.length!=0? 'COMMON.LBL_SELECT':'COMMON.LBL_NO_DATA' ) | translate }} ---"
+                      [typeahead]="masterdate.countryInput" [minTermLength]="3" [(ngModel)]="model.factoryCountryIdList"
+                      [multiple]="true" class="multiple" (scrollToEnd)="getCountryData()" #select>
+                      <ng-template ng-option-tmp let-item="item" let-index="index" let-search="searchTerm">
+                        <span>{{item.name}}</span>
+                      </ng-template>
+                      <ng-template ng-option-tmp let-item="item">
+                        <div class="text-wrap">{{ item.name }}</div>
+                      </ng-template>
+                    </ng-select>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="row marginTop25">
+              <div class="col-12 col-sm-6">
+                <button class="tertiary-cta small" (click)="toggleSection()">
+                  <span class="icon" *ngIf="!toggleFormSection">+</span>
+                  <span class="icon" *ngIf="toggleFormSection">-</span>
+                  {{'QUOTATION_SUMMARY.LBL_ADVANCED_SEARCH' | translate}}
+                </button>
+              </div>
+              <div class="col-12 col-sm-6 text-right mt-3 mt-sm-0">
+
+                <button class="category-cta small mr-2 common-tooltip common-tooltip-top-2" data-tooltip="Reset"
+                  (click)="Reset()">
+                  <img src="assets/images/reload-new.svg" alt="Reset">
+                  <span>{{'COMMON.LBL_RESET'| translate}}</span>
+                </button>
+
+                <button class="primary-cta small"
+                  [disabled]="loadingmodel.searchloading || loadingmodel.cusloading || loadingmodel.officeloading || loadingmodel.statusloading"
+                  (click)="SearchDetails()">
+                  {{ 'AUDIT_CUS_REPORT.LBL_SEARCH_BTN' | translate }}
+                  <span *ngIf="loadingmodel.searchloading">
+                    <i class="fa fa-refresh fa-spin" aria-hidden="true"></i>
+                  </span>
+                </button>
+              </div>
+            </div>
+          </div>
+          <div class="centerContainerPadding float-left" *ngIf="(model.items && model.items.length>0)">
+            <div class="row">
+              <div class="col-6 col-sm-3 col-xl-2 d-flex">
+                <p class="search-trigger-heading" [innerHtml]="showPaginationText()"></p>
+              </div>
+              <div class="col-6 col-sm-9 col-xl-10 text-right">
+                <ul class="table-badge-container mobile-hide tablet-hide">
+                  <li (click)="SearchByStatus(status.id)" [ngStyle]="{'background-color': status.statusColor}"
+                    *ngFor="let status of _statuscolorlst| slice:0:4">
+                    <span>{{status.totalCount}}</span> <span>{{status.statusName}}</span>
+                  </li>
+                  <ng-container *ngIf="_statuscolorlst.length>4">
+                    <li class="more has-dropdown">
+                      <img src="assets/images/cta-menu-grey.svg" alt="">
+                      <ul class="cta-dropdown bottom-left">
+                        <li (click)="SearchByStatus(status.id)" [ngStyle]="{'color': status.statusColor}"
+                          *ngFor="let status of _statuscolorlst | slice:4:_statuscolorlst.length">
+                          <span>{{status.totalCount}}</span> <span>{{status.statusName}}</span>
+                        </li>
+                      </ul>
+                    </li>
+                  </ng-container>
+                </ul>
+                <div class="animated-icon-container" *ngIf="!isFilterOpen" (click)="toggleFilterSection()">
+                  <img src="assets/images/cta-search-grey.svg" alt="search">
+                </div>
+              </div>
+            </div>
+            <div class="row mt-3 desktop-hide">
+              <div class="col-sm-12">
+                <ul class="table-badge-container">
+                  <li (click)="SearchByStatus(status.id)" [ngStyle]="{'background-color': status.statusColor}"
+                    *ngFor="let status of _statuscolorlst">
+                    <span>{{status.totalCount}}</span> <span>{{status.statusName}}</span>
+                  </li>
+                </ul>
+              </div>
+            </div>
+            <div class="quotation-search-container">
+              <div class="table-container h-scroll table-max-height-550">
+                <table class="pagination-table simple-table bordered">
+                  <thead>
+                    <tr class="sticky-top-row">
+                      <th></th>
+                      <th>{{ 'AUDIT_CUS_REPORT.LBL_REPORT' | translate }}</th>
+                      <th>{{ 'AUDIT_CUS_REPORT.LBL_BOOKING_CUSTOMER_NO' | translate }}</th>
+                      <th>{{ 'AUDIT_CUS_REPORT.LBL_REPORTNO' | translate }}</th>
+                      <th>{{ 'AUDIT_CUS_REPORT.LBL_CUSTOMER' | translate }}</th>
+                      <th>{{ 'AUDIT_CUS_REPORT.LBL_SUPPLIER' | translate }}</th>
+                      <th>{{ 'AUDIT_CUS_REPORT.LBL_FACTORY' | translate }}</th>
+                      <th>{{ 'AUDIT_CUS_REPORT.LBL_SERVICEDATE' | translate }}</th>
+                      <th>{{ 'AUDIT_CUS_REPORT.LBL_SERVICETYPE' | translate }}</th>
+                      <th *ngIf="_IsInternalUser">{{ 'AUDIT_CUS_REPORT.LBL_OFFICE' | translate }}</th>
+
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr *ngFor="let iteminfo of model.items" style="border-left: 5px solid #fff;"
+                      [ngStyle]="{'border-left-color': GetStatusColor(iteminfo.statusId)}">
+                      <td>
+                        <button class="category-cta small mr-2 common-tooltip common-tooltip-top-2"
+                          data-tooltip="Download"
+                          *ngIf="iteminfo.reportid > 0 && iteminfo.statusId==_auditStatus.Audited"
+                          [disabled]="loadingmodel.downloadreport" (click)="downloadreport(iteminfo)">
+                          <img src="assets/images/cta-download.svg" alt="Download">
+                          <span>{{'AUDIT_CUS_REPORT.LBL_DOWNLOAD'| translate}}</span>
+                        </button>
+                        <!--
+                    <button class="secondary-cta x-small" *ngIf="iteminfo.reportid" [disabled]="loadingmodel.downloadreport"
+                      (click)="downloadreport(iteminfo)">{{'AUDIT_CUS_REPORT.LBL_DOWNLOAD' | translate}}</button> -->
+                      </td>
+                      <td>
+                        <button
+                          *ngIf="iteminfo.fbreportid>0 && _IsInternalUser && _isQCUser && (iteminfo.statusId==_auditStatus.Audited || iteminfo.statusId==_auditStatus.Scheduled)"
+                          class="primary-cta x-small mr-2" (click)="RedirectToFbReport(iteminfo.fbreportid)">
+                          {{'BOOKING_SUMMARY.REPORT_FILLING' | translate }}
+                        </button>
+                        <button
+                          *ngIf="iteminfo.fbreportid>0 && _IsInternalUser && _isReportCheckUser && (iteminfo.statusId==_auditStatus.Audited || iteminfo.statusId==_auditStatus.Scheduled)"
+                          class=" primary-cta x-small mr-2" (click)="RedirectToFbReport(iteminfo.fbreportid)">
+                          {{'BOOKING_SUMMARY.REPORT_REVIEW' | translate }}
+                        </button>
+                      </td>
+                      <td class="width-140" *ngIf="iteminfo.customerBookingNo">
+                        {{iteminfo.auditId}}/{{iteminfo.customerBookingNo}}</td>
+                      <td class="width-140" *ngIf="!iteminfo.customerBookingNo">{{iteminfo.auditId}}</td>
+                      <td class="width-140">{{iteminfo.reportNo}}</td>
+                      <td class="width-140">{{iteminfo.customer}}</td>
+                      <td class="width-180">{{iteminfo.supplier}}</td>
+                      <td class="width-180">{{iteminfo.factory}}</td>
+                      <td>{{iteminfo.serviceDate}}</td>
+                      <td>{{iteminfo.serviceType}}</td>
+                      <td *ngIf="_IsInternalUser">{{iteminfo.officeName}}</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+            <div class="pagination-container">
+              <select class="small" [(ngModel)]="selectedPageSize" (change)="SearchDetails()">
+                <option *ngFor="let item of pagesizeitems" [ngValue]=item>{{item}}</option>
+              </select>
+              <ngb-pagination (pageChange)="onPager($event)" [pageSize]="model.pageSize"
+                [collectionSize]="model.totalCount" [(page)]="model.index" [maxSize]="5"></ngb-pagination>
+            </div>
+
+          </div>
+
+
+          <div class="centerContainerPadding" *ngIf="model.noFound">
+            <div class="error-container">
+              <img src="assets/images/no-result.svg" alt="" class="thumbnail">
+              <h4 class="title">{{'AUDIT_CUS_REPORT.MSG_NO_ITEM_FOUND' | translate}}</h4>
+              <p class="error-subtitle">{{'CS_CONFIG_SUMMARY.LBL_NODATA' | translate}}</p>
+              <button (click)="Reset()" class="category-cta">Clear Search</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

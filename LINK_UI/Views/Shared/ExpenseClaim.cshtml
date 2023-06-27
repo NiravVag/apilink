@@ -1,0 +1,77 @@
+﻿
+@{
+    ViewData["Title"] = "ExpenseClaim";
+}
+
+@model LINK_UI.FileModels.ExpenseClaimModel
+@using DTO.Common
+<xls-sheet name="Expense claim">
+    <table xls-begin="A:1" style="border-style:solid">
+        <tr style="background-color:#f5f5f5;font-weight:bold">
+            <th>Employee</th>
+            <th>Country</th>
+            <th>Office</th>
+            <th>Status</th>
+        </tr>
+        <tr>
+            <td>@Model.Item.Name</td>
+            <td>@Model.Item.CountryName</td>
+            <td>@Model.Item.LocationName</td>
+            <td>@Model.Item.Status</td>
+        </tr>
+        <tr style="background-color:#f5f5f5;font-weight:bold">
+            <th>Claim No</th>
+            <th>Approved By</th>
+            <th>Approval Date</th>
+            <th>Food Allowance</th>
+        </tr>
+        <tr>
+            <td>@Model.Item.ClaimNo</td>
+            <td>@Model.Item.StatusUserName</td>
+            <td>@Model.Item.StatusDate</td>
+            <td>@Model.Item.FoodAllowance</td>
+        </tr>
+        <tr style="background-color:#f5f5f5;font-weight:bold;text-align:center">
+            <td colspan="4">Expense Purpose</td>
+        </tr>
+        <tr>
+            <td colspan="4">@Model.Item.ExpensePuropose</td>
+        </tr>
+    </table>
+    <table xls-begin="A:8" style="border-style:solid">
+        <tr style="background-color:#f5f5f5;font-weight:bold;text-align:center">
+            <th>Expense Date</th>
+            <th>Type Of Expenses</th>
+            <th>Receipt [Y/N]</th>
+            <th>Start City</th>
+            <th>Arrival City</th>
+            <th>Actual Amount</th>
+            <th>Currency</th>
+            <th>Exchange Rate</th>
+            <th>Amount</th>
+            <th>Expense Desc. / remarks</th>
+        </tr>
+        @foreach (var item in Model.Item.ExpenseList)
+        {
+            <tr>
+                <td width="150px">@item.ExpenseDate.ToDateTime().ToString("dd/MM/yyyy")</td>
+                <td width="150px">@item.ExpenseTypeLabel</td>
+                <td width="150px">@(item.Receipt ? "Y" : "N")</td>
+                <td width="150px">@item.StartCity?.Name</td>
+                <td width="150px">@item.DestCity?.Name</td>
+                <td width="150px">@item.ActualAmount</td>
+                <td width="150px">@item.CurrencyName</td>
+                <td width="150px">@item.ExchangeRate</td>
+                <td width="150px" xls-type="number">@item.Amount</td>
+                <td width="180px">@item.Description</td>
+            </tr>
+        }
+        <tr>
+            <td colspan="8"></td>
+            <td style="font-weight:bold">Total</td>
+            <td xls-type="number">@Model.Total</td>
+        </tr>
+    </table>
+</xls-sheet>
+
+

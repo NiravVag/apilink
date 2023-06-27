@@ -1,0 +1,31 @@
+import { NgModule } from '@angular/core';
+import { CommonModule } from '@angular/common';
+
+import { CustomerPriceCardSummaryRoutingModule } from './customer-price-card-summary-routing.module';
+import { CustomerPriceCardSummaryComponent } from './customer-price-card-summary.component';
+
+import { NgbPaginationModule } from '@ng-bootstrap/ng-bootstrap';
+import { SharedModule } from '../../shared/shared.module';
+import { FormsModule } from '@angular/forms';
+import { NgSelectModule } from '@ng-select/ng-select';
+ 
+import { NgbDatepickerModule } from '@ng-bootstrap/ng-bootstrap';
+import { TranslateSharedModule } from '../../common/translate.share.module';
+ 
+
+@NgModule({
+  declarations: [CustomerPriceCardSummaryComponent],
+  imports: [
+    CommonModule,
+    CustomerPriceCardSummaryRoutingModule,
+    SharedModule,
+    FormsModule,
+    NgSelectModule,
+    NgbPaginationModule,
+    NgbDatepickerModule,
+    TranslateSharedModule.forRoot()
+  ]
+})
+export class CustomerPriceCardSummaryModule { 
+
+}

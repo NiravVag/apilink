@@ -1,0 +1,51 @@
+﻿
+@{
+    ViewData["Title"] = "AuditSearchSummary";
+}
+
+
+@model IEnumerable<DTO.Audit.AuditItem>
+
+<xls-sheet name="Audit Search Summary">
+    <table xls-begin="A:1" style="border-style:solid">
+        <tr style="background-color:#f5f5f5;font-weight:bold;text-align:center">
+            <th>PO Number</th>
+            <th>Booking No</th>
+            <th>Report No</th>
+            <th>Customer Booking No</th>
+            <th>Customer</th>
+            <th>Supplier</th>
+            <th>Supplier Code</th>
+            <th>Factory</th>
+            <th>Factory Code</th>
+            <th>Service Date From</th>
+            <th>Service Date To</th>
+            <th>Service Type</th>
+            <th>Office</th>
+            <th>Status</th>
+            <th>Factory Country</th>
+            <th>Auditor</th>
+        </tr>
+        @foreach (var item in Model)
+        {
+    <tr>
+        <td height="200px" width="250px">@item.PoNumber</td>
+        <td width="150px">@item.AuditId</td>
+        <td width="300px">@item.ReportNo</td>
+        <td width="300px">@item.CustomerBookingNo</td>
+        <td width="250px">@item.CustomerName</td>
+        <td width="100px">@item.SupplierName</td>
+        <td width="150px">@item.SupplierCustomerCode</td>
+        <td width="150px">@item.FactoryName</td>
+        <td width="150px">@item.FactoryCustomerCode</td>
+        <td width="150px">@item.ServiceDateFrom</td>
+        <td width="150px">@item.ServiceDateTo</td>
+        <td width="150px">@item.ServiceType</td>
+        <td width="150px">@item.Office</td>
+        <td width="150px">@item.StatusName</td>
+        <td width="150px">@item.FactoryCountry</td>
+        <td width="150px">@item.Auditors</td>
+    </tr>
+        }
+    </table>
+</xls-sheet>

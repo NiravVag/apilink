@@ -1,0 +1,13 @@
+{
+  "model": "quotation.model",
+  "fields": {
+    "sampleQty": [
+      {
+        "type": "required",
+        "fieldType": "NU",
+        "ressource": "QUOTATION.MSG_SAMPLEQTY_REQ"
+      }
+    ]
+    
+  }
+}

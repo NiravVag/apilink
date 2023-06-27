@@ -1,0 +1,26 @@
+{
+  "model": "EditCustomerCheckPointModel.model",
+  "fields": {
+    "customerId": [
+      {
+        "type": "required",
+        "fieldType": "N",
+        "ressource": "CUSTOMER_CHECK_POINTS.MSG_CUSTOMER_REQ"
+      }
+    ],
+    "serviceId": [
+      {
+        "type": "required",
+        "fieldType": "N",
+        "ressource": "CUSTOMER_CHECK_POINTS.MSG_SERVICE_REQ"
+      }
+    ],
+    "checkPointId": [
+      {
+        "type": "required",
+        "fieldType": "N",
+        "ressource": "CUSTOMER_CHECK_POINTS.MSG_CHECKPOINT_REQ"
+      }
+    ]
+  }
+}

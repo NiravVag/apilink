@@ -1,0 +1,511 @@
+﻿@model (DTO.Inspection.BookingMailRequest, string)
+@using DTO.CommonClass;
+<style>
+    .th-table {
+        color: black;
+        vertical-align: top;
+        font-size: 13px;
+        font-family: tahoma;
+    }
+
+    .td-table {
+        font-size: 13px;
+        font-family: tahoma;
+    }
+
+    .div-style {
+        padding-bottom: 5px;
+        margin-bottom: 5px;
+    }
+</style>
+
+<table>
+    <tr>
+        <td style="font-size:13px; font-family:tahoma;">
+            Dear Sir / Madam,
+            <br /><br />
+            <div class="div-style">
+                Your Inspection booking (<b>INS</b> - @Model.Item1.BookingId) has been @Model.Item1.StatusName.
+            </div>
+            <div class="div-style">
+                Following are the details for your reference:
+            </div>
+            <br />
+            <table border="0">
+                @if (@Model.Item1.QuotationId > 0)
+                {
+                    <tr>
+                        <th class="th-table" align="left" width='24%'>
+                            Quotation No.:
+                        </th>
+                        <td class="td-table">
+                            @Model.Item1.QuotationId
+                        </td>
+                    </tr>
+                }
+                <tr>
+                    <th class="th-table" align="left" width='24%'>
+                        Customer:
+                    </th>
+                    <td class="td-table">
+                        @Model.Item1.CustomerName
+                    </td>
+                </tr>
+                @if (!string.IsNullOrEmpty(Model.Item1.CustomerBookingNo))
+                {
+                    <tr>
+                        <th class="th-table" align="left" width='24%'>
+                            Customer Booking No:
+                        </th>
+                        <td class="td-table">
+                            @Model.Item1.CustomerBookingNo
+                        </td>
+                    </tr>
+                }
+                @if (!String.IsNullOrEmpty(@Model.Item1.Buyer))
+                {
+                    <tr>
+                        <th class="th-table" align="left" width='24%'>
+                            Buyer:
+                        </th>
+                        <td class="td-table">
+                            @Model.Item1.Buyer
+                        </td>
+                    </tr>
+                }
+                @if (!String.IsNullOrEmpty(@Model.Item1.ProductCategory))
+                {
+                    <tr>
+                        <th class="th-table" align="left" width='24%'>
+                            Product Category:
+                        </th>
+                        <td class="td-table">
+                            @Model.Item1.ProductCategory
+                        </td>
+                    </tr>
+                }
+                @if (!String.IsNullOrEmpty(@Model.Item1.Brand))
+                {
+                    <tr>
+                        <th class="th-table" align="left" width='24%'>
+                            Brand:
+                        </th>
+                        <td class="td-table">
+                            @Model.Item1.Brand
+                        </td>
+                    </tr>
+                }
+                @if (!String.IsNullOrEmpty(@Model.Item1.Department))
+                {
+                    <tr>
+                        <th class="th-table" align="left" width='24%'>
+                            Department:
+                        </th>
+                        <td class="td-table">
+                            @Model.Item1.Department
+                        </td>
+                    </tr>
+                }
+                @if (!String.IsNullOrEmpty(@Model.Item1.ApplyDate))
+                {
+                    <tr>
+                        <th class="th-table" align="left" width='24%'>
+                            Apply Date (DD/MM/YYYY):
+                        </th>
+                        <td class="td-table">
+                            @Model.Item1.ApplyDate
+                        </td>
+                    </tr>
+                }
+                @if (!String.IsNullOrEmpty(@Model.Item1.ShipmentDate))
+                {
+                    <tr>
+                        <th class="th-table" align="left" width='24%'>
+                            Shipment Date (DD/MM/YYYY):
+                        </th>
+                        <td class="td-table">
+                            @Model.Item1.ShipmentDate
+                        </td>
+                    </tr>
+                }
+                <tr>
+                    <th class="th-table" align="left" width='24%'>
+                        <br />
+                        Supplier:
+                    </th>
+                    <td class="td-table">
+                        <br />
+                        <span>@Model.Item1.SupplierName</span>
+                        <br />
+                        @if (!String.IsNullOrEmpty(@Model.Item1.SupplierAddress))
+                        {
+                            @Model.Item1.SupplierAddress
+                            <br />
+                        }
+                        @if (!String.IsNullOrEmpty(@Model.Item1.SupplierPhone) && !String.IsNullOrEmpty(@Model.Item1.SupplierMail))
+                        {
+                            @Model.Item1.SupplierPhone<span> / </span>@Model.Item1.SupplierMail
+                            <br />
+                        }
+                        else if (!String.IsNullOrEmpty(@Model.Item1.SupplierPhone))
+                        {
+                            @Model.Item1.SupplierPhone
+                            <br />
+                        }
+                        else if (!String.IsNullOrEmpty(@Model.Item1.SupplierMail))
+                        {
+                            @Model.Item1.SupplierMail
+                            <br />
+                        }
+                    </td>
+                </tr>
+                <tr>
+                    <th class="th-table" align="left" width='24%'>
+                        <br />
+                        Factory:
+                    </th>
+                    <td class="td-table">
+                        <br />
+                        <span>@Model.Item1.FactoryName</span>
+                        <br />
+                        @if (!String.IsNullOrEmpty(@Model.Item1.FactoryAddress))
+                        {
+                            @Model.Item1.FactoryAddress
+                            <br />
+                        }
+                        @if (@Model.Item1.IsChinaCountry)
+                        {
+                            @if (!String.IsNullOrEmpty(@Model.Item1.FactoryRegionalAddress))
+                            {
+                                @Model.Item1.FactoryRegionalAddress
+                                <br />
+                            }
+                        }
+                        @if (!String.IsNullOrEmpty(@Model.Item1.FactoryPhone) && !String.IsNullOrEmpty(@Model.Item1.FactoryMail))
+                        {
+                            @Model.Item1.FactoryPhone<span> / </span>@Model.Item1.FactoryMail
+                            <br />
+                        }
+                        else if (!String.IsNullOrEmpty(@Model.Item1.FactoryPhone))
+                        {
+                            @Model.Item1.FactoryPhone
+                            <br />
+                        }
+                        else if (!String.IsNullOrEmpty(@Model.Item1.FactoryMail))
+                        {
+                            @Model.Item1.FactoryMail
+                            <br />
+                        }
+                        <br />
+                    </td>
+                </tr>
+                @if (!String.IsNullOrEmpty(@Model.Item1.FactoryCountry))
+                {
+                    <tr>
+                        <th class="th-table" align="left" width='24%'>
+                            Inspection Country:
+                        </th>
+                        <td class="td-table">
+                            @Model.Item1.FactoryCountry
+                        </td>
+                    </tr>
+                }
+                @if (@Model.Item1.DACorrelation)
+                {
+                    <tr>
+                        <th class="th-table" align="left" width='24%'>
+                            DA:
+                        </th>
+                        <td class="td-table">
+                            @Model.Item1.DAName (@Model.Item1.DAEmail)
+                        </td>
+                    </tr>
+                }
+                <tr class="div-style">
+                    <th class="th-table" align="left" width='24%'>
+                        Service Type:
+                    </th>
+                    <td class="td-table">
+                        @Model.Item1.ServiceType
+                        @if (!string.IsNullOrWhiteSpace(@Model.Item1.ReInspectionTypeName))
+                        {
+                            <span> (</span>
+                            @Model.Item1.ReInspectionTypeName
+                            <span>)</span>
+                        }
+                    </td>
+                </tr>
+                <tr class="div-style">
+                    <th class="th-table" align="left" width='24%'>
+                        <span style="background-color: yellow;">
+                            New Service Date -Rescheduled (DD/MM/YYYY):
+                        </span>
+                    </th>
+                    <td class="td-table">
+                        @if (@Model.Item1.ServiceDateFrom == @Model.Item1.ServiceDateTo)
+                        {
+                            <span style="background-color: yellow;">
+                                @Model.Item1.ServiceDateFrom
+                            </span>
+                        }
+                        else
+                        {
+                            <span style="background-color: yellow;">
+                                @Model.Item1.ServiceDateFrom <label> To </label>@Model.Item1.ServiceDateTo
+                            </span>
+                        }
+                    </td>
+                </tr>
+
+                @if (!String.IsNullOrEmpty(@Model.Item1.Season))
+                {
+                    <tr>
+                        <th class="th-table" align="left" width='24%'>
+                            Season:
+                        </th>
+                        <td class="td-table">
+                            @{ string seasonYear = !@String.IsNullOrEmpty(Model.Item1.SeasonYear) ? "/" + @Model.Item1.SeasonYear : "";}
+
+                            @Model.Item1.Season@seasonYear
+                        </td>
+                    </tr>
+                }
+                @if (@Model.Item1.BookingType == (int)InspectionBookingTypeEnum.UnAnnounced)
+                {
+                    <tr>
+                        <th class="th-table" align="left" width='24%'>
+                            Booking Type:
+                        </th>
+                        <td class="td-table" style="color:red">
+                            @Model.Item1.BookingTypeValue
+                        </td>
+                    </tr>
+                }
+
+                @if (@Model.Item1.ServiceType == "Container Service")
+                {
+                    <tr class="div-style">
+                        <th class="th-table" align="left" width='24%'>
+                            <br />
+                            Total No Of Containers:
+                        </th>
+                        <td class="td-table">
+                            <br />
+                            @Model.Item1.TotalContainers
+                        </td>
+                    </tr>
+                }
+
+                <tr>
+                    <th class="th-table" align="left" width='24%'>
+                        Previous Service Date (DD/MM/YYYY):
+                    </th>
+                    <td class="td-table" style="color:red">
+                        @if (@Model.Item1.RescheduleServiceDateFrom == @Model.Item1.RescheduleServiceDateTo)
+                        {
+                            @Model.Item1.RescheduleServiceDateFrom
+                        }
+                        else
+                        {
+                            @Model.Item1.RescheduleServiceDateFrom <span>  To  </span>@Model.Item1.RescheduleServiceDateTo
+                        }
+                    </td>
+                </tr>
+                <tr>
+                    <th class="th-table" align="left" width='24%'>
+                        Reschedule Reason:
+                    </th>
+                    <td class="td-table" style="color:red">
+                        @Model.Item1.ReasonType
+                    </td>
+                </tr>
+                <tr>
+                    <th class="th-table" align="left" width='24%'>
+                        Comment:
+                    </th>
+                    <td class="td-table" style="color:red">
+                        @Model.Item1.Comment
+                    </td>
+                </tr>
+            </table>
+            <br />
+            <table id='TblList' style="border:solid 1px #d4d0c8;border-collapse:collapse;font-size:12px; font-family:tahoma;" cellspacing='0' cellpadding='1' rules='all' align='left' border='1' cellspacing=0 cellpadding=0 width='100%'>
+                <tr>
+                    <th bgcolor=#f8f4f3 style="color: black; font-size:13px;" align=center width='10%' height=35>PO NO</th>
+
+                    <th bgcolor=#f8f4f3 style="color: black; font-size:13px;" align=center width='10%' height=35>Product Reference</th>
+                    <th bgcolor=#f8f4f3 style="color: black; font-size:13px;" align=center width='15%' height=35>Product Ref. Description</th>
+                    @if (Model.Item1.IsShowSoftLineItems)
+                    {
+                        <th bgcolor=#f8f4f3 style="color: black; font-size:13px;" align=center width='10%' height=35>Color Code</th>
+                        <th bgcolor=#f8f4f3 style="color: black; font-size:13px;" align=center width='10%' height=35>Color Name</th>
+                    }
+                    <th bgcolor=#f8f4f3 style="color: black; font-size:13px;" align=center width='13%' height=35>Product Name</th>
+                    <th bgcolor=#f8f4f3 style="color: black; font-size:13px;" align=center width='10%' height=35>Destination</th>
+                    <th bgcolor=#f8f4f3 style="color: black; font-size:13px;" align=center width='10%' height=35>Booking qty</th>
+                    @if (!Model.Item1.IsShowSoftLineItems)
+                    {
+                        <th bgcolor=#f8f4f3 style="color: black; font-size:13px;" align=center width='7%' height=35>Picking qty</th>
+                    }
+                    <th bgcolor=#f8f4f3 style="color: black; font-size:13px;" align=center width='30%' height=35>Remarks</th>
+                </tr>
+                @foreach (var poItem in @Model.Item1.InspectionPoList)
+                {
+                    <tr>
+                        <td align=center style="font-size: 12px;" height=30>
+                            @poItem.PoNo
+                        </td>
+                        <td align=center style="font-size: 12px;" height=30>
+                            @poItem.ProductId
+                        </td>
+                        <td align=center style="font-size: 12px;" height=30>
+                            @poItem.ProductDesc
+                        </td>
+                        @if (Model.Item1.IsShowSoftLineItems)
+                        {
+                            <td align=center style="font-size: 12px;" height=30>
+                                @poItem.ColorCode
+                            </td>
+                            <td align=center style="font-size: 12px;" height=30>
+                                @poItem.ColorName
+                            </td>
+                        }
+                        <td align=center style="font-size: 12px;" height=30>
+                            @poItem.SubCategory2
+                        </td>
+                        <td align=center style="font-size: 12px;" height=30>
+                            @poItem.DestinationCountry
+                        </td>
+                        <td align=center style="font-size: 12px;" height=30>
+                            @(poItem.BookingQty + " (" + @poItem.Unit + ")")
+                        </td>
+                        @if (!Model.Item1.IsShowSoftLineItems)
+                        {
+                            <td align=center style="font-size: 12px;" height=30>
+                                @poItem.PickingQty
+                            </td>
+                        }
+                        <td align=center style="font-size: 12px;" height=30>
+                            @poItem.Remarks
+                        </td>
+                    </tr>
+                }
+
+            </table>
+        </td>
+    </tr>
+    <tr>
+        <td style="font-size:13px; font-family:tahoma;">
+            <br />
+            <table border="0">
+                <tr>
+                    <th class="th-table" align="left" width='24%'>
+                        @Model.Item1.EntityName Comments:
+                    </th>
+                    <td class="td-table">
+                        @Model.Item1.BookingComment
+                    </td>
+                </tr>
+                @if (!String.IsNullOrEmpty(@Model.Item1.CusBookingComments))
+                {
+                    <tr>
+                        <th class="th-table" align="left" width='24%'>
+                            <br />
+                            Customer / Supplier Comments:
+                        </th>
+                        <td class="td-table">
+                            <br />
+                            @Model.Item1.CusBookingComments
+                        </td>
+                    </tr>
+                }
+            </table>
+        </td>
+    </tr>
+    @if (@Model.Item1.IsAfter48Hours)
+    {
+        <tr>
+            <td style="font-size:13px; font-family:tahoma;color: #0065FF;">
+                <br />
+                <div style="padding-bottom: 5px;margin-bottom:5px;">
+                    “Accounting: Please note that, current action may cause some penalty”
+                </div>
+            </td>
+        </tr>
+    }
+
+    @if (@Model.Item1.quotationExists)
+    {
+        <tr>
+            <td class="td-table">
+                <br />
+                <div class="div-style">
+                    <b>Quotation Team: </b> The Booking has been rescheduled. Kindly update the corresponding quotation.
+                </div>
+            </td>
+        </tr>
+    }
+
+    <tr>
+        <td class="td-table">
+            <br />
+            <div class="div-style">
+                Please login our <a href="@Model.Item2">Link</a> to view the updated status & details.
+            </div>
+            @if (@Model.Item1.AEUserEmail != "")
+            {
+                <div class="div-style">
+                    If any question, please send an email to AE (@Model.Item1.AEUserEmail)
+                </div>
+            }
+            else
+            {
+                <div class="div-style">
+                    If any question, please send an email to AE.
+                </div>
+            }
+            <br />
+            <span style="font-style:normal"><b> Note: - This receipt is auto generated from Link Booking System. Please do not reply to @Model.Item1.SenderEmail.</b></span>
+            <br />
+            <br />
+            @Html.Raw(Model.Item1.InspectionRescheduleEnglishFooter)
+        </td>
+    </tr>
+    <tr>
+        <td class="td-table">
+            <br />
+            <div class="div-style">
+                Thanks
+            </div>
+            <div class="div-style">
+                IT-Team
+            </div>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            @if (@Model.Item1.IsChinaCountry)
+            {
+                <br />
+                <br />
+
+                @Html.Raw(Model.Item1.InspectionRescheduleChineseFooter)
+
+            }
+        </td>
+    </tr>
+    @if (@Model.Item1.IsChinaCountry)
+    {
+        <tr>
+            <td class="td-table">
+                <br />
+                <div class="div-style">
+                    Thanks
+                </div>
+                <div class="div-style">
+                    @Model.Item1.EntityName IT-Team
+                </div>
+            </td>
+        </tr>
+    }
+</table>

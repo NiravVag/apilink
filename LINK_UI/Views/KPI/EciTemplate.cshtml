@@ -1,0 +1,121 @@
+﻿@using DTO.Common;
+@{
+    ViewData["Title"] = "ECI_YTD";
+}
+
+@model DTO.Kpi.ExportResult
+
+<xls-sheet name="ECI_YTD">
+    <table xls-begin="A:1" style="border-style:solid">
+        <tr style="background-color:#f5f5f5;font-weight:bold;text-align:center">
+            <th>INSPECTION COMPANY</th>
+            <th>Operating Office</th>
+            <th>Booking No</th>
+            <th>Inspection No</th>
+            <th>Booking Status</th>
+            <th>Service Request - Type of Inspection</th>
+            <th>PO</th>
+            <th>Customer</th>
+            <th>Department</th>
+            <th>ECI Office</th>
+            <th>Team</th>
+            <th>BDM</th>
+            <th>MERCHANDISER</th>
+            <th>QCM Name</th>
+            <th>Supplier Name</th>
+            <th>Factory Name</th>
+            <th>Factory City</th>
+            <th>Factory State or Province</th>
+            <th>Factory country</th>
+            <th>Inspection Begin date</th>
+            <th>Inspection End date</th>
+            <th>Report Date</th>
+            <th>Item-SKU</th>
+            <th>Bussiness Line</th>
+            <th>Product Category</th>
+            <th>Shipment Qty</th>
+            <th>Partial_Shipment</th>
+            <th>SAMPLE SIZE</th>
+            <th>COMBINE_SAMPLING</th>
+            <th>WM Code</th>
+            <th>MANDAY rate</th>
+            <th>No of WMD</th>
+            <th>WMD Fee</th>
+            <th>No of TMD</th>
+            <th>TMD Fee</th>
+            <th>Inspection Fee</th>
+            <th>Est Travel time</th>
+            <th>Air Ticket</th>
+            <th>Extra Description</th>
+            <th>Extra Fee</th>
+            <th>Total Cost</th>
+            <th>Tax</th>
+            <th>Tax Calculation</th>
+            <th>Total</th>
+            <th>Number of reports</th>
+            <th>Paid By</th>
+            <th>Note or Instructions</th>
+            <th>ECI First Quotation approval date</th>
+            <th>ECI reconfirmation after booking change</th>
+            <th>Picking</th>
+            <th>FtyRef</th>
+        </tr>
+        @foreach(var item in Model.Data)
+        {
+        <tr>
+            <td width="150px">API</td>
+            <td width="150px">@item.Office</td>
+            <td width="150px" xls-type="number">@item.BookingNo</td>
+            <td width="150px" xls-type="number">@item.BookingNo</td>
+            <td width="150px">@item.bookingStatus</td>
+            <td width="150px">@item.ServiceTypeName</td>
+            <td width="150px">@item.PONumber</td>
+            <td width="150px">@item.BuyerName</td>
+            <td width="150px">@item.DeptCode</td>
+            <td width="150px">@item.EciOffice</td>
+            <td width="150px"></td>
+            <td width="150px">@item.Bdm</td>
+            <td width="150px">@item.Merchandise</td>
+            <td width="150px">@item.QcmName</td>
+            <td width="150px">@Html.Raw(@item.SupplierName)</td>
+            <td width="150px">@Html.Raw(@item.FactoryName)</td>
+            <td width="150px">@Html.Raw(@item.FactoryCity)</td>
+            <td width="150px">@Html.Raw(@item.FactoryState)</td>
+            <td width="150px">@Html.Raw(@item.FactoryCountry)</td>
+            <td width="150px" xls-type="date" xls-format="@ApiCommonData.StandardDateFormat">@item.InspectionStartDate</td>
+            <td width="150px" xls-type="date" xls-format="@ApiCommonData.StandardDateFormat">@item.InspectionEndDate</td>
+            <td width="150px" xls-type="date" xls-format="@ApiCommonData.StandardDateFormat">@item.ReportDate</td>
+            <td width="150px">@item.ProductName</td>
+            <td width="150px">HARDLINE</td>
+            <td width="150px">@Html.Raw(@item.ProductCategory)</td>
+            <td width="150px">@item.ShipmentQty</td>
+            <td width="150px">@item.PartialShiptment</td>
+            <td width="150px">@item.SampleSize</td>
+            <td width="150px">@item.IsCombined</td>
+            <td width="150px">@item.WMCode</td>
+            <td width="150px">@item.InspectionFeePerUnit</td>
+            <td width="150px">@item.ManDay</td>
+            <td width="150px" xls-type="number">@item.WMDFee</td>
+            <td width="150px" xls-type="number">@item.NoOfTMD</td>
+            <td width="150px" xls-type="number">@item.TMDFee</td>
+            <td width="150px" xls-type="number">@item.InspectionFee</td>
+            <td width="150px" xls-type="number">@item.TravelTime</td>
+            <td width="150px" xls-type="number">@item.AirTicket</td>
+            <td width="150px">@item.Quotationcomment</td>
+            <td width="150px" xls-type="number">@item.TravellingCost</td>
+            <td width="150px" xls-type="number">@item.TotalInspectionFee</td>
+            <td width="150px" xls-type="number">0</td>
+            <td width="150px"></td>
+            <td width="150px">0</td>
+            <td width="150px" xls-type="number">@item.TotalReports</td>
+            <td width="150px">@item.PaidBy</td>
+            <td width="150px">@item.BookingRemarks</td>
+            <td width="150px" xls-type="date" xls-format="@ApiCommonData.StandardDateFormat">@item.ConfirmDate</td>
+            <td width="150px" xls-type="date" xls-format="@ApiCommonData.StandardDateFormat">@item.ReConfirmDate</td>
+            <td width="150px">@item.IsPicking</td>
+            <td width="150px">@item.FactoryRef</td>
+            
+        </tr>
+        }
+    </table>
+</xls-sheet>

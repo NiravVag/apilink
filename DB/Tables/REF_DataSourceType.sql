@@ -1,0 +1,4 @@
+﻿	CREATE TABLE [REF_DataSourceType] (
+		[Id] INT PRIMARY KEY, 
+		[Name] NVARCHAR(300) NOT NULL
+	)

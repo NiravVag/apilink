@@ -1,0 +1,68 @@
+<div class="main-wrapper">
+  <div class="wrapper dashboard-wrapper">
+    <div class="my-container">
+      <div class="master-body">
+        <div class="title-container">
+            <div class="header-back-button" *ngIf="fromSummary">
+                <img src="assets/images/back-red.png" alt="back" (click)="this.return('province/province-summary');">
+                </div>
+          <h3 class="main-title">
+            {{model.id==null?('EDIT_PROVINCE.LBL_ADD' | translate):('EDIT_PROVINCE.LBL_EDIT' | translate)}}&nbsp;{{ 'EDIT_PROVINCE.TITLE' | translate }}
+          </h3>
+        </div>
+        <div class="content-container">
+          <h4 class="container-head">{{ 'EDIT_PROVINCE.LBL_DETAILS' | translate }}</h4>
+          <div class="formPadding">
+          <div class="row">
+            <div class="col-sm-3">
+              <div class="my-input-group">
+                <label class="required">{{ 'EDIT_PROVINCE.LBL_COUNTRY' | translate }}</label>
+                <select [(ngModel)]="model.countryid" [ngClass]="{'is-invalid': !validator.isValid('countryid')}">
+                  <option value="0">---{{ 'EDIT_PROVINCE.LBL_SELECT' | translate }}---</option>
+                  <option *ngFor="let item of data.countryvalues" [ngValue]=item.id>{{item.countryName}}</option>
+                </select>
+                <div *ngIf="!validator.isValid('countryid')" class="invalid-feedback">
+                  <div *ngFor="let error of validator.getErrors('countryid')">{{ error | translate }}</div>
+                </div>
+              </div>
+            </div>
+            <div class="col-sm-3">
+              <div class="my-input-group">
+                <label class="required">{{ 'EDIT_PROVINCE.LBL_REGION' | translate }}</label>
+                <input [(ngModel)]="model.name" placeholder="{{ 'EDIT_PROVINCE.PH_REGION_NAME' | translate }}"
+                  type="text" [ngClass]="{'is-invalid': !validator.isValid('name')}" />
+                <div *ngIf="!validator.isValid('name')" class="invalid-feedback">
+                  <div *ngFor="let error of validator.getErrors('name')">{{ error | translate }}</div>
+                </div>
+              </div>
+            </div>
+            <div class="col-sm-3">
+              <div class="my-input-group">
+                <label>{{ 'EDIT_PROVINCE.LBL_REGION_CODE' | translate }}</label>
+                <input [(ngModel)]="model.code" placeholder="{{ 'EDIT_PROVINCE.PH_REGION_CODE' | translate }}"
+                  type="text" />
+              </div>
+            </div>
+          </div>
+        </div>
+          <div class="form-action-container">
+          
+            <button class="category-cta small mr-2 common-tooltip common-tooltip-top-2" data-tooltip="Reset"
+             (click)="Reset()">
+              <img src="assets/images/reload-new.svg" alt="Reset">
+              <span>{{'COMMON.LBL_RESET'| translate}}</span>
+            </button>
+            <button class="primary-cta small" [disabled]="loading" (click)="save()">
+              {{
+                    'EDIT_PROVINCE.LBL_SAVE' | translate
+                    }}
+              <span *ngIf="loading">
+                <i class="fa fa-refresh fa-spin" aria-hidden="true"></i>
+              </span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

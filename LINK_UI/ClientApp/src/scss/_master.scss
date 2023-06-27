@@ -1,0 +1,792 @@
+.master-body{
+	margin-top: 10px;
+	@include span(12 of 12);
+
+	@media only screen and (min-width: $tablet-min-width) and (max-width: $tablet-max-width){
+		@include push(0.3 of 12);
+		@include span(11.4 of 12);
+	}
+
+	@media only screen and (min-width: $mobile-min-width) and (max-width: $mobile-max-width){
+		@include push(0.3 of 12);
+		@include span(11.4 of 12);
+	}
+
+	.title-container{
+		position: relative;
+		padding: 5px 0 24px 0;
+
+		@media only screen and (min-width: $medium-desktop-min-width) and (max-width: $medium-desktop-max-width){
+			padding: 5px 0 24px 0;
+		}
+
+		@media only screen and (min-width: $tablet-min-width) and (max-width: $tablet-max-width){
+			padding-left: 0px;
+		}
+
+		@media only screen and (min-width: $mobile-min-width) and (max-width: $mobile-max-width){
+			padding: 5px 0 12px 0px;
+		}
+
+		.header-back-button{
+			cursor: pointer;
+			margin-right: 24px;
+			display: inline-block;
+			padding: 5px 24px 5px 0;
+			border-right: 1px solid #e0e1e2;
+
+			img{
+				width: 24px;
+			}
+
+			&:hover{
+
+				img{
+					animation-duration: 2s;
+					animation-fill-mode: both;
+					animation-iteration-count: 1;
+					animation-name: wobble;
+				}
+			}
+		}
+
+		.main-title{
+			margin: 0;
+			font-size: 24px;
+			font-weight: 500;
+			line-height: 0.96;
+			display: inline-block;
+			color: $primary-color;
+			letter-spacing: -0.1px;
+			font-family: $roboto-medium;
+
+			@media only screen and (min-width: $mobile-min-width) and (max-width: $mobile-max-width){
+				font-size: 20px;
+			}
+		}
+
+		small{
+			margin-top: 4px;
+			font-style: italic;
+			font-family: $roboto-regular;
+		}
+
+		.audit-rule-container{
+			right: 0;
+			top: 25px;
+			cursor: pointer;
+			position: absolute;
+
+			img{
+				display: inline-block;
+				vertical-align: middle;
+			}
+
+			p{
+				margin: 0;
+				font-size: 10px;
+				margin-left: 10px;
+				color: $primary-color;
+				display: inline-block;
+				vertical-align: middle;
+				font-family: $roboto-regular;
+			}
+		}
+	}
+
+	.content-container{
+		@include span(12 of 12);
+		background-color: $white;
+
+		.container-head{
+			margin: 2px;
+			color: #143743;
+			font-size: 16px;
+			font-weight: 500;
+			line-height: 1.44;
+			padding: 10px 38px 9px;
+			font-family: $roboto-medium;
+			background-color: rgba(#ede4e1, 0.6);
+
+			@media only screen and (min-width: $tablet-min-width) and (max-width: $tablet-max-width){
+				padding: 10px 28px 9px;
+			}
+
+			@media only screen and (min-width: $mobile-min-width) and (max-width: $mobile-max-width){
+				padding: 10px 20px 9px;
+			}
+
+			.head-icon{
+				width: 40px;
+				height: 40px;
+				margin-right: 10px;
+			}
+		}
+
+		.formPadding{
+			// padding: 30px 40px 40px;
+			padding: 24px;
+
+			@media only screen and (min-width: $tablet-min-width) and (max-width: $tablet-max-width){
+				padding: 30px 30px 40px;
+			}
+
+			@media only screen and (min-width: $mobile-min-width) and (max-width: $mobile-max-width){
+				padding: 30px 20px;
+			}
+		}
+
+		.searchFormPadding{
+			// padding: 40px 40px 26px;
+			padding: 24px;
+
+			@media only screen and (min-width: $tablet-min-width) and (max-width: $tablet-max-width){
+				// padding: 40px 30px 26px;
+				padding: 24px;
+			}
+
+			@media only screen and (min-width: $mobile-min-width) and (max-width: $mobile-max-width){
+				padding: 30px 20px 15px;
+			}
+		}
+
+		.master-form-checkbox{
+			margin-top: 40px;
+
+			@media only screen and (min-width: $tablet-min-width) and (max-width: $tablet-max-width){
+				margin-top: 10px;
+			}
+
+			@media only screen and (min-width: $mobile-min-width) and (max-width: $mobile-max-width){
+				margin-top: 10px;
+			}
+
+			label{
+				color: #203b4e;
+				font-size: 12px;
+				line-height: 1;
+				font-family: $roboto-medium;
+			}
+		}
+
+		.master-search-cta-container{
+			padding: 14px 38px;
+			margin-bottom: 2px;
+			@include span(11.96 of 12);
+			@include push(0.02 of 12);
+			background-color: #f8f4f3;
+
+			@media only screen and (min-width: $tablet-min-width) and (max-width: $tablet-max-width){
+				padding: 14px 25px;
+			}
+
+			@media only screen and (min-width: $mobile-min-width) and (max-width: $mobile-max-width){
+				padding: 14px 20px;
+			}
+
+			.column{
+				@include span(6 of 12);
+
+				@media only screen and (min-width: $tablet-min-width) and (max-width: $tablet-max-width){
+					@include span(6 of 12);
+				}
+
+				@media only screen and (min-width: $mobile-min-width) and (max-width: $mobile-max-width){
+					@include span(6 of 12);
+				}
+
+				&:last-child{
+					text-align: right;
+					@include span(6 of 12 last);
+
+					@media only screen and (min-width: $tablet-min-width) and (max-width: $tablet-max-width){
+						@include span(6 of 12 last);
+					}
+
+					@media only screen and (min-width: $mobile-min-width) and (max-width: $mobile-max-width){
+						@include span(6 of 12 last);
+					}
+				}
+			}
+
+			.secondary-cta{
+				margin-right: 10px;
+				margin-bottom: 5px;
+			}
+		}
+
+		.result-container{
+			@include span(12 of 12);
+		}
+
+		.no-result-container{
+			margin: 12px 0;
+			text-align: center;
+			padding: 20px 0 40px;
+			@include push(0.1 of 12);
+			@include span(11.8 of 12);
+			background-color: rgba(#e1e8f5, 0.4);
+
+			@media only screen and (min-width: $mobile-min-width) and (max-width: $mobile-max-width){
+				@include span(11.6 of 12);
+				@include push(0.2 of 12);
+			}
+
+			.title{
+				color: $primary-color;
+				font-size: 18px;
+				margin-bottom: 4px;
+				font-family: $roboto-regular;
+			}
+
+			p{
+				font-size: 12px;
+				margin-bottom: 18px;
+				color: rgba($primary-color, 0.4);
+				font-family: $roboto-regular;
+			}
+		}
+
+		// record-count
+		// table-container
+
+		// module used for master page form layout
+		.form-container{
+			@include span(12 of 12);
+			padding: 30px 40px 40px;
+
+			@media only screen and (min-width: $tablet-min-width) and (max-width: $tablet-max-width){
+				padding: 30px 30px 40px;
+			}
+
+			@media only screen and (min-width: $mobile-min-width) and (max-width: $mobile-max-width){
+				padding: 30px 20px 20px;
+			}
+
+			.column{
+				@include span(2.5 of 12);
+
+				@media only screen and (min-width: $tablet-min-width) and (max-width: $tablet-max-width){
+					@include span(4 of 12);
+				}
+
+				@media only screen and (min-width: $mobile-min-width) and (max-width: $mobile-max-width){
+					margin-bottom: 14px;
+					@include span(12 of 12);
+				}
+
+				&:first-child{
+					@include span(4.5 of 12);
+
+					@media only screen and (min-width: $tablet-min-width) and (max-width: $tablet-max-width){
+						margin-bottom: 25px;
+						@include span(12 of 12);
+					}
+
+					@media only screen and (min-width: $mobile-min-width) and (max-width: $mobile-max-width){
+						margin-bottom: 25px;
+						@include span(12 of 12);
+					}
+				}
+
+				&:last-child{
+					@include span(2.5 of 12 last);
+
+					@media only screen and (min-width: $tablet-min-width) and (max-width: $tablet-max-width){
+						@include span(4 of 12 last);
+					}
+
+					@media only screen and (min-width: $mobile-min-width) and (max-width: $mobile-max-width){
+						@include span(12 of 12);
+					}
+				}
+			}
+		}
+
+		.tab-container{
+			@include span(12 of 12);
+
+			.tab-switch-container{
+				margin: 0;
+				padding: 0;
+				padding: 0 40px;
+				list-style: none;
+				background-color: rgba(242, 242, 242, 0.4);
+
+				@media only screen and (min-width: $tablet-min-width) and (max-width: $tablet-max-width){
+					padding: 0 30px;
+				}
+
+				@media only screen and (min-width: $mobile-min-width) and (max-width: $mobile-max-width){
+					padding: 0;
+					overflow-x: scroll;
+					white-space: nowrap;
+				}
+
+				li{
+					color: #048de2;
+					font-size: 13px;
+					cursor: pointer;
+					font-weight: 500;
+					line-height: 1.77;
+					padding: 11px 24px;
+					display: inline-block;
+					font-family: $roboto-medium;
+
+					&.active, &:hover{
+						color: $white;
+						background-color: #048de2;
+					}
+				}
+			}
+
+			.tab-content-container{
+				padding: 21px 40px;
+				@include span(12 of 12);
+
+				@media only screen and (min-width: $tablet-min-width) and (max-width: $tablet-max-width){
+					padding: 21px 30px;
+				}
+
+				@media only screen and (min-width: $mobile-min-width) and (max-width: $mobile-max-width){
+					padding: 20px;
+				}
+
+				.tab-content{
+					display: none;
+					position: relative;
+					overflow-x: scroll;
+					white-space: nowrap;
+					@include span(12 of 12);
+
+					@media only screen and (min-width: $mobile-min-width) and (max-width: $mobile-max-width){
+						overflow: hidden;
+						white-space: normal;
+					}
+
+
+					&::-webkit-scrollbar-track{
+						border-radius: 10px;
+						background-color: #F5F5F5;
+					}
+
+					&::-webkit-scrollbar{
+						width: 6px;
+						background-color: #F5F5F5;
+					}
+
+					&::-webkit-scrollbar-thumb{
+						border-radius: 10px;
+						background-color: #999;
+					}
+
+					@media only screen and (min-width: $tablet-min-width) and (max-width: $tablet-max-width){
+						overflow-x: scroll;
+						white-space: nowrap;
+					}
+
+					&.active{
+						display: block;
+					}
+
+					.info-table{
+						min-width: 100%;
+						@include span(12 of 12);
+						border: solid 0.5px rgba(#bdd2e2, 0.5);
+
+						@media only screen and (min-width: $mobile-min-width) and (max-width: $mobile-max-width){
+							border: none;
+						}
+
+						thead{
+							background-color: #f2f5fa;
+
+							@media only screen and (min-width: $mobile-min-width) and (max-width: $mobile-max-width){
+								display: none;
+							}
+						}
+
+						tr{
+							border: solid 0.5px #bdd2e2;
+
+							@media only screen and (min-width: $mobile-min-width) and (max-width: $mobile-max-width){
+								border: none;
+							}
+
+							th{
+								line-height: 1;
+								font-size: 10px;
+								font-weight: 500;
+								text-align: left;
+								padding: 8px 10px;
+								color: rgba(#203b4e, 0.8);
+								font-family: $roboto-medium;
+								border-right: solid 0.5px rgba(#bdd2e2, 0.5);
+
+								small{
+									margin: 0;
+									font-size: 10px;
+									line-height: 2.3;
+									display: inline-block;
+									color: rgba(#203b4e, 0.6);
+									font-family: $roboto-light;
+								}
+							}
+
+							td{
+								padding: 8px 10px;
+								border-right: solid 0.5px rgba(#bdd2e2, 0.5);
+
+								@media only screen and (min-width: $tablet-min-width) and (max-width: $tablet-max-width){
+									min-width: 100px
+								}
+
+								@media only screen and (min-width: $mobile-min-width) and (max-width: $mobile-max-width){
+									padding: 0;
+									border: none;
+									display: block;
+									margin-bottom: 14px;
+								}
+
+								&.double{
+									width: 210px;
+
+									@media only screen and (min-width: $tablet-min-width) and (max-width: $tablet-max-width){
+										min-width: 210px;
+									}
+
+									@media only screen and (min-width: $mobile-min-width) and (max-width: $mobile-max-width){
+										width: auto;
+										min-width: auto;
+									}
+								}
+
+								.my-input-group{
+
+									label{
+										display: none;
+
+										@media only screen and (min-width: $mobile-min-width) and (max-width: $mobile-max-width){
+											display: inherit;
+										}
+
+										small{
+											margin: 0;
+											font-size: 10px;
+											line-height: 2.3;
+											display: inline-block;
+											color: rgba(#203b4e, 0.6);
+											font-family: $roboto-light;
+										}
+									}
+								}
+
+								input{
+									margin: 0;
+								}
+							}
+						}
+					}
+
+					.table-action{
+						padding: 23px 0 0;
+						margin-bottom: 10px;
+						@include span(12 of 12);
+
+						&.mobile-action{
+							right: 0;
+							padding: 0;
+							z-index: 3;
+							width: auto;
+							position: absolute;
+						}
+
+						span{
+							color: $brand-color;
+							padding: 0 12px;
+							font-size: 12px;
+							font-weight: bold;
+							line-height: 1;
+							display: inline-block;
+							font-family: $roboto-bold;
+
+							&:first-child{
+								padding-left: 0;
+								border-right: solid 0.5px rgba(#bdd2e2, 0.5);
+							}
+
+							img{
+								margin-right: 4px;
+								display: inline-block;
+								vertical-align: middle;
+							}
+						}
+					}
+				}
+			}
+		}
+
+		.vertical-tab-container{
+			padding: 4px;
+			display: table;
+			@include span(12 of 12);
+
+			.tab-switch-container{
+				margin: 0;
+				padding: 0;
+				width: 140px;
+				padding: 0px;
+				list-style: none;
+				display: table-cell;
+				background-color: rgba(242, 242, 242, 0.4);
+
+				@media only screen and (min-width: $tablet-min-width) and (max-width: $tablet-max-width){
+					padding: 0;
+				}
+
+				@media only screen and (min-width: $mobile-min-width) and (max-width: $mobile-max-width){
+					padding: 0;
+					overflow-x: scroll;
+					white-space: nowrap;
+				}
+
+				li{
+					display: block;
+					color: #048de2;
+					font-size: 13px;
+					cursor: pointer;
+					font-weight: 500;
+					line-height: 1.77;
+					padding: 15px 20px;
+					font-family: $roboto-medium;
+					border-bottom: solid 0.5px rgba(#bdd2e2, 0.5);
+
+					&:last-child{
+						border-bottom: none;
+					}
+
+					&.active, &:hover{
+						color: $white;
+						background-color: #048de2;
+					}
+				}
+			}
+
+			.tab-content-container{
+				width: 87%;
+				padding: 15px 40px;
+				vertical-align: top;
+				display: table-cell;
+
+				@media only screen and (min-width: $tablet-min-width) and (max-width: $tablet-max-width){
+					padding: 21px 30px;
+				}
+
+				@media only screen and (min-width: $mobile-min-width) and (max-width: $mobile-max-width){
+					padding: 20px;
+				}
+
+				.tab-content{
+					display: none;
+					position: relative;
+					@include span(12 of 12);
+
+					&::-webkit-scrollbar-track{
+						border-radius: 10px;
+						background-color: #F5F5F5;
+					}
+
+					&::-webkit-scrollbar{
+						width: 6px;
+						background-color: #F5F5F5;
+					}
+
+					&::-webkit-scrollbar-thumb{
+						border-radius: 10px;
+						background-color: #999;
+					}
+
+					&.active{
+						display: block;
+					}
+
+					.info-table{
+						min-width: 100%;
+						@include span(12 of 12);
+						border: solid 0.5px rgba(#bdd2e2, 0.5);
+
+						@media only screen and (min-width: $mobile-min-width) and (max-width: $mobile-max-width){
+							border: none;
+						}
+
+						thead{
+							background-color: #f2f5fa;
+
+							@media only screen and (min-width: $mobile-min-width) and (max-width: $mobile-max-width){
+								display: none;
+							}
+						}
+
+						tr{
+							border: solid 0.5px #bdd2e2;
+
+							@media only screen and (min-width: $mobile-min-width) and (max-width: $mobile-max-width){
+								border: none;
+							}
+
+							th{
+								line-height: 1;
+								font-size: 10px;
+								font-weight: 500;
+								text-align: left;
+								padding: 8px 10px;
+								color: rgba(#203b4e, 0.8);
+								font-family: $roboto-medium;
+								border-right: solid 0.5px rgba(#bdd2e2, 0.5);
+
+								small{
+									margin: 0;
+									font-size: 10px;
+									line-height: 2.3;
+									display: inline-block;
+									color: rgba(#203b4e, 0.6);
+									font-family: $roboto-light;
+								}
+							}
+
+							td{
+								padding: 8px 10px;
+								border-right: solid 0.5px rgba(#bdd2e2, 0.5);
+
+								@media only screen and (min-width: $tablet-min-width) and (max-width: $tablet-max-width){
+									min-width: 100px
+								}
+
+								@media only screen and (min-width: $mobile-min-width) and (max-width: $mobile-max-width){
+									padding: 0;
+									border: none;
+									display: block;
+									margin-bottom: 14px;
+								}
+
+								&.double{
+									width: 210px;
+
+									@media only screen and (min-width: $tablet-min-width) and (max-width: $tablet-max-width){
+										min-width: 210px;
+									}
+
+									@media only screen and (min-width: $mobile-min-width) and (max-width: $mobile-max-width){
+										width: auto;
+										min-width: auto;
+									}
+								}
+
+								.my-input-group{
+
+									label{
+										display: none;
+
+										@media only screen and (min-width: $mobile-min-width) and (max-width: $mobile-max-width){
+											display: inherit;
+										}
+
+										small{
+											margin: 0;
+											font-size: 10px;
+											line-height: 2.3;
+											display: inline-block;
+											color: rgba(#203b4e, 0.6);
+											font-family: $roboto-light;
+										}
+									}
+								}
+
+								input{
+									margin: 0;
+								}
+							}
+						}
+					}
+
+					.table-action{
+						padding: 23px 0 0;
+						margin-bottom: 10px;
+						@include span(12 of 12);
+
+						&.mobile-action{
+							right: 0;
+							padding: 0;
+							z-index: 3;
+							width: auto;
+							position: absolute;
+						}
+
+						span{
+							color: $brand-color;
+							padding: 0 12px;
+							font-size: 12px;
+							font-weight: bold;
+							line-height: 1;
+							display: inline-block;
+							font-family: $roboto-bold;
+
+							&:first-child{
+								padding-left: 0;
+								border-right: solid 0.5px rgba(#bdd2e2, 0.5);
+							}
+
+							img{
+								margin-right: 4px;
+								display: inline-block;
+								vertical-align: middle;
+							}
+						}
+					}
+				}
+			}
+		}
+
+		.form-action-container{
+			text-align: right;
+			padding: 0 40px 40px;
+			@include span(12 of 12);
+
+			@media only screen and (min-width: $tablet-min-width) and (max-width: $tablet-max-width){
+				padding: 0 30px 40px;
+			}
+
+			@media only screen and (min-width: $mobile-min-width) and (max-width: $mobile-max-width){
+				padding: 0 20px 40px;
+			}
+
+			.secondary-cta{
+				margin-right: 14px;
+			}
+		}
+	}
+
+	.new-content-container{
+		flex: 1;
+		display: flex;
+	}
+}
+
+
+.vertical-center{
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+.common-form-padding{
+	padding: 40px 40px 26px;
+
+	@media only screen and (min-width: $tablet-min-width) and (max-width: $tablet-max-width){
+		padding: 40px 20px 26px;
+	}
+
+	@media only screen and (min-width: $mobile-min-width) and (max-width: $mobile-max-width){
+		padding: 40px 20px 26px;
+	}
+}

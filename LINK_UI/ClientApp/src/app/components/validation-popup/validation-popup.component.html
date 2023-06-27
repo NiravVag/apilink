@@ -1,0 +1,17 @@
+<div class="modal-body header-small-modal">
+  <div class="small-model">
+    <div class="head">
+      <h6>{{title}}</h6>
+      <img src="assets/images/black-close.svg" alt="close" class="close" (click)="closeModal();">
+    </div>
+    <div class="body">
+      <ul>
+        <li *ngFor="let item of messages;">{{item}}</li>
+      </ul>  
+      <div class="marginTop20 text-right">
+        <button class="secondary-cta"
+        (click)="closeModal();">{{buttonText}}</button>
+      </div>
+    </div>
+  </div>
+</div>

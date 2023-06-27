@@ -1,0 +1,981 @@
+<div class="main-wrapper">
+    <div class="wrapper dashboard-wrapper">
+        <div class="my-container">
+            <div class="master-body">
+                <div class="title-container">
+                    <h3 *ngIf="!isReInspection && !isReBooking" class="main-title">
+                        {{ 'SCHEDULE_SUMMARY.LBL_BOOKINGSEARCH' | translate }}</h3>
+                    <h3 *ngIf="isReInspection" class="main-title">
+                        {{ 'SCHEDULE_SUMMARY.LBL_PREVBOOKINGSEARCH' | translate }}</h3>
+                    <h3 *ngIf="isReBooking" class="main-title">{{ 'SCHEDULE_SUMMARY.LBL_REBOOKINGSEARCH' | translate }}
+                    </h3>
+                </div>
+                <div class="content-container quotation-container">
+                    <div [@expandCollapse]="isFilterOpen ? 'open' : 'close'"
+                        class="centerContainerPadding common-filter-container">
+                        <div class="animated-icon-container" (click)="toggleFilterSection()"
+                            *ngIf="(model.items && model.items.length>0)">
+                            <img src="assets/images/cta-close-grey.svg" alt="close">
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-8 col-md-7 col-lg-4">
+                                <div class="my-input-group">
+                                    <div class="scroll-xradiolist mb-2">
+                                        <div class="styled-radio-container"
+                                            *ngFor="let item of bookingSearchtypelst;let idx = index">
+                                            <input type="radio" class="styled-radio" id="{{item.id}}" name="radio-group"
+                                                [value]="item.id" [checked]="idx === 0" [(ngModel)]="model.searchtypeid"
+                                                (change)="SetSearchTypemodel(item.id)">
+                                            <label for="{{item.id}}">{{item.name}}</label>
+                                        </div>
+                                    </div>
+                                    <input maxlength="200" (ngModelChange)="BookingNoValidation()"
+                                        [(ngModel)]="model.searchtypetext" type="text"
+                                        [ngClass]="{ 'is-invalid': model.searchtypetext!='' && _customvalidationforbookid}" />
+                                    <div *ngIf="model.searchtypetext!='' && _customvalidationforbookid"
+                                        class="invalid-feedback">
+                                        <div>{{ 'SCHEDULE_SUMMARY.MSG_BOOKINGNO_ERROR' | translate }}</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-6 col-md-8 col-xl-8 mobile-margin-top-15">
+                                <div class="my-input-group">
+                                    <div class="styled-radio-container"
+                                        *ngFor="let item of datetypelst;let idx = index">
+                                        <input type="radio" class="styled-radio" id="{{item.id}}" name="radio-group1"
+                                            [value]="item.id" [checked]="idx === 0" [(ngModel)]="model.datetypeid"
+                                            (change)="SetSearchDatetype(item.id)">
+                                        <label for="{{item.id}}">{{item.name}}</label>
+                                    </div>
+                                </div>
+
+
+                                <div class="row">
+                                    <div class="my-input-group col-sm-5 col-lg-3">
+                                        <div class="calendar-wrapper">
+                                            <input type="text" maxlength="10" container="body"
+                                                [ngClass]="{ 'is-invalid':  !validator.isValidIf('fromdate',IsDateValidationRequired())}"
+                                                readonly=readonly [(ngModel)]="model.fromdate" ngbDatepicker
+                                                #sdf="ngbDatepicker" (click)="sdf.toggle()">
+                                            <img src="assets/images/calendar-icon.svg" alt="" class="calendar-icon"
+                                                (click)="sdf.toggle()">
+
+                                            <img src="assets/images/cta-close-grey.svg" alt="" class="close-icon"
+                                                (click)="clearDateInput('fromdate')"
+                                                *ngIf="model.fromdate!=null||model.fromdate!=undefined">
+                                        </div>
+                                        <div *ngIf="!validator.isValidIf('fromdate',IsDateValidationRequired())"
+                                            class="invalid-feedback">
+                                            <div *ngFor="let error of validator.getErrors('fromdate')">
+                                                {{ error | translate }}</div>
+                                        </div>
+                                    </div>
+                                    <div class="my-input-group col-sm-5 col-lg-3">
+                                        <div class="calendar-wrapper">
+                                            <input type="text" maxlength="10" container="body"
+                                                [ngClass]="{ 'is-invalid':  !validator.isValidIf('todate',IsDateValidationRequired())}"
+                                                readonly=readonly [(ngModel)]="model.todate" ngbDatepicker
+                                                #sdt="ngbDatepicker" (click)="sdt.toggle()">
+                                            <img src="assets/images/calendar-icon.svg" alt="" class="calendar-icon"
+                                                (click)="sdt.toggle()">
+                                            <img src="assets/images/cta-close-grey.svg" alt="" class="close-icon"
+                                                (click)="clearDateInput('todate')"
+                                                *ngIf="model.todate!=null||model.todate!=undefined">
+                                        </div>
+                                        <div *ngIf="!validator.isValidIf('todate',IsDateValidationRequired())"
+                                            class="invalid-feedback">
+                                            <div *ngFor="let error of validator.getErrors('todate')">
+                                                {{ error | translate }}</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <div class="row marginTop15">
+                                    <div class="col-sm-3 col-md-3 col-lg-3">
+                                        <div class="my-input-group">
+                                            <label for="">{{ 'SCHEDULE_SUMMARY.LBL_OFFICE' | translate }}</label>
+                                            <ng-select [searchable]="true" [loading]="Initialloading" appendTo="body"
+                                                [items]="data.officeList" bindLabel="name" bindValue="id"
+                                                [hideSelected]="true" [multiple]="true" class="multiple"
+                                                placeholder="--- {{(data.officeList!=null && data.officeList.length!=0? 'SCHEDULE_SUMMARY.LBL_SELECT':'SCHEDULE_SUMMARY.MSG_NO_DATA')  | translate }} ---"
+                                                [(ngModel)]="model.officeidlst">
+                                            </ng-select>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-sm-3 col-md-3 col-lg-3">
+                                        <div class="my-input-group">
+                                            <label for="">{{ 'SCHEDULE_SUMMARY.LBL_COUNTRY' | translate }}</label>
+                                            <ng-select [searchable]="true" [loading]="Initialloading" appendTo="body"
+                                                (ngModelChange)="refreshprovince($event)" [items]="data.countryValues"
+                                                bindLabel="countryName" bindValue="id" [hideSelected]="true"
+                                                [multiple]="false"
+                                                placeholder="--- {{(data.countryValues!=null && data.countryValues.length!=0? 'SCHEDULE_SUMMARY.LBL_SELECT':'SCHEDULE_SUMMARY.MSG_NO_DATA')  | translate }} ---"
+                                                [(ngModel)]="model.countryId">
+                                                <ng-template ng-option-tmp let-item="item">
+                                                    <div class="text-wrap">{{ item.countryName }}</div>
+                                                </ng-template>
+                                            </ng-select>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-sm-3 col-md-3 col-lg-3">
+                                        <div class="my-input-group">
+                                            <label for="">{{ 'SCHEDULE_SUMMARY.LBL_PROVINCE' | translate }}</label>
+                                            <ng-select [searchable]="true" [loading]="provinceLoading" appendTo="body"
+                                                (ngModelChange)="refreshcity($event)" [items]="data.provincevalues"
+                                                bindLabel="name" bindValue="id" [hideSelected]="true" [multiple]="false"
+                                                placeholder="--- {{(data.provincevalues!=null && data.provincevalues.length!=0? 'SCHEDULE_SUMMARY.LBL_SELECT':'SCHEDULE_SUMMARY.MSG_NO_DATA')  | translate }} ---"
+                                                [(ngModel)]="model.provinceId">
+                                                <ng-template ng-option-tmp let-item="item">
+                                                    <div class="text-wrap">{{ item.name }}</div>
+                                                </ng-template>
+                                            </ng-select>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-3 col-md-3 col-lg-3">
+                                        <div class="my-input-group">
+                                            <label for="">{{ 'SCHEDULE_SUMMARY.LBL_CITY' | translate }}</label>
+                                            <ng-select [searchable]="true" [loading]="cityLoading"
+                                                [items]="data.cityvalues" bindLabel="name" bindValue="id"
+                                                [hideSelected]="true" [multiple]="false" appendTo="body"
+                                                placeholder="--- {{(data.cityvalues!=null && data.cityvalues.length!=0? 'SCHEDULE_SUMMARY.LBL_SELECT':'SCHEDULE_SUMMARY.MSG_NO_DATA')  | translate }} ---"
+                                                [(ngModel)]="model.cityId">
+                                                <ng-template ng-option-tmp let-item="item">
+                                                    <div class="text-wrap">{{ item.name }}</div>
+                                                </ng-template>
+                                            </ng-select>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-sm-12" *ngIf="toggleFormSection">
+                                <div class="row marginTop15">
+                                    <div class="col-sm-3 col-md-3 col-lg-3">
+                                        <div class="my-input-group">
+                                            <label for="">{{ 'SCHEDULE_SUMMARY.LBL_CUSTOMER' | translate }}</label>
+                                            <ng-select #customer [searchable]="true" [items]="data.customerList"
+                                                bindLabel="name" (change)="ChangeCustomer($event)"
+                                                [loading]="Initialloading" appendTo="body"
+                                                [ngClass]="{ 'is-invalid': !validator.isValid('customerid')}"
+                                                bindValue="id" [hideSelected]="true"
+                                                placeholder="--- {{(data.customerList!=null && data.customerList.length!=0? 'SCHEDULE_SUMMARY.LBL_SELECT':'SCHEDULE_SUMMARY.MSG_NO_DATA')  | translate }} ---"
+                                                [(ngModel)]="model.customerid">
+                                                <ng-template ng-option-tmp let-item="item">
+                                                    <div class="text-wrap">{{ item.name }}</div>
+                                                </ng-template>
+                                            </ng-select>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-3 col-md-3 col-lg-3 mobile-margin-top-15">
+                                        <div class="my-input-group">
+                                            <label for="">{{ 'SCHEDULE_SUMMARY.LBL_SUPPLIER' | translate }}</label>
+                                            <ng-select [multiple]="false" [closeOnSelect]="true" [searchable]="true"
+                                                (change)="ChangeSupplier($event)" [hideSelected]="true"
+                                                [loading]=suploading bindLabel="name" bindValue="id"
+                                                [items]="data.supplierList" appendTo="body"
+                                                placeholder="--- {{ (data.supplierList!=null && data.supplierList.length!=0? 'SCHEDULE_SUMMARY.LBL_SELECT':'SCHEDULE_SUMMARY.MSG_NO_DATA' ) | translate }} ---"
+                                                [(ngModel)]="model.supplierid">
+                                                <ng-template ng-option-tmp let-item="item">
+                                                    <div class="text-wrap">{{ item.name }}</div>
+                                                </ng-template>
+                                            </ng-select>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-3 col-md-3 col-lg-3 mobile-margin-top-15">
+                                        <div class="my-input-group">
+                                            <label for="">{{ 'SCHEDULE_SUMMARY.LBL_FACTORY' | translate }}</label>
+                                            <ng-select [multiple]="true" class="multiple" [searchable]="true"
+                                                [loading]="factloading" [items]="data.factoryList" bindLabel="name"
+                                                bindValue="id" [hideSelected]="true" appendTo="body"
+                                                placeholder="--- {{ (data.factoryList!=null && data.factoryList.length!=0? 'SCHEDULE_SUMMARY.LBL_SELECT':'SCHEDULE_SUMMARY.MSG_NO_DATA' ) | translate }} ---"
+                                                [(ngModel)]="model.factoryidlst">
+                                                <ng-template ng-option-tmp let-item="item">
+                                                    <div class="text-wrap">{{ item.name }}</div>
+                                                </ng-template>
+                                            </ng-select>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-3 col-md-3 col-lg-3 mobile-margin-top-15">
+                                        <div class="my-input-group select-for-filter mr-md-0">
+                                            <label for="">{{ 'SCHEDULE_SUMMARY.LBL_STATUS' | translate }}</label>
+                                            <ng-select [multiple]="true" [searchable]="true" [loading]=Initialloading
+                                                [items]="data.statusList" class="multiple" bindLabel="statusName"
+                                                bindValue="id" [hideSelected]="false" appendTo="body"
+                                                placeholder="--- {{ (data.statusList!=null && data.statusList.length!=0? 'SCHEDULE_SUMMARY.LBL_SELECT':'SCHEDULE_SUMMARY.MSG_NO_DATA' ) | translate }} ---"
+                                                [(ngModel)]="model.statusidlst">
+                                                <ng-template ng-option-tmp let-item="item">
+                                                    <div class="text-wrap">{{ item.statusName }}</div>
+                                                </ng-template>
+                                                <ng-template ng-multi-label-tmp let-items="model.statusidlst"
+                                                    let-clear="clear">
+                                                    <div class="ng-value"
+                                                        *ngIf="model.statusidlst && model.statusidlst.length > 0">
+                                                        <span class="ng-value-label">{{model.statusidlst.length}}
+                                                            {{'MANDAY_UTILIZATION_DASHBOARD.LBL_SELECTED' | translate
+                                                            }}</span>
+                                                    </div>
+                                                </ng-template>
+                                            </ng-select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row marginTop15">
+                                    <div class="col-sm-3 col-md-4 col-lg-3">
+                                        <div class="my-input-group marginTop10">
+                                            <label class="marginTop10" for="">{{'BOOKING_SUMMARY.LBL_QuotationStatus' |
+                                                translate}}</label>
+                                            <ng-select [items]="data.quotationStatusList" class="multiple"
+                                                multiple="true" bindLabel="label" [searchable]="true" bindValue="id"
+                                                [clearable]="false" [(ngModel)]="model.quotationsStatusIdlst"
+                                                [hideSelected]="true" appendTo="body"
+                                                placeholder=" ---{{ (data.quotationStatusList!=null && data.quotationStatusList.length!=0? 'QUOTATION_SUMMARY.LBL_SELECT':'QUOTATION_SUMMARY.MSG_NO_DATA' ) | translate }}---">
+                                            </ng-select>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-3 col-md-4 col-lg-3">
+                                        <div class="my-input-group marginTop10">
+                                            <label for="">{{ 'SCHEDULE_SUMMARY.LBL_QC' | translate }}</label>
+                                            <ng-select [items]="scheduleFilterRequest.qcList" [virtualScroll]="true"
+                                                appendTo="body" [loading]="scheduleFilterRequest.qcLoading"
+                                                bindLabel="name" bindValue="id"
+                                                placeholder="--- {{ (scheduleFilterRequest.qcList!=null && scheduleFilterRequest.qcList.length!=0? 'BOOKING_SUMMARY.LBL_SELECT':'BOOKING_SUMMARY.MSG_NO_DATA' ) | translate }} ---"
+                                                [typeahead]="scheduleFilterRequest.qcInput" [minTermLength]="3"
+                                                [(ngModel)]="model.qcIdlst" [multiple]="true" class="multiple"
+                                                (scrollToEnd)="getQcData(true)" #select>
+                                                <ng-template ng-option-tmp let-item="item" let-index="index"
+                                                    let-search="searchTerm">
+                                                    <!-- <b>{{index}} </b><span>{{item.name}}</span> -->
+                                                    <span>{{item.name}}</span>
+                                                </ng-template>
+                                                <ng-template ng-multi-label-tmp let-items="model.qcIdlst"
+                                                    let-clear="clear">
+                                                    <div class="ng-value"
+                                                        *ngIf="model.qcIdlst && model.qcIdlst.length > 0">
+                                                        <span class="ng-value-label">{{model.qcIdlst.length}}
+                                                            {{'MANDAY_UTILIZATION_DASHBOARD.LBL_SELECTED' | translate
+                                                            }}</span>
+                                                    </div>
+                                                </ng-template>
+                                            </ng-select>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-3 col-md-4 col-lg-3">
+                                        <div class="my-input-group marginTop10">
+                                            <label for="">{{ 'SCHEDULE_SUMMARY.LBL_ZONE' | translate }}</label>
+                                            <ng-select [items]="scheduleZoneFilterRequest.zoneList"
+                                                [virtualScroll]="true" appendTo="body"
+                                                [loading]="scheduleZoneFilterRequest.zoneLoading" bindLabel="name"
+                                                bindValue="id"
+                                                placeholder="--- {{ (scheduleZoneFilterRequest.zoneList!=null && scheduleZoneFilterRequest.zoneList.length!=0? 'BOOKING_SUMMARY.LBL_SELECT':'BOOKING_SUMMARY.MSG_NO_DATA' ) | translate }} ---"
+                                                [typeahead]="scheduleZoneFilterRequest.zoneInput"
+                                                [(ngModel)]="model.zoneIdlst" [multiple]="true" class="multiple"
+                                                (scrollToEnd)="getZoneData(true)" #select>
+                                                <ng-template ng-option-tmp let-item="item" let-index="index"
+                                                    let-search="searchTerm">
+                                                    <!-- <b>{{index}} </b><span>{{item.name}}</span> -->
+                                                    <span>{{item.name}}</span>
+                                                </ng-template>
+                                                <ng-template ng-multi-label-tmp let-items="model.zoneIdlst"
+                                                    let-clear="clear">
+                                                    <div class="ng-value"
+                                                        *ngIf="model.zoneIdlst && model.zoneIdlst.length > 0">
+                                                        <span class="ng-value-label">{{model.zoneIdlst.length}}
+                                                            {{'MANDAY_UTILIZATION_DASHBOARD.LBL_SELECTED' | translate
+                                                            }}</span>
+                                                    </div>
+                                                </ng-template>
+                                            </ng-select>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-3 col-md-4 col-lg-3">
+                                        <div class="my-input-group marginTop10">
+                                            <label for="">{{ 'SCHEDULE_SUMMARY.LBL_SERVICETYPE' | translate }}</label>
+                                            <ng-select [items]="serviceTypeList" class="multiple" multiple="true"
+                                                bindLabel="name" bindValue="id" [clearable]="false"
+                                                [(ngModel)]="model.serviceTypelist" appendTo="body"
+                                                placeholder=" ---{{ (serviceTypeList!=null && serviceTypeList.length!=0? 'QUOTATION_SUMMARY.LBL_SELECT':'QUOTATION_SUMMARY.MSG_NO_DATA' ) | translate }}---"
+                                                (change)="changeServiceType()">
+                                                <ng-template ng-option-tmp let-item="item">
+                                                    <div class="text-wrap">{{ item.name }}</div>
+                                                </ng-template>
+                                            </ng-select>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row marginTop15" *ngIf="scheduleMasterData.entityId==scheduleMasterData.entityAccess.AQF">
+                                    <div class="col-sm-3 col-md-3 col-lg-2">
+                                        <div class="my-input-group marginTop25">
+                                            <div class="styled-checkbox-container">
+                                                <input class="styled-checkbox" id="checkbox-eaqf" type="checkbox"
+                                                    [(ngModel)]="model.isEAQF">
+                                                <label for="checkbox-eaqf">{{'E-AQF.LBL_EAQF' | translate}}</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row marginTop25">
+                            <div class="col-12 col-sm-6">
+                                <button class="tertiary-cta small" (click)="toggleSection()">
+                                    <span class="icon" *ngIf="!toggleFormSection">+</span>
+                                    <span class="icon" *ngIf="toggleFormSection">-</span>
+                                    {{'QUOTATION_SUMMARY.LBL_ADVANCED_SEARCH' | translate}}
+                                </button>
+                            </div>
+                            <div class="col-12 col-sm-6 text-right mt-3 mt-sm-0">
+                                <button class="primary-cta small  mr-2" (click)="openQcVisibilityPopUp(QcVisiblePopUp)"
+                                    [disabled]="sendEmailLoading" *ngIf="isBookingForQcVisible">
+                                    <span>{{ 'SCHEDULE_SUMMARY.LBL_QC_VISIBLE' | translate }} </span>
+                                </button>
+                                <button class="primary-cta small  mr-2" (click)="SendScheduleEmail(model)"
+                                    [disabled]="sendEmailLoading" *ngIf="isBookingForEmailSelected">
+                                    <span>{{ 'SCHEDULE_SUMMARY.LBL_QC_SCHEDULE_EMAIL' | translate}} </span>
+                                </button>
+
+                                <button class="category-cta small mr-2 common-tooltip common-tooltip-top-2"
+                                    data-tooltip="Reset" [disabled]="cancelLoading" (click)="Reset()">
+                                    <img src="assets/images/reload-new.svg" alt="Reset">
+                                    <span>{{'COMMON.LBL_RESET'| translate}}</span>
+                                </button>
+
+                                <button class="secondary-cta small mr-2"
+                                    (click)="openExportPopup(exportScheduleSummary)"
+                                    [disabled]="exportDataLoading || cancelLoading"
+                                    *ngIf="model.items != null && model.items.length != 0  && !model.noFound">
+                                    <img src="assets/images/red-export.svg" alt="export">
+                                    {{ 'QUOTATION_SUMMARY.LBL_EXPORT' | translate }}
+                                    <span *ngIf="exportDataLoading">
+                                        <i class="fa fa-refresh fa-spin" aria-hidden="true"></i>
+                                    </span>
+                                </button>
+                                <button class="primary-cta small"
+                                    [disabled]="searchloading || Initialloading || cancelLoading || exportDataLoading"
+                                    (click)="SearchDetails()"> {{ 'QUOTATION_SUMMARY.LBL_SEARCH_BTN' | translate }}
+                                    <span *ngIf="searchloading">
+                                        <i class="fa fa-refresh fa-spin" aria-hidden="true"></i>
+                                    </span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="centerContainerPadding float-left" *ngIf="(model.items && model.items.length>0)">
+                        <div class="row">
+                            <div class="col-12 col-sm-12 col-xl-4 d-flex">
+                                <p class="search-trigger-heading" [innerHtml]="showPaginationTitleText()"> ,
+                                    {{'TRAVEL_MATRIX.LBL_TOTAL' | translate}} {{mandayCount}}
+                                    {{'SCHEDULE_SUMMARY.LBL_PLANNED_MANDAY' | translate}}</p>
+                            </div>
+
+                            <div class="col-12 col-sm-12 col-xl-8 text-right">
+                                <ul class="table-badge-container mobile-hide tablet-hide">
+                                    <li (click)="SearchByStatus(status.id)"
+                                        [ngStyle]="{'background-color': status.statusColor}"
+                                        *ngFor="let status of _statuslist| slice:0:5">
+                                        <span>{{status.totalCount}}</span> <span>{{status.statusName}}</span>
+                                    </li>
+                                    <ng-container *ngIf="_statuslist.length>5">
+                                        <li class="more has-dropdown">
+                                            <img src="assets/images/cta-menu-grey.svg" alt="">
+                                            <ul class="cta-dropdown bottom-left">
+                                                <li (click)="SearchByStatus(status.id)"
+                                                    [ngStyle]="{'color': status.statusColor}"
+                                                    *ngFor="let status of _statuslist | slice:5:_statuslist.length">
+                                                    <span>{{status.totalCount}}</span>
+                                                    <span>{{status.statusName}}</span>
+                                                </li>
+                                            </ul>
+                                        </li>
+                                    </ng-container>
+                                </ul>
+                                <div class="animated-icon-container" *ngIf="!isFilterOpen"
+                                    (click)="toggleFilterSection()">
+                                    <img src="assets/images/cta-search-grey.svg" alt="search">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row mt-3 desktop-hide">
+                            <div class="col-sm-12">
+                                <ul class="table-badge-container">
+                                    <li (click)="SearchByStatus(status.id)" style="margin: 2px;"
+                                        [ngStyle]="{'background-color': status.statusColor}"
+                                        *ngFor="let status of _statuslist">
+                                        <span>{{status.totalCount}}</span>
+                                        <span>{{status.statusName}}</span>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="quotation-search-container">
+                            <div class="table-container h-scroll">
+                                <table class="pagination-table simple-table bordered">
+                                    <col>
+                                    <colgroup span="2"></colgroup>
+                                    <colgroup span="2"></colgroup>
+                                    <thead>
+                                        <tr>
+                                            <!-- <th>{{ 'SCHEDULE_SUMMARY.LBL_PONO' | translate }}</th> -->
+                                            <th class="width-120 Center_Middle" *ngIf="showSelectAllCheckBox">
+                                                <div class="styled-checkbox-container">
+                                                    <input class="styled-checkbox" id="checkbook"
+                                                        [checked]="selectAllChecked" type="checkbox"
+                                                        (change)="SelectAllCheckBox()">
+                                                    <label for="checkbook"> {{'SCHEDULE_SUMMARY.LBL_SEND_EMAIL' |
+                                                        translate}}</label>
+                                                </div>
+                                            </th>
+                                            <th class="width-120 Center_Middle" *ngIf="showSelectAllQCCheckBox">
+                                                <div class="styled-checkbox-container">
+                                                    <input class="styled-checkbox" id="checkbook-qc"
+                                                        [checked]="selectAllQcVisibleChecked" type="checkbox"
+                                                        (change)="SelectAllQcVisibleCheckBox()">
+                                                    <label for="checkbook-qc"> {{'SCHEDULE_SUMMARY.LBL_QC_VISIBLE' |
+                                                        translate}}</label>
+                                                </div>
+                                            </th>
+
+                                            <th></th>
+                                            <th *ngIf="showMandayButton"></th>
+                                            <th class="width-60 sticky-left-column">{{ 'SCHEDULE_SUMMARY.LBL_INSPNO' |
+                                                translate }}</th>
+                                            <th class="width-80">{{'CITY_SUMMARY.LBL_REGION' | translate}}</th>
+                                            <th class="width-80">{{'CITY_SUMMARY.LBL_CITY' | translate}}</th>
+                                            <th class="width-80">Zone</th>
+                                            <th class="width-80">{{'EDIT_SUPPLIER.LBL_COUNTY' | translate}}</th>
+                                            <th class="width-80">{{'EDIT_SUPPLIER.LBL_TOWN' | translate}}</th>
+                                            <th class="width-100">{{ 'BOOKING_SUMMARY.LBL_QuotationStatus' | translate
+                                                }}
+                                            </th>
+                                            <!-- -->
+                                            <th class="width-160"
+                                                *ngIf="entPageFieldAccessEnum.Schedule_Summary_Product_Ref | dataFieldAccessPipe :filterEntFieldAccess">
+
+                                                {{ 'SCHEDULE_SUMMARY.LBL_PRODUCT_REF' | translate }}
+                                            </th>
+                                            <th class="width-100">{{'SCHEDULE_SUMMARY.LBL_SERVICETYPE' | translate}}
+                                            </th>
+                                            <th class="width-100">{{'SCHEDULE_SUMMARY.LBL_SERVICEDATE' | translate}}
+                                            </th>
+                                            <th class="width-100">{{ 'SCHEDULE_SUMMARY.LBL_MANDAY_IND' | translate }}
+                                            </th>
+                                            <th class="width-100">{{ 'SCHEDULE_SUMMARY.LBL_CALCULATED_WORKING_HRS' |
+                                                translate }}</th>
+                                            <th class="width-100">{{ 'SCHEDULE_SUMMARY.LBL_QC' | translate }}</th>
+                                            <th class="width-80">{{ 'SCHEDULE_SUMMARY.LBL_ADDITIONALQC' | translate }}
+                                            </th>
+                                            <th class="width-100">{{ 'SCHEDULE_SUMMARY.LBL_REPORT_CHECKER' | translate
+                                                }}
+                                            </th>
+                                            <th class="width-120">{{ 'SCHEDULE_SUMMARY.LBL_CUSTOMER' | translate }}</th>
+                                            <th class="width-160">{{ 'SCHEDULE_SUMMARY.LBL_FACTORY' | translate }}</th>
+                                            <th class="width-120">{{ 'SCHEDULE_SUMMARY.LBL_SUPPLIER' | translate }}</th>
+                                            <th class="width-100">{{'SCHEDULE_SUMMARY.LBL_ITEM' | translate}}/
+                                                {{'AUIDT_SUMMARY.LBL_REPORT' | translate}}</th>
+                                            <th class="width-100">{{ 'SCHEDULE_SUMMARY.LBL_TOTAL_BOOKING_SAMPLE_SIZE' | translate}}</th>
+                                            <th class="width-100">{{'SCHEDULE_SUMMARY.LBL_FIRST_SERVICEDATE' |
+                                                translate}}
+                                            </th>
+                                            <th class="width-120">{{'SCHEDULE_SUMMARY.LBL_PRODUCT_CATEGORY' |
+                                                translate}}
+                                            </th>
+                                            <th class="width-120">{{'SCHEDULE_SUMMARY.LBL_PRODUCT_SUB_CATEGORY' |
+                                                translate}}
+                                            </th>
+                                            <th class="width-120">{{'SCHEDULE_SUMMARY.LBL_PRODUCT_NAME' | translate}}
+                                            </th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        
+                                        <tr *ngFor="let iteminfo of model.items" style="border-left: 5px solid #fff;"
+                                            [ngStyle]="{'border-left-color': GetStatusColor(iteminfo.statusName)}">
+                                            <!-- <td>{{iteminfo.poNumber}}</td> -->
+                                            <td class="width-60 Center_Middle" *ngIf="showSelectAllCheckBox">
+                                                <div class="styled-checkbox-container" *ngIf="iteminfo.showCheckBox">
+                                                    <input class="styled-checkbox"
+                                                        id="checkbookid-{{iteminfo.bookingId}}" type="checkbox"
+                                                        [(ngModel)]="iteminfo.isBookingSelected"
+                                                        (ngModelChange)="Getbookingids(iteminfo)">
+                                                    <label for="checkbookid-{{iteminfo.bookingId}}"></label>
+
+                                                </div>
+                                            </td>
+                                            <td class="width-60 Center_Middle" *ngIf="showSelectAllQCCheckBox">
+                                                <div class="styled-checkbox-container" *ngIf="iteminfo.hasQcVisible">
+                                                    <input class="styled-checkbox"
+                                                        id="checkbookidQc-{{iteminfo.bookingId}}" type="checkbox"
+                                                        [(ngModel)]="iteminfo.isQcVisibleBookingSelected"
+                                                        (ngModelChange)="GetQcVisiblebookingids(iteminfo)">
+                                                    <label for="checkbookidQc-{{iteminfo.bookingId}}"></label>
+                                                </div>
+                                            </td>
+                                            <td class="Center_Middle">
+                                                <span class="table-cta icon-cta common-tooltip"
+                                                    *ngIf=" Check(iteminfo) && !isReInspection && !isReBooking"
+                                                    (click)="getDetails(iteminfo.bookingId)" data-tooltip="Edit">
+                                                    <img src="assets/images/cta-edit.svg" alt="Edit">
+                                                </span>
+                                                <span class="table-cta icon-cta common-tooltip"
+                                                    *ngIf="iteminfo.serviceDateQCNames.length == 0 && iteminfo.showAddButton"
+                                                    (click)="getDetails(iteminfo.bookingId)" data-tooltip="Add">
+                                                    <img src="assets/images/cta-schedule.svg" alt="Add">
+                                                </span>
+                                            </td>
+                                            <td class="width-80 Center_Middle" *ngIf="showMandayButton">
+                                                <span class="table-cta icon-cta common-tooltip"
+                                                    *ngIf="hasInspScheduleRole && iteminfo.isMandayButtonVisible"
+                                                    (click)="openPopUp(mandayPopUp, iteminfo.bookingId)"
+                                                    data-tooltip="Man Day">
+                                                    <img src="assets/images/cta-leader.svg" alt="Man Day">
+                                                </span>
+                                            </td>
+                                            <td class="width-60 Center_Middle sticky-left-column">
+                                                <a style="color: blue;" triggers="mouseenter:mouseleave"
+                                                    (click)="RedirectToEdit(iteminfo.bookingId)" class="right-link"> {{
+                                                    iteminfo.bookingId}}
+                                                </a>
+                                                <span class="width-100" *ngIf="iteminfo.isEAQF">
+                                                    <img src="assets/images/E-AQF-Logo.svg" alt="">
+                                                </span>
+                                            </td>
+
+                                            <td class="width-100 Center_Middle wordbreak">
+                                                {{iteminfo.factoryProvinceName}}</td>
+                                            <td class="width-100 Center_Middle wordbreak">{{iteminfo.factoryCityName}}
+                                            </td>
+                                            <td class="width-100 Center_Middle wordbreak">{{iteminfo.factoryZoneName}}
+                                            </td>
+                                            <td class="width-100 Center_Middle wordbreak">{{iteminfo.factoryCountyName}}
+                                            </td>
+                                            <td class="width-100 Center_Middle wordbreak">{{iteminfo.factoryTownName}}
+                                            </td>
+                                            <td class="Center_Middle"
+                                                [ngStyle]="{'color': GetQuotationStatusColor(iteminfo.quotationStatus)}">
+                                                {{iteminfo.quotationStatus}}</td>
+                                            <!-- iteminfo.productCount > 1 && -->
+                                            <td [ngStyle]="{'color': iteminfo.isMSChartProduct ? '': 'red'}"
+                                                *ngIf="entPageFieldAccessEnum.Schedule_Summary_Product_Ref | dataFieldAccessPipe :filterEntFieldAccess">
+                                                <span *ngIf="iteminfo.productCount > 1; else oneProduct">
+                                                    {{iteminfo.productId}}
+                                                </span>
+                                                <ng-template #oneProduct>
+                                                    <a triggers="mouseenter:mouseleave"
+                                                        (click)="RedirectToProductReference(iteminfo.customerProductId)" class="right-link"> {{iteminfo.productId}}
+                                                    </a>
+                                                </ng-template>
+                                                <a *ngIf="iteminfo.productCount > 1" style="color: blue;"
+                                                    triggers="mouseenter:mouseleave"
+                                                    (click)="openProductData(productdetailsPopup, iteminfo.bookingId)"
+                                                    class="right-link">
+                                                    + ( {{iteminfo.productCount - 1}} )
+                                                </a>
+                                            </td>
+                                            <td class="width-80 wordbreak">{{iteminfo.serviceType}}</td>
+                                            <td class="width-80">{{iteminfo.serviceDate}}</td>
+                                            <td class="width-60 Center_Middle">{{iteminfo.plannedManday}} /
+                                                {{iteminfo.actualManDay}} / {{iteminfo.manDay}}</td>
+
+                                            <td class="width-60 Center_Middle">
+                                                {{iteminfo.calculatedWorkingHours}}
+                                            </td>
+
+                                            <td class="width-120">
+                                                <div *ngFor="let item of iteminfo.serviceDateQCNames | slice:0:1">
+                                                    <span class="textfont-bold"
+                                                        *ngIf="iteminfo.serviceDateFrom < iteminfo.serviceDateTo">{{item.serviceDate}}</span>
+                                                    <div *ngFor="let itemName of item.qcInfo | slice:0:1;">
+                                                        {{itemName.qcName}}
+                                                    </div>
+                                                    <div
+                                                        *ngIf="iteminfo.serviceDateQCNames.length > 1 || item.qcInfo.length > 1">
+                                                        <ng-template #qcpopContent>
+                                                            <div class="popoverScroll">
+                                                                <div style="width: 150px;"
+                                                                    *ngFor="let itemName of iteminfo.serviceDateQCNames">
+                                                                    <span
+                                                                        class="textfont-bold">{{itemName.serviceDate}}</span>
+                                                                    <div *ngFor="let name of itemName.qcInfo;">
+                                                                        {{name.qcName}}
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </ng-template>
+                                                        <a style="color: blue;width: 50px" [ngbPopover]="qcpopContent"
+                                                            placement="right" [autoClose]="'outside'"
+                                                            popoverTitle="QC List">
+                                                            More...
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                            </td>
+
+                                            <td class="width-100">
+                                                <div
+                                                    *ngFor="let item of iteminfo.serviceDateAdditionalQCNames | slice:0:1">
+                                                    <span class="textfont-bold"
+                                                        *ngIf="iteminfo.serviceDateFrom < iteminfo.serviceDateTo">{{item.serviceDate}}</span>
+                                                    <div *ngFor="let itemName of item.qcInfo | slice:0:1;">
+                                                        {{itemName.qcName}}
+                                                    </div>
+
+                                                    <div
+                                                        *ngIf="iteminfo.serviceDateAdditionalQCNames.length > 1 || item.qcInfo.length > 1">
+                                                        <ng-template #addqcpopContent>
+                                                            <div class="popoverScroll">
+                                                                <div style="width: 150px;"
+                                                                    *ngFor="let itemName of iteminfo.serviceDateAdditionalQCNames">
+                                                                    <span
+                                                                        class="textfont-bold">{{itemName.serviceDate}}</span>
+                                                                    <div *ngFor="let name of itemName.qcInfo;">
+                                                                        {{name.qcName}}
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </ng-template>
+                                                        <a style="color: blue;width: 50px"
+                                                            [ngbPopover]="addqcpopContent" placement="right"
+                                                            [autoClose]="'outside'" popoverTitle="Additional QC List">
+                                                            More...
+                                                        </a>
+                                                    </div>
+
+                                                </div>
+                                            </td>
+                                            <!-- <td class="width-100 Center_Middle"
+                                                *ngIf="iteminfo.serviceDateCSNames.length == 0">
+                                                <button class="secondary-cta x-small"
+                                                    (click)="getDetails(iteminfo.bookingId)">Add</button>
+                                            </td> -->
+                                            <td class="width-120">
+                                                <div *ngFor="let item of iteminfo.serviceDateCSNames | slice:0:1">
+                                                    <span class="textfont-bold"
+                                                        *ngIf="iteminfo.serviceDateFrom < iteminfo.serviceDateTo">{{item.serviceDate}}</span>
+                                                    <div *ngFor="let itemName of item.csInfo | slice:0:2;">
+                                                        {{itemName.csName}}
+                                                    </div>
+
+                                                    <div
+                                                        *ngIf="iteminfo.serviceDateCSNames.length > 1 || item.csInfo.length > 1">
+                                                        <ng-template #cspopContent>
+                                                            <div class="popoverScroll">
+                                                                <div style="width: 150px;"
+                                                                    *ngFor="let itemName of iteminfo.serviceDateCSNames">
+                                                                    <span
+                                                                        class="textfont-bold">{{itemName.serviceDate}}</span>
+                                                                    <div *ngFor="let name of itemName.csInfo;">
+                                                                        {{name.csName}}
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </ng-template>
+                                                        <a style="color: blue;width: 50px;" [ngbPopover]="cspopContent"
+                                                            placement="right" [autoClose]="'outside'"
+                                                            popoverTitle="Report Checker List">
+                                                            More...
+                                                        </a>
+                                                    </div>
+
+                                                </div>
+                                            </td>
+                                            <!-- <td class="width-80" *ngIf="iteminfo.serviceDateQCNames.length == 0"><button
+                                                    class="secondary-cta x-small"
+                                                    (click)="getDetails(iteminfo.bookingId)">Add</button>
+                                            </td> -->
+
+                                            <td class="wordbreak width-80">{{iteminfo.customerName}}</td>
+                                            <td class="wordbreak width-80">{{iteminfo.factoryName}}</td>
+                                            <td class="wordbreak width-80">{{iteminfo.supplierName}}</td>
+                                            <td class="Center_Middle width-80">{{iteminfo.productCount}}/
+                                                {{iteminfo.reportCount}}
+                                            </td>
+                                            <td class="Center_Middle width-80">{{iteminfo.sampleSize}}</td>
+                                            <td class="Center_Middle width-80">{{iteminfo.firstServiceDate}}</td>
+                                            <td class="wordbreak width-120">{{iteminfo.productCategory}}</td>
+
+                                            <td class="wordbreak width-120">{{iteminfo.productSubCategory}}</td>
+                                            <td class="wordbreak width-120">{{iteminfo.productSubCategory2.slice(0,
+                                                2).join(", ")}}
+                                                <div *ngIf="iteminfo.productSubCategory2.length > 2">
+                                                    <ng-template #prodIdpopContent>
+                                                        <div class="popoverScroll">
+                                                            <div style="width: 150px;"
+                                                                *ngFor="let prodSubCat2 of iteminfo.productSubCategory2">
+                                                                {{prodSubCat2}}
+                                                            </div>
+                                                        </div>
+                                                    </ng-template>
+                                                    <a style="display: inline-block;"
+                                                        (click)="$event.stopPropagation();" class="primary"
+                                                        container="body" [ngbPopover]="prodIdpopContent"
+                                                        placement="left" [autoClose]="'outside'"
+                                                        popoverTitle="Product Name">,+
+                                                        {{iteminfo.productSubCategory2.length-2}}</a>
+                                                </div>
+                                            </td>
+                                            <!--<td class="width-80 wordbreak">{{iteminfo.productCategory}}</td>
+                                            <td class="width-60 Center_Middle">{{iteminfo.combineProductCount}}/
+                                                {{iteminfo.nonCombineProductcount}}</td> -->
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <div class="pagination-container">
+                            <select class="small" [(ngModel)]="selectedPageSize" (change)="SearchDetails()">
+                                <option *ngFor="let item of pagesizeitems" [ngValue]=item>{{item}}</option>
+                            </select>
+                            <ngb-pagination (pageChange)="onPager($event)" [pageSize]="model.pageSize"
+                                [collectionSize]="model.totalCount" [(page)]="model.index" [maxSize]="5">
+                            </ngb-pagination>
+                        </div>
+                    </div>
+                    <div class="centerContainerPadding" *ngIf="model.noFound">
+                        <div class="error-container">
+                            <img src="assets/images/no-result.svg" alt="" class="thumbnail">
+                            <h4 class="error-title">{{'SCHEDULE_SUMMARY.MSG_NO_ITEM_FOUND' | translate}}</h4>
+                            <p class="error-subtitle">{{'CS_CONFIG_SUMMARY.LBL_NODATA' | translate}}</p>
+
+                            <button (click)="Reset()" class="category-cta">
+                                <img src="assets/images/reload-new.svg" alt="reload">
+                                <span> {{'QUOTATION_SUMMARY.MSG_CLEAR_SEARCH' | translate}}</span></button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<ng-template #mandayPopUp let-modal>
+    <div class="modal-header custom-modal-header">
+        <h4 class="modal-title" id="modal-basic-title">{{'SCHEDULE_SUMMARY.LBL_MANDAY' | translate }}</h4>
+        <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body custom-modal-body">
+        <div class="row">
+            <div class="col-sm-2 col-md-2 col-lg-3">
+                <div class="my-input-group">
+                    <label class="light">{{ 'SCHEDULE_SUMMARY.LBL_INSPNO' | translate }}</label>
+                    <p class="input-value paddingLeft4">{{mandaymodel.bookingId}}</p>
+                </div>
+            </div>
+            <div class="col-sm-2 col-md-2 col-lg-3">
+                <div class="my-input-group">
+                    <label class="light">{{ 'QUOTATION.LBL_TRAVEL_MANDAY' | translate }}</label>
+                    <p class="input-value paddingLeft30">{{mandaymodel.travelManday}}</p>
+                </div>
+            </div>
+            <div class="col-sm-2 col-md-2 col-lg-3">
+                <div class="my-input-group">
+
+                    <label class="light">{{ 'QUOTATION.LBL_ESTIMATEDMANDAY' | translate }}</label>
+                    <p class="input-value paddingLeft50">{{mandaymodel.totalManday}}</p>
+                </div>
+            </div>
+            <div class="col-sm-2 col-md-2 col-lg-3">
+                <div class="my-input-group">
+
+                    <label class="light">{{ 'SCHEDULE_SUMMARY.LBL_SUGGESTED_MD' | translate }}</label>
+                    <p class="input-value paddingLeft50">{{mandaymodel.suggestedManday}}</p>
+                </div>
+            </div>
+        </div>
+        <div class="table-container marginTop20 h-scroll table-max-height-400">
+            <!-- <div class="col-sm-8"> -->
+            <table class="pagination-table simple-table bordered">
+                <thead>
+                    <tr class="sticky-top-row">
+                        <th class="Center_Middle">{{ 'QUOTATION.LBL_SERVICEDATE' | translate }}</th>
+                        <th class="width-100 Center_Middle">{{ 'QUOTATION.LBL_MANDAY' | translate }}</th>
+                        <th class="Center_Middle">{{ 'QUOTATION.LBL_REMARKS' | translate }}</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let manday of mandaymodel.mandayList;let i = index">
+                        <td class="Center_Middle width-100">{{manday.serviceDate}}</td>
+                        <td class="width-100"> <input min="0" type="number" [(ngModel)]="manday.manDay"
+                                class="Center_Middle"
+                                [ngClass]="{ 'is-invalid': manday.validator != null ? !manday.validator.isValid('manDay'): false }" />
+                            <div *ngIf="manday.validator != null && !manday.validator.isValid('manDay')"
+                                class="invalid-feedback">
+                                <div *ngFor="let error of manday.validator.getErrors('manDay')">{{ error | translate }}
+                                </div>
+                            </div>
+                        </td>
+                        <td> <textarea rows="1" [(ngModel)]="manday.remarks"></textarea> </td>
+                    </tr>
+                </tbody>
+            </table>
+            <!-- </div> -->
+        </div>
+        <div class="marginTop20 modal-footer">
+            <button class="secondary-cta margin10" [disabled]="popUpLoading" (click)="modal.dismiss('Cross click');">{{
+                'COMMON.LBL_CONFIRMCANCEL' | translate }}
+            </button>
+            <button class="primary-cta  margin10" [disabled]="popUpLoading"
+                (click)="saveManday();">{{'QUOTATION.LBL_SAVE' | translate}}
+                <span *ngIf="mandaySave">
+                    <i class="fa fa-refresh fa-spin" aria-hidden="true"></i>
+                </span>
+            </button>
+        </div>
+    </div>
+</ng-template>
+
+<ng-template #QcVisiblePopUp let-modal>
+    <div class="modal-header custom-modal-header">
+        <h4 class="modal-title" id="modal-basic-title">{{ 'SCHEDULE_SUMMARY.LBL_QC_VISIBLE' | translate }}</h4>
+        <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body custom-modal-body">
+
+        <div class="table-container h-scroll table-max-height-400">
+            <!-- <div class="col-sm-8"> -->
+            <table class="pagination-table simple-table bordered">
+                <thead>
+                    <tr class="sticky-top-row">
+                        <th class="width-100 Center_Middle">{{'SCHEDULE_SUMMARY.LBL_BOOKINGNO' | translate }}</th>
+                        <th class="Center_Middle">{{ 'SCHEDULE_SUMMARY.LBL_SERVICEDATE' | translate }}</th>
+
+                        <th class="Center_Middle">
+                            <div class="styled-checkbox-container">
+                                <input class="styled-checkbox" id="checkbox-qcPopup" [checked]="selectAllQcPopupChecked"
+                                    type="checkbox" (change)="SelectAllQcPopupCheckBox()">
+                                <label for="checkbox-qcPopup"> {{'SCHEDULE_SUMMARY.LBL_QC_VISIBLE' | translate}}</label>
+                            </div>
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let book of qcVisiblePopUpData;let i = index">
+                        <td class="Center_Middle width-100">{{book.bookingId}}</td>
+                        <td class="Center_Middle width-100">{{book.serviceDate}}</td>
+                        <td class="Center_Middle width-100">
+                            <div class="styled-checkbox-container">
+                                <input class="styled-checkbox" id="checkbookid-{{i}}" type="checkbox"
+                                    [(ngModel)]="book.isQcVisibility" (ngModelChange)="GetQcVisiblePopUpbookingids()">
+                                <label for="checkbookid-{{i}}"></label>
+                            </div>
+                        </td>
+
+                    </tr>
+                </tbody>
+            </table>
+            <!-- </div> -->
+        </div>
+        <div class="modal-footer">
+            <button class="secondary-cta margin10" [disabled]="popUpLoading" (click)="modal.dismiss('Cross click');">{{
+                'COMMON.LBL_CONFIRMCANCEL' | translate }}
+            </button>
+            <button class="primary-cta  margin10" [disabled]="isQcVisiblePopUpSave"
+                (click)="saveQcVisibility();">{{'QUOTATION.LBL_SAVE' | translate}}
+                <span *ngIf="qcVisibleSave">
+                    <i class="fa fa-refresh fa-spin" aria-hidden="true"></i>
+                </span>
+            </button>
+        </div>
+    </div>
+</ng-template>
+
+
+<ng-template #productdetailsPopup let-modal>
+    <div class="modal-header custom-modal-header">
+        <h4 class="modal-title" id="modal-basic-title">{{ 'SCHEDULE_SUMMARY.LBL_PRODUCT_REFERENCE_DETAILS' | translate
+            }}
+        </h4>
+        <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body custom-modal-body">
+        <div class="table-container h-scroll table-max-height-400">
+            <table class="pagination-table simple-table bordered">
+                <thead>
+                    <tr class="sticky-top-row">
+                        <th class="width-100 Center_Middle">{{'SCHEDULE_SUMMARY.LBL_PRODUCT_REF' | translate }}</th>
+                        <th class="Center_Middle">{{ 'SCHEDULE_SUMMARY.LBL_ORDER_QTY' | translate }}</th>
+                        <th class="Center_Middle">
+                            {{'SCHEDULE_SUMMARY.LBL_PO' | translate}}
+                        </th>
+                        <th class="Center_Middle">{{ 'SCHEDULE_SUMMARY.LBL_MS_CHART' | translate }}</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let prodItem of scheduleProductModel;let i = index">
+                        <td class="Center_Middle width-100">
+                            <a style="color: blue;" triggers="mouseenter:mouseleave"
+                            (click)="RedirectToProductReference(prodItem.cuProductId)" class="right-link"> {{prodItem.productId}}
+                            </a>
+                        </td>
+                        <td class="Center_Middle width-100">{{prodItem.orderQty}}</td>
+                        <td class="Center_Middle width-100">{{prodItem.poNumber}}</td>
+                        <td class="Center_Middle width-100"
+                            [ngStyle]="{'color': prodItem.msChart == 'Yes'? 'green': 'red'}">
+                            <b>{{prodItem.msChart}}</b>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</ng-template>
+<div class="loader-overlay" *ngIf="loader">
+    <div class="loader-container">
+        <img src="assets/images/reload.svg" alt="">
+        <span>{{'COMMON.LBL_LOADER' | translate}}</span>
+    </div>
+</div>
+
+
+<ng-template #exportScheduleSummary let-modal>
+    <div class="modal-header custom-modal-header">
+        <h4 class="modal-title" id="modal-basic-title">{{ 'SCHEDULE_SUMMARY.LBL_EXPORT_SUMMARY' | translate }}
+        </h4>
+        <button type="button" class="close" aria-label="Close" (click)="modal.dismiss( 'Cross click' ) ">
+            <span aria-hidden=" true ">&times;</span>
+        </button>
+    </div>
+    <div class=" modal-body custom-modal-body ">
+        <div class=" row ">
+            <div class=" col-sm-6 col-md-6 col-lg-6 ">
+                <div class=" my-input-group ">
+                    <label class=" required ">{{'SCHEDULE_SUMMARY.LBL_EXPORT_TYPE' | translate}}</label>
+                    <ng-select #select [searchable]="true" [items]="scheduleSummaryExportTypeList" bindLabel="name"
+                        bindValue="id" [hideSelected]="true"
+                        placeholder="--- {{(scheduleSummaryExportTypeList!=null && scheduleSummaryExportTypeList.length!=0? 'COMMON.LBL_SELECT' : 'COMMON.LBL_NO_DATA' ) | translate }} ---"
+                        [(ngModel)]="model.exportType">
+                    </ng-select>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="marginTop20 modal-footer">
+        <button [disabled]="exportDataLoading" class="secondary-cta small" (click)="modal.dismiss('Cross click')">
+            {{'COMMON.LBL_CONFIRMCANCEL' | translate}}
+        </button>
+        <button class="primary-cta small" *ngIf="model.exportType" [disabled]="exportDataLoading" (click)="export()">
+            {{'COMMON.LBL_SUBMIT' | translate}}
+            <span *ngIf="exportDataLoading">
+                <i class="fa fa-refresh fa-spin" aria-hidden=" true "></i>
+            </span>
+        </button>
+    </div>
+</ng-template>
+<div class=" loader-overlay " *ngIf=" loader ">
+    <div class=" loader-container ">
+        <img src=" assets/images/reload.svg " alt=" ">
+        <span>{{'COMMON.LBL_LOADER' | translate}}</span>
+    </div>
+</div>

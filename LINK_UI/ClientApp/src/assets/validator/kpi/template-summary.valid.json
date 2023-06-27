@@ -1,0 +1,13 @@
+{
+  "model": "template.model",
+  "fields": {
+    "module": [
+      {
+        "type": "required",
+        "fieldType": "T",
+        "ressource": "TEMPLATE_SUMMARY.MSG_MODULE_REQ"
+      }
+    ]
+  }
+
+}

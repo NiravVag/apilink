@@ -1,0 +1,165 @@
+<div class="main-wrapper">
+  <div class="wrapper dashboard-wrapper">
+    <div class="my-container">
+      <div class="master-body">
+
+        <div class="title-container">
+          <h3 class="main-title"> {{ 'USER_SUMMARY.TITLE' | translate }}</h3>
+        </div>
+
+        <div class="content-container quotation-container">
+          <div  [@expandCollapse]="isFilterOpen ? 'open' : 'close'" class="centerContainerPadding common-filter-container">
+            <div class="animated-icon-container" (click)="toggleFilterSection()" *ngIf="(model.items && model.items.length>0)">
+             <img src="assets/images/cta-close-grey.svg" alt="close">
+             </div>
+              <div class="row">
+                <div class="col-sm-4 col-md-4 col-lg-4">
+                  <div class="my-input-group">
+                    <!--Start of Drop down select User Type-->
+                    <label class="required">{{ 'USER_SUMMARY.LBL_TYPE' | translate }}</label>
+                    <ng-select [items]="userTypeList"
+                      [multiple]="false"
+                      [searchable]="true"
+                      bindLabel="name" 
+                      bindValue="id"
+                      [loading]="loading"
+                      placeholder="--- {{ 'COMMON.LBL_SELECT' | translate }} ---" 
+                      [(ngModel)]="model.userTypeId"
+                      [ngClass]="{'is-invalid': !validator.isValid('userTypeId')}" appendTo="body">
+                    </ng-select>
+                    <!--End of Drop down select User Type-->
+                    <div *ngIf="!validator.isValid('userTypeId')" class="invalid-feedback" style="display:block">
+                      <div *ngFor="let error of validator.getErrors('userTypeId')">{{ error | translate }}</div>
+                    </div>
+                  </div>
+                </div>
+                
+                
+                <!--Name-->
+                <div class="col-sm-4 col-md-4 col-lg-4 mobile-margin-top-15">
+                  <div class="my-input-group">
+                    <label>{{ 'USER_SUMMARY.LBL_NAME' | translate }}</label>
+                    <input [(ngModel)]="model.name" type="text" maxlength="300"
+                      placeholder="{{ 'USER_SUMMARY.PH_NAME' | translate }}" />
+                  </div>
+                </div>
+
+                <!--Country-->
+                <div class="col-sm-3 col-md-3 col-lg-3 mobile-margin-top-15">
+                  <div class="my-input-group">
+                    <label>{{ 'USER_SUMMARY.LBL_COUNTRY' | translate }}</label>
+                    <ng-select [items]="dataCountry" 
+                               [multiple]="true" 
+                               [closeOnSelect]="false" 
+                               [searchable]="true"
+                               [loading]="loading" 
+                               bindLabel="countryName"
+                               placeholder="--- {{ 'COMMON.LBL_SELECT' | translate }} ---"
+                               [(ngModel)]="model.countryValues" 
+                               class="multiple" appendTo="body"> 
+                    </ng-select>
+                  </div>
+                </div>
+
+              </div>
+          
+        
+          <!--Button Search-->
+          <div class="row marginTop25">
+            <div class="col-12 col-sm-12 text-right mt-3 mt-sm-0"> 
+              <button id="btnSearch" class="primary-cta small" [disabled]="searchloading || loading" (click)="search()">
+                {{ 'COMMON.LBL_SEARCH' | translate }}
+                <span *ngIf="searchloading">
+                  <i class="fa fa-refresh fa-spin" aria-hidden="true"></i>
+                </span>
+              </button>
+            </div>
+          </div>
+        </div>
+          <!--Table Result-->
+          <div class="centerContainerPadding float-left" *ngIf="(model.items && model.items.length>0)">
+             
+
+            <div class="row">
+              <div class="col-6 col-sm-4 col-xl-2 d-flex">
+                <p  class="search-trigger-heading" [innerHtml]="showPaginationText()"></p>
+              </div>
+              <div class="col-6 col-sm-8 col-xl-10 text-right">
+                <div class="animated-icon-container" *ngIf="!isFilterOpen" (click)="toggleFilterSection()">
+                  <img src="assets/images/cta-search-grey.svg" alt="search">
+                </div>
+              </div>
+            </div>
+
+            <div class="quotation-search-container">
+              <div class="table-container h-scroll table-max-height-400">
+                <table class="pagination-table simple-table bordered">
+                <thead>
+                  <tr class="sticky-top-row">
+                    <th class="width-20"></th>
+                    <th>{{ 'USER_SUMMARY.LBL_NAME' | translate }}</th>
+                    <th *ngIf="isInternalUser">{{ 'USER_SUMMARY.LBL_GENDER' | translate }}</th>
+                    <th *ngIf="isInternalUser">{{ 'USER_SUMMARY.LBL_DEPARTMENT' | translate }}</th>
+                    <th *ngIf="isInternalUser">{{ 'USER_SUMMARY.LBL_POSITION' | translate }}</th>
+                    <th *ngIf="isInternalUser">{{ 'USER_SUMMARY.LBL_OFFICE' | translate }}</th>
+                    <th *ngIf="!isInternalUser">{{ 'USER_SUMMARY.LBL_COUNTRY' | translate }}</th>
+                    
+                  </tr>
+                </thead>
+                <!--Table Body/Result-->
+                <tbody>
+                  <ng-container *ngFor="let iteminfo of model.items">
+                    <tr>
+                      <td class="Center_Middle">
+                        <span class="table-cta icon-cta common-tooltip" 
+                        (click)="getDetailsUser(iteminfo.id, iteminfo.userTypeId)" data-tooltip="Edit">
+                          <img src="assets/images/cta-edit.svg" alt="Edit">
+                        </span>
+                      </td> 
+                      <td>{{iteminfo.name}}</td>
+                      <td *ngIf="isInternalUser">{{iteminfo.gender}}</td>
+                      <td *ngIf="isInternalUser">{{iteminfo.departmentName}}</td>
+                      <td *ngIf="isInternalUser">{{iteminfo.position}}</td>
+                      <td *ngIf="isInternalUser">{{iteminfo.office}}</td>
+                      <td *ngIf="!isInternalUser">{{iteminfo.country}}</td>
+                    </tr>
+                  </ng-container>
+                </tbody>
+              </table>
+              </div>
+            </div>
+
+<!-- 
+            <div class="pagination-container">
+                <select class="small" [(ngModel)]="selectedPageSize" (change)="changePageSize()">
+                    <option *ngFor="let item of pagesizeitems" [ngValue]=item>{{item}}</option>
+                  </select>
+                <ngb-pagination (pageChange)="onPager($event)" [pageSize]="model.pageSize"
+                  [collectionSize]="model.totalCount" [(page)]="model.index" [maxSize]="5"></ngb-pagination>
+            </div> -->
+            <div class="pagination-container">
+              <select class="small" [(ngModel)]="selectedPageSize" (change)="changePageSize()">
+                <option *ngFor="let item of pagesizeitems" [ngValue]=item>{{item}}</option>
+              </select>
+              <ngb-pagination (pageChange)="onPager($event)" [pageSize]="model.pageSize"
+                              [collectionSize]="model.totalCount" [(page)]="model.index" [maxSize]="5"></ngb-pagination>
+            </div>
+          </div>
+          <!--No data returns-->
+          <!-- <div class="no-result-container" *ngIf="model.noFound">
+            <img src="assets/images/no-data.png" alt="" class="icon">
+            <h4 class="title">{{ 'USER_SUMMARY.LBL_NOITEMS' | translate }}</h4>
+            <p>Oops! No load matching your search were found</p>
+          </div> -->
+          <div class="centerContainerPadding" *ngIf="model.noFound">
+            <div class="error-container">
+              <img src="assets/images/no-result.svg" alt="" class="thumbnail">
+              <h4 class="title">{{'CITY_SUMMARY.LBL_No_ITEM' | translate}}</h4>
+              <p class="error-subtitle">{{'CS_CONFIG_SUMMARY.LBL_NODATA' | translate}}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

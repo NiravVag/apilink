@@ -1,0 +1,280 @@
+.login-wrapper{
+	height: 100vh;
+	background-size: 100% 100%;
+	background: url('../assets/images/background.png');
+	background-size: cover;
+
+	@media only screen and (min-width: $tablet-min-width) and (max-width: $tablet-max-width){
+		height: 100vh;
+		background-size: cover;
+	}
+
+	@media only screen and (min-width: $mobile-min-width) and (max-width: $mobile-max-width){
+		height: 100vh;
+		background-size: 190% 50%;
+		background-repeat: no-repeat;
+		background-position: top right;
+	}
+
+	.my-container{
+		height: 100%;
+		position: relative;
+	}
+
+	.content-wrapper{
+		display: flex;
+		margin-top: 48px;
+		position: relative;
+		@include span(12 of 12);
+
+		@media only screen and (min-width: $tablet-min-width) and (max-width: $tablet-max-width){
+			height: 100vh;
+			align-items: center;
+		}
+
+		@media only screen and (min-width: $mobile-min-width) and (max-width: $mobile-max-width){
+			position: fixed;
+			bottom: 0;
+		}
+
+		.column{
+			display: flex;
+			position: relative;
+			@include span(5 of 12);
+
+			@media only screen and (min-width: $tablet-min-width) and (max-width: $tablet-max-width){
+				@include span(12 of 12);
+			}
+
+			@media only screen and (min-width: $mobile-min-width) and (max-width: $mobile-max-width){
+				@include span(12 of 12);
+			}
+
+			&:last-child{
+				align-items: center;
+				@include span(7 of 12 last);
+
+				@media only screen and (min-width: $tablet-min-width) and (max-width: $tablet-max-width){
+					display: none;
+				}
+
+				@media only screen and (min-width: $mobile-min-width) and (max-width: $mobile-max-width){
+					display: none;
+				}
+			}
+		}
+	}
+
+	.login-block{
+		z-index: 1;
+		width: 428px;
+		position: relative;
+		padding: 35px 45px;
+		border-radius: 4px;
+		background-color: $white;
+		box-shadow: 0 2px 4px 0 rgba(175, 187, 203, 0.6);
+
+		@media only screen and (min-width: $tablet-min-width) and (max-width: $tablet-max-width){
+			margin: auto;
+		}
+
+		@media only screen and (min-width: $mobile-min-width) and (max-width: $mobile-max-width){
+			width: 100%;
+			padding: 35px 45px 80px;
+		}
+
+		.logo{
+			width: 128px;
+			height: 62px;
+
+			@media only screen and (min-width: $mobile-min-width) and (max-width: $mobile-max-width){
+				width: 90px;
+				height: 43px;
+			}
+		}
+
+		.title{
+			color: $primary-color;
+			font-size: 22px;
+			margin-top: 35px;
+			margin-bottom: 0;
+			font-weight: 500;
+			font-family: $roboto-medium;
+
+			@media only screen and (min-width: $mobile-min-width) and (max-width: $mobile-max-width){
+				margin-top: 18px;
+				font-size: 20px;
+			}
+		}
+
+		small{
+			color: #a0a1a3;
+			font-size: 12px;
+			margin-top: 14px;
+			font-style: normal;
+			font-family: $roboto-regular;
+		}
+
+		.login-form{
+			margin-top: 10px;
+
+			@media only screen and (min-width: $mobile-min-width) and (max-width: $mobile-max-width){
+				margin-top: 19px;
+			}
+
+			.full-width{
+				margin-top: 34px;
+				transition: ease all 0.4s;
+
+				@media only screen and (min-width: $mobile-min-width) and (max-width: $mobile-max-width){
+					position: absolute;
+					bottom: 0;
+					left: 0;
+				}
+
+				&:focus{
+					outline: none;
+				}
+
+				&:hover{
+					background-color: $brand-dark-color;
+				}
+
+				&:active{
+					background-color: #a00002;
+				}
+			}
+
+			.my-input-group{
+
+				label{
+					margin-top: 24px;
+				}
+
+				input{
+					padding: 16px 15px;
+				}
+			}
+		}
+	}
+
+	.language-dropdown{
+		top: 0;
+		right: 0;
+		width: 130px;
+		position: absolute;
+
+		@media only screen and (min-width: $mobile-min-width) and (max-width: $tablet-max-width){
+			top: 20px;
+			right: 20px;
+		}
+
+		.ng-select-container{
+			padding: 10px 12px;
+			border-radius: 30px !important;
+			background-color: $white;
+			border-color: transparent !important;
+
+			&:hover{
+				background-color: $white !important;
+				border-color: transparent !important;
+			}
+
+			.ng-value, .ng-placeholder{
+				font-size: 12px;
+				line-height: 1.2;
+				font-family: $roboto-regular !important;
+			}
+		}
+
+		.ng-option-label{
+			font-size: 12px;
+			font-family: $roboto-regular !important;
+		}
+	}
+
+	.simple-dropdown{
+		top: 50;
+		right: 0;
+		padding: 12px;
+		width: 113px;
+		color: $primary-color;
+		font-size: 12px;
+		position: absolute;
+		border-radius: 30px;
+		display: inline-block;
+		font-family: $roboto-regular;
+		background-color: $white;
+
+		.dropdown-container{
+			position: relative;
+
+			img{
+				top: 5px;
+				right: 0;
+				position: absolute;
+			}
+		}
+
+		.cta-dropdown{
+			min-width: 113px;
+		}
+	}
+
+	.tagline{
+		color: $white;
+		font-size: 28px;
+		font-weight: 300;
+		line-height: 1.36;
+		letter-spacing: -0.3px;
+		font-family: $roboto-light;
+	}
+
+	.login-footer{
+		left: 0;
+		right: 0;
+		bottom: 0;
+		border: none;
+		padding: 22px 0;
+		position: absolute;
+		background-color: rgba(#000000, 0.1);
+
+		@media only screen and (min-width: $tablet-min-width) and (max-width: $tablet-max-width){
+			padding: 22px 20px;
+		}
+
+		@media only screen and (min-width: $mobile-min-width) and (max-width: $mobile-max-width){
+			display: none;
+		}
+
+		.column{
+			@include span(4 of 12);
+
+			&:last-child{
+				@include span(4 of 12 last);
+			}
+		}
+
+		.text{
+			margin: 0;
+			color: $white;
+			font-size: 12px;
+			font-family: $roboto-regular;
+		}
+
+		.group-logo{
+			width: 200px;
+		}
+
+		.footer-item{
+
+			li{
+				border-color: $white;
+
+				a{
+					color: $white;
+				}
+			}
+		}
+	}
+}

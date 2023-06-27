@@ -1,0 +1,98 @@
+{
+  "model": "PriceSpecialRule",
+  "fields": {
+    "mandayProductivity": [
+      {
+        "type": "required",
+        "fieldType": "NU",
+        "ressource": "EDIT_CUSTOMER_PRICE_CARD.MSG_PRICE_MandayProductivity"
+      }
+    ],
+    "mandayReports": [
+      {
+        "type": "required",
+        "fieldType": "NU",
+        "ressource": "EDIT_CUSTOMER_PRICE_CARD.MSG_PRICE_MandayReports"
+      }
+    ],
+    "unitPrice": [
+      {
+        "type": "required",
+        "fieldType": "NU",
+        "ressource": "EDIT_CUSTOMER_PRICE_CARD.MSG_PRICE_UnitPrice"
+      }
+    ],
+    "pieceRate_Billing_Q_Start": [
+      {
+        "type": "required",
+        "fieldType": "NU",
+        "ressource": "EDIT_CUSTOMER_PRICE_CARD.MSG_PRICE_PieceRate_Billing_Q_Start"
+      }
+    ],
+    "piecerate_Billing_Q_End": [
+      {
+          "type": "required",
+          "fieldType": "NU",
+          "ressource": "EDIT_CUSTOMER_PRICE_CARD.MSG_PRICE_Piecerate_Billing_Q_End"
+      }
+  ],
+    "additionalFee": [
+      {
+        "type": "required",
+        "fieldType": "NU",
+        "ressource": "EDIT_CUSTOMER_PRICE_CARD.MSG_PRICE_AdditionalFee"
+      }
+    ],
+    "piecerate_MinBilling": [
+      {
+        "type": "required",
+        "fieldType": "NU",
+        "ressource": "EDIT_CUSTOMER_PRICE_CARD.MSG_PRICE_Piecerate_MinBilling"
+      }
+    ],
+  
+    "perInterventionRange1": [
+      {
+        "type": "required",
+        "fieldType": "NU",
+        "ressource": "EDIT_CUSTOMER_PRICE_CARD.MSG_PRICE_PerInterventionRange1"
+      }
+    ],
+    "perInterventionRange2": [
+      {
+        "type": "required",
+        "fieldType": "NU",
+        "ressource": "EDIT_CUSTOMER_PRICE_CARD.MSG_PRICE_PerInterventionRange2"
+      }
+    ],
+    "max_Style_Per_Day": [
+      {
+        "type": "required",
+        "fieldType": "NU",
+        "ressource": "EDIT_CUSTOMER_PRICE_CARD.MSG_PRICE_Max_Style_Per_Day"
+      }
+    ],
+    "max_Style_Per_Week": [
+      {
+        "type": "required",
+        "fieldType": "NU",
+        "ressource": "EDIT_CUSTOMER_PRICE_CARD.MSG_PRICE_Max_Style_Per_Week"
+      }
+    ],
+    "max_Style_per_Month": [
+      {
+        "type": "required",
+        "fieldType": "NU",
+        "ressource": "EDIT_CUSTOMER_PRICE_CARD.MSG_PRICE_Max_Style_per_Month"
+      }
+    ],
+
+    "interventionfee": [
+      {
+        "type": "required",
+        "fieldType": "NU",
+        "ressource": "EDIT_CUSTOMER_PRICE_CARD.MSG_PRICE_Interventionfee"
+      }
+    ]  
+  }
+}

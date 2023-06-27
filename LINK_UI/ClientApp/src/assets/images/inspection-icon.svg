@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 40 40">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: #ddd1cc;
+      }
+
+      .cls-2 {
+        fill: #fff;
+      }
+    </style>
+  </defs>
+  <g id="Group_2364" data-name="Group 2364" transform="translate(-180 -581)">
+    <circle id="Ellipse_75" data-name="Ellipse 75" class="cls-1" cx="20" cy="20" r="20" transform="translate(180 581)"/>
+    <g id="file" transform="translate(106.1 592)">
+      <path id="Path_422" data-name="Path 422" class="cls-2" d="M209.135,108.4h-.516v12.684a1.53,1.53,0,0,1-1.528,1.528H197.7v.47a.976.976,0,0,0,.975.975h10.458a.976.976,0,0,0,.975-.975V109.375A.974.974,0,0,0,209.135,108.4Z" transform="translate(-108.757 -106.401)"/>
+      <path id="Path_423" data-name="Path 423" class="cls-2" d="M93.1,15.658h5.229a.976.976,0,0,0,.975-.975V.975A.976.976,0,0,0,98.332,0H91.364V.323a.946.946,0,0,1,.006.1V3.1A1.375,1.375,0,0,1,90,4.471H87.324c-.028,0-.057,0-.085,0H86.9V14.682a.976.976,0,0,0,.975.975H93.1Zm.2-3.315H89.891a.461.461,0,0,1,0-.922H93.3a.461.461,0,1,1,0,.922ZM96.711,9.99h-6.82a.461.461,0,0,1,0-.922h6.82a.461.461,0,1,1,0,.922Zm-6.82-3.42h6.82a.461.461,0,1,1,0,.922h-6.82a.461.461,0,0,1,0-.922Z" transform="translate(0)"/>
+      <path id="Path_424" data-name="Path 424" class="cls-2" d="M87.958,4.7h2.679a.818.818,0,0,0,.811-.811V1.211A.41.41,0,0,0,91.035.8a.4.4,0,0,0-.288.122L87.667,4A.411.411,0,0,0,87.958,4.7Z" transform="translate(-0.634 -0.785)"/>
+    </g>
+  </g>
+</svg>

@@ -1,0 +1,12 @@
+{
+    "model": "UserAccountSummaryModel",
+    "fields": {
+        "userTypeId": [
+            {
+              "type": "required",
+              "fieldType": "N",
+              "ressource": "USER_SUMMARY.MSG_TYPES_REQ"
+            }
+          ]
+    }
+}

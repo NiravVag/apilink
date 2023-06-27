@@ -1,0 +1,35 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 22 22">
+  <defs>
+    <style>
+      .cls-1, .cls-2 {
+        fill: none;
+      }
+
+      .cls-2 {
+        stroke: #fff;
+        stroke-width: 3px;
+      }
+
+      .cls-3 {
+        fill: #fff;
+      }
+
+      .cls-4 {
+        stroke: none;
+      }
+    </style>
+  </defs>
+  <g id="Group_11737" data-name="Group 11737" transform="translate(-571 -18734)">
+    <rect id="Rectangle_2471" data-name="Rectangle 2471" class="cls-1" width="22" height="22" transform="translate(571 18734)"/>
+    <g id="Group_11736" data-name="Group 11736" transform="translate(572 18735)">
+      <g id="Component_54_6" data-name="Component 54 – 6" transform="translate(-1 -1)">
+        <rect id="Rectangle_2016" data-name="Rectangle 2016" class="cls-1" width="20" height="20"/>
+        <g id="Ellipse_537" data-name="Ellipse 537" class="cls-2" transform="translate(1 1)">
+          <circle class="cls-4" cx="9.5" cy="9.5" r="9.5"/>
+          <circle class="cls-1" cx="9.5" cy="9.5" r="8"/>
+        </g>
+      </g>
+      <path id="Path_3824" data-name="Path 3824" class="cls-3" d="M14.545-.072a1.623,1.623,0,0,1,1.608,1.659,1.662,1.662,0,0,1-1.624,1.675L1.6,3.325A1.622,1.622,0,0,1-.008,1.667,1.662,1.662,0,0,1,1.616-.008Z" transform="translate(3.066 14.228) rotate(-51)"/>
+    </g>
+  </g>
+</svg>

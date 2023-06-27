@@ -1,0 +1,19 @@
+{
+    "model": "UserAccessMasterData",
+    "fields": {
+        "customerId": [
+            {
+                "type": "required",
+                "fieldType": "N",
+                "ressource": "USER_CONFIG.MSG_CUSTOMER_REQUIRED"
+            }            
+        ],
+        "roleIdAccessList": [
+            {
+                "type": "required",
+                "fieldType": "N",
+                "ressource": "USER_CONFIG.MSG_ROLE_REQUIRED"
+            }            
+        ]
+    }
+}

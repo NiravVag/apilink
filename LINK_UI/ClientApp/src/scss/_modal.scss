@@ -1,0 +1,173 @@
+.small-model{
+	text-align: center;
+	padding: 40px 40px;
+
+	@media only screen and (min-width: $mobile-min-width) and (max-width: $mobile-max-width){
+		padding: 40px 20px;
+	}
+
+	&.new-padding{
+		text-align: left;
+		padding: 18px !important;
+	}
+
+	h2{
+		color: $primary-color;
+		font-size: 24px;
+		line-height: 0.96;
+		letter-spacing: -0.14px;
+		font-family: $roboto-medium;
+	}
+
+	p{
+		font-size: 14px;
+		line-height: 1.64;
+		margin-bottom: 28px;
+		letter-spacing: -0.08px;
+		color: rgba($primary-color, 0.8);
+		font-family: $roboto-regular;
+
+		&.light{
+			color: #a0a1a3;
+		}
+
+		.invoice-number{
+			display: block;
+			color: #707275;
+		}
+	}
+
+	button{
+		margin: 0 7px;
+	}
+}
+
+.custom-modal-header{
+	border: none !important;
+	padding: 30px 40px !important;
+	background-color: rgba(#ede4e1, 0.4);
+
+	h4{
+		color: $primary-color;
+		font-size: 20px;
+		line-height: 1.15;
+		letter-spacing: -0.12px;
+		font-family: $roboto-medium;
+	}
+}
+
+.custom-modal-body{
+	padding: 30px 40px !important;
+
+	&.noPadding{
+		padding: 0 !important;
+	}
+
+	.table-container{
+
+		@media only screen and (min-width: $mobile-min-width) and (max-width: $mobile-max-width){
+			overflow: scroll;
+		}
+	}
+}
+
+.success-modal-body{
+	text-align: center;
+	background-color: #e9fae9;
+	padding: 60px 0 !important;
+}
+
+.common-modal-body{
+	padding: 24px 34px !important;
+}
+
+.custom-modal-footer{
+	border: none !important;
+	padding: 20px 40px;
+	background-color: rgba(#ede4e1, 0.2);
+}
+
+.modal .modal-content{
+	border: none;
+}
+
+.smModelWidth .modal-dialog {
+	max-width: 440px;
+}
+
+.md1ModelWidth .modal-dialog {
+	max-width: 80%;
+}
+
+.mdModelWidth .modal-dialog {
+	max-width: 896px;
+}
+
+.xsModelWidth .modal-dialog {
+	max-width: 334px;
+
+	.modal-content{
+		box-shadow: 0 3px 56px rgba(0,0,0,0.13);
+	}
+
+	@media only screen and (min-width: $mobile-min-width) and (max-width: $mobile-max-width){
+		margin: auto;
+	}
+}
+
+.confirmModal .modal-dialog {
+	max-width: 354px;
+
+	.confirm-title{
+		color: $primary-color;
+		font-size: 18px;
+		margin-bottom: 8px;
+		font-family: $roboto-medium;
+
+		img{
+			margin-right: 10px;
+			vertical-align: sub;
+		}
+	}
+}
+
+.qc-popup{
+
+	.modal-dialog{
+		margin: -4rem auto;
+	}
+}
+
+.header-small-modal{
+	padding: 0 !important;
+
+	.small-model{
+		padding: 0;
+		text-align: left;
+
+		.head{
+			padding: 15px 22px;
+			background-color: rgba(#ede4e1, 0.4);
+
+			h6{
+				color: $primary-color;
+				font-size: 14px;
+				margin-bottom: 0;
+				font-weight: 500;
+				line-height: 1.64;
+				display: inline-block;
+				letter-spacing: -0.08px;
+				font-family: $roboto-medium;
+			}
+
+			.close{
+				padding: 5px;
+				cursor: pointer;
+			}
+		}
+
+		.body{
+			padding: 27px 26px;
+		}
+	}
+}

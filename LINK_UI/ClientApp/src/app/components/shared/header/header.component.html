@@ -1,0 +1,498 @@
+<div class="wrapper header-border sticky">
+    <div class="my-container">
+        <div class="header">
+            <div class="column" (click)="redirect()">
+                <a>
+                    <img *ngIf="userEntity=='API'" src="assets/images/logo-header.svg" alt="" class="logo">
+                    <img *ngIf="userEntity=='SGT'" src="../assets/images/sgt-landing-logo.svg" alt="" class="logo">
+                    <img *ngIf="userEntity=='AQF'" src="../assets/images/landing-logo-2.png" alt="" class="logo">
+                </a>
+            </div>
+
+            <div class="column" #headerSecondColumnElement>
+                <ul class="navigation">
+                    <ng-container *ngFor="let subItem of User.rights, let i=index">
+                        <li *ngIf="subItem && subItem.parentId==null && subItem.isHeading && subItem.children.length>0 && i< _headercount">
+                            <a [routerLinkActive]="['active']">{{subItem.titleName || subItem.menuName}}</a>
+                            <div class="submenu submenu-navigation">
+                                <ul>
+                                    <ng-container *ngFor="let secondlevelItem of subItem.children">
+                                        <li *ngIf="secondlevelItem && secondlevelItem.parentId!=null && secondlevelItem.isHeading && secondlevelItem.children.length>0">
+                                            <a [routerLinkActive]="['active']">{{secondlevelItem.titleName ||
+												secondlevelItem.menuName}}<img src="assets/images/grey-arrow.svg"
+													alt=""></a>
+                                            <ul class="submenu level-three">
+                                                <ng-container *ngFor="let thirdlevelitem of secondlevelItem.children">
+                                                    <li><a [routerLinkActive]="['active']" (click)="GetMenuParentId(thirdlevelitem.id)" [routerLink]="[geturl(thirdlevelitem)]">{{thirdlevelitem.titleName
+															|| thirdlevelitem.menuName}}</a>
+                                                    </li>
+                                                </ng-container>
+                                            </ul>
+                                        </li>
+                                        <li *ngIf="secondlevelItem && secondlevelItem.parentId!=null && secondlevelItem.children.length==0">
+                                            <a [routerLinkActive]="['active']" (click)="GetMenuParentId(secondlevelItem.id)" [routerLink]="[geturl(secondlevelItem)]">{{secondlevelItem.titleName ||
+												secondlevelItem.menuName}}</a>
+                                        </li>
+                                    </ng-container>
+                                </ul>
+                            </div>
+                        </li>
+                        <li *ngIf="subItem && subItem.parentId==null && subItem.isHeading && subItem.children.length==0">
+                            <a [routerLinkActive]="['active']" (click)="GetMenuParentId(subItem.id)" [routerLink]="[geturl(subItem)]">{{subItem.titleName || subItem.menuName}}</a>
+                        </li>
+
+                    </ng-container>
+                    <li *ngIf="header != null && header.length > 0">
+                        <a><img class="more-menu-icon" src="assets/images/cta-more-grey.svg"></a>
+                        <div class="submenu submenu-navigation">
+                            <ul>
+                                <ng-container *ngFor="let subItem of header">
+                                    <li *ngIf="subItem && subItem.parentId==null && subItem.isHeading && subItem.children.length>0">
+                                        <a [routerLinkActive]="['active']">{{subItem.titleName || subItem.menuName}}<img
+												src="assets/images/grey-arrow.svg" alt=""></a>
+
+                                        <div class="submenu-navigation">
+                                            <ul class="submenu level-three">
+                                                <ng-container *ngFor="let secondlevelItem of subItem.children">
+                                                    <li *ngIf="secondlevelItem && secondlevelItem.parentId!=null && secondlevelItem.isHeading && secondlevelItem.children.length>0">
+                                                        <a [routerLinkActive]="['active']" (click)="toggleAccordion($event)">{{secondlevelItem.titleName
+															|| secondlevelItem.menuName}}<img
+																src="assets/images/grey-arrow.svg" alt=""></a>
+                                                        <!-- <ul class="accordion_header level-four"> -->
+                                                        <!-- <ul class="submenu level-three"> -->
+                                                        <ul class="accordion">
+                                                            <ng-container *ngFor="let thirdlevelitem of secondlevelItem.children">
+                                                                <li><a [routerLinkActive]="['active']" (click)="GetMenuParentId(secondlevelItem.id)" [routerLink]="[geturl(thirdlevelitem)]">{{thirdlevelitem.titleName
+																		|| thirdlevelitem.menuName}}</a>
+                                                                </li>
+                                                            </ng-container>
+                                                        </ul>
+                                                        <!-- </ul> -->
+                                                    </li>
+                                                    <li *ngIf="secondlevelItem && secondlevelItem.parentId!=null && secondlevelItem.children.length==0">
+                                                        <a [routerLinkActive]="['active']" (click)="GetMenuParentId(secondlevelItem.id)" [routerLink]="[geturl(secondlevelItem)]">{{secondlevelItem.titleName
+															|| secondlevelItem.menuName}}</a>
+                                                    </li>
+                                                </ng-container>
+                                            </ul>
+                                        </div>
+                                    </li>
+                                </ng-container>
+                            </ul>
+                        </div>
+                    </li>
+                    <!-- <li *ngIf="subItem && subItem.parentId==null && subItem.isHeading && subItem.children.length==0">
+						<a [routerLinkActive]="['active']" (click)="GetMenuParentId(subItem.id)"
+							[routerLink]="[geturl(subItem)]">{{subItem.titleName || subItem.menuName}}</a>
+					</li> -->
+
+                </ul>
+                <ul class="navigation-second" #headerSecondColumnLastChild>
+                    <li [ngClass]="{'active': masterModel.showHelpPanel}">
+                        <span id="helpTrigger" (click)="toggleNotification($event, 'helpContainer')">
+                            <img src="assets/images/header-help.svg" class="mobile-nav-child">
+                        </span>
+                        <div class="submenu submenu-help" [ngClass]="{'active': masterModel.showHelpPanel}" id="helpContainer">
+                            <div class="first-section">
+                                <h4 class="title">{{ 'HEADER.LBL_HEADER_HELP_YOU' | translate }}</h4>
+                                <p class="subtitle">{{ 'HEADER.LBL_HEADER_PLEASE_CONTACT_US' | translate }}
+                                </p>
+                                <button class="secondary-cta small" (click)="openEmailWindow()">{{
+									                      'HEADER.LBL_SEND_QUERY' | translate }}</button>
+
+                                <div class="help-card">
+                                    <img src="assets/images/user.svg" alt="" class="icon">
+                                    <!--If user type is customer-->
+                                    <div class="content" *ngIf="User.usertype == _userType.Customer">
+                                        <h4 class="card-title">{{ customerKAMDetail.name }}</h4>
+                                        <p class="card-subtitle">{{ 'HEADER.LBL_CUSTOMER_SERVICE_EXECUTIVE' | translate }}
+                                        </p>
+                                        <p class="card-contact-info">{{ customerKAMDetail.email }}</p>
+                                        <p class="card-contact-info">{{ customerKAMDetail.phoneNumber }}</p>
+                                    </div>
+                                    <!--If user type is Internal User-->
+                                    <div class="content" *ngIf="User.usertype == _userType.InternalUser">
+                                        <h4 class="card-title">{{ 'HEADER.LBL_SERVICE_DESK' | translate }}
+                                        </h4>
+                                        <p class="card-contact-info" style="text-decoration: underline;" (click)="navigateToWormsServicePortal()">{{ 'HEADER.LBL_CREATE_NEW_TICKET' | translate }}</p>
+                                    </div>
+                                    <!--If user type is supplier or factory-->
+                                    <div class="content" *ngIf="User.usertype == _userType.Supplier || User.usertype == _userType.Factory">
+                                        <h4 class="card-title">{{ 'HEADER.LBL_SERVICE_DESK' | translate }}</h4>
+                                        <p class="card-subtitle">{{ 'HEADER.LBL_SUPPLIER_PLS_SEND_EMAIL' | translate }}
+                                        </p>
+                                        <p class="card-contact-info">{{ itSupporEmail }}</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="support-list" (click)="redirectUserManual()">
+                                <div class="icon">
+                                    <img src="assets/images/download-manual.svg" alt="">
+                                </div>
+                                <div class="content">
+                                    <h4 class="support-title">
+                                        <a>{{ 'USER_GUIDE.LBL_DOWNLOAD_USER_MANUAL' | translate }}</a>
+                                    </h4>
+                                    <h5 class="support-subtitle">{{ 'USER_GUIDE.LBL_REFER_USER_MANUAL' | translate }}
+                                    </h5>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                    <li [ngClass]="{'active': masterModel.showTaskPanel}">
+                        <span id="taskTrigger" (click)="toggleNotification($event, 'taskContainer')">
+                            <img src="assets/images/header-task.svg" alt="task" class="mobile-nav-child notification" >
+                            <span class="notification-count">{{masterModel.taskTotalCount}}</span>
+                        </span>
+                        <div class="submenu new-submenu-notification" [ngClass]="{'active': masterModel.showTaskPanel}" id="taskContainer">
+                            <div class="submenu-head">
+                                <div class="title-container">
+                                    <span class="title">{{ 'HEADER.LBL_TASK' | translate }}</span>
+                                    <div class="dropdown-wrapper">
+                                        {{ 'HEADER.LBL_FILTER_BY' | translate }} :
+                                        <ng-select #ngTaskSelectComponent id="taskDropdown" class="new-small no-margin width-120" [clearOnBackspace]="true" [searchable]="true" [hideSelected]="true" [items]="masterModel.taskTypeList" bindLabel="name" bindValue="id" (change)="changeTaskType($event)"
+                                            placeholder="All task">
+                                        </ng-select>
+                                        <div class="filter-cta style-2 has-dropdown">
+                                            <img src="assets/images/three-dots.svg" alt="">
+                                            <ul class="cta-dropdown bottom-left no-scroll">
+                                                <!-- <li>
+                                                    <img src="assets/images/new-set/cta-read-mark.svg" alt="" class="icon">
+                                                    <span (click)="allDoneTask()">{{'HEADER.LBL_TASK_MARK_ALL_AS_DONE' | translate}}</span>
+                                                </li> -->
+                                                <li>
+                                                    <img src="assets/images/new-set/cta-read-mark.svg" alt="" class="icon">
+                                                    <span (click)="clearAllTask()">{{'HEADER.LBL_RESET_FILTER' | translate}}</span>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                        <img class="close-icon" src="assets/images/new-set/close.svg" alt="">
+                                    </div>
+                                </div>
+                                <span class="">{{'HEADER.LBL_YOU_HAVE'| translate}} <span class="mark-read" (click)="getNotDoneTask()">{{masterModel.taskCount.totalCount}} {{'HEADER.LBL_UNREAD'|translate}}</span> {{'HEADER.LBL_TASK'|translate}}</span>
+                            </div>
+                            <div class="submenu-body" (scroll)="onScroll($event,'taskContainer')">
+
+                                <div class="notification-wrapper" *ngIf="masterModel.todayTaskList?.length != 0">
+                                    <span class="day-count">{{'HEADER.LBL_TODAY'| translate}} ({{masterModel.taskCount.todayCount}})</span>
+                                    <ul>
+                                        <li *ngFor="let item of masterModel.todayTaskList">
+                                            <div class="notification-item">
+                                                <div class="item-body" (click)="navigateTaskPage(item.link)">
+                                                    <div *ngIf="!item.task.isDone" class="green-dot"></div>
+                                                    <div *ngIf="item.task.isDone" class="green-dot empty"></div>
+                                                    <img class="notification-icon" src="assets/images/new-set/{{item.iconName}}" alt="">
+                                                    <div class="heading-container">
+                                                        <span class="heading">{{item.task.typeLable}}</span>
+                                                        <span class="sub-heading">{{item.message}}</span>
+                                                    </div>
+                                                </div>
+                                                <div class="has-dropdown">
+                                                    <span class="time">{{item.task.createdOn | date:'shortTime'}}</span>
+                                                    <!-- <ul class="cta-dropdown bottom-left no-scroll" *ngIf="!item.task.isDone">
+                                                        <li>
+                                                            <img src="assets/images/new-set/cta-read-mark.svg" alt="" class="icon">
+                                                            <span (click)="doneTask(item.link, item.task.id)">{{'HEADER.LBL_TASK_MARK_AS_DONE'|translate}}</span>
+                                                        </li>
+                                                    </ul> -->
+                                                </div>
+                                            </div>
+                                        </li>
+                                    </ul>
+                                </div>
+                                <div class="notification-wrapper" *ngIf="masterModel.yesterdayTaskList?.length != 0">
+                                    <span class="day-count">{{'HEADER.LBL_YESTERDAY'| translate}} ({{masterModel.taskCount.yesterdayCount}})</span>
+                                    <ul>
+                                        <li *ngFor="let item of masterModel.yesterdayTaskList">
+                                            <div class="notification-item">
+                                                <div class="item-body" (click)="navigateTaskPage(item.link)">
+                                                    <div *ngIf="!item.task.isDone" class="green-dot"></div>
+                                                    <div *ngIf="item.task.isDone" class="green-dot empty"></div>
+                                                    <img class="notification-icon" src="assets/images/new-set/{{item.iconName}}" alt="">
+                                                    <div class="heading-container">
+                                                        <span class="heading">{{item.task.typeLable}}</span>
+                                                        <span class="sub-heading">{{item.message}}</span>
+                                                    </div>
+                                                </div>
+                                                <div class="has-dropdown">
+                                                    <span class="time">{{item.task.createdOn | date:'shortTime'}}</span>
+                                                    <!-- <ul class="cta-dropdown bottom-left no-scroll" *ngIf="!item.task.isDone">
+                                                        <li>
+                                                            <img src="assets/images/new-set/cta-read-mark.svg" alt="" class="icon">
+                                                            <span (click)="doneTask(item.link, item.task.id)">{{'HEADER.LBL_TASK_MARK_AS_DONE'|translate}}</span>
+                                                        </li>
+                                                    </ul> -->
+                                                </div>
+                                            </div>
+                                        </li>
+                                    </ul>
+                                </div>
+                                <div class="notification-wrapper" *ngIf="masterModel.olderTaskList?.length != 0">
+                                    <span class="day-count">{{'HEADER.LBL_OLDER'| translate}} ({{masterModel.taskCount.olderCount}})</span>
+                                    <ul>
+                                        <li *ngFor="let item of masterModel.olderTaskList">
+                                            <div class="notification-item">
+                                                <div class="item-body" (click)="navigateTaskPage(item.link)">
+                                                    <div *ngIf="!item.task.isDone" class="green-dot"></div>
+                                                    <div *ngIf="item.task.isDone" class="green-dot empty"></div>
+                                                    <img class="notification-icon" src="assets/images/new-set/{{item.iconName}}" alt="">
+                                                    <div class="heading-container">
+                                                        <span class="heading">{{item.task.typeLable}}</span>
+                                                        <span class="sub-heading">{{item.message}}</span>
+                                                    </div>
+                                                </div>
+                                                <div class="has-dropdown">
+                                                    <span class="time">{{item.task.createdOn | date:standardOnlyDateFormat}}</span>
+                                                    <!-- <ul class="cta-dropdown bottom-left no-scroll" *ngIf="!item.task.isDone">
+                                                        <li>
+                                                            <img src="assets/images/new-set/cta-read-mark.svg" alt="" class="icon">
+                                                            <span (click)="doneTask(item.link, item.task.id)">{{'HEADER.LBL_TASK_MARK_AS_DONE'|translate}}</span>
+                                                        </li>
+                                                    </ul> -->
+                                                </div>
+                                            </div>
+                                        </li>
+                                    </ul>
+                                </div>
+                                <div class="notification-placeholder-container mt-3" *ngIf="masterModel.taskLoader">
+                                    <ul>
+                                        <li>
+                                            <div class="row">
+                                                <div class="col-lg-2">
+                                                    <div class="rect-common animate notification-cirle"></div>
+                                                </div>
+                                                <div class="col-lg-6">
+                                                    <div class="rect-common animate height36"></div>
+                                                </div>
+                                                <div class="col-lg-2"></div>
+                                                <div class="col-lg-2">
+                                                    <div class="rect-common animate height36"></div>
+                                                </div>
+                                            </div>
+                                        </li>
+                                        <li>
+                                            <div class="row">
+                                                <div class="col-lg-2">
+                                                    <div class="rect-common animate notification-cirle"></div>
+                                                </div>
+                                                <div class="col-lg-6">
+                                                    <div class="rect-common animate height36"></div>
+                                                </div>
+                                                <div class="col-lg-2"></div>
+                                                <div class="col-lg-2">
+                                                    <div class="rect-common animate height36"></div>
+                                                </div>
+                                            </div>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                    <li [ngClass]="{'active': masterModel.showNotificationPanel}">
+                        <span id="notificationTrigger" (click)="toggleNotification($event, 'notificationContainer')">
+                            <img src="assets/images/header-bell.svg" alt="notification" class="mobile-nav-child notification">
+                            <span class="notification-count">{{masterModel.notifiactionTotalCount}}</span>
+                        </span>
+                        <div class="submenu new-submenu-notification" [ngClass]="{'active': masterModel.showNotificationPanel}" id="notificationContainer">
+                            <div class="submenu-head">
+                                <div class="title-container">
+                                    <span class="title">{{ 'HEADER.LBL_NOTIFICATION' | translate }}</span>
+                                    <div class="dropdown-wrapper">
+                                        {{ 'HEADER.LBL_FILTER_BY' | translate }} :
+                                        <ng-select #ngNotificationSelectComponent id="notificationDropdown" class="new-small no-margin width-120" [clearOnBackspace]="true" [searchable]="true" [hideSelected]="true" [items]="masterModel.notificationTypeList" bindLabel="name" bindValue="id" (change)="changeNotificationType($event)"
+                                            placeholder="All notification">
+                                        </ng-select>
+                                        <div class="filter-cta style-2 has-dropdown">
+                                            <img src="assets/images/three-dots.svg" alt="">
+                                            <ul class="cta-dropdown bottom-left no-scroll">
+                                                <li>
+                                                    <img src="assets/images/new-set/cta-read-mark.svg" alt="" class="icon">
+                                                    <span (click)="readAllNotification()">{{'HEADER.LBL_NOTIFICATION_MARK_ALL_AS_READ' | translate}}</span>
+                                                </li>
+                                                <li>
+                                                    <img src="assets/images/new-set/cta-read-mark.svg" alt="" class="icon">
+                                                    <span (click)="clearAllNotification()">{{'HEADER.LBL_RESET_FILTER' | translate}}</span>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                        <img class="close-icon" src="assets/images/new-set/close.svg" alt="">
+                                    </div>
+                                </div>
+                                <span class="">{{'HEADER.LBL_YOU_HAVE'| translate}} <span class="mark-read" (click)="getUnReadNotification()">{{masterModel.notificationCount.totalCount}} {{'HEADER.LBL_UNREAD'|translate}}</span> {{'HEADER.LBL_NOTIFICATIONS'|translate}}</span>
+                            </div>
+                            <div class="submenu-body" (scroll)="onScroll($event,'notificationContainer')">
+
+                                <div class="notification-wrapper" *ngIf="masterModel.todayNotificationList?.length != 0">
+                                    <span class="day-count">{{'HEADER.LBL_TODAY'| translate}} ({{masterModel.notificationCount.todayCount}})</span>
+                                    <ul>
+                                        <li *ngFor="let item of masterModel.todayNotificationList">
+                                            <div class="notification-item">
+                                                <div class="item-body" (click)="navigateNotificationPage(item.link, item.notification.id)">
+                                                    <div *ngIf="!item.notification.isRead" class="green-dot"></div>
+                                                    <div *ngIf="item.notification.isRead" class="green-dot empty"></div>
+                                                    <img class="notification-icon" src="assets/images/new-set/{{item.iconName}}" alt="">
+                                                    <div class="heading-container">
+                                                        <span class="heading">{{item.notification.typeLabel}}</span>
+                                                        <span class="sub-heading">{{item.notification.message != null ? item.notification.message:item.message}}</span>
+                                                    </div>
+                                                </div>
+                                                <div class="has-dropdown">
+                                                    <span class="time">{{item.notification.createdOn | date:'shortTime'}}</span>
+                                                    <ul class="cta-dropdown bottom-left no-scroll" *ngIf="!item.notification.isRead">
+                                                        <li>
+                                                            <img src="assets/images/new-set/cta-read-mark.svg" alt="" class="icon">
+                                                            <span (click)="getNotificationDetail(item.link, item.notification.id)">{{'HEADER.LBL_NOTIFICATION_MARK_AS_READ'|translate}}</span>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </li>
+                                    </ul>
+                                </div>
+                                <div class="notification-wrapper" *ngIf="masterModel.yesterdayNotificationList?.length != 0">
+                                    <span class="day-count">{{'HEADER.LBL_YESTERDAY'| translate}} ({{masterModel.notificationCount.yesterdayCount}})</span>
+                                    <ul>
+                                        <li *ngFor="let item of masterModel.yesterdayNotificationList">
+                                            <div class="notification-item">
+                                                <div class="item-body" (click)="navigateNotificationPage(item.link, item.notification.id)">
+                                                    <div *ngIf="!item.notification.isRead" class="green-dot"></div>
+                                                    <div *ngIf="item.notification.isRead" class="green-dot empty"></div>
+                                                    <img class="notification-icon" src="assets/images/new-set/{{item.iconName}}" alt="">
+                                                    <div class="heading-container">
+                                                        <span class="heading">{{item.notification.typeLabel}}</span>
+                                                        <span class="sub-heading">{{item.notification.message != null ? item.notification.message:item.message}}</span>
+                                                    </div>
+                                                </div>
+                                                <div class="has-dropdown">
+                                                    <span class="time">{{item.notification.createdOn | date:'shortTime'}}</span>
+                                                    <ul class="cta-dropdown bottom-left no-scroll" *ngIf="!item.notification.isRead">
+                                                        <li>
+                                                            <img src="assets/images/new-set/cta-read-mark.svg" alt="" class="icon">
+                                                            <span (click)="getNotificationDetail(item.link, item.notification.id)">{{'HEADER.LBL_NOTIFICATION_MARK_AS_READ'|translate}}</span>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </li>
+                                    </ul>
+                                </div>
+                                <div class="notification-wrapper" *ngIf="masterModel.olderNotificationList?.length != 0">
+                                    <span class="day-count">{{'HEADER.LBL_OLDER'| translate}} ({{masterModel.notificationCount.olderCount}})</span>
+                                    <ul>
+                                        <li *ngFor="let item of masterModel.olderNotificationList">
+                                            <div class="notification-item">
+                                                <div class="item-body" (click)="navigateNotificationPage(item.link, item.notification.id)">
+                                                    <div *ngIf="!item.notification.isRead" class="green-dot"></div>
+                                                    <div *ngIf="item.notification.isRead" class="green-dot empty"></div>
+                                                    <img class="notification-icon" src="assets/images/new-set/{{item.iconName}}" alt="">
+                                                    <div class="heading-container">
+                                                        <span class="heading">{{item.notification.typeLabel}}</span>
+                                                        <span class="sub-heading">{{item.notification.message != null ? item.notification.message:item.message}}</span>
+                                                    </div>
+                                                </div>
+                                                <div class="has-dropdown">
+                                                    <span class="time">{{item.notification.createdOn | date:standardOnlyDateFormat}}</span>
+                                                    <ul class="cta-dropdown bottom-left no-scroll" *ngIf="!item.notification.isRead">
+                                                        <li>
+                                                            <img src="assets/images/new-set/cta-read-mark.svg" alt="" class="icon">
+                                                            <span (click)="getNotificationDetail(item.link, item.notification.id)">{{'HEADER.LBL_NOTIFICATION_MARK_AS_READ'|translate}}</span>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </li>
+                                    </ul>
+                                </div>
+                                <div class="notification-placeholder-container mt-3" *ngIf="masterModel.notifiactionLoader">
+                                    <ul>
+                                        <li>
+                                            <div class="row">
+                                                <div class="col-lg-2">
+                                                    <div class="rect-common animate notification-cirle"></div>
+                                                </div>
+                                                <div class="col-lg-6">
+                                                    <div class="rect-common animate height36"></div>
+                                                </div>
+                                                <div class="col-lg-2"></div>
+                                                <div class="col-lg-2">
+                                                    <div class="rect-common animate height36"></div>
+                                                </div>
+                                            </div>
+                                        </li>
+                                        <li>
+                                            <div class="row">
+                                                <div class="col-lg-2">
+                                                    <div class="rect-common animate notification-cirle"></div>
+                                                </div>
+                                                <div class="col-lg-6">
+                                                    <div class="rect-common animate height36"></div>
+                                                </div>
+                                                <div class="col-lg-2"></div>
+                                                <div class="col-lg-2">
+                                                    <div class="rect-common animate height36"></div>
+                                                </div>
+                                            </div>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                    <li class="last" [ngClass]="{'active': masterModel.showUserPanel}">
+                        <div id="userTrigger" class="user-info" (click)="toggleNotification($event, 'userContainer')">
+                            <img [src]="photourl" alt="user" class="user-thumb">
+                            <div class="info-text">
+                                <p class="text">{{userName}}</p>
+                            </div>
+                            <img src="assets/images/grey-arrow.svg" alt="" class="drop-icon">
+                        </div>
+                        <img src="assets/images/hamburger.svg" (click)="openHamburger()" alt="hamburger" class="hamburger">
+                        <div class="submenu device-hide last-dropdown" [ngClass]="{'active': masterModel.showUserPanel}" id="userContainer">
+                            <ul>
+                                <li>
+                                    <a [routerLink]="['/api/changepassword']">
+                                        <img src="assets/images/setting.svg" alt="settings" class="icon">{{ 'HEADER.LBL_CHANGEPASSWD' | translate }}</a>
+                                </li>
+                                <li *ngIf="_userTypeId != _internalusertype">
+                                    <a (click)="redirectToProfilePage()"><img src="assets/images/user.svg" alt="profile" class="icon">{{ 'USER_PROFILE.TITLE' | translate }}</a>
+                                </li>
+                                <li>
+                                    <a (click)="signOut()"><img src="assets/images/logout.svg" alt="logout" class="icon">{{ 'HEADER.LBL_SIGNOUT' | translate }}</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<div class="side-navigation-container" [ngClass]="{'opened': expandNavigation}">
+
+    <div class="trigger-container" (click)="toggleSidebar()">
+        <span class="side-hamburger" *ngIf="expandNavigation">
+			<img src="assets/images/close.svg" alt="">
+		</span>
+        <span class="side-hamburger" *ngIf="!expandNavigation">
+			<img src="assets/images/side-hamburger.svg" alt="">
+		</span>
+        <div class="logo-container" *ngIf="expandNavigation">
+            <img *ngIf="selectedEntity==entityAccessEnum.API" src="assets/images/logo-header.svg" alt="" class="logo">
+            <img *ngIf="selectedEntity==entityAccessEnum.SGT" src="assets/images/sgt-logo.svg" alt="" class="logo">
+        </div>
+    </div>
+
+    <ul>
+
+        <ng-container *ngFor="let userRightType of userRightTypeAccessList">
+            <li [attr.data-tooltip]="userRightType.name" [ngClass]="{  'common-tooltip right':!expandNavigation,'active': (selectedRightType==userRightType.id)}" (click)="RedirectWithRightTypeAccess(userRightType)">
+                <img [src]="userRightType.rightTypeFileName" alt="">
+                <p [@expandCollapse]="expandNavigation ? 'open' : 'close'">{{userRightType.name}}</p>
+            </li>
+        </ng-container> 
+    </ul>
+
+</div>

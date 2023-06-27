@@ -1,0 +1,560 @@
+.tracking-container{
+	position: relative;
+	margin-bottom: 12px;
+
+	.thumbnail-container{
+		border-radius: 2px;
+		text-align: center;
+		padding: 50px 30px 30px;
+		border: solid 1px #e7ecf7;
+
+		img{
+			width: 100%;
+			margin: auto;
+		}
+	}
+
+	.section-title{
+		color: $primary-color;
+		font-size: 18px;
+		font-weight: 500;
+		font-family: $roboto-medium;
+	}
+
+	.result-border-right{
+		border-right: solid 1px rgba($primary-color, 0.1);
+
+		@media only screen and (min-width: $mobile-min-width) and (max-width: $mobile-max-width){
+			border-right: none !important;
+		}
+	}
+
+	.report-status{
+
+		@media only screen and (min-width: $mobile-min-width) and (max-width: $mobile-max-width){
+			margin-top: 20px;
+		}
+
+		.result-block{
+			margin-right: 24px;
+			vertical-align: top;
+			padding-right: 34px;
+			display: inline-block;
+			border-right: solid 2px rgba($primary-color, 0.1);
+
+			@media only screen and (min-width: $mobile-min-width) and (max-width: $mobile-max-width){
+				padding-right: 0;
+				border-right: none;
+				margin-bottom: 20px;
+				@include span(12 of 12);
+			}
+
+			&:last-child{
+				border: none;
+				margin-right: 0;
+			}
+
+			.small{
+				margin: 0;
+				display: block;
+				color: #7b8d94;
+				font-size: 12px;
+				line-height: 1.92;
+				vertical-align: middle;
+				font-family: $roboto-regular;
+			}
+
+			.icon{
+				width: 17px;
+				margin-right: 8px;
+				vertical-align: initial;
+			}
+
+			.result-title{
+				font-size: 18px;
+				font-weight: bold;
+				line-height: 1.28;
+				margin-right: 8px;
+				font-family: $roboto-bold;
+
+				&.green{
+					color: #1dbb7d;
+				}
+
+				&.blue{
+					color: #4880ff;
+				}
+
+				&.yellow{
+					color: #f3900f;
+				}
+
+				&.purple{
+					color: #ae56de;
+				}
+
+				&.green{
+					color: #08b24b;
+				}
+
+				&.red{
+					color: #e02e2e;
+				}
+
+				&.grey{
+					color: #9eb9ce;
+				}
+
+				&.blue{
+					color: #4b78dd;
+				}
+			}
+		}
+	}
+
+	.my-input-group{
+
+		label{
+			color: #7b8d94;
+			font-size: 11px;
+			font-family: $roboto-regular;
+		}
+
+		.input-value{
+			color: $primary-color;
+			font-size: 12px;
+			font-weight: bold;
+			font-family: $roboto-bold;
+
+			&.light{
+				color: #7b8d94;
+				margin-top: 3px;
+				font-weight: 100;
+				font-family: $roboto-regular;
+			}
+		}
+	}
+
+	.result-detail-container{
+
+		@media only screen and (min-width: $mobile-min-width) and (max-width: $mobile-max-width){
+			margin-top: 20px;
+		}
+
+		.light{
+			color: #7b8d94;
+			font-size: 11px;
+			padding-left: 80px;
+			margin-bottom: 10px;
+			font-family: $roboto-regular;
+
+			@media only screen and (min-width: $tablet-min-width) and (max-width: $tablet-max-width){
+				padding-left: 20px;
+			}
+
+			@media only screen and (min-width: $mobile-min-width) and (max-width: $mobile-max-width){
+				padding-left: 15px;
+			}
+		}
+
+		.dark{
+			color: $primary-color;
+			font-size: 12px;
+			font-weight: bold;
+			margin-bottom: 10px;
+			font-family: $roboto-bold;
+		}
+
+		.blue{
+			color: #4b78dd;
+			font-size: 12px;
+			font-weight: 500;
+			margin-top: 10px;
+			line-height: 1.42;
+			font-style: italic;
+			padding-left: 80px;
+			font-family: $roboto-medium;
+
+			@media only screen and (min-width: $tablet-min-width) and (max-width: $tablet-max-width){
+				padding-left: 20px;
+			}
+
+			@media only screen and (min-width: $mobile-min-width) and (max-width: $mobile-max-width){
+				padding-left: 15px;
+			}
+		}
+
+		.my-input-group{
+			margin-bottom: 10px;
+
+			&:nth-child(odd){
+				padding-left: 80px;
+			}
+		}
+	}
+
+	.result-card{
+		width: 373px;
+		padding: 0 50px 0;
+		position: relative;
+		vertical-align: top;
+		margin-bottom: 40px;
+		display: inline-block;
+
+		@media only screen and (min-width: $tablet-min-width) and (max-width: $tablet-max-width){
+			min-height: 108px;
+			padding: 0 20px 0;
+			margin-bottom: 20px;
+			@include span(4 of 12);
+
+			&:nth-child(3n){
+				@include span(4 of 12 last);
+			}
+		}
+
+		@media only screen and (min-width: $mobile-min-width) and (max-width: $mobile-max-width){
+			padding: 0;
+			margin-bottom: 20px;
+			border: none !important;
+			@include span(12 of 12);
+		}
+
+		&:first-child{
+			padding-left: 20px;
+
+			@media only screen and (min-width: $mobile-min-width) and (max-width: $mobile-max-width){
+				padding: 0;
+			}
+		}
+
+		&.padding20{
+			padding-left: 20px;
+
+			@media only screen and (min-width: $mobile-min-width) and (max-width: $mobile-max-width){
+				padding: 0;
+			}
+		}
+
+		&:last-child{
+			padding-right: 0;
+		}
+
+		.title{
+			color: $primary-color;
+			font-size: 14px;
+			font-weight: 500;
+			margin-bottom: 4px;
+			font-family: $roboto-medium;
+		}
+
+		.status{
+			top: 0;
+			right: 50px;
+			color: #1dbb7d;
+			font-size: 14px;
+			font-weight: bold;
+			position: absolute;
+			font-family: $roboto-bold;
+
+			&.fail{
+				color: #e02e2e;
+			}
+
+			&.pending{
+				color: #f3900f;
+			}
+
+			@media only screen and (min-width: $tablet-min-width) and (max-width: $tablet-max-width){
+				right: 20px;
+			}
+
+			@media only screen and (min-width: $mobile-min-width) and (max-width: $mobile-max-width){
+				right: 10px;
+			}
+
+			img{
+				width: 14px;
+				margin-right: 4px;
+				display: inline-block;
+			}
+		}
+
+		p.small{
+			font-size: 12px;
+			margin-bottom: 5px;
+			color: rgba($primary-color, 0.6);
+			font-family: $roboto-regular;
+		}
+
+		.count{
+
+			&.light{
+				opacity: 0.4;
+			}
+
+			.number{
+				color: $brand-color;
+				font-size: 14px;
+				margin-left: 6px;
+				font-family: $roboto-regular;
+			}
+		}
+	}
+
+	.defect-card{
+		width: 373px;
+		padding: 0 50px 0;
+		display: table-cell;
+		border-right: solid 1px rgba($primary-color, 0.1);
+
+		@media only screen and (min-width: $mobile-min-width) and (max-width: $mobile-max-width){
+			padding: 0;
+			border-right: none;
+			@include span(12 of 12);
+		}
+
+		&:first-child{
+			padding-left: 20px;
+
+			@media only screen and (min-width: $mobile-min-width) and (max-width: $mobile-max-width){
+				padding: 0;
+				border-right: none;
+				margin-bottom: 20px;
+			}
+		}
+
+		&:last-child{
+			border-right: none;
+		}
+
+		.title{
+			color: $primary-color;
+			font-size: 14px;
+			font-weight: 500;
+			margin-bottom: 14px;
+			font-family: $roboto-medium;
+		}
+
+		p.small{
+			font-size: 12px;
+			margin-bottom: 5px;
+			margin-bottom: 10px;
+			color: rgba($primary-color, 0.6);
+			font-family: $roboto-regular;
+		}
+	}
+
+
+	// TCF Page
+	
+	.product-info-card{
+		padding-left: 40px;
+
+		@media only screen and (min-width: $mobile-min-width) and (max-width: $mobile-max-width){
+			padding-left: 15px;
+		}
+
+		.my-input-group{
+
+			@media only screen and (min-width: $mobile-min-width) and (max-width: $mobile-max-width){
+				@include span(6 of 12);
+			}
+
+			&:nth-child(2n){
+
+				@media only screen and (min-width: $mobile-min-width) and (max-width: $mobile-max-width){
+					@include span(6 of 12 last);
+				}
+			}
+		}
+	}
+
+	.small-info-container{
+		margin-top: 45px;
+
+		.small-info-block{
+			display: inline-block;
+			margin-right: 50px;
+
+			@media only screen and (min-width: $tablet-min-width) and (max-width: $tablet-max-width){
+				@include span(4 of 12);
+			}
+
+			@media only screen and (min-width: $mobile-min-width) and (max-width: $mobile-max-width){
+				margin-bottom: 10px;
+				@include span(12 of 12);
+
+				&:nth-child(2n){
+					@include span(12 of 12 last);
+				}
+			}
+
+			&:last-child{
+				margin-right: 0;
+
+				@media only screen and (min-width: $tablet-min-width) and (max-width: $tablet-max-width){
+					@include span(4 of 12 last);
+				}
+			}
+
+			&.blue{
+				padding-left: 40px;
+
+				@media only screen and (min-width: $tablet-min-width) and (max-width: $tablet-max-width){
+					padding-left: 0;
+				}
+
+				@media only screen and (min-width: $mobile-min-width) and (max-width: $mobile-max-width){
+					padding-left: 0;
+				}
+
+				small{
+					color: #4b78dd;
+				}
+
+				.big{
+					color: #4b78dd;
+				}
+			}
+
+			&.red{
+
+				small{
+					color: #dd4242;
+				}
+
+				.big{
+					color: #dd4242;
+				}
+			}
+
+			&.orange{
+
+				small{
+					color: #e87304;
+				}
+
+				.big{
+					color: #e87304;
+				}
+			}
+
+			small{
+				margin: 0;
+				display: block;
+				font-size: 11px;
+				font-style: normal;
+				vertical-align: middle;
+				color: rgba(#203b4e, 0.6);
+				font-family:$roboto-regular;
+
+				@media only screen and (min-width: $mobile-min-width) and (max-width: $mobile-max-width){
+					margin-top: 8px;
+					@include span(7 of 12);
+				}
+			}
+
+			.big{
+				display: block;
+				color: $primary-color;
+				font-size: 20px;
+				vertical-align: middle;
+				font-family: $roboto-light;
+
+				@media only screen and (min-width: $mobile-min-width) and (max-width: $mobile-max-width){
+					margin: 0;
+					@include span(5 of 12 last);
+				}
+			}
+		}
+	}
+}
+
+.booking-status-container{
+	padding: 24px 0;
+	text-align: center;
+	@include span(12 of 12);
+
+	&.placeholder{
+
+		.title{
+			width: 80px;
+			height: 10px;
+			margin: 8px auto 0 !important;
+			background-color: #f2f5fa;
+		}
+
+		span{
+			width: 50px;
+			height: 8px;
+			display: inline-block;
+			background-color: #f2f5fa;
+		}
+	}
+
+	.status-list{
+		margin: 0;
+		padding: 0;
+		list-style: none;
+
+		li{
+			width: 180px;
+			padding: 0 40px;
+			position: relative;
+			display: inline-block;
+
+			@media only screen and (min-width: $tablet-min-width) and (max-width: $tablet-max-width){
+				width: 140px;
+				padding: 0 20px;
+			}
+
+			&:after{
+				top: 16px;
+				left: 59%;
+				z-index: 0;
+				content: '';
+				width: 148px;
+				position: absolute;
+				border-top: 2px solid #E5E7ED;
+			}
+
+			&.processing{
+
+				&:after{
+					border-top: 2px dashed #E5E7ED;
+				}
+			}
+
+			&:last-child{
+
+				&:after{
+					width: 0;
+				}
+			}
+
+			img{
+				width: 34px;
+				height: 34px;
+			}
+
+			.title{
+				line-height: 1;
+				color: #203b4e;
+				font-size: 12px;
+				font-weight: 500;
+				margin: 8px 0 0 0;
+				font-family: $roboto-medium;
+			}
+
+			span{
+				color: #a5b0b7;
+				line-height: 1;
+				margin-top: 4px;
+				font-size: 10px;
+				margin-top: 4px;
+				font-weight: 500;
+				font-family: $roboto-medium;
+			}
+		}
+	}
+}

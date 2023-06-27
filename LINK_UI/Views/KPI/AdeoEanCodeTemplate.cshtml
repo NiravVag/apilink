@@ -1,0 +1,29 @@
+﻿
+@{
+    ViewData["Title"] = "AdeoEanCode";
+}
+
+@model DTO.Kpi.ExportResult
+
+<xls-sheet name="AdeoEanCode">
+    <table xls-begin="A:1" style="border-style:solid">
+        <tr style="background-color:#f5f5f5;font-weight:bold;text-align:center">
+            <th>InspectionID</th>
+            <th>ProductID</th>
+            <th>Remark</th>
+            <th>Barcode</th>
+            <th>ProductDescription</th>
+        </tr>
+        @foreach (var item in Model.Data)
+        {
+            <tr>
+                <td width="150px" xls-type="number">@item.BookingNo</td>
+                <td width="150px">@Html.Raw(@item.ProductName)</td>
+                <td width="150px"></td>
+                <td width="250px">@item.Barcode</td>
+                <td width="250px">@Html.Raw(@item.ProductDescription)</td>
+            </tr>
+        }
+    </table>
+</xls-sheet>
+

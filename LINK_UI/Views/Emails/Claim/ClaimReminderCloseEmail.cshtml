@@ -1,0 +1,111 @@
+﻿
+
+@model DTO.ScheduleJob.ClaimReminderEmailResponse
+
+<style>
+    .th-table {
+        color: black;
+        vertical-align: top;
+        font-size: 13px;
+        font-family: tahoma;
+    }
+
+    .td-table {
+        font-size: 13px;
+        font-family: tahoma;
+    }
+
+    .div-style {
+        padding-bottom: 5px;
+        margin-bottom: 5px;
+    }
+
+    #color {
+        color: red;
+    }
+</style>
+
+<table>
+    <tr>
+        <td style="font-size:13px; font-family:tahoma;">
+            Dear Sir / Madam,
+            <br /><br />
+            <div class="div-style">
+                Following are the claims need to Closed. Please do the appropriate action.
+            </div>
+            <br />
+            <table style="border:solid 1px #d4d0c8;border-collapse:collapse;font-size:12px;
+                 font-family:tahoma;" cellspacing='0' cellpadding='1' rules='all' align='left' border='1' width='100%'>
+                <tr>
+                    <th bgcolor=#f8f4f3 style="color: black; font-size:13px;" align=center width='10%' height=35>
+                        Inspection#
+                    </th>
+                    <th bgcolor=#f8f4f3 style="color: black; font-size:13px;" align=center width='15%' height=35>
+                        Claim#
+                    </th>
+                    <th bgcolor=#f8f4f3 style="color: black; font-size:13px;" align=center width='10%' height=35>
+                        Claim Date
+                    </th>
+                    <th bgcolor=#f8f4f3 style="color: black; font-size:13px;" align=center width='15%' height=35>
+                        Inspection Date
+                    </th>
+                    <th bgcolor=#f8f4f3 style="color: black; font-size:13px;" align=center width='15%' height=35>
+                        Customer
+                    </th>
+                    <th bgcolor=#f8f4f3 style="color: black; font-size:13px;" align=center width='20%' height=35>
+                        Supplier
+                    </th>
+                    <th bgcolor=#f8f4f3 style="color: black; font-size:13px;" align=center width='30%' height=35>
+                        Factory
+                    </th>
+                </tr>
+                @foreach (var item in Model.ScheduleClaimReminderEmailList)
+                {
+                    <tr>
+                        <td align=center style="font-size: 12px;" height=30>
+                            <a href="@item.InspectionURL">@item.BookingId</a>
+                        </td>
+                        <td align=center style="font-size: 12px;" height=30>
+                            <a href="@item.ClaimURL">@item.ClaimNo</a>
+                        </td>
+                        <td style="font-size: 12px;" height=30>
+                            @item.ClaimDate
+                        </td>
+                        <td style="font-size: 12px;" height=30>
+                            @item.InspectionDate
+                        </td>
+                        <td align=center style="font-size: 12px;" height=30>
+                            @item.CustomerName
+                        </td>
+                        <td align=center style="font-size: 12px;" height=30>
+                            <span>@item.SupplierName</span>
+                        </td>
+                        <td align=center style="font-size: 12px;" height=30>
+                            <span>@item.FactoryName</span>
+                        </td>
+                    </tr>
+                }
+            </table>
+            <br />
+        </td>
+    </tr>
+    <tr>
+        <td class="td-table">
+            <br />
+            <div class="div-style">
+                Please login our <a href="">Link</a> to view the details.
+            </div>
+        </td>
+    </tr>
+    <tr>
+        <td class="td-table">
+            <br />
+            <div class="div-style">
+                Thanks
+            </div>
+            <div class="div-style">
+                IT-Team
+            </div>
+        </td>
+    </tr>
+</table>

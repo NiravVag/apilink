@@ -1,0 +1,866 @@
+<div class="main-wrapper">
+  <div class="wrapper dashboard-wrapper">
+    <div class="my-container">
+      <div class="master-body">
+        <div class="title-container">
+          <div class="header-back-button" *ngIf="fromSummary && !_initialloader && !_saveloader">
+            <img src="assets/images/back-red.png" alt="back" (click)="return('expensesearch/expenseclaim-list')">
+          </div>
+          <h3 class="main-title">{{ 'EXPENSE.TITLE' | translate }}</h3>
+        </div>
+        <div class="content-container">
+          <h4 class="container-head">{{ 'EXPENSE.LBL_MAIN' | translate }}</h4>
+          <div class="formPadding">
+            <div class="row">
+              <div class="col-sm-4 col-md-4 col-lg-4">
+                <div class="my-input-group">
+                  <label>{{ 'EXPENSE.LBL_EMPLOYEE' | translate }}</label>
+                  <span readonly=readonly class="form-control" style="min-height:47px;">{{model.name}}</span>
+                </div>
+              </div>
+              <div class="col-sm-4 col-md-4 col-lg-4 mobile-margin-top-15">
+                <div class="my-input-group">
+                  <label class="control-label required">{{ 'EXPENSE.LBL_CLAIMDATE' | translate }}</label>
+                  <span readonly=readonly class="form-control" style="min-height:47px;">{{model.claimDate.day + "/" +
+                    model.claimDate.month + "/" + model.claimDate.year }}</span>
+                </div>
+              </div>
+              <div class="col-sm-4 col-md-4 col-lg-4 mobile-margin-top-15">
+                <div class="my-input-group">
+                  <label class="required">{{ 'EXPENSE.LBL_COUNTRY' | translate }}</label>
+                  <select disabled [ngClass]="{ 'is-invalid': !validator.isValid('countryId')}"
+                    [(ngModel)]="model.countryId">
+                    <option value="0">--- {{ 'EXPENSE.LBL_SELECT' | translate }}---</option>
+                    <option *ngFor="let item of data.countryList" [ngValue]="item.id">{{item.countryName}}</option>
+                  </select>
+                  <div *ngIf="!validator.isValid('countryId')" class="invalid-feedback">
+                    <div *ngFor="let error of validator.getErrors('countryId')">{{ error | translate }}</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="row marginTop15">
+              <div class="col-sm-4 col-md-4 col-lg-4">
+                <div class="my-input-group">
+                  <label>{{ 'EXPENSE.LBL_BRANCH' | translate }}</label>
+                  <span readonly=readonly class="form-control" style="min-height:47px;">{{model.locationName}}</span>
+                </div>
+              </div>
+              <div class="col-sm-4 col-md-4 col-lg-4 mobile-margin-top-15">
+                <div class="my-input-group">
+                  <label>{{ 'EXPENSE.LBL_CLAIMNO' | translate }}</label>
+                  <div readonly=readonly class="form-control" style="min-height:47px;">
+                    <span *ngIf="!isOutSourceAccountingRole">{{model.claimNo}}</span>
+                  </div>
+                </div>
+              </div>
+              <div class="col-sm-4 col-md-4 col-lg-4 mobile-margin-top-15">
+                <div class="my-input-group">
+                  <label>{{ 'EXPENSE.LBL_CLAIMSTATUS' | translate }}</label>
+                  <span class="form-control" readonly=readonly style="min-height:47px">{{model.statusId == 0 ? "New" :
+                    model.status}}</span>
+                </div>
+              </div>
+            </div>
+            <div class="row marginTop15">
+              <div class="col-sm-4 col-md-4 col-lg-4 mobile-margin-top-15">
+                <div class="my-input-group">
+                  <label class="required">{{ 'EXPENSE.LBL_CLAIMTYPE' | translate }}</label>
+                  <ng-select [items]="expenseClaimTypeData.expenseClaimTypeList" [ngClass]="{ 'is-invalid': 
+                         !validator.isValid('claimTypeId')}" [multiple]="false"
+                    [disabled]="!expenseBookingDetailAccess.claimTypeEnabled || model.id!=0" [closeOnSelect]="true"
+                    bindLabel="name" bindValue="id" appendTo="body" (change)="changeExpenseClaimType()"
+                    [(ngModel)]="model.claimTypeId"
+                    placeholder="--- {{ 'CUSTOMER_PRODUCT_SUMMARY.LBL_SELECT' | translate }} ---" [clearable]="false">
+                  </ng-select>
+                  <div *ngIf="!validator.isValid('claimTypeId')" class="invalid-feedback">
+                    <div *ngFor="let error of validator.getErrors('claimTypeId')">{{ error | translate }}</div>
+                  </div>
+                </div>
+              </div>
+              <div *ngIf="canCheck && model.statusId == _expenseClaimStatusEnum.Pending 
+                            && model.isAutoExpense!=null && model.isAutoExpense"
+                class="col-sm-4 col-md-4 col-lg-4 mobile-margin-top-15" style="padding:20px;">
+                <div class="my-input-group">
+                  <div class="styled-checkbox-container" style="width:260px;">
+                    <input class="styled-checkbox" id="checkboxStatus" type="checkbox"
+                      [(ngModel)]="model.managerApproveRequired">
+                    <label for="checkboxStatus" style="display: inline-block;color: black;">
+                      Skip Manager Approval</label>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-sm-4 col-md-4 col-lg-4 mobile-margin-top-15"
+                *ngIf="currentUser.usertype==userTypeEnum.OutSource">
+                <div class="my-input-group">
+                  <label>{{ 'EXPENSE.LBL_OUTSOURCE_COMPANY' | translate }}</label>
+                  <span readonly=readonly class="form-control"
+                    style="min-height:47px;">{{model.outSourceCompanyName}}</span>
+                </div>
+              </div>
+
+            </div>
+            <div class="row marginTop15">
+
+              <div class="col-sm-8 col-md-8 col-lg-8">
+                <div class="my-input-group">
+                  <label [ngClass]="{ 'required': (model.claimTypeId == _expenseClaimTypeEnum.NonInspection) }">
+                    {{ 'EXPENSE.LBL_EXPENSEPURPOSE' | translate }}</label>
+                  <textarea [ngClass]="{ 'is-invalid': (model.claimTypeId == _expenseClaimTypeEnum.NonInspection &&
+                         !validator.isValid('expensePuropose'))}" [(ngModel)]="model.expensePuropose" type="text"
+                    maxlength="600" placeholder="{{ 'EXPENSE.LBL_EXPENSEPURPOSE' | translate }}"></textarea>
+                  <div *ngIf="(model.claimTypeId == _expenseClaimTypeEnum.NonInspection && 
+                          !validator.isValid('expensePuropose'))" class="invalid-feedback">
+                    <div *ngFor="let error of validator.getErrors('expensePuropose')">{{ error | translate }}</div>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+
+          </div>
+          <div class="tab-container">
+            <ul class="tab-switch-container">
+              <li [ngClass]="{ 'active':  (expenseClaimTypeData.bookingDetails.length>0 && model.id==0)}"
+                (click)="toggleTab($event, 'tab1')" *ngIf="(expenseBookingDetailAccess.bookingDetailVisible)">
+                {{ 'EXPENSE.LBL_BOOKING' | translate }}
+              </li>
+              <li
+                [ngClass]="{ 'active': (model.id!=0 || (model.id==0 && expenseClaimTypeData.bookingDetails.length==0))}"
+                (click)="toggleTab($event, 'tab2')">
+                {{ 'EXPENSE.LBL_EXPENSECLAIMS' | translate }}</li>
+            </ul>
+            <div class="tab-content-container">
+
+
+
+              <div class="tab-content" id="tab1" style="overflow-y: auto; max-height: 400px;">
+
+                <div class="row marginTop15">
+                  <div class="col-sm-4 col-md-4 col-lg-4 mobile-margin-top-15">
+                    <div class="my-input-group">
+                      <label>Booking No</label>
+                      <ng-select [items]="expenseBookingList" [searchable]="true" appendTo="body" [multiple]="true"
+                        class="multiple" bindLabel="bookingId" (change)="changeBookingNo($event)"
+                        [(ngModel)]="expenseSelectedBookings"
+                        placeholder="--- {{ 'CUSTOMER_PRODUCT_SUMMARY.LBL_SELECT' | translate }} ---">
+                      </ng-select>
+                    </div>
+                  </div>
+                </div>
+
+                <table class="pagination-table bordered whitespacenormal"
+                  *ngIf="(expenseBookingDetailAccess.bookingDetailVisible)">
+                  <thead>
+                    <tr class="sticky-top-row">
+                      <th>
+                        <div class="styled-checkbox-container">
+                          <input type="checkbox" class="styled-checkbox" id="checkboxall"
+                            [(ngModel)]="expenseClaimTypeData.selectedAllBooking" (change)="selectAllBookings();" />
+                          <label for="checkboxall"></label>
+                        </div>
+                      </th>
+                      <th>{{ 'EXPENSE.LBL_BOOKINGNO' | translate }}</th>
+                      <th *ngIf="isOutSourceAccountingRole">Qc Name</th>
+                      <th>{{ 'EXPENSE.LBL_SERVICEDATEFROM' | translate }}</th>
+                      <th>{{ 'EXPENSE.LBL_SERVICEDATETO' | translate }}</th>
+                      <th class="width-140">{{ 'EXPENSE.LBL_CUSTOMER' | translate }}</th>
+                      <th class="width-140">{{ 'EXPENSE.LBL_SUPPLIER' | translate }}</th>
+                      <th class="width-140">{{ 'EXPENSE.LBL_FACTORY' | translate }}</th>
+                      <th class="width-140">{{ 'EXPENSE.LBL_SERVICETYPE' | translate }}</th>
+                    </tr>
+                  </thead>
+                  <tbody *ngIf="(expenseClaimTypeData.bookingDetails.length>0)">
+                    <tr *ngFor="let item of expenseClaimTypeData.bookingDetails;let idx = index">
+                      <td>
+                        <div class="styled-checkbox-container">
+                          <input type="checkbox" id="checkbox-{{idx}}" class="styled-checkbox"
+                            [(ngModel)]="item.selected" (change)="assignSelectedBookings()">
+                          <label for="checkbox-{{idx}}"></label>
+                        </div>
+                      </td>
+                      <td>{{item.bookingId}}</td>
+                      <td *ngIf="isOutSourceAccountingRole">{{item.qcName}}</td>
+                      <td>{{item.serviceDateFrom}}</td>
+                      <td>{{item.serviceDateTo}}</td>
+                      <td class="wordbreak width-140 ">{{item.customer}}</td>
+                      <td class="wordbreak width-140 ">{{item.supplier}}</td>
+                      <td class="wordbreak width-140 ">{{item.factory}}</td>
+                      <td class="wordbreak width-140 ">{{item.serviceType}}</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+              <div class="tab-content active" id="tab2">
+                <div class="table-action mobile-action desktop-hide tablet-hide"
+                  *ngIf="(!_expenseClaimStatusEnum.Approved && 
+                  !_expenseClaimStatusEnum.Rejected && model.staffId==currentUser.staffId) || isOutSourceAccountingRole">
+                  <button class="secondary-cta x-small" (click)="addExpense(null)">
+                    +
+                    {{ 'EXPENSE.LBL_ADD' | translate }}
+                  </button>
+                </div>
+                <table class="info-table" cellspacing="0">
+                  <thead>
+                    <tr>
+                      <th class="required" *ngIf="(expenseBookingDetailAccess.bookingNoVisible)">
+                        {{ 'EXPENSE.LBL_BOOKINGNO' | translate }}</th>
+                      <th></th>
+
+                      <th *ngIf="isOutSourceAccountingRole">Qc Name</th>
+
+                      <th class="required">{{ 'EXPENSE.LBL_EXPENSEDATE' | translate }}</th>
+                      <th class="required">{{ 'EXPENSE.LBL_EXPENSETYPE' | translate }}</th>
+
+
+
+
+                      <th>{{ 'EXPENSE.LBL_RECEIPT' | translate }}</th>
+                      <th>{{ 'EXPENSE.LBL_STARTCITY' | translate }}</th>
+                      <th>{{ 'EXPENSE.LBL_DESTCITY' | translate }}</th>
+                      <th *ngIf="model.isAutoExpense">{{ 'EXPENSE.LBL_STARTPORT' | translate }}</th>
+                      <th *ngIf="model.isAutoExpense">{{ 'EXPENSE.LBL_ENDPORT' | translate }}</th>
+                      <th>{{'SCHEDULE_SUMMARY.LBL_Travel_TripType' | translate}}</th>
+                      <th class="required">{{ 'EXPENSE.LBL_CURRENCY' | translate }}</th>
+
+                      <th class="required">{{ 'EXPENSE.LBL_ACTUALAMOUNT' | translate }}</th>
+
+                      <th *ngIf="isMandayCost" class="required">{{ 'EXPENSE.LBL_MAN_DAY' | translate }}
+                      </th>
+
+                      <th>{{ 'EXPENSE.LBL_TAX' | translate }}</th>
+                      <th>{{ 'EXPENSE.LBL_TAX_AMOUNT' | translate }}</th>
+                      <th class="required">{{ 'EXPENSE.LBL_EXCHANGERATE' | translate }}</th>
+                      <th>{{ 'EXPENSE.LBL_AMOUNT' | translate }}</th>
+                      <th>{{ 'EXPENSE.LBL_DESC' | translate }}</th>
+                      <th>{{ 'EXPENSE.LBL_FILES' | translate }}</th>
+                      <th *ngIf="canEdit"></th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr *ngFor="let itemValidator of expenseValidators;  let i = index">
+                      <td *ngIf="(expenseBookingDetailAccess.bookingNoVisible)">
+                        <div class="my-input-group">
+                          <label class="required">{{ 'EXPENSE.LBL_BOOKINGNO' | translate }}</label>
+                          <ng-select [items]="expenseClaimTypeData.selectedBookingDetails" [multiple]="false"
+                            [closeOnSelect]="true" bindLabel="name" bindValue="id" appendTo="body" class="width-300"
+                            [(ngModel)]="itemValidator.expense.selectedBookingId"
+                            [disabled]="(!expenseBookingDetailAccess.bookingNoEnabled)"
+                            [ngClass]="{ 'is-invalid':  !itemValidator.validator.isValid('bookingNo')}"
+                            placeholder="--- {{ 'CUSTOMER_PRODUCT_SUMMARY.LBL_SELECT' | translate }} ---"
+                            [clearable]="false" (change)="bookingSelect(itemValidator)">
+                            <ng-template ng-option-tmp let-item="item">
+                              <div class="text-wrap">{{ item.name }}</div>
+                            </ng-template>
+                          </ng-select>
+                          <div *ngIf="!itemValidator.validator.isValid('bookingNo')" class="invalid-feedback">
+                            <div *ngFor="let error of itemValidator.validator.getErrors('bookingNo')">
+                              {{ error | translate }}
+                            </div>
+                          </div>
+                        </div>
+                      </td>
+
+                      <td>
+                        <img *ngIf="itemValidator.expense.bookingNo"
+                          (click)="viewBookingDetails(bookingdetailinfo,itemValidator.expense.bookingNo)"
+                          src="assets/images/cta-view.svg" alt="view booking details">
+
+                      </td>
+
+                      <td *ngIf="isOutSourceAccountingRole">{{itemValidator.expense.qcName}}</td>
+
+                      <td>
+                        <div class="my-input-group">
+                          <label class="required" for="">{{ 'EXPENSE.LBL_EXPENSEDATE' | translate }}</label>
+                          <div class="calendar-wrapper">
+                            <input class="width-180" type="text" readonly=readonly maxlength="10" container='body'
+                              [ngClass]="{ 'is-invalid':  !itemValidator.validator.isValid('expenseDate')}"
+                              (click)="ed.toggle();$event.stopPropagation();" (document:click)="closeFix($event, ed)"
+                              placeholder="{{ 'EXPENSE.LBL_EXPENSEDATE' | translate }}" (navigate)="disableOverFlow()"
+                              (dateSelect)="enableOverflow()" [(ngModel)]="itemValidator.expense.expenseDate"
+                              (ngModelChange)="changeExpenseDate($event, itemValidator.expense)" ngbDatepicker
+                              #ed="ngbDatepicker">
+                            <img src="assets/images/calendar-icon.svg" alt="" class="calendar-icon"
+                              (click)="ed.toggle()">
+                          </div>
+                          <div *ngIf="!itemValidator.validator.isValid('expenseDate')" class="invalid-feedback">
+                            <div *ngFor="let error of itemValidator.validator.getErrors('expenseDate')">
+                              {{ error | translate }}
+                            </div>
+                          </div>
+
+                        </div>
+                      </td>
+
+                      <td>
+                        <div class="my-input-group">
+                          <label class="required" for="">{{ 'EXPENSE.LBL_EXPENSETYPE' | translate }}</label>
+                          <ng-select class="width-180" [items]="data.expenseTypeList" [multiple]="false"
+                            bindLabel="label" bindValue="id" [closeOnSelect]="true" [searchable]="true"
+                            [hideSelected]="true" (change)="changeExpenseType(itemValidator.expense,$event)"
+                            [ngClass]=" { 'is-invalid' : !itemValidator.validator.isValid('expenseTypeId')}"
+                            [(ngModel)]="itemValidator.expense.expenseTypeId" appendTo="body" [clearable]="false"
+                            placeholder="--- {{ (data.expenseTypeList!=null && data.expenseTypeList.length!=0? 'COMMON.LBL_SELECT':'COMMON.MSG_NO_DATA' ) | translate }} ---">
+                          </ng-select>
+                          <div *ngIf="!itemValidator.validator.isValid('expenseTypeId')" class="invalid-feedback">
+                            <div *ngFor="let error of itemValidator.validator.getErrors('expenseTypeId')">
+                              {{ error | translate }}
+                            </div>
+                          </div>
+                        </div>
+                      </td>
+
+
+
+
+                      <td>
+                        <div class="my-input-group">
+                          <label for="">{{ 'EXPENSE.LBL_RECEIPT' | translate }}</label>
+                          <select [(ngModel)]="itemValidator.expense.receipt">
+                            <option value="true">{{ 'EXPENSE.LBL_YES' | translate }}</option>
+                            <option value="false">{{ 'EXPENSE.LBL_NO' | translate }}</option>
+                          </select>
+                        </div>
+                      </td>
+                      <td>
+                        <div class="my-input-group">
+                          <label for="">{{ 'EXPENSE.LBL_STARTCITY' | translate }}</label>
+                          <ng-select class="width-180" [items]="startCityList" [multiple]="false" bindLabel="name"
+                            [virtualScroll]="true" [loading]="itemValidator.expense.startCityLoading" [minTermLength]="3"
+                            (scrollToEnd)="getCityData(_cityType.StartCity, itemValidator.expense)"
+                            [disabled]="!itemValidator.expense.isTravelExpense" appendTo="body"
+                            placeholder="{{ 'EXPENSE.LBL_STARTCITY' | translate }}" (open)="disableOverFlow()"
+                            (close)="enableOverflow()" [typeahead]="startCityInput" (clear)="clearCity(_cityType.StartCity, itemValidator.expense)"
+                            [ngClass]="{ 'is-invalid': !itemValidator.validator.isValidIfAsync('startCity',destNotEmpty,data.expenseTypeList)}"
+                            [(ngModel)]="itemValidator.expense.startCity">
+                          </ng-select>
+                          <div style="display:block"
+                            *ngIf="!itemValidator.validator.isValidIfAsync('startCity',destNotEmpty, data.expenseTypeList)"
+                            class="invalid-feedback">
+                            <div
+                              *ngFor="let error of itemValidator.validator.getErrorsIf('startCity',(itemValidator.expense.destCity != ''))">
+                              {{ error | translate }}
+                            </div>
+                          </div>
+                        </div>
+                      </td>
+                      <td>
+                        <div class="my-input-group">
+                          <label for="">{{ 'EXPENSE.LBL_DESTCITY' | translate }}</label>
+                          <ng-select class="width-180" [items]="destCityList" [multiple]="false" bindLabel="name"
+                            [virtualScroll]="true" [loading]="itemValidator.expense.destCityLoading" [minTermLength]="3"
+                            (scrollToEnd)="getCityData(_cityType.DestCity, itemValidator.expense)"
+                            appendTo="body" (open)="disableOverFlow()" (close)="enableOverflow()"
+                            [disabled]="!itemValidator.expense.isTravelExpense" (clear)="clearCity(_cityType.DestCity, itemValidator.expense)"
+                            placeholder="{{ 'EXPENSE.LBL_DESTCITY' | translate }}" [typeahead]="destCityInput"
+                            [ngClass]="{ 'is-invalid': !itemValidator.validator.isValidIfAsync('destCity',startNotEmpty, data.expenseTypeList)}"
+                            [(ngModel)]="itemValidator.expense.destCity">
+                          </ng-select>
+                          <div style="display:block"
+                            *ngIf="!itemValidator.validator.isValidIfAsync('destCity',startNotEmpty, data.expenseTypeList)"
+                            class="invalid-feedback">
+                            <div
+                              *ngFor="let error of itemValidator.validator.getErrorsIf('destCity',(itemValidator.expense.startCity != ''))">
+                              {{ error | translate }}
+                            </div>
+                          </div>
+                        </div>
+                      </td>
+                      <td *ngIf="model.isAutoExpense">
+                        <div class="my-input-group"
+                          *ngIf="(itemValidator.expense && itemValidator.expense.startPortName)">
+                          <label for="">{{ 'EXPENSE.LBL_STARTPORT' | translate }}</label>
+                          <span readonly=readonly class="form-control"
+                            style="min-height:47px">{{itemValidator.expense.startPortName}}</span>
+                        </div>
+                      </td>
+                      <td *ngIf="model.isAutoExpense">
+                        <div class="my-input-group"
+                          *ngIf="(itemValidator.expense && itemValidator.expense.endPortName)">
+                          <label for="">{{ 'EXPENSE.LBL_ENDPORT' | translate }}</label>
+                          <span readonly=readonly class="form-control"
+                            style="min-height:47px">{{itemValidator.expense.endPortName}}</span>
+                        </div>
+                      </td>
+                      <td>
+                        <div class="my-input-group">
+                          <ng-select [hideSelected]="true" appendTo="body" class="width-180"
+                            placeholder="--- {{ 'TOWN_SUMMARY.LBL_SELECT' | translate }} ---" [items]="tripTypeList"
+                            [ngModel]="itemValidator.expense.tripMode" bindLabel="name" bindValue="id"
+                            [disabled]="!itemValidator.expense.isTravelExpense"
+                            [ngClass]="{ 'is-invalid': !itemValidator.validator.isValidIfAsync('tripMode',startNotEmpty, data.expenseTypeList)}"
+                            [closeOnSelect]="true" [multiple]="false" [searchable]="false" (ngModelChange)="changeTripType($event,itemValidator.expense)"></ng-select>
+
+                          <div style="display:block"
+                            *ngIf="!itemValidator.validator.isValidIfAsync('tripMode',startNotEmpty, data.expenseTypeList)"
+                            class="invalid-feedback">
+                            <div
+                              *ngFor="let error of itemValidator.validator.getErrorsIf('tripMode',(itemValidator.expense.startCity != ''))">
+                              {{ error | translate }}
+                            </div>
+                          </div>
+                        </div>
+                      </td>
+                      <td>
+                        <div class="my-input-group">
+                          <label class="required" for="">{{ 'EXPENSE.LBL_CURRENCY' | translate }}</label>
+                          <select class="width-180" (ngModelChange)="setRate($event, itemValidator.expense)"
+                            [ngClass]="{ 'is-invalid': !itemValidator.validator.isValid('currencyId')}"
+                            [(ngModel)]="itemValidator.expense.currencyId">
+                            <option value="0">--- {{ 'EXPENSE.LBL_SELECT' | translate }}---</option>
+                            <option *ngFor="let item of data.currencyList" [ngValue]="item.id">
+                              {{item.currencyName}}
+                            </option>
+                          </select>
+                          <div *ngIf="!itemValidator.validator.isValid('currencyId')" class="invalid-feedback">
+                            <div *ngFor="let error of itemValidator.validator.getErrors('currencyId')">
+                              {{ error | translate }}
+                            </div>
+                          </div>
+                        </div>
+                      </td>
+
+
+
+                      <td>
+                        <div class="my-input-group">
+                          <label class="required" for="">{{ 'EXPENSE.LBL_ACTUALAMOUNT' | translate }}</label>
+                          <input class="width-180" type="number"
+                            [ngClass]="{ 'is-invalid': !model.isAutoExpense && !itemValidator.validator.isValid('actualAmount')}"
+                            (keypress)="numericValidation($event)" (change)="calculateAmount(itemValidator.expense)"
+                            (input)="validateDecimal(itemValidator.expense,'actualAmount')" (paste)="onPaste($event,10)"
+                            [(ngModel)]="itemValidator.expense.actualAmount" maxlength="10" min="0" max="999999999"
+                            placeholder="{{ 'EXPENSE.LBL_ACTUALAMOUNT' | translate }}">
+                          <div *ngIf="!model.isAutoExpense && !itemValidator.validator.isValid('actualAmount')"
+                            class="invalid-feedback">
+                            <div *ngFor="let error of itemValidator.validator.getErrors('actualAmount')">
+                              {{ error | translate }}
+                            </div>
+                          </div>
+                        </div>
+                      </td>
+
+                      <td *ngIf="isMandayCost">
+                        <div class="my-input-group">
+                          <label class="required" for="">Man Day</label>
+                          <input class="width-80" type="number"
+                            (keypress)="avoidDecimal(itemValidator.expense.manDay,$event)" min="0" max="9999"
+                            (paste)="onPaste($event,4)"
+                            [disabled]="itemValidator.expense.expenseTypeId != expenseTypeEnum.MandayCost"
+                            [ngClass]="{ 'is-invalid': !itemValidator.validator.isValidIf('manDay', this.manDayRequiredForMandayCost(itemValidator))}"
+                            (change)="calculateAmount(itemValidator.expense)" [(ngModel)]="itemValidator.expense.manDay"
+                            maxlength="10" placeholder="MD">
+                          <div
+                            *ngIf="!itemValidator.validator.isValidIf('manDay', this.manDayRequiredForMandayCost(itemValidator))"
+                            class="invalid-feedback">
+                            <div *ngFor="let error of itemValidator.validator.getErrors('manDay')">
+                              {{ error | translate }}
+                            </div>
+                          </div>
+                        </div>
+                      </td>
+
+                      <td>
+                        <div class="my-input-group">
+                          <label class="required" for="">Tax</label>
+                          <input class="width-80" type="number" (change)="calculateAmount(itemValidator.expense)"
+                            (input)="validateDecimal(itemValidator.expense,'tax')" min="0" max="100"
+                            (paste)="onPaste($event,3)" (keypress)="numericValidation($event,3)"
+                            [(ngModel)]="itemValidator.expense.tax" maxlength="10" placeholder="Tax">
+                        </div>
+                      </td>
+
+
+
+                      <td>
+                        <div class="my-input-group">
+                          <label for="">Tax Amount</label>
+                          <span readonly=readonly class="form-control"
+                            style="min-height:47px">{{itemValidator.expense.taxAmount}}</span>
+                        </div>
+                      </td>
+
+                      <td>
+                        <div class="my-input-group">
+                          <label for="">{{ 'EXPENSE.LBL_EXCHANGERATE' | translate }}</label>
+                          <span readonly=readonly class="form-control"
+                            style="min-height:47px">{{itemValidator.expense.exchangeRate}}</span>
+                        </div>
+                      </td>
+                      <td>
+                        <div class="my-input-group">
+                          <label for="">{{ 'EXPENSE.LBL_AMOUNT' | translate }}</label>
+                          <span readonly=readonly class="form-control"
+                            style="min-height:47px">{{itemValidator.expense.amount}}</span>
+                        </div>
+                      </td>
+                      <td>
+                        <div class="my-input-group">
+                          <label class="required" for="">{{ 'EXPENSE.LBL_DESC' | translate }}</label>
+                          <textarea type="text" [(ngModel)]="itemValidator.expense.description" class="width-180"
+                            placeholder="{{ 'EXPENSE.LBL_DESC' | translate }}"></textarea>
+                        </div>
+                      </td>
+                      <td [style.minWidth]="getUploadCellWidth(itemValidator.expense.files)">
+                        <button *ngIf="canEdit" (click)="selectFiles($event, itemValidator.expense)"
+                          class="secondary-cta x-small">
+                          {{ 'EXPENSE.LBL_UPLOAD' | translate }}
+                        </button>
+                        <input style="display: none" #addFile type="file"
+                          (change)="selectFiles($event, itemValidator.expense)" multiple />
+                        <ng-container
+                          *ngIf="itemValidator.expense.files != null && itemValidator.expense.files.length>0">
+                          <div class="row" *ngFor="let file of itemValidator.expense.files ;  let j = index"
+                            style="margin-top:5px">
+                            <div class="col-sm-10">
+                              <a (click)="getFile(file)" class="alink">{{getShortFileName(file.fileName)}}</a>
+                            </div>
+                            <div class="col-sm-2">
+                              <button *ngIf="canEdit" class="secondary-cta x-small" style="margin-right:10px"
+                                (click)="removeFile(j, itemValidator.expense)">
+                                <i class="fa fa-trash"></i>
+                              </button>
+                            </div>
+                          </div>
+                        </ng-container>
+                      </td>
+                      <td *ngIf="canEdit">
+                        <button class="secondary-cta x-small" *ngIf="model.staffId==currentUser.staffId"
+                          (click)="addExpense(itemValidator.expense)">
+                          {{ 'EXPENSE.LBL_COPY' | translate }}
+                        </button>
+                        <button class="secondary-cta x-small" style="margin-left:10px" (click)="removeExpense(i)">
+                          {{ 'EXPENSE.LBL_DELETE' | translate }}
+                        </button>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+                <div class="table-action mobile-hide"
+                  *ngIf="model.staffId==currentUser.staffId || isOutSourceAccountingRole">
+                  <span>
+                    <button class="secondary-cta x-small" (click)="addExpense(null)">
+                      +
+                      {{ 'EXPENSE.LBL_ADD' | translate }}
+                    </button>
+                  </span>
+                </div>
+              </div>
+            </div>
+            <div class="pagination-container" style="display: inline-block;" *ngIf="amountCurrencyVisible">
+              <div class="row">
+                <div class="col-sm-6"></div>
+                <div class="col-sm-3">
+                  <div class="my-input-group">
+                    <span>{{ 'EXPENSE.LBL_TOTAL' | translate }}</span>
+                    <span readonly=readonly class="form-control" style="min-height:47px">{{model.totalAmount}}</span>
+                  </div>
+                </div>
+                <div class="col-sm-3">
+                  <div class="my-input-group">
+                    <span>{{ 'EXPENSE.LBL_CURRENCY' | translate }}</span>
+                    <span readonly=readonly class="form-control" style="min-height:47px">{{model.currencyName}}</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-action-container">
+            <div class=" col-sm-12">
+              <!-- <button *ngIf="fromSummary" type="button" class="secondary-cta small"
+                [disabled]="_initialloader || _saveloader" (click)="return('expensesearch/expenseclaim-list')">
+                <i class="fa fa-undo"></i>&nbsp;&nbsp;{{ 'EXPENSE.LBL_RETURN' | translate }}
+              </button> -->
+              <button *ngIf="canEdit && amountCurrencyVisible && (!model.isAutoExpense)|| 
+                (model.isAutoExpense && isAccountingRole && model.statusId == 1)" class="primary-cta small"
+                (click)="save()" [disabled]="_initialloader || _saveloader || _cancelloader">
+                <i class="fa fa-save"></i>&nbsp;&nbsp;{{ 'EXPENSE.LBL_SAVE' | translate }}
+                <span *ngIf="_saveloader">
+                  <i class="fa fa-refresh fa-spin" aria-hidden="true"></i>
+                </span>
+              </button>
+              <button style="margin-left:5px" *ngIf="canApprove && model.statusId == 5 " class="primary-cta small"
+                (click)="openConfirmStatus(contentStatus,2)"
+                [disabled]="_otherstatusloader || _rejectedloader || _cancelloader">
+                <i class="fa fa-save"></i>&nbsp;&nbsp;{{ 'EXPENSE.LBL_APPROVE' | translate }}
+                <span *ngIf="_otherstatusloader">
+                  <i class="fa fa-refresh fa-spin" aria-hidden="true"></i>
+                </span>
+              </button>
+              <button style="margin-left:5px" *ngIf="canCheck && model.statusId == 1 " class="primary-cta small"
+                (click)="openConfirmStatus(contentStatus,5)"
+                [disabled]="_otherstatusloader || _rejectedloader || _cancelloader">
+                <i class="fa fa-save"></i>&nbsp;&nbsp;{{ 'EXPENSE.LBL_CHECK' | translate }}
+                <span *ngIf="_otherstatusloader">
+                  <i class="fa fa-refresh fa-spin" aria-hidden="true"></i>
+                </span>
+              </button>
+              <button style="margin-left:5px" *ngIf="canCheck && model.statusId == 2" class="primary-cta small"
+                (click)="openConfirmStatus(contentStatus,4)"
+                [disabled]="_otherstatusloader || _rejectedloader || _cancelloader">
+                <i class="fa fa-money"></i>&nbsp;&nbsp;{{ 'EXPENSE.LBL_PAY' | translate }}
+                <span *ngIf="_otherstatusloader">
+                  <i class="fa fa-refresh fa-spin" aria-hidden="true"></i>
+                </span>
+              </button>
+              <button style="margin-left:5px"
+                *ngIf="!model.isAutoExpense && ((model.statusId == 2 && canCheck) || (model.statusId == 5 && canApprove) || (model.statusId == 1 && canCheck))"
+                class="primary-cta small" (click)="openConfirm(content)"
+                [disabled]="_rejectedloader || _otherstatusloader || _cancelloader">
+                <i class="fa fa-times"></i>&nbsp;&nbsp;{{ 'EXPENSE.LBL_REJECT' | translate }}
+                <span *ngIf="_rejectedloader">
+                  <i class="fa fa-refresh fa-spin" aria-hidden="true"></i>
+                </span>
+              </button>
+              <button *ngIf="canEdit && (model.statusId == 1 || model.statusId == 3) && amountCurrencyVisible &&  
+                (!model.isAutoExpense)|| (model.isAutoExpense && isAccountingRole && model.statusId == 1)"
+                style="margin-left:5px" type="button" class="secondary-cta small"
+                (click)="openCancelStatus(cancelStatus)"
+                [disabled]="_cancelloader || _rejectedloader || _otherstatusloader">
+                <i class="fa fa-times"></i>&nbsp;&nbsp;{{ 'EXPENSE.LBL_CANCEL' | translate }}
+                <span *ngIf="_cancelloader">
+                  <i class="fa fa-refresh fa-spin" aria-hidden="true"></i>
+                </span>
+              </button>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+<ng-template #content let-modal>
+  <div class="modal-header custom-modal-header">
+    <h4 class="modal-title" id="modal-basic-title">{{ 'EXPENSE_SUMMARY.LBL_COMMENTREJECT' | translate }}</h4>
+    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body custom-modal-body">
+    <div class="row">
+      <div class="col-sm-10 mobile-margin-top-15">
+        <div class="my-input-group">
+          <label class=" required">{{ 'EXPENSE_SUMMARY.LBL_COMMENT' | translate }}</label>
+          <textarea [ngClass]="{ 'is-invalid': !isRejectValid}" [(ngModel)]="rejectComment" maxlength="600"
+            placeholder="{{ 'EXPENSE_SUMMARY.LBL_COMMENT' | translate }}"></textarea>
+          <div *ngIf="!isRejectValid" class="invalid-feedback">
+            <div>{{ 'EXPENSE_SUMMARY.MSG_COMMENT_REQ' | translate }}</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="modal-footer custom-modal-footer">
+    <button type="button" class="secondary-cta" (click)="modal.close('cancel click')">
+      {{ 'EXPENSE_SUMMARY.LBL_CONFIRMCANCEL' | translate }}
+    </button>
+    <button type="button" class="primary-cta" (click)="reject();">
+      {{ 'EXPENSE_SUMMARY.LBL_CONFIRMOK' | translate }}
+    </button>
+  </div>
+</ng-template>
+<ng-template #contentStatus let-modal>
+  <div class="modal-body">
+    <div class="small-model">
+      <h2 class="title">{{ 'EXPENSE_SUMMARY.LBL_UPDATESTATUS' | translate }}</h2>
+      <p>{{ 'EXPENSE_SUMMARY.MSG_CONFIRMSTATUS' | translate }} {{ nextStatusLabel }} !!!</p>
+      <button class="secondary-cta" (click)="modal.dismiss('Cross click')">{{ 'EXPENSE_SUMMARY.LBL_CONFIRMCANCEL' |
+        translate }}</button>
+      <button class="primary-cta" (click)="setStatus(currentItemId, nextStatusId);">{{ 'EXPENSE_SUMMARY.LBL_CONFIRMOK' |
+        translate }}</button>
+
+    </div>
+  </div>
+</ng-template>
+
+
+
+
+<ng-template #cancelStatus let-modal>
+  <div class="modal-body">
+    <div class="small-model new-padding">
+      <h2 class="confirm-title"><img class="mr-2" src="assets/images/caution-red.svg" alt="">{{
+        'EXPENSE.LBL_CONFIRMCANCELLATION' | translate }}</h2>
+      <p class="light" *ngIf="!model.isAutoExpense">{{'EXPENSE.LBL_CANCEL_EXPENSE_DETAILS' | translate }}</p>
+      <p class="light" *ngIf="model.isAutoExpense">{{'EXPENSE.LBL_CANCEL_QC_EXPENSE_DETAILS' | translate }}</p>
+      <div class="text-right">
+        <button class="tertiary-cta small" (click)="modal.dismiss('Cross click')">
+          {{
+          'COMMON.LBL_CONFIRMCANCEL' | translate
+          }}
+        </button>
+        <button class="primary-cta small" (click)="cancel()">{{ 'COMMON.LBL_OK' | translate }}
+          <span *ngIf="_cancelloader">
+            <i class="fa fa-refresh fa-spin" aria-hidden="true"></i>
+          </span>
+        </button>
+      </div>
+    </div>
+  </div>
+</ng-template>
+
+
+<ng-template #outsourceexpenseclaimData let-modal>
+
+  <div class="modal-header custom-modal-header" style="background-color: #78dc8f">
+    <h4 class="modal-title" id="modal-title">Expense Claim Created Successfully</h4>
+    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+
+  <div class="modal-body custom-modal-body">
+
+
+    <div class="table-container marginTop25 scroll-x" style="overflow-y:scroll;max-height:200px;" #scrollableTablepopup>
+
+      <table class="pagination-table bordered">
+        <thead>
+          <tr class="sticky-top-row">
+            <th>Staff</th>
+            <th>Expense No</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let expenseClaim of expenseClaimResponse;let i = index">
+            <td style="width:50%">{{expenseClaim.name}}</td>
+            <td style="width:50%"><a (click)="navigateToEditExpenseClaim(expenseClaim.id)">
+                <span class="common-tooltip " data-tooltip="Modify" style="text-decoration: underline;">
+                  {{expenseClaim.claimNo}}
+                </span>
+              </a></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+</ng-template>
+
+
+
+<ng-template #bookingdetailinfo let-modal>
+  <div class="modal-header custom-modal-header">
+    <h4 class="modal-title" id="modal-basic-title">
+      <span>#{{inspectionBaseAndProductDetails.inspectionBaseDetail.bookingNo}} - </span>
+
+      <span>({{inspectionBaseAndProductDetails.inspectionBaseDetail.status}})</span>
+    </h4>
+    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body custom-modal-body">
+    <div class="content-container schedule-allocation-container">
+      <div class="formPadding">
+        <div class="row">
+          <div class="col-sm-12 marginTop20 detail-column-container" style="margin-left:0px!important;">
+            <div class="my-input-group col-lg-3">
+              <label class="light" for="">Customer</label>
+              <p class="input-value">{{inspectionBaseAndProductDetails.inspectionBaseDetail.customer}}</p>
+            </div>
+            <div class="my-input-group col-lg-3">
+              <label class="light" for="">Supplier</label>
+              <p class="input-value">{{inspectionBaseAndProductDetails.inspectionBaseDetail.supplier}}</p>
+            </div>
+            <div class="my-input-group col-lg-3">
+              <label class="light" for="">Factory</label>
+              <p class="input-value">{{inspectionBaseAndProductDetails.inspectionBaseDetail.factory}}</p>
+            </div>
+            <div class="my-input-group col-lg-3">
+              <label class="light" for="">Inspection Date</label>
+              <p class="input-value">{{inspectionBaseAndProductDetails.inspectionBaseDetail.inspectionDate}}</p>
+            </div>
+          </div>
+          <div class="col-sm-12 marginTop20 detail-column-container" style="margin-left:0px!important;">
+            <div class="my-input-group col-lg-3">
+              <label class="light" for="">Total Booking Quantity</label>
+              <p class="input-value">{{inspectionBaseAndProductDetails.inspectionBaseDetail.totalBookingQuantity}}</p>
+            </div>
+            <div class="my-input-group col-lg-3">
+              <label class="light" for="">Service Type</label>
+              <p class="input-value">{{inspectionBaseAndProductDetails.inspectionBaseDetail.serviceType}}
+              </p>
+            </div>
+            <div class="my-input-group col-lg-3">
+              <label class="light" for="">Unit</label>
+              <p class="input-value">{{inspectionBaseAndProductDetails.inspectionBaseDetail.unit}}
+              </p>
+            </div>
+            <div class="my-input-group col-lg-3">
+              <label class="light" for="">Country</label>
+              <p class="input-value">{{inspectionBaseAndProductDetails.inspectionBaseDetail.country}}</p>
+            </div>
+
+          </div>
+
+          <div class="col-sm-12 marginTop20 detail-column-container" style="margin-left:0px!important;">
+            <div class="my-input-group col-lg-3">
+              <label class="light" for="">Province</label>
+              <p class="input-value">{{inspectionBaseAndProductDetails.inspectionBaseDetail.province}}</p>
+            </div>
+            <div class="my-input-group col-lg-3">
+              <label class="light" for="">City</label>
+              <p class="input-value">{{inspectionBaseAndProductDetails.inspectionBaseDetail.city}}</p>
+            </div>
+            <div class="my-input-group col-lg-3">
+              <label class="light" for="">County</label>
+              <p class="input-value">{{inspectionBaseAndProductDetails.inspectionBaseDetail.county}}
+              </p>
+            </div>
+            <div class="my-input-group col-lg-3">
+              <label class="light" for="">Town</label>
+              <p class="input-value">{{inspectionBaseAndProductDetails.inspectionBaseDetail.town}}</p>
+            </div>
+          </div>
+
+
+          <div class="col-sm-12 marginTop20">
+            <div class="table-container h-scroll table-max-height-400">
+              <table class="pagination-table bordered">
+                <thead>
+                  <tr class="sticky-top-row">
+                    <th class="th-text-center">Product/Style ID</th>
+                    <th class="th-text-center">Product/Style Desc
+                    </th>
+                    <th class="th-text-center">Unit</th>
+                    <th class="th-text-center">Quantity</th>
+
+
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let product of inspectionBaseAndProductDetails.inspectionBaseDetail.productBaseDetails">
+                    <td class="Center-Middle-Table">{{product.productName}}</td>
+                    <td class="Center-Middle-Table">
+                      {{product.productDesc}}
+                    </td>
+                    <td class="Center-Middle-Table">
+                      {{product.unit}}
+                    </td>
+                    <td class="Center-Middle-Table">
+                      {{product.quantity}}
+                    </td>
+                  </tr>
+
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-template>
+
+<div class="loader-overlay" *ngIf="expenseClaimMasterData.pageLoading">
+  <div class="loader-container">
+    <img src="assets/images/reload.svg" alt="">
+    <span>{{'COMMON.LBL_LOADER' | translate}}</span>
+  </div>
+</div>

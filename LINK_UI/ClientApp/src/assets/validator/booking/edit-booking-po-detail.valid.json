@@ -1,0 +1,28 @@
+{
+    "model": "inspectionbooking.model",
+    "fields": {
+        "bookingQuantity": [
+            {
+                "type": "required",
+                "fieldType": "N",
+                "ressource": "EDIT_BOOKING.BookingQty_MSG_REQ"
+            }
+        ],
+        "etd": [
+            {
+              "type": "required",
+              "fieldType": "A",
+              "ressource": "PURCHASEORDER_SUMMARY.MSG_ETD_REQ"
+            }
+          ]
+
+          ,
+          "containerId": [
+            {
+              "type": "required",
+              "fieldType": "N",
+              "ressource": "EDIT_BOOKING.Booking_CONTAINER_REQ"
+            }
+          ]
+    }
+}

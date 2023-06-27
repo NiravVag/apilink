@@ -1,0 +1,7 @@
+﻿CREATE TABLE  REF_Translation(
+	Id INT NOT NULL IDENTITY(1,1) PRIMARY KEY, 
+	[Text_FR] NVARCHAR(2000) NULL,
+	[Text_CH] NVARCHAR(2000) NULL,
+	TranslationGroupId  INT NULL,
+	FOREIGN KEY(TranslationGroupId) REFERENCES REF_TranslationGroup(Id)
+)

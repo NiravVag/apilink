@@ -1,0 +1,7 @@
+﻿CREATE TABLE [dbo].[HR_Leave_Status](
+	[Id] [int] IDENTITY(1,1) NOT FOR REPLICATION NOT NULL PRIMARY KEY,
+	Label NVARCHAR(200) NOT NULL,
+	IdTran INT NULL ,
+	[EntityId] INT NULL,
+	FOREIGN KEY([EntityId]) REFERENCES [AP_Entity](Id)
+)

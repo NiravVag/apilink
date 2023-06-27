@@ -1,0 +1,22 @@
+{
+    "model": "InvoiceDataAccessEditModel",
+    "fields": { 
+
+      "staffId": 
+      [
+        {
+          "type": "required",
+          "fieldType": "N",
+          "ressource": "INVOICE_ACCESS.MSG_STAFF_REQ"
+        }
+      ],
+
+      "officeIdList": [
+        {
+          "type": "required",
+          "fieldType": "N",
+          "ressource": "INVOICE_ACCESS.MSG_OFFICE_REQ"
+        }
+      ]     
+    }
+}

@@ -1,0 +1,9 @@
+﻿
+CREATE TABLE [dbo].[EM_ExchangeRateType](
+	Id INT NOT NULL IDENTITY(1,1) PRIMARY KEY,
+	Label NVARCHAR(200) NOT NULL,
+	[TypeTransId] INT NULL,
+	Active BIT NOT NULL DEFAULT(1),
+	 [EntityId] INT NULL,
+	FOREIGN KEY([EntityId]) REFERENCES [AP_Entity](Id)
+)

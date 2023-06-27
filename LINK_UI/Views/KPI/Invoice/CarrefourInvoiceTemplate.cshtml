@@ -1,0 +1,349 @@
+﻿@using DTO.Common; 
+@{
+    ViewData["Title"] = "CarrefourInvoiceTemplate";
+}
+
+@model DTO.Kpi.ExportResult
+
+<xls-sheet name="Carrefour Invoice Details">
+    <table xls-begin="A:1" style="border-style:solid">
+        <tr style="background-color:#f5f5f5;font-weight:bold;text-align:center">
+            <th>Insp. company</th>
+            <th>Office location</th>
+            <th>Inspection Office Location</th>
+            <th>Supplier</th>
+            <th>Supplier code</th>
+            <th>Factory</th>
+            <th>Province</th>
+            <th>City</th>
+            <th>Country of Origin</th>
+            <th>Order no.</th>
+            <th>Dept</th>
+            <th>Division</th>
+            <th>Group</th>
+            <th>Carrefour ref#</th>
+            <th>
+                Product Description
+            </th>
+            <th>
+                Order QTY
+            </th>
+            <th>
+                Destination Country
+            </th>
+            <th>
+                Invoice
+            </th>
+            <th>Client Rate </th>
+            <th>
+                Travel
+
+            </th>
+            <th>
+                Hotel
+
+            </th>
+            <th>
+                Other Fee
+            </th>
+            <th>
+                Extra Fee
+            </th>
+            <th>
+                TOTAL
+            </th>
+            <th>
+                Currency
+            </th>
+            <th>
+                Range-used
+            </th>
+            <th>
+                Date
+            </th>
+            <th>
+                Month
+            </th>
+            <th>M</th>
+            <th>
+                Category
+            </th>
+            <th>
+                S.Size
+            </th>
+            <th>
+                Inspection Type
+            </th>
+            <th>
+                Sample
+            </th>
+            <th>
+                File
+            </th>
+            <th>
+                Result
+            </th>
+            <th>
+                Booking ID
+            </th>
+            <th>
+                Distribution Line
+            </th>
+            <th>
+                Requested Inspection Date
+            </th>
+            <th>
+                If postponed indicate reason
+            </th>
+            <th>
+                Report no.
+            </th>
+            <th>
+                Date from
+            </th>
+            <th>
+                Date to
+            </th>
+            <th>
+                Inspected Quantity
+            </th>
+            <th>
+                Number of Inspectors
+            </th>
+            <th>
+                AQL Sample Size
+            </th>
+            <th>
+                Reference sample
+            </th>
+            <th>
+                Technical File
+            </th>
+            <th>
+                Size Spec.
+            </th>
+            <th>
+                Insp Result
+            </th>
+            @if (Model.Data.Any())
+            {
+                @foreach (var resultName in Model.Data[0].ResultList)
+                {
+                    <th>
+                        @resultName.Name
+                    </th>
+                }
+            }
+            <th>
+                Cri.
+            </th>
+            <th>
+                Maj.
+            </th>
+            <th>
+                Min.
+            </th>
+
+            <th>
+                Comments when "Failed"
+            </th>
+            <th>
+                Indicate combined inspections
+            </th>
+
+            <th>
+                PCB
+            </th>
+            <th>
+                Master Length (cm)
+            </th>
+            <th>
+                Master Width (cm)
+            </th>
+            <th>
+                Master Height (cm)
+            </th>
+            <th>
+                Volume master (m3)
+            </th>
+            <th>
+                Master Weight (kg)
+            </th>
+            <th>
+                PCB
+            </th>
+            <th>
+                Master Length (cm)
+            </th>
+            <th>
+                Master Width (cm)
+            </th>
+            <th>
+                Master Height (cm)
+            </th>
+            <th>
+                Volume master (m3)
+            </th>
+            <th>
+                Master Weight (kg)
+            </th>
+            <th>
+                % Volume
+            </th>
+            <th>
+                % Weight
+            </th>
+            <th>
+                IM / warranty card
+            </th>
+            <th>
+                Golden sample
+            </th>
+            <th>
+                Labeling
+            </th>
+            <th>
+                Packaging
+            </th>
+            <th>
+                Component / Construction
+            </th>
+            <th>
+                Software
+            </th>
+            <th>
+                Release OKQ with L/G
+            </th>
+            <th>
+                API Booking Number
+            </th>
+            <th>
+                Billed To
+            </th>
+        </tr>
+            @foreach (var item in Model.Data)
+            {
+        <tr>
+            <td width="150px">API</td>
+            <td width="150px">@Html.Raw(@item.OfficeLocationName)</td>
+            <td width="150px">@Html.Raw(@item.Office)</td>
+
+            <td width="150px">@Html.Raw(@item.SupplierName)</td>
+            <td width="150px">@Html.Raw(@item.SupplierCode)</td>
+            <td width="150px">@Html.Raw(@item.FactoryName)</td>
+
+            <td width="150px">@Html.Raw(@item.FactoryState)</td>
+            <td width="150px">@Html.Raw(@item.FactoryCity)</td>
+            <td width="150px">@Html.Raw(@item.FactoryCountry)</td>
+            <td width="150px">@item.PONumber</td>
+            <td width="150px">@item.DeptCode</td>
+            <td width="150px">@item.DeptDivision</td>
+
+            @* leave it blank*@
+            <td width="150px"></td>
+
+            <td width="150px">@item.ProductName</td>
+            <td width="150px">@item.ProductDescription</td>
+            <td width="150px">@item.ProductCount</td>
+            <td width="150px">@Html.Raw(@item.DestinationCountry)</td>
+
+            <td width="150px">@item.InvoiceNumber</td>
+            <td width="150px" xls-type="number">@item.InspectionFee</td>
+            <td width="150px" xls-type="number">@item.TravellingCost</td>
+            <td width="150px" xls-type="number">@item.HotelFee</td>
+            <td width="150px" xls-type="number">
+                @item.OtherFee
+            </td>
+            <td width="150px" xls-type="number">@item.ExtraFee</td>
+            <td width="150px" xls-type="number">@item.TotalInspectionFee</td>
+            <td width="150px">@item.CurrencyName</td>
+
+            @*range used*@
+            <td width="150px">@item.PriceCategory</td>
+
+            <td width="150px"  xls-type="date" xls-format="@ApiCommonData.StandardDateFormat">@item.InspectionStartDate</td>
+            <td width="150px">@item.InspMonthName</td>
+            <td width="150px" xls-type="number">@item.InspMonthNumber</td>
+
+            @* leave it blank*@
+            <td width="150px"></td>
+            <td width="150px"></td>
+
+            <td width="150px">@item.ServiceTypeName</td>
+
+            @* leave it blank*@
+            <td width="150px"></td>
+            <td width="150px"></td>
+
+            <td width="150px">@item.ReportResult</td>
+
+            <td width="150px">@item.CustomerBookingNo</td>
+            @* leave it blank*@
+            <td width="150px"></td>
+
+            <td width="150px"  xls-type="date" xls-format="@ApiCommonData.StandardDateFormat">@item.FirstServiceDateFrom</td>
+            <td width="150px">@Html.Raw(@item.RescheduleReason)</td>
+            <td width="150px">@item.CustomerBookingNo</td>
+            <td width="150px"  xls-type="date" xls-format="@ApiCommonData.StandardDateFormat">@item.InspectionStartDate</td>
+            <td width="150px"  xls-type="date" xls-format="@ApiCommonData.StandardDateFormat">@item.InspectionEndDate</td>
+            <td width="150px" xls-type="number">@item.InspectedQty</td>
+            <td width="150px" xls-type="number">@item.QcCount</td>
+            <td width="150px" xls-type="number">@item.AQLQuantity</td>
+            <td width="150px">@item.GoldenSampleAvailable</td>
+
+            <td width="150px">No</td>
+            <td width="150px">N/A</td>
+
+            <td width="150px">@item.ReportResult</td>
+
+            @*AQL result*@
+
+            @foreach (var resultName in item.ResultList)
+            {
+                <td width="150px">@resultName.Result</td>
+            }
+
+            <td width="150px">@item.CriticalDefect</td>
+            <td width="150px">@item.MajorDefect</td>
+            <td width="150px">@item.MinorDefect</td>
+
+
+            <td width="150px">@item.ReportRemarks</td>
+            <td width="150px">@item.ProrateBookingNo</td>
+            @*<td width="150px">@item.OtherRemarks</td>*@
+
+            <td width="150px" xls-type="number">@item.PCB</td>
+
+            <td width="150px" xls-type="number">@item.SpecClientValuesLength</td>
+            <td width="150px" xls-type="number">@item.SpecClientValuesWidth</td>
+            <td width="150px" xls-type="number">@item.SpecClientValuesHeight</td>
+            <td width="150px" xls-type="number">@item.SpecClientVolume</td>
+            <td width="150px" xls-type="number">@item.SpecClientValuesWeight</td>
+
+            <td width="150px" xls-type="number">@item.PCB</td>
+
+            <td width="150px" xls-type="number">@item.MeasuredValuesLength</td>
+            <td width="150px" xls-type="number">@item.MeasuredValuesWidth</td>
+            <td width="150px" xls-type="number">@item.MeasuredValuesHeight</td>
+            <td width="150px" xls-type="number">@item.MeasuredVolume</td>
+            <td width="150px" xls-type="number">@item.MeasuredValuesWeight</td>
+            <td width="150px" xls-type="number">@item.PercentageVolume</td>
+            <td width="150px" xls-type="number">@item.PercentageWeight</td>
+
+            @* leave it blank*@
+            <td width="150px"></td>
+
+            <td width="150px">@item.GoldenSampleAvailable</td>
+
+            @*below leave it blank*@
+            <td width="150px"></td>
+            <td width="150px"></td>
+            <td width="150px"></td>
+            <td width="150px"></td>
+            <td width="150px"></td>
+            <td width="150px">@item.BookingNo</td>
+            <td width="150px">@item.InvoiceTo</td>
+        </tr>
+            }
+        </table>
+</xls-sheet>

@@ -1,0 +1,599 @@
+.qc-dashboard{
+
+	.stats-header{
+		margin-top: 14px;
+		position: relative;
+		background: $white;
+		padding: 14px 34px;
+
+		@media only screen and (min-width: $mobile-min-width) and (max-width: $mobile-max-width){
+			padding: 10px 12px;
+		}
+
+		.nagivate-reset{
+			color: #6771dc;
+			line-height: 1;
+			font-size: 11px;
+			cursor: pointer;
+			padding: 9px 12px;
+			margin-right: 20px;
+			border-radius: 30px;
+			display: inline-block;
+			transition: ease all 0.4s;
+			font-family: $roboto-bold;
+			background-color: rgba(#6771dc, 0.1);
+
+			&:hover{
+				background-color: rgba(#6771dc, 0.2);
+			}
+
+			&:active{
+				color: $white;
+				background-color: rgba(#6771dc, 1);
+			}
+		}
+
+		.qc-stats-list{
+			margin: 0;
+			padding: 0;
+			list-style: none;
+			display: inline-block;
+
+			@media only screen and (min-width: $mobile-min-width) and (max-width: $mobile-max-width){
+				margin-top: 10px;
+			}
+
+			li{
+				color: #707275;
+				font-size: 12px;
+				padding: 0 14px;
+				display: inline-block;
+				font-family: $roboto-regular;
+				border-right: solid 1px #cdd5df;
+
+				&:first-child{
+					padding-left: 0;
+				}
+
+				&:last-child{
+					border: none;
+
+					@media only screen and (min-width: $mobile-min-width) and (max-width: $mobile-max-width){
+						padding-right: 0;
+					}
+				}
+
+				span{
+					color: $primary-color;
+					margin-left: 10px;
+					font-family: $roboto-medium;
+
+					@media only screen and (min-width: $mobile-min-width) and (max-width: $mobile-max-width){
+						margin-left: 0;
+						display: block;
+					}
+				}
+			}
+		}
+
+		.document-link{
+			float: right;
+			cursor: pointer;
+
+			@media only screen and (min-width: $mobile-min-width) and (max-width: $mobile-max-width){
+				top: 10px;
+				right: 12px;
+				position: absolute;
+			}
+
+			img{
+				display: inline-block;
+			}
+
+			span{
+				color: $brand-color;
+				font-size: 12px;
+				margin-left: 8px;
+				display: inline-block;
+				transition: ease all 0.4s;
+				font-family: $roboto-regular;
+
+				&:hover{
+					color: #ab0a0b;
+				}
+
+				@media only screen and (min-width: $mobile-min-width) and (max-width: $mobile-max-width){
+					display: none;
+				}
+			}
+		}
+	}
+
+	.qc-calendar-wrapper{
+		display: flex;
+		padding-bottom: 20px;
+		align-items: flex-start;
+		background-image: url('../assets/images/qc-calendar-bg.svg');
+	}
+
+	.navigate{
+		line-height: 1;
+		cursor: pointer;
+		padding: 17px 13px;
+		background-color: #eaeef2;
+		transition: ease all 0.4s;
+
+		img{
+			opacity: 0.7;
+		}
+
+		&:hover{
+			background-color: #ecf0f3;
+
+			img{
+				opacity: 1;
+			}
+		}
+
+		&:active{
+			background-color: #e6eaef;
+		}
+
+		&.navigate-backward{
+			margin-right: 2px;
+
+			img{
+				transform: rotate(-90deg);
+			}
+		}
+
+		&.navigate-forward{
+			margin-left: 2px;
+
+			img{
+				transform: rotate(90deg);
+			}
+		}
+	}
+
+	.qc-calendar-body{
+		flex: 1;
+		overflow: hidden;
+		white-space: nowrap;
+
+		.qc-calendar-slider-container{
+			// transition: ease all 0.2s;
+			
+			.slide{
+				width: 242px;
+				margin: 0 2px;
+				vertical-align: top;
+				display: inline-block;
+
+				@media only screen and (min-width: $tablet-min-width) and (max-width: $tablet-max-width){
+					width: 214px;
+				}
+
+				@media only screen and (min-width: $mobile-min-width) and (max-width: $mobile-max-width){
+					width: 239px;
+				}
+
+				&.previous-day{
+
+					.slide-head{
+						background-color: #e59fc9;
+
+						&:hover{
+							background-color: #e291c2;
+						}
+					}
+
+					.slide-body{
+
+						.qc-card{
+							background-color: #f9e9f2;
+
+							&:hover{
+								background-color: #ffddf0;
+							}
+						}
+
+						.booking-number{
+							color: #24424d;
+							background-color: #f2c7e0;
+						}
+					}
+				}
+
+				&.current-day{
+
+					.slide-head{
+						background-color: #6771dc;
+
+						&:hover{
+							background-color: #5b67e5;
+						}
+					}
+
+					.slide-body{
+
+						.qc-card{
+							background-color: #6771dc;
+
+							&:hover{
+								background-color: #5b67e5;
+							}
+						}
+
+						.booking-number{
+							color: $white;
+							background-color: #5760c1;
+						}
+
+						.heading-one{
+							color: $white !important;
+						}
+
+						.heading-two{
+							color: $white !important;
+						}
+
+						.heading-three{
+							color: $white !important;
+						}
+					}
+				}
+
+				&.next-day{
+
+					.slide-head{
+						background-color: #c39fe7;
+
+						&:hover{
+							background-color: #ba91e4;
+						}
+					}
+
+					.slide-body{
+
+						.qc-card{
+							background-color: #e8d9f7;
+
+							&:hover{
+								background-color: #e8d3fd;
+							}
+						}
+
+						.booking-number{
+							color: #24424d;
+							background-color: rgba(#a367dc, 0.4);
+						}
+					}
+				}
+
+				.slide-head{
+					padding: 15px 0;
+					text-align: center;
+					transition: ease all 0.4s;
+
+					p{
+						margin: 0;
+						color: $white;
+						font-size: 14px;
+						font-family: $roboto-medium;
+					}
+
+					span{
+						margin-left: 10px;
+						font-family: $roboto-regular;
+					}
+				}
+
+				.slide-body{
+					padding: 6px;
+					border-radius: 6px;
+					background: $white;
+					margin: 10px 3px 0 3px;
+
+					&.no-data{
+						background: transparent;
+
+						.qc-card{
+							padding: 20px;
+							text-align: center;
+							background-color: #f4f6f8;
+
+							&:hover{
+								background-color: #f4f6f8;
+							}
+
+							.heading-one{
+								color: #a0a1a3;
+								font-family: $roboto-medium;
+							}
+						}
+					}
+
+					.qc-card{
+						padding: 13px;
+						margin-bottom: 6px;
+						border-radius: 6px;
+						white-space: initial;
+						border-color: $white;
+						transition: ease all 0.4s;
+
+						&:last-child{
+							margin-bottom: 0;
+						}
+
+						.qc-card-head{
+							display: flex;
+							align-items: center;
+							justify-content: space-between;
+						}
+
+						.booking-number{
+							line-height: 1;
+							font-size: 12px;
+							padding: 8px 6px;
+							border-radius: 4px;
+							display: inline-block;
+							font-family: $roboto-regular;
+						}
+
+						.booking-file{
+							padding: 11px;
+							border-radius: 100%;
+							background: transparent;
+							transition: ease all 0.4s;
+
+							&:hover{
+								background-color: rgba(#000534, 0.05);
+							}
+						}
+
+						.heading-one{
+							margin: 0;
+							color: #24424d;
+							font-size: 12px;
+							margin-top: 12px;
+							font-family: $roboto-light;
+						}
+
+						.heading-two{
+							margin: 0;
+							color: #24424d;
+							margin-top: 4px;
+							font-size: 12px;
+							font-family: $roboto-medium;
+						}
+
+						.heading-three{
+							margin: 0;
+							color: #24424d;
+							margin-top: 8px;
+							font-size: 12px;
+							font-family: $roboto-regular;
+						}
+					}
+				}
+			}
+		}
+	}
+
+	.qc-filter-container{
+		margin: 20px 0 10px;
+	}
+
+	.qc-filter-dropdown{
+		width: 151px;
+		display: inline-block;
+	}
+
+	.qc-stats-container{
+		display: flex;
+
+		@media only screen and (min-width: $mobile-min-width) and (max-width: $mobile-max-width){
+			flex-direction: column;
+		}
+
+		.stats-card{
+			flex: 1;
+			display: flex;
+			margin-right: 6px;
+			padding: 18px 30px;
+			background: $white;
+			transition: ease all 0.4s;
+
+			@media only screen and (min-width: $tablet-min-width) and (max-width: $tablet-max-width){
+				padding: 18px 10px;
+			}
+
+			@media only screen and (min-width: $mobile-min-width) and (max-width: $mobile-max-width){
+				margin-right: 0;
+				margin-bottom: 8px;
+			}
+
+			&:hover{
+				box-shadow: 0 3px 10px 0 rgba(0, 0, 0, 0.08);
+			}
+
+			&:first-child{
+
+				@media only screen and (min-width: $tablet-min-width) and (max-width: $tablet-max-width){
+					flex: 2;
+				}
+			}
+
+			&:last-child{
+				margin: 0;
+			}
+
+			.icon{
+				flex: 1;
+			}
+
+			.stats-info{
+				flex : 4;
+				padding-left: 26px;
+
+				@media only screen and (min-width: $tablet-min-width) and (max-width: $tablet-max-width){
+					padding-left: 10px;
+				}
+
+				p{
+					margin: 0;
+
+					&.title{
+						line-height: 1;
+						color: #24424d;
+						font-size: 13px;
+						font-family: $roboto-light;
+					}
+
+					&.count{
+						color: #24424d;
+						margin-top: 1px;
+						font-size: 18px;
+						font-family: $roboto-regular;
+
+						.link{
+							color: $brand-color;
+							cursor: pointer;
+							font-size: 12px;
+							margin-left: 10px;
+							transition: ease all 0.4s;
+							vertical-align: text-bottom;
+							font-family: $roboto-regular;
+
+							&:hover{
+								color: $brand-dark-color;
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+
+	.qc-graph-wrapper{
+		display: flex;
+		margin-top: 15px;
+
+		@media only screen and (min-width: $tablet-min-width) and (max-width: $tablet-max-width){
+			flex-wrap: wrap;
+		}
+
+		@media only screen and (min-width: $mobile-min-width) and (max-width: $mobile-max-width){
+			margin-top: 26px;
+			flex-direction: column;
+		}
+
+		.qc-graph-container{
+			flex: 1;
+			display: flex;
+			padding: 24px 34px;
+			background: $white;
+			margin-right: 15px;
+			flex-direction: column;
+			transition: ease all 0.4s; 
+
+			@media only screen and (min-width: $tablet-min-width) and (max-width: $tablet-max-width){
+				margin-top: 16px;
+				padding: 12px 16px;
+			}
+
+			@media only screen and (min-width: $mobile-min-width) and (max-width: $mobile-max-width){
+				margin-right: 0;
+				padding: 12px 12px;
+				margin-bottom: 12px;
+			}
+
+			&:hover{
+				box-shadow: 0 3px 10px 0 rgba(0, 0, 0, 0.08);
+			}
+
+			&:first-child{
+
+				@media only screen and (min-width: $tablet-min-width) and (max-width: $tablet-max-width){
+					flex: none;
+					width: 100%;
+					margin-top: 0;
+				}
+			}
+
+			&:last-child{
+				margin-right: 0;
+			}
+
+			.graph-head{
+
+				.graph-title-container{
+
+					.title{
+						margin: 0;
+						color: $primary-color;
+						font-size: 14px;
+						font-family: $roboto-regular;
+					}
+				}
+			}
+
+			.graph-body{
+				flex: 1;
+				display: flex;
+
+				.graph-container{
+					flex: 1;
+
+					@media only screen and (min-width: $mobile-min-width) and (max-width: $mobile-max-width){
+						flex: 0.9;
+					}
+				}
+
+				.legend-container{
+					flex: 1;
+				}
+
+				.inspection-details{
+					width: 100%;
+				}
+
+				.download-file-container{
+					padding: 25px 0;
+					margin-top: 24px;
+					position: relative;
+					border-top: dashed 1px #cdd5df;
+
+					@media only screen and (min-width: $mobile-min-width) and (max-width: $mobile-max-width){
+						padding: 25px 0 14px;
+					}
+
+					img{
+						display: inline-block;
+						vertical-align: middle;
+					}
+
+					span{
+						color: $primary-color;
+						font-size: 12px;
+						margin-left: 16px;
+						display: inline-block;
+						vertical-align: middle;
+						font-family: $roboto-regular;
+					}
+
+					.filter-cta{
+						right: 0;
+						top: 19px;
+						position: absolute;
+
+						@media only screen and (min-width: $mobile-min-width) and (max-width: $tablet-max-width){
+							top: 19px;
+						}
+					}
+				}
+			}
+		}
+	}
+}

@@ -1,0 +1,147 @@
+<div class="main-wrapper">
+  <div class="wrapper dashboard-wrapper">
+    <div class="my-container">
+      <div class="master-body">
+        <div class="title-container">
+          <h3 class="main-title"> {{ 'TEMPLATE_SUMMARY.TITLE' | translate }}</h3>
+        </div>
+        <div class="content-container">
+          <div class="row searchFormPadding">
+            <div class="col-sm-12">
+              <div class="row">
+                <div class="col-sm-4 col-md-4 col-lg-4">
+                  <div class="my-input-group">
+                    <label class="required">{{ 'TEMPLATE_SUMMARY.LBL_MODULE' | translate }}</label>
+                    <ng-select [items]="moduleList" [multiple]="false" [closeOnSelect]="true" [searchable]="true"
+                               bindLabel="name" [loading]="moduleloading"
+                               placeholder="--- {{ 'TEMPLATE_SUMMARY.LBL_SELECT' | translate }} ---"
+                               [(ngModel)]="model.module" [ngClass]="{ 'is-invalid': !validator.isValid('module')}"
+                               (change)="ChangeModule($event)" class="multiple">
+                    </ng-select>
+                    <div *ngIf="!validator.isValid('module')" class="invalid-feedback" style="display:block">
+                      <div *ngFor="let error of validator.getErrors('module')">{{ error | translate }}</div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-sm-4 col-md-4 col-lg-4 mobile-margin-top-15">
+                  <div class="my-input-group">
+                    <label>{{ 'TEMPLATE_SUMMARY.LBL_SUBMODULE' | translate }}</label>
+                    <ng-select [items]="subModuleList" [multiple]="false" [closeOnSelect]="true" [searchable]="true"
+                               [loading]="submoduleloading" bindLabel="name"
+                               placeholder="--- {{ 'TEMPLATE_SUMMARY.LBL_SELECT' | translate }} ---"
+                               [(ngModel)]="model.submoule" class="multiple" [ngClass]="{ 'is-invalid': !validator.isValid('submoule')}">
+                    </ng-select>
+                    <div *ngIf="!validator.isValid('submoule')" class="invalid-feedback" style="display:block">
+                      <div *ngFor="let error of validator.getErrors('submoule')">{{ error | translate }}</div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-sm-4 col-md-4 col-lg-4 mobile-margin-top-15">
+                  <div class="column" style="margin-top:20px">
+                    <button id="btnSearch" class="primary-cta small" [disabled]="moduleloading || submoduleloading" (click)="search()">
+                      {{ 'TEMPLATE_SUMMARY.LBL_SEARCH' | translate }}
+                      <span *ngIf="searchloading">
+                        <i class="fa fa-refresh fa-spin" aria-hidden="true"></i>
+                      </span>
+                    </button>
+                  </div>
+                </div>
+                </div>
+              </div>
+          </div>
+          <div class="master-search-cta-container">
+            <div class="column">
+            </div>
+
+          </div>
+          <div class="result-container" *ngIf="(model.items && model.items.length>0)">
+            <p class="record-count">
+              {{
+                      'CITY_SUMMARY.MSG_SHOWING' |
+                                translate
+              }}&nbsp;{{((model.index-1)*(model.pageSize))+1}}&nbsp;{{
+                      'CITY_SUMMARY.MSG_TO' |
+                                translate
+              }}&nbsp;{{(model.index*model.pageSize)>model.totalcount?model.totalCount:(model.index*model.pageSize)}}&nbsp;{{ 'CITY_SUMMARY.MSG_OF' | translate }}&nbsp;{{model.totalCount}}&nbsp;{{
+                                'CITY_SUMMARY.MSG_RECORDS' | translate
+              }}
+            </p>
+            <div class="table-container">
+              <table class="pagination-table">
+                <thead>
+                  <tr>
+                    <th class="desktop-hide"></th>
+                    <th>{{ 'TEMPLATE_SUMMARY.LBL_NAME' | translate }}</th>
+                    <th>{{ 'TEMPLATE_SUMMARY.LBL_MODULE' | translate }}</th>
+                    <th>{{ 'TEMPLATE_SUMMARY.LBL_USER' | translate }}</th>
+                    <th>{{ 'TEMPLATE_SUMMARY.LBL_SHARED' | translate }}</th>
+                    <th class="mobile-hide tablet-hide"></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let iteminfo of model.items">
+                    <td class="desktop-hide">
+                      <button (click)="getDetails(iteminfo.id)" class="secondary-cta x-small">
+                        {{ 'TEMPLATE_SUMMARY.LBL_EDIT' | translate }}
+                      </button>
+                      <button (click)="openConfirm(iteminfo.id,iteminfo.name,content)"
+                              class="secondary-cta x-small">
+                        {{ 'TEMPLATE_SUMMARY.LBL_DELETE' | translate }}
+                      </button>
+                    </td>
+                    <td>{{iteminfo.name}}</td>
+                    <td>{{iteminfo.subModuleName}}</td>
+                    <td>{{iteminfo.userName}}</td>
+                    <td style="text-align: center">
+                      <div class="styled-checkbox-container">
+                        <input class="styled-checkbox" type="checkbox" [(ngModel)]="iteminfo.shared">
+                        <label></label>
+                      </div>
+                    </td>
+                    <td style="text-align: center" class="mobile-hide tablet-hide">
+                      <button (click)="getDetails(iteminfo.id)" class="secondary-cta x-small">
+                        {{ 'TEMPLATE_SUMMARY.LBL_EDIT' | translate }}
+                      </button>
+                      <button (click)="getView(iteminfo.id)" class="secondary-cta x-small">
+                        {{ 'TEMPLATE_SUMMARY.LBL_VIEW' | translate }}
+                      </button>
+                      <button *ngIf="iteminfo.canSave"  (click)="openConfirm(iteminfo.id,iteminfo.name,content)"
+                              class="secondary-cta x-small">
+                        {{ 'SUPPLIER_SUMMARY.LBL_DELETE' | translate }}
+                      </button>
+                    </td>
+                  </tr>                    
+                </tbody>
+              </table>
+            </div>
+            <div class="pagination-container">
+              <div class="pagination">
+                <ngb-pagination (pageChange)="onPager($event)" [pageSize]="model.pageSize"
+                                [collectionSize]="model.totalCount" [(page)]="model.index" [maxSize]="5"></ngb-pagination>
+              </div>
+            </div>
+          </div>
+          <div class="no-result-container" *ngIf="model.noFound">
+            <img src="assets/images/no-data.png" alt="" class="icon">
+            <h4 class="title">{{ 'TEMPLATE_SUMMARY.LBL_NOITEMS' | translate }}</h4>
+            <p>Oops! No load matching your search were found</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<ng-template #content let-modal>
+  <div class="modal-body">
+    <div class="small-model">
+      <h2 class="title">{{ 'SUPPLIER_SUMMARY.LBL_CONFIRMDELETION' | translate }}</h2>
+      <p>{{ 'TEMPLATE_SUMMARY.MSG_CONFRMDELETE' | translate }} <strong>{{modelRemove.name}}</strong></p>
+      <button class="secondary-cta"
+              (click)="modal.dismiss('Cross click')">
+        {{ 'COMMON.LBL_CONFIRMCANCEL' | translate }}
+      </button>
+      <button class="primary-cta" (click)="deleteTemplate(modelRemove);">{{ 'COMMON.LBL_OK' | translate }}</button>
+
+    </div>
+  </div>
+</ng-template>

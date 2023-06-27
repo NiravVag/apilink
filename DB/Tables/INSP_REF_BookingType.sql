@@ -1,0 +1,7 @@
+﻿CREATE TABLE [dbo].[INSP_REF_BookingType]
+(
+ Id INT PRIMARY KEY IDENTITY(1,1),
+ Name NVARCHAR(100),
+ Active BIT,
+ Sort INT
+)

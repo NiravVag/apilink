@@ -1,0 +1,345 @@
+<div class="main-wrapper">
+  <div class="wrapper dashboard-wrapper">
+    <div class="my-container">
+      <div class="master-body">
+        <div class="title-container" *ngIf="callFrom =='EditCustomerStyleComponent'">
+          <div class="header-back-button"
+            *ngIf="fromSummary && callFrom =='EditCustomerStyleComponent' && !savedataloading && !initialLoading">
+            <img src="assets/images/back-red.png" alt="back"
+              (click)="this.return('cusstylesearch/customer-stylesummary');">
+          </div>
+          <h3 class="main-title" *ngIf="model.id==0">
+            {{ 'EDIT_CUSTOMER_PRODUCT.ADD_STYLE_TITLE' | translate }}
+          </h3>
+          <h3 class="main-title" *ngIf="model.id !=0">
+            {{ 'EDIT_CUSTOMER_PRODUCT.EDIT_STYLE_TITLE' | translate }}
+          </h3>
+        </div>
+        <div class="content-container">
+          <h4 *ngIf="callFrom =='EditCustomerStyleComponent'" class="container-head">
+            {{ 'EDIT_CUSTOMER_PRODUCT.LBL_MAIN_STYLE' | translate }}</h4>
+          <div class="formPadding">
+            <div class="row marginTop15">
+              <div class="col-sm-4">
+                <div class="my-input-group">
+                  <label class="required">{{ 'EDIT_CUSTOMER_PRODUCT.STYLE_ID' | translate }}</label>
+                  <input [(ngModel)]="model.productID" [ngClass]="{ 'is-invalid':  !validator.isValid('productID')}"
+                    type="text" maxlength="300" placeholder="{{ 'EDIT_CUSTOMER_PRODUCT.STYLE_ID' | translate }}"
+                    [disabled]="model.isProductBooked" />
+                  <div *ngIf="!validator.isValid('productID')" class="invalid-feedback">
+                    <div *ngFor="let error of validator.getErrors('productID')">{{ error | translate }}</div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-sm-4 mobile-margin-top-15">
+                <div class="my-input-group">
+                  <label class="required">{{ 'EDIT_CUSTOMER_PRODUCT.STYLE_DESCRIPTION' | translate }}</label> 
+                  <textarea maxlength="1000" [(ngModel)]="model.productDescription" class="form-control" type="text"
+                    [ngClass]="{ 'is-invalid':  !validator.isValid('productDescription')}"
+                    placeholder="{{ 'EDIT_CUSTOMER_PRODUCT.STYLE_DESCRIPTION' | translate }}"></textarea>
+                  <div *ngIf="!validator.isValid('productDescription')" class="invalid-feedback">
+                    <div *ngFor="let error of validator.getErrors('productDescription')">{{ error | translate }}</div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-sm-4 mobile-margin-top-15">
+                <div class="my-input-group">
+                  <label class="required">{{ 'EDIT_CUSTOMER_PRODUCT.CUSTOMER' | translate }}</label>       
+
+                  <ng-select #customer [searchable]="true" [items]="customerList" bindLabel="name"
+                  (clear)="clearCustomer()" [loading]="customerLoading"
+                  [disabled]="callFrom !='EditCustomerStyleComponent' || model.isProductBooked"
+                  bindValue="id" [hideSelected]="true" appendTo="body" [virtualScroll]="true"
+                  (scrollToEnd)="getCustomerData(true)" [typeahead]="customerInput" [minTermLength]="3"
+                  placeholder="--- {{(customerList!=null && customerList.length!=0? 'BOOKING_SUMMARY.LBL_SELECT':'BOOKING_SUMMARY.MSG_NO_DATA')  | translate }} ---"
+                  [(ngModel)]="model.customerID">
+                  <ng-template ng-option-tmp let-item="item">
+                    <div class="text-wrap">{{ item.name }}</div>
+                  </ng-template>
+                </ng-select>
+
+                  <div *ngIf="!validator.isValid('customerID')" class="invalid-feedback" style="display:block">
+                    <div *ngFor="let error of validator.getErrors('customerID')">{{ error | translate }}</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="row marginTop15">
+
+              <div class="col-sm-4">
+                <div class="my-input-group">
+                  <label class="required">{{ 'EDIT_CUSTOMER_PRODUCT.PRODUCTCATEGORY' | translate }}</label>
+                  <ng-select [items]="productCategoryList" [multiple]="false" [clearable]="false" [closeOnSelect]="true"
+                    appendTo="body" [searchable]="true" bindLabel="name" bindValue="id" [loading]="initialLoading"
+                    placeholder="--- {{ 'CUSTOMER_PRODUCT_SUMMARY.LBL_SELECT' | translate }} ---"
+                    [(ngModel)]="model.productCategory"
+                    [ngClass]="{ 'is-invalid': !validator.isValid('productCategory')}"
+                    (change)="changeProductSubCategory(model.productCategory)" [disabled]="model.isProductBooked">
+                    <ng-template ng-option-tmp let-item="item">
+                      <div class="text-wrap">{{ item.name }}</div>
+                    </ng-template>
+                  </ng-select>
+                  <div *ngIf="!validator.isValid('productCategory')" class="invalid-feedback" style="display:block">
+                    <div *ngFor="let error of validator.getErrors('productCategory')">{{ error | translate }}</div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-sm-4">
+                <div class="my-input-group mobile-margin-top-15">
+                  <label class="required">{{ 'EDIT_CUSTOMER_PRODUCT.PRODUCTSUBCATEGORY' | translate }}</label>
+                  <ng-select [items]="productSubCategoryList" [multiple]="false" [clearable]="false"
+                    [closeOnSelect]="true" appendTo="body" [searchable]="true" bindLabel="name" bindValue="id"
+                    [loading]="productSubLoading"
+                    placeholder="--- {{ 'CUSTOMER_PRODUCT_SUMMARY.LBL_SELECT' | translate }} ---"
+                    [(ngModel)]="model.productSubCategory"
+                    [ngClass]="{ 'is-invalid': !validator.isValid('productSubCategory')}"
+                    [disabled]="model.isProductBooked" (change)="changeProductSubCategory2(model.productSubCategory)">
+                    <ng-template ng-option-tmp let-item="item">
+                      <div class="text-wrap">{{ item.name }}</div>
+                    </ng-template>
+                  </ng-select>
+                  <div *ngIf="!validator.isValid('productSubCategory')" class="invalid-feedback" style="display:block">
+                    <div *ngFor="let error of validator.getErrors('productSubCategory')">{{ error | translate }}</div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-sm-4">
+                <div class="my-input-group mobile-margin-top-15" *ngIf="_IsInternalUser">
+                  <label class="required">{{ 'EDIT_CUSTOMER_PRODUCT.PRODUCTCATEGORYSUB2' | translate }}</label>
+                  <ng-select [items]="customerProductMaster.productCategorySub2List" [multiple]="false" [clearable]="false"
+                    [closeOnSelect]="true" appendTo="body" [searchable]="true" bindLabel="name" bindValue="id"
+                    [virtualScroll]="true" (scrollToEnd)="getProductSubCategory2Data(true)"
+                    [typeahead]="customerProductMaster.productCategorySub2Input" [minTermLength]="3"
+                    (clear)="getProductSubCategory2ListBySearch()"
+                    [loading]="customerProductMaster.productCategorySub2Loading"
+                    placeholder="--- {{ 'CUSTOMER_PRODUCT_SUMMARY.LBL_SELECT' | translate }} ---"
+                    [(ngModel)]="model.productCategorySub2"
+                    [ngClass]="{ 'is-invalid': !validator.isValid('productCategorySub2')}"
+                    [disabled]="model.isProductBooked">
+                    <ng-template ng-option-tmp let-item="item">
+                      <div class="text-wrap">{{ item.name }}</div>
+                    </ng-template>
+                  </ng-select>
+                  <div *ngIf="!validator.isValid('productCategorySub2')" class="invalid-feedback" style="display:block">
+                    <div *ngFor="let error of validator.getErrors('productCategorySub2')">{{ error | translate }}</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="row marginTop15">   
+              <div class="col-sm-4 mobile-margin-top-15">
+                <div class="my-input-group">
+                  <div class="my-input-group">
+                    <label class="required">{{ 'API_SERVICE.LBL_API_SERVICES' | translate }}</label>
+                    <ng-select [items]="apiServiceList" [multiple]="true" class="multiple" [closeOnSelect]="true"
+                      [searchable]="true" bindLabel="name" bindValue="id" [loading]="loading"
+                      placeholder="--- {{ 'COMMON.LBL_SELECT' | translate }} ---" [(ngModel)]="model.apiServiceIds"
+                      [ngClass]="{'is-invalid': !validator.isValid('apiServiceIds')}">
+                    </ng-select>
+                    <div *ngIf="!validator.isValid('apiServiceIds')" class="invalid-feedback">
+                      <div *ngFor="let error of validator.getErrors('apiServiceIds')">
+                        {{ error | translate }}</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-sm-4 ">
+                <div class="my-input-group ">
+                  <label>{{ 'EDIT_CUSTOMER_PRODUCT.REMARKS' | translate }}</label>
+                  <textarea maxlength="1000" [(ngModel)]="model.remarks" class="form-control" type="text"></textarea>
+                </div>
+              </div>
+              <div class="col-sm-4 ">
+                <label></label>
+                <div class="styled-checkbox-container">
+                  <input class="styled-checkbox" id="checkboxnewproduct" type="checkbox" [checked]="model.isNewProduct"
+                  [(ngModel)]="model.isNewProduct">
+                  <label for="checkboxnewproduct">{{ 'EDIT_CUSTOMER_PRODUCT.LBL_IS_NEWSTYLE' | translate }}</label>
+                </div>
+              </div>
+
+            </div>
+
+       <div class="row marginTop15">
+           <div class="col-sm-4">   
+              <div class="my-input-group">
+                <label for="">{{'EDIT_EMAIL_SEND.LBL_FILE_TYPE' | translate }}</label>
+                <ng-select [items]="fileTypeList" [loading]="fileTypeLoading"
+                  [searchable]="true" bindLabel="name" appendTo="body" bindValue="id" [(ngModel)]="fileTypeId"
+                  (change)="onChangeMSFileList($event);"
+                  placeholder="--- {{ (fileTypeList && fileTypeList.length>0? 'COMMON.LBL_SELECT':'COMMON.LBL_NO_DATA' ) | translate }} ---"
+                  [ngClass]="{ 'is-invalid':  !validator.isValid('fileTypeId')}">
+                  <ng-template ng-option-tmp let-item="item">
+                    <div class="text-wrap"><span>{{item.name}}</span></div>
+                  </ng-template>
+                </ng-select>         
+              </div>
+            </div>
+
+            <div class="col-sm-3 col-md-3 col-lg-3">
+              <div class="my-input-group">
+                <label class="control-label"></label>
+                <app-drag-drop [fileLimit]="uploadFileLimit" [fileSizeLimit]="1000000"
+                  [Bigupload]="false" [SmallUploadImage]=" " [SmallUploadTitle]=" " [SmallUploadSubTitle]=" "
+                  [fileExtension]="uploadFileExtensions" (fileUpload)="cloudUpload($event)">
+                </app-drag-drop>
+              </div>
+            </div>            
+            </div>
+
+            <div class="tab-container" *ngIf="model.cuProductFileAttachments != null && model.cuProductFileAttachments.length>0">
+              <ul class="tab-switch-container">
+                <li class="active" (click)="toggleTab($event, 'tab1')">File List</li>
+                <li *ngIf="model.id>0 && msChartDDLFileList.length>0" (click)="toggleTab($event, 'tab2')">MS chart List</li>               
+              </ul>
+              <div class="tab-content-container">
+                <div class="tab-content active" style="min-height: 200px; overflow-x: hidden;" id="tab1">
+                  <div class="row marginTop15"
+                  *ngIf="model.cuProductFileAttachments != null && model.cuProductFileAttachments.length>0">
+                  <div class="col-sm-8 col-md-12 col-lg-6">
+                    <div class="table-container">
+                      <table class="pagination-table">
+                        <thead>
+                          <tr>
+                            <th> {{'EDIT_CUSTOMER_PRODUCT.LBL_NAME' | translate }}</th>
+                            <th> {{'EDIT_CUSTOMER_PRODUCT.LBL_VIEW' | translate }}</th>
+                            <th> {{'EDIT_CUSTOMER_PRODUCT.LBL_DOWNLOAD' | translate }}</th>
+                            <th> {{'EDIT_CUSTOMER_PRODUCT.LBL_DELETE' | translate }}</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr *ngFor="let file of model.cuProductFileAttachments; let i=index;">
+                            <td class="text-wrap width-140">
+                              {{ (file.fileName.length>20)? (file.fileName | slice:0:20)+'..':(file.fileName) }}</td>
+                            <td class="width-100" style="color: blue; cursor:pointer;">
+                              <a *ngIf="file.fileTypeId!=1" (click)="getPreviewProductImage(file,productImage)">
+                                {{'EDIT_CUSTOMER_PRODUCT.LBL_VIEW' | translate }}</a>
+                            </td>
+                            <td class="width-100" style="color: blue; cursor:pointer;">
+                              <a  (click)="getFile(file)">
+                                {{'EDIT_CUSTOMER_PRODUCT.LBL_DOWNLOAD' | translate }}</a>
+                            </td>
+                            <td class="width-60">
+                              <button (click)="removeAttachment(i)" class="secondary-cta x-small" style="margin-left:10px">
+                                <i class="fa fa-trash"></i>
+                              </button>
+                            </td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                  </div>
+                </div>
+                <div class="tab-content" style="min-height: 200px; overflow-x: hidden;" id="tab2">
+                  <div class="row marginTop15">
+                  <div class="col-sm-4">   
+                    <div class="my-input-group">
+                      <label  for="">{{'EDIT_CUSTOMER_PRODUCT.LBL_STYLE_SELECT_FILE' | translate}}</label>
+                      <ng-select [items]="msChartDDLFileList" [loading]="fileTypeLoading"
+                        [searchable]="true" bindLabel="fileName"
+                        (change)="onFileChange($event);"
+                         appendTo="body" bindValue="id" [(ngModel)]="msFileId"
+                         placeholder="--- {{ (msChartDDLFileList && msChartDDLFileList.length>0? 'COMMON.LBL_SELECT':'COMMON.LBL_NO_DATA' ) | translate }} ---">
+                        <ng-template ng-option-tmp let-item="item">
+                          <div class="text-wrap"><span>{{item.fileName}}</span></div>
+                        </ng-template>
+                      </ng-select>         
+                    </div>
+                  </div>
+
+                  <div class="col-sm-4" *ngIf="msFileId>0">   
+                    <div class="my-input-group">
+                      <label  for="">{{'EDIT_CUSTOMER_PRODUCT.LBL_STYLE_CODE' | translate}}</label>
+                      <ng-select [items]="msChartStyleCodeList" [loading]="fileTypeLoading"
+                        [searchable]="true" bindLabel="code"
+                        (change)="onStyleChange($event,msFileId);"
+                     
+                         appendTo="body" bindValue="code" [(ngModel)]="msStyleCode"
+                         placeholder="--- {{ (msChartFileList && msChartStyleCodeList.length>0? 'COMMON.LBL_SELECT':'COMMON.LBL_NO_DATA' ) | translate }} ---">
+                        <ng-template ng-option-tmp let-item="item">
+                          <div class="text-wrap"><span>{{item.code}}</span></div>
+                        </ng-template>
+                      </ng-select>         
+                    </div>
+                  </div>
+                  </div>
+
+              
+                <div class="quotation-search-container" *ngIf="msChartFileList!=null && msChartFileList.length>0">
+                    <div class="table-container h-scroll table-max-height-550">
+                      <table class="pagination-table simple-table bordered">
+                        <thead>
+                          <tr class="sticky-top-row">
+                            <th>{{'EDIT_CUSTOMER_PRODUCT.LBL_STYLE_CODE' | translate }}</th>
+                            <th>{{'EDIT_CUSTOMER_PRODUCT.LBL_STYLE_DESCRIPTION' | translate }}</th>
+                            <th>{{'EDIT_CUSTOMER_PRODUCT.LBL_STYLE_MPCODE' | translate }}</th>
+                            <th>{{'EDIT_CUSTOMER_PRODUCT.LBL_STYLE_REQUIRED' | translate }}</th>
+                            <th>{{'EDIT_CUSTOMER_PRODUCT.LBL_STYLE_Tolerance1Up' | translate }}</th>
+                            <th>{{'EDIT_CUSTOMER_PRODUCT.LBL_STYLE_Tolerance1Down' | translate }}</th>
+                            <th>{{'EDIT_CUSTOMER_PRODUCT.LBL_STYLE_Tolerance2Up' | translate }}</th>
+                            <th>{{'EDIT_CUSTOMER_PRODUCT.LBL_STYLE_Tolerance2Down' | translate }}</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr *ngFor="let file of msChartFileList; let i=index;">
+                          <td class="width-140"><input type="text"  disabled  maxlength="1500" [(ngModel)]="file.code" /></td>                                 
+                           <td class="width-260"><input type="text"   maxlength="1500"  [(ngModel)]="file.description" /></td>                             
+                           <td class="width-140"><input type="text"  maxlength="1500"  [(ngModel)]="file.mpcode" /></td>  
+                           <td class="width-140"><input type="number" maxlength="10" min="1"  [(ngModel)]="file.required" /></td>  
+                           <td class="width-140"><input type="number" maxlength="10" min="1"  [(ngModel)]="file.tolerance1Up" /></td>                           
+                           <td class="width-140"><input type="number" maxlength="10" min="1"  [(ngModel)]="file.tolerance1Down" /></td>  
+                           <td class="width-140"><input type="number" maxlength="10" min="1"  [(ngModel)]="file.tolerance2Up" /></td>  
+                           <td class="width-140"><input type="number"maxlength="10" min="1"   [(ngModel)]="file.tolerance2Down" /></td>                   
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                 
+                </div>
+              </div>
+            </div>     
+          </div>
+
+          <div class="form-action-container">
+            <button class="primary-cta small" [disabled]="savedataloading ||initialLoading" (click)="save()">
+              {{'EDIT_CUSTOMER_PRODUCT.LBL_SAVE' | translate }}
+              <span *ngIf="savedataloading">
+                <i class="fa fa-refresh fa-spin" aria-hidden="true"></i>
+              </span>
+            </button>
+          </div>
+
+          <div class="loader-overlay" *ngIf="downloadloading">
+            <div class="loader-container">
+              <img src="assets/images/reload.svg" alt="">
+              <span>{{'COMMON.LBL_LOADER' | translate}}</span>
+            </div>
+          </div>
+
+          <div class="loader-overlay" *ngIf="fileuploadLoader">
+            <div class="loader-container">
+              <img src="assets/images/reload.svg" alt="">
+              <span>{{'COMMON.LBL_LOADER' | translate}}</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+<ng-template #productImage let-modal>
+  <div class="modal-header custom-modal-header">
+    <h4 class="modal-title" id="modal-basic-title">{{'EDIT_BOOKING.VIEW_PRODUCT_TITLE' | translate}}</h4>
+    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body custom-modal-body">
+    <ngx-gallery [options]="productGalleryOptions" [images]="productGalleryImages"></ngx-gallery>
+  </div>
+</ng-template>

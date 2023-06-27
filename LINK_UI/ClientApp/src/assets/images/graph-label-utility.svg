@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 22 22">
+    <defs>
+        <style>
+            .cls-2{fill:#e7eef1}.cls-3{fill:#d4d2d3}.cls-4{fill:#50c4df}.cls-5{fill:#1aa5c4}.cls-6{fill:#43c6b3}.cls-7{fill:#00ad94}.cls-8{fill:#ffcc4a}.cls-9{fill:#eaae28}.cls-10{fill:#e59fde}.cls-11{fill:#dc67ab}
+        </style>
+    </defs>
+    <g id="Group_11238" data-name="Group 11238" transform="translate(-922 -786)">
+        <path id="Rectangle_2334" fill="none" d="M0 0H22V22H0z" data-name="Rectangle 2334" opacity="0.4" transform="translate(922 786)"/>
+        <g id="paint_1_" data-name="paint (1)" transform="translate(822.656 786.001)">
+            <path id="Path_3619" d="M236.736 84.407v3.5l.828.858.828-.858v-3.5z" class="cls-2" data-name="Path 3619" transform="translate(-127.124 -80.781)"/>
+            <path id="Path_3620" d="M237.621 87.906v-3.5h-.885v3.5l.828.858.443-.459z" class="cls-3" data-name="Path 3620" transform="translate(-127.124 -80.78)"/>
+            <g id="Group_11232" data-name="Group 11232" transform="translate(105.073 4.065)">
+                <path id="Path_3621" d="M131.092 94.925l.634 3.442.969.694.659-.994-.634-3.442z" class="cls-2" data-name="Path 3621" transform="translate(-131.092 -94.625)"/>
+                <path id="Path_3622" d="M330.535 94.925l-.634 3.442-.969.694-.659-.994.634-3.442z" class="cls-2" data-name="Path 3622" transform="translate(-319.801 -94.625)"/>
+            </g>
+            <path id="Rectangle_2335" d="M0 0H1.656V4.388H0z" class="cls-4" data-name="Rectangle 2335" transform="translate(109.612 7.126)"/>
+            <path id="Rectangle_2336" d="M0 0H0.885V4.388H0z" class="cls-5" data-name="Rectangle 2336" transform="translate(109.612 7.126)"/>
+            <path id="Path_3623" d="M218.681 1.586a3.617 3.617 0 0 1-.823-1.267.441.441 0 0 0-.728-.2A4.157 4.157 0 0 0 215.808 3a1.863 1.863 0 0 0 .475 1.394 1.638 1.638 0 0 0 2.357.121 1.863 1.863 0 0 0 .616-1.338V3.16a2.109 2.109 0 0 0-.575-1.574z" class="cls-4" data-name="Path 3623" transform="translate(-107.092)"/>
+            <path id="Path_3624" d="M217.169 3.624a1.863 1.863 0 0 1-.475-1.394 4.176 4.176 0 0 1 .676-2.106.446.446 0 0 0-.239.118 4.157 4.157 0 0 0-1.322 2.873 1.863 1.863 0 0 0 .475 1.394 1.638 1.638 0 0 0 2.357.121 1.828 1.828 0 0 0 .437-.59 1.632 1.632 0 0 1-1.909-.416z" class="cls-5" data-name="Path 3624" transform="translate(-107.093 -.119)"/>
+            <path id="Path_3625" d="M132.7 99.061l.034-.052-.118-.643-.634-3.442.772-.142-.029-.158-1.628.3.634 3.442z" class="cls-3" data-name="Path 3625" transform="translate(-26.019 -90.56)"/>
+            <path id="Path_3626" d="M109.623 16.709a3.618 3.618 0 0 1-1.039-1.1.441.441 0 0 0-.751-.061 4.157 4.157 0 0 0-.78 3.065 1.863 1.863 0 0 0 .72 1.285 1.638 1.638 0 0 0 2.34-.308 1.863 1.863 0 0 0 .363-1.427v-.013a2.109 2.109 0 0 0-.853-1.441z" class="cls-6" data-name="Path 3626" transform="translate(-2.975 -14.708)"/>
+            <path id="Path_3627" d="M108.658 19.03a1.863 1.863 0 0 1-.72-1.285 4.166 4.166 0 0 1 .352-2.348.426.426 0 0 0-.457.168 4.157 4.157 0 0 0-.78 3.065 1.863 1.863 0 0 0 .72 1.285 1.638 1.638 0 0 0 2.34-.308 1.879 1.879 0 0 0 .215-.355 1.639 1.639 0 0 1-1.67-.222z" class="cls-7" data-name="Path 3627" transform="translate(-2.975 -14.723)"/>
+            <path id="Rectangle_2337" d="M0 0H4.388V1.656H0z" class="cls-6" data-name="Rectangle 2337" transform="rotate(79.572 49.16 68.2)"/>
+            <path id="Path_3628" d="M147.487 182.351l-.765-4.158-.029-.158-.856.158.265 1.439.53 2.877z" class="cls-7" data-name="Path 3628" transform="translate(-40.129 -170.386)"/>
+            <path id="Path_3629" d="M342.4 99.061l-.034-.052.118-.643.634-3.442-.772-.142.029-.158 1.628.3-.634 3.442z" class="cls-3" data-name="Path 3629" transform="translate(-228.192 -90.56)"/>
+            <path id="Path_3630" d="M324.832 16.709a3.618 3.618 0 0 0 1.039-1.1.441.441 0 0 1 .751-.061 4.157 4.157 0 0 1 .78 3.065 1.863 1.863 0 0 1-.72 1.285 1.638 1.638 0 0 1-2.34-.308 1.863 1.863 0 0 1-.363-1.427v-.013a2.109 2.109 0 0 1 .853-1.441z" class="cls-8" data-name="Path 3630" transform="translate(-210.599 -14.708)"/>
+            <path id="Path_3631" d="M329.522 19.03a1.863 1.863 0 0 0 .72-1.285 4.165 4.165 0 0 0-.352-2.348.426.426 0 0 1 .457.168 4.157 4.157 0 0 1 .78 3.065 1.863 1.863 0 0 1-.72 1.285 1.638 1.638 0 0 1-2.34-.308 1.879 1.879 0 0 1-.215-.355 1.639 1.639 0 0 0 1.67-.222z" class="cls-9" data-name="Path 3631" transform="translate(-214.324 -14.723)"/>
+            <path id="Rectangle_2338" d="M0 0H4.388V1.656H0z" class="cls-8" data-name="Rectangle 2338" transform="rotate(100.428 54.336 51.859)"/>
+            <path id="Path_3632" d="M327.748 182.351l.765-4.158.029-.158.856.158-.265 1.439-.53 2.877z" class="cls-9" data-name="Path 3632" transform="translate(-214.225 -170.386)"/>
+            <path id="Path_3633" d="M128.425 257.254l-5.728.807v8.558a1.581 1.581 0 0 0 1.581 1.581h8.294a1.581 1.581 0 0 0 1.581-1.581v-8.558z" class="cls-10" data-name="Path 3633" transform="translate(-17.985 -246.201)"/>
+            <path id="Path_3637" d="M134.153 259.277v-1.217h-9.685l4.842-.683-.885-.125-5.728.807v8.558a1.581 1.581 0 0 0 1.581 1.581h1.771a1.581 1.581 0 0 1-1.581-1.581v-7.341z" class="cls-11" data-name="Path 3637" transform="translate(-17.985 -246.2)"/>
+            <path id="Path_3638" d="M116.168 238.462h-11.456a.807.807 0 0 0 0 1.615h11.456a.807.807 0 1 0 0-1.615z" class="cls-10" data-name="Path 3638" transform="translate(0 -228.216)"/>
+            <path id="Path_3639" d="M105.676 239.269a.807.807 0 0 1 .807-.807h-1.771a.807.807 0 0 0 0 1.615h1.771a.808.808 0 0 1-.807-.808z" class="cls-11" data-name="Path 3639" transform="translate(0 -228.216)"/>
+        </g>
+    </g>
+</svg>

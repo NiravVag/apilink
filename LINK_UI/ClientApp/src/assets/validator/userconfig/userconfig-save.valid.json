@@ -1,0 +1,12 @@
+{
+    "model": "UserDataAccess",
+    "fields": {
+        "profileId": [
+            {
+                "type": "required",
+                "fieldType": "N",
+                "ressource": "USER_CONFIG.MSG_PROFILE_REQUIRED"
+            }
+        ]
+    }
+}

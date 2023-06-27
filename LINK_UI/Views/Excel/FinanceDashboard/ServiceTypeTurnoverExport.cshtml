@@ -1,0 +1,104 @@
+﻿
+@{
+    ViewData["Title"] = "ServiceTypeTurnoverExport";
+}
+
+@model DTO.FinanceDashboard.FinanceDashboardCommonExportItem
+
+<style>
+    td {
+        border-style: solid;
+    }
+
+    th {
+        text-align: center;
+    }
+</style>
+
+<xls-sheet name="Service Type Turnover">
+    <table xls-begin="A:1" style="border-style:solid">
+        <tr>
+            <td width="130px" style="font-weight:bold">Service Date From :</td>
+            <td width="100px">@Model.RequestFilters.ServiceDateFrom</td>
+
+            <td width="120px" style="font-weight:bold">Service Date To :</td>
+            <td width="100px">@Model.RequestFilters.ServiceDateTo</td>
+
+            @if (!string.IsNullOrEmpty(@Model.RequestFilters.CountryList))
+            {
+                <td width="100px" style="font-weight: bold">Country :</td>
+                <td width="100px">@Model.RequestFilters.CountryList</td>
+            }
+            @if (!string.IsNullOrEmpty(@Model.RequestFilters.OfficeList))
+            {
+                <td style="font-weight: bold">Office :</td>
+                <td width="100px">@Model.RequestFilters.OfficeList</td>
+            }
+            @if (!string.IsNullOrEmpty(@Model.RequestFilters.Customer))
+            {
+                <td style="font-weight: bold">Customer :</td>
+                <td width="100px">@Html.Raw(@Model.RequestFilters.Customer)</td>
+            }
+
+            @if (!string.IsNullOrEmpty(@Model.RequestFilters.Supplier))
+            {
+                <td width="100px" style="font-weight: bold">Supplier :</td>
+                <td width="100px">@Model.RequestFilters.Supplier</td>
+            }
+
+            @if (!string.IsNullOrEmpty(@Model.RequestFilters.FactoryList))
+            {
+                <td width="100px" style="font-weight: bold">Factory :</td>
+                <td width="100px">@Model.RequestFilters.FactoryList</td>
+            }
+            @if (!string.IsNullOrEmpty(@Model.RequestFilters?.BrandList))
+            {
+                <td width="100px" style="font-weight: bold">Brand :</td>
+                <td width="100px">@Model.RequestFilters?.BrandList</td>
+            }
+            @if (!string.IsNullOrEmpty(@Model.RequestFilters?.DeptList))
+            {
+                <td width="100px" style="font-weight: bold">Department :</td>
+                <td width="100px">@Model.RequestFilters?.DeptList</td>
+            }
+            @if (!string.IsNullOrEmpty(@Model.RequestFilters?.BuyerList))
+            {
+                <td width="100px" style="font-weight: bold">Buyer :</td>
+                <td width="100px">@Model.RequestFilters?.BuyerList</td>
+            }
+            @if (!string.IsNullOrEmpty(@Model.RequestFilters?.ServiceTypeList))
+            {
+                <td width="100px" style="font-weight: bold">Service Type :</td>
+                <td width="100px">@Model.RequestFilters?.ServiceTypeList</td>
+            }
+        </tr>
+        <tr>
+            <td></td>
+        </tr>
+
+        <tr style="background-color:#f5f5f5;font-weight:bold;text-align:center">
+            <th style="border-style:solid; text-align:left">Service Type</th>
+            <th style="border-style:solid">TurnOver $</th>
+        </tr>
+
+        @foreach (var item in Model.Data)
+        {
+            <tr>
+                <td width="200px" style="text-align:center; border-style:solid;  text-align:left">@Html.Raw(@item.Name)</td>
+                <td style="border-style:solid; text-align:center"  xls-type="number">@item.Count</td>
+            </tr>
+        }
+        <tr>
+            <td style="font-weight:bold; border-style:solid;text-align:center">Total $</td>
+            <td style="text-align:center; border-style:solid" xls-type="number">@Model.Total</td>
+        </tr>
+    </table>
+</xls-sheet>
+
+
+
+
+
+
+
+

@@ -1,0 +1,54 @@
+{
+    "model": "FoodAllowanceEditModel",
+     "fields": {
+        "startDate": [
+            {
+                "type": "required",
+                "fieldType": "D",
+                "ressource": "AUIDT_SUMMARY.MSG_SERVICE_FROMDATE_REQ"
+            },
+            {
+                "type": "isLessOrEqual",
+                "fieldType": "D",
+                "fieldCible": "endDate",
+                "ressource": "AUIDT_SUMMARY.MSG_SERVICE_FROMDATE_GREATER_REQ"
+            }
+        ],
+        "endDate": [
+            {
+                "type": "required",
+                "fieldType": "D",
+                "ressource": "AUIDT_SUMMARY.MSG_Service_TODATE_REQ"
+            },
+            {
+                "type": "isGreatOrEqual",
+                "fieldType": "D",
+                "fieldCible": "startDate",
+                "ressource": "AUIDT_SUMMARY.MSG_Service_TODATE_LESS_REQ" 
+            }
+        ],
+       "countryId": [
+         {
+           "type": "required",
+           "fieldType": "N",
+           "ressource": "EDIT_STAFF.MSG_COUNTRY_REQ"
+         }
+       ],
+       "currencyId": [
+         {
+           "type": "required",
+           "fieldType": "N",
+           "ressource": "EXPENSE.MSG_CURRENCY_REQ"
+         }
+       ],
+       "foodAllowanceValue": [
+         {
+           "type": "required",
+           "fieldType": "N",
+           "ressource": "FOOD_ALLOWANCE.MSG_FOOD_ALLOWANCE"
+         }
+       ]
+     }
+   
+   }
+   

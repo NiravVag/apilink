@@ -1,0 +1,55 @@
+{
+  "model": "quotation.model",
+  "fields": {
+    "country": [
+      {
+        "type": "required",
+        "fieldType": "A",
+        "ressource": "QUOTATION.MSG_COUNTRY_REQ"
+      }
+    ],
+    "service": [
+      {
+        "type": "required",
+        "fieldType": "A",
+        "ressource": "QUOTATION.MSG_SERVICE_REQ"
+      }
+    ],
+    "billingMethod": [
+      {
+        "type": "required",
+        "fieldType": "A",
+        "ressource": "QUOTATION.MSG_BILLMETHOD_REQ"
+      }
+    ],
+    "billingPaidBy": [
+      {
+        "type": "required",
+        "fieldType": "A",
+        "ressource": "QUOTATION.MSG_PAIEDBY_REQ"
+      }
+    ],
+   
+    "inspectionFees": [
+      {
+        "type": "required",
+        "fieldType": "N",
+        "ressource": "QUOTATION.MSG_INSPFEES_REQ"
+      }
+    ],
+    "estimatedManday": [
+      {
+        "type": "required",
+        "fieldType": "N",
+        "ressource": "QUOTATION.MSG_ESTMANDAY_REQ"
+      }
+    ], 
+    "currency": [
+      {
+        "type": "required",
+        "fieldType": "A",
+        "ressource": "QUOTATION.MSG_CURRENCY_REQ"
+      }
+    ]
+  }
+}

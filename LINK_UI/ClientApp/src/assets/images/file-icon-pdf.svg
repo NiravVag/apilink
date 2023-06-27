@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" id="Component_57_1" width="22" height="22" data-name="Component 57 – 1" viewBox="0 0 22 22">
+    <defs>
+        <style>
+            .cls-3{fill:#fff;stroke:#fff;stroke-width:.5px}
+        </style>
+    </defs>
+    <path id="Rectangle_2339" fill="none" d="M0 0H22V22H0z" data-name="Rectangle 2339"/>
+    <g id="pdf_2_" data-name="pdf (2)" transform="translate(2.75)">
+        <path id="Path_3640" fill="#f81538" d="M97.375 0A1.379 1.379 0 0 0 96 1.375v19.25A1.379 1.379 0 0 0 97.375 22h13.75a1.379 1.379 0 0 0 1.375-1.375V5.5L107 0z" data-name="Path 3640" transform="translate(-96)"/>
+        <g id="Group_11255" data-name="Group 11255" transform="translate(2.997 11)">
+            <path id="Path_3644" d="M101.744 294.7a.378.378 0 0 1 .373-.38h1.27a1.374 1.374 0 0 1 0 2.749h-.918v.726a.345.345 0 0 1-.352.379.37.37 0 0 1-.373-.379zm.725.313v1.37h.918a.685.685 0 0 0 0-1.37z" class="cls-3" data-name="Path 3644" transform="translate(-101.744 -294.32)"/>
+            <path id="Path_3645" d="M188.2 299.276a.344.344 0 0 1-.38-.34v-3.123a.374.374 0 0 1 .38-.341h1.259a1.9 1.9 0 0 1 .05 3.8zm.347-3.133v2.463h.912a1.235 1.235 0 0 0 0-2.463z" class="cls-3" data-name="Path 3645" transform="translate(-184.125 -295.471)"/>
+            <path id="Path_3646" d="M287.855 296.172v.874h1.4a.425.425 0 0 1 .4.39.382.382 0 0 1-.4.33h-1.4v1.154a.326.326 0 0 1-.329.34.349.349 0 0 1-.39-.34v-3.12a.347.347 0 0 1 .39-.341h1.93a.343.343 0 0 1 .385.341.38.38 0 0 1-.385.374h-1.6z" class="cls-3" data-name="Path 3646" transform="translate(-279.17 -295.456)"/>
+        </g>
+    </g>
+</svg>

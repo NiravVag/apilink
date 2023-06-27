@@ -1,0 +1,7 @@
+﻿CREATE TABLE DM_Department(
+Id INT PRIMARY KEY NOT NULL IDENTITY(1,1),
+DepartmentId INT NOT NULL, 
+DMFileId INT NULL,
+CONSTRAINT FK_DM_Department_DepartmentId FOREIGN KEY(DepartmentId) REFERENCES CU_Department(Id),
+CONSTRAINT FK_DM_Department_DMFileId FOREIGN KEY(DMFileId) REFERENCES DM_File(Id)
+)

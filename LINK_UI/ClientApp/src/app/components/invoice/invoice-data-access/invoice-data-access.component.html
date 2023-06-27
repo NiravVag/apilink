@@ -1,0 +1,392 @@
+<div class="main-wrapper">
+    <div class="wrapper dashboard-wrapper">
+        <div class="my-container">
+            <div class="master-body">
+                <div class="title-container">
+                    <h3 class="main-title">
+                        {{'INVOICE_ACCESS.LBL_TITLE' | translate}}</h3>
+                </div>
+                <div class="content-container quotation-container">
+                    <div [@expandCollapse]="isFilterOpen ? 'open' : 'close'"
+                        class="centerContainerPadding common-filter-container">                   
+                        <div class="row">
+                            <div class="col-sm-3 mobile-margin-top-15">
+                                <div class="my-input-group">
+                                    <label for="">{{'INVOICE_ACCESS.LBL_STAFF' | translate}}</label>
+                                    <ng-select #staff [searchable]="true" [items]="summaryMasterModel.staffList"
+                                        bindLabel="name" [loading]="summaryMasterModel.staffLoading" bindValue="id"
+                                        [hideSelected]="true" appendTo="body" [virtualScroll]="true"
+                                        (scrollToEnd)="getStaffData(true)" [typeahead]="summaryMasterModel.staffInput"
+                                        [minTermLength]="3"
+                                        placeholder="--- {{(summaryMasterModel.staffList!=null && summaryMasterModel.staffList.length!=0? 'COMMON.LBL_SELECT_ALL':'BOOKING_SUMMARY.MSG_NO_DATA')  | translate }} ---"
+                                        [(ngModel)]="model.staffId">
+                                        <ng-template ng-option-tmp let-item="item">
+                                            <div class="text-wrap">{{ item.name }}</div>
+                                        </ng-template>
+                                    </ng-select>
+                                </div>
+                            </div>
+
+                            <div class="col-sm-3 mobile-margin-top-15">
+                                <div class="my-input-group">
+                                    <label for="">{{ 'COMMON.LBL_CUSTOMER' | translate }}</label>
+                                    <ng-select #customer [searchable]="true" [items]="summaryMasterModel.customerList"
+                                        bindLabel="name" [loading]="summaryMasterModel.customerLoading" bindValue="id"
+                                        [hideSelected]="true" appendTo="body" [virtualScroll]="true"
+                                        (scrollToEnd)="getCustomerData(true)" [typeahead]="summaryMasterModel.customerInput"
+                                        [multiple]="true" class="multiple"
+                                        [minTermLength]="3"
+                                        placeholder="--- {{(summaryMasterModel.customerList!=null && summaryMasterModel.customerList.length!=0? 'COMMON.LBL_SELECT_ALL':'BOOKING_SUMMARY.MSG_NO_DATA')  | translate }} ---"
+                                        [(ngModel)]="model.customerIdList">
+                                        <ng-template ng-option-tmp let-item="item">
+                                            <div class="text-wrap">{{ item.name }}</div>
+                                        </ng-template>
+                                    </ng-select>
+                                </div>
+                            </div>
+
+                            <div class="col-sm-3 mobile-margin-top-15">
+                                    <div class="my-input-group">
+                                        <label>{{ 'EDIT_CUSTOMER.LBL_INVOICE_TYPE' |
+                                            translate }}</label>
+                                        <ng-select [items]="summaryMasterModel.invoiceTypeList" 
+                                            [(ngModel)]="model.invoiceTypeIdList" [closeOnSelect]="true"
+                                            [searchable]="true" bindLabel="name" bindValue="id"
+                                            [multiple]="true" class="multiple" appendTo="body"
+                                            placeholder="--- {{(summaryMasterModel.invoiceTypeList && 
+                                            summaryMasterModel.invoiceTypeList.length>0? 'COMMON.LBL_SELECT_ALL':'COMMON.LBL_NO_DATA')  | translate }} ---"
+                                            [loading]="summaryMasterModel.invoiceTypeLoading">
+                                            <ng-template ng-option-tmp let-item="item">
+                                                <div class="text-wrap">{{ item.name }}</div>
+                                            </ng-template>
+                                        </ng-select>
+                        
+                                    </div>
+                            </div>
+
+                            <div class="col-sm-3 mobile-margin-top-15">
+                                <div class="my-input-group">
+                                    <label for="">{{ 'BOOKING_SUMMARY.LBL_OFFICE' | translate }}</label>
+                                    <ng-select [searchable]="true" [loading]="summaryMasterModel.officeLoading"
+                                        [items]="summaryMasterModel.officeList" appendTo="body" bindLabel="name"
+                                        bindValue="id" [hideSelected]="true" [multiple]="true" class="multiple"
+                                        placeholder="--- {{(summaryMasterModel.officeList!=null && summaryMasterModel.officeList.length!=0? 'COMMON.LBL_SELECT_ALL':'COMMON.LBL_NO_DATA')  | translate }} ---"
+                                        [(ngModel)]="model.officeIdList">
+                                    </ng-select>
+                                </div>
+                            </div>
+                 
+                        </div>
+
+                        <div class="row marginTop25">
+                            <div class="col-12 col-sm-6">
+
+                            </div>
+                            <div class="col-12 col-sm-6 text-right mt-3 mt-sm-0">
+
+                                <button class="secondary-cta small mr-2"  (click)="openNewPopUp(addInvoiceDataAccess, false)"
+                                    [disabled]="summaryMasterModel.searchloading">
+                                    +{{'CUSTOMER_PRODUCT_SUMMARY.LBL_ADDNEW' | translate }}
+                                </button>             
+
+                                <button class="primary-cta small"
+                                    [disabled]="summaryMasterModel.searchloading"
+                                    (click)="SearchDetails(false)"> {{ 'COMMON.LBL_SEARCH' | translate }}
+                                    <span *ngIf="summaryMasterModel.searchloading">
+                                        <i class="fa fa-refresh fa-spin" aria-hidden="true"></i>
+                                    </span>
+                                </button>
+                            </div>
+                        </div>
+       
+                    </div>
+
+
+                    <div class="centerContainerPadding float-left" *ngIf="(model.items && model.items.length>0)">
+                        <div class="row">
+                            <div class="col-6 col-sm-3 col-xl-2 d-flex">
+                                <p class="search-trigger-heading" [innerHtml]="showPaginationText()"></p>
+                            </div>
+                            <div class="col-6 col-sm-9 col-xl-10 text-right">
+                                <ul class="table-badge-container mobile-hide tablet-hide">
+                                </ul>
+                                <div class="animated-icon-container" *ngIf="!isFilterOpen"
+                                    (click)="toggleFilterSection()">
+                                    <img src="assets/images/cta-search-grey.svg" alt="search">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row mt-3 desktop-hide">
+                        </div>
+                        <div class="quotation-search-container">
+                            <div class="table-container h-scroll table-max-height-650">
+                                <table class="pagination-table simple-table bordered">
+                                    <thead>
+                                        <tr class="sticky-top-row">
+                                            <th class="Center_Middle width-60"></th>
+                                            <th class="width-120 sticky-left-column">{{'INVOICE_ACCESS.LBL_STAFF' | translate}}</th>
+                                            <th class="width-120 sticky-left-column">{{'INVOICE_ACCESS.LBL_CUSTOMER_NAME' | translate}}</th>
+                                            <th class="width-120 sticky-left-column">{{'INVOICE_ACCESS.LBL_INVOICE_TYPE' | translate}}</th>
+                                            <th class="width-120 sticky-left-column">{{'INVOICE_ACCESS.LBL_OFFICE' | translate}}</th>                                           
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+
+                                        <ng-template ngFor let-iteminfo [ngForOf]="model.items" let-i="index">
+                                            <tr [ngClass]="(((i+1) % 2)== 0)?'even':'odd'"
+                                                style="border-left: 5px solid #fff;">
+
+                                                <td><span class="table-cta icon-cta common-tooltip"
+                                                        (click)="editInvoiceDataAccess(iteminfo.id, addInvoiceDataAccess)"
+                                                        data-tooltip="Edit">
+                                                        <img src="assets/images/cta-edit.svg" alt="Edit">
+                                                    </span>
+                                                    <span class="table-cta icon-cta common-tooltip"
+                                                        (click)="openDeletePopUp(delete, iteminfo.id)"
+                                                        data-tooltip="delete">
+                                                        <img src="assets/images/cta-delete.svg" alt="Delete"></span>
+                                                </td>
+
+                                                <td class=" wordbreak width-120 sticky-left-column">
+                                                    {{ iteminfo.staffName}}
+                                                </td>
+                                                <td class=" wordbreak width-120 ">
+                                                    <div *ngFor="let itemName of iteminfo.customerList | slice:0:1;">
+                                                        {{itemName.customerName}}
+                                                    </div>
+                                                    <div
+                                                        *ngIf="iteminfo.customerList.length > 1">
+                                                        <ng-template #customerPopContent>
+                                                            <div class="popoverScroll">
+                                                                <div style="width: 150px;"
+                                                                    *ngFor="let itemName of iteminfo.customerList">
+                                                                    <span 
+                                                                        class="textfont-bold">{{itemName.customerName}}</span>                                                                    
+                                                                </div>
+                                                            </div>
+                                                        </ng-template>
+                                                        <a style="color: blue;width: 50px" [ngbPopover]="customerPopContent"
+                                                            placement="right" [autoClose]="'outside'"
+                                                            popoverTitle="Customer List">
+                                                            More...
+                                                        </a>
+                                                    </div>
+                                                </td>
+                                                <td class=" wordbreak width-120 ">
+                                                    <div *ngFor="let itemName of iteminfo.invoiceTypeList | slice:0:1;">
+                                                        {{itemName.invoiceTypeName}}
+                                                    </div>
+                                                    <div
+                                                        *ngIf="iteminfo.invoiceTypeList.length > 1">
+                                                        <ng-template #invoiceTypePopContent>
+                                                            <div class="popoverScroll">
+                                                                <div style="width: 150px;"
+                                                                    *ngFor="let itemName of iteminfo.invoiceTypeList">
+                                                                    <span
+                                                                        class="textfont-bold">{{itemName.invoiceTypeName}}</span>                                                                    
+                                                                </div>
+                                                            </div>
+                                                        </ng-template>
+                                                        <a style="color: blue;width: 50px" [ngbPopover]="invoiceTypePopContent"
+                                                            placement="right" [autoClose]="'outside'"
+                                                            popoverTitle="Invoice Type List">
+                                                            More...
+                                                        </a>
+                                                    </div>
+                                                </td>
+                                                <td class=" wordbreak width-120 ">
+                                                    <div *ngFor="let itemName of iteminfo.officeList | slice:0:1;">
+                                                        {{itemName.invoiceOfficeName}}
+                                                    </div>
+                                                    <div
+                                                        *ngIf="iteminfo.officeList.length > 1">
+                                                        <ng-template #officePopContent>
+                                                            <div class="popoverScroll">
+                                                                <div style="width: 150px;"
+                                                                    *ngFor="let itemName of iteminfo.officeList">
+                                                                    <span
+                                                                        class="textfont-bold">{{itemName.invoiceOfficeName}}</span>                                                                    
+                                                                </div>
+                                                            </div>
+                                                        </ng-template>
+                                                        <a style="color: blue;width: 50px" [ngbPopover]="officePopContent"
+                                                            placement="right" [autoClose]="'outside'"
+                                                            popoverTitle="Office List">
+                                                            More...
+                                                        </a>
+                                                    </div>
+                                                </td>
+                                               
+                                            </tr>
+
+
+                                        </ng-template>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <div class="pagination-container">
+
+
+                            <div class="page-count-list">
+                                <select class="small" [(ngModel)]="summaryMasterModel.selectedPageSize"
+                                (change)="SearchDetails(false)">
+                                <option *ngFor="let item of pagesizeitems" [ngValue]=item>{{item}}</option>
+                              </select>
+                                <span> Records per page</span>
+                              </div>
+
+                              <div class="pagination-action-container text-right">
+            
+                                    <ngb-pagination (pageChange)="onPager($event)" [pageSize]="model.pageSize"
+                                        [collectionSize]="model.totalCount" [(page)]="model.index" [maxSize]="5">
+                                    </ngb-pagination>
+                             </div>
+                        </div>
+                    </div>
+                    <div class="centerContainerPadding" *ngIf="model.noFound">
+                        <div class="error-container">
+                            <img src="assets/images/no-result.svg" alt="" class="thumbnail">
+                            <h4 class="error-title">{{'COMMON.LBL_No_ITEM' | translate}}</h4>
+                            <p class="error-subtitle">{{'COMMON.LBL_NODATA' | translate}}</p>
+
+                            <button (click)="reset()" class="category-cta">
+                                <img src="assets/images/reload-new.svg" alt="reload">
+                                <span> {{'COMMON.LBL_CLEAR_SEARCH' | translate}}</span></button>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<ng-template #addInvoiceDataAccess let-modal>
+    <div class="modal-header custom-modal-header">
+        <h4 class="modal-title" id="modal-basic-title" *ngIf="!isEditInvDataAccess">{{'INVOICE_ACCESS.LBL_ADD_TITLE' | translate}}</h4>
+        <h4 class="modal-title" id="modal-basic-title" *ngIf="isEditInvDataAccess">{{'INVOICE_ACCESS.LBL_EDIT_TITLE' | translate}}</h4>
+        <button type="button" class="close" aria-label="Close" (click)="cancel()">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+
+    <div class="modal-body custom-modal-body">
+        <div class="content-container schedule-allocation-container">
+            <div class="formPadding">
+                <div class="row">
+                    <div class="col-sm-6 mobile-margin-top-15">
+                        <div class="my-input-group">
+                            <label for="" class="required">Staff Name</label>
+                            <ng-select #staff [searchable]="true" [items]="editMasterModel.staffList"
+                                bindLabel="name" [loading]="editMasterModel.staffLoading" bindValue="id"
+                                [hideSelected]="true" appendTo="body" [virtualScroll]="true"
+                                (scrollToEnd)="getEditStaffData(true)" [typeahead]="editMasterModel.staffInput"
+                                [minTermLength]="3"
+                                (clear)="clearEditStaff();"
+                                [ngClass]="{'is-invalid': !validator.isValid('staffId')}"
+                                placeholder="--- {{(editMasterModel.staffList!=null && editMasterModel.staffList.length!=0? 'COMMON.LBL_SELECT_ALL':'BOOKING_SUMMARY.MSG_NO_DATA')  | translate }} ---"
+                                [(ngModel)]="editModel.staffId">
+                                <ng-template ng-option-tmp let-item="item">
+                                    <div class="text-wrap">{{ item.name }}</div>
+                                </ng-template>
+                            </ng-select>
+
+                            <div *ngIf="!validator.isValid('staffId')" class="invalid-feedback" style="display:block">
+                                <div *ngFor="let error of validator.getErrors('staffId')">{{ error | translate }}
+                                </div>
+                           </div>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-6 mobile-margin-top-15">
+                        <div class="my-input-group">
+                            <label for="">{{ 'COMMON.LBL_CUSTOMER' | translate }}</label>
+                            <ng-select #customer [searchable]="true" [items]="editMasterModel.customerList"
+                                bindLabel="name" [loading]="editMasterModel.customerLoading" bindValue="id"
+                                [hideSelected]="true" appendTo="body" [virtualScroll]="true"
+                                (scrollToEnd)="getEditCustomerData(true)" [typeahead]="editMasterModel.customerInput"
+                                [multiple]="true" class="multiple"
+                                [minTermLength]="3"
+                                (clear)="clearEditCustomer();"
+                                placeholder="--- {{(editMasterModel.customerList!=null && editMasterModel.customerList.length!=0? 'COMMON.LBL_SELECT_ALL':'BOOKING_SUMMARY.MSG_NO_DATA')  | translate }} ---"
+                                [(ngModel)]="editModel.customerIdList">
+                                <ng-template ng-option-tmp let-item="item">
+                                    <div class="text-wrap">{{ item.name }}</div>
+                                </ng-template>
+                            </ng-select>
+                        </div>
+                    </div>
+                </div>   
+                
+                <div class="row marginTop15">
+                    <div class="col-sm-6 mobile-margin-top-15">
+                        <div class="my-input-group">
+                            <label>{{ 'EDIT_CUSTOMER.LBL_INVOICE_TYPE' |
+                                translate }}</label>
+                            <ng-select [items]="editMasterModel.invoiceTypeList" 
+                                [(ngModel)]="editModel.invoiceTypeIdList" [closeOnSelect]="true"
+                                [searchable]="true" bindLabel="name" bindValue="id"
+                                [multiple]="true" class="multiple" appendTo="body"
+                                placeholder="--- {{(editMasterModel.invoiceTypeList && 
+                                    editMasterModel.invoiceTypeList.length>0? 'COMMON.LBL_SELECT_ALL':'COMMON.LBL_NO_DATA')  | translate }} ---"
+                                [loading]="editMasterModel.invoiceTypeLoading">
+                                <ng-template ng-option-tmp let-item="item">
+                                    <div class="text-wrap">{{ item.name }}</div>
+                                </ng-template>
+                            </ng-select>
+            
+                        </div>
+                </div>
+
+                <div class="col-sm-6 mobile-margin-top-15">
+                    <div class="my-input-group">
+                        <label for="">{{ 'BOOKING_SUMMARY.LBL_OFFICE' | translate }}</label>
+                        <ng-select [searchable]="true" [loading]="editMasterModel.officeLoading"
+                            [items]="editMasterModel.officeList" appendTo="body" bindLabel="name"
+                            bindValue="id" [hideSelected]="true" [multiple]="true" class="multiple"                         
+                            placeholder="--- {{(editMasterModel.officeList!=null && editMasterModel.officeList.length!=0? 'COMMON.LBL_SELECT_ALL':'COMMON.LBL_NO_DATA')  | translate }} ---"
+                            [(ngModel)]="editModel.officeIdList">
+                        </ng-select>        
+                    </div>
+                </div> 
+                </div>   
+
+                <div class="marginTop20 modal-footer">
+                    <button [disabled]="editMasterModel.saveloading" class="secondary-cta MarginR-20"
+                        (click)="cancel()">
+                        {{'COMMON.LBL_CONFIRMCANCEL' | translate}}
+                    </button>
+                    <button [disabled]="editMasterModel.saveloading" class="primary-cta MarginR-20" (click)="save()">
+                        {{'COMMON.LBL_SAVE' | translate}}
+                        <span *ngIf="editMasterModel.saveloading">
+                            <i class="fa fa-refresh fa-spin" aria-hidden="true"></i>
+                        </span>
+                    </button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</ng-template>
+
+<ng-template #delete let-modal>
+    <div class="modal-body">
+        <div class="small-model new-padding">
+            <h2 class="confirm-title"><img class="mr-2" src="assets/images/caution-red.svg" alt="">{{
+                'COMMON.LBL_CONFIRMDELETION' | translate }}</h2>
+            <p class="light">{{ 'EMAIL_CONFIGURATION_SUMMARY.MSG_QUESTION_SURE' | translate }} </p>
+            <div class="text-right">
+                <button class="tertiary-cta small" (click)="modal.dismiss('Cross click')"
+                    [disabled]="editMasterModel.deleteLoading">
+                    Cancel</button>
+                <button class="primary-cta small" [disabled]="editMasterModel.deleteLoading" (click)="deleteWorks()">OK
+                    <span *ngIf="editMasterModel.deleteLoading">
+                        <i class="fa fa-refresh fa-spin" aria-hidden="true"></i>
+                    </span>
+                </button>
+            </div>
+        </div>
+    </div>
+</ng-template>
+

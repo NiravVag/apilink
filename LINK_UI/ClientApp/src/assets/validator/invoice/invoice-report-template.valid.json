@@ -1,0 +1,12 @@
+{
+    "model": "InvoiceReportTemplate",
+    "fields": {       
+        "templateId": [
+            {
+                "type": "required",
+                "fieldType": "N",
+                "ressource": "MANUAL_INVOICE_REGISTER.MSG_TEMPLATE_REQ"
+            }
+        ]
+    }
+}

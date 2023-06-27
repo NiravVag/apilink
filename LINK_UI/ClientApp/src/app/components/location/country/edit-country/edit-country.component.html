@@ -1,0 +1,78 @@
+<div class="main-wrapper">
+  <div class="wrapper dashboard-wrapper">
+    <div class="my-container">
+      <div class="master-body">
+        <div class="title-container">
+            <div class="header-back-button" *ngIf="fromSummary">
+                <img src="assets/images/back-red.png" alt="back" (click)="this.return('country/country-summary');">
+                </div>
+          <h3 #title class="main-title">
+            {{model.id==null?('EDIT_COUNTRY.LBL_ADD' | translate):('EDIT_COUNTRY.LBL_EDIT' | translate)}}&nbsp; {{ 'EDIT_COUNTRY.TITLE' |
+            translate }}</h3>
+        </div>
+        <div class="content-container">
+          <h4 class="container-head">{{ 'EDIT_COUNTRY.LBL_DETAILS' | translate }}</h4>
+          <div class="formPadding">
+          <div class="row">
+            <div class="col-sm-3">
+              <div class="my-input-group">
+                <label class="required" for="">{{ 'EDIT_COUNTRY.LBL_COUNTRY' | translate }}</label>
+                <input maxlength="50" [(ngModel)]="model.countryname"
+                  placeholder="{{ 'EDIT_COUNTRY.PH_COUNTRY_NAME' | translate }}" type="text"
+                  [ngClass]="{'is-invalid': !validator.isValid('countryname')}" />
+                <div *ngIf="!validator.isValid('countryname')" class="invalid-feedback">
+                  <div *ngFor="let error of validator.getErrors('countryname')">{{ error | translate }}</div>
+                </div>
+              </div>
+            </div>
+            <div class="col-sm-3">
+              <div class="my-input-group">
+                <label class="required">{{ 'EDIT_COUNTRY.LBL_AREA' | translate }}</label>
+                <select [(ngModel)]="model.areaId" [ngClass]="{'is-invalid': !validator.isValid('areaId')}">
+                  <option value="0">--- {{ 'EDIT_COUNTRY.LBL_SELECT' | translate }}---</option>
+                  <option *ngFor="let item of data.areaList" [ngValue]=item.id>{{item.areaName}}</option>
+                </select>
+                <div *ngIf="!validator.isValid('areaId')" class="invalid-feedback">
+                  <div *ngFor="let error of validator.getErrors('areaId')">{{ error | translate }}</div>
+                </div>
+              </div>
+            </div>
+            <div class="col-sm-3">
+              <div class="my-input-group">
+                <label>{{ 'EDIT_COUNTRY.LBL_COUNTRY_CODE' | translate }}</label>
+                <input maxlength="3" [(ngModel)]="model.countrycode"
+                  placeholder="{{ 'EDIT_COUNTRY.PH_COUNTRY_CODE' | translate }}" type="number" />
+              </div>
+            </div>
+            <div class="col-sm-3">
+              <div class="my-input-group">
+                <label>{{ 'EDIT_COUNTRY.LBL_COUNTRY_ALPH_CODE' | translate }}</label>
+                <input maxlength="2" [(ngModel)]="model.alphacode"
+                  placeholder="{{ 'EDIT_COUNTRY.PH_COUNTRY_ALPH_CODE' | translate }}" type="text" />
+              </div>
+            </div>
+          </div>
+        </div>
+          <div class="form-action-container">
+            
+            
+            <button class="category-cta small mr-2 common-tooltip common-tooltip-top-2" data-tooltip="Reset" (click)="Reset()">
+              <img src="assets/images/reload-new.svg" alt="Reset">
+              <span>{{'COMMON.LBL_RESET'| translate}}</span>
+            </button>
+            
+            <button class="primary-cta small" [disabled]="loading" (click)="save()">
+              {{
+              'EDIT_COUNTRY.LBL_SAVE' | translate
+              }}
+              <span *ngIf="loading">
+                <i class="fa fa-refresh fa-spin" aria-hidden="true"></i>
+              </span>
+            </button>
+          </div>
+        </div>
+      </div>
+     
+    </div>
+  </div>
+</div>

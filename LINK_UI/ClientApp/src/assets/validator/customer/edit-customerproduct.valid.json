@@ -1,0 +1,84 @@
+{
+    "model": "editcustomerproduct.model",
+    "fields": {
+      "productID": [
+        {
+          "type": "required",
+          "fieldType": "N",
+          "ressource": "EDIT_CUSTOMER_PRODUCT.MSG_PRODUCTID_REQ"
+        }
+      ],
+     
+  
+      "productDescription": [
+        {
+          "type": "required",
+          "fieldType": "N",
+          "ressource": "EDIT_CUSTOMER_PRODUCT.MSG_PRODUCTDESC_REQ"
+        }
+      ],
+      
+  
+      "customerID": [
+        {
+          "type": "required",
+          "fieldType": "N",
+          "ressource": "EDIT_CUSTOMER_PRODUCT.MSG_CUSTOMER_REQ"
+        }
+      ],
+      "productCategory": [
+        {
+          "type": "required",
+          "fieldType": "N",
+          "ressource": "EDIT_CUSTOMER_PRODUCT.MSG_PRODUCTCATEGORY_REQ"
+        }
+      ],
+      "productSubCategory": [
+        {
+          "type": "required",
+          "fieldType": "N",
+          "ressource": "EDIT_CUSTOMER_PRODUCT.MSG_PRODUCTSUBCATEGORY_REQ"
+        }
+      ],
+      "productCategorySub2": [
+        {
+          "type": "required",
+          "fieldType": "N",
+          "ressource": "EDIT_CUSTOMER_PRODUCT.MSG_PRODUCTCATEGORYSUB2_REQ"
+        }
+      ],
+      "apiServiceIds": [
+        {
+          "type": "required",
+          "fieldType": "N",
+          "ressource": "API_SERVICE.MSG_API_SERVICE_REQ"
+        }
+      ],
+      "productCategorySub3": [
+        {
+          "type": "required",
+          "fieldType": "N",
+          "ressource": "EDIT_CUSTOMER_PRODUCT.MSG_PRODUCTCATEGORYSUB3_REQ"
+        }
+      ],
+      "timePreparation": [
+        {
+          "type": "required",
+          "fieldType": "N",
+          "ressource": "EDIT_CUSTOMER_PRODUCT.MSG_TIME_PREPARATION_REQ"
+        }
+      ],
+      "sampleSize8h": [
+        {
+          "type": "required",
+          "fieldType": "N",
+          "ressource": "EDIT_CUSTOMER_PRODUCT.MSG_SAMPLESIZE8H_REQ"
+        }
+      ]
+
+      
+      
+    }
+  
+  }
+  

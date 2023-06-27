@@ -1,0 +1,6 @@
+﻿CREATE TABLE [dbo].[REF_INSP_CUS_decision]
+(
+	[Id] INT NOT NULL IDENTITY(1,1) PRIMARY KEY,
+	[Name] NVARCHAR(200) NULL, 
+	[Active] BIT NULL
+)

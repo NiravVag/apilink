@@ -1,0 +1,73 @@
+<div class="drawer-menu-container">
+	<div class="head">
+		<div class="user-info">
+			<img [src]="photourl" alt="user">
+			<div class="info-text">
+				<p class="small">{{ 'HEADER.LBL_WELCOME' | translate }}</p>
+				<p class="text">{{User.fullName}}</p>
+			</div>
+		</div>
+		<img src="assets/images/white-close.svg" alt="" class="close-drawer" (click)="closeDrawer()">
+	</div>
+	<ul>
+		<li class="side-navigation-parent">
+			<a>
+				<div class="my-input-group">
+					<label for="">{{ 'HEADER.LBL_SERVICES' | translate }}</label>
+					<div class="side-navigation-mobile-wrapper">
+						<div class="side-navigation-mobile-container" (click)="toggleRightTypeData()">
+							<img [src]="selectedRightType.rightTypeFileName" alt="">
+							<p>{{selectedRightType.name}}</p>
+							<img src="assets/images/dropdown-dark.svg" alt="">
+						</div>
+						<ul class="side-navigation-dropdown" [ngClass]="{ 'active': showRightTypeList }">
+
+							<li *ngFor="let userRightType of userRightTypeAccessList" (click)="changeRightType(userRightType)">
+								<img [src]="userRightType.rightTypeFileName" alt="">
+								<p>{{userRightType.name}}</p>
+							</li>
+						</ul>
+					</div>
+				</div>
+			</a>
+		</li>
+		<ng-container *ngFor="let subItem of User.rights">
+			<li *ngIf="subItem && subItem.parentId==null && subItem.isHeading && subItem.children.length>0">
+				<a [routerLinkActive]="['active']" (click)="openChild($event)">{{subItem.titleName || subItem.menuName}}
+					<img src="assets/images/grey-arrow.svg" alt="toggle" class="arrow"></a>
+				<ul class="child-menu">
+					<ng-container *ngFor="let secondlevelItem of subItem.children">
+						<li
+							*ngIf="secondlevelItem && secondlevelItem.parentId!=null && secondlevelItem.isHeading && secondlevelItem.children.length>0">
+							<a [routerLinkActive]="['active']" (click)="openChild($event)">{{secondlevelItem.titleName
+								|| secondlevelItem.menuName}}<img src="assets/images/grey-arrow.svg" alt="toggle"
+									class="arrow"></a>
+							<ul class="child-menu third-level">
+								<ng-container *ngFor="let thirdlevelitem of secondlevelItem.children">
+									<li><a [routerLinkActive]="['active']" (click)="GetMenuParentId(thirdlevelitem.id)"
+											[routerLink]="[geturl(thirdlevelitem)]">{{thirdlevelitem.titleName ||
+											thirdlevelitem.menuName}}</a></li>
+								</ng-container>
+							</ul>
+						</li>
+						<li
+							*ngIf="secondlevelItem && secondlevelItem.parentId!=null && secondlevelItem.children.length==0">
+							<a [routerLinkActive]="['active']" (click)="GetMenuParentId(thirdlevelitem.id)"
+								[routerLink]="[geturl(secondlevelItem)]">{{secondlevelItem.titleName ||
+								secondlevelItem.menuName}}</a>
+						</li>
+					</ng-container>
+				</ul>
+			</li>
+			<li *ngIf="subItem && subItem.parentId==null && subItem.isHeading && subItem.children.length==0">
+				<a [routerLinkActive]="['active']" (click)="GetMenuParentId(thirdlevelitem.id)"
+					[routerLink]="[geturl(subItem)]">{{subItem.titleName || subItem.menuName}}</a>
+			</li>
+		</ng-container>
+		<li class="last"><a (click)="closeDrawer()" [routerLink]="['/api/changepassword']"><img
+					src="assets/images/setting.svg" alt="setting" class="icon"><span>{{ 'HEADER.LBL_CHANGEPASSWD' |
+					translate }}</span></a></li>
+		<li (click)="signOut()" class="last"><a><img src="assets/images/logout.svg" alt="logout" class="icon"><span>{{
+					'HEADER.LBL_SIGNOUT' | translate }}</span></a></li>
+	</ul>
+</div>

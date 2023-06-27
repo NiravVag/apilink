@@ -1,0 +1,30 @@
+{
+    "model": "mastercontact.model",
+    "fields": {
+        "name": [
+            {
+                "type": "required",
+                "fieldType": "T",
+                "ressource": "MASTER_CONTACT.MSG_NAME_REQ"
+            }
+        ],
+        "emailId": [
+            {
+                "type": "required",
+                "fieldType": "T",
+                "ressource": "MASTER_CONTACT.MSG_EMAIL_REQ"
+            },
+            {
+                "type": "email",
+                "ressource": "MASTER_CONTACT.MSG_EMAIL_INVALID"
+            }
+        ],
+        "phoneNo": [
+            {
+                "type": "required",
+                "fieldType": "T",
+                "ressource": "MASTER_CONTACT.MSG_PHONE_REQ"
+            }
+        ]
+    }
+}

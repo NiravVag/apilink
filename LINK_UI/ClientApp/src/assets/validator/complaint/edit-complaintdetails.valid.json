@@ -1,0 +1,12 @@
+{
+  "model": "eidt-complaint.model",
+  "fields": {
+    "categoryId": [
+      {
+        "type": "required",
+        "fieldType": "N",
+        "ressource": "EDIT_COMPLAINT.MSG_CATEGORY_REQ"
+      }
+    ] 
+  }    
+}

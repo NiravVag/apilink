@@ -1,0 +1,609 @@
+<div class="main-wrapper">
+	<div class="wrapper dashboard-wrapper">
+		<div class="my-container">
+			<div class="master-body">
+				<div class="title-container">
+					<h3 class="main-title">
+						{{'CUSTOMER_DECISION.CUSTOMER_DECISION_RESULT' | translate }}</h3>
+				</div>
+				<div class="content-container quotation-container">
+					<div [@expandCollapse]="isFilterOpen ? 'open' : 'close'"
+						class="centerContainerPadding common-filter-container">
+						<div class="animated-icon-container" (click)="toggleFilterSection()"
+							*ngIf="(model.items && model.items.length>0)">
+							<img src="assets/images/cta-close-grey.svg" alt="close">
+						</div>
+						<div class="row">
+							<div class="col-sm-8 col-md-8 col-lg-4">
+								<div class="my-input-group">
+									<div class="scroll-xradiolist mb-2">
+									<div class="styled-radio-container"
+										*ngFor="let item of bookingSearchtypelst;let idx = index">
+										<input type="radio" class="styled-radio" id="{{item.id}}" name="radio-group"
+											[value]="item.id" [checked]="true" (change)="SetSearchTypemodel(item.id)"
+											[(ngModel)]="model.searchtypeid">
+										<label for="{{item.id}}">{{item.name}}</label>
+									</div>
+								</div>
+									<input maxlength="200" (ngModelChange)="BookingNoValidation($event)"
+										[(ngModel)]="model.searchtypetext" type="text"
+										[ngClass]="{ 'is-invalid': model.searchtypetext!='' && _customvalidationforbookingid}" />
+									<div *ngIf="model.searchtypetext!='' && _customvalidationforbookingid"
+										class="invalid-feedback">
+										<div>{{ 'BOOKING_SUMMARY.MSG_BOOKINGNO_ERROR' | translate }}</div>
+									</div>
+								</div>
+							</div>
+							<div class="col-sm-6 col-md-8 col-xl-8 mobile-margin-top-15">
+								<div class="my-input-group">
+									<div class="styled-radio-container"
+										*ngFor="let item of datetypelst;let idx = index">
+										<input type="radio" class="styled-radio" id="{{item.id}}" name="radio-group1"
+											[value]="item.id" [checked]="true" (change)="SetSearchDatetype(item.id)"
+											[(ngModel)]="model.datetypeid">
+										<label for="{{item.id}}">{{item.name}}</label>
+									</div>
+								</div>
+								<div class="row">
+									<div class="my-input-group col-sm-3 col-md-6 col-lg-3">
+										<div class="calendar-wrapper">
+											<input type="text" maxlength="10" container="body"
+												[ngClass]="{ 'is-invalid':  !validator.isValidIf('fromdate',IsDateValidationRequired())}"
+												readonly=readonly [(ngModel)]="model.fromdate" ngbDatepicker
+												#sdf="ngbDatepicker" (click)="sdf.toggle()">
+											<img src="assets/images/cta-close-grey.svg" alt="" class="close-icon"
+												(click)="clearDateInput('Fromdate')" *ngIf="model.fromdate">
+											<img src="assets/images/calendar-icon.svg" alt="" class="calendar-icon"
+												(click)="sdf.toggle()">
+										</div>
+										<div *ngIf="!validator.isValidIf('fromdate',IsDateValidationRequired())"
+											class="invalid-feedback">
+											<div *ngFor="let error of validator.getErrors('fromdate')">{{ error |
+												translate }}</div>
+										</div>
+									</div>
+									<div class="my-input-group col-sm-3 col-md-6 col-lg-3">
+										<div class="calendar-wrapper">
+											<input type="text" maxlength="10" container="body"
+												[ngClass]="{ 'is-invalid':  !validator.isValidIf('todate',IsDateValidationRequired())}"
+												readonly=readonly [(ngModel)]="model.todate" ngbDatepicker
+												#sdt="ngbDatepicker" (click)="sdt.toggle()">
+											<img src="assets/images/cta-close-grey.svg" alt="" class="close-icon"
+												(click)="clearDateInput('Todate')" *ngIf="model.todate">
+											<img src="assets/images/calendar-icon.svg" alt="" class="calendar-icon"
+												(click)="sdt.toggle()">
+										</div>
+										<div *ngIf="!validator.isValidIf('todate',IsDateValidationRequired())"
+											class="invalid-feedback">
+											<div *ngFor="let error of validator.getErrors('todate')">{{ error |
+												translate }}</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-sm-12">
+								<div class="row marginTop15">
+									<div class="col-sm-3 col-md-3 col-lg-3">
+										<div class="my-input-group">
+											<label for="">{{ 'COMMON.LBL_CUSTOMER' | translate }}</label>
+											<ng-select #customer [searchable]="true" [items]="masterData.customerList"
+												bindLabel="name" (change)="ChangeCustomer($event)" [clearable]="!_IsCustomerUser"
+												(clear)="clearCustomer()" [loading]="masterData.customerLoading"
+												[ngClass]="{ 'is-invalid':_IsInternalUser && !validator.isValidIf('customerid', model.searchtypetext) && model.searchtypeid!=1}"
+												bindValue="id" [hideSelected]="true" appendTo="body"
+												[virtualScroll]="true" (scrollToEnd)="getCustomerData(true)"
+												[typeahead]="masterData.customerInput" [minTermLength]="3"
+												placeholder="--- {{(masterData.customerList!=null && masterData.customerList.length!=0? 'COMMON.LBL_SELECT':'COMMON.LBL_NO_DATA')  | translate }} ---"
+												[(ngModel)]="model.customerid">
+												<ng-template ng-option-tmp let-item="item">
+													<div class="text-wrap">{{ item.name }}</div>
+												</ng-template>
+											</ng-select>
+											<div *ngIf="_IsInternalUser && !validator.isValidIf('customerid', model.searchtypetext) && model.searchtypeid!=1"
+												class="invalid-feedback">
+												<div *ngFor="let error of validator.getErrors('customerid')">{{ error |
+													translate }}</div>
+											</div>
+										</div>
+									</div>
+									<div class="col-sm-3 col-md-3 col-lg-3 mobile-margin-top-15">
+										<div class="my-input-group">
+											<label for="">{{ 'COMMON.LBL_SUPPLIER' | translate }}</label>
+											<ng-select [multiple]="false" [closeOnSelect]="true" [searchable]="true"
+												[clearable]="true" (change)="ChangeSupplier($event)"
+												(clear)="clearSupplier()" [hideSelected]="true" [virtualScroll]="true"
+												(scrollToEnd)="getSupplierData()" [typeahead]="masterData.supInput"
+												[minTermLength]="3" [loading]="masterData.supLoading" bindLabel="name"
+												bindValue="id" [items]="masterData.supplierList" appendTo="body"
+												placeholder="--- {{ (masterData.supplierList!=null && masterData.supplierList.length!=0? 'COMMON.LBL_SELECT':'COMMON.LBL_NO_DATA' ) | translate }} ---"
+												[(ngModel)]="model.supplierid">
+												<ng-template ng-option-tmp let-item="item">
+													<div class="text-wrap">{{ item.name }}</div>
+												</ng-template>
+											</ng-select>
+										</div>
+									</div>
+									<div class="col-sm-3 col-md-3 col-lg-3">
+										<div class="my-input-group">
+											<label for="">{{ 'CUSTOMER_DECISION.DECISION_STATUS' | translate }}</label>
+											<ng-select [searchable]="true" [items]="ddlList" appendTo="body"
+												bindLabel="name" bindValue="id" [hideSelected]="true"
+												[(ngModel)]="model.cusDecisionGiven" (change)="getCustomerDecisionResultList($event)"
+												placeholder="--- {{(ddlList!=null && ddlList.length!=0? 'COMMON.LBL_SELECT':'COMMON.LBL_NO_DATA')  | translate }} ---">
+											</ng-select>
+										</div>
+									</div>
+									<div class="col-sm-3 col-md-3 col-lg-3" *ngIf="model.showFbResult">
+										<div class="my-input-group">
+											<label for="">{{ 'CUSTOMER_DECISION.CUSTOMER_DECISION_RESULT' | translate }}</label>
+											<ng-select [searchable]="true" [loading]="masterData.fbReportResultLoading"
+												[items]="masterData.fbReportResultList" appendTo="body" bindLabel="name"
+												bindValue="id" [hideSelected]="true" [multiple]="true" class="multiple"
+												[(ngModel)]="model.fbReportResultList"
+												placeholder="--- {{(masterData.fbReportResultList!=null && masterData.fbReportResultList.length!=0? 'COMMON.LBL_SELECT':'COMMON.LBL_NO_DATA')  | translate }} ---">
+											</ng-select>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+
+						<div [hidden]="!toggleFormSection">
+							<div class="row">
+								<div class="col-sm-12">
+									<div class="row marginTop25">
+										<div class="col-sm-3 col-md-4 col-lg-3">
+											<div class="my-input-group">
+												<div class="styled-radio-container"
+													*ngFor="let item of bookingAdvanceSearchtypelst;let idx = index">
+													<input type="radio" class="styled-radio" id="{{item.id}}"
+														name="radio-group2" [value]="item.id"
+														(change)="SetSearchTypeText(item.id)" [checked]="true"
+														[(ngModel)]="model.advancedSearchtypeid">
+													<label for="{{item.id}}">{{item.name}}</label>
+													<!-- [checked]="idx === 0" -->
+												</div>
+												<input type="text" maxlength="200"
+													[(ngModel)]="model.advancedsearchtypetext">
+											</div>
+										</div>
+
+										<div class="col-sm-3 col-md-3 col-lg-3" *ngIf="_IsInternalUser">
+											<div class="my-input-group marginTop10">
+												<label for="">{{ 'COMMON.LBL_OFFICE' | translate }}</label>
+												<ng-select [searchable]="true" [loading]="masterData.officeLoading"
+													[items]="masterData.officeList" appendTo="body" bindLabel="name"
+													bindValue="id" [hideSelected]="true" [(ngModel)]="model.officeidlst"
+													[multiple]="true" class="multiple"
+													placeholder="--- {{(masterData.officeList!=null && masterData.officeList.length!=0? 'COMMON.LBL_SELECT':'COMMON.LBL_NO_DATA')  | translate }} ---">
+												</ng-select>
+											</div>
+										</div>
+										<div class="col-sm-3 col-md-3 col-lg-3">
+											<div class="my-input-group marginTop10">
+												<label for="" id="lbl_servicetype">{{'COMMON.LBL_SERVICETYPE' |
+													translate}}</label>
+												<ng-select [items]="masterData.serviceTypeList" class="multiple"
+													multiple="true" bindLabel="name" bindValue="id" [clearable]="false"
+													[(ngModel)]="model.serviceTypelst" appendTo="body"
+													[loading]="masterData.serviceTypeLoading"
+													placeholder=" ---{{ (masterData.serviceTypeList!=null && masterData.serviceTypeList.length!=0? 'QUOTATION_SUMMARY.LBL_SELECT':'QUOTATION_SUMMARY.MSG_NO_DATA' ) | translate }}---">
+													<ng-template ng-option-tmp let-item="item">
+														<div class="text-wrap">{{ item.name }}</div>
+													</ng-template>
+												</ng-select>
+											</div>
+										</div>
+										<div class="col-sm-3 col-md-3 col-lg-3">
+											<div class="my-input-group marginTop10">
+												<label for="">{{ 'COMMON.LBL_FACTORY' | translate }}</label>
+												<ng-select [multiple]="true" [closeOnSelect]="true" [searchable]="true"
+													[clearable]="true" [hideSelected]="true" [virtualScroll]="true"
+													(scrollToEnd)="getFactoryData(true)" class="multiple" (clear)="clearFactory()"
+													[typeahead]="masterData.facInput" [minTermLength]="3"
+													[loading]="masterData.facLoading" bindLabel="name" bindValue="id"
+													[items]="masterData.factoryList" appendTo="body" (change)="changeFactory()"
+													placeholder="--- {{ (masterData.factoryList!=null && masterData.factoryList.length!=0? 'COMMON.LBL_SELECT':'COMMON.LBL_NO_DATA' ) | translate }} ---"
+													[(ngModel)]="model.factoryidlst">
+													<ng-template ng-option-tmp let-item="item">
+														<div>{{ item.name }}</div>
+													</ng-template>
+												</ng-select>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-sm-12">
+									<div class="row marginTop15">
+										<div class="col-sm-3 col-md-3 col-lg-3">
+											<div class="my-input-group marginTop10">
+												<label for="">{{ 'COMMON.LBL_FACTORY_COUNTRY' |
+													translate}}</label>
+												<ng-select appendTo="body" [items]="masterData.countryList"
+													[virtualScroll]="true" [loading]="masterData.countryLoading"
+													bindLabel="name" bindValue="id"
+													placeholder="--- {{ (masterData.countryList!=null && masterData.countryList.length!=0? 'COMMON.LBL_SELECT':'COMMON.LBL_NO_DATA' ) | translate }} ---"
+													[typeahead]="masterData.countryInput" [minTermLength]="3"
+													[(ngModel)]="model.selectedCountryIdList" [multiple]="true"
+													class="multiple" (scrollToEnd)="getCountryData()" #select>
+													<ng-template ng-option-tmp let-item="item" let-index="index"
+														let-search="searchTerm">
+														<span>{{item.name}}</span>
+													</ng-template>
+													<ng-template ng-multi-label-tmp
+														let-items="model.selectedCountryIdList" let-clear="clear">
+														<div class="ng-value"
+															*ngIf="model.selectedCountryIdList && model.selectedCountryIdList.length > 0">
+															<span
+																class="ng-value-label">{{model.selectedCountryIdList.length}}
+																{{'COMMON.LBL_SELECTED' | translate }}</span>
+														</div>
+													</ng-template>
+												</ng-select>
+											</div>
+										</div>
+										<div class="col-sm-3 col-md-3 col-lg-3">
+											<div class="my-input-group marginTop10">
+												<label for="">{{ 'COMMON.LBL_BRAND' | translate}}</label>
+												<ng-select appendTo="body" [items]="masterData.brandList"
+													[virtualScroll]="true" [loading]="masterData.brandLoading"
+													bindLabel="name" bindValue="id" (clear)="clearBrand()"
+													placeholder="--- {{ (masterData.brandList && masterData.brandList.length>0? 'COMMON.LBL_SELECT':'COMMON.LBL_NO_DATA' ) | translate }} ---"
+													[typeahead]="masterData.brandInput" [minTermLength]="3"
+													[(ngModel)]="model.selectedBrandIdList" [multiple]="true"
+													class="multiple" (scrollToEnd)="getBrandData()" #select>
+													<ng-template ng-option-tmp let-item="item" let-index="index"
+														let-search="searchTerm">
+														<span>{{item.name}}</span>
+													</ng-template>
+													<ng-template ng-multi-label-tmp
+														let-items="model.selectedBrandIdList" let-clear="clear">
+														<div class="ng-value"
+															*ngIf="model.selectedBrandIdList && model.selectedBrandIdList.length > 0">
+															<span
+																class="ng-value-label">{{model.selectedBrandIdList.length}}
+																{{'COMMON.LBL_SELECTED' | translate }}</span>
+														</div>
+													</ng-template>
+												</ng-select>
+											</div>
+										</div>
+										<div class="col-sm-3 col-md-3 col-lg-3">
+											<div class="my-input-group marginTop10">
+												<label for="">{{ 'COMMON.LBL_DEPARTMENT' |
+													translate}}</label>
+												<ng-select appendTo="body" [items]="masterData.deptList"
+													[virtualScroll]="true" [loading]="masterData.deptLoading"
+													bindLabel="name" bindValue="id" (clear)="clearDept()"
+													placeholder="--- {{ (masterData.deptList && masterData.deptList.length>0? 'COMMON.LBL_SELECT':'COMMON.LBL_NO_DATA' ) | translate }} ---"
+													[typeahead]="masterData.deptInput" [minTermLength]="3"
+													[(ngModel)]="model.selectedDeptIdList" [multiple]="true"
+													class="multiple" (scrollToEnd)="getDeptData()" #select>
+													<ng-template ng-option-tmp let-item="item" let-index="index"
+														let-search="searchTerm">
+														<span>{{item.name}}</span>
+													</ng-template>
+													<ng-template ng-multi-label-tmp let-items="model.selectedDeptIdList"
+														let-clear="clear">
+														<div class="ng-value"
+															*ngIf="model.selectedDeptIdList && model.selectedDeptIdList.length > 0">
+															<span
+																class="ng-value-label">{{model.selectedDeptIdList.length}}
+																{{'COMMON.LBL_SELECTED' | translate }}</span>
+														</div>
+													</ng-template>
+												</ng-select>
+											</div>
+										</div>
+										<div class="col-sm-3 col-md-3 col-lg-3">
+											<div class="my-input-group marginTop10">
+												<label for="">{{ 'COMMON.LBL_COLLECTION' |
+													translate}}</label>
+												<ng-select appendTo="body" [items]="masterData.collectionList"
+													[virtualScroll]="true" [loading]="masterData.collectionLoading"
+													bindLabel="name" bindValue="id" (clear)="clearCollection()"
+													placeholder="--- {{ (masterData.collectionList && masterData.collectionList.length>0? 'COMMON.LBL_SELECT':'COMMON.LBL_NO_DATA' ) | translate }} ---"
+													[typeahead]="masterData.collectionInput" [minTermLength]="3"
+													[(ngModel)]="model.selectedCollectionIdList" [multiple]="true"
+													class="multiple" (scrollToEnd)="getCollectionData()" #select>
+													<ng-template ng-option-tmp let-item="item" let-index="index"
+														let-search="searchTerm">
+														<span>{{item.name}}</span>
+													</ng-template>
+													<ng-template ng-multi-label-tmp
+														let-items="model.selectedCollectionIdList" let-clear="clear">
+														<div class="ng-value"
+															*ngIf="model.selectedCollectionIdList && model.selectedCollectionIdList.length > 0">
+															<span
+																class="ng-value-label">{{model.selectedCollectionIdList.length}}
+																{{'COMMON.LBL_SELECTED' | translate }}</span>
+														</div>
+													</ng-template>
+												</ng-select>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-sm-12">
+									<div class="row marginTop15">
+										<div class="col-sm-3 col-md-3 col-lg-3">
+											<div class="my-input-group marginTop10">
+												<label for="">{{ 'COMMON.LBL_BUYER' | translate}}</label>
+												<ng-select appendTo="body" [items]="masterData.buyerList"
+													[virtualScroll]="true" [loading]="masterData.buyerLoading"
+													bindLabel="name" bindValue="id" (clear)="clearBuyer()"
+													placeholder="--- {{ (masterData.buyerList && masterData.buyerList.length>0? 'COMMON.LBL_SELECT':'COMMON.LBL_NO_DATA' ) | translate }} ---"
+													[typeahead]="masterData.buyerInput" [minTermLength]="3"
+													[(ngModel)]="model.selectedBuyerIdList" [multiple]="true"
+													class="multiple" (scrollToEnd)="getBuyerData()" #select>
+													<ng-template ng-option-tmp let-item="item" let-index="index"
+														let-search="searchTerm">
+														<span>{{item.name}}</span>
+													</ng-template>
+													<ng-template ng-multi-label-tmp
+														let-items="model.selectedBuyerIdList" let-clear="clear">
+														<div class="ng-value"
+															*ngIf="model.selectedBuyerIdList && model.selectedBuyerIdList.length > 0">
+															<span
+																class="ng-value-label">{{model.selectedBuyerIdList.length}}
+																{{'COMMON.LBL_SELECTED' | translate }}</span>
+														</div>
+													</ng-template>
+												</ng-select>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="row marginTop25">
+							<div class="col-12 col-sm-6">
+								<button class="tertiary-cta small" (click)="toggleSection()">
+									<span class="icon" *ngIf="!toggleFormSection">+</span>
+									<span class="icon" *ngIf="toggleFormSection">-</span>
+									{{'COMMON.LBL_ADVANCED_SEARCH' | translate}}
+								</button>
+
+							</div>
+							<div class="col-12 col-sm-6 text-right mt-3 mt-sm-0">
+								<button class="category-cta small mr-2 common-tooltip common-tooltip-top-2"
+									data-tooltip="Reset" [disabled]="masterData.searchloading" (click)="Reset()">
+									<img src="assets/images/reload-new.svg" alt="Reset">
+									<span>{{ 'COMMON.LBL_RESET' | translate}}</span>
+								</button>
+								<button class="secondary-cta small mr-2" (click)="exportCustomerDecisionSummary()"
+									[disabled]="masterData.exportLoading || masterData.searchloading"
+									*ngIf="model.items != null && model.items.length != 0  && !model.noFound">
+									<img src="assets/images/red-export.svg" alt="export"> {{
+									'QUOTATION_SUMMARY.LBL_EXPORT' | translate }}
+									<span *ngIf="masterData.exportLoading">
+										<i class="fa fa-refresh fa-spin" aria-hidden="true"></i>
+									</span>
+								</button>
+								<button class="primary-cta small" [disabled]="masterData.searchloading"
+									(click)="SearchDetails()"> {{ 'COMMON.LBL_SEARCH' | translate }}
+									<span *ngIf="masterData.searchloading">
+										<i class="fa fa-refresh fa-spin" aria-hidden="true"></i>
+									</span>
+								</button>
+							</div>
+						</div>
+						<!-- Advance Search -->
+					</div>
+					<div class="centerContainerPadding float-left" *ngIf="(model.items && model.items.length>0)">
+						<div class="row">
+							<div class="col-6 col-sm-3 col-xl-2 d-flex">
+								<p class="search-trigger-heading" [innerHtml]="showPaginationText()"></p>
+							</div>
+							<div class="col-6 col-sm-9 col-xl-10 text-right">
+								<ul class="table-badge-container mobile-hide tablet-hide">
+									<li (click)="SearchByStatus(status.id)"
+										[ngStyle]="{'background-color': status.statusColor}"
+										*ngFor="let status of _statuslist| slice:0:6">
+										<span>{{status.totalCount}}</span> <span>{{status.statusName}}</span>
+									</li>
+									<ng-container *ngIf="_statuslist.length>6">
+										<li class="more has-dropdown">
+											<img src="assets/images/cta-menu-grey.svg" alt="">
+											<ul class="cta-dropdown bottom-left">
+												<li (click)="SearchByStatus(status.id)"
+													[ngStyle]="{'color': status.statusColor}"
+													*ngFor="let status of _statuslist | slice:6:_statuslist.length">
+													<span>{{status.totalCount}}</span>
+													<span>{{status.statusName}}</span>
+												</li>
+											</ul>
+										</li>
+									</ng-container>
+								</ul>
+								<div class="animated-icon-container" *ngIf="!isFilterOpen"
+									(click)="toggleFilterSection()">
+									<img src="assets/images/cta-search-grey.svg" alt="search">
+								</div>
+							</div>
+						</div>
+						<div class="row mt-3 desktop-hide">
+							<div class="col-sm-12">
+								<ul class="table-badge-container">
+									<li (click)="SearchByStatus(status.id)" style="margin: 2px;"
+										[ngStyle]="{'background-color': status.statusColor}"
+										*ngFor="let status of _statuslist">
+										<span>{{status.totalCount}}</span> <span>{{status.statusName}}</span>
+									</li>
+								</ul>
+							</div>
+						</div>
+						<div class="quotation-search-container">
+							<div class="table-container h-scroll table-max-height-650">
+								<table class="pagination-table bordered">
+									<thead>
+										<tr class="sticky-top-row">
+											<th class="Center_Middle width-60"></th>
+											<th class="width-120 sticky-left-column">{{
+												'CUSTOMER_DECISION.LBL_BOOKING_CUS_NO' | translate }}</th>
+											<th class="width-160 sticky-left-column">{{ 'COMMON.LBL_CUSTOMER' | translate }}</th>
+											<th class="width-180 sticky-left-column">{{ 'COMMON.LBL_SUPPLIER' | translate }}</th>
+											<th class="width-180 sticky-left-column">{{ 'COMMON.LBL_FACTORY' | translate }}</th>
+											<th class="width-100 sticky-left-column">{{ 'COMMON.LBL_SERVICETYPE' | translate }}
+											</th>
+											<th class="width-100 sticky-left-column">{{ 'COMMON.LBL_SERVICEDATE_FROM_TO' |
+												translate }}</th>
+											<th class="width-140">{{ 'CUSTOMER_DECISION.DECISION_PENDING' | translate }}
+											</th>
+											<th class="width-180">{{ 'CUSTOMER_DECISION.RESULT_CD' | translate }}</th>
+										</tr>
+									</thead>
+									<tbody>
+
+										<ng-template ngFor let-iteminfo [ngForOf]="model.items" let-i="index">
+											<tr [ngClass]="(((i+1) % 2)== 0)?'even':'odd'"
+												style="border-left: 5px solid #fff;"
+												[ngStyle]="{'border-left-color': GetStatusColor(iteminfo.statusId)}">
+
+												<td><span class="table-cta icon-cta common-tooltip"
+														(click)="getCustomerDecisionView(iteminfo.bookingId)"
+														*ngIf="editCustomerDecision" data-tooltip="Edit">
+														<img src="assets/images/cta-edit.svg" alt="Edit">
+													</span>
+													<span class="table-cta icon-cta common-tooltip"
+														(click)="getCustomerDecisionView(iteminfo.bookingId)"
+														*ngIf="!editCustomerDecision && (_IsInternalUser ||  viewCustomerDecision)"
+														data-tooltip="View">
+														<img src="assets/images/cta-eye.svg" alt="View"></span>
+												</td>
+
+												<td class=" wordbreak width-120 sticky-left-column">
+													{{ iteminfo.bookingNoCustomerNo}}
+												</td>
+												<td class=" wordbreak width-120 ">
+													{{ iteminfo.customerName}}
+												</td>
+												<td class=" wordbreak width-120 ">
+													{{ iteminfo.supplierName}}
+												</td>
+												<td class=" wordbreak width-120 ">
+													{{ iteminfo.factoryName}}
+												</td>
+												<td class=" wordbreak width-120 ">
+													{{ iteminfo.serviceTypeName}}
+												</td>
+												<td class=" wordbreak width-120 ">
+													{{ iteminfo.serviceDate}}
+												</td>
+												<td class=" wordbreak width-100 Center_Middle">
+													{{iteminfo.decisionStatusCount}} / {{iteminfo.totalReportCount}}
+												</td>
+												<td class="width-200">
+													<div *ngFor="let item of iteminfo.productResultList | slice:0:3">
+														<span *ngFor="let prod of item.productIdList | slice:0:1">
+															{{prod}} <a style="color: blue; display:initial;" *ngIf="item.productIdList.length > 1"
+																[ngbPopover]="prodIdpopContent"
+																triggers="mouseenter:mouseleave" placement="right"
+																[autoClose]="'outside'" popoverTitle="Product Ref">
+																...
+															</a> - <span
+																[ngStyle]="{'color':item.resportResultColor}">{{
+																item.reportResultName}}</span> <span
+																*ngIf="item.customerDecisionName"
+																[ngStyle]="{'color':item.customerDecisionResultColor}">
+																/ {{item.customerDecisionName}}</span>
+																</span>
+														<ng-template #prodIdpopContent>
+															<div class="popoverScroll">
+																<div style="width: 150px;"
+																	*ngFor="let prodName of item.productIdList">
+																	{{prodName}}
+																</div>
+															</div>
+														</ng-template>													
+
+													</div>
+													<div *ngIf="iteminfo.productResultList.length > 3">
+														<!-- <button (click)="openReportPopUp(iteminfo, reportData)"
+															class="category-cta small has-dropdown position-relative">
+															<img src="assets/images/cta-menu-grey.svg" alt="reload">
+
+														</button> -->
+														<a style="color: blue; " class="Center_Middle"
+															 (click)="openReportPopUp(iteminfo, reportData)"
+															 [routerLink]="">
+															More...
+														</a>
+
+													</div>
+												</td>
+											</tr>
+
+
+										</ng-template>
+									</tbody>
+								</table>
+							</div>
+						</div>
+						<div class="pagination-container">
+							<select class="small" [(ngModel)]="selectedPageSize" (change)="SearchDetails()">
+								<option *ngFor="let item of pagesizeitems" [ngValue]=item>{{item}}</option>
+							</select>
+							<ngb-pagination (pageChange)="onPager($event)" [pageSize]="model.pageSize"
+								[collectionSize]="model.totalCount" [(page)]="model.index" [maxSize]="5">
+							</ngb-pagination>
+						</div>
+					</div>
+					<div class="centerContainerPadding" *ngIf="model.noFound">
+						<div class="error-container">
+							<img src="assets/images/no-result.svg" alt="" class="thumbnail">
+							<h4 class="error-title">{{'COMMON.LBL_No_ITEM' | translate}}</h4>
+							<p class="error-subtitle">{{'COMMON.LBL_NODATA' | translate}}</p>
+
+							<button (click)="Reset()" class="category-cta">
+								<img src="assets/images/reload-new.svg" alt="reload">
+								<span> {{'COMMON.LBL_CLEAR_SEARCH' | translate}}</span></button>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<ng-template #reportData let-modal>
+	<div class="modal-header custom-modal-header">
+		<h4 class="modal-title" id="modal-basic-title"> {{'CUSTOMER_DECISION.REPORT_DETAILS' | translate}}
+		</h4>
+		<button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+			<span aria-hidden="true">&times;</span>
+		</button>
+	</div>
+	<div class="modal-body custom-modal-body">
+		<div class="table-container h-scroll table-max-height-300">
+			<table class="pagination-table bordered ">
+				<thead>
+					<tr>
+						<th class="width-240">{{'CUSTOMER_DECISION.LBL_PRODUCT_NAME' | translate}}</th>
+						<th class="width-240">{{'CUSTOMER_DECISION.LBL_API_RESULT' | translate}}</th>
+						<th class="width-240">{{'CUSTOMER_DECISION.CUSTOMER_DECISION_RESULT' | translate }}</th>
+					</tr>
+				</thead>
+				<tbody *ngFor="let item of currentProductList">
+					<tr>
+						<td class="width-240">
+							<div *ngFor="let prod of item.productIdList">
+								{{prod}}
+							</div>
+						</td>
+						<td class="width-240"><span [ngStyle]="{'color':item.resportResultColor}">{{
+								item.reportResultName}}</span></td>
+						<td class="width-240"><span *ngIf="item.customerDecisionName"
+								[ngStyle]="{'color':item.customerDecisionResultColor}">{{item.customerDecisionName}}</span>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+	</div>
+</ng-template>

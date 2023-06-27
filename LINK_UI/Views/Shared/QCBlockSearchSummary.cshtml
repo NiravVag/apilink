@@ -1,0 +1,32 @@
+﻿
+@{
+    ViewData["Title"] = "QCBlockSearchSummary";
+}
+
+@model IEnumerable<DTO.Schedule.QCBlockSummaryItem>
+
+<xls-sheet name="QC Block Search Summary">
+    <table xls-begin="A:1" style="border-style:solid">
+        <tr style="background-color:#f5f5f5;font-weight:bold;text-align:center">
+            <th>QC Name</th>
+            <th>Customer Names</th>
+            <th>Supplier Names</th>
+            <th>Factory Names</th>
+            <th>Product Category Names</th>
+            <th>Product Sub Category Names</th>
+            <th>Product Names</th>
+        </tr>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td width="150px">@Html.Raw(@item.QCName)</td>
+                <td width="150px">@Html.Raw(@item.CustomerNames)</td>
+                <td width="150px">@Html.Raw(@item.SupplierNames)</td>
+                <td width="150px">@Html.Raw(@item.FactoryNames)</td>
+                <td width="150px">@Html.Raw(@item.ProductCategoryNames)</td>
+                <td width="150px">@Html.Raw(@item.ProductCategorySubNames)</td>
+                <td width="150px">@Html.Raw(@item.ProductCategorySub2Names)</td>
+            </tr>
+        }
+    </table>
+</xls-sheet>

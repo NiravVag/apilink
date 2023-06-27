@@ -1,0 +1,23 @@
+﻿CREATE TABLE [dbo].[SU_Grade](
+	[Id] [int] IDENTITY(1,1) NOT NULL PRIMARY KEY,
+	[SupplierId] [int] NOT NULL,
+	[CustomerId] [int] NOT NULL,
+	[Level_Id] [int] NOT NULL,
+	[PeriodFrom] [datetime] NOT NULL,
+	[PeriodTo] [datetime] NOT NULL,
+	[Active] [bit] NOT NULL,
+	[CreatedBy] [int] NULL,
+	[CreatedOn] [datetime] NOT NULL,
+	[UpdatedBy] [int] NULL,
+	[UpdatedOn] [datetime] NULL,
+	[DeletedBy] [int] NULL,
+	[DeletedOn] [datetime] NULL,
+	[EntityId]  [int] NULL,
+	CONSTRAINT FK_SU_Grade_CustomerId FOREIGN KEY(CustomerId) REFERENCES CU_Customer(Id),
+	CONSTRAINT FK_SU_Grade_SupplierId FOREIGN KEY(SupplierId) REFERENCES SU_Supplier(Id),
+	CONSTRAINT FK_SU_Grade_Level_Id FOREIGN KEY(Level_Id) REFERENCES SU_Level_Custom(Id),
+	CONSTRAINT FK_SU_Grade_CreatedBy FOREIGN KEY(CreatedBy) REFERENCES IT_UserMaster(Id),
+	CONSTRAINT FK_SU_Grade_UpdatedBy FOREIGN KEY(UpdatedBy) REFERENCES IT_UserMaster(Id),
+	CONSTRAINT FK_SU_Grade_DeletedBy FOREIGN KEY(DeletedBy) REFERENCES IT_UserMaster(Id),
+	CONSTRAINT FK_SU_Grade_EntityId FOREIGN KEY (EntityId) REFERENCES AP_Entity(Id)
+)

@@ -1,0 +1,113 @@
+﻿@model DTO.ScheduleJob.ScheduleSkipMSchartEmailResponse
+@{
+    ViewBag.Title = "SendMissedMSchartEmail";
+}
+
+<style>
+    .th-table {
+        color: black;
+        vertical-align: top;
+        font-size: 13px;
+        font-family: tahoma;
+    }
+
+    .td-table {
+        font-size: 13px;
+        font-family: tahoma;
+    }
+
+    .div-style {
+        padding-bottom: 5px;
+        margin-bottom: 5px;
+    }
+
+    #color {
+        color: red;
+    }
+</style>
+
+<table>
+    <tr>
+        <td style="font-size:13px; font-family:tahoma;">
+            Dear @Model.CustomerName,
+            <br /><br />
+            <div class="div-style">
+                Following are the order details of measurement chart you need to provide to data entry next 5 days.
+            </div>
+            <table id='TblList' style="border:solid 1px #d4d0c8;border-collapse:collapse;font-size:12px; font-family:tahoma;" cellspacing='0' cellpadding='1' rules='all' align='left' border='1' cellspacing=0 cellpadding=0 width='100%'>
+                <tr>
+                    <th bgcolor=#f8f4f3 style="color: black; font-size:13px;" align=center width='10%' height=35>Customer Name</th>
+                    <th bgcolor=#f8f4f3 style="color: black; font-size:13px;" align=center width='9%' height=35>Inspection #</th>
+                    <th bgcolor=#f8f4f3 style="color: black; font-size:13px;" align=center width='10%' height=35>Product Ref.</th>
+                    <th bgcolor=#f8f4f3 style="color: black; font-size:13px;" align=center width='10%' height=35>Product Name</th>
+                    <th bgcolor=#f8f4f3 style="color: black; font-size:13px;" align=center width='9%' height=35>Supplier</th>
+                    <th bgcolor=#f8f4f3 style="color: black; font-size:13px;" align=center width='9%' height=35>Factory</th>
+                    <th bgcolor=#f8f4f3 style="color: black; font-size:13px;" align=center width='10%' height=35>Service Type</th>
+                    <th bgcolor=#f8f4f3 style="color: black; font-size:13px;" align=center width='7%' height=35>QC</th>
+                    <th bgcolor=#f8f4f3 style="color: black; font-size:13px;" align=center width='9%' height=35>Schedule Date</th>
+                    <th bgcolor=#f8f4f3 style="color: black; font-size:13px;" align=center width='7%' height=35>MS Chart</th>
+                    <th bgcolor=#f8f4f3 style="color: black; font-size:13px;" align=center width='10%' height=35>Office</th>
+                </tr>
+                @foreach (var item in @Model.InspectionList)
+                {
+                    @foreach (var product in item.ProductList)
+                    {
+                        <tr>
+                            <td align=center style="font-size: 12px;" height=30>
+                                @item.CustomerName
+                            </td>
+                            <td align=center style="font-size: 12px;" height=30>
+                                <a href="@item.InspectionURL" target="_blank">@item.InspectionId</a>
+                            </td>
+                            <td align=center style="font-size: 12px;" height=30>
+                                <a href="@product.ProductURL" target="_blank">@product.ProductRef</a>
+                            </td>
+                            <td align=center style="font-size: 12px;" height=30>
+                                @product.ProductName
+                            </td>
+                            <td align=center style="font-size: 12px;" height=30>
+                                @item.SupplierName
+                            </td>
+                            <td align=center style="font-size: 12px;" height=30>
+                                @item.FactoryName
+                            </td>
+                            <td align=center style="font-size: 12px;" height=30>
+                                @item.ServiceType
+                            </td>
+                            <td align=center style="font-size: 12px;" height=30>
+                                No
+                            </td>
+                            <td align=center style="font-size: 12px;" height=30>
+                                @{ string date = item.ServiceDateFrom != item.ServiceDateTo ? item.ServiceDateFrom + "-" + item.ServiceDateTo : item.ServiceDateFrom;}
+                                @date
+                            </td>
+                            <td align=center style="font-size: 12px;" height=30>
+                                No
+                            </td>
+                            <td align=center style="font-size: 12px;" height=30>
+                                @item.Office
+                            </td>
+                        </tr>
+                    }
+                }
+            </table>
+
+        </td>
+    </tr>
+    <tr>
+        <td class="td-table">
+            <br />
+            <div class="div-style">
+                Please ensure to provide the correct MS chart.
+            </div>
+            <div class="div-style">
+                Thanks,
+            </div>
+            <div class="div-style">
+                @Model.InspectionList.Select(x => x.EntityName).FirstOrDefault() Team
+            </div>
+            <br />
+            <span style="font-style:normal">This reminder is generated from Link QMS. Please do not reply to this email address.</span>
+        </td>
+    </tr>
+</table>

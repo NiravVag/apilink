@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="20.594" height="24.967" viewBox="0 0 20.594 24.967">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: #00d37e;
+      }
+    </style>
+  </defs>
+  <g id="writing_1_" data-name="writing (1)" transform="translate(-26.571)">
+    <g id="Group_139" data-name="Group 139" transform="translate(26.57)">
+      <g id="Group_138" data-name="Group 138">
+        <path id="Path_136" data-name="Path 136" class="cls-1" d="M118.455,200.975a.975.975,0,0,0-.975-.975H107.434a.975.975,0,1,0,0,1.951H117.48A.975.975,0,0,0,118.455,200.975Z" transform="translate(-102.563 -190.247)"/>
+        <path id="Path_137" data-name="Path 137" class="cls-1" d="M107.434,280a.975.975,0,0,0,0,1.951h6.1a.975.975,0,1,0,0-1.951Z" transform="translate(-102.563 -266.346)"/>
+        <path id="Path_138" data-name="Path 138" class="cls-1" d="M33.733,23.017H30.471a1.953,1.953,0,0,1-1.951-1.951V3.9a1.953,1.953,0,0,1,1.951-1.951H42.462A1.953,1.953,0,0,1,44.412,3.9v6a.975.975,0,1,0,1.951,0v-6a3.906,3.906,0,0,0-3.9-3.9H30.471a3.906,3.906,0,0,0-3.9,3.9V21.066a3.906,3.906,0,0,0,3.9,3.9h3.262a.975.975,0,1,0,0-1.951Z" transform="translate(-26.57)"/>
+        <path id="Path_140" data-name="Path 140" class="cls-1" d="M117.48,120H107.434a.975.975,0,1,0,0,1.951H117.48a.975.975,0,1,0,0-1.951Z" transform="translate(-102.563 -114.148)"/>
+        <path id="Path_142" data-name="Path 142" class="cls-1" d="M138.113,136.324a1.1,1.1,0,0,0-1.553,0l-4.715,4.714-1.969-1.969a1.1,1.1,0,0,0-1.553,1.553l2.746,2.746a1.1,1.1,0,0,0,1.553,0l5.491-5.491A1.1,1.1,0,0,0,138.113,136.324Z" transform="translate(-117.842 -120.397)"/>
+      </g>
+    </g>
+  </g>
+</svg>

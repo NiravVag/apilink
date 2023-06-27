@@ -1,0 +1,14 @@
+{
+    "model": "CustomerProductSummaryModel.model",
+    "fields": {
+      "customerValue": [
+        {
+          "type": "required",
+          "fieldType": "N",
+          "ressource": "CUSTOMER_PRODUCT_SUMMARY.MSG_CUSTOMER_REQ"
+        }
+      ]
+    }
+  
+  }
+  

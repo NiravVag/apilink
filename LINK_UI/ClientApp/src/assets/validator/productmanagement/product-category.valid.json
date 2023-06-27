@@ -1,0 +1,11 @@
+{
+    "model": "ProductCategoryModel",
+    "fields": {
+      "name": [
+        {
+          "type": "required",
+          "ressource": "PRODUCT_CATEGORY.MSG_NAME_REQ"
+        }
+      ]
+    }
+}

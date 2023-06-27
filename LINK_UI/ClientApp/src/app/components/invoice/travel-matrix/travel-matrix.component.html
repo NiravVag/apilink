@@ -1,0 +1,824 @@
+<div class="main-wrapper">
+    <div class="wrapper dashboard-wrapper">
+        <div class="my-container">
+            <div class="master-body">
+                <div class="title-container">
+                    <h3 class="main-title">
+                        {{ 'TRAVEL_MATRIX.LBL_TITLE' | translate }}</h3>
+                </div>
+                <div class="content-container quotation-container">
+                    <div [@expandCollapse]="isFilterOpen ? 'open' : 'close'"
+                        class="centerContainerPadding common-filter-container">
+                        <div class="animated-icon-container" (click)="toggleFilterSection()"
+                            *ngIf="(travelMatrixValidators && travelMatrixValidators.length>0)">
+                            <img src="assets/images/cta-close-grey.svg" alt="close">
+                        </div>
+
+                        <div class="row">
+                            <div class="col-sm-3 col-md-3 col-lg-3">
+                                <div class="my-input-group">
+                                    <label for="">{{ 'TRAVEL_MATRIX.LBL_TARIFF_TYPE' | translate }}</label>
+                                    <ng-select appendTo="body" [searchable]="true" [clearable]="false"
+                                        [items]="masterModel.tariffTypeList" bindLabel="name"
+                                        [loading]="masterModel.tariffTypeLoading" bindValue="id"
+                                        (change)="tariffTypeChange($event)"
+                                        placeholder="--- {{(masterModel.tariffTypeList && masterModel.tariffTypeList.length>0? 'COMMON.LBL_ALL':'COMMON.LBL_NO_DATA')  | translate }} ---"
+                                        [(ngModel)]="model.tariffTypeId">
+                                        <ng-template ng-option-tmp let-item="item">
+                                            <div class="text-wrap">{{ item.name }}</div>
+                                        </ng-template>
+                                    </ng-select>
+                                </div>
+                            </div>
+                            <div class="col-sm-3 col-md-3 col-lg-3">
+                                <div class="my-input-group">
+                                    <label for="">{{ 'TRAVEL_MATRIX.LBL_CUSTOMER' | translate }}</label>
+                                    <ng-select appendTo="body" [searchable]="true" [clearable]="false"
+                                        [items]="masterModel.customerList" bindLabel="name" (change)="customerChange()"
+                                        [loading]="masterModel.customerLoading" bindValue="id"
+                                        placeholder="--- {{(masterModel.customerList && masterModel.customerList.length>0? 'COMMON.LBL_ALL':'COMMON.LBL_NO_DATA')  | translate }} ---"
+                                        [(ngModel)]="model.customerId">
+                                        <ng-template ng-option-tmp let-item="item">
+                                            <div class="text-wrap">{{ item.name }}</div>
+                                        </ng-template>
+                                    </ng-select>
+                                </div>
+                            </div>
+                            <div class="col-sm-3 col-md-3 col-lg-3 marginTop15">
+                                <div class="my-input-group">
+                                    <!-- <label for="">{{ 'TRAVEL_MATRIX.LBL_CUSTOMER' | translate }}</label> -->
+                                    <div class="styled-radio-container"
+                                        *ngFor="let item of searchTypeList;let idx = index">
+                                        <input type="radio" class="styled-radio" id="{{item.id}}" name="radio-group1"
+                                            [value]="item.id" [checked]="true" (change)="SetSearchtype(item)"
+                                            [(ngModel)]="model.searchTypeId">
+                                        <label for="{{item.id}}">{{item.name}}</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row marginTop15">
+                            <div class="col-sm-3 col-md-3 col-lg-3">
+                                <div class="my-input-group">
+                                    <label class="required" for="">{{ 'TRAVEL_MATRIX.LBL_COUNTRY' | translate }}</label>
+                                    <ng-select appendTo="body" [searchable]="true" [clearable]="false"
+                                        [items]="masterModel.countryList" bindLabel="name"
+                                        [loading]="masterModel.countryLoading" bindValue="id"
+                                        placeholder="--- {{(masterModel.countryList && masterModel.countryList.length>0? 'COMMON.LBL_SELECT':'COMMON.LBL_NO_DATA')  | translate }} ---"
+                                        [(ngModel)]="model.countryId"
+                                        [ngClass]="{ 'is-invalid': !validator.isValid('countryId')}"
+                                        (change)="setProvinceCountryChange($event)">
+                                        <ng-template ng-option-tmp let-item="item">
+                                            <div class="text-wrap">{{ item.name }}</div>
+                                        </ng-template>
+                                    </ng-select>
+                                    <div *ngIf="!validator.isValid('countryId')" class="invalid-feedback"
+                                        style="display:block">
+                                        <div *ngFor="let error of validator.getErrors('countryId')">{{ error | translate
+                                            }}</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-3 col-md-3 col-lg-3">
+                                <div class="my-input-group">
+                                    <label for="">{{ 'TRAVEL_MATRIX.LBL_PROVINCE' | translate }}</label>
+                                    <ng-select appendTo="body" [searchable]="true" [items]="masterModel.provinceList"
+                                        bindLabel="name" [loading]="masterModel.provinceLoading" bindValue="id"
+                                        placeholder="--- {{(masterModel.provinceList && masterModel.provinceList.length>0? 'COMMON.LBL_ALL':'COMMON.LBL_NO_DATA')  | translate }} ---"
+                                        [(ngModel)]="model.provinceId" (change)="setCityProvinceChange($event)">
+                                        <ng-template ng-option-tmp let-item="item">
+                                            <div class="text-wrap">{{ item.name }}</div>
+                                        </ng-template>
+                                    </ng-select>
+                                </div>
+                            </div>
+                            <div class="col-sm-3 col-md-3 col-lg-3">
+                                <div class="my-input-group">
+                                    <label for="">{{ 'TRAVEL_MATRIX.LBL_CITY' | translate }}</label>
+                                    <ng-select appendTo="body" [searchable]="true" [items]="masterModel.cityList"
+                                        bindLabel="name" [loading]="masterModel.cityLoading" bindValue="id"
+                                        placeholder="--- {{(masterModel.cityList && masterModel.cityList.length>0? 'COMMON.LBL_ALL':'COMMON.LBL_NO_DATA')  | translate }} ---"
+                                        [(ngModel)]="model.cityId" (change)="setCountyCityChange($event)">
+                                        <ng-template ng-option-tmp let-item="item">
+                                            <div class="text-wrap">{{ item.name }}</div>
+                                        </ng-template>
+                                    </ng-select>
+                                </div>
+                            </div>
+                            <div class="col-sm-3 col-md-3 col-lg-3"
+                                *ngIf="model.searchTypeId==travelMatrixSearchEnum.County">
+                                <div class="my-input-group">
+                                    <label for="">{{ 'TRAVEL_MATRIX.LBL_COUNTY' | translate }}</label>
+                                    <ng-select appendTo="body" [searchable]="true" [items]="masterModel.countyList"
+                                        bindLabel="name" [loading]="masterModel.countyLoading" bindValue="id"
+                                        placeholder="--- {{(masterModel.countyList && masterModel.countyList.length>0? 'COMMON.LBL_ALL':'COMMON.LBL_NO_DATA')  | translate }} ---"
+                                        [(ngModel)]="model.countyId">
+                                        <ng-template ng-option-tmp let-item="item">
+                                            <div class="text-wrap">{{ item.name }}</div>
+                                        </ng-template>
+                                    </ng-select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row" *ngIf="toggleFormSection">
+                            <div class="col-sm-12">
+                                <div class="row marginTop25">
+                                    <div class="col-sm-3 col-md-3 col-lg-3">
+                                        <div class="my-input-group">
+                                            <label for="">{{ 'TRAVEL_MATRIX.LBL_TRAVEL_CURRENCY' | translate }}</label>
+                                            <ng-select appendTo="body" [searchable]="true"
+                                                [items]="masterModel.travelCurrencyList" bindLabel="name"
+                                                [loading]="masterModel.travelCurrencyLoading" bindValue="id"
+                                                placeholder="--- {{(masterModel.travelCurrencyList && masterModel.travelCurrencyList.length>0? 'COMMON.LBL_ALL':'COMMON.LBL_NO_DATA')  | translate }} ---"
+                                                [(ngModel)]="model.travelCurrencyId">
+                                                <ng-template ng-option-tmp let-item="item">
+                                                    <div class="text-wrap">{{ item.name }}</div>
+                                                </ng-template>
+                                            </ng-select>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-3 col-md-3 col-lg-3">
+                                        <div class="my-input-group">
+                                            <label for="">{{ 'TRAVEL_MATRIX.LBL_SOURCE_CURRENCY' | translate }}</label>
+                                            <ng-select appendTo="body" [searchable]="true"
+                                                [items]="masterModel.sourceCurrencyList" bindLabel="name"
+                                                [loading]="masterModel.sourceCurrencyLoading" bindValue="id"
+                                                placeholder="--- {{(masterModel.sourceCurrencyList && masterModel.sourceCurrencyList.length>0? 'COMMON.LBL_ALL':'COMMON.LBL_NO_DATA')  | translate }} ---"
+                                                [(ngModel)]="model.sourceCurrencyId">
+                                                <ng-template ng-option-tmp let-item="item">
+                                                    <div class="text-wrap">{{ item.name }}</div>
+                                                </ng-template>
+                                            </ng-select>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <div class="row marginTop25">
+                            <div class="col-12 col-sm-6">
+                                <button class="tertiary-cta small" (click)="toggleSection()">
+                                    <span class="icon" *ngIf="!toggleFormSection">+</span>
+                                    <span class="icon" *ngIf="toggleFormSection">-</span>
+                                    {{'QUOTATION_SUMMARY.LBL_ADVANCED_SEARCH' | translate}}
+                                </button>
+                            </div>
+                            <div class="col-12 col-sm-6 text-right mt-3 mt-sm-0">
+
+                                <button class="secondary-cta small mr-2" (loading)=masterModel.addLoading
+                                [disabled]="buttonDisable()" (click)="add()">
+                                {{ 'COMMON.LBL_NEW' | translate }}
+                                <span *ngIf="masterModel.addLoading">
+                                    <i class="fa fa-refresh fa-spin" aria-hidden="true"></i>
+                                </span>
+                                </button>
+
+                                <button class="category-cta small mr-2 common-tooltip common-tooltip-top-2"
+                                    data-tooltip="Reset" [disabled]="buttonDisable()" (click)="reset()">
+                                    <img src="assets/images/reload-new.svg" alt="Reset">
+                                    <span>{{'COMMON.LBL_RESET'| translate}}</span>
+                                </button>
+                                <button class="secondary-cta small" (click)="export()" [disabled]="buttonDisable()"
+                                    *ngIf="isExportVisible()"><img src="assets/images/red-export.svg" alt="export">
+                                    {{ 'COMMON.LBL_EXPORT' | translate }}
+                                    <span *ngIf="masterModel.exportDataLoading">
+                                        <i class="fa fa-refresh fa-spin" aria-hidden="true"></i>
+                                    </span>
+                                </button>
+                                <!-- <button class="secondary-cta small" (loading)=masterModel.addLoading
+                                    [disabled]="buttonDisable()" (click)="add()">
+                                    {{ 'COMMON.LBL_NEW' | translate }}
+                                    <span *ngIf="masterModel.addLoading">
+                                        <i class="fa fa-refresh fa-spin" aria-hidden="true"></i>
+                                    </span>
+                                </button> -->
+                                &nbsp;
+                                <button class="primary-cta small" [disabled]="buttonDisable()"
+                                    (loading)=masterModel.searchLoading (click)="SearchDetails()">
+                                    {{ 'COMMON.LBL_SEARCH' | translate }}
+                                    <span *ngIf="masterModel.searchLoading">
+                                        <i class="fa fa-refresh fa-spin" aria-hidden="true"></i>
+                                    </span>
+                                </button>
+
+                            </div>
+                        </div>
+                    </div>
+                    <!-- *ngIf="(model.items && model.items.length>0)" -->
+                    <div class="centerContainerPadding float-left"
+                        *ngIf="(travelMatrixValidators && travelMatrixValidators.length>0)">
+                        <div class="row">
+                            <div class="col-6 col-sm-3 col-xl-2 d-flex" *ngIf="searchClicked">
+                                <p class="search-trigger-heading" [innerHtml]="showPaginationText()"></p>
+                            </div>
+
+                            <div class="col-6 col-sm-9 col-xl-12 text-right">
+                                <div class="table-badge-container mobile-hide tablet-hide">
+                                    <button class="primary-cta small MarginR-20" (loading)=masterModel.saveLoading
+                                        [disabled]="buttonDisable()" (click)="save()" *ngIf="masterModel.showButton">
+                                        {{ 'COMMON.LBL_SAVE' | translate }}
+                                        <span *ngIf="masterModel.saveLoading">
+                                            <i class="fa fa-refresh fa-spin" aria-hidden="true"></i>
+                                        </span>
+                                    </button>
+                                    <button class="secondary-cta small MarginR-20" (loading)=masterModel.deleteLoading
+                                        [disabled]="buttonDisable()" (click)="openPopup(deletepopup)"
+                                        *ngIf="masterModel.showButton">
+                                        {{ 'COMMON.LBL_DELETE' | translate }}
+                                        <span *ngIf="masterModel.deleteLoading">
+                                            <i class="fa fa-refresh fa-spin" aria-hidden="true"></i>
+                                        </span>
+                                    </button>
+                                </div>
+                                <div class="animated-icon-container" *ngIf="!isFilterOpen"
+                                    (click)="toggleFilterSection()">
+                                    <img src="assets/images/cta-search-grey.svg" alt="search">
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="row mt-3 desktop-hide">
+                            <div class="col-sm-12">
+                                <div class="table-badge-container">
+                                    <button class="primary-cta small MarginR-20" (loading)=masterModel.saveLoading
+                                        [disabled]="buttonDisable()" (click)="save()" *ngIf="masterModel.showButton">
+                                        {{ 'COMMON.LBL_SAVE' | translate }}
+                                        <span *ngIf="masterModel.saveLoading">
+                                            <i class="fa fa-refresh fa-spin" aria-hidden="true"></i>
+                                        </span>
+                                    </button>
+                                    <button class="secondary-cta small MarginR-20" (loading)=masterModel.addLoading
+                                        [disabled]="buttonDisable()" (click)="add()">
+                                        {{ 'COMMON.LBL_NEW' | translate }}
+                                        <span *ngIf="masterModel.addLoading">
+                                            <i class="fa fa-refresh fa-spin" aria-hidden="true"></i>
+                                        </span>
+                                    </button>
+
+                                    <button class="secondary-cta small MarginR-20" (loading)=masterModel.deleteLoading
+                                        [disabled]="buttonDisable()" (click)="openPopup(deletepopup)"
+                                        *ngIf="masterModel.showButton">
+                                        {{ 'COMMON.LBL_DELETE' | translate }}
+                                        <span *ngIf="masterModel.deleteLoading">
+                                            <i class="fa fa-refresh fa-spin" aria-hidden="true"></i>
+                                        </span>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="quotation-search-container">
+                            <div class="table-container h-scroll table-max-height-550">
+                                <table class="pagination-table simple-table bordered">
+                                    <thead>
+                                        <tr class="sticky-top-row">
+                                            <th class="width40"></th>
+                                            <th class="Center_Middle">
+                                                <div class="styled-checkbox-container">
+                                                    <input type="checkbox" class="styled-checkbox" id="checkboxall"
+                                                        [(ngModel)]="masterModel.selectedAllCheckBox"
+                                                        (change)="selectAllTravelMatrix();" />
+                                                    <label for="checkboxall"></label>
+                                                </div>
+                                            </th>
+                                            <th>{{ 'TRAVEL_MATRIX.LBL_CUSTOMER' | translate }}</th>
+                                            <th>{{ 'TRAVEL_MATRIX.LBL_TARIFF_TYPE' | translate }}</th>
+                                            <th>{{ 'TRAVEL_MATRIX.LBL_COUNTRY' | translate }}</th>
+                                            <th>{{ 'TRAVEL_MATRIX.LBL_PROVINCE' | translate }}</th>
+                                            <th>{{ 'TRAVEL_MATRIX.LBL_CITY' | translate }}</th>
+                                            <th *ngIf="model.searchTypeId==travelMatrixSearchEnum.County">{{
+                                                'TRAVEL_MATRIX.LBL_COUNTY' | translate }}</th>
+                                            <th>{{ 'TRAVEL_MATRIX.LBL_INSPECTION_PORT' | translate }}
+                                            </th>
+                                            <th>{{ 'TRAVEL_MATRIX.LBL_INSPECTION_PORT_CITY' | translate
+                                                }}</th>
+                                            <th>{{ 'TRAVEL_MATRIX.LBL_DISTANCE' | translate }}</th>
+                                            <th>{{ 'TRAVEL_MATRIX.LBL_TRAVEL_TIME' | translate }}</th>
+                                            <th>{{ 'TRAVEL_MATRIX.LBL_REMARKS' | translate }}</th>
+                                            <!-- <th>{{ 'TRAVEL_MATRIX.' | translate }}</th> -->
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <ng-template ngFor let-travelMatrixItem [ngForOf]="travelMatrixValidators"
+                                            let-i="index">
+                                            <!-- *ngFor="let travelMatrixItem of model.items;let i =index"> -->
+                                            <tr>
+                                                <!-- <td> [ngClass]="(((i+1) % 2)== 0)?'even':'odd'"
+                                                <a *ngIf="!travelMatrixItem.isExpand" style="cursor:pointer"
+                                                    (click)="expand(travelMatrixItem.id)">
+                                                    <i class="fa fa-plus-circle"></i></a>
+
+                                                <a *ngIf="travelMatrixItem.isExpand" style="cursor:pointer"
+                                                    (click)="collapse(travelMatrixItem.id)">
+                                                    <i class="fa fa-minus-circle"></i></a>
+                                            </td> -->
+                                                <td class="width40 text-center">
+                                                    <span class="expandable-trigger"
+                                                        (click)=toggleExpandRow($event,i,travelMatrixItem)>+</span>
+                                                </td>
+
+                                                <td class="Center_Middle">
+                                                    <div class="styled-checkbox-container">
+                                                        <input type="checkbox" class="styled-checkbox"
+                                                            id="checkboxorder-{{i}}"
+                                                            [(ngModel)]="travelMatrixItem.travelMatrix.isChecked"
+                                                            (change)="travelMatrixItemSelect();">
+                                                        <label for="checkboxorder-{{i}}"></label>
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <div class="my-input-group">
+                                                        <ng-select class="width-180" [searchable]="true"
+                                                            [items]="masterModel.customerList" appendTo="body"
+                                                            bindLabel="name"
+                                                            [loading]="travelMatrixItem.travelMatrix.customerLoading"
+                                                            bindValue="id"
+                                                            (change)="customerItemChange(travelMatrixItem.travelMatrix)"
+                                                            placeholder="--- {{(masterModel.customerList && masterModel.customerList.length>0? 'COMMON.LBL_SELECT':'COMMON.LBL_NO_DATA')  | translate }} ---"
+                                                            [(ngModel)]="travelMatrixItem.travelMatrix.customerId"
+                                                            [ngClass]="{ 'is-invalid': travelMatrixItem.travelMatrix.isChecked && 
+                                                                        travelMatrixItem.travelMatrix.tariffTypeId == _tariffType.customized &&
+                                                                         !travelMatrixItem.validator.isValid('customerId')}">
+                                                            <ng-template ng-option-tmp let-item="item">
+                                                                <div class="text-wrap">{{ item.name }}</div>
+                                                            </ng-template>
+                                                        </ng-select>
+                                                        <div *ngIf="travelMatrixItem.travelMatrix.isChecked && 
+                                                                travelMatrixItem.travelMatrix.tariffTypeId == _tariffType.customized && 
+                                                                !travelMatrixItem.validator.isValid('customerId')"
+                                                            class="invalid-feedback" style="display:block">
+                                                            <div
+                                                                *ngFor="let error of travelMatrixItem.validator.getErrors('customerId')">
+                                                                {{ error | translate }}</div>
+                                                        </div>
+
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <div class="my-input-group">
+                                                        <ng-select class="width-140" [searchable]="true" appendTo="body"
+                                                            [items]="masterModel.tariffTypeList" bindLabel="name"
+                                                            [loading]="travelMatrixItem.travelMatrix.tariffTypeLoading"
+                                                            bindValue="id" [clearable]="false"
+                                                            (change)="tariffTypeItemChange(travelMatrixItem.travelMatrix,$event)"
+                                                            placeholder="--- {{(masterModel.tariffTypeList && masterModel.tariffTypeList.length>0? 'COMMON.LBL_SELECT':'COMMON.LBL_NO_DATA')  | translate }} ---"
+                                                            [(ngModel)]="travelMatrixItem.travelMatrix.tariffTypeId"
+                                                            [ngClass]="{ 'is-invalid': !travelMatrixItem.validator.isValid('tariffTypeId')}">
+                                                            <ng-template ng-option-tmp let-item="item">
+                                                                <div class="text-wrap">{{ item.name }}</div>
+                                                            </ng-template>
+                                                        </ng-select>
+                                                        <div *ngIf="!travelMatrixItem.validator.isValid('tariffTypeId')"
+                                                            class="invalid-feedback" style="display:block">
+                                                            <div
+                                                                *ngFor="let error of travelMatrixItem.validator.getErrors('tariffTypeId')">
+                                                                {{ error | translate }}</div>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <div class="my-input-group">
+                                                        <ng-select class="width-180" [searchable]="true" appendTo="body"
+                                                            [items]="masterModel.countryList" bindLabel="name"
+                                                            [clearable]="false"
+                                                            [loading]="travelMatrixItem.travelMatrix.countryLoading"
+                                                            bindValue="id"
+                                                            placeholder="--- {{(masterModel.countryList && masterModel.countryList.length>0? 'COMMON.LBL_SELECT':'COMMON.LBL_NO_DATA')  | translate }} ---"
+                                                            [(ngModel)]="travelMatrixItem.travelMatrix.countryId"
+                                                            (change)="setProvinceCountryItemChange($event, travelMatrixItem.travelMatrix)"
+                                                            [ngClass]="{ 'is-invalid': !travelMatrixItem.validator.isValid('countryId')}">
+                                                            <ng-template ng-option-tmp let-item="item">
+                                                                <div class="text-wrap">{{ item.name }}</div>
+                                                            </ng-template>
+                                                        </ng-select>
+                                                        <div *ngIf="!travelMatrixItem.validator.isValid('countryId')"
+                                                            class="invalid-feedback" style="display:block">
+                                                            <div
+                                                                *ngFor="let error of travelMatrixItem.validator.getErrors('countryId')">
+                                                                {{ error | translate }}</div>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <div class="my-input-group">
+                                                        <ng-select class="width-180" [searchable]="true"
+                                                            [clearable]="false" appendTo="body"
+                                                            [items]="travelMatrixItem.travelMatrix.provinceList"
+                                                            bindLabel="name"
+                                                            [loading]="travelMatrixItem.travelMatrix.provinceLoading"
+                                                            bindValue="id"
+                                                            placeholder="--- {{(travelMatrixItem.travelMatrix.provinceList && travelMatrixItem.travelMatrix.provinceList.length>0? 'COMMON.LBL_SELECT':'COMMON.LBL_NO_DATA')  | translate }} ---"
+                                                            [(ngModel)]="travelMatrixItem.travelMatrix.provinceId"
+                                                            (change)="setCityProvinceItemChange($event, travelMatrixItem.travelMatrix)"
+                                                            [ngClass]="{ 'is-invalid': !travelMatrixItem.validator.isValid('provinceId')}">
+                                                            <ng-template ng-option-tmp let-item="item">
+                                                                <div class="text-wrap">{{ item.name }}</div>
+                                                            </ng-template>
+                                                        </ng-select>
+                                                        <div *ngIf="!travelMatrixItem.validator.isValid('provinceId')"
+                                                            class="invalid-feedback" style="display:block">
+                                                            <div
+                                                                *ngFor="let error of travelMatrixItem.validator.getErrors('provinceId')">
+                                                                {{ error | translate }}</div>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <div class="my-input-group">
+                                                        <ng-select class="width-180" [searchable]="true"
+                                                            [clearable]="true" appendTo="body"
+                                                            [items]="travelMatrixItem.travelMatrix.cityList"
+                                                            bindLabel="name"
+                                                            [loading]="travelMatrixItem.travelMatrix.cityLoading"
+                                                            bindValue="id"
+                                                            [ngClass]="{ 'is-invalid': model.searchTypeId == travelMatrixSearchEnum.City && !travelMatrixItem.validator.isValid('cityId')}"
+                                                            placeholder="--- {{(travelMatrixItem.travelMatrix.cityList && travelMatrixItem.travelMatrix.cityList.length>0? 'COMMON.LBL_SELECT':'COMMON.LBL_NO_DATA')  | translate }} ---"
+                                                            [(ngModel)]="travelMatrixItem.travelMatrix.cityId"
+                                                            (change)="setCountyCityItemChange($event, travelMatrixItem.travelMatrix)">
+                                                            <ng-template ng-option-tmp let-item="item">
+                                                                <div class="text-wrap">{{ item.name }}</div>
+                                                            </ng-template>
+                                                        </ng-select>
+
+                                                        <div *ngIf="model.searchTypeId == travelMatrixSearchEnum.City && !travelMatrixItem.validator.isValid('cityId')"
+                                                            class="invalid-feedback" style="display:block">
+                                                            <div
+                                                                *ngFor="let error of travelMatrixItem.validator.getErrors('cityId')">
+                                                                {{ error | translate }}</div>
+                                                        </div>
+
+                                                    </div>
+                                                </td>
+                                                <td *ngIf="model.searchTypeId==travelMatrixSearchEnum.County">
+                                                    <div class="my-input-group">
+                                                        <ng-select class="width-180" [searchable]="true"
+                                                            [clearable]="true" appendTo="body"
+                                                            [items]="travelMatrixItem.travelMatrix.countyList"
+                                                            bindLabel="name"
+                                                            [loading]="travelMatrixItem.travelMatrix.countyLoading"
+                                                            bindValue="id"
+                                                            [ngClass]="{ 'is-invalid': model.searchTypeId == travelMatrixSearchEnum.County && !travelMatrixItem.validator.isValid('countyId')}"
+                                                            placeholder="--- {{(travelMatrixItem.travelMatrix.countyList && travelMatrixItem.travelMatrix.countyList.length>0? 'COMMON.LBL_SELECT':'COMMON.LBL_NO_DATA')  | translate }} ---"
+                                                            [(ngModel)]="travelMatrixItem.travelMatrix.countyId">
+                                                            <ng-template ng-option-tmp let-item="item">
+                                                                <div class="text-wrap">{{ item.name }}</div>
+                                                            </ng-template>
+                                                        </ng-select>
+
+                                                        <div *ngIf="model.searchTypeId == travelMatrixSearchEnum.County && !travelMatrixItem.validator.isValid('countyId')"
+                                                            class="invalid-feedback" style="display:block">
+                                                            <div
+                                                                *ngFor="let error of travelMatrixItem.validator.getErrors('countyId')">
+                                                                {{ error | translate }}</div>
+                                                        </div>
+
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <div class="my-input-group">
+                                                        <ng-select class="width-180" [searchable]="true" appendTo="body"
+                                                            [items]="travelMatrixItem.travelMatrix.inspPortList | async"
+                                                            bindLabel="name"
+                                                            [loading]="travelMatrixItem.travelMatrix.inspPortLoading"
+                                                            [minTermLength]="3" [hideSelected]="true" [clearable]="true"
+                                                            (change)="onPortChange($event, travelMatrixItem.travelMatrix)"
+                                                            placeholder="--- {{ 'EDIT_BOOKING.MSG_AUTOCOMPLETE' | translate }} ---"
+                                                            [(ngModel)]="travelMatrixItem.travelMatrix.selectedPortList"
+                                                            [typeahead]="travelMatrixItem.travelMatrix.typeInspPortListInput">
+                                                            <ng-template ng-option-tmp let-item="item">
+                                                                <div class="text-wrap">{{ item.name }}</div>
+                                                            </ng-template>
+                                                        </ng-select>
+                                                    </div>
+                                                </td>
+
+                                                <td>
+                                                    <div class="my-input-group">
+                                                        <ng-select class="width-180" [searchable]="true" appendTo="body"
+                                                            [items]="travelMatrixItem.travelMatrix.inspPortCityList | async"
+                                                            bindLabel="name"
+                                                            [loading]="travelMatrixItem.travelMatrix.inspPortCityLoading"
+                                                            [minTermLength]="3" [hideSelected]="true" [clearable]="true"
+                                                            (change)="onPortCityChange($event, travelMatrixItem.travelMatrix)"
+                                                            placeholder="--- {{ 'EDIT_BOOKING.MSG_AUTOCOMPLETE' | translate }} ---"
+                                                            [(ngModel)]="travelMatrixItem.travelMatrix.selectedPortCityList"
+                                                            [typeahead]="travelMatrixItem.travelMatrix.typeInspPortCityListInput">
+                                                            <ng-template ng-option-tmp let-item="item">
+                                                                <div class="text-wrap">{{ item.name }}</div>
+                                                            </ng-template>
+                                                        </ng-select>
+                                                    </div>
+                                                </td>
+
+                                                <td>
+                                                    <div class="my-input-group">
+                                                        <input type="number" class="width-120"
+                                                            [(ngModel)]=travelMatrixItem.travelMatrix.distanceKM
+                                                            step="0.01" min="1" />
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <div class="my-input-group">
+                                                        <input type="number" class="width-120"
+                                                            [(ngModel)]=travelMatrixItem.travelMatrix.travelTime
+                                                            step="0.01" min="1" />
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <div class="my-input-group">
+                                                        <textarea class="width-220"
+                                                            [(ngModel)]=travelMatrixItem.travelMatrix.remarks
+                                                            maxlength="2000">
+                                        </textarea>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            <tr class="expandable-row" [attr.data-expand-id]="'cost' + i">
+                                                <td colspan="2"></td>
+                                                <td colspan="10">
+                                                    <div class="content-container">
+                                                        <div class="table-container child-table">
+                                                            <table class="pagination-table simple-table">
+                                                                <thead>
+                                                                    <tr>
+                                                                        <th>
+                                                                            {{ 'TRAVEL_MATRIX.LBL_BUS' | translate }}
+                                                                        </th>
+                                                                        <th>
+                                                                            {{ 'TRAVEL_MATRIX.LBL_TRAIN' | translate }}
+                                                                        </th>
+                                                                        <th>
+                                                                            {{ 'TRAVEL_MATRIX.LBL_TAXI' | translate }}
+                                                                        </th>
+                                                                        <th>
+                                                                            {{ 'TRAVEL_MATRIX.LBL_HOTEL' | translate }}
+                                                                        </th>
+                                                                        <th>
+                                                                            {{ 'TRAVEL_MATRIX.LBL_OTHERS' | translate }}
+                                                                        </th>
+                                                                        <th>
+                                                                            {{ 'TRAVEL_MATRIX.LBL_MARKUP1' | translate
+                                                                            }}
+                                                                        </th>
+                                                                        <th>
+                                                                            {{ 'TRAVEL_MATRIX.LBL_AIR' | translate }}
+                                                                        </th>
+                                                                        <th>
+                                                                            {{ 'TRAVEL_MATRIX.LBL_MARKUP2' | translate
+                                                                            }}
+                                                                        </th>
+                                                                        <th class="required">{{
+                                                                            'TRAVEL_MATRIX.LBL_TRAVEL_CURRENCY' |
+                                                                            translate }}
+                                                                        </th>
+                                                                        <th class="required">{{
+                                                                            'TRAVEL_MATRIX.LBL_SOURCE_CURRENCY' |
+                                                                            translate }}
+                                                                        </th>
+                                                                        <th class="required">{{
+                                                                            'TRAVEL_MATRIX.LBL_FIXED_EXCHANGE_RATE' |
+                                                                            translate }}
+                                                                        </th>
+
+                                                                    </tr>
+                                                                </thead>
+                                                                <tbody>
+
+                                                                    <!-- <ng-template> -->
+                                                                    <!-- ngFor let-travelMatrix
+                                                                    [ngForOf]="model.items" let-q="index" -->
+                                                                    <tr>
+                                                                        <td>
+                                                                            <div class="my-input-group">
+                                                                                <input class="width-120" type="number"
+                                                                                    [(ngModel)]=travelMatrixItem.travelMatrix.busCost
+                                                                                    step="0.01" min="1" />
+                                                                                <!--[ngClass]="{ 'is-invalid': !travelMatrixItem.validator.isValid('busCost')}" 
+                                                                                     <div *ngIf="!travelMatrixItem.validator.isValid('busCost')" class="invalid-feedback" style="display:block">
+                                                                                    <div *ngFor="let error of travelMatrixItem.validator.getErrors('busCost')">{{ error | translate }}</div>
+                                                                                  </div> -->
+                                                                            </div>
+                                                                        </td>
+                                                                        <td>
+                                                                            <div class="my-input-group">
+                                                                                <input class="width-120" type="number"
+                                                                                    [(ngModel)]=travelMatrixItem.travelMatrix.trainCost
+                                                                                    step="0.01" min="1" />
+                                                                                <!--[ngClass]="{ 'is-invalid': !travelMatrixItem.validator.isValid('trainCost')}"
+                                                                                     <div *ngIf="!travelMatrixItem.validator.isValid('trainCost')" class="invalid-feedback" style="display:block">
+                                                                                    <div *ngFor="let error of travelMatrixItem.validator.getErrors('trainCost')">{{ error | translate }}</div>
+                                                                                  </div>-->
+                                                                            </div>
+                                                                        </td>
+                                                                        <td>
+                                                                            <div class="my-input-group">
+                                                                                <input class="width-120" type="number"
+                                                                                    [(ngModel)]=travelMatrixItem.travelMatrix.taxiCost
+                                                                                    step="0.01" min="1" />
+                                                                            </div>
+                                                                        </td>
+                                                                        <td>
+                                                                            <div class="my-input-group">
+                                                                                <input class="width-120" type="number"
+                                                                                    [(ngModel)]=travelMatrixItem.travelMatrix.hotelCost
+                                                                                    step="0.01" min="1" />
+                                                                            </div>
+                                                                        </td>
+                                                                        <td>
+                                                                            <div class="my-input-group">
+                                                                                <input class="width-120" type="number"
+                                                                                    [(ngModel)]=travelMatrixItem.travelMatrix.otherCost
+                                                                                    step="0.01" min="1" />
+                                                                            </div>
+                                                                        </td>
+                                                                        <td>
+                                                                            <div class="my-input-group">
+                                                                                <input class="width-120" type="number"
+                                                                                    [(ngModel)]=travelMatrixItem.travelMatrix.markUpCost
+                                                                                    step="0.01" min="1" />
+                                                                            </div>
+                                                                        </td>
+                                                                        <td>
+                                                                            <div class="my-input-group">
+                                                                                <input class="width-120" type="number"
+                                                                                    [(ngModel)]=travelMatrixItem.travelMatrix.airCost
+                                                                                    step="0.01" min="1" />
+                                                                            </div>
+                                                                        </td>
+                                                                        <td>
+                                                                            <div class="my-input-group">
+                                                                                <input type="number" class="width-120"
+                                                                                    [(ngModel)]=travelMatrixItem.travelMatrix.markUpCostAir
+                                                                                    step="0.01" min="1" />
+                                                                            </div>
+                                                                        </td>
+                                                                        <td>
+                                                                            <div class="my-input-group">
+                                                                                <ng-select class="width-180"
+                                                                                    [searchable]="true" appendTo="body"
+                                                                                    [items]="masterModel.travelCurrencyList"
+                                                                                    bindLabel="name"
+                                                                                    [loading]="travelMatrixItem.travelMatrix.travelCurrencyLoading"
+                                                                                    bindValue="id"
+                                                                                    placeholder="--- {{(masterModel.travelCurrencyList && masterModel.travelCurrencyList.length>0? 'COMMON.LBL_SELECT':'COMMON.LBL_NO_DATA')  | translate }} ---"
+                                                                                    [(ngModel)]="travelMatrixItem.travelMatrix.travelCurrencyId"
+                                                                                    [ngClass]="{ 'is-invalid': !travelMatrixItem.validator.isValid('travelCurrencyId')}">
+                                                                                    <ng-template ng-option-tmp
+                                                                                        let-item="item">
+                                                                                        <div class="text-wrap">
+                                                                                            {{ item.name }}</div>
+                                                                                    </ng-template>
+                                                                                </ng-select>
+                                                                                <div *ngIf="!travelMatrixItem.validator.isValid('travelCurrencyId')"
+                                                                                    class="invalid-feedback"
+                                                                                    style="display:block">
+                                                                                    <div
+                                                                                        *ngFor="let error of travelMatrixItem.validator.getErrors('travelCurrencyId')">
+                                                                                        {{ error | translate }}</div>
+                                                                                </div>
+                                                                            </div>
+                                                                        </td>
+
+                                                                        <td>
+                                                                            <div class="my-input-group">
+                                                                                <ng-select class="width-180"
+                                                                                    [searchable]="true" appendTo="body"
+                                                                                    [items]="masterModel.sourceCurrencyList"
+                                                                                    bindLabel="name"
+                                                                                    [loading]="travelMatrixItem.travelMatrix.sourceCurrencyLoading"
+                                                                                    bindValue="id"
+                                                                                    placeholder="--- {{(masterModel.sourceCurrencyList && masterModel.sourceCurrencyList.length>0? 'COMMON.LBL_SELECT':'COMMON.LBL_NO_DATA')  | translate }} ---"
+                                                                                    [(ngModel)]="travelMatrixItem.travelMatrix.sourceCurrencyId"
+                                                                                    [ngClass]="{ 'is-invalid': !travelMatrixItem.validator.isValid('sourceCurrencyId')}">
+                                                                                    <ng-template ng-option-tmp
+                                                                                        let-item="item">
+                                                                                        <div class="text-wrap">
+                                                                                            {{ item.name }}</div>
+                                                                                    </ng-template>
+                                                                                </ng-select>
+                                                                                <div *ngIf="!travelMatrixItem.validator.isValid('sourceCurrencyId')"
+                                                                                    class="invalid-feedback"
+                                                                                    style="display:block">
+                                                                                    <div
+                                                                                        *ngFor="let error of travelMatrixItem.validator.getErrors('sourceCurrencyId')">
+                                                                                        {{ error | translate }}</div>
+                                                                                </div>
+                                                                            </div>
+                                                                        </td>
+                                                                        <td>
+                                                                            <div class="my-input-group">
+                                                                                <input class="width-120" type="number"
+                                                                                    [(ngModel)]=travelMatrixItem.travelMatrix.fixExchangeRate
+                                                                                    step="0.01" min="1"
+                                                                                    [ngClass]="{ 'is-invalid': !travelMatrixItem.validator.isValid('fixExchangeRate')}" />
+                                                                                <div *ngIf="!travelMatrixItem.validator.isValid('fixExchangeRate')"
+                                                                                    class="invalid-feedback"
+                                                                                    style="display:block">
+                                                                                    <div
+                                                                                        *ngFor="let error of travelMatrixItem.validator.getErrors('fixExchangeRate')">
+                                                                                        {{ error | translate }}</div>
+                                                                                </div>
+                                                                            </div>
+                                                                        </td>
+                                                                    </tr>
+                                                                    <!-- </ng-template> -->
+                                                                </tbody>
+                                                            </table>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                                <!-- <td colspan="3"></td> -->
+                                            </tr>
+                                        </ng-template>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <div class="pagination-container" *ngIf="searchClicked">
+                            <select class="small" [(ngModel)]="selectedPageSize" (change)="SearchDetails()">
+                                <option *ngFor="let item of pagesizeitems" [ngValue]=item>{{item}}</option>
+                            </select>
+                            <ngb-pagination (pageChange)="onPager($event)" [pageSize]="model.pageSize"
+                                [collectionSize]="model.totalCount" [(page)]="model.index" [maxSize]="5">
+                            </ngb-pagination>
+                        </div>
+                    </div>
+                    <div class="centerContainerPadding" *ngIf="model.noFound">
+                        <div class="error-container">
+                            <img src="assets/images/no-result.svg" alt="" class="thumbnail">
+                            <h4 class="title">{{'COMMON.LBL_No_ITEM' | translate}}</h4>
+                            <p class="error-subtitle">{{'CS_CONFIG_SUMMARY.LBL_NODATA' | translate}}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<ng-template #existsitem let-modal>
+    <div class="modal-header custom-modal-header">
+        <h4 class="modal-title" id="modal-basic-title">{{ 'TRAVEL_MATRIX.LBL_EXISTS_DATA' | translate }}</h4>
+        <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body custom-modal-body">
+        <div class="table-container">
+            <table class="pagination-table simple-table cost-table">
+                <thead>
+                    <tr>
+                        <th class="th-text-center ">{{ 'TRAVEL_MATRIX.LBL_COUNTRY' | translate }}</th>
+                        <th class="th-text-center ">{{ 'TRAVEL_MATRIX.LBL_PROVINCE' | translate }}</th>
+                        <th class="th-text-center ">{{ 'TRAVEL_MATRIX.LBL_CITY' | translate }}</th>
+                        <th class="th-text-center ">{{ 'TRAVEL_MATRIX.LBL_COUNTY' | translate }}</th>
+                        <th class="th-text-center ">{{ 'TRAVEL_MATRIX.LBL_SOURCE_CURRENCY' | translate }}</th>
+                        <th class="th-text-center ">{{ 'TRAVEL_MATRIX.LBL_TRAVEL_CURRENCY' | translate }}</th>
+                        <th class="th-text-center ">{{ 'TRAVEL_MATRIX.LBL_TARIFF_TYPE' | translate }}</th>
+                        <th class="th-text-center ">{{ 'TRAVEL_MATRIX.LBL_CUSTOMER' | translate }}</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let item of existsItemModel; let i = index">
+                        <td class="Center-Middle-Table">{{item.countryName}}
+                        </td>
+                        <td class="Center-Middle-Table">{{item.provinceName}}
+                        </td>
+
+                        <td class="Center-Middle-Table">{{item.cityName}}
+                        </td>
+                        <td class="Center-Middle-Table">{{item.countyName}}
+                        </td>
+                        <td class="Center-Middle-Table">{{item.sourceCurrencyName}}
+                        </td>
+                        <td class="Center-Middle-Table">{{item.travelCurrencyName}}
+                        </td>
+                        <td class="Center-Middle-Table">{{item.tariffTypeName}}
+                        </td>
+                        <td class="Center-Middle-Table">{{item.customerName}}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="secondary-cta small" (click)="modal.dismiss('cancel click')">
+                {{ 'COMMON.LBL_CONFIRMCANCEL' | translate }}
+            </button>
+        </div>
+
+    </div>
+</ng-template>
+
+<ng-template #deletepopup let-modal>
+    <div class="modal-body">
+        <div class="small-model">
+            <h2 class="title">{{'COMMON.LBL_CONFIRMDELETION' | translate}}</h2>
+            <p>{{'COMMON.MSG_QUESTION_SURE' | translate}} </p>
+            <button class="secondary-cta" (click)="modal.dismiss('Cross click')">{{ 'COMMON.LBL_CONFIRMCANCEL' |
+                translate }}</button>
+            <button class="primary-cta" (click)="delete();">
+                {{ 'COMMON.LBL_OK' | translate }}</button>
+        </div>
+    </div>
+</ng-template>

@@ -1,0 +1,28 @@
+﻿CREATE TABLE [dbo].[CU_PurchaseOrder]
+(
+	[Id] [int] IDENTITY(1,1) NOT FOR REPLICATION NOT NULL PRIMARY KEY,
+    [PONO] NVARCHAR(200) NOT NULL, 
+    [Office_Id] INT NULL, 
+    [Customer_Id] INT NULL, 
+    [Department_Id] INT NULL, 
+    [Brand_Id] INT NULL, 
+    [InternalRemarks] NVARCHAR(1000) NULL, 
+    [CustomerRemarks] NVARCHAR(1000) NULL, 
+	[CustomerReferencePo] NVARCHAR(1000) NULL,
+    [Active] BIT NOT NULL, 
+    [CreatedBy] INT NULL, 
+    [CreatedOn] DATETIME NULL, 
+    [UpdatedBy] INT NULL, 
+    [UpdatedOn] DATETIME NULL, 
+    [DeletedBy] INT NULL, 
+    [DeletedOn] DATETIME NULL, 
+	[EntityId] INT NULL,
+	CONSTRAINT CU_PurchaseOrder_EntityId  FOREIGN KEY(EntityId) REFERENCES [dbo].[AP_Entity](Id),
+	FOREIGN KEY (Office_Id) REFERENCES [dbo].[REF_Location] (Id),
+	FOREIGN KEY (Customer_Id) REFERENCES [dbo].[CU_Customer] (Id),
+	FOREIGN KEY (Department_Id) REFERENCES [dbo].[CU_Department] (Id),
+	FOREIGN KEY (Brand_Id) REFERENCES [dbo].[CU_Brand] (Id),
+	FOREIGN KEY ([CreatedBy]) REFERENCES [dbo].[IT_UserMaster](Id),
+	FOREIGN KEY ([UpdatedBy]) REFERENCES [dbo].[IT_UserMaster](Id),
+	FOREIGN KEY ([DeletedBy]) REFERENCES [dbo].[IT_UserMaster](Id)
+)

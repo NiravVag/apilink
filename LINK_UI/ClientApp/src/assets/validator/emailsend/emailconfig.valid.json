@@ -1,0 +1,60 @@
+{
+    "model": "EmailConfig",
+    "fields": {
+        "customerId": [{
+            "type": "required",
+            "fieldType": "D",
+            "ressource": "COMMON.MSG_CUSTOMER_REQUIRED"
+        }],
+        "serviceId": [{
+            "type": "required",
+            "fieldType": "D",
+            "ressource": "COMMON.MSG_SERVICE_REQUIRED"
+        }],
+        "typeId": [{
+            "type": "required",
+            "fieldType": "D",
+            "ressource": "EMAIL_CONFIGURATION.MSG_EMAIL_SEND_REQUIRED"
+        }],
+        "customerContactIdList": [{
+            "type": "required",
+            "fieldType": "D",
+            "ressource": "EMAIL_CONFIGURATION.LBL_SELECT_CUSTOMER_CONTACT"
+        }],
+        "apiContactIdList": [{
+            "type": "required",
+            "fieldType": "D",
+            "ressource": "EMAIL_CONFIGURATION.LBL_SELECT_API_CONTACT"
+        }],
+        "reportInEmailId": [{
+            "type": "required",
+            "fieldType": "D",
+            "ressource": "EMAIL_CONFIGURATION.MSG_SELECT_REPORT_IN_EMAIL"
+        }],
+        "reportSendTypeId": [{
+            "type": "required",
+            "fieldType": "D",
+            "ressource": "EMAIL_CONFIGURATION.MSG_SELECT_REPORT_SEND_TYPE"
+        }],
+        "emailSubjectId": [{
+            "type": "required",
+            "fieldType": "D",
+            "ressource": "EMAIL_CONFIGURATION.MSG_SELECT_SUBJECT"
+        }],
+        "toIdList": [{
+            "type": "required",
+            "fieldType": "A",
+            "ressource": "EMAIL_CONFIGURATION.MSG_TO_RECIPIENT_REQUIRED"
+        }],
+        "fileNameId": [{
+            "type": "required",
+            "fieldType": "D",
+            "ressource": "EMAIL_CONFIGURATION.MSG_ATTACHMENT_NAME_REQ"
+        }],
+        "invoiceTypeId": [{
+            "type": "required",
+            "fieldType": "D",
+            "ressource": "EMAIL_CONFIGURATION.MSG_INVOICE_TYPE"
+        }]
+    }
+}

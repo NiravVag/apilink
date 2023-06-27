@@ -1,0 +1,66 @@
+﻿@using DTO.Common; 
+@{
+    ViewData["Title"] = "ECI Remarks";
+}
+
+@model DTO.Kpi.ExportResult
+
+<xls-sheet name="ECI Remarks">
+    <table xls-begin="A:1" style="border-style:solid">
+        <tr style="background-color:#f5f5f5;font-weight:bold;text-align:center">
+            <th>Office Name</th>
+            <th>Supplier Name</th>
+            <th>Factory Name</th>
+            <th>Factory Country</th>
+            <th>Inspection ID</th>
+            <th>Product ID</th>
+            <th>Result-Conclusion</th>
+            <th>Type of Inspection</th>
+            <th>Report Count</th>
+            <th>Date of Inspection</th>
+            <th>BDM</th>
+            <th>Buyer Name</th>
+            <th>Remark No</th>
+            <th>Remarks</th>
+            <th>Type of Remark</th>
+            <th>Max Critical</th>
+            <th>Defect Critical</th>
+            <th>Critical Result</th>
+            <th>Max Major</th>
+            <th>Defect Major</th>
+            <th>Major Result</th>
+            <th>Max Minor</th>
+            <th>Defect Minor</th>
+            <th>Minor Result</th>
+        </tr>
+        @foreach (var item in Model.Data)
+        {
+        <tr>
+            <td width="150px">@Html.Raw(@item.Office)</td>
+            <td width="150px">@Html.Raw(@item.SupplierName)</td>
+            <td width="150px">@Html.Raw(@item.FactoryName)</td>
+            <td width="150px">@Html.Raw(@item.FactoryCountry)</td>
+            <td width="150px" xls-type="number">@item.BookingNo</td>
+            <td width="150px">@Html.Raw(@item.ProductName)</td>
+            <td width="150px">@Html.Raw(@item.ReportResult)</td>
+            <td width="150px">@Html.Raw(@item.ServiceTypeName)</td>
+            <td width="150px" xls-type="number">@item.TotalReports</td>
+            <td width="150px" xls-type="date" xls-format="@ApiCommonData.StandardDateFormat">@item.InspectionStartDate</td>
+            <td width="150px">@Html.Raw(@item.Bdm)</td>
+            <td width="150px">@Html.Raw(@item.BuyerName)</td>
+            <td width="150px" xls-type="number">@item.FBRemarkNumber</td>
+            <td width="150px">@Html.Raw(@item.ReportRemarks)</td>
+            <td width="150px">@Html.Raw(@item.FBRemarkResult)</td>
+            <td width="150px" xls-type="number">@item.CriticalMax</td>
+            <td width="150px" xls-type="number">@item.CriticalDefect</td>
+            <td width="150px">@Html.Raw(@item.CriticalResult)</td>
+            <td width="150px" xls-type="number">@item.MajorMax</td>
+            <td width="150px" xls-type="number">@item.MajorDefect</td>
+            <td width="150px">@Html.Raw(@item.MajorResult)</td>
+            <td width="150px" xls-type="number">@item.MinorMax</td>
+            <td width="150px" xls-type="number">@item.MinorDefect</td>
+            <td width="150px">@Html.Raw(@item.MinorResult)</td>
+        </tr>
+        }
+    </table>
+</xls-sheet>

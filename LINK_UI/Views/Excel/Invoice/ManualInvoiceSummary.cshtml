@@ -1,0 +1,87 @@
+﻿@{
+    ViewData["Title"] = "ManualInvoiceExport";
+}
+
+
+@model DTO.Invoice.ManualInvoiceSummaryExportResponse
+
+<xls-sheet name="Defect-Category">
+    <table xls-begin="A:1" style="border-style:solid">
+        <tr>
+            @if (Model.RequestFilters.FromDate != null && Model.RequestFilters.ToDate != null)
+            {
+                <td width="130px" style="font-weight:bold">Date From :</td>
+                <td width="100px">@Model.RequestFilters.FromDate</td>
+
+                <td width="120px" style="font-weight:bold">Date To :</td>
+                <td width="100px">@Model.RequestFilters.ToDate</td>
+            }
+
+
+            @if (!string.IsNullOrEmpty(Model.RequestFilters.CustomerName))
+            {
+                <td style="font-weight: bold">Customer :</td>
+                <td width="100px">@Html.Raw(Model.RequestFilters.CustomerName)</td>
+            }
+            @if (!string.IsNullOrEmpty(Model.RequestFilters.InvoiceTo))
+            {
+                <td width="100px" style="font-weight: bold">Invoice To :</td>
+                <td width="100px">@Html.Raw(@Model.RequestFilters.InvoiceTo)</td>
+            }
+            @if (!string.IsNullOrEmpty(Model.RequestFilters.InvoiceNo))
+            {
+                <td width="100px" style="font-weight: bold">Invoice No :</td>
+                <td width="100px">@Model.RequestFilters.InvoiceNo</td>
+            }
+        </tr>
+        <tr>
+            <td></td>
+        </tr>
+
+        <tr>
+            <th>Customer Name</th>
+            <th>Invoice Date</th>
+            <th>Invoice No</th>
+            <th>Billed Name</th>
+            <th>Attn</th>
+            <th>Service</th>
+            <th>Service Type</th>
+            <th>Service Fee</th>
+            <th>Exp ChargeBack</th>
+            <th>Other Cost</th>
+            <th>Sub Total</th>
+            <th>Tax</th>
+            <th>Tax Amount</th>
+            <th>Total Amount</th>
+            <th>Created By</th>
+            <th>Created On</th>
+            <th>Updated By</th>
+            <th>Updated On</th>
+        </tr>
+        @foreach (var item in Model.ManualInvoices)
+        {
+    <tr>
+        <td width="100px">@item.CustomerName</td>
+        <td width="100px">@item.InvoiceDate</td>
+        <td width="100px">@item.InvoiceNo</td>
+        <td width="100px">@item.BilledName</td>
+        <td width="100px">@item.Attn</td>
+        <td width="100px">@item.Service</td>
+        <td width="100px">@item.ServiceType</td>
+        <td width="100px" xls-type="number">@item.ServiceFee</td>
+        <td width="100px" xls-type="number">@item.ExpChargeBack</td>
+        <td width="100px" xls-type="number">@item.OtherCost</td>
+        <td width="100px" xls-type="number">@item.SubTotal</td>
+        <td width="100px">@item.Tax%</td>
+        <td width="100px" xls-type="number">@item.TaxAmount</td>
+        <td width="100px" xls-type="number">@item.TotalAmount</td>
+        <td width="100px">@item.CreatedBy</td>
+        <td width="100px" xls-type="date">@item.CreatedOn</td>
+        <td width="100px">@item.UpdatedBy</td>
+        <td width="100px" xls-type="date">@item.UpdatedOn</td>
+    </tr>
+        }
+    </table>
+</xls-sheet>
+
+

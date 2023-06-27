@@ -1,0 +1,26 @@
+{
+    "model": "AddProductCategorySub2Model",
+    "fields": {
+      "name": [
+        {
+          "type": "required",
+          "ressource": "INTERNAL_PRODUCT.MSG_NAME_REQ"
+        }
+      ],
+      "productCategoryId": [
+        {
+          "type": "required",
+          "fieldType": "N",
+          "ressource": "INTERNAL_PRODUCT.MSG_CAT_REQ"
+        }
+      ],
+      "productSubCategoryId": 
+      [
+        {
+          "type": "required",
+          "fieldType": "N",
+          "ressource": "INTERNAL_PRODUCT.MSG_SUB_CAT_REQ"
+        }
+      ]
+    }
+}

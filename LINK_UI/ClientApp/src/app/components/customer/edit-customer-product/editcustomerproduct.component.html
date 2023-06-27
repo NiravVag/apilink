@@ -1,0 +1,627 @@
+<div class="main-wrapper">
+    <div class="wrapper dashboard-wrapper">
+        <div class="page-head-container whiteBackground">
+            <div class="my-container">
+                <div class="master-body m-0">
+                    <div class="title-container p-0" *ngIf="callFrom == productScreenCallType.Product">
+                        <div class="header-back-button float-left" *ngIf="fromSummary && callFrom == productScreenCallType.Product && !savedataloading && !initialLoading">
+                            <img src="assets/images/back-red.png" alt="back"
+                            (click)="this.return('cusproductsearch/customer-productsummary');">
+                        </div>
+                        <h3 class="page-title float-left p-1" *ngIf="model.id==0">
+                            {{ 'EDIT_CUSTOMER_PRODUCT.ADD_TITLE' | translate }}
+                        </h3>
+                        <h3 class="page-title float-left p-1" *ngIf="model.id !=0">
+                            {{ 'EDIT_CUSTOMER_PRODUCT.EDIT_TITLE' | translate }}
+                        </h3>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="my-container" [ngStyle]='{"margin-left" : callFrom == productScreenCallType.Product ? "60px":"0px"}'>
+            <div class="card-wrapper tree-view-overflow">
+                <div class="card-container">
+                    <div class="card-header-container">
+                        <div class="card-header-text">
+                            <h6 *ngIf="callFrom == productScreenCallType.Product" class="container-head">
+                                {{ 'EDIT_CUSTOMER_PRODUCT.LBL_MAIN' | translate }}</h6>
+                        </div>
+                    </div>
+                    <div class="row marginTop15">
+                        <div class="col-sm-4">
+                            <div class="my-input-group">
+                                <label class="required">{{ 'EDIT_CUSTOMER_PRODUCT.PRODUCT_ID' | translate }}</label>
+                                <input [(ngModel)]="model.productID" [ngClass]="{ 'is-invalid':  !validator.isValid('productID')}"
+                                        type="text" maxlength="300" placeholder="{{ 'EDIT_CUSTOMER_PRODUCT.PRODUCT_ID' | translate }}"
+                                        [disabled]="model.isProductBooked" />
+                                <div *ngIf="!validator.isValid('productID')" class="invalid-feedback">
+                                    <div *ngFor="let error of validator.getErrors('productID')">{{ error | translate }}</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-4 mobile-margin-top-15">
+                            <div class="my-input-group">
+                                <label class="required">{{ 'EDIT_CUSTOMER_PRODUCT.PRODUCT_DESCRIPTION' | translate }}</label>
+                                <!-- <input [(ngModel)]="model.productDescription" type="text" maxlength="300"
+                [ngClass]="{ 'is-invalid':  !validator.isValid('productDescription')}"
+                placeholder="{{ 'EDIT_CUSTOMER_PRODUCT.PRODUCT_DESCRIPTION' | translate }}"> -->
+                                <textarea maxlength="1000" [(ngModel)]="model.productDescription" class="form-control" type="text"
+                                            [ngClass]="{ 'is-invalid':  !validator.isValid('productDescription')}"
+                                            placeholder="{{ 'EDIT_CUSTOMER_PRODUCT.PRODUCT_DESCRIPTION' | translate }}"></textarea>
+                                <div *ngIf="!validator.isValid('productDescription')" class="invalid-feedback">
+                                    <div *ngFor="let error of validator.getErrors('productDescription')">{{ error | translate }}</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-4 mobile-margin-top-15">
+                            <div class="my-input-group">
+                                <label class="required">{{ 'EDIT_CUSTOMER_PRODUCT.CUSTOMER' | translate }}</label>
+                                <ng-select [items]="customerList" [multiple]="false" [clearable]="false" [closeOnSelect]="true"
+                                            appendTo="body" [searchable]="true" bindLabel="name" bindValue="id"
+                                            [disabled]="callFrom != productScreenCallType.Product || model.isProductBooked"
+                                            [loading]="initialLoading" (change)="changeCustomer()"
+                                            placeholder="--- {{ 'CUSTOMER_PRODUCT_SUMMARY.LBL_SELECT' | translate }} ---"
+                                            [(ngModel)]="model.customerID" [ngClass]="{ 'is-invalid': !validator.isValid('customerID')}">
+                                    <ng-template ng-option-tmp let-item="item">
+                                        <div class="text-wrap">{{ item.name }}</div>
+                                    </ng-template>
+                                </ng-select>
+
+                                <div *ngIf="!validator.isValid('customerID')" class="invalid-feedback" style="display:block">
+                                    <div *ngFor="let error of validator.getErrors('customerID')">{{ error | translate }}</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row marginTop15">
+
+                        <div class="col-sm-4">
+                            <div class="my-input-group">
+                                <label class="required">{{ 'EDIT_CUSTOMER_PRODUCT.PRODUCTCATEGORY' | translate }}</label>
+                                <ng-select [items]="productCategoryList" [multiple]="false" [clearable]="false" [closeOnSelect]="true"
+                                            appendTo="body" [searchable]="true" bindLabel="name" bindValue="id" [loading]="initialLoading"
+                                            placeholder="--- {{ 'CUSTOMER_PRODUCT_SUMMARY.LBL_SELECT' | translate }} ---"
+                                            [(ngModel)]="model.productCategory"
+                                            [ngClass]="{ 'is-invalid': !validator.isValid('productCategory')}"
+                                            (change)="changeProductSubCategory($event)" [disabled]="model.isProductBooked">
+                                    <ng-template ng-option-tmp let-item="item">
+                                        <div class="text-wrap">{{ item.name }}</div>
+                                    </ng-template>
+                                </ng-select>
+                                <div *ngIf="!validator.isValid('productCategory')" class="invalid-feedback" style="display:block">
+                                    <div *ngFor="let error of validator.getErrors('productCategory')">{{ error | translate }}</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-4">
+                            <div class="my-input-group mobile-margin-top-15">
+                                <label class="required">{{ 'EDIT_CUSTOMER_PRODUCT.PRODUCTSUBCATEGORY' | translate }}</label>
+                                <ng-select [items]="productSubCategoryList" [multiple]="false" [clearable]="false"
+                                            [closeOnSelect]="true" appendTo="body" [searchable]="true" bindLabel="name" bindValue="id"
+                                            [loading]="productSubLoading"
+                                            placeholder="--- {{ 'CUSTOMER_PRODUCT_SUMMARY.LBL_SELECT' | translate }} ---"
+                                            [(ngModel)]="model.productSubCategory"
+                                            [ngClass]="{ 'is-invalid': !validator.isValid('productSubCategory')}"
+                                            [disabled]="model.isProductBooked" (change)="changeProductSubCategory2($event)">
+                                    <ng-template ng-option-tmp let-item="item">
+                                        <div class="text-wrap">{{ item.name }}</div>
+                                    </ng-template>
+                                </ng-select>
+                                <div *ngIf="!validator.isValid('productSubCategory')" class="invalid-feedback" style="display:block">
+                                    <div *ngFor="let error of validator.getErrors('productSubCategory')">{{ error | translate }}</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-4" *ngIf="(entPageFieldAccessEnum.Customer_Product_SubCategory2 | dataFieldAccessPipe :filterEntFieldAccess)">
+                            <div class="my-input-group mobile-margin-top-15">
+                                <label class="required">{{ 'EDIT_CUSTOMER_PRODUCT.PRODUCTCATEGORYSUB2' | translate }}</label>
+                                <ng-select [items]="customerProductMaster.productCategorySub2List" [multiple]="false"
+                                            [clearable]="true" [closeOnSelect]="true" appendTo="body" [searchable]="true" bindLabel="name"
+                                            bindValue="id" [virtualScroll]="true" (scrollToEnd)="getProductSubCategory2Data(true)"
+                                            [typeahead]="customerProductMaster.productCategorySub2Input" [minTermLength]="3"
+                                            (clear)="getProductSubCategory2ListBySearch()" (change)="loadProductSubCategory3($event)"
+                                            [loading]="customerProductMaster.productCategorySub2Loading"
+                                            placeholder="--- {{ 'CUSTOMER_PRODUCT_SUMMARY.LBL_SELECT' | translate }} ---"
+                                            [(ngModel)]="model.productCategorySub2"
+                                            [ngClass]="{ 'is-invalid': !validator.isValid('productCategorySub2')}"
+                                            [disabled]="model.isProductBooked">
+                                    <ng-template ng-option-tmp let-item="item">
+                                        <div class="text-wrap">{{ item.name }}</div>
+                                    </ng-template>
+                                </ng-select>
+                                <div *ngIf="!validator.isValid('productCategorySub2')" class="invalid-feedback" style="display:block">
+                                    <div *ngFor="let error of validator.getErrors('productCategorySub2')">{{ error | translate }}</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row marginTop15">
+                        <div class="col-sm-4" *ngIf="_IsInternalUser && model.productCategorySub2">
+                            <div class="my-input-group mobile-margin-top-15">
+                                <label>{{ 'EDIT_CUSTOMER_PRODUCT.PRODUCTCATEGORYSUB3' | translate }}</label>
+                                <ng-select [items]="customerProductMaster.productCategorySub3List" [multiple]="false"
+                                            [clearable]="false" [closeOnSelect]="true" appendTo="body" [searchable]="true" bindLabel="name"
+                                            bindValue="id" [virtualScroll]="true" (scrollToEnd)="getProductSubCategory3Data(true)"
+                                    [typeahead]="customerProductMaster.productCategorySub3Input" [minTermLength]="3"
+                                            (clear)="getProductSubCategory3ListBySearch()" (change)="changeProductSubCategory3($event)"
+                                            [loading]="customerProductMaster.productCategorySub3Loading"
+                                            placeholder="--- {{ (customerProductMaster.productCategorySub3List!=null && customerProductMaster.productCategorySub3List.length!=0? 'COMMON.LBL_SELECT':'COMMON.LBL_NO_DATA' ) | translate }} ---"
+                                            [(ngModel)]="model.productCategorySub3" [disabled]="model.isProductBooked">
+                                    <ng-template ng-option-tmp let-item="item">
+                                        <div class="text-wrap">{{ item.name }}</div>
+                                    </ng-template>
+                                </ng-select>
+                                <!-- <div *ngIf="productSubCat3Exists && !validator.isValid('productCategorySub3')"
+                class="invalid-feedback" style="display:block">
+                <div *ngFor="let error of validator.getErrors('productCategorySub3')">{{ error | translate }}</div>
+                </div> -->
+                            </div>
+                        </div>
+                        <div class="col-sm-4">
+                            <div class="my-input-group">
+                                <div class="my-input-group">
+                                    <label>{{ 'EDIT_CUSTOMER_PRODUCT.BARCODE' | translate }}</label>
+                                    <input [(ngModel)]="model.barcode" [ngClass]="{ 'is-invalid':  !validator.isValid('barcode')}"
+                                            type="text" maxlength="300" placeholder="{{ 'EDIT_CUSTOMER_PRODUCT.BARCODE' | translate }}" />
+                                    <div *ngIf="!validator.isValid('barcode')" class="invalid-feedback">
+                                        <div *ngFor="let error of validator.getErrors('barcode')">{{ error | translate }}</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-sm-4 mobile-margin-top-15">
+                            <div class="my-input-group">
+                                <div class="my-input-group">
+                                    <label>{{ 'EDIT_CUSTOMER_PRODUCT.LBL_FACTORYREFERENCE' | translate }}</label>
+                                    <input [(ngModel)]="model.factoryReference"
+                                            [ngClass]="{ 'is-invalid':  !validator.isValid('factoryReference')}" type="text" maxlength="300"
+                                            placeholder="{{ 'EDIT_CUSTOMER_PRODUCT.LBL_FACTORYREFERENCE' | translate }}" />
+                                    <div *ngIf="!validator.isValid('factoryReference')" class="invalid-feedback">
+                                        <div *ngFor="let error of validator.getErrors('barcode')">{{ error | translate }}</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row marginTop15">
+                        <div class="col-sm-4 mobile-margin-top-15" *ngIf="callFrom == productScreenCallType.Product">
+                            <div class="my-input-group">
+                                <div class="my-input-group">
+                                    <label class="required">{{ 'EDIT_CUSTOMER_PRODUCT.LBL_API_SERVICES' | translate }}</label>
+                                    <ng-select [items]="apiServiceList" [multiple]="true" class="multiple" [closeOnSelect]="true"
+                                                [searchable]="true" bindLabel="name" bindValue="id" [loading]="loading"
+                                                placeholder="--- {{ 'COMMON.LBL_SELECT' | translate }} ---" [(ngModel)]="model.apiServiceIds"
+                                        [ngClass]="{'is-invalid': !validator.isValid('apiServiceIds')}">
+                                    </ng-select>
+                                    <div *ngIf="!validator.isValid('apiServiceIds')" class="invalid-feedback">
+                                        <div *ngFor="let error of validator.getErrors('apiServiceIds')">
+                                            {{ error | translate }}</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-sm-3 mobile-margin-top-15 col-lg-4" *ngIf="callFrom == productScreenCallType.Product">
+                            <div class="my-input-group">
+                                <label>Unit</label>
+                                <!-- <input maxlength="200" [(ngModel)]="model.unit" placeholder="Unit" type="number" oninput="validity.valid||(value='');" (keypress)="avoidDecimal(model.unit ,$event)"/> -->
+
+                                <ng-select [items]="customerProductMaster.unitList" [multiple]="false" [clearable]="false"
+                                            [closeOnSelect]="true" appendTo="body" [searchable]="true" bindLabel="name" bindValue="id"
+                                            [loading]="customerProductMaster.unitLoading"
+                                            placeholder="--- {{ 'CUSTOMER_PRODUCT_SUMMARY.LBL_SELECT' | translate }} ---"
+                                    [(ngModel)]="model.unit" [ngClass]="{ 'is-invalid': !validator.isValid('productCategory')}">
+                                    <ng-template ng-option-tmp let-item="item">
+                                        <div class="text-wrap">{{ item.name }}</div>
+                                    </ng-template>
+                                </ng-select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row marginTop15" *ngIf="model.productCategorySub3 > 0">
+                        <div class="col-sm-3 mobile-margin-top-15 col-lg-4">
+                            <div class="my-input-group">
+                                <label>{{ 'PRODUCT_CATEGORY_SUB3.LBL_PREPARATION_TIME' | translate }}</label>
+                                <input maxlength="200" [(ngModel)]="model.timePreparation" (change)="changeTp()"
+                                        [ngClass]="{'is-invalid': !validator.isValid('timePreparation')}" min="0" max="99999"
+                                        (keypress)="numberOnly($event)" (paste)="onPaste($event)"
+                                        placeholder="{{ 'PRODUCT_CATEGORY_SUB3.LBL_PREPARATION_TIME' | translate }}" type="number" />
+                                <div *ngIf="!validator.isValid('timePreparation')" class="invalid-feedback" style="display:block">
+                                    <div *ngFor="let error of validator.getErrors('timePreparation')">
+                                        {{ error | translate }}</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-3 mobile-margin-top-15 col-lg-4">
+                            <div class="my-input-group">
+                                <label>{{ 'PRODUCT_CATEGORY_SUB3.LBL_8H_SAMPLE_SIZE' | translate }}</label>
+                                <input type="number" min="0" max="99999" [(ngModel)]="model.sampleSize8h"
+                                        [ngClass]="{'is-invalid': !validator.isValid('sampleSize8h')}"
+                                        placeholder="{{ 'PRODUCT_CATEGORY_SUB3.LBL_8H_SAMPLE_SIZE' | translate }}" />
+                                <div *ngIf="!validator.isValid('sampleSize8h')" class="invalid-feedback" style="display:block">
+                                    <div *ngFor="let error of validator.getErrors('sampleSize8h')">
+                                        {{ error | translate }}</div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="row marginTop15">
+                        <div class="col-sm-4 " *ngIf="model.productCategorySub3 > 0">
+                            <div class="my-input-group ">
+                                <label>Tp Adjustment Reason</label>
+                                <textarea maxlength="1000" [(ngModel)]="model.tpAdjustmentReason" class="form-control"
+                                            [ngClass]="{'is-invalid': validateTpAdjustmentReason()}" type="text"></textarea>
+                                <div *ngIf="validateTpAdjustmentReason()" class="invalid-feedback" style="display:block">
+                                    <div>
+                                        Tp Adjustment reason required</div>
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <div class="col-sm-4 ">
+                            <div class="my-input-group ">
+                                <label>{{ 'EDIT_CUSTOMER_PRODUCT.REMARKS' | translate }}</label>
+                                <textarea maxlength="1000" [(ngModel)]="model.remarks" class="form-control" type="text"></textarea>
+                            </div>
+
+                        </div>
+                        <div class="col-sm-4 " *ngIf="callFrom == productScreenCallType.Product">
+                            <div class="my-input-group ">
+                                <label>Technical Comments</label>
+                                <textarea maxlength="1000" [(ngModel)]="model.technicalComments" class="form-control"
+                                            type="text"></textarea>
+                            </div>
+
+                        </div>
+
+                        <div class="col-sm-4 ">
+                            <label></label>
+                            <div class="styled-checkbox-container">
+                                <input class="styled-checkbox" id="checkboxnewproduct" type="checkbox" [checked]="model.isNewProduct"
+                                        [(ngModel)]="model.isNewProduct">
+                                <label for="checkboxnewproduct">{{ 'EDIT_CUSTOMER_PRODUCT.LBL_IS_NEWPRODUCT' | translate }}</label>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="loader-overlay" *ngIf="downloadloading">
+                        <div class="loader-container">
+                            <img src="assets/images/reload.svg" alt="">
+                            <span>{{'COMMON.LBL_LOADER' | translate}}</span>
+                        </div>
+                    </div>
+                    <div class="loader-overlay" *ngIf="fileuploadLoader">
+                        <div class="loader-container">
+                            <img src="assets/images/reload.svg" alt="">
+                            <span>{{'COMMON.LBL_LOADER' | translate}}</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="card-wrapper">
+                <div class="card-container">
+                    <div class="card-header-container">
+                        <div class="card-header-text">
+                            <h6 *ngIf="callFrom == productScreenCallType.Product" class="container-head">
+                                {{ 'EDIT_BOOKING.LBL_DOC_PATH' | translate }}</h6>
+                        </div>
+                    </div>
+                    <div class="row marginTop15" *ngIf="callFrom == productScreenCallType.Product">
+                        <div class="col-sm-4">
+                            <div class="my-input-group">
+                                <label for="">{{'EDIT_EMAIL_SEND.LBL_FILE_TYPE' | translate }}</label>
+                                <ng-select [items]="fileTypeList" (clear)="clearFileType()" [loading]="fileTypeLoading" [searchable]="true" bindLabel="name"
+                                           appendTo="body" bindValue="id" [(ngModel)]="fileTypeId" (change)="onChangeFileType($event);"
+                                           placeholder="--- {{ (fileTypeList && fileTypeList.length>0? 'COMMON.LBL_SELECT':'COMMON.LBL_NO_DATA' ) | translate }} ---"
+                                    [ngClass]="{ 'is-invalid':  !validator.isValid('fileTypeId')}">
+                                    <ng-template ng-option-tmp let-item="item">
+                                        <div class="text-wrap"><span>{{item.name}}</span></div>
+                                    </ng-template>
+                                </ng-select>
+                            </div>
+                        </div>
+                        <div class="col-sm-4" *ngIf="productMSChartMasterModel.showMsChartFileFormat">
+                            <div class="my-input-group">
+                                <label for="">{{'EDIT_CUSTOMER_PRODUCT.LBL_MS_CHART_FILE_FORMAT' |
+                                    translate}}</label>
+                                <ng-select [items]="productMSChartMasterModel.msChartFileFormatList" [loading]="productMSChartMasterModel.msChartFileFormatLoading"
+                                    [searchable]="true" bindLabel="ocrFileFormat" appendTo="body" bindValue="id"
+                                    [(ngModel)]="productMSChartMasterModel.msChartFileFormatId" (change)="onChangeFileFormat()"
+                                    (clear)="clearFileFormat()"
+                                    placeholder="--- {{ (productMSChartMasterModel.msChartFileFormatList && productMSChartMasterModel.msChartFileFormatList.length>0? 'COMMON.LBL_SELECT':'COMMON.LBL_NO_DATA' ) | translate }} ---"
+                                    [ngClass]="{ 'is-invalid':  !validator.isValid('productMSChartMasterModel.msChartFileFormatId')}">
+                                    <ng-template ng-option-tmp let-item="item">
+                                        <div class="text-wrap"><span>{{item.ocrFileFormat}}</span></div>
+                                    </ng-template>
+                                </ng-select>
+                            </div>
+                        </div>
+                        <div class="col-sm-3 col-md-3 col-lg-3">
+                          <div class="my-input-group">
+                            <label class="control-label"></label>
+                            <div (click)="validateFileType()">
+                              <fieldset [disabled]="!uploadFileExtensions">
+                                <app-drag-drop [fileLimit]="uploadFileLimit" [fileSizeLimit]="10000000"
+                                               [Bigupload]="false" [SmallUploadImage]=" " [SmallUploadTitle]=" "
+                                               [SmallUploadSubTitle]=" " [fileExtension]="uploadFileExtensions"
+                                               (click)="fnUplodclick(fileConfirmationPopsUp)"
+                                               (fileUpload)="cloudUpload($event)">
+                                </app-drag-drop>
+                              </fieldset>
+                            </div>
+                          </div>
+                        </div>
+                    </div>
+                    <div class="row marginTop15"
+                        *ngIf="model.cuProductFileAttachments != null && model.cuProductFileAttachments.length>0 && callFrom == productScreenCallType.Product">
+                        <div class="col-sm-8 col-md-12 col-lg-6">
+                            <div class="table-container">
+                                <table class="pagination-table bordered">
+                                    <thead>
+                                        <tr>
+                                            <th> {{'EDIT_CUSTOMER_PRODUCT.LBL_NAME' | translate }}</th>
+                                            <th> {{'EDIT_EMAIL_SEND.LBL_FILE_TYPE' | translate }}</th>
+                                            <th> {{'EDIT_CUSTOMER_PRODUCT.LBL_VIEW' | translate }}</th>
+                                            <th> {{'EDIT_CUSTOMER_PRODUCT.LBL_DOWNLOAD' | translate }}</th>
+                                            <th> {{'EDIT_CUSTOMER_PRODUCT.LBL_DELETE' | translate }}</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr *ngFor="let file of model.cuProductFileAttachments; let i=index;">
+                                            <td class="text-wrap width-140">
+                                                {{ (file.fileName.length>20)? (file.fileName | slice:0:20)+'..':(file.fileName) }}</td>
+                                                <td class="text-wrap width-140">{{getFileType(file.fileTypeId)}}</td>
+                                            <td class="width-100" style="color: blue; cursor:pointer;">
+                                                <a *ngIf="file.fileTypeId == msChartFileType.ProductRefPictures"
+                                                    (click)="getPreviewProductImage(file,productImage)">
+                                                    {{'EDIT_CUSTOMER_PRODUCT.LBL_VIEW' | translate }}</a>
+                                            </td>
+                                            <td class="width-100" style="color: blue; cursor:pointer;">
+                                                <a (click)="getFile(file)">
+                                                    {{'EDIT_CUSTOMER_PRODUCT.LBL_DOWNLOAD' | translate }}</a>
+                                            </td>
+
+                                            <td class="width-60">
+                                                <ng-container *ngIf="file.fileTypeId != msChartFileType.MSChartPdf || ocrMasterModel.ocrList.length == 0; else openpopUp">
+                                                  <button (click)="removeAttachment(i)" class="secondary-cta x-small" style="margin-left:10px">
+                                                    <i class="fa fa-trash"></i>
+                                                  </button>  
+                                                </ng-container>
+                                                <ng-template #openpopUp>
+                                                  <button (click)="openConfirm(i,content)" class="secondary-cta x-small" style="margin-left:10px">
+                                                    <i class="fa fa-trash"></i>
+                                                  </button>
+                                                </ng-template>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="card-wrapper" *ngIf="ocrMasterModel && ocrMasterModel.ocrList && ocrMasterModel.ocrList.length > 0">
+                <div class="card-container">
+                    <div class="card-header-container">
+                        <div class="card-header-text">
+                            <h6 class="container-head">
+                                {{ 'SCHEDULE_SUMMARY.LBL_MS_CHART' | translate }}</h6>
+                        </div>
+                    </div>
+                    <div class="row marginTop15">
+                        <div class="col-4 pb-1">
+                            <div class="my-input-group" *ngIf="ocrMasterModel.ocrTableNameList && ocrMasterModel.ocrTableNameList.length > 0">
+                                <ng-select [items]="ocrMasterModel.ocrTableNameList" [multiple]="false" [clearable]="false" [closeOnSelect]="true"
+                                    [searchable]="true" [(ngModel)]="ocrMasterModel.ocrName" (change)="changeOcrName()">
+                                </ng-select>
+                            </div>
+                        </div>
+                        <div class="col-8 pb-1 text-right">
+                            <button class="secondary-cta small mr-2" (click)="exportOcr()"
+                                [disabled]="ocrMasterModel.exportOcrLoading" *ngIf="ocrMasterModel.showOcrExport">
+                                {{ 'QUOTATION_SUMMARY.LBL_EXPORT' | translate }}
+                                <span *ngIf="ocrMasterModel.exportOcrLoading">
+                                    <i class="fa fa-refresh fa-spin" aria-hidden="true"></i>
+                                </span>
+                            </button>
+                        </div>
+                        <div class="col-12">
+                            <div class="table-container" style="overflow-x: scroll;overflow-y: scroll; max-height: 500px;width:100%">
+                                <table class="pagination-table bordered">
+                                    <thead>
+                                        <tr class="sticky-top-row">
+                                            <th class="Center_Middle width-100">
+                                                <div class="styled-checkbox-container">
+                                                    <input type="checkbox"
+                                                        [(ngModel)]="ocrMasterModel.isAllSelected"
+                                                        class="styled-checkbox" id="checkboxall"
+                                                        (change)="checkUncheckAll()" />
+                                                    <label for="checkboxall"></label>
+                                                </div>
+                                            </th>
+                                            <th class="width-140"> {{'EDIT_CUSTOMER_PRODUCT.LBL_SIZE' | translate }} </th>
+                                            <th class="width-140"> {{'EDIT_CUSTOMER_PRODUCT.LBLCODE' | translate }} </th>
+                                            <th class="width-220 whitespacenormal wordbreak"> {{'EDIT_CUSTOMER_PRODUCT.LBL_DESCRIPTION' | translate }} </th>
+                                            <th class="width-140"> {{'EDIT_CUSTOMER_PRODUCT.LBL_REQ_VALUE' | translate }} </th>
+                                            <th class="width-140"> {{'EDIT_CUSTOMER_PRODUCT.LBL_TOL_PLUS' | translate }} </th>
+                                            <th class="width-140"> {{'EDIT_CUSTOMER_PRODUCT.LBL_TOL_MINUS' | translate }} </th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr *ngFor="let item of ocrMasterModel.ocrValidators; let i=index">
+                                            <td class="Center_Middle width-100">
+                                                <div class="styled-checkbox-container">
+                                                    <input type="checkbox" [(ngModel)]="item.ocr.isSelected"
+                                                    class="styled-checkbox" id="checkbox-{{i}}"
+                                                    (change)="isAllSelected()" />
+                                                <label for="checkbox-{{i}}"></label>
+                                                </div>
+                                            </td>
+                                            <td class="width-140"> 
+                                                <ng-container *ngIf="!item.ocr.isSelected; else codeInput">
+                                                    {{item.ocr.code}}
+                                                </ng-container>
+                                                <ng-template #codeInput>
+                                                    <input type="text" [(ngModel)]="item.ocr.code" maxlength="1000"
+                                                    [ngClass]="{ 'is-invalid':!item.validator.isValid('code')}"/>
+                                                    <div *ngIf="!item.validator.isValid('code')" class="invalid-feedback">
+                                                        <div *ngFor="let error of item.validator.getErrors('code')">
+                                                          {{ error | translate }}
+                                                        </div>
+                                                    </div>
+                                                </ng-template>
+                                            </td>
+                                            <td class="width-140"> 
+                                                <ng-container *ngIf="!item.ocr.isSelected; else mpcodeInput">
+                                                    {{item.ocr.mpcode}}
+                                                </ng-container>
+                                                <ng-template #mpcodeInput>
+                                                    <input type="text" [(ngModel)]="item.ocr.mpcode" maxlength="500"/>
+                                                </ng-template>
+                                            </td>
+                                            <td class="width-220 whitespacenormal wordbreak"> 
+                                                <ng-container *ngIf="!item.ocr.isSelected; else descriptionInput">
+                                                    {{item.ocr.description}}
+                                                </ng-container>
+                                                <ng-template #descriptionInput>
+                                                    <input type="text" [(ngModel)]="item.ocr.description" maxlength="2000"
+                                                    [ngClass]="{ 'is-invalid':!item.validator.isValid('description')}"/>
+                                                    <div *ngIf="!item.validator.isValid('description')" class="invalid-feedback">
+                                                        <div *ngFor="let error of item.validator.getErrors('description')">
+                                                          {{ error | translate }}
+                                                        </div>
+                                                    </div>
+                                                </ng-template>
+                                            </td>
+                                            <td class="width-140">
+                                                <ng-container *ngIf="!item.ocr.isSelected; else requiredInput">
+                                                    {{item.ocr.required}}
+                                                </ng-container>
+                                                <ng-template #requiredInput>
+                                                    <input type="number" [(ngModel)]="item.ocr.required"
+                                                    [ngClass]="{ 'is-invalid':!item.validator.isValid('required')}"/>
+                                                    <div *ngIf="!item.validator.isValid('required')" class="invalid-feedback">
+                                                        <div *ngFor="let error of item.validator.getErrors('required')">
+                                                          {{ error | translate }}
+                                                        </div>
+                                                    </div>
+                                                </ng-template>
+                                            </td>
+                                            <td class="width-140"> 
+                                                <ng-container *ngIf="!item.ocr.isSelected; else tolerance1UpInput">
+                                                    {{item.ocr.tolerance1Up}}
+                                                </ng-container>
+                                                <ng-template #tolerance1UpInput>
+                                                    <input type="number" [(ngModel)]="item.ocr.tolerance1Up"
+                                                    [ngClass]="{ 'is-invalid':!item.validator.isValid('tolerance1Up')}"/>
+                                                    <div *ngIf="!item.validator.isValid('tolerance1Up')" class="invalid-feedback">
+                                                        <div *ngFor="let error of item.validator.getErrors('tolerance1Up')">
+                                                          {{ error | translate }}
+                                                        </div>
+                                                    </div>
+                                                </ng-template>
+                                            </td>
+                                            <td class="width-140"> 
+                                                <ng-container *ngIf="!item.ocr.isSelected; else tolerance1DownInput">
+                                                    {{item.ocr.tolerance1Down}}
+                                                </ng-container>
+                                                <ng-template #tolerance1DownInput>
+                                                    <input type="number" [(ngModel)]="item.ocr.tolerance1Down"/>
+                                                </ng-template>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="form-action-container" style="text-align: right;padding: 1%">
+                <ng-container *ngIf="ocrMasterModel && ocrMasterModel.ocrList && ocrMasterModel.ocrList.length > 0 && !ocrMasterModel.showOcrExport; else showSaveButton">
+                    <button class="primary-cta small" [disabled]="savedataloading ||initialLoading" (click)="saveProductConfirm(productSaveConfirmPopup)">
+                        {{'EDIT_CUSTOMER_PRODUCT.LBL_SAVE' | translate }}
+                        <span *ngIf="savedataloading">
+                            <i class="fa fa-refresh fa-spin" aria-hidden="true"></i>
+                        </span>
+                    </button>
+                </ng-container>
+                <ng-template #showSaveButton>
+                    <button class="primary-cta small" [disabled]="savedataloading ||initialLoading" (click)="save()">
+                        {{'EDIT_CUSTOMER_PRODUCT.LBL_SAVE' | translate }}
+                        <span *ngIf="savedataloading">
+                            <i class="fa fa-refresh fa-spin" aria-hidden="true"></i>
+                        </span>
+                    </button>
+                </ng-template>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<ng-template #productImage let-modal>
+    <div class="modal-header custom-modal-header">
+        <h4 class="modal-title" id="modal-basic-title">{{'EDIT_BOOKING.VIEW_PRODUCT_TITLE' | translate}}</h4>
+        <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+    </div>
+    <div class="modal-body custom-modal-body">
+        <ngx-gallery [options]="productGalleryOptions" [images]="productGalleryImages"></ngx-gallery>
+    </div>
+</ng-template>
+
+<ng-template #content let-modal>
+    <div class="delete-popup-container">
+        <div class="content">
+            <img src="assets/images/new-set/delete-primary.svg" alt="">
+            <div class="title-container">
+                <h3>{{ 'COMMON.LBL_CONFIRMDELETION' | translate }}</h3>
+                <p class="mt-2">{{ 'EDIT_CUSTOMER_PRODUCT.MSG_CONFRMDELETE' | translate }}</p>
+            </div>
+        </div>
+        <div class="text-right">
+            <button class="secondary-cta link" (click)="modal.dismiss('Cross click')">{{ 'COMMON.LBL_CONFIRMCANCEL' | translate }}</button>
+            <button class="primary-cta" (click)="removeAttachment(fileIndex)">{{ 'COMMON.LBL_OK' | translate }}</button>
+        </div>
+    </div>
+</ng-template>
+
+<ng-template #productSaveConfirmPopup let-modal>
+    <div class="delete-popup-container">
+        <div class="content">
+            <img src="assets/images/new-set/confirm-green-big.svg" alt="">
+            <div class="title-container">
+                <h3>{{ 'EDIT_CUSTOMER_PRODUCT.LBL_CONFRMSAVE' | translate }}</h3>
+                <p class="mt-2">{{ 'EDIT_CUSTOMER_PRODUCT.MSG_CONFRMSAVE' | translate }}</p>
+            </div>
+        </div>
+        <div class="text-right">
+            <button class="secondary-cta link" (click)="modal.dismiss('Cross click')">{{ 'COMMON.LBL_CONFIRMCANCEL' | translate }}</button>
+            <button class="primary-cta" (click)="save()">{{ 'COMMON.LBL_OK' | translate }}</button>
+        </div>
+    </div>
+</ng-template>
+
+<ng-template #fileConfirmationPopsUp let-modal>
+    <div class="delete-popup-container">
+        <div class="content">
+            <div class="title-container">
+                <h3>{{ 'EDIT_CUSTOMER_PRODUCT.MSG_MS_CHART_UPLOAD_FILE_TITLE' | translate }}</h3>
+                <p class="mt-2">{{ 'EDIT_CUSTOMER_PRODUCT.MSG_MS_CHART_UPLOAD_FILE_MESSAGE' | translate }}</p>
+            </div>
+        </div>
+        <div class="text-right">
+            <button class="primary-cta" (click)="existingFile()">{{ 'EDIT_CUSTOMER_PRODUCT.LBL_EXISTING_MS_CHART' | translate }}</button>
+            <button class="secondary-cta link" (click)="fileHandler.click()">{{ 'EDIT_CUSTOMER_PRODUCT.LBL_NEW_MS_CHART' | translate }}</button>
+            <input type="file" [fileLimit]="uploadFileLimit" [fileSizeLimit]="10000000" [fileExtension]="uploadFileExtensions"
+            style="display: none;" (change)="inputFileUpload($event)" #fileHandler>
+        </div>
+    </div>
+</ng-template>

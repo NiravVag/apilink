@@ -1,0 +1,87 @@
+﻿@using DTO.Common;
+@{
+    ViewData["Title"] = "ExpenseSummaryTemplate";
+}
+
+@model DTO.Expense.ExportExpenseClaimSummaryKpiResponse
+
+
+<xls-sheet name="Expense Summary Kpi">
+    <table xls-begin="A:1" style="border-style:solid">
+        <tr>
+            <td style="font-weight:bold">From date</td>
+            <td style="font-weight:bold">To date</td>
+        </tr>
+        <tr>
+            <td xls-type="date">@Model.FromDate</td>
+            <td xls-type="date">@Model.ToDate</td>
+        </tr>
+        <tr>
+            <td></td>
+        </tr>
+        <tr style="background-color:#f5f5f5;font-weight:bold;text-align:center">
+            <th>Entity/ Company</th>
+            <th>Customer</th>
+            <th>Country</th>
+            <th>Expense Date</th>
+            <th>Locations</th>
+            <th>Department</th>
+            <th>Claim date</th>
+            <th>Claim No.</th>
+            <th>Employee</th>
+            <th>Regional Language  Name</th>
+            <th>Bank Account</th>
+            <th>Total Travel Expense Amt.</th>
+            <th>Travel Allowance</th>
+            <th>Report Allowance</th>
+            <th>Food Allowance</th>
+            <th>Manday Cost</th>
+            <th>Hotel Expense</th>
+            <th>Visa</th>
+            <th>Phone</th>
+            <th>Others</th>
+            <th>Tot.Amt.</th>
+            <th>Payroll Currency</th>
+            <th>
+                Payroll Company
+            </th>
+            <th>Exp. Status</th>
+            <th>Claim Type</th>
+            <th>Payment Status</th>
+            <th>Auto Expense</th>
+        </tr>
+
+        @foreach (var item in Model.Data)
+        {
+        <tr>
+            <td width="150px" xls-type="number"></td>
+            <td width="150px">@item.CustomerName</td>
+            <td width="150px">@item.Country</td>
+            <td width="150px">@Html.Raw(@item.ExpenseDate)</td>
+            <td width="150px">@item.Location</td>
+            <td width="150px">@Html.Raw(@item.DeptName)</td>
+            <td width="250px" xls-type="date">@item.ClaimDate</td>
+            <td width="250px">@item.ClaimNo</td>
+            <td width="150px">@item.EmpName</td>
+            <td width="150px">@Html.Raw(@item.RegionalEmpName)</td>
+            <td width="150px">@item.BankAccNo</td>
+            <td width="150px" xls-type="number">@item.TotalTravelExpense</td>
+            <td width="150px" xls-type="number">@item.TravelAllowance</td>
+            <td width="150px" xls-type="number">@item.ReportAllowance</td>
+            <td width="150px" xls-type="number">@item.FoodAllowance</td>
+            <td width="150px" xls-type="number">@item.MandayCost</td>
+            <td width="150px" xls-type="number">@item.HotelExpense</td>
+            <td width="150px" xls-type="number">@item.Visa</td>
+            <td width="150px" xls-type="number">@item.Phone</td>
+            <td width="150px" xls-type="number">@item.OtherExpense</td>
+            <td width="150px" xls-type="number">@item.TotalAmt</td>
+            <td width="150px">@item.PayrollCurrency</td>
+            <td width="150px">@item.PayrollCompanyName</td>
+            <td width="150px">@item.ExpenseStatus</td>
+            <td width="150px">@item.ClaimType</td>
+            <td width="150px">@item.PaymentStatus</td>
+            <td width="150px">@item.AutoExpense</td>
+        </tr>
+        }
+    </table>
+</xls-sheet>

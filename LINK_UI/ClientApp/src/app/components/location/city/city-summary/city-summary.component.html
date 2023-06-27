@@ -1,0 +1,141 @@
+<div class="main-wrapper">
+  <div class="wrapper dashboard-wrapper">
+    <div class="my-container">
+      <div class="master-body">
+        <div class="title-container">
+          <h3 class="main-title"> {{ 'CITY_SUMMARY.TITLE' | translate }}</h3>
+        </div>
+        <div class="content-container quotation-container">
+          
+          <div  [@expandCollapse]="isFilterOpen ? 'open' : 'close'" class="centerContainerPadding common-filter-container">
+             <div class="animated-icon-container" (click)="toggleFilterSection()" *ngIf="(model.items && model.items.length>0)">
+              <img src="assets/images/cta-close-grey.svg" alt="close">
+              </div>
+              <div class="row">
+                <div class="col-sm-3 col-lg-3">
+                  <div class="my-input-group">
+                    <label class="required" for="ddlcountry">{{ 'CITY_SUMMARY.LBL_COUNTRY' | translate }}</label>
+                    <select [(ngModel)]="model.Countryvalues" (ngModelChange)="refreshDataByCountry($event)"
+                            [ngClass]="{'is-invalid': !validator.isValid('Countryvalues')}">
+                      <option value="0">--- {{ 'CITY_SUMMARY.LBL_SELECT' | translate }}---</option>
+                      <option *ngFor="let item of data.countryList" [ngValue]="item.id">{{item.countryName}}</option>
+                    </select>
+                    <div *ngIf="!validator.isValid('Countryvalues')" class="invalid-feedback" style="display:block">
+                      <div *ngFor="let error of validator.getErrors('Countryvalues')">{{ error | translate }}</div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-sm-3 col-lg-3 mobile-margin-top-15">
+                  <div class="my-input-group">
+                    <label for="ddlprovince">{{ 'CITY_SUMMARY.LBL_REGION' | translate }}</label>
+                    <ng-select [items]="provinceList" [hideSelected]="true" [loading]="loading" [multiple]="false" appendTo="body"
+                               (ngModelChange)="refreshcity($event)" [searchable]="true" bindLabel="name"
+                               [(ngModel)]="model.provinceValues"
+                               placeholder="--- {{ 'CITY_SUMMARY.LBL_SELECT' | translate }} ---">
+                    </ng-select>
+                  </div>
+                </div>
+                <div class="col-sm-3  col-lg-3 mobile-margin-top-15">
+                  <div class="my-input-group">
+                    <label for="ddlcity">{{ 'CITY_SUMMARY.LBL_CITY' | translate }}</label>
+                    <ng-select [items]="citylist" [hideSelected]="true" [loading]="loading" class="multiple" appendTo="body"
+                               [multiple]="true" [searchable]="true" [closeOnSelect]="false" bindLabel="name"
+                               [(ngModel)]="model.Cityvalues" placeholder="--- {{ 'CITY_SUMMARY.LBL_SELECT' | translate }} ---">
+                    </ng-select>
+                  </div>
+                </div>
+              </div>
+
+              <div class="row marginTop25">
+                <div class="col-12 col-sm-12 text-right mt-3 mt-sm-0"> 
+                  <button id="btnAdd" class="secondary-cta small" (click)="NavigatenewPath('city/edit-city')">
+                    + {{
+                        'COMMON.LBL_NEW' | translate
+                    }}
+                  </button>
+                  &nbsp;
+                  <button id="btnSearch" [disabled]="searchloading || loading" class="primary-cta small"
+                  (click)="SearchDetails()">
+                    {{
+                     'CITY_SUMMARY.LBL_SEARCH' | translate
+                      }}
+                    <span *ngIf="searchloading">
+                      <i class="fa fa-refresh fa-spin" aria-hidden="true"></i>
+                    </span>
+                    </button>
+
+                </div>
+              </div>
+            </div>
+          <div class="centerContainerPadding float-left" *ngIf="(model.items && model.items.length>0)">
+            <div class="row">
+              <div class="col-6 col-sm-4 col-xl-2 d-flex">
+                <p  class="search-trigger-heading" [innerHtml]="showPaginationText()"></p>
+
+              </div>
+              <div class="col-6 col-sm-8 col-xl-10 text-right">
+                <div class="animated-icon-container" *ngIf="!isFilterOpen" (click)="toggleFilterSection()">
+                  <img src="assets/images/cta-search-grey.svg" alt="search">
+                </div>
+              </div>
+            </div>
+           
+            <div class="quotation-search-container">
+              <div class="table-container h-scroll table-max-height-400">
+                <table class="pagination-table simple-table bordered">
+                <thead>
+                  <tr class="sticky-top-row">
+                    <th class="width-20"></th>
+                    <th>{{ 'CITY_SUMMARY.LBL_COUNTRY' | translate }}</th>
+                    <th>{{ 'CITY_SUMMARY.LBL_REGION' | translate }}</th>
+                    <th>{{ 'CITY_SUMMARY.LBL_CITY' | translate }}</th>
+                    <th>{{ 'CITY_SUMMARY.LBL_OFFICE' | translate }}</th>
+                    <th>{{ 'CITY_SUMMARY.LBL_ZONE' | translate }}</th>
+                    <th>{{ 'CITY_SUMMARY.LBL_TRAVEL_TIME' | translate }}</th>
+                    <th>{{ 'CITY_SUMMARY.LBL_PHCODE' | translate }}</th>
+                    
+                  </tr>
+                </thead>
+                <tbody>
+                 
+                  <tr *ngFor="let iteminfo of model.items">
+                    <td class="Center_Middle">
+                      <span class="table-cta icon-cta common-tooltip" 
+                      (click)="getDetails(iteminfo.id)" data-tooltip="Edit">
+                        <img src="assets/images/cta-edit.svg" alt="Edit">
+                      </span>
+                    </td>
+                    <td>{{iteminfo.countryname}}</td>
+                    <td>{{iteminfo.provincename}}</td>
+                    <td>{{iteminfo.cityname}}</td>
+                    <td>{{iteminfo.officename}}</td>
+                    <td>{{iteminfo.zone}}</td>
+                    <td>{{iteminfo.traveltime}}</td>
+                    <td>{{iteminfo.phcode}}</td>
+                    
+                  </tr>
+                </tbody>
+              </table>
+              </div>
+            </div>
+            <div class="pagination-container">
+              <select class="small" [(ngModel)]="selectedPageSize" (change)="SearchDetails()">
+                <option *ngFor="let item of pagesizeitems" [ngValue]=item>{{item}}</option>
+              </select>
+              <ngb-pagination (pageChange)="onPager($event)" [pageSize]="model.pageSize"
+                              [collectionSize]="model.totalCount" [(page)]="model.index" [maxSize]="5"></ngb-pagination>
+            </div>
+          </div>
+
+          <div class="centerContainerPadding" *ngIf="model.noFound" >
+            <div class="error-container">
+              <img src="assets/images/no-result.svg" alt="" class="thumbnail">
+              <h4 class="title">{{'CITY_SUMMARY.LBL_No_ITEM' | translate}}</h4>
+              <p class="error-subtitle">{{'CS_CONFIG_SUMMARY.LBL_NODATA' | translate}}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

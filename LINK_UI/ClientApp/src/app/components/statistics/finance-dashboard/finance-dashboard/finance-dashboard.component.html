@@ -1,0 +1,1343 @@
+<div class="main-wrapper">
+    <div class="wrapper dashboard-wrapper mandays-dashboard-wrapper dashbaord-placeholder-container">
+        <div class="filter-container style-2" [@expandCollapse]="isFilterOpen ? 'open' : 'close'"
+            [@.disabled]="isMobile">
+            <div class="my-dashboard-container customer-dashboard-mobile-filter">
+                <div class="row">
+                    <div class="col-sm-3 mobile-margin-top-15">
+                        <div class="my-input-group">
+                            <label for="">{{'COMMON.DATE_PERIOD' | translate}}</label>
+                            <div class="d-flex my-input-group">
+                                <div class="calendar-wrapper inline mr-2">
+                                    <input type="text" autocomplete="off" outsideDays="hidden" placeholder="From"
+                                        name="dp" ngbDatepicker #d1="ngbDatepicker" (click)="d1.toggle()"
+                                        container="body" [(ngModel)]="requestModel.serviceDateFrom"
+                                        [ngClass]="{ 'is-invalid':  !validator.isValid('serviceDateFrom')}">
+                                    <img src="assets/images/cta-calendar-grey.svg" alt="" class="calendar-icon"
+                                        (click)="d1.toggle()">
+                                </div>
+                                <div class="calendar-wrapper inline">
+                                    <input type="text" autocomplete="off" outsideDays="hidden" placeholder="To"
+                                        name="dp" ngbDatepicker #d2="ngbDatepicker" (click)="d2.toggle()"
+                                        container="body" [(ngModel)]="requestModel.serviceDateTo"
+                                        [ngClass]="{ 'is-invalid':  !validator.isValid('serviceDateTo')}">
+                                    <img src="assets/images/cta-calendar-grey.svg" alt="" class="calendar-icon"
+                                        (click)="d2.toggle()">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row" *ngIf="false">
+                            <div class="col-6 my-input-group">
+                                <div class="calendar-wrapper">
+                                    <input type="text" autocomplete="off" outsideDays="hidden" placeholder="From"
+                                        name="dp1" ngbDatepicker #d1="ngbDatepicker" (click)="d1.toggle()"
+                                        container="body">
+                                    <img src="assets/images/cta-calendar-grey.svg" alt="" class="calendar-icon"
+                                        (click)="d1.toggle()">
+                                </div>
+                            </div>
+                            <div class="col-6 my-input-group">
+                                <div class="calendar-wrapper">
+                                    <input type="text" autocomplete="off" outsideDays="hidden" placeholder="To"
+                                        name="dp2" ngbDatepicker #d2="ngbDatepicker" (click)="d2.toggle()"
+                                        container="body">
+                                    <img src="assets/images/cta-calendar-grey.svg" alt="" class="calendar-icon"
+                                        (click)="d2.toggle()">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-3 mobile-margin-top-15">
+                        <div class="my-input-group">
+                            <label for="">{{'COMMON.LBL_CUSTOMER' | translate}}</label>
+                            <ng-select bindLabel="name" bindValue="id" [multiple]="false"
+                                [items]="dashBoardFilterMaster.customerList" [clearable]="true"
+                                [(ngModel)]="requestModel.customerId" [virtualScroll]="true"
+                                (scrollToEnd)="getCustomerData(true)" [typeahead]="dashBoardFilterMaster.customerInput"
+                                [minTermLength]="3" (change)="changeCustomerData($event)"
+                                (clear)="changeCustomerData(null)"
+                                placeholder="--- {{ (dashBoardFilterMaster.customerList && dashBoardFilterMaster.customerList.length>0? 'COMMON.LBL_SELECT':'COMMON.LBL_NO_DATA' ) | translate }} ---"
+                                appendTo="body" [loading]="dashBoardFilterMaster.customerLoading">
+                                <ng-template ng-option-tmp let-item="item">
+                                    <div class="text-wrap">{{ item.name }}</div>
+                                </ng-template>
+                            </ng-select>
+                        </div>
+                    </div>
+                    <div class="col-sm-3 mobile-margin-top-15">
+                        <div class="my-input-group">
+                            <label for="">{{'COMMON.LBL_SUPPLIER' | translate}}</label>
+                            <ng-select appendTo="body" [items]="dashBoardFilterMaster.supplierList"
+                                [virtualScroll]="true" [loading]="dashBoardFilterMaster.supLoading" bindLabel="name"
+                                bindValue="id"
+                                placeholder="--- {{ (dashBoardFilterMaster.supplierList && dashBoardFilterMaster.supplierList.length>0? 'COMMON.LBL_SELECT':'COMMON.LBL_NO_DATA' ) | translate }} ---"
+                                [typeahead]="dashBoardFilterMaster.supInput" [minTermLength]="3"
+                                [(ngModel)]="requestModel.supplierId" [multiple]="false" (clear)="clearSupplier()"
+                                (scrollToEnd)="getSupplierData()" (change)="supplierChange($event)" #select>
+                                <ng-template ng-option-tmp let-item="item">
+                                    <div class="text-wrap"><span>{{item.name}}</span></div>
+                                </ng-template>
+                            </ng-select>
+                        </div>
+                    </div>
+                    <div class="col-sm-3 mobile-margin-top-15">
+                        <div class="my-input-group">
+                            <label for="">{{'COMMON.LBL_FACTORY' | translate}}</label>
+                            <ng-select appendTo="body" [items]="dashBoardFilterMaster.factoryList"
+                                [virtualScroll]="true" [loading]="dashBoardFilterMaster.factLoading" bindLabel="name"
+                                bindValue="id" [multiple]="true" class="multiple" (change)="factoryChange($event)"
+                                placeholder="--- {{ (dashBoardFilterMaster.factoryList && dashBoardFilterMaster.factoryList.length>0? 'COMMON.LBL_SELECT':'COMMON.LBL_NO_DATA' ) | translate }} ---"
+                                [typeahead]="dashBoardFilterMaster.factInput" [minTermLength]="3"
+                                (clear)="clearFactory()" [(ngModel)]="requestModel.factoryIdList"
+                                (scrollToEnd)="getFactoryData(true)" #select>
+                                <ng-template ng-option-tmp let-item="item">
+                                    <div class="text-wrap"><span>{{item.name}}</span></div>
+                                </ng-template>
+                            </ng-select>
+                        </div>
+                    </div>
+                    <!-- <div class="col-6 grid-column first mobile-margin-top-15 desktop-hide tablet-hide">
+                        <div class="my-input-group">
+                            <label for="">{{'COMMON.FROM_DATE' | translate}}</label>
+                            <div class="calendar-wrapper">
+                                <input type="text" autocomplete="off" placeholder="From" name="dp" ngbDatepicker
+                                    #d1="ngbDatepicker" (click)="d1.toggle()"
+                                    [(ngModel)]="requestModel.serviceDateFrom">
+                                <img src="assets/images/cta-calendar-grey.svg" alt="" class="calendar-icon"
+                                    (click)="d1.toggle()">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-6 grid-column last mobile-margin-top-15 desktop-hide tablet-hide">
+                        <div class="my-input-group">
+                            <label for="">{{'COMMON.TO_DATE' | translate}}</label>
+                            <div class="calendar-wrapper">
+                                <input type="text" autocomplete="off" placeholder="From" name="dp" ngbDatepicker
+                                    #d2="ngbDatepicker" (click)="d2.toggle()" [(ngModel)]="requestModel.serviceDateTo">
+                                <img src="assets/images/cta-calendar-grey.svg" alt="" class="calendar-icon"
+                                    (click)="d2.toggle()">
+                            </div>
+                        </div>
+                    </div> -->
+                    <div class="col-12 filter-cta-container">
+                        <button class="primary-cta small float-right" (click)="search()">{{'COMMON.APPLY' |
+                            translate}}</button>
+                        <button class="tertiary-cta small float-right mr-2" (click)="toggleFilter()">{{'COMMON.CANCEL' |
+                            translate}}</button>
+                    </div>
+                </div>
+                <div class="row marginTop20" *ngIf="toggleFormSection">
+                    <div class="col-sm-3 mobile-margin-top-15">
+                        <div class="my-input-group">
+                            <label for="">{{ 'COMMON.LBL_FACTORY_COUNTRY' | translate}}</label>
+                            <ng-select appendTo="body" [items]="dashBoardFilterMaster.countryList"
+                                [virtualScroll]="true" [loading]="dashBoardFilterMaster.countryLoading" bindLabel="name"
+                                bindValue="id"
+                                placeholder="--- {{ (dashBoardFilterMaster.countryList && dashBoardFilterMaster.countryList.length>0? 'COMMON.LBL_SELECT':'COMMON.LBL_NO_DATA' ) | translate }} ---"
+                                [typeahead]="dashBoardFilterMaster.countryInput" [minTermLength]="3"
+                                [(ngModel)]="requestModel.countryIdList" [multiple]="true" class="multiple"
+                                (scrollToEnd)="getCountryData()" (change)="countryChange($event)" #select>
+
+                                <ng-template ng-option-tmp let-item="item">
+                                    <div class="text-wrap">{{ item.name }}</div>
+                                </ng-template>
+                            </ng-select>
+                        </div>
+                    </div>
+                    <div class="col-sm-3 mobile-margin-top-15">
+                        <div class="my-input-group">
+                            <label for="">{{'COMMON.LBL_OFFICE' | translate }}</label>
+                            <ng-select [items]="dashBoardFilterMaster.officeList" bindLabel="name" bindValue="id"
+                                [hideSelected]="false" [loading]="dashBoardFilterMaster.officeLoading"
+                                [clearable]="true" [searchable]="true" [multiple]="true" class="multiple"
+                                appendTo="body" (change)="officeChange($event)"
+                                placeholder="--- {{ (dashBoardFilterMaster.officeList && dashBoardFilterMaster.officeList.length>0? 'MANDAY_DASHBOARD.LBL_OFFICE':'COMMON.LBL_NO_DATA') | translate }} ---"
+                                [(ngModel)]="requestModel.officeIdList">
+                                <ng-template ng-option-tmp let-item="item">
+                                    <div class="text-wrap">{{ item.name }}</div>
+                                </ng-template>
+
+                            </ng-select>
+                        </div>
+                    </div>
+                    <div class="col-sm-3 col-md-3 col-lg-3">
+                        <div class="my-input-group">
+                            <label for="">{{'COMMON.LBL_SERVICETYPE' |
+                                translate}}</label>
+                            <ng-select [items]="dashBoardFilterMaster.serviceTypeList" class="multiple" multiple="true"
+                                bindLabel="name" bindValue="id" [clearable]="false" (change)="serviceTypeChange($event)"
+                                [(ngModel)]="requestModel.serviceTypeList" appendTo="body"
+                                [loading]="dashBoardFilterMaster.serviceTypeLoading"
+                                placeholder=" ---{{ (dashBoardFilterMaster.serviceTypeList!=null && dashBoardFilterMaster.serviceTypeList.length!=0? 'COMMON.LBL_SELECT':'COMMON.LBL_NO_DATA' ) | translate }}---">
+                                <ng-template ng-option-tmp let-item="item">
+                                    <div class="text-wrap">{{ item.name }}</div>
+                                </ng-template>
+                            </ng-select>
+                        </div>
+                    </div>
+                    <div class="col-sm-3 mobile-margin-top-15">
+                        <div class="my-input-group">
+                            <label for="">{{'COMMON.LBL_BRAND' | translate}}</label>
+                            <ng-select appendTo="body" [items]="dashBoardFilterMaster.brandList" [virtualScroll]="true"
+                                [loading]="dashBoardFilterMaster.brandLoading" bindLabel="name" bindValue="id"
+                                placeholder="--- {{ (dashBoardFilterMaster.brandList && dashBoardFilterMaster.brandList.length>0? 'COMMON.LBL_SELECT':'COMMON.LBL_NO_DATA' ) | translate }} ---"
+                                [typeahead]="dashBoardFilterMaster.brandInput" [minTermLength]="3"
+                                [(ngModel)]="requestModel.brandIdList" [multiple]="true" class="multiple"
+                                (scrollToEnd)="getBrandData()" (change)="brandChange($event)" #select>
+
+                                <ng-template ng-option-tmp let-item="item">
+                                    <div class="text-wrap">{{ item.name }}</div>
+                                </ng-template>
+                            </ng-select>
+                        </div>
+                    </div>
+                </div>
+                <div class="row marginTop20" *ngIf="toggleFormSection">
+                    <div class="col-sm-3 mobile-margin-top-15">
+                        <div class="my-input-group">
+                            <label for="">{{'COMMON.LBL_DEPARTMENT' | translate}}</label>
+                            <ng-select appendTo="body" [items]="dashBoardFilterMaster.deptList" [virtualScroll]="true"
+                                [loading]="dashBoardFilterMaster.deptLoading" bindLabel="name" bindValue="id"
+                                placeholder="--- {{ (dashBoardFilterMaster.deptList && dashBoardFilterMaster.deptList.length>0? 'COMMON.LBL_SELECT':'COMMON.LBL_NO_DATA' ) | translate }} ---"
+                                [typeahead]="dashBoardFilterMaster.deptInput" [minTermLength]="3"
+                                [(ngModel)]="requestModel.deptIdList" [multiple]="true" class="multiple"
+                                (scrollToEnd)="getDeptData()" (change)="deptChange($event)" #select>
+
+                                <ng-template ng-option-tmp let-item="item">
+                                    <div class="text-wrap">{{ item.name }}</div>
+                                </ng-template>
+                            </ng-select>
+                        </div>
+                    </div>
+                    <div class="col-sm-3 mobile-margin-top-15">
+                        <div class="my-input-group">
+                            <label for="">{{'COMMON.LBL_BUYER' | translate}}</label>
+                            <ng-select appendTo="body" [items]="dashBoardFilterMaster.buyerList" [virtualScroll]="true"
+                                [loading]="dashBoardFilterMaster.buyerLoading" bindLabel="name" bindValue="id"
+                                placeholder="--- {{ (dashBoardFilterMaster.buyerList && dashBoardFilterMaster.buyerList.length>0? 'COMMON.LBL_SELECT':'COMMON.LBL_NO_DATA' ) | translate }} ---"
+                                [typeahead]="dashBoardFilterMaster.buyerInput" [minTermLength]="3"
+                                [(ngModel)]="requestModel.buyerIdList" [multiple]="true" class="multiple"
+                                (scrollToEnd)="getBuyerData()" (change)="buyerChange($event)" #select>
+                                <ng-template ng-option-tmp let-item="item">
+                                    <div class="text-wrap">{{ item.name }}</div>
+                                </ng-template>
+                            </ng-select>
+                        </div>
+                    </div>
+                </div>
+                <div class="row marginTop25">
+                    <div class="col-12 col-sm-6">
+                        <button class="tertiary-cta small" (click)="toggleSection()">
+                            <span class="icon" *ngIf="!toggleFormSection">+</span>
+                            <span class="icon" *ngIf="toggleFormSection">-</span>
+                            {{'COMMON.LBL_ADVANCED_SEARCH' | translate}}
+                        </button>
+                    </div>
+                    <div class="col-12 col-sm-6 text-right mt-3 mt-sm-0">
+                        <div class="mobile-hide">
+                            <button class="category-cta small mr-2" (click)="reset()">
+                                <img src="assets/images/reload-new.svg" alt="reload">
+                                <span>{{'COMMON.LBL_RELOAD' | translate}}</span>
+                            </button>
+                            <button class="primary-cta small" (click)="search()"
+                                [disabled]="dashBoardFilterMaster.searchLoading">
+                                {{'COMMON.LBL_SEARCH' | translate }}
+                                <span *ngIf="dashBoardFilterMaster.searchLoading">
+                                    <i class="fa fa-refresh fa-spin" aria-hidden="true"></i>
+                                </span></button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="filter-bar-container" *ngIf="filterDataShown">
+            <div class="my-dashboard-container mobile-hide">
+                <p class="heading">
+                    {{'QUANTITATIVE_DASHBOARD.LBL_DATA_SHOWING' | translate}}
+                </p>
+                <ul class="applied-filter-list">
+                    <li *ngIf="requestModel.serviceDateFrom">
+                        {{'COMMON.LBL_FROMDATE' | translate}} :
+                        {{requestModel.serviceDateFrom.day}}/
+                        {{requestModel.serviceDateFrom.month}}/
+                        {{requestModel.serviceDateFrom.year}}
+                        <span *ngIf="requestModel.serviceDateTo" class="ml-2">
+                            {{'COMMON.LBL_TODATE' | translate}} :
+                            {{requestModel.serviceDateTo.day}}/
+                            {{requestModel.serviceDateTo.month}}/
+                            {{requestModel.serviceDateTo.year}}
+                        </span>
+                    </li>
+                    <li *ngIf="dashBoardFilterMaster.customerName">
+                        {{ 'COMMON.LBL_CUSTOMER' | translate }} :
+                        {{dashBoardFilterMaster.customerName}}
+                    </li>
+                    <!-- <li *ngIf="dashBoardFilterMaster.supplierName">{{ 'COMMON.LBL_SUPPLIER' | translate }}
+                        :
+                        {{dashBoardFilterMaster.supplierName}}
+                    </li>
+                    <li *ngIf="dashBoardFilterMaster.factoryNameList && dashBoardFilterMaster.factoryNameList.length>0">{{ 'COMMON.LBL_FACTORY' | translate }}
+                        :
+                        {{dashBoardFilterMaster.factoryNameList}}
+                    </li>
+                    <li
+                        *ngIf="dashBoardFilterMaster.countryNameList && dashBoardFilterMaster.countryNameList.length >0">
+                        {{ 'COMMON.LBL_FACTORY_COUNTRY' | translate}} :
+                        {{dashBoardFilterMaster.countryNameList}}
+                    </li> -->
+                    <li *ngIf="dashBoardFilterMaster.officeNameList && dashBoardFilterMaster.officeNameList.length >0">
+                        {{ 'COMMON.LBL_OFFICE' | translate}} :
+                        {{dashBoardFilterMaster.officeNameList}}
+                    </li>
+                    <li
+                        *ngIf="dashBoardFilterMaster.serviceTypeNameList && dashBoardFilterMaster.serviceTypeNameList.length >0">
+                        {{ 'COMMON.LBL_SERVICETYPE' | translate}} :
+                        {{dashBoardFilterMaster.serviceTypeNameList}}
+                    </li>
+                    <!-- <li
+                        *ngIf="dashBoardFilterMaster.brandNameList && dashBoardFilterMaster.brandNameList.length >0">
+                        {{ 'COMMON.LBL_BRAND' | translate}} :
+                        {{dashBoardFilterMaster.brandNameList}}
+                    </li>
+                    <li
+                        *ngIf="dashBoardFilterMaster.deptNameList && dashBoardFilterMaster.deptNameList.length >0">
+                        {{ 'COMMON.LBL_DEPARTMENT' | translate}} :
+                        {{dashBoardFilterMaster.deptNameList}}
+                    </li>
+                    <li
+                        *ngIf="dashBoardFilterMaster.buyerNameList && dashBoardFilterMaster.buyerNameList.length >0">
+                        {{ 'COMMON.LBL_BUYER' | translate}} :
+                        {{dashBoardFilterMaster.buyerNameList}}
+                    </li> -->
+                    <li *ngIf="(requestModel.brandIdList && requestModel.brandIdList.length >0) ||
+                        (requestModel.buyerIdList && requestModel.buyerIdList.length >0) ||
+                        (requestModel.supplierId && requestModel.supplierId >0) ||
+                        (requestModel.factoryIdList && requestModel.factoryIdList.length >0) ||
+                        (requestModel.countryIdList && requestModel.countryIdList.length >0) ||
+                        (requestModel.deptIdList && requestModel.deptIdList.length >0)">
+                        {{ 'COMMON.LBL_MORE' | translate}}
+                        ...
+                    </li>
+                </ul>
+                <div class="filter-reset-cta" (click)="ribbonReset()">
+                    <img src="assets/images/reset-white.svg" alt="">
+                    {{'COMMON.LBL_RESET' | translate}}
+                </div>
+            </div>
+            <div class="my-dashboard-container  desktop-hide tablet-hide">
+                <p class="heading">
+                    {{filterCount}} {{'COMMON.LBL_FILTER_SELECTED' | translate}}
+                </p>
+                <div class="filter-reset-cta" (click)="ribbonReset()">
+                    <img src="assets/images/reset-white.svg" alt="">
+                    {{'COMMON.LBL_RESET' | translate}}
+                </div>
+            </div>
+        </div>
+        <div class="my-dashboard-container">
+
+            <div class="dashboard-body">
+                <div class="title-container row align-items-center">
+                    <div class="col-8">
+                        <h3 class="main-title">{{'FINANCE_DASHBOARD.TITLE' | translate}}</h3>
+                    </div>
+                    <div class="col-4 text-right">
+                        <div class="filter-cta style-2 common-tooltip" *ngIf="!isFilterOpen" (click)="toggleFilter()"
+                            data-tooltip="filter">
+                            <img src="assets/images/cta-filter-grey.svg" alt="">
+                        </div>
+                        <div class="filter-cta filter-active" *ngIf="isFilterOpen" (click)="toggleFilter()">
+                            <img src="assets/images/cta-close-white.svg" alt="">
+                        </div>
+                    </div>
+                </div>
+                <div class="row customer-dashboard-graph-wrapper">
+                    <div class="col-lg-6 grid-column col-md-12">
+                        <ng-container *ngIf="summaryModel.billedMandayChartLoading; else ManadayData">
+                            <div class="dashboard-graph-container">
+                                <div class="common-graph-placeholder">
+                                    <img src="assets/images/donut-placeholder.png" alt="graph">
+                                    <div class="content-container">
+                                        <div class="rect animate"></div>
+                                        <div class="rect animate width80"></div>
+                                        <div class="rect animate width50"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </ng-container>
+                        <!-- <ng-template #MandayResult> -->
+
+                        <ng-template #ManadayData>
+
+                            <div class="dashboard-graph-container">
+                                <div class="new-graph-head text-center text-sm-left two-column">
+                                    <div class="graph-title-container">
+                                        <h3 class="title">{{'FINANCE_DASHBOARD.BILLED_MANDAY' | translate}}</h3>
+                                    </div>
+                                </div>
+                                <div class="row graph-body"
+                                    *ngIf="summaryModel.billedMandayDataFound; else BilledMandayError">
+                                    <div class="col-md-12 col-lg-12 col-xl-8 mb-3 mb-xl-0">
+                                        <div id="billedManDayChart"
+                                            style="width: 100%; height: 210px; margin-top: -10px">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-12 col-lg-12 col-xl-4 vertical-center">
+                                        <div class="legend-wrapper two-column">
+                                            <div class="legend-item" *ngFor="let item of model.billedMandayData.data">
+                                                <div class="label">
+                                                    <span class="tile" [ngStyle]="{'background-color':item.color }">
+                                                    </span>
+                                                    <span class="text">{{item.year}}</span>
+                                                </div>
+                                                <span class="count">{{item.mandayCount | number}}</span>
+                                            </div>
+                                            <div class="legend-item">
+                                                <div class="label">
+                                                    <span class="tile"
+                                                        [ngStyle]="{'background-color':model.billedMandayData.budget.color }"></span><span
+                                                        class="text">{{'MANAGEMENT_DASHBOARD.LBL_BUDGET' |
+                                                        translate}}</span>
+                                                </div>
+                                                <span class="count">{{model.billedMandayData.budget.mandayCount |
+                                                    number}}</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </ng-template>
+                        <ng-template #BilledMandayError>
+                            <div class="col-md-12 col-lg-12 col-xl-12 mb-3 mb-xl-0">
+                                <div class="error-container"
+                                    *ngIf="!summaryModel.billedMandayDataFound && !summaryModel.billedMandayChartError">
+                                    <img src="assets/images/no-data.svg" alt="" class="thumbnail">
+                                    <h4 class="error-title">{{ 'COMMON.LBL_No_ITEM' | translate }}
+                                    </h4>
+                                    <p class="error-subtitle">{{'COMMON.LBL_NO_DATA_EMPTY' | translate}}</p>
+                                </div>
+                                <div class="error-container" *ngIf="summaryModel.billedMandayChartError">
+                                    <img src="assets/images/went-wrong.svg" alt="" class="thumbnail">
+                                    <h4 class="error-title">{{ 'ERROR.MSG_ERROR_TITLE' | translate }}</h4>
+                                    <p class="error-subtitle">
+                                        {{'COMMON.LBL_UNAUTHORISED_ACCESS' | translate}}
+                                    </p>
+                                </div>
+                            </div>
+                        </ng-template>
+                        <!-- </ng-template> -->
+                    </div>
+
+                    <div class="col-lg-6 grid-column col-md-12">
+                        <ng-container *ngIf="summaryModel.mandayRateChartLoading; else ManadayRateData">
+                            <div class="dashboard-graph-container">
+                                <div class="common-graph-placeholder">
+                                    <img src="assets/images/donut-placeholder.png" alt="graph">
+                                    <div class="content-container">
+                                        <div class="rect animate"></div>
+                                        <div class="rect animate width80"></div>
+                                        <div class="rect animate width50"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </ng-container>
+                        <!-- <ng-template #MandayRateResult> -->
+
+                        <ng-template #ManadayRateData>
+                            <div class="dashboard-graph-container">
+                                <div class="new-graph-head text-center text-sm-left two-column">
+                                    <div class="graph-title-container">
+                                        <h3 class="title">{{'FINANCE_DASHBOARD.MANDAY_RATE' | translate}}</h3>
+                                    </div>
+                                </div>
+                                <div class="row graph-body"
+                                    *ngIf="summaryModel.mandayRateDataFound; else MandayRateError">
+                                    <div class="col-md-12 col-lg-12 col-xl-9 mb-3 mb-xl-0">
+                                        <div id="mandayRateChart" style="width: 100%; height: 210px; margin-top: -10px">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-12 col-lg-12 col-xl-3 vertical-center">
+                                        <div class="legend-wrapper two-column">
+                                            <div class="legend-head" *ngIf="false">
+                                                <span class="title">{{'FINANCE_DASHBOARD.TOTAL_INSPECTION' |
+                                                    translate}}</span>
+                                                <span class="count">223</span>
+                                            </div>
+                                            <div class="legend-item" *ngFor="let item of model.mandayRateData.data">
+                                                <div class="label">
+                                                    <span class="tile" [ngStyle]="{'background-color':item.color }">
+                                                    </span>
+                                                    <span class="text">{{item.year}}</span>
+                                                </div>
+                                                <!-- <span class="count">{{item.mandayCount}}</span> -->
+                                            </div>
+                                            <div class="legend-item">
+                                                <div class="label">
+                                                    <span class="tile"
+                                                        [ngStyle]="{'background-color':model.mandayRateData.budget.color }"></span><span
+                                                        class="text">{{'MANAGEMENT_DASHBOARD.LBL_BUDGET' |
+                                                        translate}}</span>
+                                                </div>
+                                                <!-- <span class="count">{{model.mandayRateData.budget.mandayCount}}</span> -->
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </ng-template>
+                        <ng-template #MandayRateError>
+                            <div class="col-md-12 col-lg-12 col-xl-12 mb-3 mb-xl-0">
+                                <div class="error-container"
+                                    *ngIf="!summaryModel.mandayRateDataFound && !summaryModel.mandayRateChartError">
+                                    <img src="assets/images/no-data.svg" alt="" class="thumbnail">
+                                    <h4 class="error-title">{{ 'COMMON.LBL_No_ITEM' | translate }}
+                                    </h4>
+                                    <p class="error-subtitle">{{'COMMON.LBL_NO_DATA_EMPTY' | translate}}</p>
+                                </div>
+                                <div class="error-container" *ngIf="summaryModel.mandayRateChartError">
+                                    <img src="assets/images/went-wrong.svg" alt="" class="thumbnail">
+                                    <h4 class="error-title">{{ 'ERROR.MSG_ERROR_TITLE' | translate }}</h4>
+                                    <p class="error-subtitle">
+                                        {{'COMMON.LBL_UNAUTHORISED_ACCESS' | translate}}
+                                    </p>
+                                </div>
+                            </div>
+                        </ng-template>
+                        <!-- </ng-template> -->
+                    </div>
+
+                </div>
+                <div class="row customer-dashboard-graph-wrapper mt-3">
+                    <div class="col-sm-12 finance-dashboard-table-wrapper">
+                        <div class="dashboard-graph-container">
+                            <ng-container *ngIf="summaryModel.mandayRateChartLoading;">
+                                <div class="dashboard-graph-container">
+                                    <div class="common-graph-placeholder">
+                                        <img src="assets/images/donut-placeholder.png" alt="graph">
+                                        <div class="content-container">
+                                            <div class="rect animate"></div>
+                                            <div class="rect animate width80"></div>
+                                            <div class="rect animate width50"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </ng-container>
+                            <div class="row graph-body" *ngIf="!summaryModel.mandayRateChartLoading;">
+                                <div class="col-lg-12">
+                                    <div class="man-days-container mt-2 mt-sm-0">
+
+                                        <div class="switch-container">
+                                            <div (click)="clickMandayRate()"
+                                                [ngClass]="summaryModel.mandayrateTabActive?'switch active':'switch'">
+                                                <img src="assets/images/man-day.svg" alt="">
+                                                {{'FINANCE_DASHBOARD.MANDAY_RATE' | translate}}
+                                            </div>
+                                            <div (click)="clickBilledManday()"
+                                                [ngClass]="summaryModel.billedmandayTabActive?'switch active':'switch'">
+                                                <img src=" assets/images/billed-man-day.svg" alt="">
+                                                {{'FINANCE_DASHBOARD.BILLED_MANDAY' | translate}}
+                                            </div>
+                                            <div (click)="clickRationAnalysis()"
+                                                [ngClass]="summaryModel.ratioTabActive?'switch active':'switch'">
+                                                <img src=" assets/images/billed-man-day.svg" alt="">
+                                                Ratio Analysis
+                                            </div>
+                                        </div>
+
+                                        <div class="graph-filter filter-input-group text-center text-sm-right">
+                                            <div class="my-input-group" style="width: 200px;" *ngIf="isRatioAnalysis && dashBoardFilterMaster.isRatioCustomerVisible">
+                                                <label>{{ 'COMMON.LBL_CUSTOMER' | translate }}</label>
+                                                <ng-select [items]="dashBoardFilterMaster.ratioCustomerList"
+                                                    bindLabel="name" bindValue="id" 
+                                                    [clearable]="true"
+                                                    placeholder="{{ 'COMMON.LBL_CUSTOMER' | translate }}"
+                                                    [minTermLength]="3"
+                                                    [loading]="dashBoardFilterMaster.ratioCustomerLoading"
+                                                    [typeahead]="dashBoardFilterMaster.ratioCustomerInput"
+                                                    appendTo="body" [(ngModel)]="requestModel.ratioCustomerIdList"
+                                                    [multiple]="true" class="multiple small" [virtualScroll]="true"
+                                                    (change)="changeRatioCustomer($event)"
+                                                    (clear)="clearRatioCustomer()"
+                                                    (scrollToEnd)="getRatioCustomerData(true)"
+                                                    typeToSearchText="{{ 'COMMON.LBL_CUSTOMER' | translate }}">
+                                                    <ng-template ng-multi-label-tmp
+                                                        let-items="requestModel.ratioCustomerIdList" let-clear="clear">
+                                                        <div class="ng-value"
+                                                            *ngIf="requestModel.ratioCustomerIdList && requestModel.ratioCustomerIdList.length > 0">
+                                                            <span
+                                                                class="ng-value-label text-wrap">{{requestModel.ratioCustomerIdList.length}}
+                                                                selected</span>
+                                                        </div>
+                                                    </ng-template>
+                                                </ng-select>
+                                            </div>
+                                            <div class="my-input-group" style="width: 200px;" *ngIf="isRatioAnalysis && dashBoardFilterMaster.isRatioCustomerVisible">
+                                                <label>{{ 'FINANCE_DASHBOARD.LBL_EMPLOYEE_TYPE' | translate }}</label>
+                                                <ng-select [items]="dashBoardFilterMaster.employeeTypeList"
+                                                    bindLabel="name" bindValue="id" 
+                                                    [clearable]="true"
+                                                    placeholder="{{ 'FINANCE_DASHBOARD.LBL_EMPLOYEE_TYPE' | translate }}"
+                                                    [loading]="dashBoardFilterMaster.employeeTypeLoading"
+                                                    appendTo="body" [(ngModel)]="requestModel.ratioEmployeeTypeIdList"
+                                                    [multiple]="true" class="multiple small"
+                                                    (change)="changeRatioCustomer($event)"
+                                                    (clear)="clearRatioEmployeeType()"
+                                                    typeToSearchText="{{ 'FINANCE_DASHBOARD.LBL_EMPLOYEE_TYPE' | translate }}">
+                                                    <ng-template ng-multi-label-tmp
+                                                        let-items="requestModel.ratioEmployeeTypeIdList" let-clear="clear">
+                                                        <div class="ng-value"
+                                                            *ngIf="requestModel.ratioEmployeeTypeIdList && requestModel.ratioEmployeeTypeIdList.length > 0">
+                                                            <span
+                                                                class="ng-value-label text-wrap">{{requestModel.ratioEmployeeTypeIdList.length}}
+                                                                selected</span>
+                                                        </div>
+                                                    </ng-template>
+                                                </ng-select>
+                                            </div>
+                                        </div>
+                                        <button class="MarginL-10 secondary-cta small mt-2 mt-sm-0 mb-2 mb-sm-0" (click)="getBilledMandayChartExport()"
+                                            [disabled]="summaryModel.tableExportLoading || !summaryModel.mandayRateDataFound || !summaryModel.billedMandayDataFound">{{'FINANCE_DASHBOARD.EXPORT'
+                                            | translate}}
+                                            <span *ngIf="summaryModel.tableExportLoading">
+                                                <i class="fa fa-refresh fa-spin" aria-hidden="true"></i>
+                                            </span></button>
+
+                                    </div>
+                                    <div  class="table-container" *ngIf="dashBoardFilterMaster.tableLoading">
+                                        <ng-container >
+                                            <div class="master-body">
+                                              <div class="content-container tracking-container transparent-bg">
+                                                <div class="record-count pl-0 pr-0">
+                                                </div>
+                                                <div class="table-container">
+                                                  <table class="pagination-table">
+                                                    <thead>
+                                                      <tr class="sticky-top-row">
+                                                        <th class="sticky-left-column width60 whitespacenormal"></th>
+                                                        <th class="width-100" >
+                                                        </th>
+                                                        <th class="Center_Middle whitespacenormal" [ngClass]="bookingMasterData.setIconWidth"></th>
+                                                        <th class="width-150 whitespacenormal sticky-left-column">
+                                                          {{
+                                                          'BOOKING_SUMMARY.LBL_BOOKING_CUS_NO' | translate
+                                                          }}
+                                                        </th>
+                                                        <th class="width-180 whitespacenormal"></th>
+                                                        <th class="width-200 whitespacenormal"></th>
+                                                        <th class="width-200 whitespacenormal"></th>
+                                                          
+                                                      </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                      <tr>
+                                                        <td>
+                                                          <div class="rect-common animate width30"></div>
+                                                        </td>
+                                                        <td>
+                                                          <div class="rect-common animate width30"></div>
+                                                        </td>
+                                                        <td>
+                                                          <div class="rect-common animate width20"></div>
+                                                        </td>
+                                                        <td>
+                                                          <div class="rect-common animate width50"></div>
+                                                        </td>
+                                                        <td>
+                                                          <div class="rect-common animate width20"></div>
+                                                        </td>
+                                                        <td>
+                                                          <div class="rect-common animate width30"></div>
+                                                        </td>
+                                                        <td>
+                                                          <div class="rect-common animate width30"></div>
+                                                        </td>
+                                                        <td>
+                                                          <div class="rect-common animate width30"></div>
+                                                        </td>
+                                                      </tr>
+                                                      <tr>
+                                                        <td>
+                                                          <div class="rect-common animate width30"></div>
+                                                        </td>
+                                                        <td>
+                                                          <div class="rect-common animate width30"></div>
+                                                        </td>
+                                                        <td>
+                                                          <div class="rect-common animate width20"></div>
+                                                        </td>
+                                                        <td>
+                                                          <div class="rect-common animate width50"></div>
+                                                        </td>
+                                                        <td>
+                                                          <div class="rect-common animate width20"></div>
+                                                        </td>
+                                                        <td>
+                                                          <div class="rect-common animate width30"></div>
+                                                        </td>
+                                                        <td>
+                                                          <div class="rect-common animate width30"></div>
+                                                        </td>
+                                                        <td>
+                                                          <div class="rect-common animate width30"></div>
+                                                        </td>
+                                                      </tr>
+                                                      <tr>
+                                                        <td>
+                                                          <div class="rect-common animate width30"></div>
+                                                        </td>
+                                                        <td>
+                                                          <div class="rect-common animate width30"></div>
+                                                        </td>
+                                                        <td>
+                                                          <div class="rect-common animate width20"></div>
+                                                        </td>
+                                                        <td>
+                                                          <div class="rect-common animate width50"></div>
+                                                        </td>
+                                                        <td>
+                                                          <div class="rect-common animate width20"></div>
+                                                        </td>
+                                                        <td>
+                                                          <div class="rect-common animate width30"></div>
+                                                        </td>
+                                                        <td>
+                                                          <div class="rect-common animate width30"></div>
+                                                        </td>
+                                                        <td>
+                                                          <div class="rect-common animate width30"></div>
+                                                        </td>
+                                                      </tr>
+                                                      
+                                                    </tbody>
+                                                  </table>
+                                                </div>
+                                              </div>
+                                            </div>
+                                          </ng-container>
+                                    </div>
+                                    <div class="table-container" *ngIf="!isRatioAnalysis">                                        
+                                        <table class="pagination-table bordered" *ngIf="tableData.actual && tableData.actual.length > 0">
+                                            <thead>
+                                                <tr>
+                                                    <th>{{'FINANCE_DASHBOARD.MANDAYS' | translate}}</th>
+                                                    <th *ngFor="let item of monthYearXAxis">{{item.monthName}}</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr *ngIf="tableData.actual && tableData.actual.length > 0">
+                                                    <td class="yellow black">{{'FINANCE_DASHBOARD.ACTUAL' | translate}}
+                                                    </td>
+                                                    <td [ngClass]="getColor(ind) ? 'pink black' : 'yellow black'"
+                                                        *ngFor="let item of tableData.actual; let ind = insdex">
+                                                        {{item}}</td>
+
+                                                </tr>
+                                                <tr *ngIf="tableData.budget && tableData.budget.length > 0">
+                                                    <td class="black">{{'MANAGEMENT_DASHBOARD.LBL_BUDGET' |
+                                                        translate}}</td>
+                                                    <td *ngFor="let item of tableData.budget">{{item}}</td>
+                                                </tr>
+                                                <tr *ngIf="tableData.lastYear && tableData.lastYear.length > 0">
+                                                    <td class="black">{{'FINANCE_DASHBOARD.LAST_YEAR' | translate}}</td>
+                                                    <td *ngFor="let item of tableData.lastYear">{{item}}</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                    <div class="quotation-search-container" *ngIf="model.RatioAnalysisTableData != null && model.RatioAnalysisTableData.length > 0">
+                                        <div class="table-container h-scroll table-max-height-550"
+                                            *ngIf="isRatioAnalysis">
+                                            <table class="pagination-table bordered">
+                                                <thead>
+                                                    <tr class="sticky-top-row">
+                                                        <th align="left">{{'COMMON.LBL_CUSTOMER' | translate}}</th>
+                                                        <th>{{'FINANCE_DASHBOARD.BILLED_MD' | translate}}</th>
+                                                        <th>{{'FINANCE_DASHBOARD.LBL_ACTUAL_MANDAY' | translate}}</th>
+                                                        <th>{{'FINANCE_DASHBOARD.PRODUCTION_MD' | translate}}</th>
+                                                        <th>{{'FINANCE_DASHBOARD.LBL_RATIO' | translate}}</th>
+                                                        <th>{{'FINANCE_DASHBOARD.LBL_REVENUE' | translate}}</th>
+                                                        <th>{{'FINANCE_DASHBOARD.LBL_CHARGEBACK' | translate}}</th>
+                                                        <th>{{'FINANCE_DASHBOARD.LBL_EXPENSE' | translate}}</th>
+                                                        <th>{{'FINANCE_DASHBOARD.LBL_NET_INCOME' | translate}}</th>
+                                                        <th>{{'FINANCE_DASHBOARD.LBL_BILL_A_MD' | translate}}</th>
+                                                        <th>{{'FINANCE_DASHBOARD.LBL_NET_MD_RATE' | translate}}</th>
+                                                        <th>{{'FINANCE_DASHBOARD.LBL_PRODUCTION_A_MD' | translate}}</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr *ngFor="let item of model.RatioAnalysisTableData">
+                                                        <td align="left">{{item.customer}}</td>
+                                                        <td>{{item.billedManday}}</td>
+                                                        <td>{{item.actualManday}}</td>
+                                                        <td>{{item.productionManday}}</td>
+                                                        <td>{{item.ratio }}</td>
+                                                        <td>{{item.revenue}}</td>
+                                                        <td>{{item.chargeBack}}</td>
+                                                        <td>{{item.totalExpense}}</td>
+                                                        <td>{{item.netIncome}}</td>
+                                                        <td>{{item.billedAvgManday }}</td>
+                                                        <td>{{item.netMDRate}}</td>
+                                                        <td>{{item.productionAvgManday }}</td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row customer-dashboard-graph-wrapper">
+                    <div class="col-sm-12">
+                        <div class="inline-dashboard-graph-wrapper three-column">
+
+
+                            <div class="dashboard-graph-container">
+                                <div class="new-graph-head text-center text-sm-left align-items-center">
+                                    <div class="graph-title-container">
+                                        <h3 class="big-title">{{'FINANCE_DASHBOARD.SALES_TURNOVER' | translate}}</h3>
+                                    </div>
+                                </div>
+                                <div class="row graph-body">
+                                    <ng-container *ngIf="summaryModel.countryChartLoading; else countryData">
+                                        <div class="col-sm-4 custom-border-right">
+                                            <div class="common-graph-placeholder">
+                                                <img src="assets/images/donut-placeholder.png" alt="graph">
+                                                <div class="content-container">
+                                                    <div class="rect animate"></div>
+                                                    <div class="rect animate width80"></div>
+                                                    <div class="rect animate width50"></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </ng-container>
+                                    <!-- <ng-template #MandayRateResult> -->
+
+                                    <ng-template #countryData>
+                                        <div class="col-sm-4 custom-border-right"
+                                            *ngIf="summaryModel.countryDataFound; else CountryError">
+                                            <div class="custom-graph-spacing first">
+                                                <div class="new-graph-head text-center text-sm-left align-items-center">
+                                                    <div class="graph-title-container mt-2">
+                                                        <h3 class="title">{{'FINANCE_DASHBOARD.COUNTRY' | translate}}
+                                                        </h3>
+                                                    </div>
+                                                    <div
+                                                        class="graph-filter filter-input-group text-center text-sm-right mt-2 mt-sm-0">
+                                                        <button class="secondary-cta small"
+                                                            (click)="getCountryChartExport()"
+                                                            [disabled]="summaryModel.countryChartExportLoading || !summaryModel.countryDataFound">{{'FINANCE_DASHBOARD.EXPORT'
+                                                            | translate}}
+                                                            <span *ngIf="summaryModel.countryChartExportLoading">
+                                                                <i class="fa fa-refresh fa-spin" aria-hidden="true"></i>
+                                                            </span></button>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-md-12 col-lg-12 col-xl-12 mb-3">
+                                                        <ng-container *ngIf="loadingLineChart">
+                                                            <div class="loadingChart"></div>
+                                                        </ng-container>
+                                                        <div id="country_piechart" style="width: 100%; height: 200px">
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-12 col-lg-12 col-xl-12 vertical-center">
+                                                        <div class="legend-wrapper two-column">
+                                                            <div class="legend-item"
+                                                                *ngFor="let item of model.countryChartData | slice:0:4">
+                                                                <div class="label">
+                                                                    <span class="tile"
+                                                                        [ngStyle]="{'background-color':item.Color }">
+                                                                    </span>
+                                                                    <span class="text">{{item.name}}</span>
+                                                                </div>
+                                                                <span class="count">$ {{item.count |
+                                                                    numberSuffix}}</span>
+
+                                                            </div>
+                                                            <div class="legend-item"
+                                                                *ngIf="model.countryChartData.length>4">
+                                                                <div class="label has-dropdown">
+                                                                    <span class="link">
+                                                                        {{ 'COMMON.LBL_SHOW' | translate }}
+                                                                        {{model.countryChartData.length - 4}}
+                                                                        {{ 'COMMON.LBL_MORE' | translate }}</span>
+                                                                    <div class="cta-dropdown top-right">
+                                                                        <div class="legend-wrapper two-column">
+                                                                            <div class="legend-item"
+                                                                                *ngFor="let item of model.countryChartData | slice:4:model.countryChartData.length;">
+                                                                                <div class="label">
+                                                                                    <span class="tile"
+                                                                                        [ngStyle]="{'background-color':item.Color }">
+                                                                                    </span>
+                                                                                    <span
+                                                                                        class="text">{{item.name}}</span>
+                                                                                </div>
+                                                                                <span class="count">$ {{item.count |
+                                                                                    numberSuffix}}</span>
+
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </ng-template>
+                                    <ng-template #CountryError>
+                                        <div class="col-sm-4 custom-border-right">
+                                            <div class="error-container"
+                                                *ngIf="!summaryModel.countryDataFound && !summaryModel.countryChartError">
+                                                <img src="assets/images/no-data.svg" alt="" class="thumbnail">
+                                                <h4 class="error-title">{{ 'COMMON.LBL_No_ITEM' | translate }}
+                                                </h4>
+                                                <p class="error-subtitle">{{'COMMON.LBL_NO_DATA_EMPTY' | translate}}</p>
+                                            </div>
+                                            <div class="error-container" *ngIf="summaryModel.countryChartError">
+                                                <img src="assets/images/went-wrong.svg" alt="" class="thumbnail">
+                                                <h4 class="error-title">{{ 'ERROR.MSG_ERROR_TITLE' | translate }}</h4>
+                                                <p class="error-subtitle">
+                                                    {{'COMMON.LBL_UNAUTHORISED_ACCESS' | translate}}
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </ng-template>
+                                    <ng-container
+                                        *ngIf="summaryModel.prodCategoryChartLoading; else ProductCategoryData">
+                                        <div class="col-sm-4 custom-border-right">
+                                            <div class="common-graph-placeholder">
+                                                <img src="assets/images/donut-placeholder.png" alt="graph">
+                                                <div class="content-container">
+                                                    <div class="rect animate"></div>
+                                                    <div class="rect animate width80"></div>
+                                                    <div class="rect animate width50"></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </ng-container>
+                                    <!-- <ng-template #MandayRateResult> -->
+
+                                    <ng-template #ProductCategoryData>
+                                        <div class="col-sm-4 custom-border-right"
+                                            *ngIf="summaryModel.prodCategoryDataFound; else ProductCategoryError">
+                                            <div class="custom-graph-spacing second">
+                                                <div class="new-graph-head text-center text-sm-left align-items-center">
+                                                    <div class="graph-title-container mt-2">
+                                                        <h3 class="title">{{'FINANCE_DASHBOARD.PRODUCT_CATEGORY' |
+                                                            translate}}</h3>
+                                                    </div>
+                                                    <div
+                                                        class="graph-filter filter-input-group text-center text-sm-right mt-2 mt-sm-0">
+                                                        <button class="secondary-cta small"
+                                                            (click)="getProductCategoryChartExport()"
+                                                            [disabled]="summaryModel.prodCategoryChartExportLoading || !summaryModel.prodCategoryDataFound">{{'FINANCE_DASHBOARD.EXPORT'
+                                                            | translate}}
+                                                            <span *ngIf="summaryModel.prodCategoryChartExportLoading">
+                                                                <i class="fa fa-refresh fa-spin" aria-hidden="true"></i>
+                                                            </span></button>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-md-12 col-lg-12 col-xl-12 mb-3">
+                                                        <ng-container *ngIf="loadingLineChart">
+                                                            <div class="loadingChart"></div>
+                                                        </ng-container>
+                                                        <div id="prodCat_piechart" style="width: 100%; height: 200px">
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-12 col-lg-12 col-xl-12 vertical-center">
+                                                        <div class="legend-wrapper two-column">
+                                                            <div class="legend-item"
+                                                                *ngFor="let item of model.prodCategoryChartData | slice:0:4">
+                                                                <div class="label">
+                                                                    <span class="tile"
+                                                                        [ngStyle]="{'background-color':item.Color }">
+                                                                    </span>
+                                                                    <span class="text">{{item.name}}</span>
+                                                                </div>
+                                                                <span class="count">$ {{item.count |
+                                                                    numberSuffix}}</span>
+
+                                                            </div>
+                                                            <div class="legend-item"
+                                                                *ngIf="model.prodCategoryChartData.length>4">
+                                                                <div class="label has-dropdown">
+                                                                    <span class="link">
+                                                                        {{ 'COMMON.LBL_SHOW' | translate }}
+                                                                        {{model.prodCategoryChartData.length - 4}}
+                                                                        {{ 'COMMON.LBL_MORE' | translate }}</span>
+                                                                    <div class="cta-dropdown top-right">
+                                                                        <div class="legend-wrapper two-column">
+                                                                            <div class="legend-item"
+                                                                                *ngFor="let item of model.prodCategoryChartData | slice:4:model.prodCategoryChartData.length;">
+                                                                                <div class="label">
+                                                                                    <span class="tile"
+                                                                                        [ngStyle]="{'background-color':item.Color }">
+                                                                                    </span>
+                                                                                    <span
+                                                                                        class="text">{{item.name}}</span>
+                                                                                </div>
+                                                                                <span class="count">$ {{item.count |
+                                                                                    numberSuffix}}</span>
+
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </ng-template>
+                                    <ng-template #ProductCategoryError>
+                                        <div class="col-sm-4 custom-border-right">
+                                            <div class="error-container"
+                                                *ngIf="!summaryModel.prodCategoryDataFound && !summaryModel.prodCategoryChartError">
+                                                <img src="assets/images/no-data.svg" alt="" class="thumbnail">
+                                                <h4 class="error-title">{{ 'COMMON.LBL_No_ITEM' | translate }}
+                                                </h4>
+                                                <p class="error-subtitle">{{'COMMON.LBL_NO_DATA_EMPTY' | translate}}</p>
+                                            </div>
+                                            <div class="error-container" *ngIf="summaryModel.prodCategoryChartError">
+                                                <img src="assets/images/went-wrong.svg" alt="" class="thumbnail">
+                                                <h4 class="error-title">{{ 'ERROR.MSG_ERROR_TITLE' | translate }}</h4>
+                                                <p class="error-subtitle">
+                                                    {{'COMMON.LBL_UNAUTHORISED_ACCESS' | translate}}
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </ng-template>
+                                    <ng-container *ngIf="summaryModel.servicetypeChartLoading; else ServiceTypeData">
+                                        <div class="col-sm-4 custom-border-right">
+                                            <div class="common-graph-placeholder">
+                                                <img src="assets/images/donut-placeholder.png" alt="graph">
+                                                <div class="content-container">
+                                                    <div class="rect animate"></div>
+                                                    <div class="rect animate width80"></div>
+                                                    <div class="rect animate width50"></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </ng-container>
+                                    <!-- <ng-template #MandayRateResult> -->
+
+                                    <ng-template #ServiceTypeData>
+                                        <div class="col-sm-4"
+                                            *ngIf="summaryModel.servicetypeDataFound; else ServiceTypeError">
+                                            <div class="custom-graph-spacing third">
+                                                <div class="new-graph-head text-center text-sm-left align-items-center">
+                                                    <div class="graph-title-container mt-2">
+                                                        <h3 class="title">{{'FINANCE_DASHBOARD.SERVICES' | translate}}
+                                                        </h3>
+                                                    </div>
+                                                    <div
+                                                        class="graph-filter filter-input-group text-center text-sm-right mt-2 mt-sm-0">
+                                                        <button class="secondary-cta small"
+                                                            (click)="getServiceTypeChartExport()"
+                                                            [disabled]="summaryModel.servicetypeChartExportLoading || !summaryModel.servicetypeDataFound">{{'FINANCE_DASHBOARD.EXPORT'
+                                                            | translate}}
+                                                            <span *ngIf="summaryModel.servicetypeChartExportLoading">
+                                                                <i class="fa fa-refresh fa-spin" aria-hidden="true"></i>
+                                                            </span></button>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-md-12 col-lg-12 col-xl-12 mb-3">
+                                                        <ng-container *ngIf="loadingLineChart">
+                                                            <div class="loadingChart"></div>
+                                                        </ng-container>
+                                                        <div id="serviceType_piechart"
+                                                            style="width: 100%; height: 200px">
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-12 col-lg-12 col-xl-12 vertical-center">
+                                                        <div class="legend-wrapper two-column">
+                                                            <div class="legend-item"
+                                                                *ngFor="let item of model.servicetypeChartData | slice:0:4">
+                                                                <div class="label">
+                                                                    <span class="tile"
+                                                                        [ngStyle]="{'background-color':item.Color }">
+                                                                    </span>
+                                                                    <span class="text">{{item.name}}</span>
+                                                                </div>
+                                                                <span class="count">$ {{item.count |
+                                                                    numberSuffix}}</span>
+
+                                                            </div>
+                                                            <div class="legend-item"
+                                                                *ngIf="model.servicetypeChartData.length>4">
+                                                                <div class="label has-dropdown">
+                                                                    <span class="link">
+                                                                        {{ 'COMMON.LBL_SHOW' | translate }}
+                                                                        {{model.servicetypeChartData.length - 4}}
+                                                                        {{ 'COMMON.LBL_MORE' | translate }}</span>
+                                                                    <div class="cta-dropdown top-right">
+                                                                        <div class="legend-wrapper two-column">
+                                                                            <div class="legend-item"
+                                                                                *ngFor="let item of model.servicetypeChartData | slice:4:model.servicetypeChartData.length;">
+                                                                                <div class="label">
+                                                                                    <span class="tile"
+                                                                                        [ngStyle]="{'background-color':item.Color }">
+                                                                                    </span>
+                                                                                    <span
+                                                                                        class="text">{{item.name}}</span>
+                                                                                </div>
+                                                                                <span class="count">$ {{item.count |
+                                                                                    numberSuffix}}</span>
+
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </ng-template>
+                                    <ng-template #ServiceTypeError>
+                                        <div class="col-sm-4 custom-border-right">
+                                            <div class="error-container"
+                                                *ngIf="!summaryModel.servicetypeDataFound && !summaryModel.servicetypeChartError">
+                                                <img src="assets/images/no-data.svg" alt="" class="thumbnail">
+                                                <h4 class="error-title">{{ 'COMMON.LBL_No_ITEM' | translate }}
+                                                </h4>
+                                                <p class="error-subtitle">{{'COMMON.LBL_NO_DATA_EMPTY' | translate}}</p>
+                                            </div>
+                                            <div class="error-container" *ngIf="summaryModel.servicetypeChartError">
+                                                <img src="assets/images/went-wrong.svg" alt="" class="thumbnail">
+                                                <h4 class="error-title">{{ 'ERROR.MSG_ERROR_TITLE' | translate }}</h4>
+                                                <p class="error-subtitle">
+                                                    {{'COMMON.LBL_UNAUTHORISED_ACCESS' | translate}}
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </ng-template>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row customer-dashboard-graph-wrapper">
+                    <div class="col-sm-12 col-lg-12 col-xl-8 grid-column mobile-margin-top-15 tablet-margin-top-15">
+                        <ng-container *ngIf="summaryModel.chargeBackChartLoading; else ChargeBackData">
+                            <div class="dashboard-graph-container">
+                                <div class="common-graph-placeholder">
+                                    <img src="assets/images/donut-placeholder.png" alt="graph">
+                                    <div class="content-container">
+                                        <div class="rect animate"></div>
+                                        <div class="rect animate width80"></div>
+                                        <div class="rect animate width50"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </ng-container>
+                        <!-- <ng-template #MandayRateResult> -->
+
+                        <ng-template #ChargeBackData>
+                            <div class="inline-dashboard-graph-wrapper three-column">
+                                <div class="dashboard-graph-container">
+                                    <div class="new-graph-head text-center text-sm-left align-items-center">
+                                        <div class="graph-title-container">
+                                            <h3 class="title">{{ 'FINANCE_DASHBOARD.CHARGE_BACK' | translate }}</h3>
+                                        </div>
+                                    </div>
+                                    <div class="row graph-body"
+                                        *ngIf="summaryModel.chargeBackDataFound; else ChargeBackError">
+                                        <div class="col-sm-7 custom-border-right mt-3">
+                                            <div class="row">
+                                                <div
+                                                    class="col-md-5 col-lg-5 col-xl-5 mb-3 mb-xl-0 text-center text-sm-left">
+                                                    <img src="assets/images/travel-charge.svg" alt="">
+                                                </div>
+                                                <div class="col-md-7 col-lg-7 col-xl-7">
+                                                    <div class="quotation-container">
+                                                        <h5>{{ 'FINANCE_DASHBOARD.TRAVELLING_CHARGE_BACK' | translate }}
+                                                        </h5>
+                                                        <div class="quotation-count">
+                                                            <div class="total-count">
+                                                                <p>{{ 'FINANCE_DASHBOARD.TOTAL_EXPENSE' | translate }}
+                                                                </p>
+                                                                <p><span class="bold value">
+                                                                        $ {{model.chargeBackChartData.totalExpense |
+                                                                        numberSuffix}}</span>
+                                                                </p>
+                                                            </div>
+                                                            <div class="total-count">
+                                                                <p>{{ 'FINANCE_DASHBOARD.CHARGE_BACK' | translate }}</p>
+                                                                <p><span class="bold value">
+                                                                        $ {{model.chargeBackChartData.chargeBack |
+                                                                        numberSuffix}}</span>
+                                                                </p>
+                                                            </div>
+                                                        </div>
+                                                        <p
+                                                            *ngIf="model.chargeBackChartData.totalExpense <= model.chargeBackChartData.chargeBack">
+                                                            {{ 'FINANCE_DASHBOARD.TRAVELLING_CHARGE_BACK' | translate
+                                                            }}<span
+                                                                class="percent high">{{model.chargeBackChartData.chargeBackRatio}}%</span>
+                                                        </p>
+                                                        <p
+                                                            *ngIf="model.chargeBackChartData.totalExpense > model.chargeBackChartData.chargeBack">
+                                                            {{ 'FINANCE_DASHBOARD.TRAVELLING_CHARGE_BACK' | translate
+                                                            }}<span
+                                                                class="percent low">{{model.chargeBackChartData.chargeBackRatio}}%</span>
+                                                        </p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-5 mt-3">
+                                            <div class="row">
+                                                <div class="col-sm-12">
+                                                    <div class="custom-graph-spacing third">
+                                                        <div class="quotation-container">
+                                                            <h5> {{ 'FINANCE_DASHBOARD.REVENUE_NO_CHARGEBACK' |
+                                                                translate }}</h5>
+                                                            <div class="quotation-count">
+                                                                <div class="total-count">
+                                                                    <p>{{ 'FINANCE_DASHBOARD.TOTAL_REVENUE' | translate
+                                                                        }}</p>
+                                                                    <p><span class="bold value">
+                                                                            $ {{model.chargeBackChartData.totalRevenue |
+                                                                            numberSuffix}}</span>
+                                                                    </p>
+                                                                </div>
+                                                                <div class="total-count">
+                                                                    <p>{{ 'FINANCE_DASHBOARD.CHARGE_BACK' | translate }}
+                                                                    </p>
+                                                                    <p><span class="bold value">
+                                                                            $ {{model.chargeBackChartData.chargeBack |
+                                                                            numberSuffix}}</span>
+                                                                    </p>
+                                                                </div>
+                                                            </div>
+                                                            <p>{{ 'FINANCE_DASHBOARD.NOT_SUBJECT_CHARGEBACK' | translate
+                                                                }}<span class="percent high">
+                                                                    {{model.chargeBackChartData.revenueChargeBackRatio}}%</span>
+                                                            </p>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </ng-template>
+                        <ng-template #ChargeBackError>
+                            <div class="col-md-12 col-lg-12 col-xl-12 mb-3 mb-xl-0">
+                                <div class="error-container"
+                                    *ngIf="!summaryModel.chargeBackDataFound && !summaryModel.chargeBackChartError">
+                                    <img src="assets/images/no-data.svg" alt="" class="thumbnail">
+                                    <h4 class="error-title">{{ 'COMMON.LBL_No_ITEM' | translate }}
+                                    </h4>
+                                    <p class="error-subtitle">{{'COMMON.LBL_NO_DATA_EMPTY' | translate}}</p>
+                                </div>
+                                <div class="error-container" *ngIf="summaryModel.chargeBackChartError">
+                                    <img src="assets/images/went-wrong.svg" alt="" class="thumbnail">
+                                    <h4 class="error-title">{{ 'ERROR.MSG_ERROR_TITLE' | translate }}</h4>
+                                    <p class="error-subtitle">
+                                        {{'COMMON.LBL_UNAUTHORISED_ACCESS' | translate}}
+                                    </p>
+                                </div>
+                            </div>
+                        </ng-template>
+                    </div>
+                    <div class="col-sm-12 col-lg-12 col-xl-4 grid-column mobile-margin-top-15 tablet-margin-top-15">
+                        <ng-container *ngIf="summaryModel.chargeBackChartLoading; else QuotationData">
+                            <div class="dashboard-graph-container">
+                                <div class="common-graph-placeholder">
+                                    <img src="assets/images/donut-placeholder.png" alt="graph">
+                                    <div class="content-container">
+                                        <div class="rect animate"></div>
+                                        <div class="rect animate width80"></div>
+                                        <div class="rect animate width50"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </ng-container>
+                        <!-- <ng-template #MandayRateResult> -->
+
+                        <ng-template #QuotationData>
+                            <div class="dashboard-graph-container">
+                                <div class="new-graph-head text-center text-sm-left">
+                                    <div class="graph-title-container">
+                                        <h3 class="title">{{ 'FINANCE_DASHBOARD.QUOT_REJECTION_RATE' | translate }}</h3>
+                                    </div>
+                                </div>
+                                <div class="row graph-body"
+                                    *ngIf="summaryModel.quotationDataFound; else QuotationError">
+                                    <div class="col-md-3 col-lg-3 col-xl-5 text-center text-sm-left">
+                                        <img src="assets/images/rejection.svg" alt="">
+                                    </div>
+                                    <div class="col-md-9 col-lg-9 col-xl-7 vertical-center kpi-alignment-tablet">
+                                        <div class="quotation-container total-rejection">
+                                            <div class="quotation-count">
+                                                <div class="total-count">
+                                                    <p>{{ 'FINANCE_DASHBOARD.TOTAL_QUOTATION' | translate }}</p>
+                                                    <p class="bold value">{{model.quotationData.quotationCount}}</p>
+                                                </div>
+                                                <div class="total-count">
+                                                    <p>{{ 'FINANCE_DASHBOARD.REJECTION' | translate }}</p>
+                                                    <p class="bold value">{{model.quotationData.rejectedQuotationCount}}
+                                                    </p>
+                                                </div>
+                                            </div>
+                                            <div class="rejection-percent">
+                                                <div class="marginTop60">
+                                                    <p>{{ 'FINANCE_DASHBOARD.QUOT_REJECTION_RATE' | translate }}<span
+                                                            class="percent low">{{model.quotationData.rejectionPercentage}}%</span>
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </ng-template>
+                        <ng-template #QuotationError>
+                            <div class="col-md-12 col-lg-12 col-xl-12 mb-3 mb-xl-0">
+                                <div class="error-container"
+                                    *ngIf="!summaryModel.quotationDataFound && !summaryModel.quotationChartError">
+                                    <img src="assets/images/no-data.svg" alt="" class="thumbnail">
+                                    <h4 class="error-title">{{ 'COMMON.LBL_No_ITEM' | translate }}
+                                    </h4>
+                                    <p class="error-subtitle">{{'COMMON.LBL_NO_DATA_EMPTY' | translate}}</p>
+                                </div>
+                                <div class="error-container" *ngIf="summaryModel.quotationChartError">
+                                    <img src="assets/images/went-wrong.svg" alt="" class="thumbnail">
+                                    <h4 class="error-title">{{ 'ERROR.MSG_ERROR_TITLE' | translate }}</h4>
+                                    <p class="error-subtitle">
+                                        {{'COMMON.LBL_UNAUTHORISED_ACCESS' | translate}}
+                                    </p>
+                                </div>
+                            </div>
+                        </ng-template>
+                    </div>
+                </div>
+            </div>
+            <div class="footer independent">
+                <div class="column">
+                    <p class="text">© 2019 All rights reserved. api - hk.com</p>
+                </div>
+                <div class="column">
+                    <ul class="footer-item">
+                        <li><a href="">User Guide</a></li>
+                        <li><a href="">Contact</a></li>
+                        <li><a href="">Help</a></li>
+                        <li><a href="">Terms</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,325 @@
+<div class="main-wrapper">
+  <div class="wrapper dashboard-wrapper">
+    <div class="my-container">
+      <div class="master-body">
+        <div class="title-container">
+          <div class="header-back-button"
+            *ngIf="!initialloading && !savedataloading && !productChangeLoading && !exportDataLoading">
+            <img src="assets/images/back-red.png" alt="back" (click)="return('inspsummary/booking-summary')">
+          </div>
+          <h3 class="main-title"> {{'BOOKING_COMBINEORDERS.TITLE' | translate }} - {{inspectionID}}</h3>
+        </div>
+        <div class="content-container">
+          <h4 class="container-head">{{ 'BOOKING_COMBINEORDERS.SUB_TITLE' | translate }}</h4>
+          <div class="formPadding">
+            <div class="row">
+              <div class="col-sm-12">
+                <div class="booking-title-container">
+                  <div class="stats-container float-right">
+                    <span>
+                      {{'BOOKING_COMBINEORDERS.LBL_TOTAL' | translate }}
+                      <br>
+                      {{'BOOKING_COMBINEORDERS.LBL_COMBINE_COUNT' | translate }}
+                    </span>
+                    <span class="big">
+                      {{totalCombineCount}}
+                    </span>
+                    <span>
+                      {{'BOOKING_COMBINEORDERS.LBL_TOTAL' | translate }}
+                      <br>
+                      {{'BOOKING_COMBINEORDERS.LBL_PRODUCTS' | translate }}
+                    </span>
+                    <span class="big">
+                      {{totalNumberofProducts}}
+                    </span>
+                    <span>
+                      {{'BOOKING_COMBINEORDERS.LBL_TOTAL' | translate }}
+                      <br>
+                      {{'BOOKING_COMBINEORDERS.LBL_REPORTS' | translate }}
+                    </span>
+                    <span class="big">
+                      {{totalNumberofReports}} 
+                    </span>
+                    <span>
+                      {{'BOOKING_COMBINEORDERS.LBL_TOTAL_COMBINE' | translate }}
+                      <br>
+                      {{'BOOKING_COMBINEORDERS.LBL_AQL_QTY' | translate }}
+                    </span>
+                    <span class="big">
+                      {{totalCombineProducts}} / {{totalCombineAqlQuantity}}
+                    </span>
+                    <span>
+                      {{'BOOKING_COMBINEORDERS.LBL_TOTAL_NON_COMBINE' | translate }}
+                      <br>
+                      {{'BOOKING_COMBINEORDERS.LBL_AQL_QTY' | translate }}
+                    </span>
+                    <span class="big">
+                      {{totalNonCombineProducts}} / {{totalNonCombineAqlQuantity}}
+                    </span>
+                    <span>
+                      {{'BOOKING_COMBINEORDERS.LBL_TOTAL_AQL' | translate }}
+                      <br>
+                      {{'BOOKING_COMBINEORDERS.LBL_AQL_QTY' | translate }}
+                    </span>
+                    <span class="big">
+                      {{totalCombineAqlQuantity + totalNonCombineAqlQuantity}}
+                    </span>
+                  </div>
+                  <div class="stats-container">
+                    <div style="padding-left: 0px;" class="col-sm-12 marginTop25">
+                      <div class="section-toggle-container" (click)=toggleSection()>
+                        <p>
+                          <img src="assets/images/expand-circle.png" alt="expand" *ngIf="!toggleFormSection">
+                          <img src="assets/images/collapse-circle.png" alt="collapse" *ngIf="toggleFormSection">
+                          {{'BOOKING_COMBINEORDERS.LBL_ADVANCE_FILTER' | translate}}</p>
+                      </div>
+                    </div>
+                    <div class="row marginTop25" *ngIf="toggleFormSection">
+
+                      <div class="col-sm-3 col-md-6 col-lg-3">
+                        <div class="my-input-group">
+                          <label for="">Product List</label>
+
+                          <ng-select class="multiple" [items]="combineOrderFilter.productList" [hideSelected]="true"
+                          [closeOnSelect]="false"
+                            [multiple]="true" [searchable]="true" bindLabel="name" appendTo="body" bindValue="id"
+                            [(ngModel)]="combineOrderFilterRequest.filterProductIds" #getModelValue="ngModel"
+                            [ngClass]="{ 'is-invalid': !validator.isValid('filterProductIds')}"
+                            placeholder="--- {{ 'BOOKING_COMBINEORDERS.PH_SELECT' | translate }} ---">
+                            <ng-template ng-header-tmp>
+
+                              <div>
+                                <button class="secondary-cta x-small" (click)="onSelectAll()">{{'BOOKING_COMBINEORDERS.LBL_SELECT_ALL' | translate }}</button>
+                                <button class="secondary-cta x-small" (click)="onClearAll()">{{'BOOKING_COMBINEORDERS.LBL_UNSELECT_ALL' | translate }}</button>
+                              </div>
+
+                            </ng-template>
+                          </ng-select>
+                          <div *ngIf="!validator.isValid('filterProductIds')" class="invalid-feedback"
+                            style="display:block">
+                            <div *ngFor="let error of validator.getErrors('filterProductIds')">
+                              {{ error | translate }}
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div class="col-sm-6 col-md-6 col-lg-3">
+                        <div class="my-input-group">
+                          <label for="">{{'BOOKING_COMBINEORDERS.LBL_COMBINE_PRODUCT' | translate }}</label>
+                          <ng-select [items]="groupData" [multiple]="false" [searchable]="true" bindLabel="name"
+                            appendTo="body" bindValue="id"
+                            [(ngModel)]="combineOrderFilterRequest.filterCombineProductId"
+                            [ngClass]="{ 'is-invalid': !validator.isValid('filterCombineProductId')}"
+                            placeholder="--- {{ 'BOOKING_COMBINEORDERS.PH_SELECT' | translate }} ---">
+                          </ng-select>
+                          <div *ngIf="!validator.isValid('filterCombineProductId')" class="invalid-feedback"
+                            style="display:block">
+                            <div *ngFor="let error of validator.getErrors('filterCombineProductId')">
+                              {{ error | translate }}
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div class="col-sm-6 col-md-6 col-lg-3">
+                        <div class="my-input-group">
+                          <label for="">{{ 'BOOKING_COMBINEORDERS.LBL_AQL_LIST' | translate }} </label>
+                          <ng-select [items]="topAqlList" [multiple]="false" [searchable]="true"
+                            bindLabel="value" appendTo="body" bindValue="id" [loading]="levelPickLoading"
+                            [(ngModel)]="combineOrderFilterRequest.filterAqlId"
+                            placeholder="--- {{ 'BOOKING_COMBINEORDERS.PH_SELECT' | translate }} ---">
+                          </ng-select>
+                        </div>
+                      </div>
+                      <div class="col-sm-6 col-md-6 col-lg-3 marginTop20">
+                        <button id="btnSearch" class="primary-cta small" (click)="calculateProductsSampleSize()"
+                          [disabled]="!(combineOrderFilterRequest.filterProductIds && combineOrderFilterRequest.filterCombineProductId)">
+                          {{ 'BOOKING_COMBINEORDERS.LBL_AQL_APPLY' | translate }}
+                          
+                        </button>
+
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- <div class="table-container scroll-x" #scrollableTable>  -->
+                  <div class="table-container" style="overflow-x: scroll;overflow-y:scroll;max-height:550px">
+                  <table class="pagination-table simple-table bordered">
+                    <thead>
+                      <tr class="sticky-top-row">
+                        <th></th>
+                        <th>{{'BOOKING_COMBINEORDERS.LBL_PRODUCTID' | translate }}</th>
+                        <th>{{'BOOKING_COMBINEORDERS.LBL_PRODUCTDESC' | translate }}</th>
+                        <th>{{'BOOKING_COMBINEORDERS.LBL_FACTREF' | translate }}</th>
+                        <th>{{'BOOKING_COMBINEORDERS.LBL_PARENT_PRODUCT' | translate }}</th>
+                        <th>{{'BOOKING_COMBINEORDERS.LBL_COMBINEPRODUCTID' | translate }}</th>
+                        <th>{{'BOOKING_COMBINEORDERS.LBL_TOTAL_BOOKING_QTY' | translate }}</th>
+                        <th>{{'BOOKING_COMBINEORDERS.LBL_AQLLEVEL' | translate }}</th>
+                        <th>{{'BOOKING_COMBINEORDERS.LBL_SAMPLEAQLSIZE' | translate }}</th>
+                        <th>{{'BOOKING_COMBINEORDERS.LBL_COMBINEDAQLSIZE' | translate }}</th>
+                      </tr>
+                    </thead>
+
+                    <tbody>
+                      <ng-template ngFor let-item [ngForOf]="combineOrdersList" let-i="index">
+
+                        <tr [ngStyle]='{"background-color" : item.colorCode}'>
+                          <td class="width40 text-center">
+                            <span class="expandable-trigger" (click)=toggleExpandRow($event,i,item)>+</span>
+                          </td>
+                          <td>{{item.productName}}</td>
+                          <td class="width-180 wordbreak">{{item.productDescription}}</td>
+                          <td class="width-180 wordbreak">{{item.factoryReference}}</td>
+                          <td>{{item.parentProductName}}</td>
+                          <td>
+                            <div class="my-input-group">
+
+                              <ng-select [items]="groupData" [multiple]="false" [searchable]="true" bindLabel="name"
+                                class="width-180" appendTo="body" bindValue="id" (change)="combineProduct(item,$event)"
+                                (clear)="clearCombineProducts(item)"
+                                placeholder="--- {{ 'BOOKING_COMBINEORDERS.PH_SELECT' | translate }} ---"
+                                [(ngModel)]="item.combineProductId">
+                              </ng-select>
+
+                            </div>
+                          </td>
+                          <td style="text-align: center">{{item.totalBookingQuantity}}</td>
+                          <td>
+                            <ng-select [items]="combineOrderFilter.aqlList" [multiple]="false" [searchable]="true"
+                              [disabled]="item.combineProductId==null || item.aqlLevel==aqlType.AQLCustom || item.isDisplayMaster"
+                              bindLabel="value" appendTo="body" bindValue="id" [clearable]="false"
+                              [loading]="levelPickLoading" [(ngModel)]="item.aqlLevel"
+                              (change)="changeAQLData(item,$event)"
+                              placeholder="--- {{ 'BOOKING_COMBINEORDERS.PH_SELECT' | translate }} ---">
+                            </ng-select>
+                          </td>
+                          <td class="width-150">
+                            <input [disabled]="!item.isProductQTYEnable" type="number"
+                              [(ngModel)]="item.samplingQuantity"
+                              placeholder="{{ 'BOOKING_COMBINEORDERS.PH_SAMPLEAQLQUANTITY' | translate }}">
+                          </td>
+                          <td style="text-align: center">
+                            <p style="font-size: 16px;"> {{item.combinedAqlQuantity}} <span *ngIf="item.combineCount>0">
+                                ({{item.combineCount}})</span> </p>
+                          </td>
+                        </tr>
+
+
+                        <tr class="expandable-row" [attr.data-expand-id]="i">
+                          <td colspan="9">
+                            <div class="content-container padding10">
+                              <div class="table-container child-table" style="overflow-y: scroll;max-height:500px;">
+                                <table class="pagination-table simple-table bordered">
+                                  <thead>
+                                    <tr>
+                                      <th>{{'PURCHASEORDER_SUMMARY.LBL_PO_NO' | translate }}</th>
+                                      <th>{{'BOOKING_COMBINEORDERS.LBL_ORDERQTY' | translate }}</th>
+                                      <th>{{'PURCHASEORDER_SUMMARY.LBL_ETD' | translate }}</th>
+                                      <th>{{'EDIT_BOOKING.LBL_DESTINATION_COUNTRY' | translate }}</th>
+                                    </tr>
+                                  </thead>
+                                  <tbody>
+                                    <ng-template ngFor let-poDetail [ngForOf]="item.poList" let-p="index">
+                                    <tr [ngClass]="p%2 !== 0?'even':'odd' ">
+                                      <td>{{poDetail.poNumber}}</td>
+                                      <td>{{poDetail.bookingQuantity}}</td>
+                                      <td>{{poDetail.etd}}</td>
+                                      <td>{{poDetail.destinationCountry}}</td>
+                                    </tr>
+                                    </ng-template>
+                                  <tbody>
+
+                                </table>
+                              </div>
+                            </div>
+                          </td>
+                        </tr>
+
+                      </ng-template>
+
+                    </tbody>
+                  </table>
+                </div>
+
+
+              </div>
+            </div>
+          </div>
+          <div class="form-action-container">
+            <button class="secondary-cta small" (click)="export()"
+              [disabled]="initialloading || savedataloading || productChangeLoading || exportDataLoading"
+              *ngIf="isCombineOrderSaveVisible && (combineOrdersList != null && combineOrdersList.length != 0)"><img
+                src="assets/images/red-export.svg" alt="export"> {{ 'BOOKING_SUMMARY.LBL_EXPORT' | translate }}
+              <span *ngIf="exportDataLoading">
+                <i class="fa fa-refresh fa-spin" aria-hidden="true"></i>
+              </span>
+            </button>
+
+            <!-- <button type="button" [disabled]="initialloading || savedataloading || productChangeLoading || exportDataLoading"
+              class="secondary-cta small" (click)="return('inspsummary/booking-summary')">
+              {{
+                          'BOOKING_COMBINEORDERS.LBL_RETURN' | translate
+              }}
+            </button> -->
+            <button *ngIf="isCombineOrderSaveVisible"
+              [disabled]="savedataloading"
+              class="primary-cta small" (click)="save()">
+              {{
+                      'BOOKING_COMBINEORDERS.LBL_SAVE' | translate
+              }}
+              <span *ngIf="savedataloading">
+                <i class="fa fa-refresh fa-spin" aria-hidden="true"></i>
+              </span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <ng-template #changeAQLLevel let-modal>
+    <div class="modal-header custom-modal-header">
+      <h4 class="modal-title" id="modal-title">{{ 'BOOKING_COMBINEORDERS.LBL_AQL_LEVEL_CHANGE' | translate }}</h4>
+      <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body custom-modal-body">
+      <div class="table-container">
+        <div class="row">
+          <div class="col-sm-12 col-md-12 col-lg-12">
+            <div class="my-input-group">
+              <label>{{ 'BOOKING_COMBINEORDERS.LBL_AQL_DIFF_PRODUCTS' | translate }}</label>
+            </div>
+          </div>
+
+          <div class="col-sm-12 col-md-12 col-lg-12 marginTop20">
+            <div class="my-input-group">
+              <label>{{ 'BOOKING_COMBINEORDERS.LBL_AQL_WANT_TO_APPLY' | translate }}</label>
+              <ng-select [items]="userAQLList" class="width-140" [multiple]="false" [searchable]="true" bindLabel="value"
+                appendTo="body" bindValue="id" [loading]="levelPickLoading"
+                [(ngModel)]="userSelectedAqlId"
+                placeholder="--- {{ 'BOOKING_COMBINEORDERS.PH_SELECT' | translate }} ---">
+              </ng-select>
+            </div>
+          </div>
+        </div>
+        
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button type="button"
+        class="primary-cta small" (click)="setNewAQLLevel()" [disabled]="!userSelectedAqlId">
+        {{ 'BOOKING_COMBINEORDERS.LBL_AQL_APPLY' | translate }}
+      </button>
+      <button type="button" class="secondary-cta small"
+        (click)="modal.dismiss('cancel click')">
+        {{ 'BOOKING_COMBINEORDERS.LBL_AQL_CANCEL' | translate }}
+      </button>
+    </div>
+  </ng-template>
+
+
+</div>

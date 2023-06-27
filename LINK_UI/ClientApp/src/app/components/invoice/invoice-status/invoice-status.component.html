@@ -1,0 +1,1232 @@
+<div class="main-wrapper">
+  <div class="wrapper dashboard-wrapper">
+    <div class="filter-bar-container" *ngIf="filterDataShown">
+      <div class="my-container" *ngIf="!isMobile">
+        <p class="heading"><img src="assets/images/new-set/applier-filter-search.svg" alt="">Search By</p>
+        <ul class="applied-filter-list">
+          <li *ngIf="model.invoiceFromDate || model.invoiceToDate">
+            <span *ngIf="model.invoiceFromDate">
+              {{masterModel.DateName}} :
+              {{model.invoiceFromDate.day}}/
+              {{model.invoiceFromDate.month}}/
+              {{model.invoiceFromDate.year}}
+            </span>
+            <span *ngIf="model.invoiceToDate" class="ml-2">
+              to
+              {{model.invoiceToDate.day}}/
+              {{model.invoiceToDate.month}}/
+              {{model.invoiceToDate.year}}
+            </span>
+          </li>
+          <li *ngIf="model.customerId && model.customerId >0">
+            <span>{{ 'BOOKING_SUMMARY.LBL_CUSTOMER' | translate }}
+              : {{masterModel.customerName}}
+            </span>
+          </li>
+          <li *ngIf="model.supplierId && model.supplierId >0">
+            <span>{{ 'BOOKING_SUMMARY.LBL_SUPPLIER' | translate }} :
+              {{masterModel.supplierName}}
+            </span>
+          </li>
+          <li *ngIf="model.statusidlst && model.statusidlst.length >0">
+            <span>{{ 'BOOKING_SUMMARY.LBL_BOOKING_STATUS' | translate }} :
+              {{masterModel.statusNameList}}
+            </span>
+          </li>
+          <li *ngIf="model.officeIdList && model.officeIdList.length >0">
+            <span>{{'BOOKING_SUMMARY.LBL_OFFICE' | translate }} :
+              {{masterModel.officeNameList}}
+            </span>
+          </li>
+          <li *ngIf="
+                    (model.factoryId >0) || (model.serviceId > 0) || model.invoiceType > 0
+                    || model.invoiceStatusId > 0 || (model.paymentStatusIdList && model.paymentStatusIdList.length > 0) || 
+                    (model.brandIdList && model.brandIdList.length > 0)">
+            {{ 'COMMON.LBL_MORE' | translate}} ...
+          </li>
+        </ul>
+        <span class="reset-link" (click)="Reset()">Reset</span>
+      </div>
+      <div class="my-container" *ngIf="isMobile">
+        <p class="heading"> {{filterCount}} {{'COMMON.LBL_FILTER_SELECTED' | translate}}
+        </p>
+      </div>
+    </div>
+    <div class="page-head-container whiteBackground">
+      <div class="my-container">
+        <div class="column">
+          <h3 class="page-title">
+            Invoice Status
+          </h3>
+        </div>
+        <div class="column text-right d-flex align-items-start justify-content-end">
+          <div class="custom-dropdown">
+            <span class="selected-value">{{masterModel.selectedNumber}}</span>
+            <ul class="dropdown-list-container width-220">
+              <li *ngFor="let item of invoiceSearchTypeList;let idx = index" [value]="item.id" id="{{item.id}}"
+                name="radio-group" (click)="SetSearchTypemodel(item)" [(ngModel)]="model.searchtypeid">
+                <span>({{item.shortName}})</span> {{item.name}}
+              </li>
+            </ul>
+          </div>
+          <div class="my-input-group search-input inline">
+            <div class="inline position-relative">
+              <input maxlength="200" (ngModelChange)="BookingNoValidation()" [(ngModel)]="model.searchTypeText"
+                type="text" [placeholder]="masterModel.selectedNumberPlaceHolder"
+                [ngClass]="{ 'is-invalid': model.searchTypeText!='' && _customValidationForInvoiceNo}" />
+              <div class="icon-container">
+                <img (click)="getSearchDetails()" src="assets/images/new-set/search-lens.svg" alt="" class="icon">
+              </div>
+            </div>
+          </div>
+          <div class="filter-cta style-4 common-tooltip" *ngIf="!isFilterOpen" (click)="toggleFilterSection()"
+            data-tooltip="filter">
+            <img src="assets/images/cta-filter-grey.svg" alt="">
+          </div>
+          <div class="filter-cta style-4 active" *ngIf="isFilterOpen" (click)="toggleFilterSection()">
+            <img src="assets/images/cta-filter-grey.svg" alt="">
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="filter-container style-3" [@expandCollapse]="isFilterOpen ? 'open' : 'close'" [@.disabled]="isMobile">
+      <div class="my-container customer-dashboard-mobile-filter">
+        <div class="row">
+          <div class="col-sm-12 col-md-12 col-lg-3 mobile-margin-top-15">
+            <div class="my-input-group">
+              <div class="styled-radio-container" *ngFor="let item of invoiceDateTypeList;let idx = index">
+                <input type="radio" class="styled-radio" id="{{item.id}}" name="radio-group1" [value]="item.id"
+                  [checked]="true" (change)="SetSearchDatetype(item)" [(ngModel)]="model.datetypeid">
+                <label for="{{item.id}}">{{item.name}}</label>
+              </div>
+            </div>
+            <div class="my-input-group">
+              <div class="d-flex my-input-group">
+                <div class="calendar-wrapper flex-fill mr-2">
+                  <input type="text" maxlength="10" container="body"
+                    [ngClass]="{ 'is-invalid':  !validator.isValidIf('invoiceFromDate',IsDateValidationRequired())}"
+                    readonly=readonly [(ngModel)]="model.invoiceFromDate" ngbDatepicker #sdf="ngbDatepicker"
+                    (click)="sdf.toggle()">
+                  <img src="assets/images/cta-close-grey.svg" alt="" class="close-icon"
+                    (click)="clearDateInput('Fromdate');isfilterData();" *ngIf="model.invoiceFromDate">
+                  <!-- click function isfilterData() -->
+                  <img src="assets/images/cta-calendar-grey.svg" alt="" class="calendar-icon" (click)="sdf.toggle()">
+                  <div *ngIf="!validator.isValidIf('invoiceFromDate',IsDateValidationRequired())"
+                    class="invalid-feedback">
+                    <div *ngFor="let error of validator.getErrors('invoiceFromDate')">{{ error |
+                      translate }}</div>
+                  </div>
+                </div>
+                <div class="calendar-wrapper flex-fill">
+                  <input type="text" maxlength="10" container="body"
+                    [ngClass]="{ 'is-invalid':  !validator.isValidIf('invoiceToDate',IsDateValidationRequired())}"
+                    readonly=readonly [(ngModel)]="model.invoiceToDate" ngbDatepicker #sdt="ngbDatepicker"
+                    (click)="sdt.toggle()">
+                  <img src="assets/images/cta-close-grey.svg" alt="" class="close-icon"
+                    (click)="clearDateInput('Todate');isfilterData()" *ngIf="model.invoiceToDate">
+                  <img src="assets/images/cta-calendar-grey.svg" alt="" class="calendar-icon" (click)="sdt.toggle()">
+                  <div *ngIf="!validator.isValidIf('invoiceToDate',IsDateValidationRequired())"
+                    class="invalid-feedback">
+                    <div *ngFor="let error of validator.getErrors('invoiceToDate')">{{ error |
+                      translate }}</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-sm-12 col-md-4 col-lg-3 marginTop15 mobile-margin-top-15">
+            <div class="my-input-group">
+              <label for="">{{ 'BOOKING_SUMMARY.LBL_CUSTOMER' | translate }}</label>
+              <ng-select #customer [searchable]="true" [items]="masterModel.customerList" bindLabel="name"
+                (change)="onChangeCustomer($event);isfilterData();" (clear)="clearCustomerSelection()"
+                [loading]="masterModel.customerLoading" [clearable]="true" [multiple]="false" bindValue="id"
+                [hideSelected]="true" appendTo="body" [virtualScroll]="true" (scrollToEnd)="getCustomerData(true)"
+                [typeahead]="masterModel.customerInput" [minTermLength]="3"
+                placeholder="--- {{(masterModel.customerList!=null && masterModel.customerList.length!=0? 'BOOKING_SUMMARY.LBL_SELECT':'BOOKING_SUMMARY.MSG_NO_DATA')  | translate }} ---"
+                [(ngModel)]="model.customerId" #select>
+                <ng-template ng-option-tmp let-item="item">
+                  <div class="text-wrap">{{ item.name }}</div>
+                </ng-template>
+              </ng-select>
+            </div>
+          </div>
+          <div class="col-sm-12 col-md-4 col-lg-3 marginTop15 mobile-margin-top-15">
+            <div class="my-input-group">
+              <label for="">{{ 'BOOKING_SUMMARY.LBL_SUPPLIER' | translate }}</label>
+              <ng-select [items]="masterModel.supplierList" [virtualScroll]="true"
+                [loading]="masterModel.supplierLoading" bindLabel="name" bindValue="id"
+                placeholder="--- {{ (masterModel.supplierList!=null && masterModel.supplierList.length!=0? 'BOOKING_SUMMARY.LBL_SELECT':'BOOKING_SUMMARY.MSG_NO_DATA' ) | translate }} ---"
+                [typeahead]="masterModel.supplierInput" [minTermLength]="3" appendTo="body"
+                (clear)="clearSupplierSelection()" [clearable]="true" [(ngModel)]="model.supplierId" [multiple]="false"
+                (change)="onChangeSupplier($event);isfilterData();" (scrollToEnd)="getSupplierData(true)" #select>
+                <ng-template ng-option-tmp let-item="item">
+                  <div class="text-wrap"><span>{{item.name}}</span></div>
+                </ng-template>
+              </ng-select>
+            </div>
+          </div>
+          <div class="col-sm-12 col-md-4 col-lg-3 marginTop15 mobile-margin-top-15">
+            <div class="my-input-group">
+              <label for="">{{ 'BOOKING_SUMMARY.LBL_OFFICE' | translate }}</label>
+              <ng-select #office [searchable]="true" [items]="masterModel.officeList" bindLabel="name"
+                (change)="officeChange($event);isfilterData()" [loading]="masterModel.officeLoading" [clearable]="true"
+                [multiple]="true" class="multiple" bindValue="id" [hideSelected]="true" appendTo="body"
+                placeholder="--- {{(masterModel.officeList!=null && masterModel.officeList.length!=0? 'BOOKING_SUMMARY.LBL_SELECT':'BOOKING_SUMMARY.MSG_NO_DATA')  | translate }} ---"
+                [(ngModel)]="model.officeIdList" #select>
+                <ng-template ng-option-tmp let-item="item">
+                  <div class="text-wrap">{{ item.name }}</div>
+                </ng-template>
+              </ng-select>
+            </div>
+          </div>
+        </div>
+        <div [hidden]="!toggleFormSection">
+          <div class="row">
+            <div class="col-sm-12 col-md-4 col-lg-3 marginTop15 mobile-margin-top-15">
+              <div class="my-input-group">
+                <label for="" class="required" id="lbl_servicetype">{{ 'CUSTOMER_SERVICECONFIG.Service'
+                  | translate
+                  }}</label>
+                <ng-select #office [searchable]="true" [items]="masterModel.serviceList" bindLabel="name"
+                  [ngClass]="{ 'is-invalid':  !validator.isValid('serviceId')}" (change)="isfilterData();"
+                  (ngModelChange)="changeService($event)" [loading]="masterModel.serviceLoading" [clearable]="true"
+                  bindValue="id" [hideSelected]="true" appendTo="body"
+                  placeholder="--- {{(masterModel.serviceList!=null && masterModel.serviceList.length!=0? 'BOOKING_SUMMARY.LBL_SELECT':'BOOKING_SUMMARY.MSG_NO_DATA')  | translate }} ---"
+                  [(ngModel)]="model.serviceId" #select>
+                  <ng-template ng-option-tmp let-item="item">
+                    <div class="text-wrap">{{ item.name }}</div>
+                  </ng-template>
+                </ng-select>
+                <div *ngIf="!validator.isValid('serviceId')" class="invalid-feedback">
+                  <div *ngFor="let error of validator.getErrors('serviceId')">
+                    {{ error | translate }}</div>
+                </div>
+              </div>
+            </div>
+            <div class="col-sm-12 col-md-4 col-lg-3 marginTop15 mobile-margin-top-15">
+              <div class="my-input-group">
+                <label for="">{{ 'EDIT_CUSTOMER.LBL_INVOICE_TYPE' | translate }}</label>
+                <ng-select [items]="masterModel.invoiceTypeList" [(ngModel)]="model.invoiceType" [closeOnSelect]="true"
+                  [searchable]="true" bindLabel="name" bindValue="id" appendTo="body"
+                  [disabled]="masterModel.hasHideMonthlyInvocieInvoiceStatus && !hasAccountRole"
+                  placeholder="--- {{(masterModel.invoiceTypeList &&
+                        masterModel.invoiceTypeList.length>0? 'COMMON.LBL_SELECT':'COMMON.LBL_NO_DATA')  | translate }} ---" [loading]="masterModel.invoiceTypeLoading" #select
+                  (change)="isfilterData();">
+                  <ng-template ng-option-tmp let-item="item">
+                    <div class="text-wrap">{{ item.name }}</div>
+                  </ng-template>
+                </ng-select>
+              </div>
+            </div>
+            <div class="col-sm-12 col-md-4 col-lg-3 marginTop15 mobile-margin-top-15">
+              <div class="my-input-group">
+                <label for="">{{ 'INVOICE_SUMMARY.LBL_INVOICE_STATUS' | translate }}</label>
+                <ng-select [searchable]="true" [(ngModel)]="model.invoiceStatusId" bindLabel="name" class="multiple"
+                  [multiple]="true" [loading]="masterModel.statusLoading" appendTo="body"
+                  [items]="masterModel.invoiceStatusList" bindValue="id" [hideSelected]="true"
+                  (change)="isfilterData();"
+                  placeholder="---{{(masterModel.invoiceStatusList!=null && masterModel.invoiceStatusList.length!=0 ? 'BOOKING_SUMMARY.LBL_SELECT':'QUOTATION_SUMMARY.MSG_NO_DATA')  | translate }} ---">
+                  <ng-template ng-option-tmp let-item="item">
+                    <div class="text-wrap">{{ item.name }}</div>
+                  </ng-template>
+                </ng-select>
+              </div>
+            </div>
+            <div class="col-sm-12 col-md-4 col-lg-3 marginTop15 mobile-margin-top-15">
+              <div class="my-input-group">
+                <label class="" for="">{{ 'BOOKING_SUMMARY.LBL_BOOKING_STATUS' | translate }}</label>
+                <ng-select [multiple]="true" [searchable]="true" [loading]="masterModel.bookingstatusLoading"
+                  [items]="masterModel.bookingStatusList" class="multiple" bindLabel="name" bindValue="id"
+                  [hideSelected]="true" appendTo="body"
+                  placeholder="--- {{ (masterModel.bookingStatusList!=null && masterModel.bookingStatusList.length!=0? 'BOOKING_SUMMARY.LBL_SELECT':'BOOKING_SUMMARY.MSG_NO_DATA' ) | translate }} ---"
+                  [(ngModel)]="model.statusidlst" (change)="statusChange($event);isfilterData()">
+                </ng-select>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-sm-12 col-md-4 col-lg-3 marginTop15 mobile-margin-top-15">
+              <div class="my-input-group">
+                <label>{{ 'BOOKING_SUMMARY.LBL_FACTORY' | translate }}</label>
+                <ng-select [items]="masterModel.factoryList" [virtualScroll]="true"
+                  [loading]="masterModel.factoryLoading" bindLabel="name" bindValue="id"
+                  placeholder="--- {{ (masterModel.factoryList!=null && masterModel.factoryList.length!=0? 'BOOKING_SUMMARY.LBL_SELECT':'BOOKING_SUMMARY.MSG_NO_DATA' ) | translate }} ---"
+                  [typeahead]="masterModel.factoryInput" [minTermLength]="4" (clear)="clearFactorySelection()"
+                  [clearable]="true" appendTo="body" [(ngModel)]="model.factoryId" [multiple]="false"
+                  (change)="isfilterData()" (scrollToEnd)="getFactoryData(true)" #select>
+                  <ng-template ng-option-tmp let-item="item">
+                    <div><span>{{item.name}}</span></div>
+                  </ng-template>
+                </ng-select>
+              </div>
+            </div>
+            <div class="col-sm-12 col-md-4 col-lg-3 marginTop15 mobile-margin-top-15">
+              <div class="my-input-group">
+                <label>{{ 'INVOICE_MODIFY.LBL_FACTORY_COUNTRY' | translate }}</label>
+                <ng-select [items]="masterModel.factoryCountryList" appendTo="body" [virtualScroll]="true"
+                  [loading]="masterModel.factoryCountryLoading" [(ngModel)]="model.factoryCountryIds" multiple="true"
+                  [closeOnSelect]="true" [searchable]="true" bindLabel="name" bindValue="id" class="multiple"
+                  [typeahead]="masterModel.factoryCountryInput" [minTermLength]="4"
+                  placeholder="--- {{ 'SUPPLIER_SUMMARY.LBL_SELECT' | translate }} ---"
+                  (scrollToEnd)="getCountryData(true)" #select>
+                  <ng-template ng-option-tmp let-item="item">
+                    <div class="text-wrap">{{ item.name }}</div>
+                  </ng-template>
+                </ng-select>
+              </div>
+            </div>
+            <div class="col-sm-12 col-md-4 col-lg-3 marginTop15 mobile-margin-top-15">
+              <div class="my-input-group">
+                <label>{{ 'INVOICE_MODIFY.LBL_PAYMENT_STATUS' | translate
+                  }}</label>
+                <ng-select [items]="masterModel.invoicePaymentStatusList" [(ngModel)]="model.paymentStatusIdList"
+                  [closeOnSelect]="true" class="multiple" [multiple]="true" appendTo="body" (change)="isfilterData();"
+                  [searchable]="true" bindLabel="name" bindValue="id"
+                  placeholder="--- {{(masterModel.invoicePaymentStatusList && masterModel.invoicePaymentStatusList.length>0? 'COMMON.LBL_SELECT':'COMMON.LBL_NO_DATA')  | translate }} ---"
+                  [loading]="masterModel.invoicePaymentStatusLoading"
+                  [ngClass]="{ 'is-invalid': !validator.isValid('paymentStatus')}">
+                  <ng-template ng-option-tmp let-item="item">
+                    <div class="text-wrap">{{ item.name }}</div>
+                  </ng-template>
+                </ng-select>
+              </div>
+            </div>
+            <div class="col-sm-12 col-md-4 col-lg-3 marginTop15 mobile-margin-top-15">
+              <div class="my-input-group">
+                <label for="">{{ 'EDIT_BOOKING.LBL_CUS_BRAND' | translate }}</label>
+                <ng-select #customerbrand appendTo="body" (change)="isfilterData();"
+                  [items]="masterModel.customerBrandList" bindLabel="name" class="multiple" bindValue="id"
+                  [multiple]="true" [closeOnSelect]="true" [searchable]="true"
+                  [loading]=masterModel.customerBrandLoading
+                  placeholder="--- {{ (masterModel.customerBrandList!=null && masterModel.customerBrandList.length!=0? 'COMMON.LBL_SELECT':'COMMON.LBL_NO_DATA')  | translate }} ---"
+                  [(ngModel)]="model.brandIdList">
+                  <ng-template ng-option-tmp let-item="item">
+                    <div class="text-wrap">{{ item.name }}</div>
+                  </ng-template>
+                </ng-select>
+
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- Advance Search starts-->
+        <div class="row filter-cta-container">
+          <div class="col-6">
+            <div class="advanced-search" (click)="toggleSection()">
+              <img class="icon" src="assets/images/expand-new.svg" alt="" *ngIf="!toggleFormSection">
+              <img class="icon" src="assets/images/collapse-new.svg" alt="" *ngIf="toggleFormSection">
+              {{'QUOTATION_SUMMARY.LBL_ADVANCED_SEARCH' | translate}}
+            </div>
+          </div>
+          <div class="col-6 text-right">
+
+            <button class="category-cta small mr-2 common-tooltip common-tooltip-top-2" data-tooltip="Reset"
+              [disabled]="masterModel.exportDataLoading || masterModel.searchloading  || masterModel.serviceLoading"
+              (click)="Reset()">
+              <img src="assets/images/reload-new.svg" alt="Reset">
+              <span>{{ 'COMMON.LBL_RESET' | translate}}</span>
+            </button>
+
+            <button class="secondary-cta small mr-2" (click)="confirmInvoiceGenerate(invoiceConfirm)"
+              [disabled]="masterModel.exportDataLoading" *ngIf="masterModel.isInvoiceCreateVisible">
+              {{'INVOICE_SUMMARY.LBL_CREATE_INVOICE' | translate}}
+              <span *ngIf="masterModel.exportDataLoading">
+                <i class="fa fa-refresh fa-spin" aria-hidden="true"></i>
+              </span>
+            </button>
+
+
+            <button class="secondary-cta small mr-2" (click)="export()" [disabled]="masterModel.exportDataLoading"
+              *ngIf="model.items != null && model.items.length != 0  && !model.noFound">
+              {{ 'QUOTATION_SUMMARY.LBL_EXPORT' | translate }}
+              <span *ngIf="masterModel.exportDataLoading">
+                <i class="fa fa-refresh fa-spin" aria-hidden="true"></i>
+              </span>
+            </button>
+
+            <button class="primary-cta small float-right"
+              [disabled]="masterModel.searchloading  || masterModel.serviceLoading" (click)="SearchDetails()">
+              {{ 'QUOTATION_SUMMARY.LBL_SEARCH_BTN' | translate }}
+              <span *ngIf="masterModel.searchloading">
+                <i class="fa fa-refresh fa-spin" aria-hidden="true"></i>
+              </span>
+            </button>
+          </div>
+        </div>
+        <!-- Advance Search end-->
+      </div>
+    </div>
+    <div class="my-container">
+      <ng-container *ngIf="masterModel.searchloading">
+        <div class="master-body">
+          <div class="content-container tracking-container transparent-bg">
+            <div class="record-count pl-0 pr-0">
+            </div>
+            <div class="table-container">
+              <table class="pagination-table">
+                <thead>
+                  <tr class="sticky-top-row">
+                    <th class="width60 whitespacenormal">{{'INVOICE_SUMMARY.LBL_HEADER_INVOICE' |
+                      translate}}</th>
+                    <th class="width-80">{{ 'EXTRA_FEE.LBL_BOOKING_NUMBER' | translate }}</th>
+                    <th class="width-100">{{ 'QUOTATION_SUMMARY.LBL_QUOTNP' | translate }} </th>
+                    <th class="width-140">{{ 'INVOICE_MODIFY.LBL_CUSTOMER' | translate }}</th>
+                    <th class="width-140">{{ 'INVOICE_MODIFY.LBL_SUPPLIER' | translate }}</th>
+                    <th class="width-140">{{ 'INVOICE_MODIFY.LBL_FACTORY' | translate }}</th>
+                    <th class="width-100">{{ 'INVOICE_MODIFY.LBL_SERVICE_DATE' | translate }}</th>
+                    <th class="width-80">{{ 'EXTRA_FEE.LBL_SERVICE' | translate }}</th>
+                    <th class="width-80">{{ 'EDIT_BOOKING.LBL_CUS_BRAND' | translate }}</th>
+                    <th class="width-140">{{ 'INVOICE_MODIFY.LBL_INVOICE_NO' | translate }}</th>
+                    <th class="width-100">{{ 'INVOICE_SUMMARY.LBL_INVOICE_TOTAL' | translate }}</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>
+                      <div class="rect-common animate width30"></div>
+                    </td>
+                    <td>
+                      <div class="rect-common animate width30"></div>
+                    </td>
+                    <td>
+                      <div class="rect-common animate width30"></div>
+                    </td>
+                    <td>
+                      <div class="rect-common animate width20"></div>
+                    </td>
+                    <td>
+                      <div class="rect-common animate width50"></div>
+                    </td>
+                    <td *ngIf="_IsCustomerUser">
+                      <div class="rect-common animate width20"></div>
+                    </td>
+                    <td>
+                      <div class="rect-common animate width30"></div>
+                    </td>
+                    <td>
+                      <div class="rect-common animate width30"></div>
+                    </td>
+                    <td>
+                      <div class="rect-common animate width30"></div>
+                    </td>
+                    <td>
+                      <div class="rect-common animate width30"></div>
+                    </td>
+                    <td>
+                      <div class="rect-common animate width30"></div>
+                    </td>
+                    <td>
+                      <div class="rect-common animate width30"></div>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>
+                      <div class="rect-common animate width30"></div>
+                    </td>
+                    <td>
+                      <div class="rect-common animate width30"></div>
+                    </td>
+                    <td>
+                      <div class="rect-common animate width30"></div>
+                    </td>
+                    <td>
+                      <div class="rect-common animate width20"></div>
+                    </td>
+                    <td>
+                      <div class="rect-common animate width50"></div>
+                    </td>
+                    <td *ngIf="_IsCustomerUser">
+                      <div class="rect-common animate width20"></div>
+                    </td>
+                    <td>
+                      <div class="rect-common animate width30"></div>
+                    </td>
+                    <td>
+                      <div class="rect-common animate width30"></div>
+                    </td>
+                    <td>
+                      <div class="rect-common animate width30"></div>
+                    </td>
+                    <td>
+                      <div class="rect-common animate width30"></div>
+                    </td>
+                    <td>
+                      <div class="rect-common animate width30"></div>
+                    </td>
+                    <td>
+                      <div class="rect-common animate width30"></div>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>
+                      <div class="rect-common animate width30"></div>
+                    </td>
+                    <td>
+                      <div class="rect-common animate width30"></div>
+                    </td>
+                    <td>
+                      <div class="rect-common animate width30"></div>
+                    </td>
+                    <td>
+                      <div class="rect-common animate width20"></div>
+                    </td>
+                    <td>
+                      <div class="rect-common animate width50"></div>
+                    </td>
+                    <td *ngIf="_IsCustomerUser">
+                      <div class="rect-common animate width20"></div>
+                    </td>
+                    <td>
+                      <div class="rect-common animate width30"></div>
+                    </td>
+                    <td>
+                      <div class="rect-common animate width30"></div>
+                    </td>
+                    <td>
+                      <div class="rect-common animate width30"></div>
+                    </td>
+                    <td>
+                      <div class="rect-common animate width30"></div>
+                    </td>
+                    <td>
+                      <div class="rect-common animate width30"></div>
+                    </td>
+                    <td>
+                      <div class="rect-common animate width30"></div>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>
+                      <div class="rect-common animate width30"></div>
+                    </td>
+                    <td>
+                      <div class="rect-common animate width30"></div>
+                    </td>
+                    <td>
+                      <div class="rect-common animate width30"></div>
+                    </td>
+                    <td>
+                      <div class="rect-common animate width20"></div>
+                    </td>
+                    <td>
+                      <div class="rect-common animate width50"></div>
+                    </td>
+                    <td *ngIf="_IsCustomerUser">
+                      <div class="rect-common animate width20"></div>
+                    </td>
+                    <td>
+                      <div class="rect-common animate width30"></div>
+                    </td>
+                    <td>
+                      <div class="rect-common animate width30"></div>
+                    </td>
+                    <td>
+                      <div class="rect-common animate width30"></div>
+                    </td>
+                    <td>
+                      <div class="rect-common animate width30"></div>
+                    </td>
+                    <td>
+                      <div class="rect-common animate width30"></div>
+                    </td>
+                    <td>
+                      <div class="rect-common animate width30"></div>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>
+                      <div class="rect-common animate width30"></div>
+                    </td>
+                    <td>
+                      <div class="rect-common animate width30"></div>
+                    </td>
+                    <td>
+                      <div class="rect-common animate width30"></div>
+                    </td>
+                    <td>
+                      <div class="rect-common animate width20"></div>
+                    </td>
+                    <td>
+                      <div class="rect-common animate width50"></div>
+                    </td>
+                    <td *ngIf="_IsCustomerUser">
+                      <div class="rect-common animate width20"></div>
+                    </td>
+                    <td>
+                      <div class="rect-common animate width30"></div>
+                    </td>
+                    <td>
+                      <div class="rect-common animate width30"></div>
+                    </td>
+                    <td>
+                      <div class="rect-common animate width30"></div>
+                    </td>
+                    <td>
+                      <div class="rect-common animate width30"></div>
+                    </td>
+                    <td>
+                      <div class="rect-common animate width30"></div>
+                    </td>
+                    <td>
+                      <div class="rect-common animate width30"></div>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </ng-container>
+      <ng-container *ngIf="(model.items && model.items.length>0); else noDataContainer">
+        <div class="master-body">
+          <div class="content-container tracking-container transparent-bg">
+            <div class="record-count pl-0 pr-0">
+              <div class="column">
+                <p class="count" [innerHtml]="showPaginationText()"></p>
+              </div>
+              <div class="column text-right">
+                <ul class="table-badge-container">
+                  <li *ngFor="let status of masterModel._statuslist | slice:0:masterModel._statuslist.length"
+                    (click)="clickStatus(status.id)" [class]="status.statusColor"
+                    [ngClass]="{'active': changeStatus(status.id)}">
+                    {{status.statusName}}<span>{{status.totalCount}}</span>
+                    <img *ngIf="changeStatus(status.id)" src="assets/images/white-close.svg" alt="">
+                  </li>
+                </ul>
+              </div>
+            </div>
+            <div class="table-container" [ngClass]="{'expanded-table' : masterModel.isShowColumn}">
+              <table class="pagination-table collapsed-table">
+                <thead>
+                  <tr class="sticky-top-row">
+                    <th class="width60 whitespacenormal">{{'INVOICE_SUMMARY.LBL_HEADER_INVOICE' |
+                      translate}}</th>
+                    <th class="width-80">{{ 'EXTRA_FEE.LBL_BOOKING_NUMBER' | translate }}</th>
+                    <th class="width-80">{{ 'QUOTATION_SUMMARY.LBL_QUOTNP' | translate }} </th>
+                    <th class="width-140">{{ 'INVOICE_MODIFY.LBL_CUSTOMER' | translate }}</th>
+                    <th class="width-140">{{ 'INVOICE_MODIFY.LBL_SUPPLIER' | translate }}</th>
+                    <th class="width-140">{{ 'INVOICE_MODIFY.LBL_FACTORY' | translate }}</th>
+                    <th class="width-140">{{ 'INVOICE_MODIFY.LBL_FACTORY_COUNTRY' | translate }}</th>
+                    <th class="width-100">{{ 'INVOICE_MODIFY.LBL_SERVICE_DATE' | translate }}</th>
+                    <th class="width-80">{{ 'EXTRA_FEE.LBL_SERVICE' | translate }}</th>
+                    <th class="width-80">{{ 'EDIT_BOOKING.LBL_CUS_BRAND' | translate }}</th>
+                    <th class="width-140">{{ 'INVOICE_MODIFY.LBL_INVOICE_NO' | translate }}</th>
+                    <th class="extra-column width-100">{{ 'INVOICE_SUMMARY.LBL_INVOICE_TOTAL' | translate }}</th>
+                    <th class="extra-column width-80">{{ 'INVOICE_MODIFY.LBL_INVOICE_DATE' | translate }}
+                    <th class="width-120">{{ 'INVOICE_SUMMARY.LBL_INVOICE_TYPE' | translate }}
+                    </th>
+
+                 
+                    <th class="extra-column width-80">{{ 'INVOICE_SUMMARY.LBL_BILLED_TO' | translate
+                      }}</th>
+                    <th class="extra-column width-100">{{ 'INVOICE_SUMMARY.LBL_INVOICE_STATUS' |
+                      translate }}
+                    </th>
+                    <th class="extra-column width-100">{{ 'INVOICE_MODIFY.LBL_PAYMENT_STATUS' |
+                      translate }}
+                    </th>
+                    <th class="extra-column width-100">{{ 'INVOICE_MODIFY.LBL_PAYMENT_DATE' |
+                      translate }}
+                    </th>
+
+                    <th class="extra-column width-100" >{{ 'INVOICE_SUMMARY.LBL_EXTRAFEE_INV_NO' | translate }}</th>
+                    <th class="extra-column width-100" >{{ 'INVOICE_SUMMARY.LBL_EXTRAFEE_INV_Status' | translate }}</th>
+                    <th class="extra-column width-100" >{{ 'INVOICE_SUMMARY.LBL_EXTRAFEE_INV_Total' | translate }}</th>
+                    <th class="extra-column width-100" >{{ 'INVOICE_SUMMARY.LBL_EXTRAFEE_INV_Date' | translate }}</th>
+                    <th class="extra-column width-100" >{{ 'INVOICE_SUMMARY.LBL_EXTRAFEE_INV_BilledTo' | translate }} </th>
+                    <th class="extra-column width-100" >{{ 'INVOICE_SUMMARY.LBL_EXTRAFEE_INV_Payment_Status' | translate }}</th>
+                    <th class="extra-column width-100" >{{ 'INVOICE_SUMMARY.LBL_EXTRAFEE_INV_Payment_Date' | translate }}</th>
+
+
+                    <th *ngIf="model.serviceId == 1" class="extra-column width-100">{{
+                      'INVOICE_MODIFY.LBL_HOLD_TYPE' | translate }}
+                    </th>
+                    <th *ngIf="model.serviceId == 1" class="extra-column width-100">{{
+                      'INVOICE_MODIFY.LBL_HOLD_REASON' | translate }}
+                    </th>
+                    <th class="extra-column width-180">{{ 'INVOICE_MODIFY.LBL_QUOTSTATUS' |
+                      translate }}
+                    </th>
+                    <th class="extra-column width-100">{{ 'INVOICE_MODIFY.LBL_COMMUNICATION' |
+                      translate }}
+                    </th>
+                    <th class="text-center">
+                      <img class="cursor-pointer" [attr.data-tooltip]="masterModel.showColumnTooltip"
+                        (click)="isShownColumn()" [src]="masterModel.isShowColumnImagePath" alt="">
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <ng-template ngFor let-iteminfo [ngForOf]="model.items" let-i="index">
+                    <tr>
+                      <td class="Center_Middle width60"
+                        [ngStyle]="{'background-color':(hasAccountRole && iteminfo.id==0 && iteminfo.paymentTerms==paymentTerms.PreInvoice && iteminfo.quotationStatusId==7) ? 'yellow' : 'inherit' }">
+                        <div class="my-input-group marginTop20"
+                          *ngIf="hasAccountRole && iteminfo.id==0 && iteminfo.paymentTerms==paymentTerms.PreInvoice && iteminfo.quotationStatusId==7">
+                          <div class="styled-checkbox-container">
+                            <input class="styled-checkbox" id="checkbox-{{i}}" type="checkbox"
+                              (change)="changeInvoiceSelection(iteminfo,$event);"
+                              [(ngModel)]="iteminfo.selectedToGenerateInvoice">
+                            <label for="checkbox-{{i}}"></label>
+                          </div>
+                        </div>
+                      </td>
+                      <td class="wordbreak width-80 whitespacenormal">
+                        <a style="color: blue;" triggers="mouseenter:mouseleave"
+                          (click)="navigateToBooking(iteminfo.bookingId,iteminfo.serviceId)" class="right-link">
+                          <span class="number-badge common-tooltip" [class]="GetStatusColor(iteminfo.bookingStatusId)"
+                            [attr.data-tooltip]="iteminfo.bookingStatusName">
+                            {{ iteminfo.bookingId}}
+                          </span>
+                        </a>
+                      </td>
+                      <td class="width-80 whitespacenormal wordbreak">
+                        <a style="color: blue;" triggers="mouseenter:mouseleave"
+                          (click)="navigateToQuotation(iteminfo.quotationId)" class="right-link">
+                          {{iteminfo.quotationId}} </a>
+                      </td>
+                      <td class="wordbreak whitespacenormal width-180 medium">
+                        {{iteminfo.customerName}}</td>
+                      <td class="wordbreak whitespacenormal width-180 medium">
+                        {{iteminfo.supplierName}}</td>
+                      <td class="wordbreak whitespacenormal width-180 medium">
+                        {{iteminfo.factoryName}}</td>
+                      <td class="wordbreak whitespacenormal width-180 medium">
+                        {{iteminfo.factoryCountry}}</td>
+                      <td class="wordbreak whitespacenormal width-100">{{iteminfo.serviceDate}}
+                      </td>
+                      <td class="wordbreak whitespacenormal width-80">{{iteminfo.serviceName}}
+                      </td>
+                      <td class="wordbreak whitespacenormal width-150">{{iteminfo.brandNames}}
+                      </td>
+                      <td class="wordbreak whitespacenormal width-140" *ngIf="hasAccountRole">
+                        <a style="color: blue;" triggers="mouseenter:mouseleave"
+                          (click)="navigateToEditInvoice(iteminfo.invoiceNo,iteminfo.serviceId)" class="right-link">
+                          {{iteminfo.invoiceNo}} </a>
+                      </td>
+                      <td class="wordbreak whitespacenormal width-100" *ngIf="!hasAccountRole">
+                        {{iteminfo.invoiceNo}}</td>
+                      <td class="wordbreak whitespacenormal width-80 extra-column ">{{iteminfo.invoiceAmount}}
+                        {{iteminfo.currencyCode}}
+                      </td>
+                      <td class="wordbreak whitespacenormal width-80 extra-column ">{{iteminfo.invoiceDate}}
+                      </td>
+                      <td class="wordbreak whitespacenormal width-120">
+                        <span *ngIf="iteminfo.invoiceTypeName" [class]="iteminfo.invoiceTypeClassName">
+                          {{iteminfo.invoiceTypeName}}
+                        </span>
+                      </td>
+                      <td class="wordbreak whitespacenormal width-100 extra-column">
+                        {{iteminfo.invoiceTo}} </td>
+                      <td class="wordbreak whitespacenormal extra-column width-100"><span
+                          [ngStyle]="{'color': iteminfo.invoiceStatusColor}">{{iteminfo.invoiceStatusName}}</span>
+                      </td>
+
+                      <td class="wordbreak whitespacenormal extra-column width-100">
+                        <div *ngIf="iteminfo.paymentStatusId == 1" class="booking-status Center_Middle">
+                          <img src="assets/images/red-cross-icon.svg" alt="">
+                          <span class="red">{{iteminfo.paymentStatusName}}</span>
+                        </div>
+                        <div *ngIf="iteminfo.paymentStatusId == 2" class="booking-status Center_Middle">
+                          <img src="assets/images/process.svg" alt="">
+                          <span class="yellow">{{iteminfo.paymentStatusName}}</span>
+                        </div>
+                        <div *ngIf="iteminfo.paymentStatusId == 3" class="booking-status Center_Middle">
+                          <img src="assets/images/green-tick.svg" alt="">
+                          <span class="green">{{iteminfo.paymentStatusName}}</span>
+                        </div>
+                      </td>
+                      <td class="wordbreak whitespacenormal width-100 extra-column">
+                        {{iteminfo.paymentDate}}</td>
+
+                        <td class="wordbreak whitespacenormal width-100 extra-column">
+                          {{iteminfo.extraFeeInvoiceNo}} </td>
+  
+                        <td class="wordbreak whitespacenormal width-100 extra-column">
+                          {{iteminfo.extraFeesStatusName}} </td>
+  
+                        <td class="wordbreak whitespacenormal width-100 extra-column">
+                          {{iteminfo.extraFeesAmount}} {{iteminfo.extraFeesCurrencyCode}} </td>
+  
+                        <td class="wordbreak whitespacenormal width-100 extra-column">
+                          {{iteminfo.extraFeesInvoiceDate}} </td>
+  
+                        <td class="wordbreak whitespacenormal width-100 extra-column">
+                          {{iteminfo.extraFeesInvoiceTo}} </td>  
+
+                          <td class="wordbreak whitespacenormal width-100 extra-column">
+                            {{iteminfo.extraFeesPaymentStatusName}} </td>
+                       
+                          
+  
+                        <td class="wordbreak whitespacenormal width-100 extra-column">
+                          {{iteminfo.extraFeesPaymentDate}} </td>
+  
+
+                      <td *ngIf="model.serviceId == 1" class="wordbreak whitespacenormal width-100 extra-column">
+                        {{iteminfo.holdType}}</td>
+                      <td class="extra-column whitespacenormal wordbreak width-100" *ngIf="model.serviceId == 1"
+                        [ngClass]="{'text-tooltip-table': iteminfo.isHoldReasonTooltipShow }"
+                        [attr.data-tooltip]="iteminfo.holdReason">{{iteminfo.holdReasonTrim}}
+                      </td>
+                      <td class="wordbreak whitespacenormal extra-column width-180">
+                        {{iteminfo.quotationStatus}}</td>
+                      <td class="wordbreak whitespacenormal extra-column width-100">
+
+                        <a *ngIf="iteminfo.id && iteminfo.id >0" style="color: blue;" triggers="mouseenter:mouseleave"
+                          (click)="openPopup(iteminfo.invoiceNo, invoiceCommunicationPopup)"
+                          class="right-link text-center">
+                          {{'COMMON.LBL_ADD'| translate }}
+                        </a>
+                      </td>
+                      <td>
+                      </td>
+                    </tr>
+                  </ng-template>
+                </tbody>
+              </table>
+            </div>
+            <div class="pagination-container">
+              <div class="page-count-list">
+                <select class="small" [(ngModel)]="selectedPageSize" (change)="SearchDetails()">
+                  <option *ngFor="let item of pagesizeitems" [ngValue]=item>{{item}}</option>
+                </select>
+                <span> Records per page</span>
+              </div>
+              <div class="pagination-action-container text-right">
+                <ngb-pagination [pageSize]="model.pageSize" [collectionSize]="model.totalCount" [boundaryLinks]="true"
+                  [(page)]="model.index" [maxSize]="5" (pageChange)="onPager($event)">
+                  <ng-template ngbPaginationFirst>
+                    <img src="assets/images/new-set/double-arrow.svg" alt="">
+                  </ng-template>
+                  <ng-template ngbPaginationPrevious>
+                    <img src="assets/images/new-set/single-arrow.svg" alt="" class="left-arrow">
+                  </ng-template>
+                  <ng-template ngbPaginationNext>
+                    <img src="assets/images/new-set/single-arrow.svg" alt="" class="right-arrow">
+                  </ng-template>
+                  <ng-template ngbPaginationLast>
+                    <img src="assets/images/new-set/double-arrow.svg" alt="" class="right-most-arrow">
+                  </ng-template>
+                </ngb-pagination>
+              </div>
+            </div>
+          </div>
+        </div>
+      </ng-container>
+      <ng-template #noDataContainer>
+        <div class="master-body" *ngIf="model.noFound">
+          <div class="error-container plain page-level">
+            <img src="assets/images/no-result.svg" alt="" class="thumbnail">
+            <h4 class="error-title">{{'BOOKING_SUMMARY.MSG_NO_ITEM_FOUND' | translate}}</h4>
+            <p class="error-subtitle">{{'CS_CONFIG_SUMMARY.LBL_NODATA' | translate}}</p>
+            <button (click)="Reset()" class="secondary-cta link to-primary text-transform-initial">
+              {{'COMMON.MSG_CLEAR_SEARCH' | translate}}
+            </button>
+          </div>
+        </div>
+      </ng-template>
+    </div>
+  </div>
+</div>
+
+<div class="loader-overlay" *ngIf="masterModel.invoiceGenerateLoading || masterModel.emailRuleLoading">
+    <div class="loader-container">
+        <img src="assets/images/reload.svg" alt="">
+        <span>{{'COMMON.LBL_LOADER' | translate}}</span>
+    </div>
+</div>
+
+<ng-template #invoicePreviewTemplate let-modal>
+  <app-invoice-preview (closeInvoicePreview)="closeInvoicePreview()" 
+  [invoicePreviewModel]="invoicePreviewRequest"></app-invoice-preview>
+</ng-template>
+
+<ng-template #invoiceConfirm let-modal>
+  <div class="modal-header custom-modal-header">
+    <h4 class="modal-title" id="modal-basic-title">{{'INVOICE_MODIFY.LBL_INV_CREATE_INVOICE' | translate }}</h4>
+    <button type="button" class="close" *ngIf="!masterModel.invoiceGenerateLoading" aria-label="Close"
+      (click)="cancelConfirmInvoiceGenerate()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body custom-modal-body">
+    <div class="formPadding">
+      <div class="row">
+        <div class="col-sm-12 marginTop20 detail-column-container">
+          <div class="row">
+            <!-- <div class="col-lg-2 col-md-2 col-sm-2 my-input-group">
+                            <label class="light" for="">Inspection</label>
+                            <p class="input-value">#{{masterModel.inspectionNo}}</p>
+                        </div> -->
+            <div class="col-lg-2 col-md-2 col-sm-2 my-input-group">
+              <label class="light" for="">{{'INVOICE_MODIFY.LBL_BILLING_TO' | translate }}</label>
+              <p class="input-value">{{masterModel.quotationBilledTo}}</p>
+            </div>
+            <div class="col-lg-6 col-md-6 col-sm-6 my-input-group">
+              <label class="light" for=""> {{ 'INVOICE_MODIFY.LBL_BILLED_NAME' | translate }} </label>
+              <p class="input-value">{{masterModel.quotationBilledName}}</p>
+            </div>
+            <!-- <div class="col-lg-2 col-md-2 col-sm-2 my-input-group" style="padding-top: 5px;">
+                            <label class="light" for="">Total Fees</label>
+                            <p style="background-color: yellow;" class="input-value">{{masterModel.quotationTotalFees}}
+                                ({{masterModel.quotationCurrencyCode}})</p>
+                        </div> -->
+          </div>
+        </div>
+      </div>
+
+      <div class="row marginTop15">
+        <div class="col-sm-12 mobile-margin-top-15">
+          <div class="table-container" *ngIf="masterModel.preInvoiceList.length>0">
+            <table class="pagination-table bordered" cellspacing="0">
+              <thead>
+                <tr>
+                  <th>Booking #</th>
+                  <th>Quotation #</th>
+                  <th>Total Amount (Quotation)</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let item of masterModel.preInvoiceList;  let i = index">
+                  <td>{{item.bookingId}}</td>
+                  <td>{{item.quotationId}}</td>
+                  <td>{{item.quotationTotalFees}} ({{item.quotationCurrencyCode}})</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-sm-12 marginTop20 detail-column-container">
+          <div class="row">
+            <div class="col-lg-6 col-md-6 col-sm-6 my-input-group">
+              <label class="light required" for="">{{'INVOICE_MODIFY.LBL_COMPANY_NAME' | translate
+                }}</label>
+              <ng-select [searchable]="true" [loading]="masterModel.billingEntityLoading"
+                [items]="masterModel.billingEntityList" appendTo="body" bindLabel="name" bindValue="id"
+                [hideSelected]="true" (change)="onChangeCompanyList($event);" (clear)="onClearCompanyList();"
+                [multiple]="false" [ngClass]="{ 'is-invalid':  !masterModel.billingEntityId>0}"
+                placeholder="--- {{ 'COMMON.LBL_SELECT' | translate }} ---" [(ngModel)]="masterModel.billingEntityId">
+              </ng-select>
+
+              <div *ngIf="!masterModel.billingEntityId>0" class="invalid-feedback">
+                <div>
+                  {{'INVOICE_MODIFY.MSG_BILLING_MANDATORY' | translate }} </div>
+              </div>
+
+            </div>
+            <div class="col-lg-6 col-md-6 col-sm-6 my-input-group">
+              <label class="light required" for="">{{'INVOICE_MODIFY.LBL_BANK_NAME' | translate }}</label>
+              <ng-select [items]="masterModel.bankList" [hideSelected]="true" appendTo="body" [multiple]="false"
+                [closeOnSelect]="true" [searchable]="true" [ngClass]="{ 'is-invalid':  !masterModel.bankId>0}"
+                (change)="onChangeBankList($event)" (clear)="onClearBankList();" bindLabel="name" bindValue="id"
+                [(ngModel)]="masterModel.bankId" placeholder="--- {{ 'COMMON.LBL_SELECT' | translate }} ---">
+              </ng-select>
+
+              <div *ngIf="!masterModel.bankId>0" class="invalid-feedback">
+                <div>
+                  {{'INVOICE_MODIFY.MSG_BANK_MANDATORY' | translate }}
+                </div>
+              </div>
+
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-sm-12 marginTop20 detail-column-container">
+          <div class="row">
+            <div class="col-lg-6 col-md-6 col-sm-6 my-input-group">
+              <label class="light" for=""> {{'INVOICE_SUMMARY.LBL_LOCAL_CURRENCY' | translate }}</label>
+              <ng-select [searchable]="true" [loading]="masterModel.currencyLoading" [items]="masterModel.currencyList"
+                appendTo="body" bindLabel="name" [multiple]="false" (change)="onChangeCurrencyList($event);"
+                placeholder="--- {{ 'COMMON.LBL_SELECT' | translate }} ---" bindValue="id" [hideSelected]="true"
+                [(ngModel)]="masterModel.bankcurrencyId">
+              </ng-select>
+            </div>
+
+            <div class="col-lg-6 col-md-6 col-sm-6 my-input-group"
+              *ngIf="masterModel.showAdditionalTax && isBankIdMatched">
+              <label class="light" for="">{{'INVOICE_SUMMARY.LBL_ADDITIONAL_TAX' | translate }}</label>
+              <ng-select [searchable]="true" [loading]="masterModel.additionalTaxLoading" [clearable]="false"
+                [items]="masterModel.additionalTaxList" appendTo="body" bindLabel="name"
+                (change)="onChangeAdditionalTax($event);" placeholder="--- {{ 'COMMON.LBL_SELECT' | translate }} ---"
+                bindValue="id" [hideSelected]="true" [(ngModel)]="masterModel.additionalTax">
+              </ng-select>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row marginTop15" *ngIf="isBankIdMatched">
+        <div class="col-sm-12 mobile-margin-top-15">
+          <div class="table-container">
+            <table class="pagination-table" cellspacing="0">
+              <thead>
+                <tr>
+                  <th>{{ 'EDIT_INV_BANK.LBL_LOCAL_CURRENCY_INFO' | translate }}</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>
+                    <div class="row table-input-container">
+                      <div class="col-sm-4">
+                        <div class="my-input-group">
+                          <label for="">{{ 'EDIT_INV_BANK.LBL_EXCHANGE_RATE' | translate
+                            }}</label>
+                          <input type="number" (change)="calculateTotalFees();" min="1" max="9999999999"                         
+                            (keypress)="keyPressNumbersWithDecimal($event)" (paste)="onPaste($event)"
+                            [(ngModel)]="masterModel.exchangeRate">
+                        </div>
+                      </div>
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <div class="row marginTop15" *ngIf="isBankIdMatched">
+        <div class="col-sm-12 mobile-margin-top-15">
+          <div class="table-container" *ngIf="masterModel.taxList.length>0">
+            <table class="pagination-table bordered" cellspacing="0">
+              <thead>
+                <tr>
+                  <th>{{ 'EDIT_INV_BANK.LBL_NAME' | translate }}</th>
+                  <th>{{ 'EDIT_INV_BANK.LBL_VALUE' | translate }}</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let item of masterModel.taxList;  let i = index">
+                  <td>{{item.taxName}}</td>
+                  <td>{{item.taxValue * 100}} %</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <div class="row marginTop15" *ngIf="isBankIdMatched">
+        <div class="col-sm-4 mobile-margin-top-15">
+          <div class="my-input-group">
+            <label style="font-weight: bold;">Total Amount: {{masterModel.totalCalculatedAmount}}
+              ({{masterModel.bankcurrencyName}})</label>
+          </div>
+        </div>
+      </div>
+
+              <div class="marginTop20 modal-footer">
+                  <button  class="secondary-cta MarginR-20"  [disabled]="masterModel.invoiceGenerateLoading"
+                      (click)="cancelConfirmInvoiceGenerate()">
+                      {{'COMMON.LBL_CONFIRMCANCEL' | translate}}
+                  </button>
+                  <button  class="primary-cta MarginR-20"
+                  [disabled]="masterModel.invoiceGenerateLoading"
+                  (click)="generateInvoice()">
+                  {{'INVOICE_GENERATE.LBL_GENERATE' | translate}}
+                      <span *ngIf="masterModel.invoiceGenerateLoading">
+                          <i class="fa fa-refresh fa-spin" aria-hidden="true"></i>
+                      </span>
+                  </button>
+              </div>
+
+          </div>
+  </div>
+</ng-template>
+
+
+<ng-template #emailruleinfo let-modal>
+  <div class="modal-header custom-modal-header">
+    <h4 class="modal-title" id="modal-basic-title">{{ 'EDIT_EMAIL_SEND.LBL_EMAIL_RULE' | translate }}</h4>
+    <button type="button" class="close" aria-label="Close"
+      (click)="modal.dismiss('Cross click');">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body custom-modal-body">
+    <div class="content-container schedule-allocation-container">
+      <div class="formPadding">
+        <div class="row">
+          <div class="col-sm-12 marginTop20">
+            <div class="table-container">
+              <table class="pagination-table bordered">
+                <thead>
+                  <tr>
+                    <th class="width-60">{{ 'COMMON.LBL_CHOOSE' | translate }}</th>
+                    <th class="width-60">{{ 'EMAIL_CONFIGURATION.LBL_SUPPLIER' | translate }}</th>
+                    <th class="width-60">{{ 'EMAIL_CONFIGURATION.LBL_FACTORY' | translate }}</th>
+                    <th class="width-60">{{ 'EMAIL_CONFIGURATION.LBL_DEPARTMENT' | translate }}</th>
+                    <th class="width-60">{{ 'EMAIL_CONFIGURATION.LBL_BRAND' | translate }}</th>
+                    <th class="width-60">{{ 'EMAIL_CONFIGURATION.LBL_COLLECTION' | translate }}</th>
+                    <th class="width-60">{{ 'EMAIL_CONFIGURATION.LBL_BUYER' | translate }}</th>
+                    <th class="width-60">{{ 'EMAIL_CONFIGURATION.LBL_SERVICE_TYPE' | translate }}</th>
+                    <th class="width-100">{{ 'EMAIL_CONFIGURATION.LBL_PRODUCT_CATEGORY' | translate }}</th>
+                    <th class="width-60">{{ 'EMAIL_CONFIGURATION.LBL_API_RESULT' | translate }}</th>
+                    <th class="width-60">{{ 'EMAIL_CONFIGURATION.LBL_FACTORY_COUNTRY' | translate }}</th>
+                    <th class="width-60">{{ 'EMAIL_CONFIGURATION.LBL_SPECIAL_RULE' | translate }}</th>
+                    <th class="width-60">{{ 'EMAIL_CONFIGURATION.LBL_REPORT_SEND_TYPE' | translate }}</th>
+                    <th class="width-60">{{ 'EMAIL_CONFIGURATION.LBL_REPORT_IN_EMAIL' | translate }}</th>
+                    <th class="width-60"></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let iteminfo of emailPreviewMaster.emailRuleList; let i = index"
+                    [ngClass]="(((i+1) % 2)== 0)?'even':'odd'">
+                    <td class="Center_Middle">
+                      <div class="styled-radio-container">
+                        <input type="radio" class="styled-radio" id="{{iteminfo.ruleId}}"
+                          [(ngModel)]="iteminfo.isSelected" [value]="iteminfo.ruleId" name="radrule-group"
+                           [checked]="i === 0" (click)="getRuleId(iteminfo.ruleId)">
+                        <label for="{{iteminfo.ruleId}}"></label>
+                      </div>
+                    </td>
+                    <td class="width-60">{{iteminfo.supplierName}}</td>
+                    <td class="width-60">{{iteminfo.factoryName}}</td>
+                    <td class="width-60">{{iteminfo.departmentName}}</td>
+                    <td class="width-60">{{iteminfo.brandName}}</td>
+                    <td class="width-60">{{iteminfo.collectionName}}</td>
+                    <td class="width-60">{{iteminfo.buyerName}}</td>
+                    <td class="width-60">{{iteminfo.serviceTypeName}}</td>
+                    <td class="width-100">{{iteminfo.productCategoryName}}</td>
+                    <td class="width-60">{{iteminfo.apiResultName}}</td>
+                    <td class="width-60">{{iteminfo.factoryCountryName}}</td>
+                    <td class="width-60">{{iteminfo.specialRuleName}}</td>
+                    <td class="width-60">{{iteminfo.reportSendType}}</td>
+                    <td class="width-60">{{iteminfo.reportInEmail}}</td>
+                    <td class="width-60"><span class="table-cta icon-cta common-tooltip"
+                        data-tooltip="Rule details"><img (click)="returnToRule(iteminfo.ruleId)"
+                          src="assets/images/cta-view.svg" alt="view rule"></span></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button type="button" [disabled]="popupOk()" class="primary-cta small" (click)="modal.dismiss('cancel click')">
+      {{ 'COMMON.LBL_OK' | translate }}
+    </button>
+    <button type="button" class="tertiary-cta small" (click)="confirmEmailRule();">
+      {{ 'QUOTATION.LBL_CONFIRMCANCEL' | translate }}
+    </button>
+  </div>
+</ng-template>
+
+<ng-template #emailPreviewContent let-modal>
+  <app-email-preview 
+  (sendEmailEvent)="sendEmail($event)" 
+  (closeEmailPreview)="closeEmailPreview($event)"
+  [serialNumberList]="serialNumberListToEmailPreview"
+  [emailPreviewTitle]="emailPreviewTitle"
+  [emailModelItem]="emailModelItem" >
+  </app-email-preview> 
+</ng-template>
+
+<ng-template #invoiceCommunicationPopup let-modal>
+  <div class="modal-header custom-modal-header">
+    <h4 class="modal-title" id="modal-title">{{'INVOICE_STATUS.LBL_POPUP_TITLE' | translate}}</h4>
+    <button type="button" class="close" aria-label="Close" (click)="modelRef.dismiss('Cross click');assignValidator()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+
+  <div class="modal-body custom-modal-body">
+    <div class="table-container">
+      <div class="row">
+        <div class="col-sm-8">
+          <div class="my-input-group">
+            <label for="" class="required">{{ 'COMMON.LBL_COMMENT' | translate }}</label>
+            <textarea maxlength="1000" type="text" [(ngModel)]="communicationSaveModel.comment"></textarea>
+          </div>
+        </div>
+        <div class="col-sm-4">
+          <button class="primary-cta small communication-btn-top" (click)="invoiceCommunicationMap()"
+            [disabled]="masterModel.communicationSaveLoading">
+            {{'COMMON.LBL_SUBMIT' | translate}}
+            <span *ngIf="masterModel.communicationSaveLoading">
+              <i class="fa fa-refresh fa-spin" aria-hidden="true"></i>
+            </span>
+          </button>
+        </div>
+      </div>
+    </div>
+    <div class="table-container h-scroll table-max-height-450" #scrollableTablepopup
+      *ngIf="masterModel.invoiceCommunicationTableList && masterModel.invoiceCommunicationTableList.length > 0">
+      <table class="pagination-table bordered">
+        <ng-container *ngIf="masterModel.communicationTableLoading">
+          <thead>
+            <tr class="sticky-top-row">
+              <th class="wordbreak whitespacenormal width-140">{{'INVOICE_STATUS.LBL_POPUP_TITLE' | translate}}</th>
+              <th class="wordbreak whitespacenormal width-60">{{'COMMON.LBL_CREATED_BY' | translate}}</th>
+              <th class="wordbreak whitespacenormal width-60">{{'COMMON.LBL_CREATED_ON' | translate}}</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>
+                <div class="rect-common animate width30"></div>
+              </td>
+              <td>
+                <div class="rect-common animate width30"></div>
+              </td>
+              <td>
+                <div class="rect-common animate width30"></div>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <div class="rect-common animate width30"></div>
+              </td>
+              <td>
+                <div class="rect-common animate width30"></div>
+              </td>
+              <td>
+                <div class="rect-common animate width30"></div>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <div class="rect-common animate width30"></div>
+              </td>
+              <td>
+                <div class="rect-common animate width30"></div>
+              </td>
+              <td>
+                <div class="rect-common animate width30"></div>
+              </td>
+            </tr>
+          </tbody>
+        </ng-container>
+
+        <ng-container *ngIf="!masterModel.communicationTableLoading">
+          <thead>
+            <tr class="sticky-top-row">
+              <th class="wordbreak whitespacenormal width-140">{{'COMMON.LBL_COMMENT' | translate}}</th>
+              <th class="wordbreak whitespacenormal width-60">{{'COMMON.LBL_CREATED_BY' | translate}}</th>
+              <th class="wordbreak whitespacenormal width-60">{{'COMMON.LBL_CREATED_ON' | translate}}</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let communication of masterModel.invoiceCommunicationTableList;let i = index">
+              <td class="wordbreak whitespacenormal width-140">{{communication.comment}}</td>
+              <td class="wordbreak whitespacenormal width-60">{{communication.createdBy}}</td>
+              <td class="wordbreak whitespacenormal width-60">{{communication.createdOn}}</td>
+            </tr>
+          </tbody>
+        </ng-container>
+      </table>
+    </div>
+  </div>
+</ng-template>

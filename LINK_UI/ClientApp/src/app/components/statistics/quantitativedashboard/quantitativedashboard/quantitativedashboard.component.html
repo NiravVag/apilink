@@ -1,0 +1,888 @@
+<div class="main-wrapper">
+    <div class="wrapper dashboard-wrapper mandays-dashboard-wrapper">
+
+        <div class="filter-container style-2" [@expandCollapse]="isFilterOpen ? 'open' : 'close'" [@.disabled]="isMobile">
+            <div class="my-dashboard-container">
+                <div class="row">
+                    <div class="col-sm-3 mobile-margin-top-15">
+                        <div class="my-input-group">
+                            <label for="">{{'QUANTITATIVE_DASHBOARD.LBL_DATE_PERIOD' | translate}}</label>
+                            <div class="d-flex my-input-group">
+                                <div class="calendar-wrapper inline mr-2">
+                                    <input type="text" container="body" [(ngModel)]="requestModel.serviceDateFrom" ngbDatepicker #sdf="ngbDatepicker" [ngClass]="{ 'is-invalid':  !validator.isValid('serviceDateFrom')}" placeholder="{{  'QUANTITATIVE_DASHBOARD.LBL_SERVICE_DATE_FROM'  | translate }}"
+                                        (click)="sdf.toggle()">
+                                    <img src="assets/images/cta-calendar-grey.svg" alt="" class="calendar-icon" (click)="sdf.toggle()">
+                                </div>
+                                <div class="calendar-wrapper inline">
+                                    <input type="text" maxlength="10" container="body" [ngClass]="{ 'is-invalid':  !validator.isValid('serviceDateTo')}" placeholder="{{  'QUANTITATIVE_DASHBOARD.LBL_SERVICE_DATE_TO'  | translate }}" [(ngModel)]="requestModel.serviceDateTo" ngbDatepicker
+                                        #sdt="ngbDatepicker" (click)="sdt.toggle()">
+                                    <img src="assets/images/cta-calendar-grey.svg" alt="" class="calendar-icon" (click)="sdt.toggle()">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-3 mobile-margin-top-15">
+                        <div class="my-input-group">
+                            <label for="">{{'QUANTITATIVE_DASHBOARD.LBL_CUSTOMER' | translate}}</label>
+                            <ng-select bindLabel="name" bindValue="id" [multiple]="false" [items]="model.customerList" [clearable]="false" [(ngModel)]="requestModel.customerId" [virtualScroll]="true" (scrollToEnd)="getCustomerData(true)" [typeahead]="model.customerInput" [minTermLength]="3"
+                                (change)="changeCustomerData($event)" placeholder="--- {{ (model.customerList && model.customerList.length>0? 'COMMON.LBL_SELECT':'COMMON.LBL_NO_DATA' ) | translate }} ---" appendTo="body" [loading]="model.customerLoading">
+                                <ng-template ng-option-tmp let-item="item">
+                                    <div class="text-wrap">{{ item.name }}</div>
+                                </ng-template>
+                            </ng-select>
+                        </div>
+                    </div>
+                    <div class="col-sm-3 mobile-margin-top-15 dashboard-supplier-margin" >
+                        <div class="my-input-group">
+                            <div class="styled-radio-container" *ngFor="let item of supplierTypeList;let idx = index">
+                              <input type="radio" class="styled-radio" id="{{item.id}}" name="radio-group3" [value]="item.id"
+                                [checked]="true"  [(ngModel)]="model.supplierTypeId"
+                                (change)="changeSupplierType(item)">
+                              <label for="{{item.id}}">{{item.name}}</label>
+                            </div>
+                        </div>
+                        <div class="my-input-group">
+                            <div class="d-flex my-input-group">
+                                <div class="calendar-wrapper flex-fill mr-2">
+                            <ng-select appendTo="body" [items]="model.supplierList" [virtualScroll]="true" [loading]="model.supLoading" bindLabel="name" bindValue="id" placeholder="--- {{ (model.supplierList && model.supplierList.length>0? 'COMMON.LBL_SELECT':'COMMON.LBL_NO_DATA' ) | translate }} ---"
+                                [typeahead]="model.supInput" [minTermLength]="3" [(ngModel)]="requestModel.supplierId" [multiple]="false" (scrollToEnd)="getSupplierData()" (change)="supplierChange($event)" #select>
+                                <ng-template ng-option-tmp let-item="item">
+                                    <div class="text-wrap"><span>{{item.name}}</span></div>
+                                </ng-template>
+                            </ng-select>
+                            </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-3 mobile-margin-top-15">
+                        <div class="my-input-group">
+                            <label for="">{{'QUANTITATIVE_DASHBOARD.LBL_FACTORY_COUNTRY' | translate}}</label>
+                            <ng-select appendTo="body" [items]="model.countryList" [virtualScroll]="true" [loading]="model.countryLoading" bindLabel="name" bindValue="id" placeholder="--- {{ (model.countryList && model.countryList.length>0? 'COMMON.LBL_SELECT':'COMMON.LBL_NO_DATA' ) | translate }} ---"
+                                [typeahead]="model.countryInput" [minTermLength]="3" [(ngModel)]="requestModel.selectedCountryIdList" [multiple]="true" class="multiple" (scrollToEnd)="getCountryData()" (change)="countryChange($event)" #select>
+
+                                <ng-template ng-multi-label-tmp let-items="requestModel.selectedCountryIdList" let-clear="clear">
+                                    <div class="ng-value" *ngIf="requestModel.selectedCountryIdList && requestModel.selectedCountryIdList.length > 0">
+                                        <span class="ng-value-label">{{requestModel.selectedCountryIdList.length}}
+											{{'MANDAY_UTILIZATION_DASHBOARD.LBL_SELECTED' | translate }}</span>
+                                    </div>
+                                </ng-template>
+                            </ng-select>
+                        </div>
+                    </div>
+                    <div class="col-12 filter-cta-container">
+                        <button class="primary-cta small float-right" [disabled]="model.searchLoading" (click)="search();toggleFilter()">{{'COMMON.LBL_APPLY' | translate}}</button>
+                        <button class="tertiary-cta small float-right mr-2" (click)="toggleFilter()">{{'COMMON.LBL_CANCEL' | translate}}</button>
+                    </div>
+                </div>
+                <div class="row marginTop20" *ngIf="toggleFormSection">
+                    <div class="col-sm-3 mobile-margin-top-15">
+                        <div class="my-input-group">
+                            <label for="">{{'QUANTITATIVE_DASHBOARD.LBL_BRAND' | translate}}</label>
+                            <ng-select appendTo="body" [items]="model.brandList" [virtualScroll]="true" [loading]="model.brandLoading" bindLabel="name" bindValue="id" placeholder="--- {{ (model.brandList && model.brandList.length>0? 'COMMON.LBL_SELECT':'COMMON.LBL_NO_DATA' ) | translate }} ---"
+                                [typeahead]="model.brandInput" [minTermLength]="3" [(ngModel)]="requestModel.selectedBrandIdList" [multiple]="true" class="multiple" (scrollToEnd)="getBrandData()" #select>
+
+                                <ng-template ng-multi-label-tmp let-items="requestModel.selectedBrandIdList" let-clear="clear">
+                                    <div class="ng-value" *ngIf="requestModel.selectedBrandIdList && requestModel.selectedBrandIdList.length > 0">
+                                        <span class="ng-value-label">{{requestModel.selectedBrandIdList.length}}
+											{{'COMMON.LBL_SELECTED' | translate }}</span>
+                                    </div>
+                                </ng-template>
+                            </ng-select>
+                        </div>
+                    </div>
+                    <div class="col-sm-3 mobile-margin-top-15">
+                        <div class="my-input-group">
+                            <label for="">{{'QUANTITATIVE_DASHBOARD.LBL_DEPARTMENT' | translate}}</label>
+                            <ng-select appendTo="body" [items]="model.deptList" [virtualScroll]="true" [loading]="model.deptLoading" bindLabel="name" bindValue="id" placeholder="--- {{ (model.deptList && model.deptList.length>0? 'COMMON.LBL_SELECT':'COMMON.LBL_NO_DATA' ) | translate }} ---"
+                                [typeahead]="model.deptInput" [minTermLength]="3" [(ngModel)]="requestModel.selectedDeptIdList" [multiple]="true" class="multiple" (scrollToEnd)="getDeptData()" #select>
+
+                                <ng-template ng-multi-label-tmp let-items="requestModel.selectedDeptIdList" let-clear="clear">
+                                    <div class="ng-value" *ngIf="requestModel.selectedDeptIdList && requestModel.selectedDeptIdList.length > 0">
+                                        <span class="ng-value-label">{{requestModel.selectedDeptIdList.length}}
+											{{'COMMON.LBL_SELECTED' | translate }}</span>
+                                    </div>
+                                </ng-template>
+                            </ng-select>
+                        </div>
+                    </div>
+                    <div class="col-sm-3 mobile-margin-top-15">
+                        <div class="my-input-group">
+                            <label for="">{{'QUANTITATIVE_DASHBOARD.LBL_BUYER' | translate}}</label>
+                            <ng-select appendTo="body" [items]="model.buyerList" [virtualScroll]="true" [loading]="model.buyerLoading" bindLabel="name" bindValue="id" placeholder="--- {{ (model.buyerList && model.buyerList.length>0? 'COMMON.LBL_SELECT':'COMMON.LBL_NO_DATA' ) | translate }} ---"
+                                [typeahead]="model.buyerInput" [minTermLength]="3" [(ngModel)]="requestModel.selectedBuyerIdList" [multiple]="true" class="multiple" (scrollToEnd)="getBuyerData()" #select>
+
+                                <ng-template ng-multi-label-tmp let-items="requestModel.selectedBuyerIdList" let-clear="clear">
+                                    <div class="ng-value" *ngIf="requestModel.selectedBuyerIdList && requestModel.selectedBuyerIdList.length > 0">
+                                        <span class="ng-value-label">{{requestModel.selectedBuyerIdList.length}}
+											{{'COMMON.LBL_SELECTED' | translate }}</span>
+                                    </div>
+                                </ng-template>
+                            </ng-select>
+                        </div>
+                    </div>
+                    <div class="col-sm-3 mobile-margin-top-15">
+                        <div class="my-input-group">
+                            <label for="">{{'QUANTITATIVE_DASHBOARD.LBL_COLLECTION' | translate}}</label>
+                            <ng-select appendTo="body" [items]="model.collectionList" [virtualScroll]="true" [loading]="model.collectionLoading" bindLabel="name" bindValue="id" placeholder="--- {{ (model.collectionList && model.collectionList.length>0? 'COMMON.LBL_SELECT':'COMMON.LBL_NO_DATA' ) | translate }} ---"
+                                [typeahead]="model.collectionInput" [minTermLength]="3" [(ngModel)]="requestModel.selectedCollectionIdList" [multiple]="true" class="multiple" (scrollToEnd)="getCollectionData()" #select>
+
+                                <ng-template ng-multi-label-tmp let-items="requestModel.selectedCollectionIdList" let-clear="clear">
+                                    <div class="ng-value" *ngIf="requestModel.selectedCollectionIdList && requestModel.selectedCollectionIdList.length > 0">
+                                        <span class="ng-value-label">{{requestModel.selectedCollectionIdList.length}}
+											{{'COMMON.LBL_SELECTED' | translate }}</span>
+                                    </div>
+                                </ng-template>
+                            </ng-select>
+                        </div>
+                    </div>
+                </div>
+                <div class="row marginTop20" *ngIf="toggleFormSection">
+                    <div class="col-sm-3 col-md-3 col-lg-3 mobile-margin-top-15">
+                        <div class="my-input-group">
+                            <label for="">{{ 'QUANTITATIVE_DASHBOARD.LBL_PRODUCT_CATEGORY' | translate}}</label>
+                            <ng-select [items]="model.productCategoryList" bindLabel="name" bindValue="id" [hideSelected]="false" [clearable]="true" [searchable]="true" appendTo="body" [multiple]="true" class="multiple" [loading]="model.productCategoryListLoading" placeholder="--- {{ (model.productCategoryList && model.productCategoryList.length>0? 'COMMON.LBL_SELECT':'COMMON.LBL_NO_DATA') | translate }} ---"
+                                [(ngModel)]="requestModel.selectedProdCategoryIdList">
+                                <ng-template ng-option-tmp let-item="item">
+                                    <div class="text-wrap">{{ item.name }}</div>
+                                </ng-template>
+                            </ng-select>
+                        </div>
+                    </div>
+                    <div class="col-sm-3 col-md-3 col-lg-3 mobile-margin-top-15">
+                        <div class="my-input-group">
+                            <label for="">{{ 'QUANTITATIVE_DASHBOARD.LBL_PRODUCT' | translate }}</label>
+                            <ng-select appendTo="body" [items]="model.productList" [virtualScroll]="true" [loading]="model.productLoading" bindLabel="productId" bindValue="id" class="width-180" (clear)="clearProductRef()" placeholder="--- {{ (model.productList!=null && model.productList.length!=0? 'COMMON.LBL_SELECT':'COMMON.LBL_NO_DATA' ) | translate }} ---"
+                                [typeahead]="model.productInput" [minTermLength]="3" (change)="changeProductRef()" [(ngModel)]="requestModel.selectedProductIdList" [multiple]="true" class="multiple" (scrollToEnd)="getProductData()" #select>
+                                <ng-template ng-option-tmp let-item="item">
+                                    <div class="text-wrap">{{ item.productId }}</div>
+                                </ng-template>
+                            </ng-select>
+                        </div>
+                    </div>
+                </div>
+                <div class="row marginTop20 align-items-center">
+                    <div class="col-6">
+                        <div class="advanced-search" (click)="toggleSection()">
+                            <img class="icon" src="assets/images/expand-new.svg" alt="" *ngIf="!toggleFormSection">
+                            <img class="icon" src="assets/images/collapse-new.svg" alt="" *ngIf="toggleFormSection"> {{'COMMON.LBL_ADVANCED_SEARCH' | translate}}
+                        </div>
+                    </div>
+                    <div class="col-6 text-right">
+                        <div class="mobile-hide">
+                            <button class="category-cta small mr-2" (click)="reset()">
+								<img src="assets/images/reload-new.svg" alt="reload">
+								<span>{{'COMMON.LBL_RELOAD' | translate}}</span>
+							</button>
+                            <button class="primary-cta small" [disabled]="model.searchLoading" (click)="search()">{{'COMMON.LBL_SEARCH' | translate }}
+								<span *ngIf="model.searchLoading">
+									<i class="fa fa-refresh fa-spin" aria-hidden="true"></i>
+								</span>
+							</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- <div class="filter-bar-container" *ngIf="model.filterDataShown">
+				<div class="my-dashboard-container" *ngIf="!isMobile">
+					<p class="heading">
+						{{'QUANTITATIVE_DASHBOARD.LBL_DATA_SHOWING' | translate}}
+					</p>
+					<ul class="applied-filter-list">
+						<li *ngIf="requestModel.serviceDateFrom">
+							{{'EXCHANGE_RATE.LBL_FROMDATE' | translate}} :
+							{{requestModel.serviceDateFrom.day}}/
+							{{requestModel.serviceDateFrom.month}}/
+							{{requestModel.serviceDateFrom.year}}
+							<span *ngIf="requestModel.serviceDateTo" class="ml-2">
+								{{'EXCHANGE_RATE.LBL_TODATE' | translate}} :
+								{{requestModel.serviceDateTo.day}}/
+								{{requestModel.serviceDateTo.month}}/
+								{{requestModel.serviceDateTo.year}}
+							</span></li>
+						<li *ngIf="model.customerName">
+							{{ 'QUANTITATIVE_DASHBOARD.LBL_CUSTOMER' | translate }} :
+							{{model.customerName}}
+						</li>
+						<li *ngIf="model.supplierName">{{ 'QUANTITATIVE_DASHBOARD.LBL_SUPPLIER' | translate }}
+							:
+							{{model.supplierName}}
+						</li>
+						<li
+							*ngIf="model.countryListName && model.countryListName.length >0">
+							{{ 'QUANTITATIVE_DASHBOARD.LBL_FACTORY_COUNTRY' | translate}} :
+							{{model.countryListName}}
+						</li>
+						<li *ngIf="(requestModel.selectedBrandIdList && requestModel.selectedBrandIdList.length >0) ||
+							(requestModel.selectedBuyerIdList && requestModel.selectedBuyerIdList.length >0) ||
+							(requestModel.selectedCollectionIdList && requestModel.selectedCollectionIdList.length >0) ||
+							(requestModel.selectedDeptIdList && requestModel.selectedDeptIdList.length >0)">
+							{{ 'COMMON.LBL_MORE'  | translate}}
+							...
+						</li>
+					</ul>
+					<div class="filter-reset-cta" (click)="cancelFilter()">
+						<img src="assets/images/reset-white.svg" alt="">
+						{{'COMMON.LBL_RESET' | translate}}
+					</div>
+				</div>
+				<div class="my-dashboard-container" *ngIf="isMobile">
+					<p class="heading">
+						{{model.filterCount}} {{'QUANTITATIVE_DASHBOARD.LBL_FILTER_SELECTED' | translate}}
+					</p>
+					<div class="filter-reset-cta" (click)="cancelFilter()">
+						<img src="assets/images/reset-white.svg" alt="">
+						{{'COMMON.LBL_RESET' | translate}}
+					</div>
+				</div>
+			</div> -->
+        </div>
+        <div class="my-dashboard-container">
+            <div class="dashboard-body customer-dashboard-body dashbaord-placeholder-container">
+                <div class="title-container row align-items-center">
+                    <div class="col-8">
+                        <h3 class="main-title">{{ 'QUANTITATIVE_DASHBOARD.TITLE' | translate }}</h3>
+                    </div>
+                    <div class="col-4 text-right">
+                        <div class="filter-cta style-2 common-tooltip" *ngIf="!isFilterOpen" (click)="toggleFilter()" data-tooltip="filter">
+                            <img src="assets/images/cta-filter-grey.svg" alt="">
+                        </div>
+                        <div class="filter-cta filter-active" *ngIf="isFilterOpen" (click)="toggleFilter()">
+                            <img src="assets/images/cta-close-white.svg" alt="">
+                        </div>
+                    </div>
+                </div>
+                <div class="quatatitive-dashboard-container">
+                    <div class="dashboard-stats-card row-one">
+                        <img src="assets/images/vendor.svg" alt="icon">
+                        <div class="info">
+                            <p class="card-title">Vendors</p>
+                            <p class="card-number">{{model.quantitativeDashboardCount.totalVendorCount}}</p>
+                        </div>
+                    </div>
+                    <div class="dashboard-stats-card row-one">
+                        <img src="assets/images/factory.svg" alt="icon">
+                        <div class="info">
+                            <p class="card-title">Factories</p>
+                            <p class="card-number">{{model.quantitativeDashboardCount.totalFactoryCount}}</p>
+                        </div>
+                    </div>
+                    <div class="dashboard-stats-card row-one last">
+                        <img src="assets/images/inspection.svg" alt="icon">
+                        <div class="info">
+                            <p class="card-title">Inspections</p>
+                            <p class="card-number">{{model.quantitativeDashboardCount.totalInspCount}}</p>
+                        </div>
+                    </div>
+                    <div class="break"></div>
+                    <div class="dashboard-stats-card">
+                        <img src="assets/images/man-days.svg" alt="icon">
+                        <div class="info">
+                            <p class="card-title">Man Days</p>
+                            <p class="card-number">{{model.quantitativeDashboardCount.totalManday}}</p>
+                        </div>
+                    </div>
+                    <div class="dashboard-stats-card">
+                        <img src="assets/images/reports.svg" alt="icon">
+                        <div class="info">
+                            <p class="card-title">Reports</p>
+                            <p class="card-number">{{model.quantitativeDashboardCount.totalReportCount}}</p>
+                        </div>
+                    </div>
+                    <div class="dashboard-stats-card">
+                        <img src="assets/images/inspector.svg" alt="icon">
+                        <div class="info">
+                            <p class="card-title">Inspectors</p>
+                            <p class="card-number">{{model.quantitativeDashboardCount.totalQcCount}}</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="row customer-dashboard-graph-wrapper">
+                    <div class="col-lg-6 grid-column col-md-12">
+                        <ng-container *ngIf="quantitativeDashboardLoader.manDayDashboardLoading; else MandayResult">
+                            <div class="dashboard-graph-container graph-body">
+                                <div class="common-graph-placeholder">
+                                    <img src="assets/images/donut-placeholder.png" alt="graph">
+                                    <div class="content-container">
+                                        <div class="rect animate"></div>
+                                        <div class="rect animate width80"></div>
+                                        <div class="rect animate width50"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </ng-container>
+                        <ng-template #MandayResult>
+                            <div class="error-container" *ngIf="quantitativeDashboardLoader.manDayDashboardError; else ManadayData">
+                                <img src="assets/images/went-wrong.svg" alt="" class="thumbnail">
+                                <h4 class="error-title">{{ 'ERROR.MSG_ERROR_TITLE' | translate }}</h4>
+                                <p class="error-subtitle">
+                                    {{'CUSTOMER_DASHBOARD.LBL_UNAUTHORISED_ACCESS' | translate}}</p>
+                            </div>
+                            <ng-template #ManadayData>
+                                <div class="error-container dashboard-graph-container" *ngIf="!dataFound.manDayDashboardDataFound">
+                                    <div class="new-graph-head text-center text-sm-left align-items-center">
+                                        <div class="graph-title-container">
+                                            <h3 class="title"> {{'QUANTITATIVE_DASHBOARD.LBL_PRODUCT_CATEGORY' | translate }}</h3>
+                                        </div>
+                                    </div>
+                                    <img src="assets/images/no-data.svg" al t="" class="thumbnail">
+                                    <h4 class="error-title">{{ 'MANDAY_DASHBOARD.LBL_NO_DATA_FOUND' | translate }}
+                                    </h4>
+                                    <p class="error-subtitle">{{'CUSTOMER_DASHBOARD.LBL_NO_DATA' | translate}}</p>
+                                </div>
+
+                                <div class="dashboard-graph-container" *ngIf="dataFound.manDayDashboardDataFound">
+                                    <div class="new-graph-head text-center text-sm-left two-column">
+                                        <div class="graph-title-container">
+                                            <h3 class="title">
+                                                {{'CUSTOMER_DASHBOARD.LBL_MAN_DAYS' | translate}}</h3>
+                                        </div>
+                                        <div class="graph-filter text-center text-sm-right">
+                                            <button class="secondary-cta small" (click)="getMandayYearExport()" [disabled]="quantitativeDashboardLoader.manDayDashboardLoading">Export</button>
+                                        </div>
+                                    </div>
+                                    <div class="row graph-body">
+                                        <div class="col-md-12 col-lg-8 col-xl-8 mb-3 mb-xl-0">
+                                            <div id="chartQuandiv" style="width: 100%; height: 200px"></div>
+                                        </div>
+                                        <div class="col-md-12 col-lg-4 col-xl-4 vertical-center">
+                                            <div class="legend-wrapper">
+                                                <div class="legend-item" *ngFor="let manDayYearItem of model.mandayDashboard.mandayData">
+                                                    <div class="label">
+                                                        <span class="tile" [ngStyle]='{"background-color": manDayYearItem.color}'>
+														</span><span class="text">{{manDayYearItem.year}}</span>
+                                                    </div>
+                                                    <span class="count">{{manDayYearItem.mandayCount}}</span>
+                                                    <span class="percent low" *ngIf="manDayYearItem.percentage < 0">{{manDayYearItem.percentagePositive}}%</span>
+                                                    <span class="percent high" *ngIf="manDayYearItem.percentage > 0">{{manDayYearItem.percentagePositive}}%</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </ng-template>
+                        </ng-template>
+                    </div>
+                    <div class="col-lg-6 grid-column col-md-12 mobile-margin-top-15">
+                        <ng-container *ngIf="quantitativeDashboardLoader.mandayCountryDashboardLoading; else MandayCountryResult">
+                            <div class="dashboard-graph-container">
+                                <div class="common-graph-placeholder">
+                                    <img src="assets/images/donut-placeholder.png" alt="graph">
+                                    <div class="content-container">
+                                        <div class="rect animate"></div>
+                                        <div class="rect animate width80"></div>
+                                        <div class="rect animate width50"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </ng-container>
+                        <ng-template #MandayCountryResult>
+                            <div class="error-container" *ngIf="quantitativeDashboardLoader.manDayCountryChartError; else ManadayCountryData">
+                                <img src="assets/images/went-wrong.svg" alt="" class="thumbnail">
+                                <h4 class="error-title">{{ 'ERROR.MSG_ERROR_TITLE' | translate }}</h4>
+                                <p class="error-subtitle">
+                                    {{'CUSTOMER_DASHBOARD.LBL_UNAUTHORISED_ACCESS' | translate}}</p>
+                            </div>
+                            <ng-template #ManadayCountryData>
+                                <div class="error-container dashboard-graph-container" *ngIf="!dataFound.manDayCountryDashboardDataFound">
+                                    <div class="new-graph-head text-center text-sm-left align-items-center">
+                                        <div class="graph-title-container">
+                                            <h3 class="title"> {{'QUANTITATIVE_DASHBOARD.LBL_PRODUCT_CATEGORY' | translate }}</h3>
+                                        </div>
+                                    </div>
+                                    <img src="assets/images/no-data.svg" alt="" class="thumbnail">
+                                    <h4 class="error-title">{{ 'MANDAY_DASHBOARD.LBL_NO_DATA_FOUND' | translate }}
+                                    </h4>
+                                    <p class="error-subtitle">{{'CUSTOMER_DASHBOARD.LBL_NO_DATA' | translate}}</p>
+                                </div>
+                                <div class="dashboard-graph-container" *ngIf="dataFound.manDayCountryDashboardDataFound">
+                                    <div class="new-graph-head text-center text-sm-left align-items-center">
+                                        <div class="graph-title-container">
+                                            <h3 class="title">{{ 'MANDAY_DASHBOARD.LBL_MAN_DAYS_BY_COUNTRY' | translate}}
+                                            </h3>
+                                        </div>
+                                        <div class="graph-filter text-center text-sm-right">
+                                            <button class="secondary-cta small" (click)="getMandayCountryChartExport()" [disabled]="quantitativeDashboardLoader.manDayCountryChartExportLoading">Export</button>
+                                        </div>
+                                    </div>
+                                    <div class="row graph-body">
+                                        <div class="col-md-12 col-lg-12 col-xl-12 mb-3 mb-xl-0">
+                                            <div id="piechartQuandiv" style="width: 100%; height: 200px"></div>
+                                        </div>
+                                        <!-- <div class="col-md-12 col-lg-12 col-xl-12 vertical-center">
+											<div class="legend-wrapper">
+												<div class="legend-item"
+													*ngFor="let item of model.mandayByCountryDashboard | slice:0:3;">
+													<div class="label">
+														<span class="tile" [ngStyle]="{'background-color':item.color }">
+														</span>
+														<span class="text common-tooltip"
+															[attr.data-tooltip]="item.name">{{item.trimmedName}}</span>
+													</div>
+													<span class="count">{{item.count}}</span>
+													<span class="percent low"
+														*ngIf="item.percentage < 0">{{item.percentagePositive}}%</span>
+													<span class="percent high"
+														*ngIf="item.percentage > 0">{{item.percentagePositive}}%</span>
+												</div>
+												<div class="legend-item"
+													*ngIf="model.mandayByCountryDashboard.length>3">
+													<div class="label has-dropdown">
+														<span class="link">
+															{{ 'CUSTOMER_DASHBOARD.LBL_SHOW' | translate }}
+															{{model.mandayByCountryDashboard.length - 3}}
+															{{ 'CUSTOMER_DASHBOARD.LBL_MORE' | translate }}</span>
+														<div class="cta-dropdown top-right">
+															<div class="legend-wrapper two-column">
+																<div class="legend-item"
+																	*ngFor="let item of model.mandayByCountryDashboard | slice:3:model.mandayByCountryDashboard.length;">
+																	<div class="label">
+																		<span class="tile"
+																			[ngStyle]="{'background-color':item.color }">
+																		</span><span class="text">{{item.name}}</span>
+																	</div>
+																	<span class="count">{{item.count}}</span>
+																	<span class="percent low"
+																		*ngIf="item.percentage < 0">{{item.percentage}}%</span>
+																	<span class="percent high"
+																		*ngIf="item.percentage > 0">{{item.percentage}}%</span>
+																</div>
+															</div>
+														</div>
+													</div>
+												</div>
+											</div>
+										</div> -->
+                                    </div>
+                                </div>
+                            </ng-template>
+                        </ng-template>
+                    </div>
+                </div>
+                <div class="row customer-dashboard-graph-wrapper mt-3">
+                    <div class="col-sm-12">
+                        <ng-container *ngIf="quantitativeDashboardLoader.turnOverDashboardLoading; else TurnOverResult">
+                            <div class="inline-dashboard-graph-wrapper">
+                                <div class="dashboard-graph-container">
+                                    <div class="common-graph-placeholder">
+                                        <img src="assets/images/donut-placeholder.png" alt="graph">
+                                        <div class="content-container">
+                                            <div class="rect animate"></div>
+                                            <div class="rect animate width80"></div>
+                                            <div class="rect animate width50"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="dashboard-graph-container">
+                                    <div class="common-graph-placeholder">
+                                        <img src="assets/images/donut-placeholder.png" alt="graph">
+                                        <div class="content-container">
+                                            <div class="rect animate"></div>
+                                            <div class="rect animate width80"></div>
+                                            <div class="rect animate width50"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </ng-container>
+                        <ng-template #TurnOverResult>
+                            <div class="inline-dashboard-graph-wrapper" *ngIf="quantitativeDashboardLoader.turnOverDashboardError; else TurnOverData">
+                                <div class="dashboard-graph-container">
+                                    <div class="error-container">
+                                        <img src="assets/images/went-wrong.svg" alt="" class="thumbnail">
+                                        <h4 class="error-title">{{ 'ERROR.MSG_ERROR_TITLE' | translate }}</h4>
+                                        <p class="error-subtitle">
+                                            {{'DEFECT_DASHBOARD.LBL_UNAUTHORISED_ACCESS' | translate}}</p>
+                                    </div>
+                                </div>
+                                <div class="dashboard-graph-container">
+                                    <div class="error-container">
+                                        <img src="assets/images/went-wrong.svg" alt="" class="thumbnail">
+                                        <h4 class="error-title">{{ 'ERROR.MSG_ERROR_TITLE' | translate }}</h4>
+                                        <p class="error-subtitle">
+                                            {{'DEFECT_DASHBOARD.LBL_UNAUTHORISED_ACCESS' | translate}}</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <ng-template #TurnOverData>
+                                <div class="inline-dashboard-graph-wrapper" *ngIf="!dataFound.turnOverDashboardDataFound">
+                                    <div class="dashboard-graph-container">
+                                        <div class="error-container">
+                                            <img src="assets/images/no-data.svg" al t="" class="thumbnail">
+                                            <h4 class="error-title">{{ 'COMMON.LBL_No_ITEM' | translate }}
+                                            </h4>
+                                            <p class="error-subtitle">{{'COMMON.LBL_NO_DATA_EMPTY' | translate}}</p>
+                                        </div>
+                                    </div>
+                                    <div class="dashboard-graph-container">
+                                        <div class="error-container">
+                                            <img src="assets/images/no-data.svg" al t="" class="thumbnail">
+                                            <h4 class="error-title">{{ 'COMMON.LBL_No_ITEM' | translate }}
+                                            </h4>
+                                            <p class="error-subtitle">{{'COMMON.LBL_NO_DATA_EMPTY' | translate}}</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="inline-dashboard-graph-wrapper" *ngIf="dataFound.turnOverDashboardDataFound">
+                                    <div class="dashboard-graph-container">
+                                        <div class="new-graph-head text-center text-sm-left align-items-center">
+                                            <div class="graph-title-container mt-2">
+                                                <h3 class="title">{{ 'QUANTITATIVE_DASHBOARD.LBL_TURNOVER_USD' | translate }}
+                                                </h3>
+                                            </div>
+                                        </div>
+                                        <div class="row graph-body vertical-center mt-xl-4">
+                                            <div class="col-md-12 col-lg-12 col-xl-5 mb-3 mb-xl-0 text-center text-xl-left">
+                                                <img src="assets/images/turn-over.svg" class="target-graphic" alt="">
+                                            </div>
+                                            <div class="col-md-12 col-lg-12 col-xl-7 text-left">
+                                                <div class="inspection-details">
+                                                    <div class="details-container text-center text-center text-xl-left">
+                                                        <div class="info">
+                                                            <h4 class="title big mb-3">
+                                                                $ {{model.turnOverDashboard.totalTurnOver | number : '1.0'}}
+                                                                <!-- currency : 'USD' : 'symbol' : '1.0-0' -->
+                                                                <span class="percent high" *ngIf="model.turnOverDashboard.totalTurnOverPercentage > 0">{{model.turnOverDashboard.totalTurnOverPercentagePositive}}%</span>
+                                                                <span class="percent low" *ngIf="model.turnOverDashboard.totalTurnOverPercentage < 0">{{model.turnOverDashboard.totalTurnOverPercentagePositive}}%</span>
+                                                            </h4>
+                                                            <div class="stats for-supplier">
+                                                                <p>Customer</p>
+                                                                <p class="value big">
+                                                                    $ {{model.turnOverDashboard.customerTurnOver | number : '1.0'}} <span class="percent low" *ngIf="model.turnOverDashboard.customerTurnOverPercentage < 0">{{model.turnOverDashboard.customerTurnOverPercentagePositive}}%</span>
+                                                                    <span class="percent high" *ngIf="model.turnOverDashboard.customerTurnOverPercentage > 0">{{model.turnOverDashboard.customerTurnOverPercentagePositive}}%</span>
+                                                                </p>
+                                                            </div>
+                                                            <div class="stats for-supplier">
+                                                                <p>Supplier</p>
+                                                                <p class="value big">
+                                                                    $ {{model.turnOverDashboard.supplierTurnOver | number : '1.0' }} <span class="percent low" *ngIf="model.turnOverDashboard.supplierTurnOverPercentage < 0">{{model.turnOverDashboard.supplierTurnOverPercentagePositive}}%</span>
+                                                                    <span class="percent high" *ngIf="model.turnOverDashboard.supplierTurnOverPercentage > 0">{{model.turnOverDashboard.supplierTurnOverPercentagePositive}}%</span>
+                                                                </p>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="dashboard-graph-container">
+                                        <div class="new-graph-head text-center text-sm-left align-items-center">
+                                            <div class="graph-title-container">
+                                                <h3 class="title">{{ 'QUANTITATIVE_DASHBOARD.LBL_TURNOVER_SERVICES' | translate }}
+                                                </h3>
+                                            </div>
+                                            <div class="graph-filter filter-input-group text-center text-sm-right mt-2 mt-sm-0">
+                                                <button class="secondary-cta small" (click)="getTurnOverByServiceTypeChartExport()" [disabled]="quantitativeDashboardLoader.serviceTypeTurnOverDashboardExportLoading">Export</button>
+                                            </div>
+                                        </div>
+                                        <div class="row graph-body">
+                                            <div class="col-md-12 col-lg-12 col-xl-6 mb-3 mb-xl-0">
+                                                <div id="variablePieChart2Quan" style="width: 100%; height: 200px"></div>
+                                            </div>
+                                            <div class="col-md-12 col-lg-12 col-xl-6 vertical-center">
+                                                <div class="legend-wrapper two-column">
+                                                    <div class="legend-item" *ngFor="let item of model.serviceTypeDashboard | slice:0:5;">
+                                                        <div class="label">
+                                                            <span class="tile" [ngStyle]="{'background-color':item.color }">
+															</span>
+                                                            <span class="text common-tooltip" [attr.data-tooltip]="item.name">{{item.trimmedName}}</span>
+                                                        </div>
+                                                        <span class="count">{{item.count}}%</span>
+                                                    </div>
+                                                    <div class="legend-item" *ngIf="model.serviceTypeDashboard.length>5">
+                                                        <div class="label has-dropdown">
+                                                            <span class="link">
+																{{ 'CUSTOMER_DASHBOARD.LBL_SHOW' | translate }}
+																{{model.serviceTypeDashboard.length - 5}}
+																{{ 'CUSTOMER_DASHBOARD.LBL_MORE' | translate }}</span>
+                                                            <div class="cta-dropdown top-right">
+                                                                <div class="legend-wrapper two-column">
+                                                                    <div class="legend-item" *ngFor="let item of model.serviceTypeDashboard | slice:5:model.serviceTypeDashboard.length;">
+                                                                        <div class="label">
+                                                                            <span class="tile" [ngStyle]="{'background-color':item.color }">
+																			</span><span class="text">{{item.name}}</span>
+                                                                        </div>
+                                                                        <span class="count">{{item.count}}%</span>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </ng-template>
+                        </ng-template>
+                    </div>
+                </div>
+                <div class="row customer-dashboard-graph-wrapper">
+                    <div class="col-sm-4 col-md-12 col-lg-12 col-xl-4 grid-column mobile-margin-top-15 tablet-margin-top-15">
+                        <ng-container *ngIf="quantitativeDashboardLoader.serviceTypeInspectionDashboardLoading; else ServiceTypeResult">
+                            <div class="dashboard-graph-container">
+                                <div class="common-graph-placeholder">
+                                    <img src="assets/images/donut-placeholder.png" alt="graph">
+                                    <div class="content-container">
+                                        <div class="rect animate"></div>
+                                        <div class="rect animate width80"></div>
+                                        <div class="rect animate width50"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </ng-container>
+                        <ng-template #ServiceTypeResult>
+                            <div class="error-container" *ngIf="quantitativeDashboardLoader.serviceTypeInspectionDashboardError; else ServiceTypeData">
+                                <img src="assets/images/went-wrong.svg" alt="" class="thumbnail">
+                                <h4 class="error-title">{{ 'ERROR.MSG_ERROR_TITLE' | translate }}</h4>
+                                <p class="error-subtitle">
+                                    {{'CUSTOMER_DASHBOARD.LBL_UNAUTHORISED_ACCESS' | translate}}</p>
+                            </div>
+                            <ng-template #ServiceTypeData>
+
+                                <div class="error-container  dashboard-graph-container" *ngIf="!dataFound.serviceTypeInspectionDashboardDataFound">
+                                    <div class="new-graph-head text-center text-sm-left align-items-center">
+                                        <div class="graph-title-container">
+                                            <h3 class="title"> {{'BOOKING_SUMMARY.LBL_SERVICETYPE' | translate }}</h3>
+                                        </div>
+                                    </div>
+                                    <img src="assets/images/no-data.svg" al t="" class="thumbnail">
+                                    <h4 class="error-title">{{ 'MANDAY_DASHBOARD.LBL_NO_DATA_FOUND' | translate }}
+                                    </h4>
+                                    <p class="error-subtitle">{{'CUSTOMER_DASHBOARD.LBL_NO_DATA' | translate}}</p>
+                                </div>
+                                <div class="dashboard-graph-container" *ngIf="dataFound.serviceTypeInspectionDashboardDataFound">
+                                    <div class="new-graph-head text-center text-sm-left align-items-center">
+                                        <div class="graph-title-container">
+                                            <h3 class="title"> {{'BOOKING_SUMMARY.LBL_SERVICETYPE' | translate }}</h3>
+                                        </div>
+                                        <div class="graph-filter filter-input-group text-center text-sm-right mt-2 mt-sm-0">
+                                            <button class="secondary-cta small" [disabled]="quantitativeDashboardLoader.serviceTypeInspectionDashboardExportLoading || (model.inspectionServiceTypeDashboard && model.inspectionServiceTypeDashboard.length==0)" (click)="getInspectionyServiceTypeChartExport()">
+												{{'COMMON.LBL_EXPORT' | translate}}</button>
+                                        </div>
+                                    </div>
+                                    <div class="row graph-body">
+                                        <div class="col-md-12 col-lg-12 col-xl-12 mb-3 mb-xl-0">
+                                            <div id="variablePieChartQuan" style="width: 100%; height: 200px"></div>
+                                        </div>
+                                        <div class="col-sm-12 vertical-center mt-3">
+                                            <div class="legend-wrapper two-column">
+                                                <div class="legend-item" *ngFor="let item of model.inspectionServiceTypeDashboard | slice:0:4;">
+                                                    <div class="label">
+                                                        <span class="tile" [ngStyle]="{'background-color':item.color }">
+														</span>
+                                                        <span class="text common-tooltip" [attr.data-tooltip]="item.name">{{item.trimmedName}}</span>
+                                                    </div>
+                                                    <span class="count">{{item.count}}</span>
+                                                </div>
+                                                <div class="legend-item" *ngIf="model.inspectionServiceTypeDashboard.length>5">
+                                                    <div class="label has-dropdown">
+                                                        <span class="link">
+															{{ 'CUSTOMER_DASHBOARD.LBL_SHOW' | translate }}
+															{{model.inspectionServiceTypeDashboard.length - 5}}
+															{{ 'CUSTOMER_DASHBOARD.LBL_MORE' | translate }}</span>
+                                                        <div class="cta-dropdown top-right min-width-230">
+                                                            <div class="legend-wrapper two-column">
+                                                                <div class="legend-item" *ngFor="let item of model.inspectionServiceTypeDashboard | slice:4:model.inspectionServiceTypeDashboard.length;">
+                                                                    <div class="label">
+                                                                        <span class="tile" [ngStyle]="{'background-color':item.color }">
+																		</span><span class="text common-tooltip" [attr.data-tooltip]="item.name">{{item.trimmedName}}</span>
+                                                                    </div>
+                                                                    <span class="count">{{item.count}}</span>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </ng-template>
+                        </ng-template>
+                    </div>
+                    <div class="col-sm-4 col-md-12 col-lg-4 col-xl-4 grid-column mobile-margin-top-15 tablet-margin-top-15">
+                        <ng-container *ngIf="quantitativeDashboardLoader.orderQuantityLoading; else quantityResult">
+                            <div class="dashboard-graph-container">
+                                <div class="common-graph-placeholder">
+                                    <img src="assets/images/donut-placeholder.png" alt="graph">
+                                    <div class="content-container">
+                                        <div class="rect animate"></div>
+                                        <div class="rect animate width80"></div>
+                                        <div class="rect animate width50"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </ng-container>
+                        <ng-template #quantityResult>
+                            <div class="error-container" *ngIf="quantitativeDashboardLoader.orderQuantityError; else quantityDataFound">
+                                <img src="assets/images/went-wrong.svg" alt="" class="thumbnail">
+                                <h4 class="error-title">{{ 'ERROR.MSG_ERROR_TITLE' | translate }}</h4>
+                                <p class="error-subtitle">
+                                    {{'DEFECT_DASHBOARD.LBL_UNAUTHORISED_ACCESS' | translate}}
+                                </p>
+                            </div>
+                            <ng-template #quantityDataFound>
+
+                                <div class="error-container  dashboard-graph-container" *ngIf="!dataFound.orderQuantityFound">
+                                    <div class="new-graph-head text-center text-sm-left align-items-center">
+                                        <div class="graph-title-container">
+                                            <h3 class="title"> {{'QUANTITATIVE_DASHBOARD.LBL_QUANTITY_DETAILS' | translate }}</h3>
+                                        </div>
+                                    </div>
+                                    <img src="assets/images/no-data.svg" alt="" class="thumbnail">
+                                    <h4 class="error-title">{{ 'COMMON.LBL_No_ITEM' | translate }}
+                                    </h4>
+                                    <p class="error-subtitle">{{'COMMON.LBL_NO_DATA_EMPTY' | translate}}</p>
+                                </div>
+                                <div class="dashboard-graph-container" *ngIf="dataFound.orderQuantityFound">
+                                    <div class="new-graph-head text-center text-sm-left align-items-center">
+                                        <div class="graph-title-container">
+                                            <h3 class="title">{{'QUANTITATIVE_DASHBOARD.LBL_QUANTITY_DETAILS' | translate}}
+                                            </h3>
+                                        </div>
+                                        <div class="graph-filter filter-input-group text-center text-sm-right mt-2 mt-sm-0">
+                                            <button class="secondary-cta small" (click)="getOrderQuantityListExport()" [disabled]="quantitativeDashboardLoader.orderQuantityExportLoading">
+												{{'COMMON.LBL_EXPORT' | translate}}</button>
+                                        </div>
+                                    </div>
+                                    <div class="row graph-body">
+                                        <div class="col-sm-12 mb-3 mb-xl-0">
+                                            <div id="stackedColumnChartQuan" style="width: 100%; height: 200px"></div>
+                                        </div>
+                                        <div class="col-sm-12 vertical-center mt-3">
+                                            <div class="legend-wrapper two-column">
+                                                <div class="legend-item" *ngFor="let item of model.bookingQuantityDashboard">
+                                                    <div class="label">
+                                                        <span class="tile" [ngStyle]="{'background-color': item.color }">
+														</span><span class="text">{{item.year}}</span>
+                                                    </div>
+                                                    <span class="count">{{item.orderCount}}</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </ng-template>
+                        </ng-template>
+                    </div>
+                    <div class="col-sm-4 col-md-6 col-lg-4 col-xl-4 grid-column mobile-margin-top-15 tablet-margin-top-15">
+                        <ng-container *ngIf="quantitativeDashboardLoader.productCategoryLoading; else productCategoryResult">
+                            <div class="dashboard-graph-container">
+                                <div class="common-graph-placeholder">
+                                    <img src="assets/images/donut-placeholder.png" alt="graph">
+                                    <div class="content-container">
+                                        <div class="rect animate"></div>
+                                        <div class="rect animate width80"></div>
+                                        <div class="rect animate width50"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </ng-container>
+                        <ng-template #productCategoryResult>
+                            <div class="error-container" *ngIf="quantitativeDashboardLoader.productCategoryError; else productCategoryDataFound">
+                                <img src="assets/images/went-wrong.svg" alt="" class="thumbnail">
+                                <h4 class="error-title">{{ 'ERROR.MSG_ERROR_TITLE' | translate }}</h4>
+                                <p class="error-subtitle">
+                                    {{'DEFECT_DASHBOARD.LBL_UNAUTHORISED_ACCESS' | translate}}
+                                </p>
+                            </div>
+                            <ng-template #productCategoryDataFound>
+                                <div class="error-container  dashboard-graph-container" *ngIf="!dataFound.productCategoryFound">
+                                    <div class="new-graph-head text-center text-sm-left align-items-center">
+                                        <div class="graph-title-container">
+                                            <h3 class="title"> {{'QUANTITATIVE_DASHBOARD.LBL_PRODUCT_CATEGORY' | translate }}</h3>
+                                        </div>
+                                        <div class="graph-filter filter-input-group text-center text-sm-right">
+                                            <!-- <div class="my-input-group mr-2">
+                                                <ng-select [items]="model.productCategoryList" bindLabel="name" class="small" bindValue="id" [hideSelected]="false" [clearable]="true" [searchable]="true" [multiple]="false" [loading]="model.productCategoryListLoading" placeholder="--- {{ (model.productCategoryList && model.productCategoryList.length>0? 'QUANTITATIVE_DASHBOARD.LBL_SUB_CATEGORY':'COMMON.LBL_NO_DATA') | translate }} ---"
+                                                    [(ngModel)]="productCategoryRequestModel.productCategoryId" (change)="changeProductCategory($event)">
+                                                    <ng-template ng-option-tmp let-item="item">
+                                                        <div class="text-wrap">{{ item.name }}</div>
+                                                    </ng-template>
+                                                </ng-select>
+                                            </div> -->
+                                        </div>
+                                    </div>
+                                    <img src="assets/images/no-data.svg" alt="" class="thumbnail">
+                                    <h4 class="error-title">{{ 'COMMON.LBL_No_ITEM' | translate }}
+                                    </h4>
+                                    <p class="error-subtitle">{{'COMMON.LBL_NO_DATA_EMPTY' | translate}}</p>
+                                </div>
+                                <div class="dashboard-graph-container" *ngIf="dataFound.productCategoryFound">
+                                    <div class="new-graph-head text-center text-sm-left align-items-center">
+                                        <div class="graph-title-container">
+                                            <h3 class="title">{{'QUANTITATIVE_DASHBOARD.LBL_PRODUCT_CATEGORY' | translate}}
+                                            </h3>
+                                        </div>
+                                        <div class="graph-filter filter-input-group text-center text-sm-right mt-2 mt-sm-0">
+                                            <!-- <div class="my-input-group mr-2">
+                                                <ng-select [items]="model.productCategoryList" bindLabel="name" class="small" bindValue="id" [hideSelected]="false" [clearable]="true" [searchable]="true" [multiple]="false" [loading]="model.productCategoryListLoading" placeholder="--- {{ (model.productCategoryList && model.productCategoryList.length>0? 'QUANTITATIVE_DASHBOARD.LBL_SUB_CATEGORY':'COMMON.LBL_NO_DATA') | translate }} ---"
+                                                    [(ngModel)]="productCategoryRequestModel.productCategoryId" (change)="changeProductCategory($event)">
+                                                    <ng-template ng-option-tmp let-item="item">
+                                                        <div class="text-wrap">{{ item.name }}</div>
+                                                    </ng-template>
+                                                </ng-select>
+                                            </div> -->
+                                            <button class="secondary-cta small" (click)="getProductCategoryCountListExport()" [disabled]="quantitativeDashboardLoader.productCategoryExportLoading">{{'COMMON.LBL_EXPORT'
+													| translate}}</button>
+                                        </div>
+                                    </div>
+                                    <div class="row graph-body">
+                                        <div class="col-sm-12 mb-3 mb-xl-0">
+                                            <div id="sunburstchartQuan" style="width: 100%; height: 200px"></div>
+                                        </div>
+                                        <div class="col-sm-12 vertical-center mt-3">
+                                            <div class="legend-wrapper two-column">
+                                                <div class="legend-item" *ngFor="let item of model.prodCategoryChart | slice:0:quantitativeDashboardProductLength;">
+                                                    <div class="label">
+                                                        <span class="tile" [ngStyle]="{'background-color':item.statusColor }">
+														</span>
+                                                        <span class="text common-tooltip" [attr.data-tooltip]="item.statusName">{{item.name}}</span>
+                                                    </div>
+                                                    <span class="count">{{item.totalCount}}</span>
+                                                </div>
+                                                <div class="legend-item" *ngIf="model.prodCategoryChart.length>quantitativeDashboardProductLength">
+                                                    <div class="label has-dropdown">
+                                                        <span class="link">
+															{{ 'COMMON.LBL_SHOW' | translate }}
+															{{model.prodCategoryChart.length -
+															quantitativeDashboardProductLength}}
+															{{ 'COMMON.LBL_MORE' | translate }}</span>
+                                                        <div class="cta-dropdown top-right min-width-230">
+                                                            <div class="legend-wrapper two-column">
+                                                                <div class="legend-item" *ngFor="let item of model.prodCategoryChart | slice:quantitativeDashboardProductLength:model.prodCategoryChart.length;">
+                                                                    <div class="label">
+                                                                        <span class="tile" [ngStyle]="{'background-color':item.statusColor }">
+																		</span><span class="text common-tooltip" [attr.data-tooltip]="item.statusName">{{item.name}}</span>
+                                                                    </div>
+                                                                    <span class="count">{{item.totalCount}}</span>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </ng-template>
+                        </ng-template>
+                    </div>
+                </div>
+            </div>
+            <div class="footer independent">
+                <div class="column">
+                    <p class="text">{{'COMMON.LBL_RIGHTS_RESERVED' | translate}}</p>
+                </div>
+                <div class="column">
+                    <ul class="footer-item">
+                        <li><a href="">{{'COMMON.LBL_USER_GUIDE' | translate}}</a></li>
+                        <li><a href="">{{'COMMON.LBL_CONTACT' | translate}}</a></li>
+                        <li><a href="">{{'COMMON.LBL_HELP' | translate}}</a></li>
+                        <li><a href="">{{'COMMON.LBL_TERMS' | translate}}</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

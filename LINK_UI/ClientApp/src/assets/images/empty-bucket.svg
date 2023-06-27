@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="29" height="34.352" viewBox="0 0 29 34.352">
+    <defs>
+        <style>
+            .prefix__cls-1{fill:#e5e6ed}
+        </style>
+    </defs>
+    <g id="prefix__Group_10046" data-name="Group 10046" transform="translate(-259.9 -747)">
+        <path id="prefix__Path_2815" d="M47.255 11.468a1.543 1.543 0 0 0 1.555-1.555V4.055a1.555 1.555 0 0 0-3.11 0v5.822a1.574 1.574 0 0 0 1.555 1.591z" class="prefix__cls-1" data-name="Path 2815" transform="translate(227.145 744.5)"/>
+        <path id="prefix__Path_2816" d="M22.8 14.975a1.559 1.559 0 0 0 1.446.976 1.837 1.837 0 0 0 .615-.108 1.553 1.553 0 0 0 .832-2.061l-2.238-5.388a1.572 1.572 0 1 0-2.893 1.229z" class="prefix__cls-1" data-name="Path 2816" transform="translate(243.279 741.354)"/>
+        <path id="prefix__Path_2817" d="M65.567 15.85a1.689 1.689 0 0 0 .615.108 1.559 1.559 0 0 0 1.446-.976l2.242-5.387a1.6 1.6 0 0 0-.832-2.061 1.677 1.677 0 0 0-2.1.9L64.7 13.825a1.559 1.559 0 0 0 .867 2.025z" class="prefix__cls-1" data-name="Path 2817" transform="translate(215.089 741.347)"/>
+        <path id="prefix__Path_2818" d="M38.755 48.935L34.489 40a1.557 1.557 0 0 0-1.41-.9H15.722a1.557 1.557 0 0 0-1.41.9l-4.267 8.931a1.467 1.467 0 0 0-.145.687v9.04a1.543 1.543 0 0 0 1.555 1.555h25.89a1.543 1.543 0 0 0 1.555-1.551v-9.04a1.567 1.567 0 0 0-.145-.687zm-22.021-6.69H32.1l2.676 5.6H14.022z" class="prefix__cls-1" data-name="Path 2818" transform="translate(250 721.134)"/>
+    </g>
+</svg>

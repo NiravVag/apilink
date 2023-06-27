@@ -1,0 +1,256 @@
+<div class="main-wrapper">
+  <div class="wrapper dashboard-wrapper">
+    <div class="my-container">
+      <div class="master-body">
+        <div class="title-container">
+            <div class="header-back-button">
+                <img src="assets/images/back-red.png" alt="back" (click)="this.return('inspsummary/booking-summary');">
+                </div>
+          <h3 class="main-title">{{ 'BOOKING_INSPECTIONPICKING.TITLE' | translate }} - {{inspectionId}}</h3>
+          <div class="float-right">
+            <span>
+              {{ 'EDIT_BOOKING.LBL_TOTAL_PICKINGQTY' | translate }}
+              {{ 'EDIT_BOOKING.LBL_TOTAL_QTY' | translate }} :
+            </span>
+            <span class="big" [ngStyle]="{'font-size.px':24}">
+              {{totalPickingQuantity}}
+            </span>
+          </div>
+        </div>
+        <div class="content-container">
+          <h4 class="container-head">{{ 'BOOKING_INSPECTIONPICKING.SUB_TITLE' | translate }}</h4>
+          <div class="formPadding">
+            <div class="row">
+              <div class="col-sm-12">
+                <div class="quotation-search-container">
+                <div class="table-container h-scroll table-max-height-650">
+                  <table class="pagination-table simple-table bordered">
+                    <thead>
+                      <tr class="sticky-top-row">
+                        <th class="required">{{ 'BOOKING_INSPECTIONPICKING.LBL_POID' | translate }}</th>
+                        <th class="required  sticky-left-column">{{ 'BOOKING_INSPECTIONPICKING.LBL_PRODUCTID' | translate }}</th>
+                        <th class="required">{{ 'BOOKING_INSPECTIONPICKING.LBL_PICKINGQUANTITY' | translate }}</th>
+                        <th>{{ 'BOOKING_INSPECTIONPICKING.LBL_LABNAME' | translate }}</th>
+                        <th>{{ 'BOOKING_INSPECTIONPICKING.LBL_LABADDRESS' | translate }}</th>
+                        <th>{{ 'BOOKING_INSPECTIONPICKING.LBL_LABCONTACT' | translate }}</th>
+                        <th>{{ 'BOOKING_INSPECTIONPICKING.LBL_REMARKS' | translate }}</th>
+                        <th></th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr *ngFor="let item of model;  let i = index">
+                        <td>
+                          <div class="my-input-group">
+
+                            <ng-select [items]="poList" [multiple]="false" [closeOnSelect]="true"
+                              [searchable]="true" bindLabel="poName" class="width-180" appendTo="body"
+                              bindValue="poID" [loading]="initialLoading"
+                              (change)="changeProductNumber($event,item)"
+                              placeholder="--- {{ 'BOOKING_INSPECTIONPICKING.PH_SELECT' | translate }} ---"
+                              [ngClass]="{ 'is-invalid': !item.validator.isValid('poId')}"
+                              [(ngModel)]="item.inspectionPickingData.poId">
+                              <ng-template ng-option-tmp let-item="item">
+                                <div class="width-180 text-wrap">{{ item.poName }}</div>
+                              </ng-template>
+                            </ng-select>
+
+                            <div *ngIf="!item.validator.isValid('poId')" class="invalid-feedback"
+                              style="display:block">
+                              <div *ngFor="let error of item.validator.getErrors('poId')">
+                                {{ error | translate }}
+                              </div>
+                            </div>
+
+                          </div>
+
+                        </td>
+                        <td class="sticky-left-column">
+                          <div class="my-input-group">
+
+                            <ng-select [items]="productList" [multiple]="false" [closeOnSelect]="true"
+                              [searchable]="true" bindLabel="productName" class="width-180" appendTo="body"
+                              bindValue="productID" [loading]="initialLoading"
+                              (change)="changeProductNumber($event,item)"
+                              placeholder="--- {{ 'BOOKING_INSPECTIONPICKING.PH_SELECT' | translate }} ---"
+                              [ngClass]="{ 'is-invalid': !item.validator.isValid('productId')}"
+                              [(ngModel)]="item.inspectionPickingData.productId">
+                              <ng-template ng-option-tmp let-item="item">
+                                <div class="width-180 text-wrap">{{ item.productName }}</div>
+                              </ng-template>
+                            </ng-select>
+
+                            <div *ngIf="!item.validator.isValid('productId')" class="invalid-feedback"
+                              style="display:block">
+                              <div *ngFor="let error of item.validator.getErrors('productId')">
+                                {{ error | translate }}
+                              </div>
+                            </div>
+
+                          </div>
+
+                        </td>
+                        <td>
+                          <div class="my-input-group">
+                            <input class="width-180" type="number"
+                              [(ngModel)]="item.inspectionPickingData.pickingQuantity" maxlength="300"
+                              placeholder="{{ 'BOOKING_INSPECTIONPICKING.PH_PICKINGQUANTITY' | translate }}"
+                              (input)="getTotalPickingData(true)"
+                              [ngClass]="{ 'is-invalid': !item.validator.isValid('pickingQuantity')}" />
+
+                            <div *ngIf="!item.validator.isValid('pickingQuantity')" class="invalid-feedback"
+                              style="display:block">
+                              <div *ngFor="let error of item.validator.getErrors('pickingQuantity')">
+                                {{ error | translate }}
+                              </div>
+                            </div>
+
+                          </div>
+
+                        </td>
+                        <td class="width-220">
+                          
+                          <div class="my-input-group">
+                           
+                            <ng-select [items]="labList" [multiple]="false" [closeOnSelect]="true" [searchable]="true"
+                              bindLabel="name" class="width-180" appendTo="body" bindValue="id" [loading]="labLoading"
+                              placeholder="--- {{ 'BOOKING_INSPECTIONPICKING.PH_SELECT' | translate }} ---"
+                              (change)="getLabRelatedDetails($event,item)" (clear)="clearLabRelatedDetails(item)"
+                              [(ngModel)]="item.inspectionPickingData.labId">
+                              <ng-template ng-option-tmp let-item="item">
+                                <div class="text-wrap">{{ item.name }}</div>
+                              </ng-template>
+                            </ng-select>
+                             
+                            <span class="table-cta icon-cta common-tooltip" style="position: absolute;top: 7px;right: -10px;" *ngIf="item.inspectionPickingData.labId"
+                            (click)="showLabName(item)"  [attr.data-tooltip]="item.inspectionPickingData.showLabName?'Cancel':'View'">
+                            <img [src]="item.inspectionPickingData.labNameImgPath" alt="View">
+                            </span>
+                            
+                             <textarea class="width-180" [(ngModel)]="item.inspectionPickingData.labName" *ngIf="item.inspectionPickingData.showLabName" disabled
+                            placeholder="{{ 'BOOKING_INSPECTIONPICKING.LBL_LABNAME' | translate }}">
+                          </textarea> 
+                          </div>
+                        
+                          
+
+                        </td>
+
+                        <td class="width-220">
+                          <div class="my-input-group">
+
+                            <ng-select [items]="item.inspectionPickingData.labAddressList" [multiple]="false"
+                              [closeOnSelect]="true" [searchable]="true" bindLabel="name" class="width-180"
+                              appendTo="body" bindValue="id" [loading]="item.inspectionPickingData.labAddressLoading"
+                              placeholder="--- {{ 'BOOKING_INSPECTIONPICKING.PH_SELECT' | translate }} ---"
+                              (change)="getLabAddressRelatedDetails(item)" (clear)="clearLabAddressRelatedDetails(item)"
+                              [(ngModel)]="item.inspectionPickingData.labAddressId">
+                              <ng-template ng-option-tmp let-item="item">
+                                <div class="width-180 text-wrap">{{ item.name }}</div>
+                              </ng-template>
+                            </ng-select>
+
+                            <span class="table-cta icon-cta common-tooltip" style="position: absolute;top: 7px;right: -10px;" *ngIf="item.inspectionPickingData.labAddressId"
+                            (click)="showLabAddress(item)"  [attr.data-tooltip]="item.inspectionPickingData.showLabAddress?'Cancel':'View'">
+                            <img [src]="item.inspectionPickingData.labAddressImgPath" alt="View">
+                            </span>
+                           
+                            <div *ngIf="item.inspectionPickingData.labId">
+                              <div *ngIf="!item.validator.isValid('labAddressId')" class="invalid-feedback"
+                                style="display:block">
+                                <div *ngFor="let error of item.validator.getErrors('labAddressId')">
+                                  {{ error | translate }}
+                                </div>
+                              </div>
+                            </div>
+                             
+                            <textarea class="width-180" [(ngModel)]="item.inspectionPickingData.labAddress" *ngIf="item.inspectionPickingData.showLabAddress" disabled
+                            placeholder="{{ 'BOOKING_INSPECTIONPICKING.LBL_LABADDRESS' | translate }}">
+                          </textarea> 
+                          </div>
+
+                        </td>
+
+                        <td>
+                          <div class="my-input-group">
+
+                            <ng-select [items]="item.inspectionPickingData.labContactList" [multiple]="true"
+                              [closeOnSelect]="true" [searchable]="true" bindLabel="name" class="width-180 multiple"
+                              appendTo="body" bindValue="id" [loading]="item.inspectionPickingData.labContactLoading"
+                              placeholder="--- {{ 'BOOKING_INSPECTIONPICKING.PH_SELECT' | translate }} ---"
+                              (change)="changeLabContact(item)"
+                              [(ngModel)]="item.inspectionPickingData.labContactTypeItems">
+                              <ng-template ng-option-tmp let-item="item">
+                                <div class="width-180 text-wrap">{{ item.name }}</div>
+                              </ng-template>
+                            </ng-select>
+
+                            <div *ngIf="item.inspectionPickingData.labId">
+                              <div *ngIf="!item.validator.isValid('labContactTypeItems')" class="invalid-feedback"
+                                style="display:block">
+                                <div *ngFor="let error of item.validator.getErrors('labContactTypeItems')">
+                                  {{ error | translate }}
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+
+                        </td>
+
+                        <td>
+                          <div class="my-input-group">
+                            <textarea class="width-180" [(ngModel)]="item.inspectionPickingData.remarks"
+                              placeholder="{{ 'BOOKING_INSPECTIONPICKING.PH_REMARKS' | translate }}"  (input)="changeRemark()">
+                            </textarea>
+                          </div>
+                        </td>
+
+                        <td>
+                          <button   (click)="removeInspectionPicking(i)" class="secondary-cta x-small"
+                            style="margin-left:10px">
+                            <i class="fa fa-trash"></i>
+                          </button>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+
+                  <div class="table-action mobile-hide">
+                    <span><button class="secondary-cta x-small" (click)="addInspectionPickingData()">
+                        {{ 'BOOKING_INSPECTIONPICKING.LBL_ADD' | translate }}</button> </span>
+                  </div>
+
+                </div>
+              </div>
+              </div>
+            </div>
+          </div>
+          <div class="form-action-container">
+          <button type="button" *ngIf="inspectionPickingFound" class="secondary-cta small"
+            [disabled]="savedataloading ||initialLoading || exportDataLoading" (click)="export();">
+            {{
+            'BOOKING_INSPECTIONPICKING.LBL_EXPORT' | translate
+            }}
+            <span *ngIf="exportDataLoading">
+              <i class="fa fa-refresh fa-spin" aria-hidden="true"></i>
+            </span>
+          </button>
+            <button type="button" class="secondary-cta small" [disabled]="savedataloading ||initialLoading ||  !_isPreview" (click)="getPickingData();">
+              {{
+                'BOOKING_INSPECTIONPICKING.LBL_PREVIEW' | translate
+              }}
+            </button>
+            <button *ngIf="fromSummary && statusId != _BookingStatus.Inspected" [disabled]="savedataloading ||initialLoading" class="primary-cta small"
+              (click)="save()">
+              {{
+                      'BOOKING_INSPECTIONPICKING.LBL_SAVE' | translate
+              }}
+              <span *ngIf="savedataloading">
+                <i class="fa fa-refresh fa-spin" aria-hidden="true"></i>
+              </span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

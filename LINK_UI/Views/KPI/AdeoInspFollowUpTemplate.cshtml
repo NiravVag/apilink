@@ -1,0 +1,58 @@
+﻿
+@{
+    ViewData["Title"] = "AdeoInspFollowUpTemplate";
+}
+
+@model DTO.Kpi.ExportResult
+
+<xls-sheet name="AdeoFranceInspFollowUp">
+    <table xls-begin="A:1" style="border-style:solid">
+        <tr style="background-color:#f5f5f5;font-weight:bold;text-align:center">
+            <th>ID</th>
+            <th>ETD</th>
+            <th>Order number</th>
+            <th>ADEO supplier name</th>
+            <th>ADEO Supplier code</th>
+            <th>Order responsible</th>
+            <th>Quality Manager</th>
+            <th>Inspection Country</th>
+            <th>Inspection company name</th>
+            <th>Status of the order (planned / inspected / cancelled)</th>
+            <th>Supplier effective contact date</th>
+            <th>Deadline to be contacted by supplier</th>
+            <th>Inspection date</th>
+            <th>Date of sending report</th>
+            <th>Final decision date on pending</th>
+            <th>Date of SR Emitted</th>
+            <th>Final status</th>
+            <th>Comments</th>
+            <th>Office Location</th>
+        </tr>
+        @{var count = 0; }
+        @foreach (var item in Model.Data)
+        {
+            count = count + 1;
+        <tr>
+            <td width="150px" xls-type="number">@count</td>
+            <td width="150px">@item.Etd</td>
+            <td width="150px">@Html.Raw(@item.PONumber)</td>
+            <td width="150px">@Html.Raw(@item.SupplierName)</td>
+            <td width="250px">@item.SupplierCode</td>
+            <td width="250px"></td>
+            <td width="150px"></td>
+            <td width="150px">@item.FactoryCountry</td>
+            <td width="150px">API</td>
+            <td width="150px">@item.bookingStatus</td>
+            <td width="150px">@item.SupContactDate</td>
+            <td width="150px">@item.SupContactDeadlineDate</td>
+            <td width="150px">@item.InspectionEndDate</td>
+            <td width="150px">@item.ReportDate</td>
+            <td width="150px">@item.ConfirmDate</td>
+            <td width="150px">@item.ReConfirmDate</td>
+            <td width="150px">@item.ReportStatus</td>
+            <td width="150px">@item.ProductName</td>
+            <td width="150px">@item.Office</td>
+        </tr>
+        }
+    </table>
+</xls-sheet>

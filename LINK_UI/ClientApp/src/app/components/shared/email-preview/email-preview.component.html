@@ -1,0 +1,126 @@
+<div class="mail-container">
+    <div class="column">
+        <h2 class="mail-popup-title">
+            <div class="checkbox-container">
+                <div class="styled-checkbox-container">
+                    <input type="checkbox" class="styled-checkbox" id="selectAll" [(ngModel)]="emailPreviewMaster.isSelectedEmailPreview" (change)="selectAllEmailPreview($event)" />
+                    <label for="selectAll"></label> {{emailPreviewTitle}} 
+                    <span class="audit-id" *ngFor="let bookingNo of emailPreviewMaster.serialNumberList">
+            #{{bookingNo}} </span>
+                </div>
+            </div>
+        </h2>
+        <div class="mail-list-container">
+            <ng-container *ngFor="let item of emailModelItem;let indexOfelement=index;;">
+                <div class="mail-item" [ngClass]="{ 'active': item.active,'error':item.emailValidOption!=_emailValidOption.EmailSuccess}" id="{{item.emailId}}" (click)="processEmailItem(indexOfelement)">
+                    <div class="checkbox-container">
+                        <div class="styled-checkbox-container">
+                            <input class="styled-checkbox" id="{{'emailPrev ' + item.emailId}}" type="checkbox" (change)="changeEmailCheckBox(item.emailId,$event,item.isEmailSelected)" [disabled]="item.emailValidOption!=_emailValidOption.EmailSuccess" [(ngModel)]="item.isEmailSelected">
+                            <label (click)="$event.stopPropagation()" for="{{'emailPrev ' + item.emailId}}"></label>
+                        </div>
+                    </div>
+                    <div class="mail-content">
+                        <h4 class="mail-head" [ngStyle]="{'color': item.emailValidOption!=_emailValidOption.EmailSuccess ?  'red' : ''}">
+                            {{item.emailSubjectDisplay}}</h4>
+                    </div>
+                </div>
+            </ng-container>
+        </div>
+    </div>
+    <div class="column">
+        <img src="assets/images/close-icon.svg" alt="" class="close-btn" (click)=" closePreview()">
+        <div class="my-input-group">
+            <label for="">{{ 'EMAIL_SEND_PREVIEW.LBL_EMAIL_TO' | translate }}</label>
+        </div>
+
+        <div class="multiselection-container type-mailer marginBottom24">
+            <div class="multiselection-input-container" [ngClass]="{ 'is-invalid':  !emailPreviewValidator.toListValid}">
+                <ng-container *ngFor="let mail of emailModelItem[emailSelectedIndex].emailToList;let indexOfelement=index;">
+                    <div class="user-badge">
+                        <span class="name">{{mail}}</span>
+                        <span (click)="removeToMail(indexOfelement)" *ngIf="emailModelItem[emailSelectedIndex].isenabled"><img
+                class="remove" src="assets/images/cta-close-grey.svg" alt=""></span>
+
+                    </div>
+                </ng-container>
+                <input type="text" [disabled]="!emailModelItem[emailSelectedIndex].isenabled"
+                 [(ngModel)]="emailModelItem[emailSelectedIndex].toMailText" 
+                 (keyup)="assignEmailOnKeyPress($event, _emailAddressType.toList)" 
+                 (focusout)="assignEmailOnFocusOut($event,_emailAddressType.toList)">
+            </div>
+            <div *ngIf=" !emailPreviewValidator.toListValid" class="invalid-feedback">
+                <div>{{emailPreviewValidator.toListErrorMessage}}</div>
+            </div>
+        </div>
+
+        <div class="my-input-group">
+            <label for="">{{ 'EMAIL_SEND_PREVIEW.LBL_EMAIL_CC' | translate }}</label>
+        </div>
+        <div class="multiselection-container type-mailer marginBottom24">
+            <div class="multiselection-input-container" [ngClass]="{ 'is-invalid':  !emailPreviewValidator.ccListValid}">
+                <ng-container *ngFor="let mail of emailModelItem[emailSelectedIndex].emailCCList;let indexOfelement=index;">
+                    <div class="user-badge">
+                        <span class="name">{{mail}}</span>
+                        <span (click)="removeCCMail(indexOfelement)" *ngIf="emailModelItem[emailSelectedIndex].isenabled"><img
+                class="remove" src="assets/images/cta-close-grey.svg" alt=""></span>
+
+                    </div>
+                </ng-container>
+                <input type="text" [disabled]="!emailModelItem[emailSelectedIndex].isenabled" 
+                [(ngModel)]="emailModelItem[emailSelectedIndex].ccMailText" 
+                (keyup)="assignEmailOnKeyPress($event, _emailAddressType.ccList)" 
+                (focusout)="assignEmailOnFocusOut($event,_emailAddressType.ccList)">
+            </div>
+            <div *ngIf="!emailPreviewValidator.ccListValid" class="invalid-feedback">
+                <div>{{emailPreviewValidator.ccListErrorMessage}}</div>
+            </div>
+        </div>
+
+        <div class="my-input-group">
+            <label for="">{{ 'EMAIL_SEND_PREVIEW.LBL_EMAIL_BCC' | translate }}</label>
+        </div>
+        <div class="multiselection-container type-mailer marginBottom24">
+            <div class="multiselection-input-container" [ngClass]="{ 'is-invalid':  !emailPreviewValidator.bccListValid}">
+                <ng-container *ngFor="let mail of emailModelItem[emailSelectedIndex].emailBCCList;let indexOfelement=index;">
+                    <div class="user-badge">
+                        <span class="name">{{mail}}</span>
+                        <span (click)="removeBCCMail(indexOfelement)" *ngIf="emailModelItem[emailSelectedIndex].isenabled"><img
+                class="remove" src="assets/images/cta-close-grey.svg" alt=""></span>
+
+                    </div>
+                </ng-container>
+                <input type="text" [disabled]="!emailModelItem[emailSelectedIndex].isenabled" 
+                [(ngModel)]="emailModelItem[emailSelectedIndex].bccMailText" 
+                (keyup)="assignEmailOnKeyPress($event, _emailAddressType.bccList)" 
+                (focusout)="assignEmailOnFocusOut($event,_emailAddressType.bccList)">
+            </div>
+            <div *ngIf="!emailPreviewValidator.bccListValid" class="invalid-feedback">
+                <div>{{emailPreviewValidator.bccListErrorMessage}}</div>
+            </div>
+        </div>
+
+        <div class="my-input-group mb-4">
+            <label for="">{{ 'EMAIL_SEND_PREVIEW.LBL_EMAIL_SUBJECT' | translate }}</label>
+            <textarea rows="1" [disabled]="!emailModelItem[emailSelectedIndex].isenabled" 
+            [(ngModel)]="emailModelItem[emailSelectedIndex].emailSubject" 
+            (focusout)="focusOutEmailSubject($event)" [ngClass]="{ 'is-invalid':  !emailPreviewValidator.subjectValid}" (keyup)="changeEmailSubject($event)"></textarea>
+            <div *ngIf="!emailPreviewValidator.subjectValid" class="invalid-feedback">
+                <div>{{emailPreviewValidator.subjectErrorMessage}}</div>
+            </div>
+        </div>
+
+
+        <angular-editor #emailEditor [(ngModel)]="emailModelItem[emailSelectedIndex].emailBody" 
+        (ngModelChange)="onChangeEmailBody($event)" [config]="config"></angular-editor>
+
+        <div class="cta-container">
+            <button (click)="closePreview()" class="secondary-cta link">{{ 'EMAIL_SEND_PREVIEW.LBL_CANCEL' |
+        translate}}</button>
+            <button class="primary-cta" [disabled]="emailPreviewMaster.isEmailSendLoading || !emailPreviewMaster.isEmailReady" (click)="sendEmail()">{{ 'EMAIL_SEND_PREVIEW.LBL_SEND' | translate}}
+        <span *ngIf="emailPreviewMaster.isEmailSendLoading">
+          <i class="fa fa-refresh fa-spin" aria-hidden="true"></i>
+        </span>
+      </button>
+        </div>
+    </div>
+</div>

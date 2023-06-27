@@ -1,0 +1,19 @@
+.custom {
+    max-height: 22px !important;
+    border: none !important;
+  }
+  
+  .multiselect-dropdown[test] {
+    width: 95% !important;
+  }
+  
+  :host /deep/ .multiselect-dropdown {
+    width: 95% !important;
+    font-size: 12px !important;
+  }
+  
+    :host /deep/ .multiselect-dropdown .dropdown-btn {
+      font-size: 12px !important;
+      max-height: 27px !important;
+      line-height: unset !important;
+    }

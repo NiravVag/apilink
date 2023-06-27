@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="25.988" height="30.574" viewBox="0 0 25.988 30.574">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: #c7d9e6;
+      }
+    </style>
+  </defs>
+  <g id="notifications-button" transform="translate(-38.25)">
+    <g id="notifications" transform="translate(38.25)">
+      <path id="Path_124" data-name="Path 124" class="cls-1" d="M51.244,30.574A3.066,3.066,0,0,0,54.3,27.517H48.187A3.066,3.066,0,0,0,51.244,30.574ZM61.181,21.4V12.994a9.837,9.837,0,0,0-7.644-9.631V2.293a2.293,2.293,0,0,0-4.586,0v1.07a9.837,9.837,0,0,0-7.644,9.631V21.4L38.25,24.46v1.529H64.238V24.46Z" transform="translate(-38.25)"/>
+    </g>
+  </g>
+</svg>

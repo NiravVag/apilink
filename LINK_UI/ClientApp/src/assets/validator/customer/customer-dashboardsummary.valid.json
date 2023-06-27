@@ -1,0 +1,21 @@
+{
+    "model": "CustomerDashboardFilterModel",
+    "fields": {
+        "serviceDateFrom": [
+            {
+                "type": "isLessOrEqual",
+                "fieldType": "D",
+                "fieldCible": "serviceDateTo",
+                "ressource": "AUIDT_SUMMARY.MSG_SERVICE_FROMDATE_GREATER_REQ"
+            }
+        ],
+        "serviceDateTo": [
+            {
+                "type": "isGreatOrEqual",
+                "fieldType": "D",
+                "fieldCible": "serviceDateFrom",
+                "ressource": "AUIDT_SUMMARY.MSG_Service_TODATE_LESS_REQ" 
+            }
+        ]
+    }
+}

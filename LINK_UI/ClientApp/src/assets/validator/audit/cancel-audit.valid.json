@@ -1,0 +1,45 @@
+{
+    "model": "Auditcancelmodel",
+    "fields": {
+        "servicedatefrom": [
+            {
+                "type": "required",
+                "fieldType": "D",
+                "ressource": "AUDIT_CANCEL.MSG_SERVICE_FROMDATE_REQ"
+            },
+            {
+                "type": "isLessOrEqual",
+                "fieldType": "D",
+                "fieldCible": "servicedateto",
+                "ressource": "AUDIT_CANCEL.MSG_SERVICE_FROMDATE_GREATER_REQ"
+            }
+        ],
+        "servicedateto": [
+            {
+                "type": "required",
+                "fieldType": "D",
+                "ressource": "AUDIT_CANCEL.MSG_Service_TODATE_REQ"
+            },
+            {
+                "type": "isGreatOrEqual",
+                "fieldType": "D",
+                "fieldCible": "servicedatefrom",
+                "ressource": "AUDIT_CANCEL.MSG_Service_TODATE_LESS_REQ"
+            }
+        ],
+        "reasontypeid": [
+            {
+                "type": "required",
+                "fieldType": "N",
+                "ressource": "AUDIT_CANCEL.MSG_REASON_TYPE"
+            }
+        ],
+        "currencyId": [
+            {
+                "type": "required",
+                "fieldType": "N",
+                "ressource": "AUDIT_CANCEL.MSG_CURRENCY_REQ"
+            }
+        ]
+    }
+}

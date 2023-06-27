@@ -1,0 +1,630 @@
+<div class="main-wrapper">
+  <div class="wrapper dashboard-wrapper">
+    <div class="my-container">
+      <div class="master-body">
+        <div class="title-container">
+          <div class="header-back-button" *ngIf="fromSummary">
+            <img src="assets/images/back-red.png" alt="back" (click)="return('econfig/summary')">
+          </div>
+          <h3 class="main-title">
+            {{ 'EMAIL_CONFIGURATION.LBL_TITLE' | translate }}
+            <span class="audit-id" *ngIf="model.id >0 && copyId !=0">
+              #{{model.id}}</span>
+          </h3>
+        </div>
+        <div class="content-container quotation-container">
+          <div class="container-head">
+            <img class="head-icon" src="assets/images/general.png" alt=""> {{
+            'EMAIL_CONFIGURATION.LBL_RULE_CONFIGURATION' | translate }}
+          </div>
+          <div class="row formPadding">
+            <div class="col-sm-12">
+              <div class="row marginTop15">
+                <div class="col-sm-3 col-md-3 col-lg-3">
+                  <div class="my-input-group">
+                    <label [class]="{'required': model.invoiceTypeId != masterModel.invoiceType.PreInvoice}">{{
+                      'EMAIL_CONFIGURATION.LBL_CUSTOMER' | translate }}
+                    </label>
+                    <ng-select [virtualScroll]="true" bindLabel="name" bindValue="id" [minTermLength]="3"
+                      appendTo="body" [items]="masterModel.customerList" [loading]="masterModel.customerLoading"
+                      placeholder="--- {{ (masterModel.customerList!=null && masterModel.customerList.length!=0? 'COMMON.LBL_SELECT':'COMMON.LBL_NO_DATA' ) | translate }} ---"
+                      [ngClass]="{ 'is-invalid':  !validator.isValidIf('customerId',model.invoiceTypeId != masterModel.invoiceType.PreInvoice)}"
+                      [typeahead]="masterModel.customerInput" (change)="changeCustomer($event)" [multiple]="false"
+                      [closeOnSelect]="true" (clear)="clearCustomer()" [(ngModel)]="model.customerId"
+                      (scrollToEnd)="getCustomerData()" #select>
+                      <ng-template ng-option-tmp let-item="item">
+                        <div class="text-wrap"><span>{{item.name}}</span></div>
+                      </ng-template>
+                    </ng-select>
+                    <!-- (ngModelChange)="changeCustomer($event)" -->
+                    <div
+                      *ngIf="!validator.isValidIf('customerId',model.invoiceTypeId != masterModel.invoiceType.PreInvoice)"
+                      class="invalid-feedback">
+                      <div *ngFor="let error of validator.getErrors('customerId')">
+                        {{ error | translate }}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-sm-3 col-md-3 col-lg-3">
+                  <div class="my-input-group">
+                    <label class="required" for="">{{'EMAIL_CONFIGURATION.LBL_ES_TYPE' |
+                      translate}}</label>
+                    <ng-select appendTo="body" [items]="masterModel.esTypeList" [loading]="masterModel.esTypeLoading"
+                      bindLabel="name" bindValue="id"
+                      placeholder="--- {{ (masterModel.esTypeList && masterModel.esTypeList.length>0? 'COMMON.LBL_SELECT':'COMMON.LBL_NO_DATA' ) | translate }} ---"
+                      [(ngModel)]="model.typeId" (change)="changeEmailType($event)" (clear)="clearEmailType()"
+                      [ngClass]="{ 'is-invalid':  !validator.isValid('typeId')}">
+                      <ng-template ng-option-tmp let-item="item">
+                        <div class="text-wrap"><span>{{item.name}}</span></div>
+                      </ng-template>
+                    </ng-select>
+                    <div *ngIf="!validator.isValid('typeId')" class="invalid-feedback">
+                      <div *ngFor="let error of validator.getErrors('typeId')">
+                        {{ error | translate }}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-sm-3 col-md-3 col-lg-3" *ngIf="model.typeId==masterModel.emailType.InvoiceSend">
+                  <div class="my-input-group select-for-filter">
+                    <label class="required">{{ 'EDIT_CUSTOMER.LBL_INVOICE_TYPE' |
+                      translate}}</label>
+                    <ng-select [items]="masterModel.invoiceTypeList" [(ngModel)]="model.invoiceTypeId"
+                      [closeOnSelect]="true" [searchable]="true" bindLabel="name" bindValue="id"
+                      placeholder="--- {{(masterModel.invoiceTypeList &&
+                                                masterModel.invoiceTypeList.length>0? 'COMMON.LBL_SELECT':'COMMON.LBL_NO_DATA')  | translate }} ---" [loading]="masterModel.invoiceTypeLoading"
+                      [ngClass]="{ 'is-invalid':  !validator.isValid('invoiceTypeId')}">
+                      <ng-template ng-option-tmp let-item="item">
+                        <div class="text-wrap">{{ item.name }}</div>
+                      </ng-template>
+                    </ng-select>
+                    <div *ngIf="!validator.isValid('invoiceTypeId')" class="invalid-feedback">
+                      <div *ngFor="let error of validator.getErrors('invoiceTypeId')">
+                        {{ error | translate }}
+                      </div>
+                    </div>
+
+                  </div>
+                </div>
+              </div>
+              <div class="row marginTop15">
+                <div class="col-sm-3 col-md-3 col-lg-3">
+                  <div class="my-input-group">
+                    <label>{{ 'EMAIL_CONFIGURATION.LBL_SUPPLIER' | translate }}
+                    </label>
+                    <ng-select [virtualScroll]="true" bindLabel="name" bindValue="id" [minTermLength]="3"
+                      [clearable]="true" class="multiple" [items]="masterModel.supplierList"
+                      [loading]="masterModel.supplierLoading"
+                      placeholder="--- {{ (masterModel.supplierList!=null && masterModel.supplierList.length!=0? 'COMMON.LBL_SELECT':'COMMON.LBL_NO_DATA' ) | translate }} ---"
+                      [typeahead]="masterModel.supplierInput" (clear)="clearSupplierData()"
+                      [(ngModel)]="model.supplierIdList" [multiple]="true" (scrollToEnd)="getSupplierData()" #select
+                      appendTo="body">
+                      <ng-template ng-option-tmp let-item="item">
+                        <div class="text-wrap"><span>{{item.name}}</span></div>
+                      </ng-template>
+                    </ng-select>
+                  </div>
+                </div>
+                <div class="col-sm-3 col-md-3 col-lg-3">
+                  <div class="my-input-group">
+                    <label>{{ 'EMAIL_CONFIGURATION.LBL_FACTORY' | translate }}
+                    </label>
+                    <ng-select class="multiple" [virtualScroll]="true" bindLabel="name" bindValue="id"
+                      [minTermLength]="3" #select appendTo="body" [clearable]="true" [items]="masterModel.factoryList"
+                      [loading]="masterModel.factoryLoading"
+                      placeholder="--- {{ (masterModel.factoryList!=null && masterModel.factoryList.length!=0? 'COMMON.LBL_SELECT':'COMMON.LBL_NO_DATA' ) | translate }} ---"
+                      [typeahead]="masterModel.factoryInput" (clear)="clearFactoryData()"
+                      [(ngModel)]="model.factoryIdList" [multiple]="true" (scrollToEnd)="getFactoryData()">
+                      <ng-template ng-option-tmp let-item="item">
+                        <div class="text-wrap"><span>{{item.name}}</span></div>
+                      </ng-template>
+                    </ng-select>
+                  </div>
+                </div>
+                <div class="col-sm-3 col-md-3 col-lg-3">
+                  <div class="my-input-group">
+                    <label>{{ 'EMAIL_CONFIGURATION.LBL_FACTORY_COUNTRY' | translate }}
+                    </label>
+                    <ng-select [virtualScroll]="true" bindLabel="name" bindValue="id" class="multiple"
+                      [minTermLength]="3" #select appendTo="body" [clearable]="true"
+                      [items]="masterModel.factoryCountryList" [loading]="masterModel.factoryCountryLoading"
+                      placeholder="--- {{ (masterModel.factoryCountryList!=null && masterModel.factoryCountryList.length!=0? 'COMMON.LBL_SELECT':'COMMON.LBL_NO_DATA' ) | translate }} ---"
+                      [typeahead]="masterModel.factoryCountryInput" (clear)="clearCountryData()"
+                      [(ngModel)]="model.factoryCountryIdList" [multiple]="true" (scrollToEnd)="getCountryData()">
+                      <ng-template ng-option-tmp let-item="item">
+                        <div class="text-wrap"><span>{{item.name}}</span></div>
+                      </ng-template>
+                    </ng-select>
+                  </div>
+                </div>
+              </div>
+              <div class="row marginTop15">
+                <div class="col-sm-3 col-md-3 col-lg-3">
+                  <div class="my-input-group">
+                    <label for="">{{'EMAIL_CONFIGURATION.LBL_BRAND' | translate}}</label>
+                    <ng-select appendTo="body" [items]="masterModel.brandList" [virtualScroll]="true"
+                      [loading]="masterModel.brandLoading" bindLabel="name" bindValue="id"
+                      placeholder="--- {{ (masterModel.brandList && masterModel.brandList.length>0? 'COMMON.LBL_SELECT':'COMMON.LBL_NO_DATA' ) | translate }} ---"
+                      [typeahead]="masterModel.brandInput" [minTermLength]="3" (clear)="clearBrandData()"
+                      [(ngModel)]="model.brandIdList" [multiple]="true" class="multiple" (scrollToEnd)="getBrandData()"
+                      #select>
+                      <ng-template ng-option-tmp let-item="item">
+                        <div class="text-wrap"><span>{{item.name}}</span></div>
+                      </ng-template>
+                    </ng-select>
+                  </div>
+                </div>
+                <div class="col-sm-3 col-md-3 col-lg-3">
+                  <div class="my-input-group">
+                    <label for="">{{'EMAIL_CONFIGURATION.LBL_DEPARTMENT' | translate}}</label>
+                    <ng-select appendTo="body" [items]="masterModel.departmentList" [virtualScroll]="true"
+                      [loading]="masterModel.departmentLoading" bindLabel="name" bindValue="id"
+                      placeholder="--- {{ (masterModel.departmentList && masterModel.departmentList.length>0? 'COMMON.LBL_SELECT':'COMMON.LBL_NO_DATA' ) | translate }} ---"
+                      [typeahead]="masterModel.departmentInput" [minTermLength]="3" (clear)="clearDeptData()"
+                      [(ngModel)]="model.departmentIdList" [multiple]="true" class="multiple"
+                      (scrollToEnd)="getDeptData()" #select>
+                      <ng-template ng-option-tmp let-item="item">
+                        <div class="text-wrap"><span>{{item.name}}</span></div>
+                      </ng-template>
+                    </ng-select>
+                  </div>
+                </div>
+                <div class="col-sm-3 col-md-3 col-lg-3">
+                  <div class="my-input-group">
+                    <label for="">{{'EMAIL_CONFIGURATION.LBL_BUYER' | translate}}</label>
+                    <ng-select appendTo="body" [items]="masterModel.buyerList" [virtualScroll]="true"
+                      [loading]="masterModel.buyerLoading" bindLabel="name" bindValue="id"
+                      placeholder="--- {{ (masterModel.buyerList && masterModel.buyerList.length>0? 'COMMON.LBL_SELECT':'COMMON.LBL_NO_DATA' ) | translate }} ---"
+                      [typeahead]="masterModel.buyerInput" [minTermLength]="3" (clear)="clearBuyerData()"
+                      [(ngModel)]="model.buyerIdList" [multiple]="true" class="multiple" (scrollToEnd)="getBuyerData()"
+                      #select>
+                      <ng-template ng-option-tmp let-item="item">
+                        <div class="text-wrap"><span>{{item.name}}</span></div>
+                      </ng-template>
+                    </ng-select>
+                  </div>
+                </div>
+                <div class="col-sm-3 col-md-3 col-lg-3">
+                  <div class="my-input-group">
+                    <label for="">{{'EMAIL_CONFIGURATION.LBL_COLLECTION' | translate}}</label>
+                    <ng-select appendTo="body" [items]="masterModel.collectionList" [virtualScroll]="true"
+                      [loading]="masterModel.collectionLoading" bindLabel="name" bindValue="id"
+                      placeholder="--- {{ (masterModel.collectionList && masterModel.collectionList.length>0? 'COMMON.LBL_SELECT':'COMMON.LBL_NO_DATA' ) | translate }} ---"
+                      [typeahead]="masterModel.collectionInput" [minTermLength]="3" (clear)="clearCollectionData()"
+                      [(ngModel)]="model.collectionIdList" [multiple]="true" class="multiple"
+                      (scrollToEnd)="getCollectionData()" #select>
+                      <ng-template ng-option-tmp let-item="item">
+                        <div class="text-wrap"><span>{{item.name}}</span></div>
+                      </ng-template>
+                    </ng-select>
+                  </div>
+                </div>
+              </div>
+              <div class="row marginTop15">
+                <div class="col-sm-3 col-md-3 col-lg-3">
+                  <div class="my-input-group">
+                    <label class="required" for="">{{'EMAIL_CONFIGURATION.LBL_SERVICE' |
+                      translate}}</label>
+                    <ng-select appendTo="body" [items]="masterModel.serviceList" [loading]="masterModel.serviceLoading"
+                      bindLabel="name" bindValue="id"
+                      placeholder="--- {{ (masterModel.serviceList && masterModel.serviceList.length>0? 'COMMON.LBL_SELECT':'COMMON.LBL_NO_DATA' ) | translate }} ---"
+                      [(ngModel)]="model.serviceId" (change)="changeService()"
+                      [ngClass]="{ 'is-invalid':  !validator.isValid('serviceId')}">
+                      <ng-template ng-option-tmp let-item="item">
+                        <div class="text-wrap"><span>{{item.name}}</span></div>
+                      </ng-template>
+                    </ng-select>
+
+                    <div *ngIf="!validator.isValid('serviceId')" class="invalid-feedback">
+                      <div *ngFor="let error of validator.getErrors('serviceId')">
+                        {{ error | translate }}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-sm-3 col-md-3 col-lg-3">
+                  <div class="my-input-group">
+                    <label for="">{{'EMAIL_CONFIGURATION.LBL_OFFICE' | translate}}</label>
+                    <ng-select appendTo="body" [items]="masterModel.officeList" [loading]="masterModel.officeLoading"
+                      bindLabel="name" bindValue="id"
+                      placeholder="--- {{ (masterModel.officeList && masterModel.officeList.length>0? 'COMMON.LBL_SELECT':'COMMON.LBL_NO_DATA' ) | translate }} ---"
+                      [(ngModel)]="model.officeIdList" class="multiple" [multiple]="true">
+                      <ng-template ng-option-tmp let-item="item">
+                        <div class="text-wrap"><span>{{item.name}}</span></div>
+                      </ng-template>
+                    </ng-select>
+                  </div>
+                </div>
+                <div class="col-sm-3 col-md-3 col-lg-3">
+                  <div class="my-input-group">
+                    <label for="">{{'EMAIL_CONFIGURATION.LBL_SERVICE_TYPE' | translate}}</label>
+                    <ng-select appendTo="body" [items]="masterModel.serviceTypeList"
+                      [loading]="masterModel.serviceTypeLoading" bindLabel="name" bindValue="id"
+                      placeholder="--- {{ (masterModel.serviceTypeList && masterModel.serviceTypeList.length>0? 'COMMON.LBL_SELECT':'COMMON.LBL_NO_DATA' ) | translate }} ---"
+                      [(ngModel)]="model.serviceTypeIdList" class="multiple" [multiple]="true">
+                      <ng-template ng-option-tmp let-item="item">
+                        <div class="text-wrap"><span>{{item.name}}</span></div>
+                      </ng-template>
+                    </ng-select>
+                  </div>
+                </div>
+                <div class="col-sm-3 col-md-3 col-lg-3">
+                  <div class="my-input-group">
+                    <label for="">{{'EMAIL_CONFIGURATION.LBL_PRODUCT_CATEGORY' | translate}}</label>
+                    <ng-select appendTo="body" [items]="masterModel.productCategoryList"
+                      [loading]="masterModel.productCategoryLoading" bindLabel="name" bindValue="id"
+                      placeholder="--- {{ (masterModel.productCategoryList && masterModel.productCategoryList.length>0? 'COMMON.LBL_SELECT':'COMMON.LBL_NO_DATA' ) | translate }} ---"
+                      [(ngModel)]="model.productCategoryIdList" class="multiple" [multiple]="true">
+                      <ng-template ng-option-tmp let-item="item">
+                        <div class="text-wrap"><span>{{item.name}}</span></div>
+                      </ng-template>
+                    </ng-select>
+                  </div>
+                </div>
+              </div>
+              <div class="row marginTop15">
+                <div class="col-sm-3 col-md-3 col-lg-3">
+                  <div class="my-input-group">
+                    <label for="">{{'EMAIL_CONFIGURATION.LBL_API_RESULT' | translate}}</label>
+                    <ng-select appendTo="body" [items]="masterModel.apiResultList"
+                      [loading]="masterModel.apiResultLoading" bindLabel="name" bindValue="id"
+                      placeholder="--- {{ (masterModel.apiResultList && masterModel.apiResultList.length>0? 'COMMON.LBL_SELECT':'COMMON.LBL_NO_DATA' ) | translate }} ---"
+                      [(ngModel)]="model.apiResultIdList" class="multiple" [multiple]="true">
+
+                      <ng-template ng-option-tmp let-item="item">
+                        <div class="text-wrap"><span>{{item.name}}</span></div>
+                      </ng-template>
+                    </ng-select>
+                  </div>
+                </div>
+                <div class="col-sm-3 col-md-3 col-lg-3">
+                  <div class="my-input-group">
+                    <label for="">{{'EMAIL_CONFIGURATION.LBL_SPECIAL_RULE' | translate}}</label>
+                    <ng-select appendTo="body" [items]="masterModel.specialRuleList"
+                      [loading]="masterModel.specialRuleLoading" bindLabel="name" bindValue="id"
+                      placeholder="--- {{ (masterModel.specialRuleList && masterModel.specialRuleList.length>0? 'COMMON.LBL_SELECT':'COMMON.LBL_NO_DATA' ) | translate }} ---"
+                      [(ngModel)]="model.specialRuleIdList" class="multiple" [multiple]="true">
+
+                      <ng-template ng-option-tmp let-item="item">
+                        <div class="text-wrap"><span>{{item.name}}</span></div>
+                      </ng-template>
+                    </ng-select>
+                  </div>
+                </div>
+                <div class="col-sm-3 col-md-3 col-lg-3" *ngIf="masterModel.EmailTypeBaseOnLoad">
+                  <div class="my-input-group">
+                    <label for="">{{'EMAIL_CONFIGURATION.LBL_CUSTOMER_DECISION' |
+                      translate}}</label>
+                    <ng-select appendTo="body" [items]="masterModel.cusDecistionList"
+                      [loading]="masterModel.cusDecisionLoading" bindLabel="name" bindValue="id"
+                      placeholder="--- {{ (masterModel.cusDecistionList && masterModel.cusDecistionList.length>0? 'COMMON.LBL_SELECT':'COMMON.LBL_NO_DATA' ) | translate }} ---"
+                      [(ngModel)]="model.cusDecisionIdList" class="multiple" [multiple]="true">
+
+                      <ng-template ng-option-tmp let-item="item">
+                        <div class="text-wrap"><span>{{item.name}}</span></div>
+                      </ng-template>
+                    </ng-select>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="content-container quotation-container">
+          <div class="container-head">
+            <img class="head-icon" src="assets/images/general.png" alt=""> {{
+            'EMAIL_CONFIGURATION.LBL_RECIPIENT_TITLE' | translate }}
+          </div>
+          <div class="row formPadding">
+            <div class="col-sm-12">
+              <div class="row marginTop15">
+                <div class="col-sm-3 col-md-3 col-lg-3">
+                  <div class="my-input-group">
+                    <label>{{ 'EMAIL_CONFIGURATION.LBL_CUSTOMER_CONTACT' | translate }}
+                    </label>
+                    <ng-select bindLabel="name" bindValue="id" #select appendTo="body" [clearable]="true"
+                      [items]="masterModel.customerContactList" [loading]="masterModel.customerContactLoading"
+                      placeholder="--- {{ (masterModel.customerContactList!=null && masterModel.customerContactList.length!=0? 'COMMON.LBL_SELECT':'COMMON.LBL_NO_DATA' ) | translate }} ---"
+                      [(ngModel)]="model.customerContactIdList" [multiple]="true" class="multiple">
+                      <!-- [ngClass]="{ 'is-invalid':  !model.isCustomerContact &&
+                                    this.model.typeId == this._EmailTypeReportSend &&
+                                    !validator.isValid('customerContactIdList')}" [typeahead]="masterModel.customerInput"
+                                    (scrollToEnd)="getCustomerData()" [minTermLength]="3"
+                                [virtualScroll]="true" -->
+                      <ng-template ng-option-tmp let-item="item">
+                        <div class="text-wrap"><span>{{item.name}}</span></div>
+                      </ng-template>
+                    </ng-select>
+                    <div *ngIf=" iscustomercontactvalidate" class="invalid-feedback">
+                      <div *ngFor="let error of validator.getErrors('customerContactIdList')">
+                        {{ error | translate }}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-sm-3 col-md-3 col-lg-3">
+                  <div class="my-input-group">
+                    <label class="required">{{ 'EMAIL_CONFIGURATION.LBL_API_CONTACT' | translate }}
+                    </label>
+                    <ng-select bindLabel="name" bindValue="id" #select appendTo="body" [clearable]="true"
+                      [items]="masterModel.apiContactList" [loading]="masterModel.apiContactLoading" class="multiple"
+                      [ngClass]="{ 'is-invalid': !validator.isValid('apiContactIdList')}"
+                      placeholder="--- {{ (masterModel.apiContactList!=null && masterModel.apiContactList.length!=0? 'COMMON.LBL_SELECT':'COMMON.LBL_NO_DATA' ) | translate }} ---"
+                      [(ngModel)]="model.apiContactIdList" [multiple]="true">
+                      <!-- [typeahead]="masterModel.customerInput"  [virtualScroll]="true"
+                                    (scrollToEnd)="getCustomerData()" [minTermLength]="3" -->
+                      <ng-template ng-option-tmp let-item="item">
+                        <div class="text-wrap"><span>{{item.name}}</span></div>
+                      </ng-template>
+                    </ng-select>
+                    <div *ngIf="!validator.isValid('apiContactIdList')" class="invalid-feedback">
+                      <div *ngFor="let error of validator.getErrors('apiContactIdList')">
+                        {{ error | translate }}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-sm-3 col-md-3 col-lg-3">
+                  <div class="my-input-group">
+                    <label class="required">{{ 'EMAIL_CONFIGURATION.LBL_TO_LIST' | translate }}
+                    </label>
+                    <ng-select bindLabel="name" bindValue="id" #select appendTo="body" [clearable]="true"
+                      [items]="masterModel.toList" [loading]="masterModel.toLoading"
+                      placeholder="--- {{ (masterModel.toList!=null && masterModel.toList.length!=0? 'COMMON.LBL_SELECT':'COMMON.LBL_NO_DATA' ) | translate }} ---"
+                      [ngClass]="{ 'is-invalid': !validator.isValid('toIdList')}" [(ngModel)]="model.toIdList"
+                      [multiple]="true" class="multiple" (change)="changeToList($event)" (clear)="clearToList()">
+                      <ng-template ng-option-tmp let-item="item">
+                        <div class="text-wrap"><span>{{item.name}}</span></div>
+                      </ng-template>
+                    </ng-select>
+                    <div *ngIf="!validator.isValid('toIdList')" class="invalid-feedback">
+                      <div *ngFor="let error of validator.getErrors('toIdList')">
+                        {{ error | translate }}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-sm-3 col-md-3 col-lg-3">
+                  <div class="my-input-group">
+                    <label>{{ 'EMAIL_CONFIGURATION.LBL_CC_LIST' | translate }}
+                    </label>
+                    <ng-select bindLabel="name" bindValue="id" (clear)="clearCCList()" #select appendTo="body"
+                      [clearable]="true" [items]="masterModel.ccList" [loading]="masterModel.ccLoading" class="multiple"
+                      (change)="changeCCList($event)"
+                      placeholder="--- {{ (masterModel.ccList!=null && masterModel.ccList.length!=0? 'COMMON.LBL_SELECT':'COMMON.LBL_NO_DATA' ) | translate }} ---"
+                      [(ngModel)]="model.ccIdList" [multiple]="true">
+                      <ng-template ng-option-tmp let-item="item">
+                        <div class="text-wrap"><span>{{item.name}}</span></div>
+                      </ng-template>
+                    </ng-select>
+                  </div>
+                </div>
+              </div>
+              <div class="row marginTop15">
+                <div class="col-sm-3">
+                  <div class="my-input-group">
+                    <label>{{ 'EMAIL_CONFIGURATION.LBL_ADDITIONAL_EMAIL' | translate }}</label>
+                    <input type="text" [(ngModel)]="masterModel.additionalEmailRecipient.email"
+                      placeholder="{{'EMAIL_CONFIGURATION.PH_ADDITIONAL_EMAIL' | translate}}"
+                      [ngClass]="{ 'is-invalid':  !validator.isValid('additionalEmail')}" />
+                  </div>
+                </div>
+                <div class="col-sm-3">
+                  <div class="my-input-group">
+                    <label>{{ 'EMAIL_CONFIGURATION.LBL_ADDITIONAL_RECIPIENT' | translate }}</label>
+                    <ng-select appendTo="body" [items]="masterModel.recipientTypeList"
+                      [(ngModel)]="masterModel.additionalEmailRecipient.recipientId"
+                      [loading]="masterModel.recipientTypeLoading" bindLabel="name" bindValue="id"
+                      placeholder="--- {{ (masterModel.recipientTypeList && masterModel.recipientTypeList.length>0? 'COMMON.LBL_SELECT':'COMMON.LBL_NO_DATA' ) | translate }} ---">
+                      <ng-template ng-option-tmp let-item="item">
+                        <div class="text-wrap"><span>{{item.name}}</span></div>
+                      </ng-template>
+                    </ng-select>
+                  </div>
+                </div>
+                <div class="col-sm-3">
+                  <button class="primary-cta marginTop15" (click)="addAdditionalEmailRecipient()">Add</button>
+                </div>
+              </div>
+              <div class="row marginTop15" *ngIf="model.additionalEmailRecipients.length>0">
+                <div class="col-sm-8">
+                  <div class="table-container">
+                    <table class="pagination-table bordered">
+                      <thead>
+                        <tr>
+                          <th>{{ 'EMAIL_CONFIGURATION.LBL_ADDITIONAL_EMAIL' | translate }}
+                          </th>
+                          <th>{{ 'EMAIL_CONFIGURATION.LBL_ADDITIONAL_RECIPIENT' | translate }}
+                          </th>
+                          <th></th>
+                        </tr>
+
+                      </thead>
+                      <tbody>
+                        <ng-container *ngFor="let item of model.additionalEmailRecipients;  let i = index">
+                          <tr>
+                            <td>{{item.email}}</td>
+                            <td>{{item.recipientType}}</td>
+                            <td>
+                              <button (click)="removeAdditionalEmailRecipient(i)" class="secondary-cta x-small"
+                                style="margin-left:10px">
+                                <i class="fa fa-trash"></i>
+                              </button>
+                            </td>
+
+                          </tr>
+
+                        </ng-container>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="content-container quotation-container">
+          <div class="container-head">
+            <img class="head-icon" src="assets/images/general.png" alt=""> {{
+            'EMAIL_CONFIGURATION.LBL_EMAIL_CONFIGURATION' | translate }}
+          </div>
+          <div class="row formPadding">
+            <div class="col-sm-12">
+              <div class="row marginTop15">
+                <div class="col-sm-3 col-md-3 col-lg-3">
+                  <div class="my-input-group">
+                    <label>{{ 'EMAIL_CONFIGURATION.LBL_RECIPIENT_NAME' | translate }}</label>
+                    <input type="text" [(ngModel)]="model.recipientName" />
+                  </div>
+                </div>
+                <div class="col-sm-3 col-md-3 col-lg-3">
+                  <div class="my-input-group">
+                    <label>{{ 'EMAIL_CONFIGURATION.LBL_NUMBER_OF_REPORTS' | translate }}</label>
+                    <input type="number" min="1" max="3000" [(ngModel)]="model.numberOfReports"
+                      [disabled]="masterModel.disableNoOfReport" />
+                  </div>
+                </div>
+                <div class="col-sm-3 col-md-3 col-lg-3">
+                  <div class="my-input-group">
+                    <label class="required">{{ 'EMAIL_CONFIGURATION.LBL_REPORT_SEND_TYPE' |
+                      translate }}</label>
+                    <ng-select bindLabel="name" bindValue="id" #select appendTo="body" [clearable]="true"
+                      [items]="masterModel.reportSendTypeList" [loading]="masterModel.reportSendTypeLoading"
+                      placeholder="--- {{ (masterModel.reportSendTypeList!=null && masterModel.reportSendTypeList.length!=0? 'COMMON.LBL_SELECT':'COMMON.LBL_NO_DATA' ) | translate }} ---"
+                      [(ngModel)]="model.reportSendTypeId"
+                      [ngClass]="{ 'is-invalid':  !validator.isValid('reportSendTypeId')}">
+                      <ng-template ng-option-tmp let-item="item">
+                        <div class="text-wrap"><span>{{item.name}}</span></div>
+                      </ng-template>
+                    </ng-select>
+                    <div *ngIf="!validator.isValid('reportSendTypeId')" class="invalid-feedback">
+                      <div *ngFor="let error of validator.getErrors('reportSendTypeId')">
+                        {{ error | translate }}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-sm-3 col-md-3 col-lg-3">
+                  <div class="my-input-group">
+                    <label class="required">{{ 'EMAIL_CONFIGURATION.LBL_EMAIL_SUBJECT' | translate
+                      }}</label>
+                    <ng-select bindLabel="name" bindValue="id" #select appendTo="body" [clearable]="true"
+                      [items]="masterModel.emailSubjectList" [loading]="masterModel.emailSubjectLoading"
+                      placeholder="--- {{ (masterModel.emailSubjectList!=null && masterModel.emailSubjectList.length!=0? 'COMMON.LBL_SELECT':'COMMON.LBL_NO_DATA' ) | translate }} ---"
+                      [(ngModel)]="model.emailSubjectId"
+                      [ngClass]="{ 'is-invalid':  !validator.isValid('emailSubjectId')}">
+                      <ng-template ng-option-tmp let-item="item">
+                        <div class="text-wrap"><span>{{item.name}}</span></div>
+                      </ng-template>
+                    </ng-select>
+                    <div *ngIf="!validator.isValid('emailSubjectId')" class="invalid-feedback">
+                      <div *ngFor="let error of validator.getErrors('emailSubjectId')">
+                        {{ error | translate }}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="row marginTop15">
+                <div class="col-sm-3 col-md-3 col-lg-3">
+                  <div class="my-input-group">
+                    <label class="required">{{ 'EMAIL_CONFIGURATION.LBL_REPORT_IN_EMAIL' | translate
+                      }}</label>
+                    <ng-select bindLabel="name" bindValue="id" [disabled]="masterModel.disableReportInEmail" #select
+                      appendTo="body" (clear)="clearReportInEmail()" [clearable]="true"
+                      (change)="changeReportInEmail($event)" [items]="masterModel.reportInEmailList"
+                      [loading]="masterModel.reportInEmailLoading"
+                      placeholder="--- {{ (masterModel.reportInEmailList!=null && masterModel.reportInEmailList.length!=0? 'COMMON.LBL_SELECT':'COMMON.LBL_NO_DATA' ) | translate }} ---"
+                      [(ngModel)]="model.reportInEmailId"
+                      [ngClass]="{ 'is-invalid':  !validator.isValid('reportInEmailId')}">
+                      <ng-template ng-option-tmp let-item="item">
+                        <div class="text-wrap"><span>{{item.name}}</span></div>
+                      </ng-template>
+                    </ng-select>
+                    <div *ngIf="!validator.isValid('reportInEmailId')" class="invalid-feedback">
+                      <div *ngFor="let error of validator.getErrors('reportInEmailId')">
+                        {{ error | translate }}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-sm-3 col-md-3 col-lg-3" *ngIf="masterModel.reportInEmaiBaseOnlLoad">
+                  <div class="my-input-group">
+                    <label>{{ 'EMAIL_CONFIGURATION.LBL_EMAIL_SIZE' | translate }}</label>
+                    <ng-select bindLabel="name" bindValue="id" #select appendTo="body" [clearable]="true"
+                      [items]="masterModel.emailSizeList" [loading]="masterModel.emailSizeLoading"
+                      placeholder="--- {{ (masterModel.emailSizeList!=null && masterModel.emailSizeList.length!=0? 'COMMON.LBL_SELECT':'COMMON.LBL_NO_DATA' ) | translate }} ---"
+                      [(ngModel)]="model.emailSizeId">
+                      <ng-template ng-option-tmp let-item="item">
+                        <div class="text-wrap"><span>{{item.name}}</span></div>
+                      </ng-template>
+                    </ng-select>
+                  </div>
+                </div>
+                <div class="col-sm-3 col-md-3 col-lg-3">
+                  <div class="my-input-group">
+                    <label class="required" for="">{{'EMAIL_CONFIGURATION.LBL_FILE_NAME' |
+                      translate}}</label>
+                    <ng-select appendTo="body" [items]="masterModel.subjectFileNameList"
+                      [loading]="masterModel.subjectFileNameLoading" bindLabel="name" bindValue="id"
+                      placeholder="--- {{ (masterModel.subjectFileNameList && masterModel.subjectFileNameList.length>0? 'COMMON.LBL_SELECT':'COMMON.LBL_NO_DATA' ) | translate }} ---"
+                      [(ngModel)]="model.fileNameId">
+                      <ng-template ng-option-tmp let-item="item">
+                        <div class="text-wrap"><span>{{item.name}}</span></div>
+                      </ng-template>
+                    </ng-select>
+                    <div *ngIf="!validator.isValid('fileNameId')" class="invalid-feedback">
+                      <div *ngFor="let error of validator.getErrors('fileNameId')">
+                        {{ error | translate }}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+
+                <div class="col-sm-3 col-md-3 col-lg-3" *ngIf="model.typeId == _EmailTypeReportSend">
+                  <div class="my-input-group marginTop20">
+                    <div class="styled-checkbox-container">
+                      <input class="styled-checkbox" id="checkbox-isPictureFileInEmail" type="checkbox"
+                        [(ngModel)]="model.isPictureFileInEmail">
+                      <label for="checkbox-isPictureFileInEmail">Report Picture pdf file
+                        <span class="common-tooltip"
+                          data-tooltip="add the report’s picture pdf file in the report email as link. Please configure in FB too.">
+                          <img class="hover" src="assets/images/red-question.png" style="width: 13px;" alt="">
+                        </span>
+                      </label>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+            <div class="col-sm-12">
+              <div class="row form-action-container">
+                <div class="col-sm-12">
+                  <button (click)="reset()" class="category-cta MarginR-20">
+                    <img src="assets/images/reload-new.svg" alt="reload">
+                  </button>
+
+                  <button class="primary-cta MarginR-20" [disabled]="masterModel.saveLoading" (click)="save()">
+                    {{'COMMON.LBL_SAVE' | translate}}
+                    <span *ngIf="masterModel.saveLoading">
+                      <i class="fa fa-refresh fa-spin" aria-hidden="true"></i>
+                    </span>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="loader-overlay" *ngIf="pageLoading">
+          <div class="loader-container">
+            <img src="assets/images/reload.svg" alt="">
+            <span>{{'COMMON.LBL_LOADER' | translate}}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

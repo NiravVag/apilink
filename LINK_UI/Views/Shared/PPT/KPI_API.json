@@ -1,0 +1,4592 @@
+{
+  "Name": "KPI",
+  "Type": "PowerPoint",
+  "Extension": ".PPTX",
+  "StreamType": "application/vnd.openxmlformats-officedocument.presentationml.presentation",
+  // "ModelPath": "C:\\FileModels\\KPI\\KPIs.PPTX",
+  "SourceText": "KPI_GETDATA_BY_CUSTOMER_DATE",
+  "FileNameExt": "KPIs-[CN]-PPT.pptx",
+  "ConnectionStringName": "APIConnection",
+  "Variables": [
+    // Index 0 Gneral - Slide 1 + Slide 3
+    {
+      "Name": "CN",
+      "Type": "S",
+      "IndexSource": 0,
+      "ColumnName": "Customer_Name"
+    },
+    {
+      "Name": "BD",
+      "Type": "S",
+      "IndexSource": 0,
+      "ColumnName": "BeginDate"
+    },
+    {
+      "Name": "ED",
+      "Type": "S",
+      "IndexSource": 0,
+      "ColumnName": "EndDate"
+    },
+    {
+      "Name": "LYBD",
+      "Type": "S",
+      "IndexSource": 0,
+      "ColumnName": "LYBeginDate"
+    },
+    {
+      "Name": "LYED",
+      "Type": "S",
+      "IndexSource": 0,
+      "ColumnName": "LYEndDate"
+    },
+    {
+      "Name": "LYFY",
+      "Type": "S",
+      "IndexSource": 0,
+      "ColumnName": "LastYearFY"
+    },
+    {
+      "Name": "LYYTD",
+      "Type": "S",
+      "IndexSource": 0,
+      "ColumnName": "LastYearYTD"
+    },
+    {
+      "Name": "LYIT",
+      "Type": "S",
+      "IndexSource": 0,
+      "ColumnName": "LastYearItem"
+    },
+    {
+      "Name": "CYIT",
+      "Type": "S",
+      "IndexSource": 0,
+      "ColumnName": "CurrentYearItem"
+    },
+    {
+      "Name": "CY",
+      "Type": "S",
+      "IndexSource": 0,
+      "ColumnName": "CurrentYear"
+    },
+    {
+      "Name": "IFLY",
+      "Type": "S",
+      "IndexSource": 0,
+      "ColumnName": "InspectionFeesLY"
+    },
+    {
+      "Name": "IFLY2",
+      "Type": "S",
+      "IndexSource": 0,
+      "ColumnName": "InspectionFeesLY2"
+    },
+    {
+      "Name": "IFCY",
+      "Type": "S",
+      "IndexSource": 0,
+      "ColumnName": "InspectionFeesCY"
+    },
+    {
+      "Name": "VARI",
+      "Type": "S",
+      "IndexSource": 0,
+      "ColumnName": "VarianceI"
+    },
+    {
+      "Name": "VARIP",
+      "Type": "S",
+      "IndexSource": 0,
+      "ColumnName": "VarianceIP"
+    },
+    {
+      "Name": "NILY",
+      "Type": "S",
+      "IndexSource": 0,
+      "ColumnName": "NbInspectionsLY"
+    },
+    {
+      "Name": "NILY2",
+      "Type": "S",
+      "IndexSource": 0,
+      "ColumnName": "NbInspectionsLY2"
+    },
+    {
+      "Name": "NICY",
+      "Type": "S",
+      "IndexSource": 0,
+      "ColumnName": "NbInspectionsCY"
+    },
+    {
+      "Name": "VARNI",
+      "Type": "S",
+      "IndexSource": 0,
+      "ColumnName": "VarianceIIns"
+    },
+    {
+      "Name": "VARNIP",
+      "Type": "S",
+      "IndexSource": 0,
+      "ColumnName": "VarianceIInsP"
+    },
+    {
+      "Name": "MDLY",
+      "Type": "S",
+      "IndexSource": 0,
+      "ColumnName": "MandaysLY"
+    },
+    {
+      "Name": "MDLY2",
+      "Type": "S",
+      "IndexSource": 0,
+      "ColumnName": "MandaysLY2"
+    },
+    {
+      "Name": "MDCY",
+      "Type": "S",
+      "IndexSource": 0,
+      "ColumnName": "MandaysCY"
+    },
+    {
+      "Name": "VARM",
+      "Type": "S",
+      "IndexSource": 0,
+      "ColumnName": "VarianceIManday"
+    },
+    {
+      "Name": "VARMP",
+      "Type": "S",
+      "IndexSource": 0,
+      "ColumnName": "VarianceIMandayP"
+    },
+    {
+      "Name": "NBRYLY",
+      "Type": "S",
+      "IndexSource": 0,
+      "ColumnName": "NbReportsLY"
+    },
+    {
+      "Name": "NBRYLY2",
+      "Type": "S",
+      "IndexSource": 0,
+      "ColumnName": "NbReportsLY2"
+    },
+    {
+      "Name": "NBRYCY",
+      "Type": "S",
+      "IndexSource": 0,
+      "ColumnName": "NbReportsCY"
+    },
+    {
+      "Name": "VARNOR",
+      "Type": "S",
+      "IndexSource": 0,
+      "ColumnName": "VarianceINoR"
+    },
+    {
+      "Name": "VARNORP",
+      "Type": "S",
+      "IndexSource": 0,
+      "ColumnName": "VarianceINoRP"
+    },
+
+    {
+      "Name": "NBITLY",
+      "Type": "S",
+      "IndexSource": 0,
+      "ColumnName": "NbItemsLY"
+    },
+    {
+      "Name": "NBITLY2",
+      "Type": "S",
+      "IndexSource": 0,
+      "ColumnName": "NbItemsLY2"
+    },
+    {
+      "Name": "NBITCY",
+      "Type": "S",
+      "IndexSource": 0,
+      "ColumnName": "NbItemsCY"
+    },
+    {
+      "Name": "VARNOIT",
+      "Type": "S",
+      "IndexSource": 0,
+      "ColumnName": "VarianceINoItems"
+    },
+    {
+      "Name": "VARNOITP",
+      "Type": "S",
+      "IndexSource": 0,
+      "ColumnName": "VarianceINoItemsP"
+    },
+
+    {
+      "Name": "IQTLY",
+      "Type": "S",
+      "IndexSource": 0,
+      "ColumnName": "InspectedQtyLY"
+    },
+    {
+      "Name": "IQTLY2",
+      "Type": "S",
+      "IndexSource": 0,
+      "ColumnName": "InspectedQtyLY2"
+    },
+    {
+      "Name": "IQTCY",
+      "Type": "S",
+      "IndexSource": 0,
+      "ColumnName": "InspectedQtyCY"
+    },
+    {
+      "Name": "VARIIQ",
+      "Type": "S",
+      "IndexSource": 0,
+      "ColumnName": "VarianceIIQ"
+    },
+    {
+      "Name": "VARIIQP",
+      "Type": "S",
+      "IndexSource": 0,
+      "ColumnName": "VarianceIIQP"
+    },
+    {
+      "Name": "OQTLY",
+      "Type": "S",
+      "IndexSource": 0,
+      "ColumnName": "OrderQtyLY"
+    },
+    {
+      "Name": "OQTLY2",
+      "Type": "S",
+      "IndexSource": 0,
+      "ColumnName": "OrderQtyLY2"
+    },
+    {
+      "Name": "OQTCY",
+      "Type": "S",
+      "IndexSource": 0,
+      "ColumnName": "OrderQtyCY"
+    },
+    {
+      "Name": "VARIOQ",
+      "Type": "S",
+      "IndexSource": 0,
+      "ColumnName": "VarianceIOQ"
+    },
+    {
+      "Name": "VARIOQP",
+      "Type": "S",
+      "IndexSource": 0,
+      "ColumnName": "VarianceIOQP"
+    },
+    {
+      "Name": "NBSULY",
+      "Type": "S",
+      "IndexSource": 0,
+      "ColumnName": "NbSuppliersLY"
+    },
+    {
+      "Name": "NBSULY2",
+      "Type": "S",
+      "IndexSource": 0,
+      "ColumnName": "NbSuppliersLY2"
+    },
+    {
+      "Name": "NBSUCY",
+      "Type": "S",
+      "IndexSource": 0,
+      "ColumnName": "NbSuppliersCY"
+    },
+    {
+      "Name": "NBSUCY",
+      "Type": "S",
+      "IndexSource": 0,
+      "ColumnName": "NbSuppliersCY"
+    },
+    {
+      "Name": "VARSU",
+      "Type": "S",
+      "IndexSource": 0,
+      "ColumnName": "VarianceISU"
+    },
+    {
+      "Name": "VARSUP",
+      "Type": "S",
+      "IndexSource": 0,
+      "ColumnName": "VarianceISUP"
+    },
+    {
+      "Name": "NBFALY",
+      "Type": "S",
+      "IndexSource": 0,
+      "ColumnName": "NbFactoriesLY"
+    },
+    {
+      "Name": "NBFALY2",
+      "Type": "S",
+      "IndexSource": 0,
+      "ColumnName": "NbFactoriesLY2"
+    },
+    {
+      "Name": "NBFACY",
+      "Type": "S",
+      "IndexSource": 0,
+      "ColumnName": "NbFactoriesCY"
+    },
+    {
+      "Name": "VARFA",
+      "Type": "S",
+      "IndexSource": 0,
+      "ColumnName": "VarianceIFU"
+    },
+    {
+      "Name": "VARFAP",
+      "Type": "S",
+      "IndexSource": 0,
+      "ColumnName": "VarianceIFUP"
+    },
+    {
+      "Name": "AFLY",
+      "Type": "S",
+      "IndexSource": 0,
+      "ColumnName": "InspectionFeesLYA"
+    },
+    {
+      "Name": "AFLY2",
+      "Type": "S",
+      "IndexSource": 0,
+      "ColumnName": "InspectionFeesLYA2"
+    },
+    {
+      "Name": "AFCY",
+      "Type": "S",
+      "IndexSource": 0,
+      "ColumnName": "InspectionFeesCYA"
+    },
+    {
+      "Name": "VARA",
+      "Type": "S",
+      "IndexSource": 0,
+      "ColumnName": "VarianceA"
+    },
+    {
+      "Name": "VARAP",
+      "Type": "S",
+      "IndexSource": 0,
+      "ColumnName": "VarianceAP"
+    },
+    {
+      "Name": "TALY",
+      "Type": "S",
+      "IndexSource": 0,
+      "ColumnName": "TechnicalAuditLY"
+    },
+    {
+      "Name": "TALY2",
+      "Type": "S",
+      "IndexSource": 0,
+      "ColumnName": "TechnicalAuditLY2"
+    },
+    {
+      "Name": "TACY",
+      "Type": "S",
+      "IndexSource": 0,
+      "ColumnName": "TechnicalAuditCY"
+    },
+    {
+      "Name": "VARTA",
+      "Type": "S",
+      "IndexSource": 0,
+      "ColumnName": "VarianceATech"
+    },
+    {
+      "Name": "VARTAP",
+      "Type": "S",
+      "IndexSource": 0,
+      "ColumnName": "VarianceATechP"
+    },
+    {
+      "Name": "SALY",
+      "Type": "S",
+      "IndexSource": 0,
+      "ColumnName": "SocialAuditLY"
+    },
+    {
+      "Name": "SALY2",
+      "Type": "S",
+      "IndexSource": 0,
+      "ColumnName": "SocialAuditLY2"
+    },
+    {
+      "Name": "SACY",
+      "Type": "S",
+      "IndexSource": 0,
+      "ColumnName": "SocialAuditCY"
+    },
+    {
+      "Name": "VARSA",
+      "Type": "S",
+      "IndexSource": 0,
+      "ColumnName": "VarianceASocial"
+    },
+    {
+      "Name": "VARSAP",
+      "Type": "S",
+      "IndexSource": 0,
+      "ColumnName": "VarianceASocialP"
+    },
+    {
+      "Name": "EALY",
+      "Type": "S",
+      "IndexSource": 0,
+      "ColumnName": "EnvironnmentAuditLY"
+    },
+    {
+      "Name": "EALY2",
+      "Type": "S",
+      "IndexSource": 0,
+      "ColumnName": "EnvironnmentAuditLY2"
+    },
+    {
+      "Name": "EACY",
+      "Type": "S",
+      "IndexSource": 0,
+      "ColumnName": "EnvironnmentAuditCY"
+    },
+    {
+      "Name": "VAREA",
+      "Type": "S",
+      "IndexSource": 0,
+      "ColumnName": "VarianceAEnv"
+    },
+    {
+      "Name": "VAREAP",
+      "Type": "S",
+      "IndexSource": 0,
+      "ColumnName": "VarianceAEnvP"
+    },
+    {
+      "Name": "TOTLY",
+      "Type": "S",
+      "IndexSource": 0,
+      "ColumnName": "TotalLY"
+    },
+    {
+      "Name": "TOTLY2",
+      "Type": "S",
+      "IndexSource": 0,
+      "ColumnName": "TotalLY2"
+    },
+    {
+      "Name": "TOTCY",
+      "Type": "S",
+      "IndexSource": 0,
+      "ColumnName": "TotalCY"
+    },
+    {
+      "Name": "TOTVA",
+      "Type": "S",
+      "IndexSource": 0,
+      "ColumnName": "TotalVariance"
+    },
+    {
+      "Name": "CAT1",
+      "Type": "S",
+      "IndexSource": 0,
+      "ColumnName": "CatName1"
+    },
+    {
+      "Name": "CAT2",
+      "Type": "S",
+      "IndexSource": 0,
+      "ColumnName": "CatName2"
+    },
+    {
+      "Name": "CAT3",
+      "Type": "S",
+      "IndexSource": 0,
+      "ColumnName": "CatName3"
+    },
+    {
+      "Name": "DEP1",
+      "Type": "S",
+      "IndexSource": 0,
+      "ColumnName": "DepName1",
+      "IsHorizontalCollection": false,
+      "GroupField": false,
+      "MaxRowsNumber": null,
+      "IsFirstRowBoldInGroup": false,
+      "UsedForFirstRowGroup": false,
+      "IndexGroup": null
+    },
+    {
+      "Name": "DEP2",
+      "Type": "S",
+      "IndexSource": 0,
+      "ColumnName": "DepName2",
+      "IsHorizontalCollection": false,
+      "GroupField": false,
+      "MaxRowsNumber": null,
+      "IsFirstRowBoldInGroup": false,
+      "UsedForFirstRowGroup": false,
+      "IndexGroup": null
+    },
+    {
+      "Name": "DEP3",
+      "Type": "S",
+      "IndexSource": 0,
+      "ColumnName": "DepName3",
+      "IsHorizontalCollection": false,
+      "GroupField": false,
+      "MaxRowsNumber": null,
+      "IsFirstRowBoldInGroup": false,
+      "UsedForFirstRowGroup": false,
+      "IndexGroup": null
+    },
+    {
+      "Name": "BYDEPT",
+      "Type": "S",
+      "IndexSource": 0,
+      "ColumnName": "byDepartment",
+      "IsHorizontalCollection": false,
+      "GroupField": false,
+      "MaxRowsNumber": null,
+      "IsFirstRowBoldInGroup": false,
+      "UsedForFirstRowGroup": false,
+      "IndexGroup": null
+    },
+    {
+      "Name": "BYFACT",
+      "Type": "S",
+      "IndexSource": 0,
+      "ColumnName": "byFactory",
+      "IsHorizontalCollection": false,
+      "GroupField": false,
+      "MaxRowsNumber": null,
+      "IsFirstRowBoldInGroup": false,
+      "UsedForFirstRowGroup": false,
+      "IndexGroup": null
+    },
+    {
+      "Name": "BYSUPP",
+      "Type": "S",
+      "IndexSource": 0,
+      "ColumnName": "bySupplier",
+      "IsHorizontalCollection": false,
+      "GroupField": false,
+      "MaxRowsNumber": null,
+      "IsFirstRowBoldInGroup": false,
+      "UsedForFirstRowGroup": false,
+      "IndexGroup": null
+    },
+    {
+      "Name": "AEDOJAR",
+      "Type": "S",
+      "IndexSource": 0,
+      "ColumnName": "JanNbReps",
+      "IsHorizontalCollection": false,
+      "GroupField": false,
+      "MaxRowsNumber": null,
+      "IsFirstRowBoldInGroup": false,
+      "UsedForFirstRowGroup": false,
+      "IndexGroup": null
+    },
+    {
+      "Name": "AEDOFER",
+      "Type": "S",
+      "IndexSource": 0,
+      "ColumnName": "FebNbReps",
+      "IsHorizontalCollection": false,
+      "GroupField": false,
+      "MaxRowsNumber": null,
+      "IsFirstRowBoldInGroup": false,
+      "UsedForFirstRowGroup": false,
+      "IndexGroup": null
+    },
+    {
+      "Name": "AEDOMAR",
+      "Type": "S",
+      "IndexSource": 0,
+      "ColumnName": "MarNbReps",
+      "IsHorizontalCollection": false,
+      "GroupField": false,
+      "MaxRowsNumber": null,
+      "IsFirstRowBoldInGroup": false,
+      "UsedForFirstRowGroup": false,
+      "IndexGroup": null
+    },
+    {
+      "Name": "AEDOAPR",
+      "Type": "S",
+      "IndexSource": 0,
+      "ColumnName": "ApNbReps",
+      "IsHorizontalCollection": false,
+      "GroupField": false,
+      "MaxRowsNumber": null,
+      "IsFirstRowBoldInGroup": false,
+      "UsedForFirstRowGroup": false,
+      "IndexGroup": null
+    },
+    {
+      "Name": "AEDOMAYR",
+      "Type": "S",
+      "IndexSource": 0,
+      "ColumnName": "MayNbReps",
+      "IsHorizontalCollection": false,
+      "GroupField": false,
+      "MaxRowsNumber": null,
+      "IsFirstRowBoldInGroup": false,
+      "UsedForFirstRowGroup": false,
+      "IndexGroup": null
+    },
+    {
+      "Name": "AEDOJUNR",
+      "Type": "S",
+      "IndexSource": 0,
+      "ColumnName": "JuiNbReps",
+      "IsHorizontalCollection": false,
+      "GroupField": false,
+      "MaxRowsNumber": null,
+      "IsFirstRowBoldInGroup": false,
+      "UsedForFirstRowGroup": false,
+      "IndexGroup": null
+    },
+    {
+      "Name": "AEDOJULR",
+      "Type": "S",
+      "IndexSource": 0,
+      "ColumnName": "JulNbReps",
+      "IsHorizontalCollection": false,
+      "GroupField": false,
+      "MaxRowsNumber": null,
+      "IsFirstRowBoldInGroup": false,
+      "UsedForFirstRowGroup": false,
+      "IndexGroup": null
+    },
+    {
+      "Name": "AEDOAUR",
+      "Type": "S",
+      "IndexSource": 0,
+      "ColumnName": "AugNbReps",
+      "IsHorizontalCollection": false,
+      "GroupField": false,
+      "MaxRowsNumber": null,
+      "IsFirstRowBoldInGroup": false,
+      "UsedForFirstRowGroup": false,
+      "IndexGroup": null
+    },
+    {
+      "Name": "AEDOSER",
+      "Type": "S",
+      "IndexSource": 0,
+      "ColumnName": "SepNbReps",
+      "IsHorizontalCollection": false,
+      "GroupField": false,
+      "MaxRowsNumber": null,
+      "IsFirstRowBoldInGroup": false,
+      "UsedForFirstRowGroup": false,
+      "IndexGroup": null
+    },
+    {
+      "Name": "AEDOOCR",
+      "Type": "S",
+      "IndexSource": 0,
+      "ColumnName": "OctNbReps",
+      "IsHorizontalCollection": false,
+      "GroupField": false,
+      "MaxRowsNumber": null,
+      "IsFirstRowBoldInGroup": false,
+      "UsedForFirstRowGroup": false,
+      "IndexGroup": null
+    },
+    {
+      "Name": "AEDONOR",
+      "Type": "S",
+      "IndexSource": 0,
+      "ColumnName": "NovNbReps",
+      "IsHorizontalCollection": false,
+      "GroupField": false,
+      "MaxRowsNumber": null,
+      "IsFirstRowBoldInGroup": false,
+      "UsedForFirstRowGroup": false,
+      "IndexGroup": null
+    },
+    {
+      "Name": "AEDODER",
+      "Type": "S",
+      "IndexSource": 0,
+      "ColumnName": "DecNbReps",
+      "IsHorizontalCollection": false,
+      "GroupField": false,
+      "MaxRowsNumber": null,
+      "IsFirstRowBoldInGroup": false,
+      "UsedForFirstRowGroup": false,
+      "IndexGroup": null
+    },
+    {
+      "Name": "AEDOSUM",
+      "Type": "S",
+      "IndexSource": 0,
+      "ColumnName": "TotalNbReps",
+      "IsHorizontalCollection": false,
+      "GroupField": false,
+      "MaxRowsNumber": null,
+      "IsFirstRowBoldInGroup": false,
+      "UsedForFirstRowGroup": false,
+      "IndexGroup": null
+    },
+    {
+      "Name": "AEDOJAR3",
+      "Type": "S",
+      "IndexSource": 0,
+      "ColumnName": "JanNbReps3",
+      "IsHorizontalCollection": false,
+      "GroupField": false,
+      "MaxRowsNumber": null,
+      "IsFirstRowBoldInGroup": false,
+      "UsedForFirstRowGroup": false,
+      "IndexGroup": null
+    },
+    {
+      "Name": "AEDOFER3",
+      "Type": "S",
+      "IndexSource": 0,
+      "ColumnName": "JanNbReps3",
+      "IsHorizontalCollection": false,
+      "GroupField": false,
+      "MaxRowsNumber": null,
+      "IsFirstRowBoldInGroup": false,
+      "UsedForFirstRowGroup": false,
+      "IndexGroup": null
+    },
+    {
+      "Name": "AEDOFER3",
+      "Type": "S",
+      "IndexSource": 0,
+      "ColumnName": "FebNbReps3",
+      "IsHorizontalCollection": false,
+      "GroupField": false,
+      "MaxRowsNumber": null,
+      "IsFirstRowBoldInGroup": false,
+      "UsedForFirstRowGroup": false,
+      "IndexGroup": null
+    },
+    {
+      "Name": "AEDOMAR3",
+      "Type": "S",
+      "IndexSource": 0,
+      "ColumnName": "MarNbReps3",
+      "IsHorizontalCollection": false,
+      "GroupField": false,
+      "MaxRowsNumber": null,
+      "IsFirstRowBoldInGroup": false,
+      "UsedForFirstRowGroup": false,
+      "IndexGroup": null
+    },
+    {
+      "Name": "AEDOAPR3",
+      "Type": "S",
+      "IndexSource": 0,
+      "ColumnName": "ApNbReps3",
+      "IsHorizontalCollection": false,
+      "GroupField": false,
+      "MaxRowsNumber": null,
+      "IsFirstRowBoldInGroup": false,
+      "UsedForFirstRowGroup": false,
+      "IndexGroup": null
+    },
+    {
+      "Name": "AEDOMAYR3",
+      "Type": "S",
+      "IndexSource": 0,
+      "ColumnName": "MayNbReps3",
+      "IsHorizontalCollection": false,
+      "GroupField": false,
+      "MaxRowsNumber": null,
+      "IsFirstRowBoldInGroup": false,
+      "UsedForFirstRowGroup": false,
+      "IndexGroup": null
+    },
+    {
+      "Name": "AEDOJUNR3",
+      "Type": "S",
+      "IndexSource": 0,
+      "ColumnName": "JuiNbReps3",
+      "IsHorizontalCollection": false,
+      "GroupField": false,
+      "MaxRowsNumber": null,
+      "IsFirstRowBoldInGroup": false,
+      "UsedForFirstRowGroup": false,
+      "IndexGroup": null
+    },
+    {
+      "Name": "AEDOJULR3",
+      "Type": "S",
+      "IndexSource": 0,
+      "ColumnName": "JulNbReps3",
+      "IsHorizontalCollection": false,
+      "GroupField": false,
+      "MaxRowsNumber": null,
+      "IsFirstRowBoldInGroup": false,
+      "UsedForFirstRowGroup": false,
+      "IndexGroup": null
+    },
+    {
+      "Name": "AEDOAUR3",
+      "Type": "S",
+      "IndexSource": 0,
+      "ColumnName": "AugNbReps3",
+      "IsHorizontalCollection": false,
+      "GroupField": false,
+      "MaxRowsNumber": null,
+      "IsFirstRowBoldInGroup": false,
+      "UsedForFirstRowGroup": false,
+      "IndexGroup": null
+    },
+    {
+      "Name": "AEDOSER3",
+      "Type": "S",
+      "IndexSource": 0,
+      "ColumnName": "SepNbReps3",
+      "IsHorizontalCollection": false,
+      "GroupField": false,
+      "MaxRowsNumber": null,
+      "IsFirstRowBoldInGroup": false,
+      "UsedForFirstRowGroup": false,
+      "IndexGroup": null
+    },
+    {
+      "Name": "AEDOOCR3",
+      "Type": "S",
+      "IndexSource": 0,
+      "ColumnName": "OctNbReps3",
+      "IsHorizontalCollection": false,
+      "GroupField": false,
+      "MaxRowsNumber": null,
+      "IsFirstRowBoldInGroup": false,
+      "UsedForFirstRowGroup": false,
+      "IndexGroup": null
+    },
+    {
+      "Name": "AEDONOR3",
+      "Type": "S",
+      "IndexSource": 0,
+      "ColumnName": "NovNbReps3",
+      "IsHorizontalCollection": false,
+      "GroupField": false,
+      "MaxRowsNumber": null,
+      "IsFirstRowBoldInGroup": false,
+      "UsedForFirstRowGroup": false,
+      "IndexGroup": null
+    },
+    {
+      "Name": "AEDODER3",
+      "Type": "S",
+      "IndexSource": 0,
+      "ColumnName": "DecNbReps3",
+      "IsHorizontalCollection": false,
+      "GroupField": false,
+      "MaxRowsNumber": null,
+      "IsFirstRowBoldInGroup": false,
+      "UsedForFirstRowGroup": false,
+      "IndexGroup": null
+    },
+    {
+      "Name": "AEDOJAR5",
+      "Type": "S",
+      "IndexSource": 0,
+      "ColumnName": "JanNbReps5",
+      "IsHorizontalCollection": false,
+      "GroupField": false,
+      "MaxRowsNumber": null,
+      "IsFirstRowBoldInGroup": false,
+      "UsedForFirstRowGroup": false,
+      "IndexGroup": null
+    },
+    {
+      "Name": "AEDOFER5",
+      "Type": "S",
+      "IndexSource": 0,
+      "ColumnName": "JanNbReps5",
+      "IsHorizontalCollection": false,
+      "GroupField": false,
+      "MaxRowsNumber": null,
+      "IsFirstRowBoldInGroup": false,
+      "UsedForFirstRowGroup": false,
+      "IndexGroup": null
+    },
+    {
+      "Name": "AEDOFER5",
+      "Type": "S",
+      "IndexSource": 0,
+      "ColumnName": "FebNbReps5",
+      "IsHorizontalCollection": false,
+      "GroupField": false,
+      "MaxRowsNumber": null,
+      "IsFirstRowBoldInGroup": false,
+      "UsedForFirstRowGroup": false,
+      "IndexGroup": null
+    },
+    {
+      "Name": "AEDOMAR5",
+      "Type": "S",
+      "IndexSource": 0,
+      "ColumnName": "MarNbReps5",
+      "IsHorizontalCollection": false,
+      "GroupField": false,
+      "MaxRowsNumber": null,
+      "IsFirstRowBoldInGroup": false,
+      "UsedForFirstRowGroup": false,
+      "IndexGroup": null
+    },
+    {
+      "Name": "AEDOAPR5",
+      "Type": "S",
+      "IndexSource": 0,
+      "ColumnName": "ApNbReps5",
+      "IsHorizontalCollection": false,
+      "GroupField": false,
+      "MaxRowsNumber": null,
+      "IsFirstRowBoldInGroup": false,
+      "UsedForFirstRowGroup": false,
+      "IndexGroup": null
+    },
+    {
+      "Name": "AEDOMAYR5",
+      "Type": "S",
+      "IndexSource": 0,
+      "ColumnName": "MayNbReps5",
+      "IsHorizontalCollection": false,
+      "GroupField": false,
+      "MaxRowsNumber": null,
+      "IsFirstRowBoldInGroup": false,
+      "UsedForFirstRowGroup": false,
+      "IndexGroup": null
+    },
+    {
+      "Name": "AEDOJUNR5",
+      "Type": "S",
+      "IndexSource": 0,
+      "ColumnName": "JuiNbReps5",
+      "IsHorizontalCollection": false,
+      "GroupField": false,
+      "MaxRowsNumber": null,
+      "IsFirstRowBoldInGroup": false,
+      "UsedForFirstRowGroup": false,
+      "IndexGroup": null
+    },
+    {
+      "Name": "AEDOJULR5",
+      "Type": "S",
+      "IndexSource": 0,
+      "ColumnName": "JulNbReps5",
+      "IsHorizontalCollection": false,
+      "GroupField": false,
+      "MaxRowsNumber": null,
+      "IsFirstRowBoldInGroup": false,
+      "UsedForFirstRowGroup": false,
+      "IndexGroup": null
+    },
+    {
+      "Name": "AEDOAUR5",
+      "Type": "S",
+      "IndexSource": 0,
+      "ColumnName": "AugNbReps5",
+      "IsHorizontalCollection": false,
+      "GroupField": false,
+      "MaxRowsNumber": null,
+      "IsFirstRowBoldInGroup": false,
+      "UsedForFirstRowGroup": false,
+      "IndexGroup": null
+    },
+    {
+      "Name": "AEDOSER5",
+      "Type": "S",
+      "IndexSource": 0,
+      "ColumnName": "SepNbReps5",
+      "IsHorizontalCollection": false,
+      "GroupField": false,
+      "MaxRowsNumber": null,
+      "IsFirstRowBoldInGroup": false,
+      "UsedForFirstRowGroup": false,
+      "IndexGroup": null
+    },
+    {
+      "Name": "AEDOOCR5",
+      "Type": "S",
+      "IndexSource": 0,
+      "ColumnName": "OctNbReps5",
+      "IsHorizontalCollection": false,
+      "GroupField": false,
+      "MaxRowsNumber": null,
+      "IsFirstRowBoldInGroup": false,
+      "UsedForFirstRowGroup": false,
+      "IndexGroup": null
+    },
+    {
+      "Name": "AEDONOR5",
+      "Type": "S",
+      "IndexSource": 0,
+      "ColumnName": "NovNbReps5",
+      "IsHorizontalCollection": false,
+      "GroupField": false,
+      "MaxRowsNumber": null,
+      "IsFirstRowBoldInGroup": false,
+      "UsedForFirstRowGroup": false,
+      "IndexGroup": null
+    },
+    {
+      "Name": "AEDODER5",
+      "Type": "S",
+      "IndexSource": 0,
+      "ColumnName": "DecNbReps5",
+      "IsHorizontalCollection": false,
+      "GroupField": false,
+      "MaxRowsNumber": null,
+      "IsFirstRowBoldInGroup": false,
+      "UsedForFirstRowGroup": false,
+      "IndexGroup": null
+    },
+    // Index 1 -  Copperation start - slide 2
+    {
+      "Name": "CS",
+      "Type": "LIST",
+      "IndexSource": 1,
+      "ColumnName": null,
+      "IsHorizontalCollection": false,
+      "GroupField": false,
+      "MaxRowsNumber": null,
+      "IsFirstRowBoldInGroup": false,
+      "UsedForFirstRowGroup": false,
+      "IndexGroup": null,
+      "Variables": [
+        {
+          "Name": "CTR",
+          "Type": "S",
+          "IndexSource": 1,
+          "ColumnName": "Country_Name",
+          "IsHorizontalCollection": false,
+          "GroupField": false,
+          "MaxRowsNumber": null,
+          "IsFirstRowBoldInGroup": false,
+          "UsedForFirstRowGroup": false,
+          "IndexGroup": null
+        },
+        {
+          "Name": "MY",
+          "Type": "S",
+          "IndexSource": 1,
+          "ColumnName": "MonthYEAR",
+          "IsHorizontalCollection": false,
+          "GroupField": false,
+          "MaxRowsNumber": null,
+          "IsFirstRowBoldInGroup": false,
+          "UsedForFirstRowGroup": false,
+          "IndexGroup": null
+        }
+      ]
+    },
+
+    // Index 2 -Inspections by country  - Slide 4 - Last Year
+
+    {
+      "Name": "IBCLY",
+      "Type": "LIST",
+      "IndexSource": 2,
+      "ColumnName": null,
+      "IsHorizontalCollection": false,
+      "GroupField": false,
+      "MaxRowsNumber": null,
+      "IsFirstRowBoldInGroup": false,
+      "UsedForFirstRowGroup": false,
+      "IndexGroup": null,
+      "Variables": [
+        {
+          "Name": "IBCLYCN",
+          "Type": "S",
+          "IndexSource": 2,
+          "ColumnName": "Country_Name",
+          "IsHorizontalCollection": false,
+          "GroupField": false,
+          "MaxRowsNumber": null,
+          "IsFirstRowBoldInGroup": false,
+          "UsedForFirstRowGroup": false,
+          "IndexGroup": null
+        },
+        {
+          "Name": "IBCLYNF",
+          "Type": "S",
+          "IndexSource": 2,
+          "ColumnName": "NbFactories",
+          "IsHorizontalCollection": false,
+          "GroupField": false,
+          "MaxRowsNumber": null,
+          "IsFirstRowBoldInGroup": false,
+          "UsedForFirstRowGroup": false,
+          "IndexGroup": null
+        },
+        {
+          "Name": "IBCLYNIN",
+          "Type": "S",
+          "IndexSource": 2,
+          "ColumnName": "NbInspections",
+          "IsHorizontalCollection": false,
+          "GroupField": false,
+          "MaxRowsNumber": null,
+          "IsFirstRowBoldInGroup": false,
+          "UsedForFirstRowGroup": false,
+          "IndexGroup": null
+        },
+        {
+          "Name": "IBCLYNR",
+          "Type": "S",
+          "IndexSource": 2,
+          "ColumnName": "NbReports",
+          "IsHorizontalCollection": false,
+          "GroupField": false,
+          "MaxRowsNumber": null,
+          "IsFirstRowBoldInGroup": false,
+          "UsedForFirstRowGroup": false,
+          "IndexGroup": null
+        },
+        {
+          "Name": "IBCLYNIT",
+          "Type": "S",
+          "IndexSource": 2,
+          "ColumnName": "nbItems",
+          "IsHorizontalCollection": false,
+          "GroupField": false,
+          "MaxRowsNumber": null,
+          "IsFirstRowBoldInGroup": false,
+          "UsedForFirstRowGroup": false,
+          "IndexGroup": null
+        },
+        {
+          "Name": "IBCLYMD",
+          "Type": "S",
+          "IndexSource": 2,
+          "ColumnName": "NbMandays",
+          "IsHorizontalCollection": false,
+          "GroupField": false,
+          "MaxRowsNumber": null,
+          "IsFirstRowBoldInGroup": false,
+          "UsedForFirstRowGroup": false,
+          "IndexGroup": null
+        },
+        {
+          "Name": "IBCLYPMD",
+          "Type": "S",
+          "IndexSource": 2,
+          "ColumnName": "PMandays",
+          "IsHorizontalCollection": false,
+          "GroupField": false,
+          "MaxRowsNumber": null,
+          "IsFirstRowBoldInGroup": false,
+          "UsedForFirstRowGroup": false,
+          "IndexGroup": null
+        }
+      ]
+    },
+
+    // Index 3 - Inspections by country  - Slide 4 -Current Year
+    {
+      "Name": "IBCCY",
+      "Type": "LIST",
+      "IndexSource": 3,
+      "ColumnName": null,
+      "IsHorizontalCollection": false,
+      "GroupField": false,
+      "MaxRowsNumber": null,
+      "IsFirstRowBoldInGroup": false,
+      "UsedForFirstRowGroup": false,
+      "IndexGroup": null,
+      "Variables": [
+        {
+          "Name": "IBCCYCN",
+          "Type": "S",
+          "IndexSource": 3,
+          "ColumnName": "Country_Name",
+          "IsHorizontalCollection": false,
+          "GroupField": false,
+          "MaxRowsNumber": null,
+          "IsFirstRowBoldInGroup": false,
+          "UsedForFirstRowGroup": false,
+          "IndexGroup": null
+        },
+        {
+          "Name": "IBCCYNF",
+          "Type": "S",
+          "IndexSource": 3,
+          "ColumnName": "NbFactories",
+          "IsHorizontalCollection": false,
+          "GroupField": false,
+          "MaxRowsNumber": null,
+          "IsFirstRowBoldInGroup": false,
+          "UsedForFirstRowGroup": false,
+          "IndexGroup": null
+        },
+        {
+          "Name": "IBCCYNIN",
+          "Type": "S",
+          "IndexSource": 3,
+          "ColumnName": "NbInspections",
+          "IsHorizontalCollection": false,
+          "GroupField": false,
+          "MaxRowsNumber": null,
+          "IsFirstRowBoldInGroup": false,
+          "UsedForFirstRowGroup": false,
+          "IndexGroup": null
+        },
+        {
+          "Name": "IBCCYNR",
+          "Type": "S",
+          "IndexSource": 3,
+          "ColumnName": "NbReports",
+          "IsHorizontalCollection": false,
+          "GroupField": false,
+          "MaxRowsNumber": null,
+          "IsFirstRowBoldInGroup": false,
+          "UsedForFirstRowGroup": false,
+          "IndexGroup": null
+        },
+        {
+          "Name": "IBCCYNIT",
+          "Type": "S",
+          "IndexSource": 3,
+          "ColumnName": "nbItems",
+          "IsHorizontalCollection": false,
+          "GroupField": false,
+          "MaxRowsNumber": null,
+          "IsFirstRowBoldInGroup": false,
+          "UsedForFirstRowGroup": false,
+          "IndexGroup": null
+        },
+        {
+          "Name": "IBCCYMD",
+          "Type": "S",
+          "IndexSource": 3,
+          "ColumnName": "NbMandays",
+          "IsHorizontalCollection": false,
+          "GroupField": false,
+          "MaxRowsNumber": null,
+          "IsFirstRowBoldInGroup": false,
+          "UsedForFirstRowGroup": false,
+          "IndexGroup": null
+        },
+        {
+          "Name": "IBCCYPMD",
+          "Type": "S",
+          "IndexSource": 3,
+          "ColumnName": "PMandays",
+          "IsHorizontalCollection": false,
+          "GroupField": false,
+          "MaxRowsNumber": null,
+          "IsFirstRowBoldInGroup": false,
+          "UsedForFirstRowGroup": false,
+          "IndexGroup": null
+        }
+      ]
+    },
+
+    // Index 4 - Inspections by type - slide 7 - Last Year
+    {
+      "Name": "ITLY",
+      "Type": "LIST",
+      "IndexSource": 4,
+      "ColumnName": null,
+      "IsHorizontalCollection": false,
+      "GroupField": false,
+      "MaxRowsNumber": null,
+      "IsFirstRowBoldInGroup": false,
+      "UsedForFirstRowGroup": false,
+      "IndexGroup": null,
+      "Variables": [
+        {
+          "Name": "ITCNLY",
+          "Type": "S",
+          "IndexSource": 4,
+          "ColumnName": "Country_Name",
+          "IsHorizontalCollection": false,
+          "GroupField": false,
+          "MaxRowsNumber": null,
+          "IsFirstRowBoldInGroup": false,
+          "UsedForFirstRowGroup": false,
+          "IndexGroup": null
+        },
+        {
+          "Name": "ITILY",
+          "Type": "S",
+          "IndexSource": 4,
+          "ColumnName": "Inspection",
+          "IsHorizontalCollection": false,
+          "GroupField": false,
+          "MaxRowsNumber": null,
+          "IsFirstRowBoldInGroup": false,
+          "UsedForFirstRowGroup": false,
+          "IndexGroup": null
+        },
+        {
+          "Name": "ITSPLY",
+          "Type": "S",
+          "IndexSource": 4,
+          "ColumnName": "SamplePicking",
+          "IsHorizontalCollection": false,
+          "GroupField": false,
+          "MaxRowsNumber": null,
+          "IsFirstRowBoldInGroup": false,
+          "UsedForFirstRowGroup": false,
+          "IndexGroup": null
+        },
+        {
+          "Name": "ITDPLY",
+          "Type": "S",
+          "IndexSource": 4,
+          "ColumnName": "DUPRO",
+          "IsHorizontalCollection": false,
+          "GroupField": false,
+          "MaxRowsNumber": null,
+          "IsFirstRowBoldInGroup": false,
+          "UsedForFirstRowGroup": false,
+          "IndexGroup": null
+        },
+        {
+          "Name": "ITFRLY",
+          "Type": "S",
+          "IndexSource": 4,
+          "ColumnName": "FinalRandom",
+          "IsHorizontalCollection": false,
+          "GroupField": false,
+          "MaxRowsNumber": null,
+          "IsFirstRowBoldInGroup": false,
+          "UsedForFirstRowGroup": false,
+          "IndexGroup": null
+        },
+        {
+          "Name": "ITRELY",
+          "Type": "S",
+          "IndexSource": 4,
+          "ColumnName": "Reinspections",
+          "IsHorizontalCollection": false,
+          "GroupField": false,
+          "MaxRowsNumber": null,
+          "IsFirstRowBoldInGroup": false,
+          "UsedForFirstRowGroup": false,
+          "IndexGroup": null
+        },
+        {
+          "Name": "ITCLLY",
+          "Type": "S",
+          "IndexSource": 4,
+          "ColumnName": "ContainerLoadingSupervisions",
+          "IsHorizontalCollection": false,
+          "GroupField": false,
+          "MaxRowsNumber": null,
+          "IsFirstRowBoldInGroup": false,
+          "UsedForFirstRowGroup": false,
+          "IndexGroup": null
+        },
+        {
+          "Name": "IT100LY",
+          "Type": "S",
+          "IndexSource": 4,
+          "ColumnName": "Inspections100",
+          "IsHorizontalCollection": false,
+          "GroupField": false,
+          "MaxRowsNumber": null,
+          "IsFirstRowBoldInGroup": false,
+          "UsedForFirstRowGroup": false,
+          "IndexGroup": null
+        },
+        {
+          "Name": "ITOTLY",
+          "Type": "S",
+          "IndexSource": 4,
+          "ColumnName": "Others",
+          "IsHorizontalCollection": false,
+          "GroupField": false,
+          "MaxRowsNumber": null,
+          "IsFirstRowBoldInGroup": false,
+          "UsedForFirstRowGroup": false,
+          "IndexGroup": null
+        }
+      ]
+    },
+
+    // Index 5 - Inspections by type - slide 7 - Current Year
+    {
+      "Name": "ITCY",
+      "Type": "LIST",
+      "IndexSource": 5,
+      "ColumnName": null,
+      "IsHorizontalCollection": false,
+      "GroupField": false,
+      "MaxRowsNumber": null,
+      "IsFirstRowBoldInGroup": false,
+      "UsedForFirstRowGroup": false,
+      "IndexGroup": null,
+      "Variables": [
+        {
+          "Name": "ITCNCY",
+          "Type": "S",
+          "IndexSource": 5,
+          "ColumnName": "Country_Name",
+          "IsHorizontalCollection": false,
+          "GroupField": false,
+          "MaxRowsNumber": null,
+          "IsFirstRowBoldInGroup": false,
+          "UsedForFirstRowGroup": false,
+          "IndexGroup": null
+        },
+        {
+          "Name": "ITICY",
+          "Type": "S",
+          "IndexSource": 5,
+          "ColumnName": "Inspection",
+          "IsHorizontalCollection": false,
+          "GroupField": false,
+          "MaxRowsNumber": null,
+          "IsFirstRowBoldInGroup": false,
+          "UsedForFirstRowGroup": false,
+          "IndexGroup": null
+        },
+        {
+          "Name": "ITSPCY",
+          "Type": "S",
+          "IndexSource": 5,
+          "ColumnName": "SamplePicking",
+          "IsHorizontalCollection": false,
+          "GroupField": false,
+          "MaxRowsNumber": null,
+          "IsFirstRowBoldInGroup": false,
+          "UsedForFirstRowGroup": false,
+          "IndexGroup": null
+        },
+        {
+          "Name": "ITDPCY",
+          "Type": "S",
+          "IndexSource": 5,
+          "ColumnName": "DUPRO",
+          "IsHorizontalCollection": false,
+          "GroupField": false,
+          "MaxRowsNumber": null,
+          "IsFirstRowBoldInGroup": false,
+          "UsedForFirstRowGroup": false,
+          "IndexGroup": null
+        },
+        {
+          "Name": "ITFRCY",
+          "Type": "S",
+          "IndexSource": 5,
+          "ColumnName": "FinalRandom",
+          "IsHorizontalCollection": false,
+          "GroupField": false,
+          "MaxRowsNumber": null,
+          "IsFirstRowBoldInGroup": false,
+          "UsedForFirstRowGroup": false,
+          "IndexGroup": null
+        },
+        {
+          "Name": "ITRECY",
+          "Type": "S",
+          "IndexSource": 5,
+          "ColumnName": "Reinspections",
+          "IsHorizontalCollection": false,
+          "GroupField": false,
+          "MaxRowsNumber": null,
+          "IsFirstRowBoldInGroup": false,
+          "UsedForFirstRowGroup": false,
+          "IndexGroup": null
+        },
+        {
+          "Name": "ITCLCY",
+          "Type": "S",
+          "IndexSource": 5,
+          "ColumnName": "ContainerLoadingSupervisions",
+          "IsHorizontalCollection": false,
+          "GroupField": false,
+          "MaxRowsNumber": null,
+          "IsFirstRowBoldInGroup": false,
+          "UsedForFirstRowGroup": false,
+          "IndexGroup": null
+        },
+        {
+          "Name": "IT100CY",
+          "Type": "S",
+          "IndexSource": 5,
+          "ColumnName": "Inspections100",
+          "IsHorizontalCollection": false,
+          "GroupField": false,
+          "MaxRowsNumber": null,
+          "IsFirstRowBoldInGroup": false,
+          "UsedForFirstRowGroup": false,
+          "IndexGroup": null
+        },
+        {
+          "Name": "ITOTCY",
+          "Type": "S",
+          "IndexSource": 5,
+          "ColumnName": "Others",
+          "IsHorizontalCollection": false,
+          "GroupField": false,
+          "MaxRowsNumber": null,
+          "IsFirstRowBoldInGroup": false,
+          "UsedForFirstRowGroup": false,
+          "IndexGroup": null
+        }
+      ]
+    },
+
+    // Index 6 - Inspections by category - Slide 8
+    {
+      "Name": "IBCA",
+      "Type": "LIST",
+      "IndexSource": 6,
+      "ColumnName": null,
+      "IsHorizontalCollection": false,
+      "GroupField": false,
+      "MaxRowsNumber": null,
+      "IsFirstRowBoldInGroup": false,
+      "UsedForFirstRowGroup": false,
+      "IndexGroup": null,
+      "Variables": [
+        {
+          "Name": "ICNAME",
+          "Type": "S",
+          "IndexSource": 6,
+          "ColumnName": "CatgeoryName",
+          "IsHorizontalCollection": false,
+          "GroupField": false,
+          "MaxRowsNumber": null,
+          "IsFirstRowBoldInGroup": false,
+          "UsedForFirstRowGroup": false,
+          "IndexGroup": null
+        },
+        {
+          "Name": "ICMDFY",
+          "Type": "S",
+          "IndexSource": 6,
+          "ColumnName": "MandayLastYearFY",
+          "IsHorizontalCollection": false,
+          "GroupField": false,
+          "MaxRowsNumber": null,
+          "IsFirstRowBoldInGroup": false,
+          "UsedForFirstRowGroup": false,
+          "IndexGroup": null
+        },
+        {
+          "Name": "ICMDLY",
+          "Type": "S",
+          "IndexSource": 6,
+          "ColumnName": "MandayLastYearYTD",
+          "IsHorizontalCollection": false,
+          "GroupField": false,
+          "MaxRowsNumber": null,
+          "IsFirstRowBoldInGroup": false,
+          "UsedForFirstRowGroup": false,
+          "IndexGroup": null
+        },
+        {
+          "Name": "ICMDCY",
+          "Type": "S",
+          "IndexSource": 6,
+          "ColumnName": "MandayCUrrentYear",
+          "IsHorizontalCollection": false,
+          "GroupField": false,
+          "MaxRowsNumber": null,
+          "IsFirstRowBoldInGroup": false,
+          "UsedForFirstRowGroup": false,
+          "IndexGroup": null
+        },
+        {
+          "Name": "ICVAR",
+          "Type": "S",
+          "IndexSource": 6,
+          "ColumnName": "Variance",
+          "IsHorizontalCollection": false,
+          "GroupField": false,
+          "MaxRowsNumber": null,
+          "IsFirstRowBoldInGroup": false,
+          "UsedForFirstRowGroup": false,
+          "IndexGroup": null
+        },
+        {
+          "Name": "ICPVAR",
+          "Type": "S",
+          "IndexSource": 6,
+          "ColumnName": "VariancePer",
+          "IsHorizontalCollection": false,
+          "GroupField": false,
+          "MaxRowsNumber": null,
+          "IsFirstRowBoldInGroup": false,
+          "UsedForFirstRowGroup": false,
+          "IndexGroup": null
+        }
+      ]
+    },
+
+    // Index 7 - Inspections by month  by Mandays - Slide 5
+    {
+      "Name": "IBMMD",
+      "Type": "CHART",
+      "IndexSource": 7,
+      "ColumnName": null,
+      "IsHorizontalCollection": false,
+      "GroupField": false,
+      "MaxRowsNumber": null,
+      "IsFirstRowBoldInGroup": false,
+      "UsedForFirstRowGroup": false,
+      "IndexGroup": null,
+      "ChartType": 2,
+      "Series": [
+        {
+          "Name": "IBMMLYN",
+          "Values": "IBMMLY"
+        },
+        {
+          "Name": "IBMMCYN",
+          "Values": "IBMMCY"
+        }
+
+      ],
+      "Categories": "IBMMMN",
+      "Variables": [
+        {
+          "Name": "IBMMLYN",
+          "Type": "S",
+          "IndexSource": 8,
+          "ColumnName": "LastYear",
+          "IsHorizontalCollection": false,
+          "GroupField": false,
+          "MaxRowsNumber": null,
+          "IsFirstRowBoldInGroup": false,
+          "UsedForFirstRowGroup": false,
+          "IndexGroup": null
+        },
+        {
+          "Name": "IBMMCYN",
+          "Type": "S",
+          "IndexSource": 7,
+          "ColumnName": "CurrentYear",
+          "IsHorizontalCollection": false,
+          "GroupField": false,
+          "MaxRowsNumber": null,
+          "IsFirstRowBoldInGroup": false,
+          "UsedForFirstRowGroup": false,
+          "IndexGroup": null
+        },
+        {
+          "Name": "IBMMMN",
+          "Type": "S",
+          "IndexSource": 7,
+          "ColumnName": "MonthName",
+          "IsHorizontalCollection": false,
+          "GroupField": false,
+          "MaxRowsNumber": null,
+          "IsFirstRowBoldInGroup": false,
+          "UsedForFirstRowGroup": false,
+          "IndexGroup": null
+        },
+        {
+          "Name": "IBMMLY",
+          "Type": "S",
+          "IndexSource": 7,
+          "ColumnName": "MDLastYear",
+          "IsHorizontalCollection": false,
+          "GroupField": false,
+          "MaxRowsNumber": null,
+          "IsFirstRowBoldInGroup": false,
+          "UsedForFirstRowGroup": false,
+          "IndexGroup": null
+        },
+        {
+          "Name": "IBMMCY",
+          "Type": "S",
+          "IndexSource": 7,
+          "ColumnName": "MDCurrentYear",
+          "IsHorizontalCollection": false,
+          "GroupField": false,
+          "MaxRowsNumber": null,
+          "IsFirstRowBoldInGroup": false,
+          "UsedForFirstRowGroup": false,
+          "IndexGroup": null
+        }
+      ]
+
+    },
+
+    // Index 8 - TOP 3 categories - Category 1 - Slide 5
+    {
+      "Name": "IBMC1",
+      "Type": "CHART",
+      "IndexSource": 8,
+      "ColumnName": null,
+      "IsHorizontalCollection": false,
+      "GroupField": false,
+      "MaxRowsNumber": null,
+      "IsFirstRowBoldInGroup": false,
+      "UsedForFirstRowGroup": false,
+      "IndexGroup": null,
+      "ChartType": 2,
+      "Series": [
+        {
+          "Name": "IMC1LYN",
+          "Values": "IMC1LY"
+        },
+        {
+          "Name": "IMC1CYN",
+          "Values": "IMC1CY"
+        }
+
+      ],
+      "Categories": "IMC1MN",
+      "Variables": [
+        {
+          "Name": "IMC1LYN",
+          "Type": "S",
+          "IndexSource": 8,
+          "ColumnName": "LastYear",
+          "IsHorizontalCollection": false,
+          "GroupField": false,
+          "MaxRowsNumber": null,
+          "IsFirstRowBoldInGroup": false,
+          "UsedForFirstRowGroup": false,
+          "IndexGroup": null
+        },
+        {
+          "Name": "IMC1CYN",
+          "Type": "S",
+          "IndexSource": 8,
+          "ColumnName": "CurrentYear",
+          "IsHorizontalCollection": false,
+          "GroupField": false,
+          "MaxRowsNumber": null,
+          "IsFirstRowBoldInGroup": false,
+          "UsedForFirstRowGroup": false,
+          "IndexGroup": null
+        },
+        {
+          "Name": "IMC1MN",
+          "Type": "S",
+          "IndexSource": 8,
+          "ColumnName": "MonthName",
+          "IsHorizontalCollection": false,
+          "GroupField": false,
+          "MaxRowsNumber": null,
+          "IsFirstRowBoldInGroup": false,
+          "UsedForFirstRowGroup": false,
+          "IndexGroup": null
+        },
+        {
+          "Name": "IMC1LY",
+          "Type": "S",
+          "IndexSource": 8,
+          "ColumnName": "MDLastYear",
+          "IsHorizontalCollection": false,
+          "GroupField": false,
+          "MaxRowsNumber": null,
+          "IsFirstRowBoldInGroup": false,
+          "UsedForFirstRowGroup": false,
+          "IndexGroup": null,
+          "DataType": 2
+        },
+        {
+          "Name": "IMC1CY",
+          "Type": "S",
+          "IndexSource": 8,
+          "ColumnName": "MDCurrentYear",
+          "IsHorizontalCollection": false,
+          "GroupField": false,
+          "MaxRowsNumber": null,
+          "IsFirstRowBoldInGroup": false,
+          "UsedForFirstRowGroup": false,
+          "IndexGroup": null,
+          "DataType": 2
+        }
+      ]
+    },
+
+    // Index 9 - TOP 3 categories - Category 2 - Side 5
+    {
+      "Name": "IBMC2",
+      "Type": "CHART",
+      "IndexSource": 9,
+      "ColumnName": null,
+      "IsHorizontalCollection": false,
+      "GroupField": false,
+      "MaxRowsNumber": null,
+      "IsFirstRowBoldInGroup": false,
+      "UsedForFirstRowGroup": false,
+      "IndexGroup": null,
+      "ChartType": 2,
+      "Series": [
+        {
+          "Name": "IMC2LYN",
+          "Values": "IMC2LY"
+        },
+        {
+          "Name": "IMC2CYN",
+          "Values": "IMC2CY"
+        }
+
+      ],
+      "Categories": "IMC2MN",
+      "Variables": [
+        {
+          "Name": "IMC2LYN",
+          "Type": "S",
+          "IndexSource": 9,
+          "ColumnName": "LastYear",
+          "IsHorizontalCollection": false,
+          "GroupField": false,
+          "MaxRowsNumber": null,
+          "IsFirstRowBoldInGroup": false,
+          "UsedForFirstRowGroup": false,
+          "IndexGroup": null
+        },
+        {
+          "Name": "IMC2CYN",
+          "Type": "S",
+          "IndexSource": 9,
+          "ColumnName": "CurrentYear",
+          "IsHorizontalCollection": false,
+          "GroupField": false,
+          "MaxRowsNumber": null,
+          "IsFirstRowBoldInGroup": false,
+          "UsedForFirstRowGroup": false,
+          "IndexGroup": null
+        },
+        {
+          "Name": "IMC2MN",
+          "Type": "S",
+          "IndexSource": 9,
+          "ColumnName": "MonthName",
+          "IsHorizontalCollection": false,
+          "GroupField": false,
+          "MaxRowsNumber": null,
+          "IsFirstRowBoldInGroup": false,
+          "UsedForFirstRowGroup": false,
+          "IndexGroup": null
+        },
+        {
+          "Name": "IMC2LY",
+          "Type": "S",
+          "IndexSource": 9,
+          "ColumnName": "MDLastYear",
+          "IsHorizontalCollection": false,
+          "GroupField": false,
+          "MaxRowsNumber": null,
+          "IsFirstRowBoldInGroup": false,
+          "UsedForFirstRowGroup": false,
+          "IndexGroup": null,
+          "DataType": 2
+        },
+        {
+          "Name": "IMC2CY",
+          "Type": "S",
+          "IndexSource": 9,
+          "ColumnName": "MDCurrentYear",
+          "IsHorizontalCollection": false,
+          "GroupField": false,
+          "MaxRowsNumber": null,
+          "IsFirstRowBoldInGroup": false,
+          "UsedForFirstRowGroup": false,
+          "IndexGroup": null,
+          "DataType": 2
+        }
+      ]
+    },
+
+    // Index 10 - TOP 3 categories - Category 3 - Slide 5
+    {
+      "Name": "IBMC3",
+      "Type": "CHART",
+      "IndexSource": 10,
+      "ColumnName": null,
+      "IsHorizontalCollection": false,
+      "GroupField": false,
+      "MaxRowsNumber": null,
+      "IsFirstRowBoldInGroup": false,
+      "UsedForFirstRowGroup": false,
+      "IndexGroup": null,
+      "ChartType": 2,
+      "Series": [
+        {
+          "Name": "IMC3LYN",
+          "Values": "IMC3LY"
+        },
+        {
+          "Name": "IMC3CYN",
+          "Values": "IMC3CY"
+        }
+
+      ],
+      "Categories": "IMC3MN",
+      "Variables": [
+        {
+          "Name": "IMC3LYN",
+          "Type": "S",
+          "IndexSource": 10,
+          "ColumnName": "LastYear",
+          "IsHorizontalCollection": false,
+          "GroupField": false,
+          "MaxRowsNumber": null,
+          "IsFirstRowBoldInGroup": false,
+          "UsedForFirstRowGroup": false,
+          "IndexGroup": null
+        },
+        {
+          "Name": "IMC3CYN",
+          "Type": "S",
+          "IndexSource": 10,
+          "ColumnName": "CurrentYear",
+          "IsHorizontalCollection": false,
+          "GroupField": false,
+          "MaxRowsNumber": null,
+          "IsFirstRowBoldInGroup": false,
+          "UsedForFirstRowGroup": false,
+          "IndexGroup": null
+        },
+        {
+          "Name": "IMC3MN",
+          "Type": "S",
+          "IndexSource": 10,
+          "ColumnName": "MonthName",
+          "IsHorizontalCollection": false,
+          "GroupField": false,
+          "MaxRowsNumber": null,
+          "IsFirstRowBoldInGroup": false,
+          "UsedForFirstRowGroup": false,
+          "IndexGroup": null
+        },
+        {
+          "Name": "IMC3LY",
+          "Type": "S",
+          "IndexSource": 10,
+          "ColumnName": "MDLastYear",
+          "IsHorizontalCollection": false,
+          "GroupField": false,
+          "MaxRowsNumber": null,
+          "IsFirstRowBoldInGroup": false,
+          "UsedForFirstRowGroup": false,
+          "IndexGroup": null,
+          "DataType": 2
+        },
+        {
+          "Name": "IMC3CY",
+          "Type": "S",
+          "IndexSource": 10,
+          "ColumnName": "MDCurrentYear",
+          "IsHorizontalCollection": false,
+          "GroupField": false,
+          "MaxRowsNumber": null,
+          "IsFirstRowBoldInGroup": false,
+          "UsedForFirstRowGroup": false,
+          "IndexGroup": null,
+          "DataType": 2
+        }
+      ]
+    },
+
+    // Index 11 -  mandays by country chart - Slide 4
+    {
+      "Name": "MDBCC",
+      "Type": "CHART",
+      "IndexSource": 11,
+      "ColumnName": null,
+      "IsHorizontalCollection": false,
+      "GroupField": false,
+      "MaxRowsNumber": null,
+      "IsFirstRowBoldInGroup": false,
+      "UsedForFirstRowGroup": false,
+      "IndexGroup": null,
+      "ChartType": 2,
+      "Series": [
+        {
+          "Name": "MDBCLY",
+          "Values": "MDBCNMDLY"
+        },
+        {
+          "Name": "MDBCCY",
+          "Values": "MDBCNMDCY"
+        }
+
+      ],
+      "Categories": "MDBCCN",
+      "Variables": [
+        {
+          "Name": "MDBCNMDCY",
+          "Type": "S",
+          "IndexSource": 11,
+          "ColumnName": "NbMandaysCY",
+          "IsHorizontalCollection": false,
+          "GroupField": false,
+          "MaxRowsNumber": null,
+          "IsFirstRowBoldInGroup": false,
+          "UsedForFirstRowGroup": false,
+          "IndexGroup": null
+        },
+        {
+          "Name": "MDBCNMDLY",
+          "Type": "S",
+          "IndexSource": 11,
+          "ColumnName": "NbMandaysLY",
+          "IsHorizontalCollection": false,
+          "GroupField": false,
+          "MaxRowsNumber": null,
+          "IsFirstRowBoldInGroup": false,
+          "UsedForFirstRowGroup": false,
+          "IndexGroup": null
+        },
+        {
+          "Name": "MDBCCN",
+          "Type": "S",
+          "IndexSource": 11,
+          "ColumnName": "country_name",
+          "IsHorizontalCollection": false,
+          "GroupField": false,
+          "MaxRowsNumber": null,
+          "IsFirstRowBoldInGroup": false,
+          "UsedForFirstRowGroup": false,
+          "IndexGroup": null
+        },
+        {
+          "Name": "MDBCCY",
+          "Type": "S",
+          "IndexSource": 11,
+          "ColumnName": "CurrentYear",
+          "IsHorizontalCollection": false,
+          "GroupField": false,
+          "MaxRowsNumber": null,
+          "IsFirstRowBoldInGroup": false,
+          "UsedForFirstRowGroup": false,
+          "IndexGroup": null
+        },
+        {
+          "Name": "MDBCLY",
+          "Type": "S",
+          "IndexSource": 11,
+          "ColumnName": "LastYear",
+          "IsHorizontalCollection": false,
+          "GroupField": false,
+          "MaxRowsNumber": null,
+          "IsFirstRowBoldInGroup": false,
+          "UsedForFirstRowGroup": false,
+          "IndexGroup": null
+        }
+
+      ]
+    },
+
+    // Index 12 - Inspections By Months  - Mandays - Slide 6
+    {
+      "Name": "IBDMD",
+      "Type": "CHART",
+      "IndexSource": 12,
+      "ColumnName": null,
+      "IsHorizontalCollection": false,
+      "GroupField": false,
+      "MaxRowsNumber": null,
+      "IsFirstRowBoldInGroup": false,
+      "UsedForFirstRowGroup": false,
+      "IndexGroup": null,
+      "ChartType": 2,
+      "Series": [
+        {
+          "Name": "IBDMLYN",
+          "Values": "IBDMLY"
+        },
+        {
+          "Name": "IBDMCYN",
+          "Values": "IBDMCY"
+        }
+
+      ],
+      "Categories": "IBDMMN",
+      "Variables": [
+        {
+          "Name": "IBDMLYN",
+          "Type": "S",
+          "IndexSource": 12,
+          "ColumnName": "LastYear",
+          "IsHorizontalCollection": false,
+          "GroupField": false,
+          "MaxRowsNumber": null,
+          "IsFirstRowBoldInGroup": false,
+          "UsedForFirstRowGroup": false,
+          "IndexGroup": null
+        },
+        {
+          "Name": "IBDMCYN",
+          "Type": "S",
+          "IndexSource": 12,
+          "ColumnName": "CurrentYear",
+          "IsHorizontalCollection": false,
+          "GroupField": false,
+          "MaxRowsNumber": null,
+          "IsFirstRowBoldInGroup": false,
+          "UsedForFirstRowGroup": false,
+          "IndexGroup": null
+        },
+        {
+          "Name": "IBDMMN",
+          "Type": "S",
+          "IndexSource": 12,
+          "ColumnName": "MonthName",
+          "IsHorizontalCollection": false,
+          "GroupField": false,
+          "MaxRowsNumber": null,
+          "IsFirstRowBoldInGroup": false,
+          "UsedForFirstRowGroup": false,
+          "IndexGroup": null
+        },
+        {
+          "Name": "IBDMLY",
+          "Type": "S",
+          "IndexSource": 12,
+          "ColumnName": "MDLastYear",
+          "IsHorizontalCollection": false,
+          "GroupField": false,
+          "MaxRowsNumber": null,
+          "IsFirstRowBoldInGroup": false,
+          "UsedForFirstRowGroup": false,
+          "IndexGroup": null
+        },
+        {
+          "Name": "IBDMCY",
+          "Type": "S",
+          "IndexSource": 12,
+          "ColumnName": "MDCurrentYear",
+          "IsHorizontalCollection": false,
+          "GroupField": false,
+          "MaxRowsNumber": null,
+          "IsFirstRowBoldInGroup": false,
+          "UsedForFirstRowGroup": false,
+          "IndexGroup": null
+        }
+      ]
+
+    },
+
+    // Index 13 - TOP 3 Departments - Department 1 - Slide 6
+    {
+      "Name": "IBDC1",
+      "Type": "CHART",
+      "IndexSource": 13,
+      "ColumnName": null,
+      "IsHorizontalCollection": false,
+      "GroupField": false,
+      "MaxRowsNumber": null,
+      "IsFirstRowBoldInGroup": false,
+      "UsedForFirstRowGroup": false,
+      "IndexGroup": null,
+      "ChartType": 2,
+      "Series": [
+        {
+          "Name": "IDC1LYN",
+          "Values": "IDC1LY"
+        },
+        {
+          "Name": "IDC1CYN",
+          "Values": "IDC1CY"
+        }
+
+      ],
+      "Categories": "IDC1MN",
+      "Variables": [
+        {
+          "Name": "IDC1LYN",
+          "Type": "S",
+          "IndexSource": 13,
+          "ColumnName": "LastYear",
+          "IsHorizontalCollection": false,
+          "GroupField": false,
+          "MaxRowsNumber": null,
+          "IsFirstRowBoldInGroup": false,
+          "UsedForFirstRowGroup": false,
+          "IndexGroup": null
+        },
+        {
+          "Name": "IDC1CYN",
+          "Type": "S",
+          "IndexSource": 13,
+          "ColumnName": "CurrentYear",
+          "IsHorizontalCollection": false,
+          "GroupField": false,
+          "MaxRowsNumber": null,
+          "IsFirstRowBoldInGroup": false,
+          "UsedForFirstRowGroup": false,
+          "IndexGroup": null
+        },
+        {
+          "Name": "IDC1MN",
+          "Type": "S",
+          "IndexSource": 13,
+          "ColumnName": "MonthName",
+          "IsHorizontalCollection": false,
+          "GroupField": false,
+          "MaxRowsNumber": null,
+          "IsFirstRowBoldInGroup": false,
+          "UsedForFirstRowGroup": false,
+          "IndexGroup": null
+        },
+        {
+          "Name": "IDC1LY",
+          "Type": "S",
+          "IndexSource": 13,
+          "ColumnName": "MDLastYear",
+          "IsHorizontalCollection": false,
+          "GroupField": false,
+          "MaxRowsNumber": null,
+          "IsFirstRowBoldInGroup": false,
+          "UsedForFirstRowGroup": false,
+          "IndexGroup": null,
+          "DataType": 2
+        },
+        {
+          "Name": "IDC1CY",
+          "Type": "S",
+          "IndexSource": 13,
+          "ColumnName": "MDCurrentYear",
+          "IsHorizontalCollection": false,
+          "GroupField": false,
+          "MaxRowsNumber": null,
+          "IsFirstRowBoldInGroup": false,
+          "UsedForFirstRowGroup": false,
+          "IndexGroup": null,
+          "DataType": 2
+        }
+      ]
+    },
+
+    // Index 14 - TOP 3 Departments - Department 2 - Slide 6
+    {
+      "Name": "IBDC2",
+      "Type": "CHART",
+      "IndexSource": 14,
+      "ColumnName": null,
+      "IsHorizontalCollection": false,
+      "GroupField": false,
+      "MaxRowsNumber": null,
+      "IsFirstRowBoldInGroup": false,
+      "UsedForFirstRowGroup": false,
+      "IndexGroup": null,
+      "ChartType": 2,
+      "Series": [
+        {
+          "Name": "IDC2LYN",
+          "Values": "IDC2LY"
+        },
+        {
+          "Name": "IDC2CYN",
+          "Values": "IDC2CY"
+        }
+
+      ],
+      "Categories": "IDC2MN",
+      "Variables": [
+        {
+          "Name": "IDC2LYN",
+          "Type": "S",
+          "IndexSource": 14,
+          "ColumnName": "LastYear",
+          "IsHorizontalCollection": false,
+          "GroupField": false,
+          "MaxRowsNumber": null,
+          "IsFirstRowBoldInGroup": false,
+          "UsedForFirstRowGroup": false,
+          "IndexGroup": null
+        },
+        {
+          "Name": "IDC2CYN",
+          "Type": "S",
+          "IndexSource": 14,
+          "ColumnName": "CurrentYear",
+          "IsHorizontalCollection": false,
+          "GroupField": false,
+          "MaxRowsNumber": null,
+          "IsFirstRowBoldInGroup": false,
+          "UsedForFirstRowGroup": false,
+          "IndexGroup": null
+        },
+        {
+          "Name": "IDC2MN",
+          "Type": "S",
+          "IndexSource": 14,
+          "ColumnName": "MonthName",
+          "IsHorizontalCollection": false,
+          "GroupField": false,
+          "MaxRowsNumber": null,
+          "IsFirstRowBoldInGroup": false,
+          "UsedForFirstRowGroup": false,
+          "IndexGroup": null
+        },
+        {
+          "Name": "IDC2LY",
+          "Type": "S",
+          "IndexSource": 14,
+          "ColumnName": "MDLastYear",
+          "IsHorizontalCollection": false,
+          "GroupField": false,
+          "MaxRowsNumber": null,
+          "IsFirstRowBoldInGroup": false,
+          "UsedForFirstRowGroup": false,
+          "IndexGroup": null,
+          "DataType": 2
+        },
+        {
+          "Name": "IDC2CY",
+          "Type": "S",
+          "IndexSource": 14,
+          "ColumnName": "MDCurrentYear",
+          "IsHorizontalCollection": false,
+          "GroupField": false,
+          "MaxRowsNumber": null,
+          "IsFirstRowBoldInGroup": false,
+          "UsedForFirstRowGroup": false,
+          "IndexGroup": null,
+          "DataType": 2
+        }
+      ]
+    },
+
+    // Index 15 - TOP 3 Departments - Department 3 - Slide 6
+    {
+      "Name": "IBDC3",
+      "Type": "CHART",
+      "IndexSource": 15,
+      "ColumnName": null,
+      "IsHorizontalCollection": false,
+      "GroupField": false,
+      "MaxRowsNumber": null,
+      "IsFirstRowBoldInGroup": false,
+      "UsedForFirstRowGroup": false,
+      "IndexGroup": null,
+      "ChartType": 2,
+      "Series": [
+        {
+          "Name": "IDC3LYN",
+          "Values": "IDC3LY"
+        },
+        {
+          "Name": "IDC3CYN",
+          "Values": "IDC3CY"
+        }
+
+      ],
+      "Categories": "IDC3MN",
+      "Variables": [
+        {
+          "Name": "IDC3LYN",
+          "Type": "S",
+          "IndexSource": 15,
+          "ColumnName": "LastYear",
+          "IsHorizontalCollection": false,
+          "GroupField": false,
+          "MaxRowsNumber": null,
+          "IsFirstRowBoldInGroup": false,
+          "UsedForFirstRowGroup": false,
+          "IndexGroup": null
+        },
+        {
+          "Name": "IDC3CYN",
+          "Type": "S",
+          "IndexSource": 15,
+          "ColumnName": "CurrentYear",
+          "IsHorizontalCollection": false,
+          "GroupField": false,
+          "MaxRowsNumber": null,
+          "IsFirstRowBoldInGroup": false,
+          "UsedForFirstRowGroup": false,
+          "IndexGroup": null
+        },
+        {
+          "Name": "IDC3MN",
+          "Type": "S",
+          "IndexSource": 15,
+          "ColumnName": "MonthName",
+          "IsHorizontalCollection": false,
+          "GroupField": false,
+          "MaxRowsNumber": null,
+          "IsFirstRowBoldInGroup": false,
+          "UsedForFirstRowGroup": false,
+          "IndexGroup": null
+        },
+        {
+          "Name": "IDC3LY",
+          "Type": "S",
+          "IndexSource": 15,
+          "ColumnName": "MDLastYear",
+          "IsHorizontalCollection": false,
+          "GroupField": false,
+          "MaxRowsNumber": null,
+          "IsFirstRowBoldInGroup": false,
+          "UsedForFirstRowGroup": false,
+          "IndexGroup": null,
+          "DataType": 2
+        },
+        {
+          "Name": "IDC3CY",
+          "Type": "S",
+          "IndexSource": 15,
+          "ColumnName": "MDCurrentYear",
+          "IsHorizontalCollection": false,
+          "GroupField": false,
+          "MaxRowsNumber": null,
+          "IsFirstRowBoldInGroup": false,
+          "UsedForFirstRowGroup": false,
+          "IndexGroup": null,
+          "DataType": 2
+        }
+      ]
+    },
+
+    // Index 16 - Inspections Inspections by category by country - slide 9 - Last Year
+    {
+      "Name": "IBCCLY",
+      "Type": "MATRIX",
+      "IndexSource": 16,
+      "X": "ICCLYCAN",
+      "Y": "ICCLYCN",
+      "Variables": [
+        {
+          "Name": "ICCLYCAN",
+          "Type": "S",
+          "IndexSource": 16,
+          "ColumnName": "CatgeoryName"
+        },
+        {
+          "Name": "ICCLYCN",
+          "Type": "S",
+          "IndexSource": 16,
+          "ColumnName": "CountryName"
+        },
+        {
+          "Name": "ICCLYMD",
+          "Type": "S",
+          "IndexSource": 16,
+          "ColumnName": "ManDay"
+        }
+
+      ]
+    },
+
+    // Index 17 - Inspections by category by country - slide 9 - Current Year
+    {
+      "Name": "IBCCCY",
+      "Type": "MATRIX",
+      "IndexSource": 17,
+      "X": "ICCCYCAN",
+      "Y": "ICCCYCN",
+      "Variables": [
+        {
+          "Name": "ICCCYCAN",
+          "Type": "S",
+          "IndexSource": 17,
+          "ColumnName": "CatgeoryName"
+        },
+        {
+          "Name": "ICCCYCN",
+          "Type": "S",
+          "IndexSource": 17,
+          "ColumnName": "CountryName"
+        },
+        {
+          "Name": "ICCCYCMD",
+          "Type": "S",
+          "IndexSource": 17,
+          "ColumnName": "ManDay"
+        }
+      ]
+    },
+
+    // Index 18 - Inspections overall performances PER COUNTRY - slide 10 - Last Year
+    {
+      "Name": "SOPC",
+      "Type": "LIST",
+      "IndexSource": 18,
+      "ColumnName": null,
+      "IsHorizontalCollection": false,
+      "GroupField": false,
+      "MaxRowsNumber": null,
+      "IsFirstRowBoldInGroup": false,
+      "UsedForFirstRowGroup": false,
+      "IndexGroup": null,
+      "Variables": [
+        {
+          "Name": "SOPCN",
+          "Type": "S",
+          "IndexSource": 18,
+          "ColumnName": "Country_Name",
+          "IsHorizontalCollection": false,
+          "GroupField": false,
+          "MaxRowsNumber": null,
+          "IsFirstRowBoldInGroup": false,
+          "UsedForFirstRowGroup": false,
+          "IndexGroup": null
+        },
+        {
+          "Name": "SOPRE",
+          "Type": "S",
+          "IndexSource": 18,
+          "ColumnName": "Reports",
+          "IsHorizontalCollection": false,
+          "GroupField": false,
+          "MaxRowsNumber": null,
+          "IsFirstRowBoldInGroup": false,
+          "UsedForFirstRowGroup": false,
+          "IndexGroup": null
+        },
+        {
+          "Name": "SOPSU",
+          "Type": "S",
+          "IndexSource": 18,
+          "ColumnName": "Suppliers",
+          "IsHorizontalCollection": false,
+          "GroupField": false,
+          "MaxRowsNumber": null,
+          "IsFirstRowBoldInGroup": false,
+          "UsedForFirstRowGroup": false,
+          "IndexGroup": null
+        },
+        {
+          "Name": "SOPPA",
+          "Type": "S",
+          "IndexSource": 18,
+          "ColumnName": "Pass",
+          "IsHorizontalCollection": false,
+          "GroupField": false,
+          "MaxRowsNumber": null,
+          "IsFirstRowBoldInGroup": false,
+          "UsedForFirstRowGroup": false,
+          "IndexGroup": null
+        },
+        {
+          "Name": "SOPFA",
+          "Type": "S",
+          "IndexSource": 18,
+          "ColumnName": "Fail",
+          "IsHorizontalCollection": false,
+          "GroupField": false,
+          "MaxRowsNumber": null,
+          "IsFirstRowBoldInGroup": false,
+          "UsedForFirstRowGroup": false,
+          "IndexGroup": null
+        },
+        {
+          "Name": "SOPPE",
+          "Type": "S",
+          "IndexSource": 18,
+          "ColumnName": "Pending",
+          "IsHorizontalCollection": false,
+          "GroupField": false,
+          "MaxRowsNumber": null,
+          "IsFirstRowBoldInGroup": false,
+          "UsedForFirstRowGroup": false,
+          "IndexGroup": null
+        },
+        {
+          "Name": "SOPMI",
+          "Type": "S",
+          "IndexSource": 18,
+          "ColumnName": "Missing",
+          "IsHorizontalCollection": false,
+          "GroupField": false,
+          "MaxRowsNumber": null,
+          "IsFirstRowBoldInGroup": false,
+          "UsedForFirstRowGroup": false,
+          "IndexGroup": null
+        },
+        {
+          "Name": "SOPPPA",
+          "Type": "S",
+          "IndexSource": 18,
+          "ColumnName": "PerPass",
+          "IsHorizontalCollection": false,
+          "GroupField": false,
+          "MaxRowsNumber": null,
+          "IsFirstRowBoldInGroup": false,
+          "UsedForFirstRowGroup": false,
+          "IndexGroup": null
+        },
+        {
+          "Name": "SOPPFA",
+          "Type": "S",
+          "IndexSource": 18,
+          "ColumnName": "PerFail",
+          "IsHorizontalCollection": false,
+          "GroupField": false,
+          "MaxRowsNumber": null,
+          "IsFirstRowBoldInGroup": false,
+          "UsedForFirstRowGroup": false,
+          "IndexGroup": null
+        },
+        {
+          "Name": "SOPPPE",
+          "Type": "S",
+          "IndexSource": 18,
+          "ColumnName": "PerPending",
+          "IsHorizontalCollection": false,
+          "GroupField": false,
+          "MaxRowsNumber": null,
+          "IsFirstRowBoldInGroup": false,
+          "UsedForFirstRowGroup": false,
+          "IndexGroup": null
+        },
+        {
+          "Name": "SOPPPMI",
+          "Type": "S",
+          "IndexSource": 18,
+          "ColumnName": "PerMissing",
+          "IsHorizontalCollection": false,
+          "GroupField": false,
+          "MaxRowsNumber": null,
+          "IsFirstRowBoldInGroup": false,
+          "UsedForFirstRowGroup": false,
+          "IndexGroup": null
+        }
+      ]
+    },
+
+    // Index 19 - Inspections overall performances PER COUNTRY - slide 10 - Current Year
+    {
+      "Name": "SOPCCY",
+      "Type": "LIST",
+      "IndexSource": 19,
+      "ColumnName": null,
+      "IsHorizontalCollection": false,
+      "GroupField": false,
+      "MaxRowsNumber": null,
+      "IsFirstRowBoldInGroup": false,
+      "UsedForFirstRowGroup": false,
+      "IndexGroup": null,
+      "Variables": [
+        {
+          "Name": "SOPCNCY",
+          "Type": "S",
+          "IndexSource": 19,
+          "ColumnName": "Country_Name",
+          "IsHorizontalCollection": false,
+          "GroupField": false,
+          "MaxRowsNumber": null,
+          "IsFirstRowBoldInGroup": false,
+          "UsedForFirstRowGroup": false,
+          "IndexGroup": null
+        },
+        {
+          "Name": "SOPRECY",
+          "Type": "S",
+          "IndexSource": 19,
+          "ColumnName": "Reports",
+          "IsHorizontalCollection": false,
+          "GroupField": false,
+          "MaxRowsNumber": null,
+          "IsFirstRowBoldInGroup": false,
+          "UsedForFirstRowGroup": false,
+          "IndexGroup": null
+        },
+        {
+          "Name": "SOPSUCY",
+          "Type": "S",
+          "IndexSource": 19,
+          "ColumnName": "Suppliers",
+          "IsHorizontalCollection": false,
+          "GroupField": false,
+          "MaxRowsNumber": null,
+          "IsFirstRowBoldInGroup": false,
+          "UsedForFirstRowGroup": false,
+          "IndexGroup": null
+        },
+        {
+          "Name": "SOPPACY",
+          "Type": "S",
+          "IndexSource": 19,
+          "ColumnName": "Pass",
+          "IsHorizontalCollection": false,
+          "GroupField": false,
+          "MaxRowsNumber": null,
+          "IsFirstRowBoldInGroup": false,
+          "UsedForFirstRowGroup": false,
+          "IndexGroup": null
+        },
+        {
+          "Name": "SOPFACY",
+          "Type": "S",
+          "IndexSource": 19,
+          "ColumnName": "Fail",
+          "IsHorizontalCollection": false,
+          "GroupField": false,
+          "MaxRowsNumber": null,
+          "IsFirstRowBoldInGroup": false,
+          "UsedForFirstRowGroup": false,
+          "IndexGroup": null
+        },
+        {
+          "Name": "SOPPECY",
+          "Type": "S",
+          "IndexSource": 19,
+          "ColumnName": "Pending",
+          "IsHorizontalCollection": false,
+          "GroupField": false,
+          "MaxRowsNumber": null,
+          "IsFirstRowBoldInGroup": false,
+          "UsedForFirstRowGroup": false,
+          "IndexGroup": null
+        },
+        {
+          "Name": "SOPMICY",
+          "Type": "S",
+          "IndexSource": 19,
+          "ColumnName": "Missing",
+          "IsHorizontalCollection": false,
+          "GroupField": false,
+          "MaxRowsNumber": null,
+          "IsFirstRowBoldInGroup": false,
+          "UsedForFirstRowGroup": false,
+          "IndexGroup": null
+        },
+        {
+          "Name": "SOPPPACY",
+          "Type": "S",
+          "IndexSource": 19,
+          "ColumnName": "PerPass",
+          "IsHorizontalCollection": false,
+          "GroupField": false,
+          "MaxRowsNumber": null,
+          "IsFirstRowBoldInGroup": false,
+          "UsedForFirstRowGroup": false,
+          "IndexGroup": null
+        },
+        {
+          "Name": "SOPPFACY",
+          "Type": "S",
+          "IndexSource": 19,
+          "ColumnName": "PerFail",
+          "IsHorizontalCollection": false,
+          "GroupField": false,
+          "MaxRowsNumber": null,
+          "IsFirstRowBoldInGroup": false,
+          "UsedForFirstRowGroup": false,
+          "IndexGroup": null
+        },
+        {
+          "Name": "SOPPPECY",
+          "Type": "S",
+          "IndexSource": 19,
+          "ColumnName": "PerPending",
+          "IsHorizontalCollection": false,
+          "GroupField": false,
+          "MaxRowsNumber": null,
+          "IsFirstRowBoldInGroup": false,
+          "UsedForFirstRowGroup": false,
+          "IndexGroup": null
+        },
+        {
+          "Name": "SOPPPMICY",
+          "Type": "S",
+          "IndexSource": 19,
+          "ColumnName": "PerMissing",
+          "IsHorizontalCollection": false,
+          "GroupField": false,
+          "MaxRowsNumber": null,
+          "IsFirstRowBoldInGroup": false,
+          "UsedForFirstRowGroup": false,
+          "IndexGroup": null
+        }
+      ]
+    },
+
+    // Index 20 - Inspections overall performances PER COUNTRY - slide 10 - Last Year - CHART
+    {
+      "Name": "CSOPC",
+      "Type": "CHART",
+      "IndexSource": 20,
+      "ColumnName": null,
+      "IsHorizontalCollection": false,
+      "GroupField": false,
+      "MaxRowsNumber": null,
+      "IsFirstRowBoldInGroup": false,
+      "UsedForFirstRowGroup": false,
+      "IndexGroup": null,
+      "ChartType": 3,
+      "Variables": [
+        {
+          "Name": "Pass",
+          "Type": "S",
+          "IndexSource": 20,
+          "ColumnName": "Pass",
+          "IsHorizontalCollection": false,
+          "GroupField": false,
+          "MaxRowsNumber": null,
+          "IsFirstRowBoldInGroup": false,
+          "UsedForFirstRowGroup": false,
+          "IndexGroup": null
+        },
+        {
+          "Name": "Fail",
+          "Type": "S",
+          "IndexSource": 20,
+          "ColumnName": "Fail",
+          "IsHorizontalCollection": false,
+          "GroupField": false,
+          "MaxRowsNumber": null,
+          "IsFirstRowBoldInGroup": false,
+          "UsedForFirstRowGroup": false,
+          "IndexGroup": null
+        },
+        {
+          "Name": "Pending",
+          "Type": "S",
+          "IndexSource": 20,
+          "ColumnName": "Pending",
+          "IsHorizontalCollection": false,
+          "GroupField": false,
+          "MaxRowsNumber": null,
+          "IsFirstRowBoldInGroup": false,
+          "UsedForFirstRowGroup": false,
+          "IndexGroup": null
+        },
+        {
+          "Name": "Missing",
+          "Type": "S",
+          "IndexSource": 20,
+          "ColumnName": "Missing",
+          "IsHorizontalCollection": false,
+          "GroupField": false,
+          "MaxRowsNumber": null,
+          "IsFirstRowBoldInGroup": false,
+          "UsedForFirstRowGroup": false,
+          "IndexGroup": null
+        }
+      ]
+    },
+
+    // Index 21 - Inspections overall performances PER COUNTRY - slide 10 - current Year - CHART
+    {
+      "Name": "CSOPCCY",
+      "Type": "CHART",
+      "IndexSource": 21,
+      "ColumnName": null,
+      "IsHorizontalCollection": false,
+      "GroupField": false,
+      "MaxRowsNumber": null,
+      "IsFirstRowBoldInGroup": false,
+      "UsedForFirstRowGroup": false,
+      "IndexGroup": null,
+      "ChartType": 3,
+      "Variables": [
+        {
+          "Name": "Pass",
+          "Type": "S",
+          "IndexSource": 21,
+          "ColumnName": "Pass",
+          "IsHorizontalCollection": false,
+          "GroupField": false,
+          "MaxRowsNumber": null,
+          "IsFirstRowBoldInGroup": false,
+          "UsedForFirstRowGroup": false,
+          "IndexGroup": null
+        },
+        {
+          "Name": "Fail",
+          "Type": "S",
+          "IndexSource": 21,
+          "ColumnName": "Fail",
+          "IsHorizontalCollection": false,
+          "GroupField": false,
+          "MaxRowsNumber": null,
+          "IsFirstRowBoldInGroup": false,
+          "UsedForFirstRowGroup": false,
+          "IndexGroup": null
+        },
+        {
+          "Name": "Pending",
+          "Type": "S",
+          "IndexSource": 21,
+          "ColumnName": "Pending",
+          "IsHorizontalCollection": false,
+          "GroupField": false,
+          "MaxRowsNumber": null,
+          "IsFirstRowBoldInGroup": false,
+          "UsedForFirstRowGroup": false,
+          "IndexGroup": null
+        },
+        {
+          "Name": "Missing",
+          "Type": "S",
+          "IndexSource": 21,
+          "ColumnName": "Missing",
+          "IsHorizontalCollection": false,
+          "GroupField": false,
+          "MaxRowsNumber": null,
+          "IsFirstRowBoldInGroup": false,
+          "UsedForFirstRowGroup": false,
+          "IndexGroup": null
+        }
+      ]
+    },
+
+    // Index 22 - Inspections overall performances PER CATEGORY - slide 11 - Last Year
+    {
+      "Name": "SOPCA",
+      "Type": "LIST",
+      "IndexSource": 22,
+      "ColumnName": null,
+      "IsHorizontalCollection": false,
+      "GroupField": false,
+      "MaxRowsNumber": null,
+      "IsFirstRowBoldInGroup": false,
+      "UsedForFirstRowGroup": false,
+      "IndexGroup": null,
+      "Variables": [
+        {
+          "Name": "SCOPCN",
+          "Type": "S",
+          "IndexSource": 22,
+          "ColumnName": "CatgeoryName",
+          "IsHorizontalCollection": false,
+          "GroupField": false,
+          "MaxRowsNumber": null,
+          "IsFirstRowBoldInGroup": false,
+          "UsedForFirstRowGroup": false,
+          "IndexGroup": null
+        },
+        {
+          "Name": "SCOPRE",
+          "Type": "S",
+          "IndexSource": 22,
+          "ColumnName": "Reports",
+          "IsHorizontalCollection": false,
+          "GroupField": false,
+          "MaxRowsNumber": null,
+          "IsFirstRowBoldInGroup": false,
+          "UsedForFirstRowGroup": false,
+          "IndexGroup": null
+        },
+        {
+          "Name": "SCOPSU",
+          "Type": "S",
+          "IndexSource": 22,
+          "ColumnName": "Suppliers",
+          "IsHorizontalCollection": false,
+          "GroupField": false,
+          "MaxRowsNumber": null,
+          "IsFirstRowBoldInGroup": false,
+          "UsedForFirstRowGroup": false,
+          "IndexGroup": null
+        },
+        {
+          "Name": "SCOPPA",
+          "Type": "S",
+          "IndexSource": 22,
+          "ColumnName": "Pass",
+          "IsHorizontalCollection": false,
+          "GroupField": false,
+          "MaxRowsNumber": null,
+          "IsFirstRowBoldInGroup": false,
+          "UsedForFirstRowGroup": false,
+          "IndexGroup": null
+        },
+        {
+          "Name": "SCOPFA",
+          "Type": "S",
+          "IndexSource": 22,
+          "ColumnName": "Fail",
+          "IsHorizontalCollection": false,
+          "GroupField": false,
+          "MaxRowsNumber": null,
+          "IsFirstRowBoldInGroup": false,
+          "UsedForFirstRowGroup": false,
+          "IndexGroup": null
+        },
+        {
+          "Name": "SCOPPE",
+          "Type": "S",
+          "IndexSource": 22,
+          "ColumnName": "Pending",
+          "IsHorizontalCollection": false,
+          "GroupField": false,
+          "MaxRowsNumber": null,
+          "IsFirstRowBoldInGroup": false,
+          "UsedForFirstRowGroup": false,
+          "IndexGroup": null
+        },
+        {
+          "Name": "SCOPMI",
+          "Type": "S",
+          "IndexSource": 22,
+          "ColumnName": "Missing",
+          "IsHorizontalCollection": false,
+          "GroupField": false,
+          "MaxRowsNumber": null,
+          "IsFirstRowBoldInGroup": false,
+          "UsedForFirstRowGroup": false,
+          "IndexGroup": null
+        },
+        {
+          "Name": "SCOPPPA",
+          "Type": "S",
+          "IndexSource": 22,
+          "ColumnName": "PerPass",
+          "IsHorizontalCollection": false,
+          "GroupField": false,
+          "MaxRowsNumber": null,
+          "IsFirstRowBoldInGroup": false,
+          "UsedForFirstRowGroup": false,
+          "IndexGroup": null
+        },
+        {
+          "Name": "SCOPPFA",
+          "Type": "S",
+          "IndexSource": 22,
+          "ColumnName": "PerFail",
+          "IsHorizontalCollection": false,
+          "GroupField": false,
+          "MaxRowsNumber": null,
+          "IsFirstRowBoldInGroup": false,
+          "UsedForFirstRowGroup": false,
+          "IndexGroup": null
+        },
+        {
+          "Name": "SCOPPPE",
+          "Type": "S",
+          "IndexSource": 22,
+          "ColumnName": "PerPending",
+          "IsHorizontalCollection": false,
+          "GroupField": false,
+          "MaxRowsNumber": null,
+          "IsFirstRowBoldInGroup": false,
+          "UsedForFirstRowGroup": false,
+          "IndexGroup": null
+        },
+        {
+          "Name": "SCOPPPMI",
+          "Type": "S",
+          "IndexSource": 22,
+          "ColumnName": "PerMissing",
+          "IsHorizontalCollection": false,
+          "GroupField": false,
+          "MaxRowsNumber": null,
+          "IsFirstRowBoldInGroup": false,
+          "UsedForFirstRowGroup": false,
+          "IndexGroup": null
+        }
+      ]
+    },
+
+
+    // Index 23 - Inspections overall performances PER CATEGORY - slide 11 - new one
+    {
+      "Name": "SOPCAC",
+      "Type": "LIST",
+      "IndexSource": 23,
+      "MaxRowsNumber": 4,
+      "GroupField": true,
+      "Variables": [
+        {
+          "Name": "SCOPCNC",
+          "Type": "S",
+          "IndexSource": 23,
+          "GroupField": true,
+          "ColumnName": "CatgeoryName"
+        },
+        {
+          "Name": "SCOPSUN",
+          "Type": "S",
+          "IndexSource": 23,
+          "GroupField": true,
+          "ColumnName": "Supplier_name"
+        },
+        {
+          "Name": "SCOPFAN",
+          "Type": "S",
+          "IndexSource": 23,
+          "ColumnName": "factory_name"
+        },
+        {
+          "Name": "SCOPPAC",
+          "Type": "S",
+          "IndexSource": 23,
+          "ColumnName": "Pass"
+        },
+        {
+          "Name": "SCOPFAC",
+          "Type": "S",
+          "IndexSource": 23,
+          "ColumnName": "Fail"
+        },
+        {
+          "Name": "SCOPPEC",
+          "Type": "S",
+          "IndexSource": 23,
+          "ColumnName": "Pending",
+          "IsHorizontalCollection": false,
+          "GroupField": false,
+          "MaxRowsNumber": null,
+          "IsFirstRowBoldInGroup": false,
+          "UsedForFirstRowGroup": false,
+          "IndexGroup": null
+        },
+        {
+          "Name": "SCOPMIC",
+          "Type": "S",
+          "IndexSource": 23,
+          "ColumnName": "Missing",
+          "IsHorizontalCollection": false,
+          "GroupField": false,
+          "MaxRowsNumber": null,
+          "IsFirstRowBoldInGroup": false,
+          "UsedForFirstRowGroup": false,
+          "IndexGroup": null
+        },
+        {
+          "Name": "SCOPPPAC",
+          "Type": "S",
+          "IndexSource": 23,
+          "ColumnName": "PerPass",
+          "IsHorizontalCollection": false,
+          "GroupField": false,
+          "MaxRowsNumber": null,
+          "IsFirstRowBoldInGroup": false,
+          "UsedForFirstRowGroup": false,
+          "IndexGroup": null
+        },
+        {
+          "Name": "SCOPPFAC",
+          "Type": "S",
+          "IndexSource": 23,
+          "ColumnName": "PerFail",
+          "IsHorizontalCollection": false,
+          "GroupField": false,
+          "MaxRowsNumber": null,
+          "IsFirstRowBoldInGroup": false,
+          "UsedForFirstRowGroup": false,
+          "IndexGroup": null
+        },
+        {
+          "Name": "SCOPPPEC",
+          "Type": "S",
+          "IndexSource": 23,
+          "ColumnName": "PerPending",
+          "IsHorizontalCollection": false,
+          "GroupField": false,
+          "MaxRowsNumber": null,
+          "IsFirstRowBoldInGroup": false,
+          "UsedForFirstRowGroup": false,
+          "IndexGroup": null
+        },
+        {
+          "Name": "SCOPPPMIC",
+          "Type": "S",
+          "IndexSource": 23,
+          "ColumnName": "PerMissing"
+        },
+        {
+          "Name": "SCOPSPBS",
+          "Type": "S",
+          "IndexSource": 23,
+          "ColumnName": "SumPassBySupplier"
+        },
+        {
+          "Name": "SCOPSPBC",
+          "Type": "S",
+          "IndexSource": 23,
+          "ColumnName": "SumPassByCategory"
+        },
+        {
+          "Name": "SCOPSFBS",
+          "Type": "S",
+          "IndexSource": 23,
+          "ColumnName": "SumFailBySupplier"
+        },
+        {
+          "Name": "SCOPSFBC",
+          "Type": "S",
+          "IndexSource": 23,
+          "ColumnName": "SumFailByCategory"
+        },
+        {
+          "Name": "SCOPSPEBS",
+          "Type": "S",
+          "IndexSource": 23,
+          "ColumnName": "SumPendBySupplier"
+        },
+        {
+          "Name": "SCOPSPEBC",
+          "Type": "S",
+          "IndexSource": 23,
+          "ColumnName": "SumPendByCategory"
+        },
+        {
+          "Name": "SCOPSMIBS",
+          "Type": "S",
+          "IndexSource": 23,
+          "ColumnName": "SumMissBySupplier"
+        },
+        {
+          "Name": "SCOPSMIBC",
+          "Type": "S",
+          "IndexSource": 23,
+          "ColumnName": "SumMissByCategory"
+        },
+        {
+          "Name": "SCOPSTOTBC",
+          "Type": "S",
+          "IndexSource": 23,
+          "ColumnName": "SumTotalByCategory"
+        },
+        {
+          "Name": "SCOPSTOTBS",
+          "Type": "S",
+          "IndexSource": 23,
+          "ColumnName": "SumTotalBySupplier"
+        },
+        {
+          "Name": "SCOPSTOTBF",
+          "Type": "S",
+          "IndexSource": 23,
+          "ColumnName": "SumTotalByFactory"
+        },
+        {
+          "Name": "SCOPSPPBS",
+          "Type": "S",
+          "IndexSource": 23,
+          "ColumnName": "SumPerPassBySupplier"
+        },
+        {
+          "Name": "SCOPSPPBC",
+          "Type": "S",
+          "IndexSource": 23,
+          "ColumnName": "SumPerPassByCategory"
+        },
+        {
+          "Name": "SCOPSPFBS",
+          "Type": "S",
+          "IndexSource": 23,
+          "ColumnName": "SumPerFailBySupplier"
+        },
+        {
+          "Name": "SCOPSPFBC",
+          "Type": "S",
+          "IndexSource": 23,
+          "ColumnName": "SumPerFailByCategory"
+        },
+        {
+          "Name": "SCOPSPPEBS",
+          "Type": "S",
+          "IndexSource": 23,
+          "ColumnName": "SumPerPendBySupplier"
+        },
+        {
+          "Name": "SCOPSPPEBC",
+          "Type": "S",
+          "IndexSource": 23,
+          "ColumnName": "SumPerPendByCategory"
+        },
+        {
+          "Name": "SCOPSPMIBS",
+          "Type": "S",
+          "IndexSource": 23,
+          "ColumnName": "SumPerMissBySupplier"
+        },
+        {
+          "Name": "SCOPSPMIBC",
+          "Type": "S",
+          "IndexSource": 23,
+          "ColumnName": "SumPerMissByCategory"
+        }
+
+      ]
+    },
+
+
+    //Index 24 - Top 20 Suppliers performances - Last year  slide 12
+    {
+      "Name": "SPLY",
+      "Type": "CHART",
+      "IndexSource": 24,
+      "ColumnName": null,
+      "IsHorizontalCollection": false,
+      "GroupField": false,
+      "MaxRowsNumber": null,
+      "IsFirstRowBoldInGroup": false,
+      "UsedForFirstRowGroup": false,
+      "IndexGroup": null,
+      "ChartType": 2,
+      "FixScale": true,
+      "Categories": "SPLYSN",
+      "Variables": [
+        {
+          "Name": "SPLYSN",
+          "Type": "S",
+          "IndexSource": 24,
+          "ColumnName": "Supplier_Name",
+          "IsHorizontalCollection": false,
+          "GroupField": false,
+          "MaxRowsNumber": null,
+          "IsFirstRowBoldInGroup": false,
+          "UsedForFirstRowGroup": false,
+          "IndexGroup": null
+        },
+        {
+          "Name": "Passed",
+          "Type": "S",
+          "IndexSource": 24,
+          "ColumnName": "Pass",
+          "IsHorizontalCollection": false,
+          "GroupField": false,
+          "MaxRowsNumber": null,
+          "IsFirstRowBoldInGroup": false,
+          "UsedForFirstRowGroup": false,
+          "IndexGroup": null
+        },
+        {
+          "Name": "Failed",
+          "Type": "S",
+          "IndexSource": 24,
+          "ColumnName": "Fail",
+          "IsHorizontalCollection": false,
+          "GroupField": false,
+          "MaxRowsNumber": null,
+          "IsFirstRowBoldInGroup": false,
+          "UsedForFirstRowGroup": false,
+          "IndexGroup": null
+        },
+        {
+          "Name": "Pending",
+          "Type": "S",
+          "IndexSource": 24,
+          "ColumnName": "Pending",
+          "IsHorizontalCollection": false,
+          "GroupField": false,
+          "MaxRowsNumber": null,
+          "IsFirstRowBoldInGroup": false,
+          "UsedForFirstRowGroup": false,
+          "IndexGroup": null
+        },
+        {
+          "Name": "Missing",
+          "Type": "S",
+          "IndexSource": 24,
+          "ColumnName": "Missing",
+          "IsHorizontalCollection": false,
+          "GroupField": false,
+          "MaxRowsNumber": null,
+          "IsFirstRowBoldInGroup": false,
+          "UsedForFirstRowGroup": false,
+          "IndexGroup": null
+        }
+      ]
+    },
+
+    //Index 25 - Top 20 Suppliers performances - current years  slide 12
+    {
+      "Name": "SPCY",
+      "Type": "CHART",
+      "IndexSource": 25,
+      "ColumnName": null,
+      "IsHorizontalCollection": false,
+      "GroupField": false,
+      "MaxRowsNumber": null,
+      "IsFirstRowBoldInGroup": false,
+      "UsedForFirstRowGroup": false,
+      "IndexGroup": null,
+      "ChartType": 2,
+      "FixScale": true,
+      "Categories": "SPCYSN",
+      "Variables": [
+        {
+          "Name": "SPCYSN",
+          "Type": "S",
+          "IndexSource": 25,
+          "ColumnName": "Supplier_Name",
+          "IsHorizontalCollection": false,
+          "GroupField": false,
+          "MaxRowsNumber": null,
+          "IsFirstRowBoldInGroup": false,
+          "UsedForFirstRowGroup": false,
+          "IndexGroup": null
+        },
+        {
+          "Name": "Passed",
+          "Type": "S",
+          "IndexSource": 25,
+          "ColumnName": "Pass",
+          "IsHorizontalCollection": false,
+          "GroupField": false,
+          "MaxRowsNumber": null,
+          "IsFirstRowBoldInGroup": false,
+          "UsedForFirstRowGroup": false,
+          "IndexGroup": null
+        },
+        {
+          "Name": "Failed",
+          "Type": "S",
+          "IndexSource": 25,
+          "ColumnName": "Fail",
+          "IsHorizontalCollection": false,
+          "GroupField": false,
+          "MaxRowsNumber": null,
+          "IsFirstRowBoldInGroup": false,
+          "UsedForFirstRowGroup": false,
+          "IndexGroup": null
+        },
+        {
+          "Name": "Pending",
+          "Type": "S",
+          "IndexSource": 25,
+          "ColumnName": "Pending",
+          "IsHorizontalCollection": false,
+          "GroupField": false,
+          "MaxRowsNumber": null,
+          "IsFirstRowBoldInGroup": false,
+          "UsedForFirstRowGroup": false,
+          "IndexGroup": null
+        },
+        {
+          "Name": "Missing",
+          "Type": "S",
+          "IndexSource": 25,
+          "ColumnName": "Missing",
+          "IsHorizontalCollection": false,
+          "GroupField": false,
+          "MaxRowsNumber": null,
+          "IsFirstRowBoldInGroup": false,
+          "UsedForFirstRowGroup": false,
+          "IndexGroup": null
+        }
+      ]
+    },
+
+    //Index 26 - Top 20 Suppliers performances - nb remprts  slide 12
+    {
+      "Name": "SPNR",
+      "Type": "CHART",
+      "IndexSource": 26,
+      "ColumnName": null,
+      "IsHorizontalCollection": false,
+      "GroupField": false,
+      "IsFirstRowBoldInGroup": false,
+      "UsedForFirstRowGroup": false,
+      "IndexGroup": null,
+      "ChartType": 2,
+      "Categories": "SPNRSN",
+      "Variables": [
+        {
+          "Name": "SPNRSN",
+          "Type": "S",
+          "IndexSource": 26,
+          "ColumnName": "Supplier_Name",
+          "IsHorizontalCollection": false,
+          "GroupField": false,
+          "MaxRowsNumber": null,
+          "IsFirstRowBoldInGroup": false,
+          "UsedForFirstRowGroup": false,
+          "IndexGroup": null
+        },
+        {
+          "Name": "No. of reports",
+          "Type": "S",
+          "IndexSource": 26,
+          "ColumnName": "nbInspection",
+          "IsHorizontalCollection": false,
+          "GroupField": false,
+          "IsFirstRowBoldInGroup": false,
+          "UsedForFirstRowGroup": false,
+          "IndexGroup": null
+        }
+      ]
+    },
+
+
+    // Index 27 Suppliers overall performances – Fail reasons slide 13-14
+    {
+      "Name": "SOPFR",
+      "Type": "LIST",
+      "IndexSource": 27,
+      "ColumnName": null,
+      "IsHorizontalCollection": false,
+      "GroupField": false,
+      "MaxRowsNumber": 6,
+      "IsFirstRowBoldInGroup": false,
+      "UsedForFirstRowGroup": false,
+      "IndexGroup": null,
+      "Variables": [
+        {
+          "Name": "SOPFRCN",
+          "Type": "S",
+          "IndexSource": 27,
+          "ColumnName": "Country_Name",
+          "IsHorizontalCollection": false,
+          "GroupField": true,
+          "IsFirstRowBoldInGroup": false,
+          "UsedForFirstRowGroup": false,
+          "IndexGroup": null
+        },
+        {
+          "Name": "SOPFRSN",
+          "Type": "S",
+          "IndexSource": 27,
+          "ColumnName": "Supplier_name",
+          "IsHorizontalCollection": false,
+          "GroupField": true,
+          "IsFirstRowBoldInGroup": false,
+          "UsedForFirstRowGroup": false,
+          "IndexGroup": null
+        },
+        {
+          "Name": "SOPFRFN",
+          "Type": "S",
+          "IndexSource": 27,
+          "ColumnName": "factory_name",
+          "IsHorizontalCollection": false,
+          "GroupField": false,
+          "IsFirstRowBoldInGroup": false,
+          "UsedForFirstRowGroup": false,
+          "IndexGroup": null
+        },
+        {
+          "Name": "SOPFRRE",
+          "Type": "S",
+          "IndexSource": 27,
+          "ColumnName": "reports",
+          "IsHorizontalCollection": false,
+          "GroupField": false,
+          "IsFirstRowBoldInGroup": false,
+          "UsedForFirstRowGroup": false,
+          "IndexGroup": null
+        },
+        {
+          "Name": "SOPFRFR",
+          "Type": "S",
+          "IndexSource": 27,
+          "ColumnName": "FailRemarks",
+          "IsHorizontalCollection": false,
+          "GroupField": false,
+          "IsFirstRowBoldInGroup": false,
+          "UsedForFirstRowGroup": false,
+          "IndexGroup": null
+        },
+        {
+          "Name": "SOPFRQU",
+          "Type": "S",
+          "IndexSource": 27,
+          "ColumnName": "Quantity",
+          "IsHorizontalCollection": false,
+          "GroupField": false,
+          "IsFirstRowBoldInGroup": false,
+          "UsedForFirstRowGroup": false,
+          "IndexGroup": null
+        },
+        {
+          "Name": "SOPFRWS",
+          "Type": "S",
+          "IndexSource": 27,
+          "ColumnName": "Workmanship",
+          "IsHorizontalCollection": false,
+          "IsFirstRowBoldInGroup": false,
+          "UsedForFirstRowGroup": false,
+          "IndexGroup": null
+        },
+        {
+          "Name": "SOPFRPS",
+          "Type": "S",
+          "IndexSource": 27,
+          "ColumnName": "ProductSpec",
+          "IsHorizontalCollection": false,
+          "IsFirstRowBoldInGroup": false,
+          "UsedForFirstRowGroup": false,
+          "IndexGroup": null
+        },
+        {
+          "Name": "SOPFRPA",
+          "Type": "S",
+          "IndexSource": 27,
+          "ColumnName": "Packing",
+          "IsHorizontalCollection": false,
+          "IsFirstRowBoldInGroup": false,
+          "UsedForFirstRowGroup": false,
+          "IndexGroup": null
+        },
+        {
+          "Name": "SOPFROS",
+          "Type": "S",
+          "IndexSource": 27,
+          "ColumnName": "OnSiteTests",
+          "IsHorizontalCollection": false,
+          "GroupField": false,
+          "MaxRowsNumber": null,
+          "IsFirstRowBoldInGroup": false,
+          "UsedForFirstRowGroup": false,
+          "IndexGroup": null
+        },
+        {
+          "Name": "SOPFROT",
+          "Type": "S",
+          "IndexSource": 27,
+          "ColumnName": "Others",
+          "IsHorizontalCollection": false,
+          "GroupField": false,
+          "MaxRowsNumber": null,
+          "IsFirstRowBoldInGroup": false,
+          "UsedForFirstRowGroup": false,
+          "IndexGroup": null
+        }
+      ]
+    },
+
+    //  Index 28 Suppliers overall performances – Pending reasons slide 15-16
+    {
+      "Name": "SOPPR",
+      "Type": "LIST",
+      "IndexSource": 28,
+      "ColumnName": null,
+      "IsHorizontalCollection": false,
+      "GroupField": false,
+      "MaxRowsNumber": 6,
+      "IsFirstRowBoldInGroup": false,
+      "UsedForFirstRowGroup": false,
+      "IndexGroup": null,
+      "Variables": [
+        {
+          "Name": "SOPPRCN",
+          "Type": "S",
+          "IndexSource": 28,
+          "ColumnName": "Country_Name",
+          "IsHorizontalCollection": false,
+          "GroupField": true,
+          "MaxRowsNumber": null,
+          "IsFirstRowBoldInGroup": false,
+          "UsedForFirstRowGroup": false,
+          "IndexGroup": null
+        },
+        {
+          "Name": "SOPPRSN",
+          "Type": "S",
+          "IndexSource": 28,
+          "ColumnName": "Supplier_name",
+          "IsHorizontalCollection": false,
+          "GroupField": true,
+          "MaxRowsNumber": null,
+          "IsFirstRowBoldInGroup": false,
+          "UsedForFirstRowGroup": false,
+          "IndexGroup": null
+        },
+        {
+          "Name": "SOPPRFN",
+          "Type": "S",
+          "IndexSource": 28,
+          "ColumnName": "factory_name",
+          "IsHorizontalCollection": false,
+          "GroupField": false,
+          "MaxRowsNumber": null,
+          "IsFirstRowBoldInGroup": false,
+          "UsedForFirstRowGroup": false,
+          "IndexGroup": null
+        },
+        {
+          "Name": "SOPPRRE",
+          "Type": "S",
+          "IndexSource": 28,
+          "ColumnName": "reports",
+          "IsHorizontalCollection": false,
+          "GroupField": false,
+          "MaxRowsNumber": null,
+          "IsFirstRowBoldInGroup": false,
+          "UsedForFirstRowGroup": false,
+          "IndexGroup": null
+        },
+        {
+          "Name": "SOPPRPR",
+          "Type": "S",
+          "IndexSource": 28,
+          "ColumnName": "PendingRemarks",
+          "IsHorizontalCollection": false,
+          "GroupField": false,
+          "MaxRowsNumber": null,
+          "IsFirstRowBoldInGroup": false,
+          "UsedForFirstRowGroup": false,
+          "IndexGroup": null
+        },
+        {
+          "Name": "SOPPRQU",
+          "Type": "S",
+          "IndexSource": 28,
+          "ColumnName": "Quantity",
+          "IsHorizontalCollection": false,
+          "GroupField": false,
+          "MaxRowsNumber": null,
+          "IsFirstRowBoldInGroup": false,
+          "UsedForFirstRowGroup": false,
+          "IndexGroup": null
+        },
+        {
+          "Name": "SOPPRWS",
+          "Type": "S",
+          "IndexSource": 28,
+          "ColumnName": "Workmanship",
+          "IsHorizontalCollection": false,
+          "GroupField": false,
+          "MaxRowsNumber": null,
+          "IsFirstRowBoldInGroup": false,
+          "UsedForFirstRowGroup": false,
+          "IndexGroup": null
+        },
+        {
+          "Name": "SOPPRPS",
+          "Type": "S",
+          "IndexSource": 28,
+          "ColumnName": "ProductSpec",
+          "IsHorizontalCollection": false,
+          "GroupField": false,
+          "MaxRowsNumber": null,
+          "IsFirstRowBoldInGroup": false,
+          "UsedForFirstRowGroup": false,
+          "IndexGroup": null
+        },
+        {
+          "Name": "SOPPRPA",
+          "Type": "S",
+          "IndexSource": 28,
+          "ColumnName": "Packing",
+          "IsHorizontalCollection": false,
+          "GroupField": false,
+          "MaxRowsNumber": null,
+          "IsFirstRowBoldInGroup": false,
+          "UsedForFirstRowGroup": false,
+          "IndexGroup": null
+        },
+        {
+          "Name": "SOPPROS",
+          "Type": "S",
+          "IndexSource": 28,
+          "ColumnName": "OnSiteTests",
+          "IsHorizontalCollection": false,
+          "GroupField": false,
+          "MaxRowsNumber": null,
+          "IsFirstRowBoldInGroup": false,
+          "UsedForFirstRowGroup": false,
+          "IndexGroup": null
+        },
+        {
+          "Name": "SOPPROT",
+          "Type": "S",
+          "IndexSource": 28,
+          "ColumnName": "Others",
+          "IsHorizontalCollection": false,
+          "GroupField": false,
+          "MaxRowsNumber": null,
+          "IsFirstRowBoldInGroup": false,
+          "UsedForFirstRowGroup": false,
+          "IndexGroup": null
+        }
+      ]
+    },
+
+
+    // Index 29 Suppliers overall performances – Fail reasons detail slide 17-18
+    {
+      "Name": "SOPFRD",
+      "Type": "LIST",
+      "IndexSource": 29,
+      "ColumnName": null,
+      "IsHorizontalCollection": false,
+      "GroupField": false,
+      "MaxRowsNumber": 8,
+      "IsFirstRowBoldInGroup": false,
+      "UsedForFirstRowGroup": false,
+      "IndexGroup": null,
+      "Variables": [
+        {
+          "Name": "SOPFRDCN",
+          "Type": "S",
+          "IndexSource": 29,
+          "ColumnName": "Country_Name",
+          "IsHorizontalCollection": false,
+          "GroupField": true,
+          "MaxRowsNumber": null,
+          "IsFirstRowBoldInGroup": false,
+          "UsedForFirstRowGroup": false,
+          "IndexGroup": null
+        },
+        {
+          "Name": "SOPFRDSN",
+          "Type": "S",
+          "IndexSource": 29,
+          "ColumnName": "Supplier_name",
+          "IsHorizontalCollection": false,
+          "GroupField": true,
+          "MaxRowsNumber": null,
+          "IsFirstRowBoldInGroup": false,
+          "UsedForFirstRowGroup": false,
+          "IndexGroup": null
+        },
+        {
+          "Name": "SOPFRDFN",
+          "Type": "S",
+          "IndexSource": 29,
+          "ColumnName": "factory_name",
+          "IsHorizontalCollection": false,
+          "GroupField": true,
+          "MaxRowsNumber": null,
+          "IsFirstRowBoldInGroup": false,
+          "UsedForFirstRowGroup": false,
+          "IndexGroup": null
+        },
+        {
+          "Name": "SOPFRDRE",
+          "Type": "S",
+          "IndexSource": 29,
+          "ColumnName": "reports",
+          "IsHorizontalCollection": false,
+          "GroupField": true,
+          "MaxRowsNumber": null,
+          "IsFirstRowBoldInGroup": false,
+          "UsedForFirstRowGroup": false,
+          "IndexGroup": null
+        },
+        {
+          "Name": "SOPFRDR",
+          "Type": "S",
+          "IndexSource": 29,
+          "ColumnName": "Reason",
+          "IsHorizontalCollection": false,
+          "GroupField": false,
+          "MaxRowsNumber": null,
+          "IsFirstRowBoldInGroup": false,
+          "UsedForFirstRowGroup": false,
+          "IndexGroup": null
+        },
+        {
+          "Name": "SOPFRDPR",
+          "Type": "S",
+          "IndexSource": 29,
+          "ColumnName": "PercentReason",
+          "IsHorizontalCollection": false,
+          "GroupField": false,
+          "MaxRowsNumber": null,
+          "IsFirstRowBoldInGroup": false,
+          "UsedForFirstRowGroup": false,
+          "IndexGroup": null
+        },
+        {
+          "Name": "SOPFRDFR",
+          "Type": "S",
+          "IndexSource": 29,
+          "ColumnName": "TotalFailRemarks",
+          "IsHorizontalCollection": false,
+          "GroupField": false,
+          "MaxRowsNumber": null,
+          "IsFirstRowBoldInGroup": false,
+          "UsedForFirstRowGroup": false,
+          "IndexGroup": null
+        }
+
+      ]
+    },
+
+
+    // Index 30 Suppliers overall performances – Pending reasons detail slide 19-20
+    {
+      "Name": "SOPPRD",
+      "Type": "LIST",
+      "IndexSource": 30,
+      "ColumnName": null,
+      "IsHorizontalCollection": false,
+      "GroupField": false,
+      "MaxRowsNumber": 8,
+      "IsFirstRowBoldInGroup": false,
+      "UsedForFirstRowGroup": false,
+      "IndexGroup": null,
+      "Variables": [
+        {
+          "Name": "SOPPRDCN",
+          "Type": "S",
+          "IndexSource": 30,
+          "ColumnName": "Country_Name",
+          "IsHorizontalCollection": false,
+          "GroupField": true,
+          "MaxRowsNumber": null,
+          "IsFirstRowBoldInGroup": false,
+          "UsedForFirstRowGroup": false,
+          "IndexGroup": null
+        },
+        {
+          "Name": "SOPPRDSN",
+          "Type": "S",
+          "IndexSource": 30,
+          "ColumnName": "Supplier_name",
+          "IsHorizontalCollection": false,
+          "GroupField": true,
+          "MaxRowsNumber": null,
+          "IsFirstRowBoldInGroup": false,
+          "UsedForFirstRowGroup": false,
+          "IndexGroup": null
+        },
+        {
+          "Name": "SOPPRDFN",
+          "Type": "S",
+          "IndexSource": 30,
+          "ColumnName": "factory_name",
+          "IsHorizontalCollection": false,
+          "GroupField": true,
+          "MaxRowsNumber": null,
+          "IsFirstRowBoldInGroup": false,
+          "UsedForFirstRowGroup": false,
+          "IndexGroup": null
+        },
+        {
+          "Name": "SOPPRDRE",
+          "Type": "S",
+          "IndexSource": 30,
+          "ColumnName": "reports",
+          "IsHorizontalCollection": false,
+          "GroupField": true,
+          "MaxRowsNumber": null,
+          "IsFirstRowBoldInGroup": false,
+          "UsedForFirstRowGroup": false,
+          "IndexGroup": null
+        },
+        {
+          "Name": "SOPPRDR",
+          "Type": "S",
+          "IndexSource": 30,
+          "ColumnName": "Reason",
+          "IsHorizontalCollection": false,
+          "GroupField": false,
+          "MaxRowsNumber": null,
+          "IsFirstRowBoldInGroup": false,
+          "UsedForFirstRowGroup": false,
+          "IndexGroup": null
+        },
+        {
+          "Name": "SOPPRDPR",
+          "Type": "S",
+          "IndexSource": 30,
+          "ColumnName": "PercentReason",
+          "IsHorizontalCollection": false,
+          "GroupField": false,
+          "MaxRowsNumber": null,
+          "IsFirstRowBoldInGroup": false,
+          "UsedForFirstRowGroup": false,
+          "IndexGroup": null
+        },
+        {
+          "Name": "SOPPRPRD",
+          "Type": "S",
+          "IndexSource": 30,
+          "ColumnName": "TotalPendingRemarks",
+          "IsHorizontalCollection": false,
+          "GroupField": false,
+          "MaxRowsNumber": null,
+          "IsFirstRowBoldInGroup": false,
+          "UsedForFirstRowGroup": false,
+          "IndexGroup": null
+        }
+      ]
+    },
+
+    // Index 31 Suppliers overall performances – Defects details - slide 21-22
+    {
+      "Name": "SOPDD",
+      "Type": "LIST",
+      "IndexSource": 31,
+      "ColumnName": null,
+      "IsHorizontalCollection": false,
+      "GroupField": false,
+      "MaxRowsNumber": 11,
+      "IsFirstRowBoldInGroup": false,
+      "UsedForFirstRowGroup": false,
+      "IndexGroup": null,
+      "Variables": [
+        {
+          "Name": "SOPDDCN",
+          "Type": "S",
+          "IndexSource": 31,
+          "ColumnName": "Country_Name",
+          "IsHorizontalCollection": false,
+          "GroupField": true,
+          "MaxRowsNumber": null,
+          "IsFirstRowBoldInGroup": false,
+          "UsedForFirstRowGroup": false,
+          "IndexGroup": 1
+        },
+        {
+          "Name": "SOPDDSN",
+          "Type": "S",
+          "IndexSource": 31,
+          "ColumnName": "Supplier_name",
+          "IsHorizontalCollection": false,
+          "GroupField": true,
+          "MaxRowsNumber": null,
+          "IsFirstRowBoldInGroup": false,
+          "UsedForFirstRowGroup": false,
+          "IndexGroup": 2
+        },
+        {
+          "Name": "SOPDDFN",
+          "Type": "S",
+          "IndexSource": 31,
+          "ColumnName": "factory_name",
+          "IsHorizontalCollection": false,
+          "GroupField": true,
+          "MaxRowsNumber": null,
+          "IsFirstRowBoldInGroup": false,
+          "UsedForFirstRowGroup": false,
+          "IndexGroup": 3
+        },
+        {
+          "Name": "SOPDDDF",
+          "Type": "S",
+          "IndexSource": 31,
+          "ColumnName": "Defect",
+          "IsHorizontalCollection": false,
+          "GroupField": false,
+          "MaxRowsNumber": null,
+          "IsFirstRowBoldInGroup": false,
+          "UsedForFirstRowGroup": false,
+          "IndexGroup": null
+        },
+        {
+          "Name": "SOPDDCR",
+          "Type": "S",
+          "IndexSource": 31,
+          "ColumnName": "Critical",
+          "IsHorizontalCollection": false,
+          "GroupField": false,
+          "MaxRowsNumber": null,
+          "IsFirstRowBoldInGroup": false,
+          "UsedForFirstRowGroup": false,
+          "IndexGroup": null
+        },
+        {
+          "Name": "SOPDDMA",
+          "Type": "S",
+          "IndexSource": 31,
+          "ColumnName": "Major",
+          "IsHorizontalCollection": false,
+          "GroupField": false,
+          "MaxRowsNumber": null,
+          "IsFirstRowBoldInGroup": false,
+          "UsedForFirstRowGroup": false,
+          "IndexGroup": null
+        },
+        {
+          "Name": "SOPDDMI",
+          "Type": "S",
+          "IndexSource": 31,
+          "ColumnName": "Minor",
+          "IsHorizontalCollection": false,
+          "GroupField": false,
+          "MaxRowsNumber": null,
+          "IsFirstRowBoldInGroup": false,
+          "UsedForFirstRowGroup": false,
+          "IndexGroup": null
+        },
+        {
+          "Name": "SOPDDPR",
+          "Type": "S",
+          "IndexSource": 31,
+          "ColumnName": "PerDef",
+          "IsHorizontalCollection": false,
+          "GroupField": false,
+          "MaxRowsNumber": null,
+          "IsFirstRowBoldInGroup": false,
+          "UsedForFirstRowGroup": false,
+          "IndexGroup": null
+        }
+      ]
+    },
+
+    //Index 32 Overall resulat analysis  Fails
+    {
+      "Name": "ORAF",
+      "Type": "LIST",
+      "IndexSource": 32,
+      "Variables": [
+        {
+          "Name": "ORAFD",
+          "Type": "S",
+          "IndexSource": 32,
+          "ColumnName": "description"
+        },
+        {
+          "Name": "ORAFO",
+          "Type": "S",
+          "IndexSource": 32,
+          "ColumnName": "occurence"
+        },
+        {
+          "Name": "ORAFP",
+          "Type": "S",
+          "IndexSource": 32,
+          "ColumnName": "ocurencePercent"
+        }
+
+      ]
+    },
+
+    //Index 33 Overall resulat analysis  Pendings
+    {
+      "Name": "ORAP",
+      "Type": "LIST",
+      "IndexSource": 33,
+      "Variables": [
+        {
+          "Name": "ORAPD",
+          "Type": "S",
+          "IndexSource": 33,
+          "ColumnName": "description"
+        },
+        {
+          "Name": "ORAPO",
+          "Type": "S",
+          "IndexSource": 33,
+          "ColumnName": "occurence"
+        },
+        {
+          "Name": "ORAPP",
+          "Type": "S",
+          "IndexSource": 33,
+          "ColumnName": "ocurencePercent"
+        }
+
+      ]
+    },
+
+    // Index 34 overall resulats analysis Performance by categories
+    {
+      "Name": "OPRAC",
+      "Type": "CHART",
+      "IndexSource": 34,
+      "ChartType": 2,
+      "FixScale": true,
+      "Series": [
+        {
+          "Name": "Missing",
+          "Values": "OPRACMI",
+          "Color": "808080"
+        },
+        {
+          "Name": "Pending",
+          "Values": "OPRACPE",
+          "Color": "FFA401"
+        },
+        {
+          "Name": "Fail",
+          "Values": "OPRACFA",
+          "Color": "FF0000"
+        },
+        {
+          "Name": "Pass",
+          "Values": "OPRACPA",
+          "Color": "92D050"
+        }
+      ],
+      "Categories": "OPRACCN",
+      "Variables": [
+        {
+          "Name": "OPRACCN",
+          "Type": "S",
+          "IndexSource": 34,
+          "ColumnName": "CatgeoryName"
+        },
+        {
+          "Name": "OPRACPE",
+          "Type": "S",
+          "IndexSource": 34,
+          "ColumnName": "Pending"
+        },
+        {
+          "Name": "OPRACMI",
+          "Type": "S",
+          "IndexSource": 34,
+          "ColumnName": "Missing"
+        },
+        {
+          "Name": "OPRACPA",
+          "Type": "S",
+          "IndexSource": 34,
+          "ColumnName": "Pass"
+        },
+        {
+          "Name": "OPRACFA",
+          "Type": "S",
+          "IndexSource": 34,
+          "ColumnName": "Fail"
+        }
+      ]
+    },
+    // Index 35 - Inspections by department by country - slide 9 - Last Year
+    {
+      "Name": "IBDCLY",
+      "Type": "MATRIX",
+      "IndexSource": 35,
+      "X": "IDCLYCAN",
+      "Y": "IDCLYCN",
+      "Variables": [
+        {
+          "Name": "IDCLYCAN",
+          "Type": "S",
+          "IndexSource": 35,
+          "ColumnName": "DepartmentName"
+        },
+        {
+          "Name": "IDCLYCN",
+          "Type": "S",
+          "IndexSource": 35,
+          "ColumnName": "CountryName"
+        },
+        {
+          "Name": "IDCLYMD",
+          "Type": "S",
+          "IndexSource": 35,
+          "ColumnName": "ManDay"
+        }
+
+      ]
+    },
+
+    // Index 36 - Inspections by department by country - slide 9 - Current Year
+    {
+      "Name": "IBDCCY",
+      "Type": "MATRIX",
+      "IndexSource": 36,
+      "X": "IDCCYCAN",
+      "Y": "IDCCYCN",
+      "Variables": [
+        {
+          "Name": "IDCCYCAN",
+          "Type": "S",
+          "IndexSource": 36,
+          "ColumnName": "DepartmentName"
+        },
+        {
+          "Name": "IDCCYCN",
+          "Type": "S",
+          "IndexSource": 36,
+          "ColumnName": "CountryName"
+        },
+        {
+          "Name": "IDCCYCMD",
+          "Type": "S",
+          "IndexSource": 36,
+          "ColumnName": "ManDay"
+        }
+      ]
+    },
+    //Index 37 Overall resulat analysis  Fails
+    {
+      "Name": "ORDAF",
+      "Type": "LIST",
+      "IndexSource": 37,
+      "Variables": [
+        {
+          "Name": "ORDAFD",
+          "Type": "S",
+          "IndexSource": 37,
+          "ColumnName": "description"
+        },
+        {
+          "Name": "ORDAFO",
+          "Type": "S",
+          "IndexSource": 37,
+          "ColumnName": "occurence"
+        },
+        {
+          "Name": "ORDAFP",
+          "Type": "S",
+          "IndexSource": 37,
+          "ColumnName": "ocurencePercent"
+        }
+
+      ]
+    },
+
+    //Index 38 Overall resulat analysis  Pendings
+    {
+      "Name": "ORDAP",
+      "Type": "LIST",
+      "IndexSource": 38,
+      "Variables": [
+        {
+          "Name": "ORDAPD",
+          "Type": "S",
+          "IndexSource": 38,
+          "ColumnName": "description"
+        },
+        {
+          "Name": "ORDAPO",
+          "Type": "S",
+          "IndexSource": 38,
+          "ColumnName": "occurence"
+        },
+        {
+          "Name": "ORDAPP",
+          "Type": "S",
+          "IndexSource": 38,
+          "ColumnName": "ocurencePercent"
+        }
+
+      ]
+    },
+
+    // Index 39 overall resulats analysis Performance by department
+    {
+      "Name": "OPRAD",
+      "Type": "CHART",
+      "IndexSource": 39,
+      "ChartType": 2,
+      "FixScale": true,
+      "Series": [
+        {
+          "Name": "Missing",
+          "Values": "OPRADMI",
+          "Color": "808080"
+        },
+        {
+          "Name": "Pending",
+          "Values": "OPRADPE",
+          "Color": "FFA401"
+        },
+        {
+          "Name": "Fail",
+          "Values": "OPRADFA",
+          "Color": "FF0000"
+        },
+        {
+          "Name": "Pass",
+          "Values": "OPRADPA",
+          "Color": "92D050"
+        }
+      ],
+      "Categories": "OPRADDN",
+      "Variables": [
+        {
+          "Name": "OPRADDN",
+          "Type": "S",
+          "IndexSource": 39,
+          "ColumnName": "DepartmentName"
+        },
+        {
+          "Name": "OPRADPE",
+          "Type": "S",
+          "IndexSource": 39,
+          "ColumnName": "Pending"
+        },
+        {
+          "Name": "OPRADMI",
+          "Type": "S",
+          "IndexSource": 39,
+          "ColumnName": "Missing"
+        },
+        {
+          "Name": "OPRADPA",
+          "Type": "S",
+          "IndexSource": 39,
+          "ColumnName": "Pass"
+        },
+        {
+          "Name": "OPRADFA",
+          "Type": "S",
+          "IndexSource": 39,
+          "ColumnName": "Fail"
+        }
+      ]
+    },
+    // Index 40 - Inspections overall performances PER Department - slide 11 - new one
+    {
+      "Name": "SOPCAD",
+      "Type": "LIST",
+      "IndexSource": 40,
+      "MaxRowsNumber": 4,
+      "GroupField": true,
+      "Variables": [
+        {
+          "Name": "SCOPCND",
+          "Type": "S",
+          "IndexSource": 40,
+          "GroupField": true,
+          "ColumnName": "department_name"
+        },
+        {
+          "Name": "SCOPSUND",
+          "Type": "S",
+          "IndexSource": 40,
+          "GroupField": true,
+          "ColumnName": "Supplier_name"
+        },
+        {
+          "Name": "SCOPFAND",
+          "Type": "S",
+          "IndexSource": 40,
+          "ColumnName": "factory_name"
+        },
+        {
+          "Name": "SCOPPACD",
+          "Type": "S",
+          "IndexSource": 40,
+          "ColumnName": "Pass"
+        },
+        {
+          "Name": "SCOPFACD",
+          "Type": "S",
+          "IndexSource": 40,
+          "ColumnName": "Fail"
+        },
+        {
+          "Name": "SCOPPECD",
+          "Type": "S",
+          "IndexSource": 40,
+          "ColumnName": "Pending"
+        },
+        {
+          "Name": "SCOPMICD",
+          "Type": "S",
+          "IndexSource": 40,
+          "ColumnName": "Missing"
+        },
+        {
+          "Name": "SCOPPPACD",
+          "Type": "S",
+          "IndexSource": 40,
+          "ColumnName": "PerPass"
+        },
+        {
+          "Name": "SCOPPFACD",
+          "Type": "S",
+          "IndexSource": 40,
+          "ColumnName": "PerFail"
+        },
+        {
+          "Name": "SCOPPPECD",
+          "Type": "S",
+          "IndexSource": 40,
+          "ColumnName": "PerPending"
+        },
+        {
+          "Name": "SCOPPPMICD",
+          "Type": "S",
+          "IndexSource": 40,
+          "ColumnName": "PerMissing"
+        },
+        {
+          "Name": "SCOPSPBSD",
+          "Type": "S",
+          "IndexSource": 40,
+          "ColumnName": "SumPassBySupplier"
+        },
+        {
+          "Name": "SCOPSPBD",
+          "Type": "S",
+          "IndexSource": 40,
+          "ColumnName": "SumPassByDepartment"
+        },
+        {
+          "Name": "SCOPSFBSD",
+          "Type": "S",
+          "IndexSource": 40,
+          "ColumnName": "SumFailBySupplier"
+        },
+        {
+          "Name": "SCOPSFBD",
+          "Type": "S",
+          "IndexSource": 40,
+          "ColumnName": "SumFailByDepartment"
+        },
+        {
+          "Name": "SCOPSPEBSD",
+          "Type": "S",
+          "IndexSource": 40,
+          "ColumnName": "SumPendBySupplier"
+        },
+        {
+          "Name": "SCOPSPEBD",
+          "Type": "S",
+          "IndexSource": 40,
+          "ColumnName": "SumPendByDepartment"
+        },
+        {
+          "Name": "SCOPSMIBSD",
+          "Type": "S",
+          "IndexSource": 40,
+          "ColumnName": "SumMissBySupplier"
+        },
+        {
+          "Name": "SCOPSMIBD",
+          "Type": "S",
+          "IndexSource": 40,
+          "ColumnName": "SumMissByDepartment"
+        },
+        {
+          "Name": "SCOPSPPBSD",
+          "Type": "S",
+          "IndexSource": 40,
+          "ColumnName": "SumPerPassBySupplier"
+        },
+        {
+          "Name": "SCOPSPPBD",
+          "Type": "S",
+          "IndexSource": 40,
+          "ColumnName": "SumPerPassByDepartment"
+        },
+        {
+          "Name": "SCOPSPPBCD",
+          "Type": "S",
+          "IndexSource": 40,
+          "ColumnName": "SumPerFailBySupplier"
+        },
+        {
+          "Name": "SCOPSPFBD",
+          "Type": "S",
+          "IndexSource": 40,
+          "ColumnName": "SumPerFailByDepartment"
+        },
+        {
+          "Name": "SCOPSPPEBSD",
+          "Type": "S",
+          "IndexSource": 40,
+          "ColumnName": "SumPerPendBySupplier"
+        },
+        {
+          "Name": "SCOPSPPEBD",
+          "Type": "S",
+          "IndexSource": 40,
+          "ColumnName": "SumPerPendByDepartment"
+        },
+        {
+          "Name": "SCOPSPFBSD",
+          "Type": "S",
+          "IndexSource": 40,
+          "ColumnName": "SumPerMissBySupplier"
+        },
+        {
+          "Name": "SCOPSPMIBD",
+          "Type": "S",
+          "IndexSource": 40,
+          "ColumnName": "SumPerMissByDepartment"
+        },
+        {
+          "Name": "SCOPSTOTBD",
+          "Type": "S",
+          "IndexSource": 40,
+          "ColumnName": "SumTotalByDepartment"
+        },
+        {
+          "Name": "SCOPSTOTBSD",
+          "Type": "S",
+          "IndexSource": 40,
+          "ColumnName": "SumTotalBySupplier"
+        },
+        {
+          "Name": "SCOPSTOTBFD",
+          "Type": "S",
+          "IndexSource": 40,
+          "ColumnName": "SumTotalByFactory"
+        }
+
+      ]
+    }
+  ]
+}

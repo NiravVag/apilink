@@ -1,0 +1,1247 @@
+<div class="main-wrapper">
+  <div class="wrapper dashboard-wrapper">
+    <div class="my-container">
+      <div class="master-body" *ngIf="!_issuccess">
+        <div class="title-container">
+          <div class="header-back-button" *ngIf="fromSummary && !Initialloading">
+            <img src="assets/images/back-red.png" alt="back" (click)="return('auditsummary/audit-summary')">
+          </div>
+          <h3 class="main-title"> {{'EDIT_AUDIT.TITLE' | translate }}</h3>
+          <span class="audit-id" *ngIf="model.auditid!=null && model.auditid!=0">#{{model.auditid}}</span>
+          <div class="audit-rule-container" *ngIf="!IsInternalUser" (click)="toggleRuleBox($event)">
+            <img src="assets/images/rules.svg" alt="rules">
+            <p>{{ 'EDIT_AUDIT.LBL_BOOKING_RULE_CONTACT' | translate }}</p>
+          </div>
+        </div>
+        <div class="row booking-rule-container" *ngIf="!IsInternalUser" #ruleBoxContainer>
+          <div class="col-sm-6">
+            <div class="office-info-container">
+              <img class="office-info-icon" src="assets/images/office.svg" alt="office">
+              <div class="office-info">
+                <h4 class="title">{{ 'EDIT_AUDIT.LBL_OFFICE_ADDRESS' | translate }}</h4>
+                <p class="text">{{_officedetails.officeAddress}}<br>
+                  <br>
+                </p>
+                <ul class="contact-list">
+                  <li>
+                    <img src="assets/images/phone.svg" alt="Phone">
+                    <span>
+                      <h6 *ngIf="model.officeTelNo!=null && model.officeTelNo.length>0">
+                        Tel:-{{_officedetails.officeTelNo}}</h6>
+                    </span>
+                  </li>
+                  <li>
+                    <img src="assets/images/mail.svg" alt="Email">
+                    <span class="red">{{_officedetails.planningEmailTo}}</span>
+                  </li>
+                  <li>
+                    <img src="assets/images/mail.svg" alt="Email">
+                    <span class="red">{{_officedetails.planningEmailCC}}</span>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+          <div class="col-sm-6">
+            <div class="rules-container">
+              <h4 class="title">{{'EDIT_AUDIT.LBL_BOOKING_RULE' | translate}}</h4>
+              <p class="text">{{BookingRuleDesc}}</p>
+            </div>
+          </div>
+        </div>
+        <div class="accordian-container" *ngIf="!isConfirmationVisible">
+          <!-- panel 1 -->
+          <div class="panel" #panel1 *ngIf="IsInternalUser">
+            <div class=" row panel-body">
+              <div class="col-sm-10">
+                <img src="assets/images/audit-step-1.svg" alt="" class="icon" *ngIf="!panelOneReady">
+                <img src="assets/images/green-circle-tick.svg" alt="" class="icon" *ngIf="panelOneReady">
+                <div class="panel-info">
+                  <h4 class="panel-title">{{ 'EDIT_AUDIT.LBL_MAIN_DETAILS' | translate }}</h4>
+                </div>
+                <div class="row marginLeft100 mobile-hide" *ngIf="panelOneReady">
+                  <div class="col-sm-12">
+                    <div class="my-input-group">
+                      <label class="light" for="">{{ 'EDIT_AUDIT.LBL_PO' | translate }}</label>
+                      <p class="input-value">{{model.ponumber}}</p>
+                    </div>
+                    <div class="my-input-group">
+                      <label class="light" for="">{{ 'EDIT_AUDIT.LBL_REPORT_NO' | translate }}</label>
+                      <p class="input-value">{{model.reportno}}</p>
+                    </div>
+                    <div class="my-input-group">
+                      <label class="light" for="">{{ 'EDIT_AUDIT.LBL_OFFICE' | translate }}</label>
+                      <p class="input-value">{{_Officename}}</p>
+                    </div>
+
+                  </div>
+                </div>
+              </div>
+              <!-- <div class="col-sm-2 text-right mobile-hide">
+                <ng-container *ngIf="panelOneReady">
+                  <button class="secondary-cta small"
+                    (click)="toggleAccordion($event,'panel1')">{{ 'EDIT_AUDIT.LBL_EDIT' | translate}}</button>
+                </ng-container>
+              </div> -->
+            </div>
+            <div class="panel-content">
+              <div class="audit-step-form">
+                <div class="row marginTop15">
+                  <div class="col-sm-6 col-md-6 col-lg-3">
+                    <div class="my-input-group">
+                      <label for="">{{ 'EDIT_AUDIT.LBL_PO' | translate }}</label>
+                      <input maxlength="300" [(ngModel)]="model.ponumber" type="text" />
+                    </div>
+                  </div>
+                  <div class="col-sm-6 col-md-6 col-lg-3 mobile-margin-top-15">
+                    <div class="my-input-group">
+                      <label for="">{{ 'EDIT_AUDIT.LBL_REPORT_NO' | translate }}</label>
+                      <input maxlength="300" disabled="disabled" [(ngModel)]="model.reportno" type="text" />
+                    </div>
+                  </div>
+                  <div class="col-sm-6 col-md-6 col-lg-3 mobile-margin-top-15">
+                    <div class="my-input-group">
+                      <label class="required" for="">{{ 'EDIT_AUDIT.LBL_OFFICE' | translate }}</label>
+                      <ng-select #customer [multiple]="false" [closeOnSelect]="true" [searchable]="true" appendTo="body"
+                        [loading]="Initialloading" [items]="_Office" bindLabel="name" bindValue="id"
+                        [ngClass]="{ 'is-invalid': !validator.isValid('officeid')}" [hideSelected]="true"
+                        placeholder="--- {{(_Office!=null && _Office.length!=0? 'EDIT_AUDIT.LBL_SELECT':'EDIT_AUDIT.MSG_NO_DATA')  | translate }} ---"
+                        [(ngModel)]="model.officeid">
+                      </ng-select>
+                      <div *ngIf="!validator.isValid('officeid')" class="invalid-feedback" style="display:block">
+                        <div *ngFor="let error of validator.getErrors('officeid')">{{ error | translate }}</div>
+                      </div>
+                    </div>
+                  </div>
+
+                </div>
+                <div class="row marginTop15">
+                  <div class="col-sm-12 col-md-12 col-lg-6 tablet-margin-top-15 mobile-margin-top-15">
+                    <div class="my-input-group">
+                      <label for="">{{ 'EDIT_AUDIT.LBL_INTERNAL_COMMENTS' | translate }}</label>
+                      <textarea maxlength="1000" [(ngModel)]="model.internalComments" type="text"></textarea>
+                    </div>
+                  </div>
+                </div>
+                <div class="row marginTop25">
+                  <div class="col-6 col-md-6 col-lg-6 mobile-margin-top-15">
+                    <div class="styled-checkbox-container">
+                      <input class="styled-checkbox" id="checkbox-1" type="checkbox"
+                        [(ngModel)]="model.isemailrequired">
+                      <label for="checkbox-1">{{ 'EDIT_AUDIT.LBL_EMail_NOTIFICATION' | translate }}</label>
+                    </div>
+                  </div>
+                  <div class="col-6 col-md-6 col-lg-6 text-right">
+                    <button class="primary-cta" (click)="IsPanelDataValid('panel1', 'panel2','panel1',false,$event)">{{
+                      'EDIT_AUDIT.LBL_NEXT' | translate }}</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- panel 2 -->
+          <div class="panel" #panel2>
+            <div class="row panel-body">
+              <div class="col-sm-10">
+                <img src="assets/images/audit-step-2.svg" alt="" class="icon" *ngIf="!panelTwoReady">
+                <img src="assets/images/green-circle-tick.svg" alt="" class="icon" *ngIf="panelTwoReady">
+                <div class="panel-info">
+                  <p class="count">Step 1</p>
+                  <h4 class="panel-title">General Information</h4>
+                </div>
+                <div class="row marginLeft100 mobile-hide" *ngIf="panelTwoReady">
+                  <div class="col-sm-12">
+                    <div class="my-input-group">
+                      <label class="light" for="">{{ 'EDIT_AUDIT.LBL_CUS' | translate }}</label>
+                      <p class="input-value">{{_cusname}}</p>
+                    </div>
+                    <div class="my-input-group">
+                      <label class="light" for="">{{ 'EDIT_AUDIT.LBL_SUP' | translate }}</label>
+                      <p class="input-value">{{_suppliername}}</p>
+                    </div>
+                    <div class="my-input-group">
+                      <label class="light" for="">{{ 'EDIT_AUDIT.LBL_FACT' | translate }}</label>
+                      <p class="input-value">{{_factoryname}}</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <!-- <div class="col-sm-2 text-right mobile-hide">
+                <ng-container *ngIf="panelTwoReady">
+                  <button class="secondary-cta small"
+                    (click)="toggleAccordion($event,'panel2')">{{ 'EDIT_AUDIT.LBL_EDIT' | translate}}</button>
+                </ng-container>
+              </div> -->
+            </div>
+            <div class="panel-content">
+              <div class="audit-step-form">
+                <div class="row marginTop15">
+                  <div class="col-sm-12">
+                    <div class="row marginTop25 tablet-margin-top-15">
+                      <div class="col-sm-3 col-md-6 col-lg-3 tablet-margin-top-15 mobile-margin-top-15">
+                        <div class="my-input-group">
+                          <label class="required" for="">{{ 'EDIT_AUDIT.LBL_CUS' | translate }}</label>
+                          <ng-select #customer [searchable]="true" [items]="_Customerlist" bindLabel="name"
+                            (change)="getCusRelatedDetails($event)"
+                            (clear)="ResetDetailsByCustomerId()" [loading]="Initialloading"
+                            [ngClass]="{ 'is-invalid': !validator.isValid('customerid')}" bindValue="id"
+                            [hideSelected]="true"
+                            placeholder="--- {{(_Customerlist!=null && _Customerlist.length!=0? 'EDIT_AUDIT.LBL_SELECT':'EDIT_AUDIT.MSG_NO_DATA')  | translate }} ---"
+                            [(ngModel)]="model.customerid">
+                          </ng-select>
+                          <div *ngIf="!validator.isValid('customerid')" class="invalid-feedback" style="display:block">
+                            <div *ngFor="let error of validator.getErrors('customerid')">{{ error | translate }}</div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-sm-3 col-md-6 col-lg-3 tablet-margin-top-15 mobile-margin-top-15">
+                        <div class="my-input-group">
+                          <label class="required" for="">{{ 'EDIT_AUDIT.LBL_CUS_CONTACT' | translate }}</label>
+                          <ng-select #customercontact [items]="data.customerContactList" class="multiple"
+                            [multiple]="true" [closeOnSelect]="false" [hideSelected]="true" [searchable]="true"
+                            bindLabel="contactName" bindValue="id" [loading]=cusloading
+                            [ngClass]="{ 'is-invalid': !validator.isValid('customercontactlistitems')}"
+                            placeholder="--- {{ (data.customerContactList!=null && data.customerContactList.length!=0? 'EDIT_AUDIT.LBL_SELECT':'EDIT_AUDIT.MSG_NO_DATA' ) | translate }} ---"
+                            [(ngModel)]="model.customercontactlistitems">
+                          </ng-select>
+                          <div *ngIf="!validator.isValid('customercontactlistitems')" class="invalid-feedback"
+                            style="display:block">
+                            <div *ngFor="let error of validator.getErrors('customercontactlistitems')">
+                              {{ error | translate }}</div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-sm-3 col-md-6 col-lg-3 tablet-margin-top-15 mobile-margin-top-15">
+                        <div class="my-input-group">
+                          <label for="">{{ 'EDIT_AUDIT.LBL_CUS_BRAND' | translate }}</label>
+                          <ng-select #customerbrand [items]="data.customerBrandList" bindLabel="name" bindValue="id"
+                            [multiple]="false" [closeOnSelect]="true" [searchable]="true" [loading]=cusloading
+                            [hideSelected]="true" [ngClass]="{ 'is-invalid': !validator.isValid('brandid')}"
+                            placeholder="--- {{ (data.customerBrandList!=null && data.customerBrandList.length!=0? 'EDIT_AUDIT.LBL_SELECT':'EDIT_AUDIT.MSG_NO_DATA' ) | translate }} ---"
+                            [(ngModel)]="model.brandid">
+                          </ng-select>
+                          <div *ngIf="!validator.isValid('brandid')" class="invalid-feedback" style="display:block">
+                            <div *ngFor="let error of validator.getErrors('brandid')">{{ error | translate }}</div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-sm-3 col-md-6 col-lg-3 tablet-margin-top-15">
+                        <div class="my-input-group">
+                          <label for="">{{ 'EDIT_AUDIT.LBL_CUS_DEPARTMENT' | translate }}</label>
+                          <ng-select #customerdep [items]="data.customerDepartmentList" bindLabel="name" bindValue="id"
+                            [multiple]="false" [closeOnSelect]="true" [searchable]="true" [loading]=cusloading
+                            [hideSelected]="true" [ngClass]="{ 'is-invalid': !validator.isValid('departmentid')}"
+                            placeholder="--- {{ (data.customerDepartmentList!=null && data.customerDepartmentList.length!=0? 'EDIT_AUDIT.LBL_SELECT':'EDIT_AUDIT.MSG_NO_DATA' ) | translate }} ---"
+                            [(ngModel)]="model.departmentid">
+                          </ng-select>
+                          <div *ngIf="!validator.isValid('departmentid')" class="invalid-feedback"
+                            style="display:block">
+                            <div *ngFor="let error of validator.getErrors('departmentid')">{{ error | translate }}</div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="row marginTop25 tablet-margin-top-15 borderline">
+                      <div class="col-sm-3 col-md-6 col-lg-3">
+                        <div class="my-input-group">
+                          <label for="">{{ 'EDIT_AUDIT.LBL_SEASON' | translate }}</label>
+                          <ng-select [multiple]="false" [closeOnSelect]="true" [searchable]="true"
+                            [loading]="cusloading" [items]="data.seasonList" bindLabel="name" bindValue="id"
+                            [hideSelected]="true"
+                            placeholder="--- {{ (data.seasonList!=null && data.seasonList.length!=0? 'EDIT_AUDIT.LBL_SELECT':'EDIT_AUDIT.MSG_NO_DATA' ) | translate }} ---"
+                            [(ngModel)]="model.seasonid">
+                          </ng-select>
+                          <!-- <div *ngIf="!validator.isValid('seasonid')" class="invalid-feedback" style="display:block">
+                            <div *ngFor="let error of validator.getErrors('seasonid')">{{ error | translate }}</div>
+                          </div> -->
+                        </div>
+                      </div>
+                      <div class="col-sm-3 col-md-6 col-lg-3 mobile-margin-top-15">
+                        <div class="my-input-group">
+                          <label for="">{{ 'EDIT_AUDIT.LBL_SEASON_YEAR' | translate }}</label>
+                          <ng-select [multiple]="false" [closeOnSelect]="true" [searchable]="true"
+                            [loading]="Initialloading" [items]="_Seasonyearlist" bindLabel="year" bindValue="id"
+                            [hideSelected]="true"
+                            placeholder="--- {{ (_Seasonyearlist!=null && _Seasonyearlist.length!=0? 'EDIT_AUDIT.LBL_SELECT':'EDIT_AUDIT.MSG_NO_DATA' ) | translate }} ---"
+                            [(ngModel)]="model.seasonyearid">
+                          </ng-select>
+                          <!-- <div *ngIf="!validator.isValid('seasonyearid')" class="invalid-feedback"
+                            style="display:block">
+                            <div *ngFor="let error of validator.getErrors('seasonyearid')">{{ error | translate }}</div>
+                          </div> -->
+                        </div>
+                      </div>
+                      <div class="col-sm-3 col-md-6 col-lg-3 mobile-margin-top-15">
+                        <div class="my-input-group">
+                          <label for="">{{ 'EDIT_AUDIT.LBL_CUS_BOOKING_NO' | translate }}</label>
+                          <input [(ngModel)]="model.customerBookingNo" type="text" maxlength="200" />
+                        </div>
+                      </div>
+                      <div class="col-sm-3"></div>
+                    </div>
+                    <div class="row marginTop25 tablet-margin-top-15 borderline">
+                      <div class="col-sm-3 col-md-6 col-lg-3">
+                        <div class="my-input-group">
+                          <label class="required" for="">{{ 'EDIT_AUDIT.LBL_SUP' | translate }}</label>
+                          <ng-select [multiple]="false" [closeOnSelect]="true" [searchable]="true"
+                            (change)="getSupRelatedDetails($event,model.id>0?true:false)"
+                            (clear)="ResetSupplierDetails()" [hideSelected]="true" disabled="{{Issupplier?true:false}}"
+                            [loading]=supplierloading [ngClass]="{ 'is-invalid': !validator.isValid('supplierid')}"
+                            [items]="data.supplierList" bindLabel="name" bindValue="id"
+                            placeholder="--- {{ (data.supplierList!=null && data.supplierList.length!=0? 'EDIT_AUDIT.LBL_SELECT':'EDIT_AUDIT.MSG_NO_DATA' ) | translate }} ---"
+                            [(ngModel)]="model.supplierid">
+                          </ng-select>
+                          <div *ngIf="!validator.isValid('supplierid')" class="invalid-feedback" style="display:block">
+                            <div *ngFor="let error of validator.getErrors('supplierid')">{{ error | translate }}</div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-sm-3 col-md-6 col-lg-3 mobile-margin-top-15">
+                        <div class="my-input-group">
+                          <label class="required" for="">{{ 'EDIT_AUDIT.LBL_SUP_CONTACT' | translate }}</label>
+                          <ng-select [multiple]="true" [closeOnSelect]="false" [searchable]="true" [loading]=suploading
+                            class="multiple" [items]="data.supplierContactList" bindLabel="contactName"
+                            bindValue="contactId"
+                            [ngClass]="{ 'is-invalid': !validator.isValid('suppliercontactlistitems')}"
+                            [hideSelected]="true"
+                            placeholder="--- {{ (data.supplierContactList!=null && data.supplierContactList.length!=0? 'EDIT_AUDIT.LBL_SELECT':'EDIT_AUDIT.MSG_NO_DATA' ) | translate }} ---"
+                            [(ngModel)]="model.suppliercontactlistitems">
+                          </ng-select>
+                          <div *ngIf="!validator.isValid('suppliercontactlistitems')" class="invalid-feedback"
+                            style="display:block">
+                            <div *ngFor="let error of validator.getErrors('suppliercontactlistitems')">
+                              {{ error | translate }}</div>
+                          </div>
+                        </div>
+
+                      </div>
+                      <div class="col-sm-3 col-md-6 col-lg-3 tablet-margin-top-15 mobile-margin-top-15">
+                        <div class="my-input-group">
+                          <label for="">{{ 'EDIT_AUDIT.LBL_SUP_Code' | translate }}</label>
+                          <input disabled="disabled" [value]="_suppliercode" type="text" />
+                        </div>
+                      </div>
+                      <div class="col-sm-3"></div>
+                    </div>
+                    <div class="row marginTop25 tablet-margin-top-15">
+                      <div class="col-sm-3 col-md-6 col-lg-3">
+                        <div class="my-input-group">
+                          <label class="required" for="">{{ 'EDIT_AUDIT.LBL_FACT' | translate }}</label>
+                          <ng-select [multiple]="false" [closeOnSelect]="true" [searchable]="true"
+                            (change)="geFactRelatedDetails($event)" (clear)="ResetFactoryDetails()"
+                            [loading]=factoryloading [ngClass]="{ 'is-invalid': !validator.isValid('factoryid')}"
+                            [items]="data.factoryList" bindLabel="name" bindValue="id" [hideSelected]="true"
+                            disabled="{{IsFactory?true:false}}"
+                            placeholder="--- {{ (data.factoryList!=null && data.factoryList.length!=0? 'EDIT_AUDIT.LBL_SELECT':'EDIT_AUDIT.MSG_NO_DATA' ) | translate }} ---"
+                            [(ngModel)]="model.factoryid">
+                          </ng-select>
+                          <div *ngIf="!validator.isValid('factoryid')" class="invalid-feedback" style="display:block">
+                            <div *ngFor="let error of validator.getErrors('factoryid')">{{ error | translate }}</div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-sm-3 col-md-6 col-lg-3 mobile-margin-top-15">
+                        <div class="my-input-group">
+                          <label class="required" for="">{{ 'EDIT_AUDIT.LBL_FACT_CONTACT' | translate }}</label>
+                          <ng-select [multiple]="true" class="multiple" [closeOnSelect]="false" [searchable]="true"
+                            [hideSelected]="true" [loading]=factloading
+                            [ngClass]="{ 'is-invalid': !validator.isValid('factorycontactlistitems')}"
+                            placeholder="--- {{ (data.factoryContactList!=null && data.factoryContactList.length!=0? 'EDIT_AUDIT.LBL_SELECT':'EDIT_AUDIT.MSG_NO_DATA' ) | translate }} ---"
+                            [items]="data.factoryContactList" bindLabel="contactName" bindValue="contactId"
+                            [(ngModel)]="model.factorycontactlistitems">
+                          </ng-select>
+                          <div *ngIf="!validator.isValid('factorycontactlistitems')" class="invalid-feedback"
+                            style="display:block">
+                            <div *ngFor="let error of validator.getErrors('factorycontactlistitems')">
+                              {{ error | translate }}</div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-sm-3 col-md-6 col-lg-3 mobile-margin-top-15">
+                        <div class="my-input-group">
+                          <label for="">{{ 'EDIT_AUDIT.LBL_FACT_CODE' | translate }}</label>
+                          <input disabled="disabled" [value]="_factcode" type="text" />
+                        </div>
+                      </div>
+                      <div class="col-sm-3"></div>
+                    </div>
+                    <div class="row marginTop25 tablet-margin-top-15 borderline">
+                      <div class="col-sm-3 col-md-6 col-lg-3">
+                        <div class="my-input-group">
+                          <label for="">{{ 'EDIT_AUDIT.LBL_FACT_ADDRESS' | translate }}</label>
+                          <textarea disabled="disabled" [value]="_factaddress" type="text"></textarea>
+                        </div>
+                      </div>
+                      <div class="col-sm-3 col-md-6 col-lg-3 mobile-margin-top-15">
+                        <div class="my-input-group">
+                          <label for="">{{ 'EDIT_AUDIT.LBL_FACT_REGIONAL_ADDRESS' | translate }}</label>
+                          <textarea disabled="disabled" [value]="_factRegaddress" type="text"></textarea>
+                        </div>
+                      </div>
+                      <div class="col-sm-3"></div>
+                      <div class="col-sm-3"></div>
+                    </div>
+                    <div class="row marginTop25 tablet-margin-top-15">
+                      <div class="col-sm-3 col-md-6 col-lg-3">
+                        <div class="my-input-group">
+                          <label [ngClass]="{'required': !IsInternalUser}" for="">{{ 'EDIT_AUDIT.LBL_APPLICANT_NAME' |
+                            translate }}</label>
+                          <input maxlength="200"
+                            [ngClass]="{ 'is-invalid': !validator.isValidIf('applicantname',!IsInternalUser)}"
+                            [(ngModel)]="model.applicantname" type="text" />
+                          <div *ngIf="!validator.isValidIf('applicantname',!IsInternalUser)" class="invalid-feedback">
+                            <div *ngFor="let error of validator.getErrors('applicantname')">{{ error | translate }}
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-sm-3 col-md-6 col-lg-3 mobile-margin-top-15">
+                        <div class="my-input-group">
+                          <label [ngClass]="{'required': !IsInternalUser}" for="">{{ 'EDIT_AUDIT.LBL_APPLICANT_EMAIL' |
+                            translate }}</label>
+                          <input maxlength="200"
+                            [ngClass]="{ 'is-invalid': !validator.isValidIf('applicantemail',!IsInternalUser)}"
+                            [(ngModel)]="model.applicantemail" type="text" />
+                          <div *ngIf="!validator.isValidIf('applicantemail',!IsInternalUser)" class="invalid-feedback">
+                            <div *ngFor="let error of validator.getErrors('applicantemail')">{{ error | translate }}
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-sm-3 col-md-6 col-lg-3 mobile-margin-top-15">
+                        <div class="my-input-group">
+                          <label [ngClass]="{'required': !IsInternalUser}" for="">{{ 'EDIT_AUDIT.LBL_APPLICANT_PH' |
+                            translate }}</label>
+                          <input maxlength="200"
+                            [ngClass]="{ 'is-invalid': !validator.isValidIf('applicantphno',!IsInternalUser)}"
+                            [(ngModel)]="model.applicantphno" type="text" />
+                          <div *ngIf="!validator.isValidIf('applicantphno',!IsInternalUser)" class="invalid-feedback">
+                            <div *ngFor="let error of validator.getErrors('applicantphno')">{{ error | translate }}
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-sm-3"></div>
+                    </div>
+                  </div>
+                </div>
+                <div class="row marginTop25">
+                  <div class="col-sm-6"></div>
+                  <div class="col-sm-6 text-right">
+                    <button class="primary-cta MarginR-20"
+                      (click)="TooglePanel('panel2', 'panel1','panel2',true,false)">Previous</button>
+                    <button class="primary-cta" (click)="IsPanelDataValid('panel2', 'panel3','panel2',false,$event)">{{
+                      'EDIT_AUDIT.LBL_NEXT' | translate }}</button>
+
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- panel 3 -->
+          <div class="panel" #panel3>
+            <div class="row panel-body">
+              <div class="col-sm-10">
+                <img src="assets/images/audit-step-3.svg" alt="" class="icon" *ngIf="!panelThreeReady">
+                <img src="assets/images/green-circle-tick.svg" alt="" class="icon" *ngIf="panelThreeReady">
+                <div class="panel-info">
+                  <p class="count">Step 2</p>
+                  <h4 class="panel-title">Process Information</h4>
+                </div>
+                <div class="row marginLeft100 mobile-hide" *ngIf="panelThreeReady">
+                  <div class="col-sm-12">
+                    <div class="my-input-group">
+                      <label class="light" for="">{{ 'EDIT_AUDIT.LBL_SERVICE_FROMDATE' | translate }}</label>
+                      <p class="input-value">{{_servicefromdatepanel}}</p>
+                    </div>
+                    <div class="my-input-group">
+                      <label class="light" for="">{{ 'EDIT_AUDIT.LBL_Service_TODATE' | translate }}</label>
+                      <p class="input-value">{{_servicetodatepanel}}</p>
+                    </div>
+                    <div class="my-input-group">
+                      <label class="light" for="">{{ 'EDIT_AUDIT.LBL_CUS_SERVICETYPE' | translate }}</label>
+                      <p class="input-value"></p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <!-- <div class="col-sm-2 text-right mobile-hide">
+                <ng-container *ngIf="panelThreeReady">
+                  <button class="secondary-cta small"
+                    (click)="toggleAccordion($event,'panel3')">{{ 'EDIT_AUDIT.LBL_EDIT' | translate}}</button>
+                </ng-container>
+              </div> -->
+            </div>
+            <div class="panel-content">
+              <div class="audit-step-form">
+                <div class="row marginTop15">
+                  <div class="col-sm-3 col-md-6 col-lg-3 tablet-margin-top-15 mobile-margin-top-15">
+                    <div class="my-input-group">
+                      <label class="required" for="">{{ 'EDIT_AUDIT.LBL_SERVICE_FROMDATE' | translate }}</label>
+                      <div class="calendar-wrapper">
+                        <input type="text" [ngClass]="{ 'is-invalid':  !validator.isValid('servicedatefrom')}"
+                          readonly=readonly [navigation]="arrow" (dateSelect)="onDateSelection($event)"
+                          [(ngModel)]="model.servicedatefrom" [markDisabled]="isDisabled" ngbDatepicker
+                          #sdf="ngbDatepicker" (click)="sdf.toggle()">
+                        <img src="assets/images/calendar-icon.svg" alt="" class="calendar-icon" (click)="sdf.toggle()">
+                      </div>
+                      <div *ngIf="!validator.isValid('servicedatefrom')" class="invalid-feedback">
+                        <div *ngFor="let error of validator.getErrors('servicedatefrom')">{{ error | translate }}</div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-sm-3 col-md-6 col-lg-3 tablet-margin-top-15 mobile-margin-top-15">
+                    <div class="my-input-group">
+                      <label class="required" for="">{{ 'EDIT_AUDIT.LBL_Service_TODATE' | translate }}</label>
+                      <div class="calendar-wrapper">
+                        <input type="text" [ngClass]="{ 'is-invalid':  !validator.isValid('servicedateto')}"
+                          [navigation]="arrow" readonly=readonly [(ngModel)]="model.servicedateto"
+                          [markDisabled]="isDisabled" ngbDatepicker #sdt="ngbDatepicker" (click)="sdt.toggle()">
+                        <img src="assets/images/calendar-icon.svg" alt="" class="calendar-icon" (click)="sdt.toggle()">
+                      </div>
+                      <div *ngIf="!validator.isValid('servicedateto')" class="invalid-feedback">
+                        <div *ngFor="let error of validator.getErrors('servicedateto')">{{ error | translate }}</div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-sm-3 col-md-6 col-lg-3 tablet-margin-top-15 mobile-margin-top-15">
+                    <div class="my-input-group">
+                      <label class="required" for="">{{ 'EDIT_AUDIT.LBL_CUS_SERVICETYPE' | translate }}</label>
+                      <ng-select #customerservicetype [items]="auditMaster.customerServiceList" bindLabel="name" bindValue="id"
+                        [multiple]="false" [closeOnSelect]="true" [searchable]="true" [loading]=cusloading
+                        [hideSelected]="true" [ngClass]="{ 'is-invalid': !validator.isValid('servicetypeid')}"
+                        placeholder="--- {{ (auditMaster.customerServiceList!=null && auditMaster.customerServiceList.length!=0? 'EDIT_AUDIT.LBL_SELECT':'EDIT_AUDIT.MSG_NO_DATA' ) | translate }} ---"
+                        [(ngModel)]="model.servicetypeid" (change)="changeServiceType()">
+                      </ng-select>
+                      <div *ngIf="!validator.isValid('servicetypeid')" class="invalid-feedback" style="display:block">
+                        <div *ngFor="let error of validator.getErrors('servicetypeid')">{{ error | translate }}</div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-sm-3 col-md-6 col-lg-3 tablet-margin-top-15 mobile-margin-top-15">
+                    <div class="my-input-group">
+                      <label class="required" for="">{{ 'EDIT_AUDIT.LBL_EVALUATION' | translate }}</label>
+                      <ng-select [multiple]="false" [closeOnSelect]="true" [searchable]="true"
+                        [loading]="Initialloading" [items]="_EvaluationRound" bindLabel="name" bindValue="id"
+                        [ngClass]="{ 'is-invalid': !validator.isValid('evaluationroundid')}" [hideSelected]="true"
+                        placeholder="--- {{ (_EvaluationRound!=null && _EvaluationRound.length!=0? 'EDIT_AUDIT.LBL_SELECT':'EDIT_AUDIT.MSG_NO_DATA' ) | translate }} ---"
+                        [(ngModel)]="model.evaluationroundid">
+                      </ng-select>
+                      <div *ngIf="!validator.isValid('evaluationroundid')" class="invalid-feedback"
+                        style="display:block">
+                        <div *ngFor="let error of validator.getErrors('evaluationroundid')">{{ error | translate }}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-sm-2"></div>
+                </div>
+                <div class="row seperatorRow marginTop15">
+                  <div class="col-sm-3 col-md-6 col-lg-3 tablet-margin-top-15 mobile-margin-top-15">
+                    <div class="my-input-group">
+                      <label class="required" for="">{{ 'EDIT_AUDIT.LBL_AUDIT_TYPE' | translate }}</label>
+                      <ng-select [multiple]="false" [closeOnSelect]="true" [searchable]="true"
+                        [ngClass]="{ 'is-invalid': !validator.isValid('audittypeid')}"
+                        [items]="_AuditType" bindLabel="name" bindValue="id" [hideSelected]="true"
+                        placeholder="--- {{ (_AuditType!=null && _AuditType.length!=0? 'EDIT_AUDIT.LBL_SELECT':'EDIT_AUDIT.MSG_NO_DATA' ) | translate }} ---"
+                        [(ngModel)]="model.audittypeid">
+                      </ng-select>
+                      <div *ngIf="!validator.isValid('audittypeid')" class="invalid-feedback">
+                        <div *ngFor="let error of validator.getErrors('audittypeid')">{{ error | translate }}</div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-sm-3 col-md-6 col-lg-3 tablet-margin-top-15 mobile-margin-top-15">
+                    <div class="my-input-group">
+                      <label for="">{{ 'EDIT_AUDIT.LBL_AUDIT_WORK_PROCESS' | translate }}</label>
+                      <ng-select [multiple]="true" [closeOnSelect]="false" [searchable]="true" [hideSelected]="true"
+                        [ngClass]="{ 'is-invalid': !validator.isValid('auditworkprocess')}" class="multiple"
+                        placeholder="--- {{ (_AuditWorkProcess!=null && _AuditWorkProcess.length!=0? 'EDIT_AUDIT.LBL_SELECT':'EDIT_AUDIT.MSG_NO_DATA' ) | translate }} ---"
+                        [items]="_AuditWorkProcess" bindLabel="name" bindValue="id"
+                        [(ngModel)]="model.auditworkprocessItems"></ng-select>
+                    </div>
+                  </div>
+
+                  <div class="col-sm-3 col-md-6 col-lg-3 tablet-margin-top-15 mobile-margin-top-15"
+                    *ngIf="_ProductCategory && _ProductCategory.length > 0">
+                    <div class="my-input-group">
+                      <label [ngClass]="{ 'required': model.customerid == _customerEnum.Gap }" for="">{{ 'EDIT_AUDIT.LBL_PRODUCTCATEGORY' | translate }}</label>
+                      <ng-select [multiple]="false" [closeOnSelect]="true" [searchable]="true"
+                        [ngClass]="{ 'is-invalid': !validator.isValid('auditProductCategoryId')}"
+                        [items]="_ProductCategory" bindLabel="name" bindValue="id" [hideSelected]="true"
+                        placeholder="--- {{ (_ProductCategory!=null && _ProductCategory.length!=0? 'EDIT_AUDIT.LBL_SELECT':'EDIT_AUDIT.MSG_NO_DATA' ) | translate }} ---"
+                        [(ngModel)]="model.auditProductCategoryId">
+                      </ng-select>
+                      <div *ngIf="!validator.isValid('auditProductCategoryId')" class="invalid-feedback">
+                        <div *ngFor="let error of validator.getErrors('auditProductCategoryId')">{{ error | translate }}</div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-sm-6 col-md-12 col-lg-6 inline-input-container borderRight">
+                    <div class="block">
+                      <div class="my-input-group inline">
+                        <label for="">{{ 'EDIT_AUDIT.LBL_FACTORY_CREATION_DATE' | translate }}</label>
+                        <div class="calendar-wrapper">
+                          <input type="text" readonly=readonly [(ngModel)]="model.factorycreationdate" ngbDatepicker
+                            #fcd="ngbDatepicker" (click)="fcd.toggle()">
+                          <img src="assets/images/calendar-icon.svg" alt="" class="calendar-icon"
+                            (click)="fcd.toggle()">
+                        </div>
+                      </div>
+                      <div class="my-input-group inline width75 mobile-margin-top-15">
+                        <label for="">{{ 'EDIT_AUDIT.LBL_OPEN_HOUR' | translate }}</label>
+                        <input maxlength="200" [(ngModel)]="model.openhour" type="text" />
+                      </div>
+                      <div class="my-input-group inline width75 mobile-margin-top-15">
+                        <label for="">{{ 'EDIT_AUDIT.LBL_ANNUAL_HOLIDAY' | translate }}</label>
+                        <input maxlength="200" [(ngModel)]="model.annualholidays" type="text" />
+                      </div>
+                    </div>
+                    <div class="block">
+                      <p class="text">Enter the number of</p>
+                    </div>
+                    <div class="block">
+                      <div class="my-input-group inline width75">
+                        <label for="">{{ 'EDIT_AUDIT.LBL_NO_OF_CUSTOMER' | translate }}</label>
+                        <input maxlength="200" [(ngModel)]="model.noofcustomers" type="text" />
+                      </div>
+                      <div class="my-input-group inline width75">
+                        <label for="">{{ 'EDIT_AUDIT.LBL_NO_OF_SUPPLIER' | translate }}</label>
+                        <input maxlength="200" [(ngModel)]="model.noofsuppliers" type="text" />
+                      </div>
+                    </div>
+                    <div class="block">
+                      <div class="my-input-group inline width75">
+                        <label [ngClass]="{'required': !IsInternalUser}" for="">{{ 'EDIT_AUDIT.LBL_STAFF_TOTAL' |
+                          translate }}</label>
+                        <input maxlength="200" min="1" oninput="validity.valid||(value='');"
+                          [ngClass]="{ 'is-invalid': !validator.isValidIf('totalstaff', !IsInternalUser)}"
+                          [(ngModel)]="model.totalstaff" type="number" (keypress)="numericValidation($event)" />
+                        <!-- <div *ngIf="!validator.isValidIf('totalstaff', !IsInternalUser)" class="invalid-feedback">
+                          <div *ngFor="let error of validator.getErrors('totalstaff')">{{ error | translate }}</div>
+                        </div> -->
+                      </div>
+                      <div class="my-input-group inline width105">
+                        <label for="">{{ 'EDIT_AUDIT.LBL_STAFF_PRODUCTION' | translate }}</label>
+                        <input maxlength="200" [(ngModel)]="model.productionstaff" type="number" />
+                      </div>
+                      <div class="my-input-group inline width75">
+                        <label for="">{{ 'EDIT_AUDIT.LBL_STAFF_QUALITY' | translate }}</label>
+                        <input maxlength="200" [(ngModel)]="model.qualitystaff" type="number" />
+                      </div>
+                      <div class="my-input-group inline width75 mobile-margin-top-15">
+                        <label for="">{{ 'EDIT_AUDIT.LBL_STAFF_SALE' | translate }}</label>
+                        <input maxlength="200" [(ngModel)]="model.salesstaff" type="number" />
+                      </div>
+                      <div class="my-input-group inline width75 mobile-margin-top-15">
+                        <label for="">{{ 'EDIT_AUDIT.LBL_STAFF_ADMIN' | translate }}</label>
+                        <input maxlength="200" [(ngModel)]="model.adminstaff" type="number" />
+                      </div>
+                    </div>
+                    <div class="block">
+                      <div class="my-input-group inline width105">
+                        <label for="">{{ 'EDIT_AUDIT.LBL_ANNUAL_PRODUCTION' | translate }}</label>
+                        <input maxlength="200" [(ngModel)]="model.annualproduction" type="text" />
+                      </div>
+                      <div class="my-input-group inline width105">
+                        <label for="">{{ 'EDIT_AUDIT.LBL_POTENTIAL_MAX_CAPACITY' | translate }}</label>
+                        <input maxlength="200" [(ngModel)]="model.maximumcapacity" type="text" />
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-sm-6 col-md-12 col-lg-6">
+                    <div class="row">
+                      <div class="col-sm-6">
+                        <div class="my-input-group">
+                          <label for="">{{ 'EDIT_AUDIT.LBL_POSSIBILITY_EXTENSION' | translate }}</label>
+                          <input maxlength="200" [(ngModel)]="model.factoryextension" class="form-control"
+                            type="text" />
+                        </div>
+                      </div>
+                      <div class="col-sm-6 mobile-margin-top-15">
+                        <div class="my-input-group">
+                          <label for="">{{ 'EDIT_AUDIT.LBL_SURFACE_AREA' | translate }}</label>
+                          <input maxlength="200" [(ngModel)]="model.factorysurfacearea" class="form-control"
+                            type="text" />
+                        </div>
+                      </div>
+                    </div>
+                    <div class="row marginTop15">
+                      <div class="col-sm-6">
+                        <div class="my-input-group">
+                          <label for="">{{ 'EDIT_AUDIT.LBL_CUS_CAPACITY' | translate }}</label>
+                          <input maxlength="200" [(ngModel)]="model.totalcapacitybycustomer" type="text" />
+                        </div>
+                      </div>
+                      <div class="col-sm-6">
+                        <div class="my-input-group">
+                          <label for="">{{ 'EDIT_AUDIT.LBL_NO_SITES' | translate }}</label>
+                          <input maxlength="300" [(ngModel)]="model.numberofsites" type="text">
+                        </div>
+                      </div>
+                    </div>
+                    <div class="row marginTop25">
+                      <div class="col-sm-6">
+                        <div class="my-input-group">
+                          <label for="">{{ 'EDIT_AUDIT.LBL_PRODUCT_TYPE_MANUFACTURE' | translate }}</label>
+                          <textarea maxlength="300" [(ngModel)]="model.manufactureproducts" type="text"></textarea>
+                        </div>
+                      </div>
+                      <div class="col-sm-6 mobile-margin-top-15">
+                        <div class="my-input-group">
+                          <label for="">{{ 'EDIT_AUDIT.LBL_PRODUCE_BRANDS' | translate }}</label>
+                          <textarea maxlength="300" [(ngModel)]="model.brandsproduced" type="text"></textarea>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="row marginTop15">
+                      <div class="col-sm-6">
+                        <div class="my-input-group">
+                          <label for="">{{ 'EDIT_AUDIT.LBL_INVESTMENT' | translate }}</label>
+                          <textarea maxlength="300" [(ngModel)]="model.investment" type="text"></textarea>
+                        </div>
+                      </div>
+                      <div class="col-sm-6 mobile-margin-top-15">
+                        <div class="my-input-group">
+                          <label for="">{{ 'EDIT_AUDIT.LBL_LIABILITY' | translate }}</label>
+                          <textarea maxlength="300" [(ngModel)]="model.liability" type="text"></textarea>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="row marginTop15">
+                      <div class="col-sm-6">
+                        <div class="my-input-group">
+                          <label for="">{{ 'EDIT_AUDIT.LBL_TRADE_ASSOCIATION' | translate }}</label>
+                          <textarea maxlength="300" [(ngModel)]="model.tradeassociation" type="text"></textarea>
+                        </div>
+                      </div>
+                      <div class="col-sm-6 mobile-margin-top-15">
+                        <div class="my-input-group">
+                          <label for="">{{ 'EDIT_AUDIT.LBL_ACCREDITATIONS' | translate }}</label>
+                          <textarea maxlength="300" [(ngModel)]="model.accreditations" type="text"></textarea>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="row marginTop25">
+                  <div class="col-sm-6"></div>
+                  <div class="col-sm-6 text-right">
+                    <button class="primary-cta MarginR-20"
+                      (click)="TooglePanel('panel3', 'panel2','panel3',true,false)">Previous</button>
+                    <button class="primary-cta" (click)="IsPanelDataValid('panel3','panel4', 'panel3',false,$event)">{{
+                      'EDIT_AUDIT.LBL_NEXT' | translate }}</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- panel 4 -->
+          <div class="panel" #panel4>
+            <div class="panel-body">
+              <img src="assets/images/audit-step-4.svg" alt="" class="icon" *ngIf="!panelFourReady">
+              <img src="assets/images/green-circle-tick.svg" alt="" class="icon" *ngIf="panelFourReady">
+              <div class="panel-info">
+                <p class="count">Step 3</p>
+                <h4 class="panel-title">{{ 'EDIT_AUDIT.LBL_TECHNICAL_DOC' | translate }}</h4>
+              </div>
+            </div>
+            <div class="panel-content">
+              <div class="audit-step-form">
+                <div class="row marginTop15">
+                  <!-- <ng-container *ngIf="model.attachments != null && model.attachments.length>0">
+                    <div class="col-lg-3">
+                      <div class="drag-drop-files-container">
+                        <div class="file" *ngFor="let file of model.attachments ;  let j = index">
+                          <a (click)="getFile(file)"><img [src]="GetFileExtensionIcon(file)" class="icon"
+                              alt=""></a>
+                          <div class="info">
+                            <h4 class="file-title">{{file.fileName}}</h4>
+                          </div>
+                          <img src="assets/images/red-close.svg" alt="" (click)="removeAttachment(j)" class="close">
+                        </div>
+                      </div>
+                    </div>
+                  </ng-container>
+                  <div class="col-sm-8 col-md-12 col-lg-5">
+                    <app-drag-drop [fileLimit]="uploadLimit" [fileSizeLimit]="fileSize"
+                      [fileExtension]="uploadFileExtensions" (fileUpload)="selectFiles($event)"></app-drag-drop>
+                  </div> -->
+                  <div class="col-sm-12 col-md-12 col-lg-6">
+                    <div class="row">
+                      <div class="col-sm-12">
+                        <div class="drag-drop-container type-two" (click)="selectFiles($event)">
+                          <img src="assets/images/upload-icon.svg" class="icon" alt="drag drop">
+                          <div class="info">
+                            <h4 class="title">
+                              {{ 'EDIT_BOOKING.LBL_SELECT_FILE' | translate }}, <span>
+                                {{ 'EDIT_BOOKING.LBL_BROWSE' | translate }}
+                              </span>
+                            </h4>
+                          </div>
+                        </div>
+                      </div>
+                      <ng-container *ngIf="model.attachments != null && model.attachments.length>0">
+                        <div class="col-sm-12">
+                          <div class="drag-drop-files-container">
+                            <div class="row col-sm-12">
+                              <div class="file col-sm-3" *ngFor="let file of model.attachments ;  let j = index">
+                                <a (click)="getFile(file)">
+                                  <img [src]="GetFileExtensionIcon(file)" class="icon" alt="">
+                                </a>
+                                <div class="info">
+                                  <h4 class="file-title">{{file.fileName}}</h4>
+                                </div>
+                                <img src="assets/images/red-close.svg" alt="" (click)="removeAttachment(j)"
+                                  class="close">
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </ng-container>
+                    </div>
+                  </div>
+                  <div class="col-sm-4 col-md-12 col-lg-4">
+                    <div class="row">
+                      <div class="col-sm-6 col-md-6 col-lg-12 tablet-margin-top-15 mobile-margin-top-15">
+                        <div class="my-input-group big">
+                          <label for="">{{ 'EDIT_AUDIT.LBL_COMMENTS_ENTITY' | translate }}</label>
+                          <textarea [disabled]="!IsInternalUser" maxlength="1000" [(ngModel)]="model.aPIComments"
+                            type="text"></textarea>
+                        </div>
+                      </div>
+                      <div class="col-sm-6 col-md-6 col-lg-12 marginTop15">
+                        <div class="my-input-group big">
+                          <label for="">{{ 'EDIT_AUDIT.LBL_BOOKING_COMMENT' | translate }}</label>
+                          <textarea [disabled]="IsInternalUser" maxlength="1000" [(ngModel)]="model.customerComments"
+                            type="text"></textarea>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="row marginTop25" *ngIf="!IsInternalUser">
+                  <div class="col-sm-6"></div>
+                  <div class="col-sm-6 text-right">
+                    <button class="primary-cta MarginR-20"
+                      (click)="TooglePanel('panel4', 'panel3','panel4',true,false)">{{'EDIT_AUDIT.LBL_PREVIOUS' |
+                      translate}}</button>
+                    <button class="primary-cta" (click)="toggleConfirmation()">{{'EDIT_AUDIT.LBL_PREVIEW' |
+                      translate}}</button>
+                  </div>
+                </div>
+                <div class="row marginTop25" *ngIf="IsInternalUser">
+                  <div class="col-sm-6"></div>
+                  <div class="col-sm-6 text-right">
+                    <button class="primary-cta MarginR-20"
+                      (click)="TooglePanel('panel4', 'panel3','panel4',true,false)">{{'EDIT_AUDIT.LBL_PREVIOUS' |
+                      translate}}</button>
+                    <button class="primary-cta" (click)="IsPanelDataValid('panel4', 'panel5','panel4',false,$event)">{{
+                      'EDIT_AUDIT.LBL_NEXT' | translate }}</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="loader-overlay" *ngIf="downloadloading">
+              <div class="loader-container">
+                <img src="assets/images/reload.svg" alt="">
+                <span>{{'COMMON.LBL_LOADER' | translate}}</span>
+              </div>
+            </div>
+          </div>
+          <!-- panel 5 -->
+          <div class="panel" #panel5 *ngIf="IsInternalUser">
+            <div class="panel-body">
+              <img src="assets/images/audit-step-1.svg" alt="" class="icon">
+              <div class="panel-info">
+                <p class="count">Step 4</p>
+                <h4 class="panel-title">{{ 'EDIT_AUDIT.LBL_SCHEDULE' | translate }}</h4>
+              </div>
+            </div>
+            <div class="panel-content">
+              <div class="audit-step-form">
+                <div class="row marginTop15">
+                  <div class="col-sm-6 col-md-6 col-lg-3">
+                    <div class="my-input-group">
+                      <label for="">{{ 'EDIT_AUDIT.LBL_Auditor' | translate }}</label>
+                      <ng-select [items]="_Auidtorlist" [multiple]="true" class="multiple" [closeOnSelect]="false"
+                        appendTo="body" [hideSelected]="true" [searchable]="true" bindLabel="name" bindValue="id"
+                        [loading]=Initialloading
+                        placeholder="--- {{ (_Auidtorlist!=null && _Auidtorlist.length!=0? 'EDIT_AUDIT.LBL_SELECT':'EDIT_AUDIT.MSG_NO_DATA' ) | translate }} ---"
+                        [(ngModel)]="model.auditors">
+                      </ng-select>
+                    </div>
+                  </div>
+                  <div class="col-sm-6 col-md-6 col-lg-3 mobile-margin-top-15">
+                    <div class="my-input-group">
+                      <label for="">{{ 'EDIT_AUDIT.LBL_CS' | translate }}</label>
+                      <ng-select [items]="_AuditCS" [multiple]="true" class="multiple" [closeOnSelect]="false"
+                        appendTo="body" [hideSelected]="true" [searchable]="true" bindLabel="name" bindValue="id"
+                        [loading]=Initialloading
+                        placeholder="--- {{ (_AuditCS!=null && _AuditCS.length!=0? 'EDIT_AUDIT.LBL_SELECT':'EDIT_AUDIT.MSG_NO_DATA' ) | translate }} ---"
+                        [(ngModel)]="model.auditCS">
+                      </ng-select>
+                    </div>
+                  </div>
+                </div>
+                <div class="row marginTop25">
+                  <div class="col-sm-6"></div>
+                  <div class="col-sm-6 text-right">
+                    <button class="primary-cta MarginR-20"
+                      (click)="TooglePanel('panel5', 'panel4','panel5',true,false)">{{'EDIT_AUDIT.LBL_PREVIOUS' |
+                      translate}}</button>
+                    <button class="primary-cta" (click)="toggleConfirmation()">{{'EDIT_AUDIT.LBL_PREVIEW' |
+                      translate}}</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="audit-confirmation-container" *ngIf="isConfirmationVisible">
+          <div class="row" *ngIf="IsInternalUser">
+            <div class="col-sm-12">
+              <div class="confirmation-title-container">
+                <img src="assets/images/audit-step-1.svg" alt="">
+                <h4 class="title">{{ 'EDIT_AUDIT.LBL_MAIN_DETAILS' | translate }}</h4>
+                <button class="secondary-cta x-small" (click)="toggleFromConfirmation('panel1')">{{
+                  'EDIT_AUDIT.LBL_EDIT' | translate}}</button>
+              </div>
+            </div>
+          </div>
+          <div class="row audit-data-container" *ngIf="IsInternalUser">
+            <div class="col-sm-6 col-md-6 col-lg-8">
+              <div class="row">
+                <div class="col-sm-12 col-md-12 col-lg-5 border-right">
+                  <div class="my-input-group">
+                    <label for="">{{ 'EDIT_AUDIT.LBL_PO' | translate }}</label>
+                    <p class="input-value">
+                      <strong>{{model.ponumber}}</strong><br>
+                    </p>
+                  </div>
+                  <div class="my-input-group">
+                    <label for="">{{ 'EDIT_AUDIT.LBL_REPORT_NO' | translate }}</label>
+                    <p class="input-value">
+                      <strong>{{model.reportno}}</strong><br>
+                    </p>
+                  </div>
+                </div>
+                <div class="col-sm-12 col-md-12 col-lg-7 padding-left border-right">
+                  <div class="my-input-group">
+                    <label for="">{{ 'EDIT_AUDIT.LBL_OFFICE' | translate }}</label>
+                    <p class="input-value">
+                      <strong>{{_Officename}}</strong>
+                    </p>
+                  </div>
+
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-sm-12">
+              <div class="confirmation-title-container">
+                <img src="assets/images/audit-step-2.svg" alt="">
+                <h4 class="title">General Information</h4>
+                <button class="secondary-cta x-small" (click)="toggleFromConfirmation('panel2')">{{
+                  'EDIT_AUDIT.LBL_EDIT' | translate}}</button>
+              </div>
+            </div>
+          </div>
+          <div class="row audit-data-container">
+            <div class="col-sm-6 col-md-6 col-lg-8">
+              <div class="row">
+                <div class="col-sm-12 col-md-12 col-lg-5 border-right">
+                  <div class="my-input-group">
+                    <label for="">{{ 'EDIT_AUDIT.LBL_CUS' | translate }}</label>
+                    <p class="input-value">
+                      <strong>{{_cusname}}</strong><br>
+                    </p>
+                  </div>
+                  <div class="my-input-group">
+                    <label for="">{{ 'EDIT_AUDIT.LBL_SUP' | translate }}</label>
+                    <p class="input-value">
+                      <strong>{{_suppliername}}</strong><br>
+                    </p>
+                  </div>
+                </div>
+                <div class="col-sm-12 col-md-12 col-lg-7 padding-left border-right">
+                  <div class="my-input-group">
+                    <label for="">{{ 'EDIT_AUDIT.LBL_FACT' | translate }}</label>
+                    <p class="input-value">
+                      <strong>{{_factoryname}}</strong>
+                    </p>
+                  </div>
+                  <div class="my-input-group">
+                    <label for="">{{_factaddress}}</label><br>
+                    <label for="">{{ 'EDIT_AUDIT.LBL_CUS_BOOKING_NO' | translate }}</label>
+                    <p class="input-value" style="width: 300px; word-wrap:break-word;">
+                      <strong>{{model.customerBookingNo}}</strong><br>
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-sm-6 col-md-6 col-lg-4 padding-left tablet-padding-left last-column">
+              <div class="my-input-group inline-group">
+                <label for="">{{ 'EDIT_AUDIT.LBL_CUS_BRAND' | translate }}</label>
+                <p class="input-value"><strong>{{_brand}}</strong></p>
+                <label for="">{{ 'EDIT_AUDIT.LBL_CUS_DEPARTMENT' | translate }}</label>
+                <p class="input-value"><strong>{{_department}}</strong></p>
+              </div>
+              <div class="my-input-group inline-group">
+                <label for="">{{ 'EDIT_AUDIT.LBL_SEASON' | translate }}</label>
+                <p class="input-value"><strong>{{_season}}</strong></p>
+                <label for="">{{ 'EDIT_AUDIT.LBL_SEASON_YEAR' | translate }}</label>
+                <p class="input-value"><strong>{{_year}}</strong></p>
+              </div>
+            </div>
+          </div>
+          <div class="row marginTop50 mobile-margin-top-15">
+            <div class="col-sm-12">
+              <div class="confirmation-title-container">
+                <img src="assets/images/audit-step-3.svg" alt="">
+                <h4 class="title">Process Information</h4>
+                <button class="secondary-cta x-small" (click)="toggleFromConfirmation('panel3')">{{
+                  'EDIT_AUDIT.LBL_EDIT' | translate}}</button>
+              </div>
+            </div>
+          </div>
+          <div class="row audit-data-container">
+            <div class="col-sm-6 col-md-6 col-lg-8">
+              <div class="row">
+                <div class="col-sm-12 col-md-12 col-lg-5 border-right">
+                  <div class="my-input-group inline-group">
+                    <label for="">{{ 'EDIT_AUDIT.LBL_CUS_SERVICETYPE' | translate }}</label>
+                    <p class="input-value"><strong>{{_servicetype}}</strong></p>
+                    <label for="">{{ 'EDIT_AUDIT.LBL_SERVICE_FROMDATE' | translate }}</label>
+                    <p class="input-value"><strong>{{_servicefromdatepanel}}</strong></p>
+                    <label for="">{{ 'EDIT_AUDIT.LBL_SERVICE_FROMDATE' | translate }}</label>
+                    <p class="input-value"><strong>{{_servicetodatepanel}}</strong></p>
+                    <label for="">{{ 'EDIT_AUDIT.LBL_EVALUATION' | translate }}</label>
+                    <p class="input-value"><strong>{{_evaluationroundname}}</strong></p>
+                    <label for="">{{'EDIT_AUDIT.LBL_AUDIT_TYPE' | translate}}</label>
+                    <p class="input-value"><strong>{{_audittypename}}</strong></p>
+                  </div>
+                </div>
+                <div class="col-sm-12 col-md-12 col-lg-7 padding-left border-right">
+                  <div class="my-input-group inline-group">
+                    <label for="">{{'EDIT_AUDIT.LBL_SURFACE_AREA' | translate}}</label>
+                    <p class="input-value"><strong>{{model.numberofsites}}</strong></p>
+                    <label for="">{{ 'EDIT_AUDIT.LBL_PRODUCE_BRANDS' | translate }}</label>
+                    <p class="input-value"><strong>{{model.brandsproduced}}</strong></p>
+                    <label for="">{{ 'EDIT_AUDIT.LBL_INVESTMENT' | translate }}</label>
+                    <p class="input-value"><strong>{{model.investment}}</strong></p>
+                    <label for="">{{ 'EDIT_AUDIT.LBL_LIABILITY' | translate }}</label>
+                    <p class="input-value"><strong>{{model.liability}}</strong></p>
+                    <label for="">{{ 'EDIT_AUDIT.LBL_TRADE_ASSOCIATION' | translate }}</label>
+                    <p class="input-value"><strong>{{model.tradeassociation}}</strong></p>
+                    <label for="">{{ 'EDIT_AUDIT.LBL_ACCREDITATIONS' | translate }}</label>
+                    <p class="input-value"><strong>{{model.accreditations}}</strong></p>
+                  </div>
+                  <div class="my-input-group inline-group marginTop25">
+                    <label for="">{{ 'EDIT_AUDIT.LBL_FACTORY_CREATION_DATE' | translate }}</label>
+                    <p class="input-value"><strong>{{_factcreateddate}}</strong></p>
+                    <label for="">{{ 'EDIT_AUDIT.LBL_OPEN_HOUR' | translate }}</label>
+                    <p class="input-value"><strong>{{model.openhour}}</strong></p>
+                    <label for="">{{ 'EDIT_AUDIT.LBL_ANNUAL_HOLIDAY' | translate }}</label>
+                    <p class="input-value"><strong>{{model.annualholidays}}</strong></p>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-sm-6 col-md-6 col-lg-4 padding-left tablet-padding-left last-column">
+              <div class="my-input-group inline-group">
+                <label for="">{{ 'EDIT_AUDIT.LBL_NO_OF_CUSTOMER' | translate }}</label>
+                <p class="input-value"><strong>{{model.noofcustomers}}</strong></p>
+                <label for="">{{ 'EDIT_AUDIT.LBL_NO_OF_SUPPLIER' | translate }}</label>
+                <p class="input-value"><strong>{{model.noofsuppliers}}</strong></p>
+                <label for="">{{ 'EDIT_AUDIT.LBL_ANNUAL_PRODUCTION' | translate }}</label>
+                <p class="input-value"><strong>{{model.annualproduction}}</strong></p>
+              </div>
+              <div class="my-input-group inline-group">
+                <label for="">{{ 'EDIT_AUDIT.LBL_STAFF_PRODUCTION' | translate }}</label>
+                <p class="input-value"><strong>{{model.productionstaff}}</strong></p>
+                <label for="">{{ 'EDIT_AUDIT.LBL_STAFF_ADMIN' | translate }}</label>
+                <p class="input-value"><strong>{{model.adminstaff}}</strong></p>
+                <label for="">{{ 'EDIT_AUDIT.LBL_POTENTIAL_MAX_CAPACITY' | translate }}</label>
+                <p class="input-value"><strong>{{model.maximumcapacity}}</strong></p>
+                <label for="">{{ 'EDIT_AUDIT.LBL_STAFF_QUALITY' | translate }}</label>
+                <p class="input-value"><strong>{{model.qualitystaff}}</strong></p>
+                <label for="">{{ 'EDIT_AUDIT.LBL_STAFF_QUALITY' | translate }}</label>
+                <p class="input-value"><strong>{{model.totalstaff}}</strong></p>
+                <label for="">{{ 'EDIT_AUDIT.LBL_STAFF_SALE' | translate }}</label>
+                <p class="input-value"><strong>{{model.LBL_STAFF_SALE}}</strong></p>
+              </div>
+            </div>
+          </div>
+          <div class="row marginTop50 mobile-margin-top-15">
+            <div class="col-sm-12">
+              <div class="confirmation-title-container">
+                <img src="assets/images/audit-step-4.svg" alt="">
+                <h4 class="title">Technical Document</h4>
+                <button class="secondary-cta x-small" (click)="toggleFromConfirmation('panel4')">{{
+                  'EDIT_AUDIT.LBL_EDIT' | translate}}</button>
+              </div>
+            </div>
+          </div>
+          <div class="row audit-data-container">
+            <div class="col-sm-10 col-md-12 col-lg-10">
+              <div class="row">
+                <div class="col-sm-4 col-md-6 col-lg-4 border-right">
+                  <div class="document-count-container">
+                    <img src="assets/images/uploaded-files.svg" alt="Uploaded Files">
+                    <div class="info">
+                      <h4 class="count">{{_totalattachedfile}}</h4>
+                      <p>Technical document updated</p>
+                      <span></span>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-sm-8 col-md-6 col-lg-8 padding-left tablet-padding-left last-column">
+                  <div class="my-input-group">
+                    <label for="">{{ 'EDIT_AUDIT.LBL_BOOKING_COMMENT' | translate}}</label>
+                    <p class="input-value">
+                      <strong>{{model.customerComments}}</strong>
+                    </p>
+                  </div>
+                  <div class="my-input-group">
+                    <label for="">{{'EDIT_AUDIT.LBL_COMMENTS_ENTITY' | translate}}</label>
+                    <p class="input-value">
+                      <strong>{{model.aPIComments}}</strong>
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-sm-1 col-md-12 col-lg-2 padding-left"></div>
+          </div>
+          <div class="row marginTop50 mobile-margin-top-15" style="margin-top:50px !important; " *ngIf="IsInternalUser">
+            <div class="col-sm-12">
+              <div class="confirmation-title-container">
+                <img src="assets/images/audit-step-1.svg" alt="">
+                <h4 class="title">{{ 'EDIT_AUDIT.LBL_SCHEDULE' | translate }}</h4>
+                <button class="secondary-cta x-small" (click)="toggleFromConfirmation('panel5')">{{
+                  'EDIT_AUDIT.LBL_EDIT' | translate}}</button>
+              </div>
+            </div>
+          </div>
+          <div class="row audit-data-container" *ngIf="IsInternalUser">
+            <div class="col-sm-6 col-md-6 col-lg-8">
+              <div class="row">
+                <div class="col-sm-12 col-md-12 col-lg-5">
+                  <div class="my-input-group">
+                    <label for="">{{ 'EDIT_AUDIT.LBL_Auditor' | translate }}</label>
+                    <p class="input-value">
+                      <strong>{{_auditorpreview}}</strong><br>
+                    </p>
+                  </div>
+                  <div class="my-input-group">
+                    <label for="">{{ 'EDIT_AUDIT.LBL_CS' | translate }}</label>
+                    <p class="input-value">
+                      <strong>{{_cspreview}}</strong><br>
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+
+          <div class="row marginTop25">
+            <div class="col-sm-3 col-md-6 col-lg-4"
+              *ngIf="model.audittypeid!=_auditBookingTypeEnum.UnAnnounced && !model.isEaqf">
+              <div class="styled-checkbox-container">
+                <input class="styled-checkbox" id="checkbox-supEmail" type="checkbox"
+                  [(ngModel)]="model.isSupplierOrFactoryEmailSend">
+                <label for="checkbox-supEmail">{{ 'EDIT_BOOKING.LBL_SUPPLIER_FACTORY_EMAIL' | translate }}</label>
+              </div>
+            </div>
+
+            <div class="col-sm-4 col-md-6 col-lg-4 last-column" *ngIf="!model.isEaqf && IsCustomer || IsInternalUser "
+              [ngClass]="{ 'padding-left tablet-padding-left': model.audittypeid!=_auditBookingTypeEnum.UnAnnounced }">
+
+              <div class="styled-checkbox-container">
+                <input class="styled-checkbox" id="checkbox-cusEmail" type="checkbox"
+                  [(ngModel)]="model.isCustomerEmailSend">
+                <label for="checkbox-cusEmail">{{ 'EDIT_BOOKING.LBL_CUSTOMER_EMAIL' | translate }}</label>
+              </div>
+            </div>
+
+
+          </div>
+
+          <div class="cta-container text-right border-top">
+            <!--    <button *ngIf="fromSummary" (click)="return('auditsummary/audit-summary')" class="secondary-cta"
+              [disabled]="Initialloading" (click)="Reset()">
+              {{
+          'EDIT_AUDIT.LBL_RETURN' | translate
+        }}
+            </button> -->
+            <button class="primary-cta" [ngStyle]="{'display': IsSaveBtnShow?'inline-block':'none'}"
+              [disabled]="savedataloading || Initialloading || cusloading || suploading || factloading || factoryloading || supplierloading"
+              (click)="save()">
+              {{
+              'EDIT_AUDIT.LBL_SAVE' | translate
+              }}
+            </button>
+            <button class="primary-cta" [ngStyle]="{'display':IsconfirmBtnShow?'inline-block':'none' }"
+              [disabled]="savedataloading || Initialloading || cusloading || suploading || factloading || factoryloading || supplierloading"
+              (click)="ConfirmAudit()">
+              {{
+              'EDIT_AUDIT.LBL_CONFIRM' | translate
+              }}
+            </button>
+            <!-- <button class="secondary-cta" [disabled]="Initialloading">
+              (click)="Reset()"
+              {{
+        'EDIT_AUDIT.LBL_RESET' | translate
+      }}
+            </button> -->
+          </div>
+
+          <!-- <div class="confirmation-loader" *ngIf="savedataloading">
+            <div class="loader">
+              <img src="assets/images/loader.gif" alt="Loader">
+              <p>Please wait...</p>
+            </div>
+          </div> -->
+
+          <div class="loader-overlay" *ngIf="savedataloading">
+            <div class="loader-container">
+              <img src="assets/images/reload.svg" alt="">
+              <span>{{'COMMON.LBL_LOADER' | translate}}</span>
+            </div>
+          </div>
+
+
+        </div>
+      </div>
+      <div class="success-container" *ngIf="_issuccess">
+        <div class="success-box">
+          <div class="head">
+            <img src="assets/images/flight.svg" alt="success">
+          </div>
+          <div class="body">
+            <div class="oval"></div>
+            <h3 class="title">
+              {{ 'EDIT_AUDIT.AUDIT_SUCCESS_TITLE1' | translate }}<br>{{ 'EDIT_AUDIT.AUDIT_SUCCESS_TITLE2' | translate }}
+            </h3>
+            <p class="text">{{ 'EDIT_AUDIT.AUDIT_SUCCESS_TITLE3' | translate }} </p>
+            <span class="audit-id">#{{model.auditid}}</span>
+            <div class="cta-container">
+              <button class="secondary-cta small" (click)="Initialize()">{{ 'EDIT_AUDIT.AUDIT_NEWBOOKING' | translate }}
+              </button>
+              <button class="secondary-cta small"
+                (click)="returnwithsearchparam('auditsummary/audit-summary',model.auditid)">{{
+                'EDIT_AUDIT.AUDIT_ORDERTRACKING' | translate }}</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,168 @@
+<div class="main-wrapper">
+    <div class="wrapper dashboard-wrapper">
+        <div class="my-container">
+            <div class="master-body">
+                <div class="title-container">
+                    <h3 class="main-title"> {{ 'INTERNAL_PRODUCT.TITLE' | translate }}</h3>
+                </div>
+                <div class="content-container quotation-container">
+                    <div  [@expandCollapse]="isFilterOpen ? 'open' : 'close'" class="centerContainerPadding common-filter-container">
+                        <div class="animated-icon-container" (click)="toggleFilterSection()" *ngIf="(model.items && model.items.length>0)">
+                          <img src="assets/images/cta-close-grey.svg" alt="close">
+                        </div>
+                            <div class="row">
+                                <div class="col-sm-3  col-lg-3">
+                                    <div class="my-input-group">
+                                        <label>{{ 'INTERNAL_PRODUCT.LBL_PRODUCT' | translate }}</label>
+                                        <ng-select [items]="productCategoryList" [hideSelected]="true" appendTo="body"
+                                            [multiple]="false" [closeOnSelect]="true" [loading]="loading"
+                                            [searchable]="true" bindLabel="name" bindValue="id"
+                                            [(ngModel)]="model.productCategoryId" (ngModelChange)="onChange($event)"
+                                            placeholder="--- {{ 'COMMON.LBL_SELECT' | translate }} ---">
+                                        </ng-select>
+                                    </div>
+                                </div>
+                                <div class="col-sm-3  col-lg-3 mobile-margin-top-15">
+                                    <div class="my-input-group">
+                                        <label>{{ 'INTERNAL_PRODUCT.LBL_SUB_PRODUCT' | translate }}</label>
+                                        <ng-select [items]="productSubCategoryList" [hideSelected]="true" appendTo="body"
+                                            [multiple]="false" [closeOnSelect]="true" [loading]="loading"
+                                            [searchable]="true" bindLabel="name" bindValue="id"
+                                            [(ngModel)]="model.productSubCategoryId"
+                                            (ngModelChange)="onChangeSub($event)"
+                                            placeholder="--- {{ 'COMMON.LBL_SELECT' | translate }} ---">
+                                        </ng-select>
+                                    </div>
+                                </div>
+                                <div class="col-sm-3  col-lg-3 mobile-margin-top-15">
+                                    <div class="my-input-group">
+                                        <label>{{ 'INTERNAL_PRODUCT.LBL_PRODUCT_TYPE' | translate }}</label>
+                                        <ng-select [items]="productCategorySub2List" [hideSelected]="true" appendTo="body" class="multiple"
+                                            [multiple]="true" [closeOnSelect]="false" [loading]="loading"
+                                            [searchable]="true" bindLabel="name"
+                                            [(ngModel)]="model.productCategorySub2Values"
+                                            placeholder="--- {{ 'COMMON.LBL_SELECT' | translate }} ---"
+                                            *ngIf="isCategoryId">
+                                        </ng-select>
+                                        <input maxlength="200" [(ngModel)]="model.productCategorySub2Name"
+                                            placeholder="{{ 'INTERNAL_PRODUCT.PH_NAME' | translate }}" type="text"
+                                            *ngIf="!isCategoryId" />
+                                    </div>
+                                </div>
+                            </div>
+                         
+                   
+                    <div class="row marginTop25">
+                        <div class="col-12 col-sm-12 text-right mt-3 mt-sm-0"> 
+                            <button id="btnAdd" class="secondary-cta small"
+                                (click)="NavigatenewPath('productsub2category/new-product-category-sub2')">
+                                + {{
+                                        'COMMON.LBL_NEW' | translate
+                                    }}
+                            </button>
+                            &nbsp;
+                            <button id="btnSearch" [disabled]="searchloading || loading" class="primary-cta small"
+                                (click)="SearchDetails()">
+                                {{
+                                      'COMMON.LBL_SEARCH' | translate
+                                  }}
+                                <span *ngIf="searchloading">
+                                    <i class="fa fa-refresh fa-spin" aria-hidden="true"></i>
+                                </span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div class="centerContainerPadding float-left" *ngIf="model.items && model.items.length>0">
+                        
+                        <div class="row">
+                            <div class="col-6 col-sm-4 col-xl-2 d-flex">
+                              <p  class="search-trigger-heading" [innerHtml]="showPaginationText()"></p>
+                            </div>
+                            <div class="col-6 col-sm-8 col-xl-10 text-right">
+                              <div class="animated-icon-container" *ngIf="!isFilterOpen" (click)="toggleFilterSection()">
+                                <img src="assets/images/cta-search-grey.svg" alt="search">
+                              </div>
+                            </div>
+                          </div>
+                          <div class="quotation-search-container">
+                            <div class="table-container h-scroll table-max-height-400">
+                                <table class="pagination-table simple-table bordered">
+                                <thead>
+                                  <tr class="sticky-top-row">
+                                    <th class="width-100"></th>
+                                        <th>{{ 'INTERNAL_PRODUCT.LBL_PRODUCT' | translate }}</th>
+                                        <th>{{ 'INTERNAL_PRODUCT.LBL_SUB_PRODUCT' | translate }}</th>
+                                        <th>{{ 'INTERNAL_PRODUCT.LBL_PRODUCT_TYPE' | translate }}</th>
+                                         
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr *ngFor="let iteminfo of model.items">
+                                        <td class="Center_Middle">
+                                            <span class="table-cta icon-cta common-tooltip" 
+                                                (click)="getDetails(iteminfo.id)" data-tooltip="Edit">
+                                                <img src="assets/images/cta-edit.svg" alt="Edit">
+                                            </span>
+                                            &nbsp;
+                                            <span class="table-cta icon-cta common-tooltip" 
+                                            (click)="openConfirm(iteminfo,deleteProductSubCategory2)" data-tooltip="Delete">
+                                                <img src="assets/images/cta-delete.svg" alt="Delete">
+                                            </span>
+                                        </td>
+                                        <td>{{iteminfo.productCategory.name}}</td>
+                                        <td>{{iteminfo.productSubCategory.name}}</td>
+                                        <td>{{iteminfo.name}}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            </div>
+                        </div>
+                        <div class="pagination-container">
+                            <select class="small" [(ngModel)]="selectedPageSize" (change)="SearchDetails()">
+                                <option *ngFor="let item of pagesizeitems" [ngValue]=item>{{item}}</option>
+                            </select>
+                            <ngb-pagination (pageChange)="onPager($event)" [pageSize]="model.pageSize"
+                                [collectionSize]="model.totalCount" [(page)]="model.index" [maxSize]="5">
+                            </ngb-pagination>
+                        </div>
+                       
+                    </div>
+                   
+                    <div class="centerContainerPadding" *ngIf="model.noFound">
+                        <div class="error-container">
+                          <img src="assets/images/no-result.svg" alt="" class="thumbnail">
+                          <h4 class="title">{{'COMMON.LBL_No_ITEM' | translate}}</h4>
+                          <p class="error-subtitle">{{'CS_CONFIG_SUMMARY.LBL_NODATA' | translate}}</p>
+                        </div>
+                      </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<ng-template #deleteProductSubCategory2 let-modal>
+    <div class="delete-popup-container">
+       <div class="content">
+          <img src="assets/images/new-set/delete-primary.svg" alt="">
+          <div class="title-container">
+            <h3>{{'COMMON.LBL_CONFIRMDELETION' | translate }}</h3>
+            <p>{{ 'INTERNAL_PRODUCT.MSG_CONFRMDELETE' | translate }} <strong>{{modelRemove.name}} ?</strong></p>
+          </div>
+       </div>
+       <div class="text-right">
+          <button class="secondary-cta link" (click)="cancelProductSubCategory2()">
+          {{
+          'COMMON.LBL_CONFIRMCANCEL' |
+          translate
+          }}
+          </button>
+          <button class="primary-cta" (click)="clickdeleteProductSubCategory2();">          {{
+            'COMMON.LBL_DELETE' |
+            translate
+            }}
+          </button>
+       </div>
+    </div>
+</ng-template>

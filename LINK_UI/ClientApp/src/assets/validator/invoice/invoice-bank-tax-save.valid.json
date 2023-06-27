@@ -1,0 +1,47 @@
+
+{  
+
+    "model": "InvoiceBankTax",
+    "fields": {      
+        "taxName":[
+            {
+                "type": "required",
+                "fieldType": "T",
+                "ressource": "EDIT_INV_BANK.MSG_BANK_TAXNAME_REQUIRED"
+            }
+        ],
+        "taxValue":[
+            {
+                "type": "required",
+                "fieldType": "N",
+                "ressource": "EDIT_INV_BANK.MSG_BANK_TAXVALUE_REQUIRED"
+            }
+        ],
+        "fromDate":[
+            {
+                "type": "required",
+                "fieldType": "D",
+                "ressource": "EDIT_INV_BANK.MSG_BANK_TAX_FROMDATE_REQUIRED"
+            },
+            {
+                "type": "isLessOrEqual",
+                "fieldType": "D",
+                "fieldCible": "toDate",
+                "ressource": "EDIT_BOOKING.MSG_SERVICE_FROMDATE_GREATER_REQ"
+            }
+        ]  ,
+        "toDate": [ 
+            {
+                "type": "required",
+                "fieldType": "D",
+                "ressource": "EDIT_INV_BANK.MSG_BANK_TAX_TODATE_REQUIRED"
+            },  
+            {
+                "type": "isGreatOrEqual",
+                "fieldType": "D",
+                "fieldCible": "fromDate",
+                "ressource": "EDIT_BOOKING.MSG_Service_TODATE_LESS_REQ"
+            }
+        ]     
+    }
+}

@@ -1,0 +1,998 @@
+<div class="main-wrapper">
+	<div class="wrapper dashboard-wrapper">
+		<div class="filter-container" [@expandCollapse] = "isFilterOpen ? 'open' : 'close'" [@.disabled]="isMobile">
+			<div class="my-dashboard-container customer-dashboard-mobile-filter">
+				<div class="row">
+                    <div class="col-sm-3 mobile-margin-top-15">
+                        <div class="my-input-group">
+                            <label for="">{{'COMMON.DATE_PERIOD' | translate}}</label>
+                            <div class="d-flex my-input-group">
+                                <div class="calendar-wrapper inline mr-2">
+                                    <input type="text" autocomplete="off" outsideDays="hidden" placeholder="From"
+                                        name="dp" ngbDatepicker #d1="ngbDatepicker" (click)="d1.toggle()"
+                                        container="body" [(ngModel)]="request.serviceDateFrom"
+                                        [ngClass]="{ 'is-invalid':  !validator.isValid('serviceDateFrom')}">
+                                    <img src="assets/images/cta-calendar-grey.svg" alt="" class="calendar-icon"
+                                        (click)="d1.toggle()">
+                                </div>
+                                <div class="calendar-wrapper inline">
+                                    <input type="text" autocomplete="off" outsideDays="hidden" placeholder="To"
+                                        name="dp" ngbDatepicker #d2="ngbDatepicker" (click)="d2.toggle()"
+                                        container="body" [(ngModel)]="request.serviceDateTo"
+                                        [ngClass]="{ 'is-invalid':  !validator.isValid('serviceDateTo')}">
+                                    <img src="assets/images/cta-calendar-grey.svg" alt="" class="calendar-icon"
+                                        (click)="d2.toggle()">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row" *ngIf="false">
+                            <div class="col-6 my-input-group">
+                                <div class="calendar-wrapper">
+                                    <input type="text" autocomplete="off" outsideDays="hidden" placeholder="From"
+                                        name="dp1" ngbDatepicker #d1="ngbDatepicker" (click)="d1.toggle()"
+                                        container="body">
+                                    <img src="assets/images/cta-calendar-grey.svg" alt="" class="calendar-icon"
+                                        (click)="d1.toggle()">
+                                </div>
+                            </div>
+                            <div class="col-6 my-input-group">
+                                <div class="calendar-wrapper">
+                                    <input type="text" autocomplete="off" outsideDays="hidden" placeholder="To"
+                                        name="dp2" ngbDatepicker #d2="ngbDatepicker" (click)="d2.toggle()"
+                                        container="body">
+                                    <img src="assets/images/cta-calendar-grey.svg" alt="" class="calendar-icon"
+                                        (click)="d2.toggle()">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-3 mobile-margin-top-15">
+                        <div class="my-input-group">
+                            <label for="">{{'COMMON.LBL_CUSTOMER' | translate}}</label>
+                            <ng-select bindLabel="name" bindValue="id" [multiple]="false"
+                                [items]="masterModel.customerList" [clearable]="true"
+                                [(ngModel)]="request.customerId" [virtualScroll]="true"
+                                (scrollToEnd)="getCustomerData(true)" [typeahead]="masterModel.customerInput"
+                                [minTermLength]="3" (change)="changeCustomerData($event)" (clear)="changeCustomerData(null)"
+                                placeholder="--- {{ (masterModel.customerList && masterModel.customerList.length>0? 'COMMON.LBL_SELECT':'COMMON.LBL_NO_DATA' ) | translate }} ---"
+                                appendTo="body" [loading]="masterModel.customerLoading">
+                                <ng-template ng-option-tmp let-item="item">
+                                    <div class="text-wrap">{{ item.name }}</div>
+                                </ng-template>
+                            </ng-select>
+                        </div>
+                    </div>
+                    <div class="col-sm-3 mobile-margin-top-15">
+                        <div class="my-input-group">
+                            <label for="">{{'COMMON.LBL_SUPPLIER' | translate}}</label>
+                            <ng-select appendTo="body" [items]="masterModel.supplierList"
+                                [virtualScroll]="true" [loading]="masterModel.supLoading" bindLabel="name"
+                                bindValue="id" (clear)="clearSupplier()"
+                                placeholder="--- {{ (masterModel.supplierList && masterModel.supplierList.length>0? 'COMMON.LBL_SELECT':'COMMON.LBL_NO_DATA' ) | translate }} ---"
+                                [typeahead]="masterModel.supInput" [minTermLength]="3"
+                                [(ngModel)]="request.supplierId" [multiple]="false"
+                                (scrollToEnd)="getSupplierData()" (change)="supplierChange($event)" #select>
+                                <ng-template ng-option-tmp let-item="item">
+                                    <div class="text-wrap"><span>{{item.name}}</span></div>
+                                </ng-template>
+                            </ng-select>
+                        </div>
+                    </div>
+                    <div class="col-sm-3 mobile-margin-top-15">
+                        <div class="my-input-group">
+                            <label for="">{{'COMMON.LBL_FACTORY' | translate}}</label>
+                            <ng-select appendTo="body" [items]="masterModel.factoryList"
+                                [virtualScroll]="true" [loading]="masterModel.factLoading" bindLabel="name"
+                                bindValue="id" [multiple]="true" class="multiple" (change)="factoryChange($event)"
+                                placeholder="--- {{ (masterModel.factoryList && masterModel.factoryList.length>0? 'COMMON.LBL_SELECT':'COMMON.LBL_NO_DATA' ) | translate }} ---"
+                                [typeahead]="masterModel.factInput" [minTermLength]="3" (clear)="clearFactory()"
+                                [(ngModel)]="request.factoryIdList" (scrollToEnd)="getFactoryData(true)" #select>
+                                <ng-template ng-option-tmp let-item="item">
+                                    <div class="text-wrap"><span>{{item.name}}</span></div>
+                                </ng-template>
+                            </ng-select>
+                        </div>
+                    </div>
+                    <div class="col-6 grid-column first mobile-margin-top-15 desktop-hide tablet-hide">
+                        <div class="my-input-group">
+                            <label for="">{{'COMMON.FROM_DATE' | translate}}</label>
+                            <div class="calendar-wrapper">
+                                <input type="text" autocomplete="off" placeholder="From" name="dp" ngbDatepicker
+                                    #d1="ngbDatepicker" (click)="d1.toggle()"
+                                    [(ngModel)]="request.serviceDateFrom">
+                                <img src="assets/images/cta-calendar-grey.svg" alt="" class="calendar-icon"
+                                    (click)="d1.toggle()">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-6 grid-column last mobile-margin-top-15 desktop-hide tablet-hide">
+                        <div class="my-input-group">
+                            <label for="">{{'COMMON.TO_DATE' | translate}}</label>
+                            <div class="calendar-wrapper">
+                                <input type="text" autocomplete="off" placeholder="From" name="dp" ngbDatepicker
+                                    #d2="ngbDatepicker" (click)="d2.toggle()" [(ngModel)]="request.serviceDateTo">
+                                <img src="assets/images/cta-calendar-grey.svg" alt="" class="calendar-icon"
+                                    (click)="d2.toggle()">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-12 filter-cta-container">
+                        <button class="primary-cta small float-right"
+                            (click)="toggleFilter()">{{'COMMON.APPLY' | translate}}</button>
+                        <button class="tertiary-cta small float-right mr-2"
+                            (click)="toggleFilter()">{{'COMMON.CANCEL' | translate}}</button>
+                    </div>
+                </div>
+                <div class="row marginTop20" *ngIf="toggleFormSection">
+                    <div class="col-sm-3 mobile-margin-top-15">
+                        <div class="my-input-group">
+                            <label for="">{{ 'COMMON.LBL_FACTORY_COUNTRY' | translate}}</label>
+                            <ng-select appendTo="body" [items]="masterModel.countryList"
+                                [virtualScroll]="true" [loading]="masterModel.countryLoading" bindLabel="name"
+                                bindValue="id"
+                                placeholder="--- {{ (masterModel.countryList && masterModel.countryList.length>0? 'COMMON.LBL_SELECT':'COMMON.LBL_NO_DATA' ) | translate }} ---"
+                                [typeahead]="masterModel.countryInput" [minTermLength]="3"
+                                [(ngModel)]="request.countryIdList" [multiple]="true" class="multiple"
+                                (scrollToEnd)="getCountryData()" (change)="countryChange($event)" #select>
+
+                                <ng-template ng-option-tmp let-item="item">
+                                    <div class="text-wrap">{{ item.name }}</div>
+                                </ng-template>
+                            </ng-select>
+                        </div>
+                    </div>
+                    <div class="col-sm-3 mobile-margin-top-15">
+                        <div class="my-input-group">
+                            <label for="">{{'COMMON.LBL_OFFICE' | translate }}</label>
+                            <ng-select [items]="masterModel.officeList" bindLabel="name" bindValue="id"
+                                [hideSelected]="false" [loading]="masterModel.officeLoading"
+                                [clearable]="true" [searchable]="true" [multiple]="true" class="multiple"
+                                appendTo="body" (change)="officeChange($event)"
+                                placeholder="--- {{ (masterModel.officeList && masterModel.officeList.length>0? 'MANDAY_DASHBOARD.LBL_OFFICE':'COMMON.LBL_NO_DATA') | translate }} ---"
+                                [(ngModel)]="request.officeIdList">
+                                <ng-template ng-option-tmp let-item="item">
+                                    <div class="text-wrap">{{ item.name }}</div>
+                                </ng-template>
+
+                            </ng-select>
+                        </div>
+                    </div>
+                    <div class="col-sm-3 col-md-3 col-lg-3">
+                        <div class="my-input-group">
+                            <label for="">{{'COMMON.LBL_SERVICETYPE' |
+                                translate}}</label>
+                            <ng-select [items]="masterModel.serviceTypeList" class="multiple" multiple="true"
+                                bindLabel="name" bindValue="id" [clearable]="true" (change)="serviceTypeChange($event)"
+                                [(ngModel)]="request.serviceTypeList" appendTo="body"
+                                [loading]="masterModel.serviceTypeLoading"
+                                placeholder=" ---{{ (masterModel.serviceTypeList!=null && masterModel.serviceTypeList.length!=0? 'COMMON.LBL_SELECT':'COMMON.LBL_NO_DATA' ) | translate }}---">
+                                <ng-template ng-option-tmp let-item="item">
+                                    <div class="text-wrap">{{ item.name }}</div>
+                                </ng-template>
+                            </ng-select>
+                        </div>
+                    </div>
+                    <div class="col-sm-3 mobile-margin-top-15">
+                        <div class="my-input-group">
+                            <label for="">{{'COMMON.LBL_BRAND' | translate}}</label>
+                            <ng-select appendTo="body" [items]="masterModel.brandList" [virtualScroll]="true"
+                                [loading]="masterModel.brandLoading" bindLabel="name" bindValue="id"
+                                placeholder="--- {{ (masterModel.brandList && masterModel.brandList.length>0? 'COMMON.LBL_SELECT':'COMMON.LBL_NO_DATA' ) | translate }} ---"
+                                [typeahead]="masterModel.brandInput" [minTermLength]="3"
+                                [(ngModel)]="request.brandIdList" [multiple]="true" class="multiple"
+                                (scrollToEnd)="getBrandData()" (change)="brandChange($event)" #select>
+
+                                <ng-template ng-option-tmp let-item="item">
+                                    <div class="text-wrap">{{ item.name }}</div>
+                                </ng-template>
+                            </ng-select>
+                        </div>
+                    </div>
+                </div>
+                <div class="row marginTop20" *ngIf="toggleFormSection">
+                    <div class="col-sm-3 mobile-margin-top-15">
+                        <div class="my-input-group">
+                            <label for="">{{'COMMON.LBL_DEPARTMENT' | translate}}</label>
+                            <ng-select appendTo="body" [items]="masterModel.deptList" [virtualScroll]="true"
+                                [loading]="masterModel.deptLoading" bindLabel="name" bindValue="id"
+                                placeholder="--- {{ (masterModel.deptList && masterModel.deptList.length>0? 'COMMON.LBL_SELECT':'COMMON.LBL_NO_DATA' ) | translate }} ---"
+                                [typeahead]="masterModel.deptInput" [minTermLength]="3"
+                                [(ngModel)]="request.deptIdList" [multiple]="true" class="multiple"
+                                (scrollToEnd)="getDeptData()" (change)="deptChange($event)" #select>
+
+                                <ng-template ng-option-tmp let-item="item">
+                                    <div class="text-wrap">{{ item.name }}</div>
+                                </ng-template>
+                            </ng-select>
+                        </div>
+                    </div>
+                    <div class="col-sm-3 mobile-margin-top-15">
+                        <div class="my-input-group">
+                            <label for="">{{'COMMON.LBL_BUYER' | translate}}</label>
+                            <ng-select appendTo="body" [items]="masterModel.buyerList" [virtualScroll]="true"
+                                [loading]="masterModel.buyerLoading" bindLabel="name" bindValue="id"
+                                placeholder="--- {{ (masterModel.buyerList && masterModel.buyerList.length>0? 'COMMON.LBL_SELECT':'COMMON.LBL_NO_DATA' ) | translate }} ---"
+                                [typeahead]="masterModel.buyerInput" [minTermLength]="3"
+                                [(ngModel)]="request.buyerIdList" [multiple]="true" class="multiple"
+                                (scrollToEnd)="getBuyerData()" (change)="buyerChange($event)" #select>
+                                <ng-template ng-option-tmp let-item="item">
+                                    <div class="text-wrap">{{ item.name }}</div>
+                                </ng-template>
+                            </ng-select>
+                        </div>
+                    </div>
+                </div>
+                <div class="row marginTop25">
+                    <div class="col-12 col-sm-6">
+                        <button class="tertiary-cta small" (click)="toggleSection()">
+                            <span class="icon" *ngIf="!toggleFormSection">+</span>
+                            <span class="icon" *ngIf="toggleFormSection">-</span>
+                            {{'COMMON.LBL_ADVANCED_SEARCH' | translate}}
+                        </button>
+                    </div>
+                    <div class="col-12 col-sm-6 text-right mt-3 mt-sm-0">
+                        <div class="mobile-hide">
+                            <button class="category-cta small mr-2" (click)="reset()">
+                                <img src="assets/images/reload-new.svg" alt="reload">
+                                <span>{{'COMMON.LBL_RELOAD' | translate}}</span>
+                            </button>
+                            <button class="primary-cta small" (click)="search()"
+                                [disabled]="masterModel.searchLoading">
+                                {{'COMMON.LBL_SEARCH' | translate }}
+                                <span *ngIf="masterModel.searchLoading">
+                                    <i class="fa fa-refresh fa-spin" aria-hidden="true"></i>
+                                </span></button>
+                        </div>
+                    </div>
+                </div>				
+			</div>
+		</div>
+		<div class="filter-bar-container cs-filter-bar" *ngIf="filterDataShown">
+            <div class="my-dashboard-container" *ngIf="!isMobile">
+                <p class="heading">
+                    {{'QUANTITATIVE_DASHBOARD.LBL_DATA_SHOWING' | translate}}
+                </p>
+                <ul class="applied-filter-list">
+                    <li *ngIf="request.serviceDateFrom">
+                        {{'COMMON.LBL_FROMDATE' | translate}} :
+                        {{request.serviceDateFrom.day}}/
+                        {{request.serviceDateFrom.month}}/
+                        {{request.serviceDateFrom.year}}
+                        <span *ngIf="request.serviceDateTo" class="ml-2">
+                            {{'COMMON.LBL_TODATE' | translate}} :
+                            {{request.serviceDateTo.day}}/
+                            {{request.serviceDateTo.month}}/
+                            {{request.serviceDateTo.year}}
+                        </span></li>
+                    <li *ngIf="masterModel.customerName">
+                        {{ 'COMMON.LBL_CUSTOMER' | translate }} :
+                        {{masterModel.customerName}}
+                    </li>
+                    <!-- <li *ngIf="masterModel.supplierName">{{ 'COMMON.LBL_SUPPLIER' | translate }}
+                        :
+                        {{masterModel.supplierName}}
+                    </li>
+                    <li *ngIf="masterModel.factoryNameList && masterModel.factoryNameList.length>0">{{ 'COMMON.LBL_FACTORY' | translate }}
+                        :
+                        {{masterModel.factoryNameList}}
+                    </li>
+                    <li
+                        *ngIf="masterModel.countryNameList && masterModel.countryNameList.length >0">
+                        {{ 'COMMON.LBL_FACTORY_COUNTRY' | translate}} :
+                        {{masterModel.countryNameList}}
+                    </li> -->
+                    <li
+                        *ngIf="masterModel.officeNameList && masterModel.officeNameList.length >0">
+                        {{ 'COMMON.LBL_OFFICE' | translate}} :
+                        {{masterModel.officeNameList}}
+                    </li>
+                    <li
+                        *ngIf="masterModel.serviceTypeNameList && masterModel.serviceTypeNameList.length >0">
+                        {{ 'COMMON.LBL_SERVICETYPE' | translate}} :
+                        {{masterModel.serviceTypeNameList}}
+                    </li>
+                    <!-- <li
+                        *ngIf="masterModel.brandNameList && masterModel.brandNameList.length >0">
+                        {{ 'COMMON.LBL_BRAND' | translate}} :
+                        {{masterModel.brandNameList}}
+                    </li>
+                    <li
+                        *ngIf="masterModel.deptNameList && masterModel.deptNameList.length >0">
+                        {{ 'COMMON.LBL_DEPARTMENT' | translate}} :
+                        {{masterModel.deptNameList}}
+                    </li>
+                    <li
+                        *ngIf="masterModel.buyerNameList && masterModel.buyerNameList.length >0">
+                        {{ 'COMMON.LBL_BUYER' | translate}} :
+                        {{masterModel.buyerNameList}}
+                    </li> -->
+                    <li *ngIf="(request.brandIdList && request.brandIdList.length >0) ||
+                        (request.buyerIdList && request.buyerIdList.length >0) ||
+                        (request.supplierId && request.supplierId >0) ||
+                        (request.factoryIdList && request.factoryIdList.length >0) ||
+                        (request.countryIdList && request.countryIdList.length >0) ||
+                        (request.deptIdList && request.deptIdList.length >0)">
+                        {{ 'COMMON.LBL_MORE'  | translate}}
+                        ...
+                    </li>
+                </ul>
+                <!-- <div class="filter-reset-cta" (click)="reset()">
+                    <img src="assets/images/reset-white.svg" alt="">
+                    {{'COMMON.LBL_RESET' | translate}}
+                </div> -->
+                <div class="filter-cta filter-active filter-icon" *ngIf="isFilterOpen" (click)="toggleFilter()">
+					<img src="assets/images/cta-close-white.svg" alt="">
+				</div>
+            </div>
+            <div class="my-dashboard-container" *ngIf="isMobile">
+                <p class="heading">
+                    {{model.filterCount}} {{'COMMON.LBL_FILTER_SELECTED' | translate}}
+                </p>              
+                <div class="filter-cta style-2 common-tooltip" *ngIf="!isFilterOpen" (click)="toggleFilter()" data-tooltip="filter">
+					<img src="assets/images/cta-filter-grey.svg" alt="">
+				</div>
+				<div class="filter-cta filter-active" *ngIf="isFilterOpen" (click)="toggleFilter()">
+					<img src="assets/images/cta-close-white.svg" alt="">
+				</div>
+                <!-- <div class="filter-reset-cta" (click)="reset()">
+                    <img src="assets/images/reset-white.svg" alt="">
+                    {{'COMMON.LBL_RESET' | translate}}
+                </div> -->
+            </div>
+        </div>
+		<!-- <div class="filter-bar-container cs-filter-bar">
+			<div class="my-dashboard-container" *ngIf="!isMobile">
+				<p class="heading">Data Showing</p>
+				<ul class="applied-filter-list">
+					<li>From: 12/10/20 <span class="ml-2">To: 12/10/20</span></li>
+				</ul>
+				<div class="filter-cta style-2 common-tooltip filter-icon" (click)="toggleFilter()" data-tooltip="filter">
+					<img src="assets/images/cta-filter-grey.svg" alt="">
+				</div>
+			</div>
+			<div class="my-dashboard-container" *ngIf="isMobile">
+				<p class="heading">5 filter selected</p>
+				<div class="filter-cta style-2 common-tooltip filter-icon" (click)="toggleFilter()" data-tooltip="filter">
+					<img src="assets/images/cta-filter-grey.svg" alt="">
+				</div>
+			</div>
+		</div> -->
+		<div class="cs-catagory-container" *ngIf="!masterModel.newCountDashboardLoading">
+			<div class="my-dashboard-container">
+                <div class="cs-catagories" *ngIf="!isMobile">
+                    <div class="catagory-column">
+                        <img src="assets/images/Customers-icon.svg">
+                        <span class="number"> {{masterModel.newCountDashboardItem.customerCount | numberSuffix}} </span>
+                        <span>{{ 'CS_DASHBOARD.LBL_NEW_CUSTOMER' | translate }}</span>
+                    </div>
+                    <div class="catagory-column">
+                        <img src="assets/images/Customers-icon.svg">
+                        <span class="number">{{masterModel.newCountDashboardItem.supplierCount | numberSuffix}}</span>
+                        <span>{{ 'CS_DASHBOARD.LBL_NEW_SUPPLIER' | translate }}</span>
+                    </div>
+                    <div class="catagory-column">
+                        <img src="assets/images/factory-icon.svg">
+                        <span class="number">{{masterModel.newCountDashboardItem.factoryCount | numberSuffix}}</span>
+                        <span>{{ 'CS_DASHBOARD.LBL_NEW_FACTORY' | translate }}</span>
+                    </div>
+                    <div class="catagory-column">
+                        <img src="assets/images/Booking-done.svg">
+                        <span class="number">{{masterModel.newCountDashboardItem.bookingCount | numberSuffix}}</span>
+                        <span>{{ 'CS_DASHBOARD.LBL_NEW_BOOKING' | translate }}</span>
+                    </div>
+                    <div class="catagory-column">
+                        <img src="assets/images/po-icon.svg">
+                        <span class="number">{{masterModel.newCountDashboardItem.poCount | numberSuffix}}</span>
+                        <span>{{ 'CS_DASHBOARD.LBL_NEW_PO' | translate }}</span>
+                    </div>
+                    <div class="catagory-column">
+                        <img src="assets/images/product-registerd.svg">
+                        <span class="number">{{masterModel.newCountDashboardItem.productCount | numberSuffix}}</span>
+                        <span>{{ 'CS_DASHBOARD.LBL_NEW_PRODUCT' | translate }}</span>
+                    </div>
+                </div>
+                <div class="filter-cta style-2 common-tooltip filter-icon ml-3" *ngIf="!isFilterOpen" (click)="toggleFilter()" data-tooltip="filter">
+					<img src="assets/images/cta-filter-grey.svg" alt="">
+				</div>				
+			</div>
+		</div>
+        <div class="cs-catagory-placeholder-container" *ngIf="masterModel.newCountDashboardLoading">
+            <div class="my-dashboard-container">
+                <div class="cs-catagories">
+                    <div class="catagory-column">
+                        <div class="rect-common animate width30"></div>
+                        <div class="rect-common animate width50"></div>
+                    </div>
+                    <div class="catagory-column">
+                        <div class="rect-common animate width30"></div>
+                        <div class="rect-common animate width50"></div>
+                    </div>
+                    <div class="catagory-column">
+                        <div class="rect-common animate width30"></div>
+                        <div class="rect-common animate width50"></div>
+                    </div>
+                    <div class="catagory-column mobile-hide">
+                        <div class="rect-common animate width30"></div>
+                        <div class="rect-common animate width50"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+		<div class="cs-main-stats-container">
+			<div class="my-dashboard-container">
+				<div class="cs-stats-container">
+					<ng-container
+                        *ngIf="masterModel.statusCountLoading; else BookingCountResult">
+                        <div class="cs-stats-block">
+                            <div class="rect-common animate width50"></div>
+							<div class="rect-common animate width80"></div>
+							<div class="rect-common animate width30"></div>
+							<div class="rect-common animate width30"></div>
+                        </div>
+                    </ng-container>
+                    <ng-template #BookingCountResult>
+                        <div class="error-container cs-stats-block booking-color"
+                            *ngIf="masterModel.statusCountError; else BookingCountData">
+							<div class="new-graph-head text-center text-sm-left align-items-center">
+								<div class="graph-title-container">
+									<h3 class="title"> {{'CS_DASHBOARD.LBL_BOOKING' | translate }}</h3>
+								</div>
+							</div>
+                            <img src="assets/images/went-wrong.svg" alt="" class="thumbnail">
+                            <h4 class="error-title">{{ 'ERROR.MSG_ERROR_TITLE' | translate }}</h4>
+                            <p class="error-subtitle">
+                                {{'COMMON.LBL_UNAUTHORISED_ACCESS' | translate}}</p>
+                        </div>
+                        <ng-template #BookingCountData>                                                   
+							<div class="cs-stats-block booking-color" *ngIf="masterModel.statusCountFound">
+								<h4 class="title">{{'CS_DASHBOARD.LBL_BOOKING' | translate}}</h4>
+								<div class="stats-link-wrapper" 
+                                [ngClass]="{ 'two-column': masterModel.bookingCardState == 3 }"
+                                *ngIf="masterModel.bookingCardState == 2 || masterModel.bookingCardState == 3">
+									<div class="stats-link-container" 
+									*ngFor="let item of masterModel.bookingTaskList | slice:0:2;">
+                                    <a class="ahover" (click)="redirectSummary(item.taskLink)">
+										<span class="count">
+                                            {{item.taskCount | numberSuffix}}
+                                            <!-- <a (click)="redirectSummary(item.taskLink)">{{item.taskCount}}
+                                            </a> -->
+                                        </span>
+										<span class="status">
+                                            {{'CS_DASHBOARD.LBL_TO_BE' | translate}} {{item.statusName}}</span>
+										<img src="assets/images/white-right-arrow.svg" alt="">
+                                    </a>
+									</div>
+								</div>
+								<!-- <div class="stats-link-wrapper two-column" *ngIf="masterModel.bookingCardState == 3">
+									<div class="stats-link-container" 
+									*ngFor="let item of masterModel.bookingTaskList | slice:0:2;">
+										<span class="count">{{item.taskCount}}</span>
+										<span class="status">to be {{item.statusName}}</span>
+									</div>
+								</div> -->
+								<img src="assets/images/Quotation-icon.svg" class="stats-icon" *ngIf="masterModel.bookingCardState == 1">
+								<div class="stats-list">
+									<ul>
+										<li *ngFor="let item of masterModel.bookingStatusList | slice:0:4;"
+										[ngClass]="{ 'disable':  !(item.statusCount > 0)}">
+											<span>{{item.statusCount | numberSuffix}}</span>
+                                            <span class="text common-tooltip"
+                                            [attr.data-tooltip]="item.statusName">{{item.trimName}}</span>
+											<!-- <span class="custom-badge" *ngIf="item.taskCount > 0">{{item.taskCount}}
+											</span> -->
+                                                <span class="custom-badge" *ngIf="item.taskCount > 0">
+                                                    <a class="ahover" (click)="redirectSummary(item.taskLink)">{{item.taskCount | numberSuffix}}
+                                                    </a>
+                                                </span>
+                                                
+										</li>
+									</ul>
+									<ul  *ngIf="masterModel.bookingStatusList.length>4">
+										<li 
+										*ngFor="let item of masterModel.bookingStatusList | slice:4:masterModel.bookingStatusList.length;"
+										[ngClass]="{ 'disable':  !(item.statusCount > 0)}">
+										<span>{{item.statusCount | numberSuffix}}</span>
+                                        <span class="text common-tooltip"
+                                        [attr.data-tooltip]="item.statusName">{{item.trimName}}</span>
+										<!-- <span *ngIf="item.taskCount > 0" class="custom-badge">{{item.taskCount}}
+										</span> -->
+                                        <span class="custom-badge" *ngIf="item.taskCount > 0">
+                                            <a class="ahover" (click)="redirectSummary(item.taskLink)">{{item.taskCount | numberSuffix}}
+                                            </a>
+                                        </span>
+										</li>
+									</ul>
+									<!-- <ul  *ngIf="masterModel.bookingStatusList.length>6">
+										<li 
+										*ngFor="let item of masterModel.bookingStatusList | slice:6:masterModel.bookingStatusList.length;"
+										[ngClass]="{ 'disable':  !(item.taskCount > 0)}">
+										<span>{{item.statusCount}}</span>{{item.statusName}}
+										<span *ngIf="item.taskCount > 0" class="custom-badge">{{item.taskCount}}
+											item.taskLink
+										</span>
+										</li>
+									</ul> -->
+								</div>
+							</div>
+                        </ng-template>
+                    </ng-template>
+					
+					<!-- quotation -->
+					<ng-container
+					*ngIf="masterModel.statusCountLoading; else QuotationCountResult">
+					<div class="cs-stats-block">
+						<div class="rect-common animate width50"></div>
+							<div class="rect-common animate width80"></div>
+							<div class="rect-common animate width30"></div>
+							<div class="rect-common animate width30"></div>
+					</div>
+				</ng-container>
+				<ng-template #QuotationCountResult>
+					<div class="error-container cs-stats-block quotation-color"
+						*ngIf="masterModel.statusCountError; else QuotationCountData">
+						<div class="new-graph-head text-center text-sm-left align-items-center">
+							<div class="graph-title-container">
+								<h3 class="title"> {{'CS_DASHBOARD.LBL_QUOTATION' | translate }}</h3>
+							</div>
+						</div>
+						<img src="assets/images/went-wrong.svg" alt="" class="thumbnail">
+						<h4 class="error-title">{{ 'ERROR.MSG_ERROR_TITLE' | translate }}</h4>
+						<p class="error-subtitle">
+							{{'COMMON.LBL_UNAUTHORISED_ACCESS' | translate}}</p>
+					</div>
+					<ng-template #QuotationCountData>                                                   
+						<div class="cs-stats-block quotation-color" *ngIf="masterModel.statusCountFound">
+							<h4 class="title">{{'CS_DASHBOARD.LBL_QUOTATION' | translate}}</h4>
+							<div class="stats-link-wrapper" 
+                            [ngClass]="{ 'two-column': masterModel.quotationCardState == 3 }"
+                            *ngIf="masterModel.quotationCardState == 2 || masterModel.quotationCardState == 3">
+								<div class="stats-link-container" 
+								*ngFor="let item of masterModel.quotationTaskList | slice:0:2;">
+                                <a class="ahover" (click)="redirectSummary(item.taskLink,2)">
+									<span class="count">{{item.taskCount | numberSuffix}}</span>
+									<span class="status">
+                                        {{'CS_DASHBOARD.LBL_TO_BE' | translate}} {{item.taskName}}</span>
+									<img src="assets/images/white-right-arrow.svg" alt="">
+                                </a>
+								</div>
+							</div>
+							<img src="assets/images/Quotation-icon.svg" class="stats-icon" *ngIf="masterModel.quotationCardState == 1">
+							<div class="stats-list">
+								<ul>
+									<li *ngFor="let item of masterModel.quotationStatusList | slice:0:5;"
+									[ngClass]="{ 'disable':  !(item.statusCount > 0)}">
+										<span>{{item.statusCount | numberSuffix}}</span>
+                                        <span class="text common-tooltip"
+                                        [attr.data-tooltip]="item.statusName">{{item.trimName}}</span>
+										<a  class="ahover" (click)="redirectSummary(item.taskLink, 2)">
+                                        <span class="custom-badge" *ngIf="item.taskCount > 0">
+											{{item.taskCount | numberSuffix}}
+										</span>
+											</a>
+									</li>
+								</ul>
+								<ul  *ngIf="masterModel.quotationStatusList.length>5">
+									<li 
+									*ngFor="let item of masterModel.quotationStatusList | slice:5:masterModel.quotationStatusList.length;"
+									[ngClass]="{ 'disable':  !(item.statusCount > 0)}">
+									<span>{{item.statusCount | numberSuffix}}</span>
+                                    <span class="text common-tooltip"
+									[attr.data-tooltip]="item.statusName">{{item.trimName}}</span>
+									<!-- <span *ngIf="item.taskCount > 0" class="custom-badge">{{item.taskCount}}										
+									</span> -->
+                                    <span class="custom-badge" *ngIf="item.taskCount > 0">
+                                        <a  class="ahover" (click)="redirectSummary(item.taskLink, 2)">{{item.taskCount | numberSuffix}}
+                                        </a>
+                                    </span>
+									</li>
+								</ul>							
+							</div>
+						</div>
+					</ng-template>
+				</ng-template>
+
+					<!-- allocation -->
+					<ng-container
+					*ngIf="masterModel.statusCountLoading; else AllocationCountResult">
+					<div class="cs-stats-block">
+						<div class="rect-common animate width50"></div>
+							<div class="rect-common animate width80"></div>
+							<div class="rect-common animate width30"></div>
+							<div class="rect-common animate width30"></div>
+					</div>
+				</ng-container>
+				<ng-template #AllocationCountResult>
+					<div class="error-container cs-stats-block allocation-color"
+						*ngIf="masterModel.statusCountError; else AllocationCountData">
+						<div class="new-graph-head text-center text-sm-left align-items-center">
+							<div class="graph-title-container">
+								<h3 class="title"> {{'CS_DASHBOARD.LBL_ALLOCATION' | translate }}</h3>
+							</div>
+						</div>
+						<img src="assets/images/went-wrong.svg" alt="" class="thumbnail">
+						<h4 class="error-title">{{ 'ERROR.MSG_ERROR_TITLE' | translate }}</h4>
+						<p class="error-subtitle">
+							{{'COMMON.LBL_UNAUTHORISED_ACCESS' | translate}}</p>
+					</div>
+					<ng-template #AllocationCountData>                                                   
+						<div class="cs-stats-block allocation-color" *ngIf="masterModel.statusCountFound">
+							<h4 class="title">{{'CS_DASHBOARD.LBL_ALLOCATION' | translate}}</h4>
+							<div class="stats-link-wrapper" 
+                            [ngClass]="{ 'two-column': masterModel.allocationCardState == 3 }"
+                            *ngIf="masterModel.allocationCardState == 2 || masterModel.allocationCardState == 3">
+								<div class="stats-link-container violet" 								
+								*ngFor="let item of masterModel.allocationTaskList | slice:0:1;">
+                                <a class="ahover" (click)="redirectSummary(item.taskLink)">
+									<span class="count">{{item.taskCount | numberSuffix}}</span>
+									<span class="status">
+                                        {{'CS_DASHBOARD.LBL_TO_BE' | translate}} {{item.taskName}}</span>
+									<img src="assets/images/white-right-arrow.svg" alt="">
+                                    </a>                                    
+								</div>
+							</div>
+							<img src="assets/images/Quotation-icon.svg" class="stats-icon" *ngIf="masterModel.allocationCardState == 1">
+							<div class="stats-list">
+								<ul>
+									<li *ngFor="let item of masterModel.allocationStatusList | slice:0:masterModel.allocationStatusList.length;"
+									[ngClass]="{ 'disable':  !(item.statusCount > 0)}">
+										<span>{{item.statusCount | numberSuffix}}</span>
+                                        {{item.statusName}}
+                                        <!-- <span class="text common-tooltip"
+                                        [attr.data-tooltip]="item.statusName">{{item.trimName}}</span>
+                                         -->
+										<!-- <span class="custom-badge" *ngIf="item.taskCount > 0">{{item.taskCount}}											
+										</span> -->
+                                        <span class="custom-badge" *ngIf="item.taskCount > 0">
+                                            <a  class="ahover" (click)="redirectSummary(item.taskLink)">{{item.taskCount | numberSuffix}}
+                                            </a>
+                                        </span>
+									</li>
+								</ul>
+							</div>
+						</div>
+					</ng-template>
+				</ng-template> 	
+
+				<!-- report -->
+				<ng-container
+				*ngIf="masterModel.statusCountLoading; else ReportStatusCountResult">
+				<div class="cs-stats-block">
+                    <div class="rect-common animate width50"></div>
+                    <div class="rect-common animate width80"></div>
+                    <div class="rect-common animate width30"></div>
+                    <div class="rect-common animate width30"></div>
+				</div>
+			</ng-container>
+			<ng-template #ReportStatusCountResult>
+				<div class="error-container cs-stats-block report-color"
+					*ngIf="masterModel.statusCountError; else ReportStatusCountData">
+					<div class="new-graph-head text-center text-sm-left align-items-center">
+						<div class="graph-title-container">
+							<h3 class="title"> {{'CS_DASHBOARD.LBL_REPORTS' | translate }}</h3>
+						</div>
+					</div>
+					<img src="assets/images/went-wrong.svg" alt="" class="thumbnail">
+					<h4 class="error-title">{{ 'ERROR.MSG_ERROR_TITLE' | translate }}</h4>
+					<p class="error-subtitle">
+						{{'COMMON.LBL_UNAUTHORISED_ACCESS' | translate}}</p>
+				</div>
+				<ng-template #ReportStatusCountData>                                                   
+					<div class="cs-stats-block report-color" *ngIf="masterModel.statusCountFound">
+						<h4 class="title">{{'CS_DASHBOARD.LBL_REPORTS' | translate}}</h4>
+						<div class="stats-link-wrapper" 
+                        [ngClass]="{ 'two-column': masterModel.reportCardState == 3 }"
+                        *ngIf="masterModel.reportCardState == 2 || masterModel.reportCardState == 3">
+							<div class="stats-link-container blue" 
+							*ngFor="let item of masterModel.reportTaskList | slice:0:1;">
+                            <a class="ahover" (click)="redirectSummary(item.taskLink, 4)">
+								<span class="count">{{item.taskCount | numberSuffix}}</span>
+								<span class="status">
+								{{'CS_DASHBOARD.LBL_TO_BE' | translate}} {{item.taskName}}</span>
+								<img src="assets/images/white-right-arrow.svg" alt="">
+                            </a>
+							</div>
+						</div>
+						<img src="assets/images/Quotation-icon.svg" class="stats-icon" *ngIf="masterModel.reportCardState == 1">
+						<div class="stats-list">
+							<ul>
+								<li *ngFor="let item of masterModel.reportStatusList | slice:0:4;"
+								[ngClass]="{ 'disable':  !(item.statusCount > 0)}">
+									<span>{{item.statusCount | numberSuffix}}</span>
+									<span class="text common-tooltip"
+									[attr.data-tooltip]="item.statusName">{{item.trimName}}</span>
+									<!-- <span class="custom-badge" *ngIf="item.taskCount > 0">{{item.taskCount}}										
+									</span> -->
+                                    <span class="custom-badge" *ngIf="item.taskCount > 0">
+                                        <a class="ahover" (click)="redirectSummary(item.taskLink, 4)">{{item.taskCount | numberSuffix}}
+                                        </a>
+                                    </span>
+								</li>
+							</ul>
+							<ul  *ngIf="masterModel.reportStatusList.length>4">
+								<li 
+								*ngFor="let item of masterModel.reportStatusList | slice:4:masterModel.reportStatusList.length;"
+								[ngClass]="{ 'disable':  !(item.statusCount > 0)}">
+								<span>{{item.statusCount | numberSuffix}}</span>
+                                <span class="text common-tooltip"
+                                [attr.data-tooltip]="item.statusName">{{item.trimName}}</span>
+								<!-- <span *ngIf="item.taskCount > 0" class="custom-badge">{{item.taskCount}}									
+								</span> -->
+                                <span class="custom-badge" *ngIf="item.taskCount > 0">
+                                    <a  class="ahover" (click)="redirectSummary(item.taskLink, 4)">{{item.taskCount | numberSuffix}}
+                                    </a>
+                                </span>
+								</li>
+							</ul>							
+						</div>
+					</div>
+				</ng-template>
+			</ng-template> 	
+				</div>
+			</div>
+		</div>
+		<div class="my-dashboard-container">
+			<div class="dashboard-body customer-dashboard-body dashbaord-placeholder-container">
+				<div class="row customer-dashboard-graph-wrapper">
+					<div class="col-12 col-sm-12 col-xl-4 grid-column mobile-margin-top-15">
+						<ng-container
+                        *ngIf="masterModel.reportCountLoading; else ReportCountResult">
+                        <div class="dashboard-graph-container">
+                            <div class="common-graph-placeholder">
+                                <img src="assets/images/donut-placeholder.png" alt="graph">
+                                <div class="content-container">
+                                    <div class="rect animate"></div>
+                                    <div class="rect animate width80"></div>
+                                    <div class="rect animate width50"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </ng-container>
+                    <ng-template #ReportCountResult>
+                        <div class="error-container dashboard-graph-container"
+                            *ngIf="masterModel.reportCountError; else ReportCountData">
+							<div class="new-graph-head text-center text-sm-left align-items-center">
+								<div class="graph-title-container">
+									<h3 class="title"> {{'CS_DASHBOARD.LBL_TOTAL_REPORTS' |
+										translate }}</h3>
+								</div>
+							</div>
+                            <img src="assets/images/went-wrong.svg" alt="" class="thumbnail">
+                            <h4 class="error-title">{{ 'ERROR.MSG_ERROR_TITLE' | translate }}</h4>
+                            <p class="error-subtitle">
+                                {{'COMMON.LBL_UNAUTHORISED_ACCESS' | translate}}</p>
+                        </div>
+                        <ng-template #ReportCountData>                        
+                            <div class="error-container dashboard-graph-container" *ngIf="!masterModel.reportCountFound">
+                                <div class="new-graph-head text-center text-sm-left align-items-center">
+                                    <div class="graph-title-container">
+                                        <h3 class="title"> {{'CS_DASHBOARD.LBL_TOTAL_REPORTS' |
+                                            translate }}</h3>
+                                    </div>
+                                </div>
+                                <img src="assets/images/no-data.svg" al t="" class="thumbnail">
+                                <h4 class="error-title">{{ 'COMMON.LBL_No_ITEM' | translate }}
+                                </h4>
+                                <p class="error-subtitle">{{'COMMON.LBL_NO_DATA_EMPTY' | translate}}</p>
+                            </div>
+							<div class="dashboard-graph-container" *ngIf="masterModel.reportCountFound">
+								<div class="new-graph-head text-center text-sm-left align-items-center">
+									<div class="graph-title-container">
+										<h3 class="title">{{'CS_DASHBOARD.LBL_TOTAL_REPORTS' | translate}}</h3>
+									</div>
+								</div>
+								<div class="row graph-body">
+									<div class="col-sm-12 mb-3 mb-xl-0">
+										<div id="chartdiv1" style="width: 100%; height: 164px"></div>
+									</div>
+								</div>
+							</div>
+                        </ng-template>
+                    </ng-template> 
+					</div>
+					<div class="col-12 col-sm-6 col-xl-4 grid-column mobile-margin-top-15 tablet-margin-top-15">
+                        <ng-container
+                        *ngIf="masterModel.serviceTypeGraphLoading; else ServiceTypeResult">
+                        <div class="dashboard-graph-container">
+                            <div class="common-graph-placeholder">
+                                <img src="assets/images/donut-placeholder.png" alt="graph">
+                                <div class="content-container">
+                                    <div class="rect animate"></div>
+                                    <div class="rect animate width80"></div>
+                                    <div class="rect animate width50"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </ng-container>
+                    <ng-template #ServiceTypeResult>
+                        <div class="error-container dashboard-graph-container"
+                            *ngIf="masterModel.serviceTypeGraphError; else ServiceTypeData">
+							<div class="new-graph-head text-center text-sm-left align-items-center">
+								<div class="graph-title-container">
+									<h3 class="title"> {{'CS_DASHBOARD.LBL_SERVICE_TYPE' |
+										translate }}</h3>
+								</div>
+							</div>
+                            <img src="assets/images/went-wrong.svg" alt="" class="thumbnail">
+                            <h4 class="error-title">{{ 'ERROR.MSG_ERROR_TITLE' | translate }}</h4>
+                            <p class="error-subtitle">
+                                {{'COMMON.LBL_UNAUTHORISED_ACCESS' | translate}}</p>
+                        </div>
+                        <ng-template #ServiceTypeData>                        
+                            <div class="error-container dashboard-graph-container" *ngIf="!masterModel.serviceTypeGraphFound">
+                                <div class="new-graph-head text-center text-sm-left align-items-center">
+                                    <div class="graph-title-container">
+                                        <h3 class="title"> {{'CS_DASHBOARD.LBL_SERVICE_TYPE' |
+                                            translate }}</h3>
+                                    </div>
+                                </div>
+                                <img src="assets/images/no-data.svg" al t="" class="thumbnail">
+                                <h4 class="error-title">{{ 'COMMON.LBL_No_ITEM' | translate }}
+                                </h4>
+                                <p class="error-subtitle">{{'COMMON.LBL_NO_DATA_EMPTY' | translate}}</p>
+                            </div>
+                            <div class="dashboard-graph-container" *ngIf="masterModel.serviceTypeGraphFound">
+                                <div class="new-graph-head text-center text-sm-left align-items-center">
+                                    <div class="graph-title-container">
+                                        <h3 class="title">{{'CS_DASHBOARD.LBL_SERVICE_TYPE' | translate}}</h3>
+                                    </div>
+                                </div>
+                                <div class="row graph-body">
+                                    <div class="col-md-12 col-lg-12 col-xl-6 mb-3 mb-xl-0">								
+                                        <div id="chartdiv-circle1" style="width: 100%; height: 190px"></div>
+                                    </div>
+                                    <div class="col-md-12 col-lg-12 col-xl-6 vertical-center">
+                                        <div class="legend-wrapper two-column">																			
+                                            <div class="legend-item"
+                                            *ngFor="let item of masterModel.serviceTypeGraphList | slice:0:5;">
+                                            <div class="label">
+                                                <span class="tile" [ngStyle]="{'background-color':item.color }">
+                                                </span>
+                                                <span class="text common-tooltip"
+                                                    [attr.data-tooltip]="item.name">{{item.trimmedName}}</span>
+                                            </div>
+                                            <span class="count">{{item.count}}</span>
+                                        </div>
+                                        <div class="legend-item"
+                                            *ngIf="masterModel.serviceTypeGraphList.length>5">
+                                            <div class="label has-dropdown">
+                                                <span class="link">
+                                                    {{ 'CUSTOMER_DASHBOARD.LBL_SHOW' | translate }}
+                                                    {{masterModel.serviceTypeGraphList.length - 5}}
+                                                    {{ 'CUSTOMER_DASHBOARD.LBL_MORE' | translate }}</span>
+                                                <div class="cta-dropdown top-right min-width-230">
+                                                    <div class="legend-wrapper two-column">
+                                                        <div class="legend-item"
+                                                            *ngFor="let item of masterModel.serviceTypeGraphList | slice:5:masterModel.serviceTypeGraphList.length;">
+                                                            <div class="label">
+                                                                <span class="tile"
+                                                                    [ngStyle]="{'background-color':item.color }">
+                                                                </span>
+                                                                <!-- <span class="text">{{item.name}}</span> -->
+                                                                <span class="text common-tooltip"
+                                                                    [attr.data-tooltip]="item.name">{{item.trimmedName}}</span>
+                                                            </div>
+                                                            <span class="count">{{item.count}}</span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </ng-template>
+                    </ng-template>                     					
+                    </div>
+					<div class="col-12 col-sm-6 col-xl-4 grid-column mobile-margin-top-15 tablet-margin-top-15">
+						<ng-container
+                        *ngIf="masterModel.mandayByOfficeLoading; else MandayByOfficeResult">
+                        <div class="dashboard-graph-container">
+                            <div class="common-graph-placeholder">
+                                <img src="assets/images/donut-placeholder.png" alt="graph">
+                                <div class="content-container">
+                                    <div class="rect animate"></div>
+                                    <div class="rect animate width80"></div>
+                                    <div class="rect animate width50"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </ng-container>
+                    <ng-template #MandayByOfficeResult>
+                        <div class="error-container dashboard-graph-container"
+                            *ngIf="masterModel.mandayByOfficeError; else MandayByOfficeData">
+							<div class="new-graph-head text-center text-sm-left align-items-center">
+								<div class="graph-title-container">
+									<h3 class="title"> {{'CS_DASHBOARD.LBL_MAN_DAY_BY_OFFICE' |
+										translate }}</h3>
+								</div>
+							</div>
+                            <img src="assets/images/went-wrong.svg" alt="" class="thumbnail">
+                            <h4 class="error-title">{{ 'ERROR.MSG_ERROR_TITLE' | translate }}</h4>
+                            <p class="error-subtitle">
+                                {{'COMMON.LBL_UNAUTHORISED_ACCESS' | translate}}</p>
+                        </div>
+                        <ng-template #MandayByOfficeData>                        
+                            <div class="error-container dashboard-graph-container" *ngIf="!masterModel.mandayByOfficeFound">
+                                <div class="new-graph-head text-center text-sm-left align-items-center">
+                                    <div class="graph-title-container">
+                                        <h3 class="title"> {{'CS_DASHBOARD.LBL_MAN_DAY_BY_OFFICE' |
+                                            translate }}</h3>
+                                    </div>
+                                </div>
+                                <img src="assets/images/no-data.svg" al t="" class="thumbnail">
+                                <h4 class="error-title">{{ 'COMMON.LBL_No_ITEM' | translate }}
+                                </h4>
+                                <p class="error-subtitle">{{'COMMON.LBL_NO_DATA_EMPTY' | translate}}</p>
+                            </div>
+							<div class="dashboard-graph-container"  *ngIf="masterModel.mandayByOfficeFound">
+								<div class="new-graph-head text-center text-sm-left align-items-center">
+									<div class="graph-title-container">
+										<h3 class="title">{{ 'CS_DASHBOARD.LBL_MAN_DAY_BY_OFFICE' | translate}}</h3>
+									</div>
+								</div>
+								<div class="row graph-body">
+									<div class="col-md-12 col-lg-12 col-xl-6 mb-3 mb-xl-0">
+										<div id="chartdiv-circle2" style="width: 100%; height: 190px"></div>
+									</div>
+									<div class="col-md-12 col-lg-12 col-xl-6 vertical-center">
+										<div class="legend-wrapper two-column">
+											<div class="legend-item"
+											*ngFor="let item of masterModel.mandayByOfficeList | slice:0:5;">
+											<div class="label">
+												<span class="tile" [ngStyle]="{'background-color':item.color }">
+												</span>
+												<span class="text common-tooltip"
+													[attr.data-tooltip]="item.name">{{item.trimmedName}}</span>
+											</div>
+											<span class="count">{{item.count}}</span>
+										</div>
+										<div class="legend-item"
+											*ngIf="masterModel.mandayByOfficeList.length>5">
+											<div class="label has-dropdown">
+												<span class="link">
+													{{ 'CUSTOMER_DASHBOARD.LBL_SHOW' | translate }}
+													{{masterModel.mandayByOfficeList.length - 5}}
+													{{ 'CUSTOMER_DASHBOARD.LBL_MORE' | translate }}</span>
+												<div class="cta-dropdown top-right min-width-230">
+													<div class="legend-wrapper two-column">
+														<div class="legend-item"
+															*ngFor="let item of masterModel.mandayByOfficeList | slice:5:masterModel.mandayByOfficeList.length;">
+															<div class="label">
+																<span class="tile"
+																	[ngStyle]="{'background-color':item.color }">
+																</span><span class="text common-tooltip"
+																	[attr.data-tooltip]="item.name">{{item.trimmedName}}</span>
+															</div>
+															<span class="count">{{item.count}}</span>
+														</div>
+													</div>
+												</div>
+											</div>
+										</div>
+										</div>
+									</div>
+								</div>
+							</div>                            
+                        </ng-template>
+                    </ng-template>    
+					
+					</div>
+				</div>
+			</div>
+			<div class="footer independent">
+				<div class="column">
+					<p class="text">{{'COMMON.LBL_RIGHTS_RESERVED' | translate}}</p>
+				</div>
+				<div class="column">
+					<ul class="footer-item">
+						<li><a href="">{{'COMMON.LBL_USER_GUIDE' | translate}}</a></li>
+						<li><a href="">{{'COMMON.LBL_CONTACT' | translate}}</a></li>
+						<li><a href="">{{'COMMON.LBL_HELP' | translate}}</a></li>
+						<li><a href="">{{'COMMON.LBL_TERMS' | translate}}</a></li>
+					</ul>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

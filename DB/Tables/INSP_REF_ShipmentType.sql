@@ -1,0 +1,7 @@
+﻿CREATE TABLE [dbo].[INSP_REF_ShipmentType]
+(
+	Id INT IDENTITY(1,1) PRIMARY KEY,
+	Name NVARCHAR(500),
+	Active BIT,
+	Sort INT
+)

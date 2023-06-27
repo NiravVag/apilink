@@ -1,0 +1,750 @@
+<div class="main-wrapper">
+  <div class="wrapper dashboard-wrapper">
+    <div class="my-container">
+      <div class="master-body">
+        <div class="title-container">
+          <div class="header-back-button" *ngIf="fromSummary && !pageLoading">
+            <img src="assets/images/back-red.png" alt="back" (click)="this.return('editClaim/claim-summary');">
+          </div>
+          <h3 class="main-title">{{model.id==null?('EDIT_CLAIM.LBL_ADD' | translate):('EDIT_CLAIM.LBL_EDIT' |
+            translate)}}&nbsp; {{
+            'EDIT_CLAIM.TITLE' |
+            translate
+            }}
+            <span class="highlight-badge" *ngIf="model.id!=null && model.id!=0">#{{model.claimNo}}</span>
+            <span class="highlight-badge in-progress"
+              *ngIf="model.id!=null && model.id!=0">({{model.statusName}})</span>
+          </h3>
+        </div>
+        <div class="content-container schedule-allocation-container" *ngIf="masterModel.showBookingDetails">
+          <div class="formPadding">
+            <div class="row">
+              <div class="col-sm-12 booking-detail-container">
+                <img src="assets/images/blue-file.svg" alt="" class="icon">
+                <h4 class="title">{{ 'EDIT_COMPLAINT.LBL_BOOKING_DETAILS' | translate}}</h4>
+              </div>
+              <div class="col-sm-12 marginTop20 detail-column-container">
+
+                <div class="my-input-group col-lg-3">
+                  <label class="light" for="">{{ 'EDIT_COMPLAINT.LBL_CUSTOMER' | translate}}</label>
+                  <p class="input-value wordbreak">{{bookingData.customerName}}</p>
+                </div>
+                <div class="my-input-group col-lg-3">
+                  <label class="light" for="">{{ 'EDIT_COMPLAINT.LBL_SUPPLIER' | translate}}</label>
+                  <p class="input-value wordbreak">{{bookingData.supplierName}}</p>
+                </div>
+                <div class="my-input-group col-lg-3">
+                  <label class="light" for="">{{ 'EDIT_COMPLAINT.LBL_FACTORY' | translate }}</label>
+                  <p class="input-value wordbreak">{{bookingData.factoryName}}</p>
+                </div>
+                <div class="my-input-group col-lg-3">
+                  <label class="light" for="">{{ 'EDIT_CLAIM.LBL_INSPECTION_DATE' | translate }}</label>
+                  <p class="input-value wordbreak">{{bookingData.serviceDate}}</p>
+                </div>
+              </div>
+              <div class="col-sm-12 marginTop20 detail-column-container">
+                <div class="my-input-group col-lg-3">
+                  <label class="light" for="">{{ 'EDIT_CLAIM.LBL_FACT_ADDRESS' | translate }}</label>
+                  <p class="input-value wordbreak">{{bookingData.factoryAddress}}</p>
+
+                </div>
+                <div class="my-input-group col-lg-3 padding-left tablet-padding-left">
+                  <label class="light" for="">{{ 'EDIT_CLAIM.LBL_PRESENTED_QTY' | translate }}</label>
+                  <p class="input-value">{{bookingData.reportPresentedQty}}</p>
+                </div>
+
+                <div class="my-input-group col-lg-3">
+                  <label class="light" for="">{{ 'EDIT_CLAIM.LBL_InspectedQuantity' | translate }}</label>
+                  <p class="input-value">{{bookingData.reportInspectedQty}}</p>
+                </div>
+                <div class="my-input-group col-lg-3">
+                  <label class="light" for="">{{ 'EDIT_CLAIM.LBL_QC' | translate }}</label>
+                  <p class="input-value">{{bookingData.qc}}</p>
+                </div>
+              </div>
+              <div class="col-sm-12 marginTop20 detail-column-container" *ngIf="masterModel.showBookingDetails">
+                <div class="my-input-group col-lg-3">
+                  <label class="light" for="">{{ 'EDIT_CLAIM.LBL_CS' | translate }}</label>
+                  <p class="input-value">{{bookingData.cs}}</p>
+                </div>
+
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="content-container">
+          <div class="container-head">
+            <img class="head-icon" src="assets/images/general.png" alt="">{{ 'EDIT_CLAIM.LBL_MAIN' | translate }}
+          </div>
+          <div class="content-container marginTop15">
+            <div class="row searchFormPadding">
+              <div class="col-sm-12">
+                <div class="row">
+                  <div class="col-sm-3 col-md-3 col-lg-3">
+                    <div class="my-input-group">
+                      <label class="control-label required">{{ 'EDIT_CLAIM.LBL_INSPECTIONNO' | translate }}</label>
+                      <ng-select bindValue="id" bindLabel="name" [multiple]="false" [items]="masterModel.bookingIdList"
+                        [clearable]="false" [(ngModel)]="model.bookingId" [virtualScroll]="true"
+                        (scrollToEnd)="getBookingIdListData()" (change)="changeBookingNo($event)"
+                        [typeahead]="masterModel.bookingIdInput" [minTermLength]="3" [disabled]="isEditInspection"
+                        placeholder="--- {{ (masterModel.bookingIdList!=null && masterModel.bookingIdList.length!=0? 'COMMON.LBL_SELECT':'COMMON.LBL_NO_DATA' ) | translate }} ---"
+                        appendTo="body" [loading]="masterModel.bookingIdLoading">
+                        <ng-template ng-option-tmp let-item="item">
+                          <div class="text-wrap">{{ item.name }}</div>
+                        </ng-template>
+                      </ng-select>
+                      <div *ngIf="!validator.isValid('bookingId')" class="invalid-feedback" style="display:block">
+                        <div *ngFor="let error of validator.getErrors('bookingId')">{{ error | translate }}</div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-sm-3  col-lg-3 mobile-margin-top-15">
+                    <div class="my-input-group">
+                      <label>{{ 'EDIT_CLAIM.LBL_REPORTTITLE' | translate }}</label>
+                      <ng-select [items]="masterModel.reportList" [hideSelected]="true" appendTo="body"
+                        [multiple]="true" class="multiple" [closeOnSelect]="true"
+                        [loading]="masterModel.reportListLoading" [searchable]="true" (change)="getBookingData()"
+                        bindLabel="name" bindValue="id" [(ngModel)]="model.reportIdList"
+                        placeholder="--- {{ (masterModel.reportList!=null && masterModel.reportList.length!=0? 'COMMON.LBL_SELECT':'COMMON.LBL_NO_DATA' ) | translate }} ---">
+                      </ng-select>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="row searchFormPadding">
+              <div class="col-sm-12">
+                <div class="row">
+                  <div class="col-sm-4 col-md-6 col-lg-3">
+                    <div class="my-input-group">
+                      <label class="control-label required">{{ 'EDIT_CLAIM.LBL_CLAIMDATE' | translate }}</label>
+                      <div class="calendar-wrapper">
+                        <input type="text" maxlength="10" [ngClass]="{ 'is-invalid':  !validator.isValid('claimDate')}"
+                          placeholder="{{ 'EDIT_CLAIM.LBL_CLAIMDATE' | translate }}" ngbDatepicker #ec="ngbDatepicker"
+                          (click)="ec.toggle()" [(ngModel)]="model.claimDate">
+                        <img src="assets/images/calendar-icon.svg" alt="" class="calendar-icon" (click)="ec.toggle()">
+                        <div *ngIf="!validator.isValid('claimDate')" class="invalid-feedback">
+                          <div *ngFor="let error of validator.getErrors('claimDate')">{{ error | translate }}</div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-sm-4 col-md-6 col-lg-3">
+                    <div class="my-input-group">
+                      <label>{{ 'EDIT_CLAIM.LBL_REQUEST_CONTACT_NAME' | translate }}</label>
+                      <input type="text" maxlength="1000" [(ngModel)]=model.requestContactName
+                        placeholder="{{ 'EDIT_CLAIM.LBL_REQUEST_CONTACT_NAME' | translate }}" />
+                    </div>
+                  </div>
+                  <div class="col-sm-3 col-lg-3 mobile-margin-top-15">
+                    <div class="my-input-group">
+                      <label>{{ 'EDIT_CLAIM.LBL_CLAIMFROM' | translate }}</label>
+                      <ng-select [items]="masterModel.claimFromList" [hideSelected]="true" appendTo="body"
+                        [multiple]="false" [closeOnSelect]="true" [loading]="masterModel.claimFromListLoading"
+                        [searchable]="true" bindLabel="name" bindValue="id" [(ngModel)]="model.claimFromId"
+                        placeholder="--- {{ (masterModel.claimFromList!=null && masterModel.claimFromList.length!=0? 'COMMON.LBL_SELECT':'COMMON.LBL_NO_DATA' ) | translate }} ---">
+                      </ng-select>
+                    </div>
+                  </div>
+                  <div class="col-sm-3 col-lg-3 mobile-margin-top-15">
+                    <div class="my-input-group">
+                      <label class="control-label required">{{ 'EDIT_CLAIM.LBL_RECEIVEDFROM' | translate }}</label>
+                      <ng-select [items]="masterModel.receivedFromList" [hideSelected]="true" appendTo="body"
+                        [multiple]="false" [closeOnSelect]="true" [loading]="masterModel.receivedFromListLoading"
+                        [searchable]="true" bindLabel="name" bindValue="id" [(ngModel)]="model.receivedFromId"
+                        placeholder="--- {{ (masterModel.receivedFromList!=null && masterModel.receivedFromList.length!=0? 'COMMON.LBL_SELECT':'COMMON.LBL_NO_DATA' ) | translate }} ---">
+                      </ng-select>
+                      <div *ngIf="!validator.isValid('receivedFromId')" class="invalid-feedback">
+                        <div *ngFor="let error of validator.getErrors('receivedFromId')">
+                          {{ error | translate }}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-sm-3 col-lg-3 mobile-margin-top-15 marginTop10">
+                    <div class="my-input-group">
+                      <label class="control-label required">{{ 'EDIT_CLAIM.LBL_CLAIMSOURCE' | translate }}</label>
+                      <ng-select [items]="masterModel.claimSourceList" [hideSelected]="true" appendTo="body"
+                        [multiple]="false" [closeOnSelect]="true" [loading]="masterModel.claimSourceListLoading"
+                        [searchable]="true" bindLabel="name" bindValue="id" [(ngModel)]="model.claimSourceId"
+                        placeholder="--- {{ (masterModel.claimSourceList!=null && masterModel.claimSourceList.length!=0? 'COMMON.LBL_SELECT':'COMMON.LBL_NO_DATA' ) | translate }} ---">
+                      </ng-select>
+                      <div *ngIf="!validator.isValid('claimSourceId')" class="invalid-feedback">
+                        <div *ngFor="let error of validator.getErrors('claimSourceId')">
+                          {{ error | translate }}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-sm-3 col-lg-3 mobile-margin-top-15 marginTop10">
+                    <div class="my-input-group">
+                      <label>{{ 'EDIT_CLAIM.LBL_DEFECTFAMILY' | translate }}</label>
+                      <ng-select [items]="masterModel.defectFamilyList" [hideSelected]="true" appendTo="body"
+                        [multiple]="true" class="multiple" [closeOnSelect]="true"
+                        [loading]="masterModel.defectFamilyListLoading" [searchable]="true" bindLabel="name"
+                        bindValue="id" [(ngModel)]="model.defectFamilyIdList"
+                        placeholder="--- {{ (masterModel.defectFamilyList!=null && masterModel.defectFamilyList.length!=0? 'COMMON.LBL_SELECT':'COMMON.LBL_NO_DATA' ) | translate }} ---">
+                      </ng-select>
+                    </div>
+                  </div>
+                  <div class="col-sm-3 col-lg-3 mobile-margin-top-15 marginTop10">
+                    <div class="my-input-group">
+                      <label>{{ 'EDIT_CLAIM.LBL_CLAIM_DEPARTMENT' | translate }}</label>
+                      <ng-select [items]="masterModel.claimDepartmentList" [hideSelected]="true" appendTo="body"
+                        [multiple]="true" class="multiple" [closeOnSelect]="true"
+                        [loading]="masterModel.claimDepartmentListLoading" [searchable]="true" bindLabel="name"
+                        bindValue="id" [(ngModel)]="model.claimDepartmentIdList"
+                        placeholder="--- {{ (masterModel.claimDepartmentList!=null && masterModel.claimDepartmentList.length!=0? 'COMMON.LBL_SELECT':'COMMON.LBL_NO_DATA' ) | translate }} ---">
+                      </ng-select>
+                    </div>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-sm-6 col-lg-6 mobile-margin-top-15 marginTop10">
+                    <div class="my-input-group">
+                      <label class="">{{ 'EDIT_CLAIM.LBL_CLAIM_DESCRIPTION' | translate }}</label>
+                      <textarea maxlength="1000" [(ngModel)]="model.claimDescription" class="form-control" type="text"
+                        rows="4" placeholder="{{ 'EDIT_CLAIM.LBL_CLAIM_DESCRIPTION' | translate }}"></textarea>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-sm-12 marginTop25">
+              <div class=" col-sm-12">
+                <h6 class="quote-form-title">{{ 'EDIT_CLAIM.LBL_CUSTOMER_DETAILS' | translate }}</h6>
+              </div>
+              <div class="row borderline marginleft10">
+                <div class="col-sm-4 col-lg-4 mobile-margin-top-15 marginTop10">
+                  <div class="my-input-group">
+                    <label>{{ 'EDIT_CLAIM.LBL_CUSTOMER_REQUEST' | translate }}</label>
+                    <ng-select [items]="masterModel.claimCustomerRequestList" [hideSelected]="true" appendTo="body"
+                      [multiple]="true" class="multiple" [closeOnSelect]="true"
+                      [loading]="masterModel.claimCustomerRequestListLoading" [searchable]="true" bindLabel="name"
+                      bindValue="id" [(ngModel)]="model.claimCustomerRequestIdList"
+                      placeholder="--- {{ (masterModel.claimCustomerRequestList!=null && masterModel.claimCustomerRequestList.length!=0? 'COMMON.LBL_SELECT':'COMMON.LBL_NO_DATA' ) | translate }} ---">
+                    </ng-select>
+                  </div>
+                </div>
+                <div class="col-sm-4 col-lg-4 mobile-margin-top-15 marginTop10">
+                  <div class="my-input-group">
+                    <label>{{ 'EDIT_CLAIM.LBL_PRORITY' | translate }}</label>
+                    <ng-select [items]="masterModel.priorityList" [hideSelected]="true" appendTo="body"
+                      [multiple]="false" [closeOnSelect]="true" [loading]="masterModel.priorityListLoading"
+                      [searchable]="true" bindLabel="name" bindValue="id" [(ngModel)]="model.priorityId"
+                      placeholder="--- {{ (masterModel.priorityList!=null && masterModel.priorityList.length!=0? 'COMMON.LBL_SELECT':'COMMON.LBL_NO_DATA' ) | translate }} ---">
+                    </ng-select>
+                  </div>
+                </div>
+                <div class="col-sm-4 col-lg-4 mobile-margin-top-15 marginTop10">
+                  <div class="my-input-group">
+                    <label>{{ 'EDIT_CLAIM.LBL_CUSTOMER_REQUEST_REFUND' | translate }}</label>
+                    <ng-select [items]="masterModel.customerRequestRefundList" [hideSelected]="true" appendTo="body"
+                      [multiple]="true" class="multiple" [closeOnSelect]="true"
+                      (change)="ChangeCustomerRequestRefund($event)"
+                      [loading]="masterModel.customerRequestRefundListLoading" [searchable]="true" bindLabel="name"
+                      bindValue="id" [(ngModel)]="model.customerRequestRefundIdList"
+                      placeholder="--- {{ (masterModel.customerRequestRefundList!=null && masterModel.customerRequestRefundList.length!=0? 'COMMON.LBL_SELECT':'COMMON.LBL_NO_DATA' ) | translate }} ---">
+                    </ng-select>
+                  </div>
+                </div>
+                <div class="col-sm-4 mobile-margin-top-15 marginTop10" *ngIf="isCompensation">
+                  <div class="my-input-group">
+                    <label class="required">{{ 'EDIT_CLAIM.LBL_AMOUNT' | translate }}</label>
+                    <input [(ngModel)]="model.amount" [ngClass]="{ 'is-invalid':  !validator.isValid('amount')}"
+                      placeholder="{{ 'EDIT_CLAIM.LBL_AMOUNT' | translate }}" type="text" />
+                    <div *ngIf="!validator.isValid('amount')" class="invalid-feedback">
+                      <div *ngFor="let error of validator.getErrors('amount')">
+                        {{ error | translate }}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-sm-4  col-lg-4 mobile-margin-top-15 marginTop10" *ngIf="isCompensation">
+                  <div class="my-input-group">
+                    <label>{{'EDIT_CLAIM.LBL_CURRENCY'| translate}}</label>
+                    <ng-select [items]="masterModel.currencyList" [hideSelected]="true" appendTo="body"
+                      [multiple]="false" [closeOnSelect]="true" [loading]="masterModel.currencyListLoading"
+                      [searchable]="true" bindLabel="name" bindValue="id" [(ngModel)]="model.currencyId"
+                      placeholder="--- {{ (masterModel.currencyList!=null && masterModel.currencyList.length!=0? 'COMMON.LBL_SELECT':'COMMON.LBL_NO_DATA' ) | translate }} ---">
+                    </ng-select>
+                    <div *ngIf="!validator.isValid('currencyId')" class="invalid-feedback">
+                      <div *ngFor="let error of validator.getErrors('currencyId')">
+                        {{ error | translate }}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-sm-4 mobile-margin-top-15 marginTop10">
+                  <div class="my-input-group">
+                    <label>{{ 'EDIT_CLAIM.LBL_CUSTOMER_COMMENTS' | translate }}</label>
+                    <textarea maxlength="500" [(ngModel)]="model.customercomment"
+                      placeholder="{{ 'EDIT_CLAIM.LBL_CUSTOMER_COMMENTS' | translate }}">
+                                        </textarea>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-sm-12">
+              <div class="row">
+                <div class="tab-container">
+                  <ul class="tab-switch-container">
+                    <li class="active" (click)="toggleTab($event, 'tab1')">{{ 'EDIT_CLAIM.TAB_TITLE' | translate }}</li>
+                    <li (click)="toggleTab($event, 'tab2')">{{'EDIT_CLAIM.TAB_ATTACHMENTS_TITLE' | translate }}</li>
+                    <li (click)="toggleTab($event, 'tab3')">{{'EDIT_CLAIM.TAB_FINANCIAL_IMPACT_TITLE' | translate }}
+                    </li>
+                    <li *ngIf="isValidateClaimRole || isValidateTab || isAccountingClaimRole || isClosed"
+                      (click)="toggleTab($event, 'tab4')">{{ 'EDIT_CLAIM.TAB_VALIDATE_TITLE' |translate }}</li>
+                    <li *ngIf="isAccountingClaimRole || isClosed" (click)="toggleTab($event, 'tab5')">
+                      {{'EDIT_CLAIM.TAB_FINAL_TITLE' | translate }}</li>
+                  </ul>
+                  <div class="tab-content-container">
+                    <div class="tab-content active" id="tab1">
+                      <div class="col-sm-12">
+                        <div class="row marginTop15">
+                          <div class="col-sm-4">
+                            <div class="my-input-group">
+                              <label class="">{{ 'EDIT_CLAIM.LBL_QCCONTROL' | translate }}</label>
+                              <ng-select [multiple]="false" [closeOnSelect]="true" [searchable]="true"
+                                [hideSelected]="true" bindLabel="name" bindValue="id" [items]="qcControl100Goods"
+                                placeholder="--- {{ 'EDIT_CUSTOMER.LBL_SELECT' | translate }}---"
+                                [(ngModel)]="model.qcControlId">
+                              </ng-select>
+
+                            </div>
+                          </div>
+                          <div class="col-sm-4">
+                            <div class="my-input-group">
+                              <label class="">{{ 'EDIT_CLAIM.LBL_DEFECT_PERCENTAGE' | translate }}</label>
+                              <input maxlength="100" [(ngModel)]="model.defectPercentage" type="number"
+                                (keypress)="numericValidation($event)" oninput="validity.valid||(value='');"
+                                placeholder="{{ 'EDIT_CLAIM.LBL_DEFECT_PERCENTAGE' | translate }}" />
+                            </div>
+                          </div>
+                          <div class="col-sm-4">
+                            <div class="my-input-group">
+                              <label class="">{{ 'EDIT_CLAIM.LBL_NOOFPIECES' | translate }}</label>
+                              <input maxlength="100" [(ngModel)]="model.noOfPieces" type="number"
+                                (keypress)="numericValidation($event)" oninput="validity.valid||(value='');"
+                                placeholder="{{ 'EDIT_CLAIM.LBL_NOOFPIECES' | translate }}" />
+                            </div>
+                          </div>
+                        </div>
+                        <div class="row marginTop15">
+                          <div class="col-sm-4">
+                            <div class="my-input-group">
+                              <label>{{ 'EDIT_CLAIM.LBL_COMPARETOAQL' | translate }}</label>
+                              <input maxlength="50" [(ngModel)]="model.compareToAQL" type="number"
+                                (keypress)="numericValidation($event)" oninput="validity.valid||(value='');"
+                                placeholder="{{ 'EDIT_CLAIM.LBL_COMPARETOAQL' | translate }}" />
+                            </div>
+                          </div>
+                          <div class="col-sm-4">
+                            <div class="my-input-group">
+                              <label class="">{{ 'EDIT_CLAIM.LBL_DEFECT_DISTRIBUTION' | translate }}</label>
+                              <ng-select [items]="masterModel.defectDistributionList" [hideSelected]="true"
+                                appendTo="body" [multiple]="false" [closeOnSelect]="true"
+                                [loading]="masterModel.defectDistributionListLoading" [searchable]="true"
+                                bindLabel="name" bindValue="id" [(ngModel)]="model.defectDistributionId"
+                                placeholder="--- {{ (masterModel.defectDistributionList!=null && masterModel.defectDistributionList.length!=0? 'COMMON.LBL_SELECT':'COMMON.LBL_NO_DATA' ) | translate }} ---">
+                              </ng-select>
+                            </div>
+                          </div>
+                          <div class="col-sm-4">
+                            <div class="my-input-group">
+                              <label for="Color">{{ 'EDIT_CLAIM.LBL_COLOR' | translate }}</label>
+                              <input maxlength="100" [(ngModel)]="model.color" type="text"
+                                placeholder="{{ 'EDIT_CLAIM.LBL_COLOR' | translate }}" />
+                            </div>
+                          </div>
+                        </div>
+                        <div class="row marginTop15">
+                          <div class="col-sm-4">
+                            <div class="my-input-group">
+                              <label for="defectCartonInspected">{{ 'EDIT_CLAIM.LBL_DEFECT_CARTON_INSPECTED' | translate
+                                }}</label>
+                              <input maxlength="100" [(ngModel)]="model.defectCartonInspected" type="text"
+                                placeholder="{{ 'EDIT_CLAIM.LBL_DEFECT_CARTON_INSPECTED' | translate }}" />
+                            </div>
+                          </div>
+                          <div class="col-sm-4">
+                            <div class="my-input-group">
+                              <label for="FoBPrice">{{ 'EDIT_CLAIM.LBL_FOB_PRICE' | translate }}</label>
+                              <input maxlength="100" [(ngModel)]="model.fobPrice" type="number"
+                                (keypress)="numericValidation($event)" oninput="validity.valid||(value='');"
+                                placeholder="{{ 'EDIT_CLAIM.LBL_FOB_PRICE' | translate }}" />
+                            </div>
+                          </div>
+                          <div class="col-sm-4">
+                            <div class="my-input-group">
+                              <label>{{ 'EDIT_CLAIM.LBL_FOB_CURRENCY' | translate }}</label>
+                              <ng-select [items]="masterModel.currencyList" [hideSelected]="true" appendTo="body"
+                                [multiple]="false" [closeOnSelect]="true" [loading]="masterModel.currencyListLoading"
+                                [searchable]="true" bindLabel="name" bindValue="id" [(ngModel)]="model.fobCurrencyId"
+                                placeholder="--- {{ (masterModel.currencyList!=null && masterModel.currencyList.length!=0? 'COMMON.LBL_SELECT':'COMMON.LBL_NO_DATA' ) | translate }} ---">
+                              </ng-select>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="row marginTop15">
+                          <div class="col-sm-4">
+                            <div class="my-input-group">
+                              <label for="Color">{{ 'EDIT_CLAIM.LBL_RETAILPRICE' | translate }}</label>
+                              <input maxlength="100" [(ngModel)]="model.retailPrice" type="number"
+                                (keypress)="numericValidation($event)" oninput="validity.valid||(value='');"
+                                placeholder="{{ 'EDIT_CLAIM.LBL_RETAILPRICE' | translate }}" />
+                            </div>
+                          </div>
+                          <div class="col-sm-4">
+                            <div class="my-input-group">
+                              <label>{{ 'EDIT_CLAIM.LBL_RETAIL_CURRENCY' | translate }}</label>
+                              <ng-select [items]="masterModel.currencyList" [hideSelected]="true" appendTo="body"
+                                [multiple]="false" [closeOnSelect]="true" [loading]="masterModel.currencyListLoading"
+                                [searchable]="true" bindLabel="name" bindValue="id" [(ngModel)]="model.retailCurrencyId"
+                                placeholder="--- {{ (masterModel.currencyList!=null && masterModel.currencyList.length!=0? 'COMMON.LBL_SELECT':'COMMON.LBL_NO_DATA' ) | translate }} ---">
+                              </ng-select>
+                            </div>
+                          </div>
+                          <div class="col-sm-4" *ngIf="isAnalyzeClaimRole">
+                            <div class="my-input-group">
+                              <label>{{ 'EDIT_CLAIM.LBL_ANALYZER_FEEDBACK' | translate }}</label>
+                              <textarea maxlength="500" [(ngModel)]="model.analyzerFeedback"
+                                placeholder="{{ 'EDIT_CLAIM.LBL_ANALYZER_FEEDBACK' | translate }}">
+                                                </textarea>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="tab-content" id="tab2">
+                      <div class="content-container">
+                        <div class="col-sm-12">
+                          <div class="row marginTop15">
+                            <div class="col-sm-3">
+                              <div class="my-input-group">
+                                <label>{{ 'EDIT_CLAIM.LBL_FILE_TYPE' | translate }}</label>
+                                <ng-select [items]="masterModel.fileTypeList" [hideSelected]="true" appendTo="body"
+                                  [multiple]="false" [closeOnSelect]="true" [loading]="masterModel.fileTypeListLoading"
+                                  [searchable]="true" bindLabel="name" bindValue="id" [(ngModel)]="model.fileTypeId"
+                                  placeholder="--- {{ (masterModel.fileTypeList!=null && masterModel.fileTypeList.length!=0? 'COMMON.LBL_SELECT':'COMMON.LBL_NO_DATA' ) | translate }} ---">
+                                </ng-select>
+                              </div>
+                            </div>
+                            <div class="col-sm-3">
+                              <div class="my-input-group">
+                                <label class="">{{ 'EDIT_CLAIM.LBL_FILE_DESCRIPTION' | translate }}</label>
+                                <textarea maxlength="1000" [(ngModel)]="model.fileDesc" class="form-control" type="text"
+                                  placeholder="{{ 'EDIT_CLAIM.LBL_FILE_DESCRIPTION' | translate }}"></textarea>
+                              </div>
+                            </div>
+                            <div class="col-sm-6 marginTop10">
+                              <div class="drag-drop-container type-two" (click)="selectFiles($event)">
+                                <img src="assets/images/upload-icon.svg" class="icon" alt="drag drop">
+                                <div class="info">
+                                  <h4 class="title">
+                                    {{ 'EDIT_CLAIM.LBL_SELECT_FILE' | translate }}, <span>
+                                      {{ 'EDIT_CLAIM.LBL_BROWSE' | translate }}
+                                    </span>
+                                  </h4>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                          <div class="row marginTop15" *ngIf="model.attachments != null && model.attachments.length>0">
+                            <div class="col-sm-8 col-md-12 col-lg-8">
+                              <div class="table-container">
+                                <table class="pagination-table">
+                                  <thead>
+                                    <tr>
+                                      <th>File Type</th>
+                                      <th>File Url</th>
+                                      <th>File Description</th>
+                                      <th>Delete</th>
+                                    </tr>
+                                  </thead>
+                                  <tbody>
+                                    <tr *ngFor="let attachment of model.attachments;  let i = index">
+                                      <td class="text-wrap width-140">
+                                        {{attachment.fileTypeName}}
+                                      </td>
+                                      <td class="width-140" style="color: blue; cursor:pointer;">
+                                        <div>
+                                          <a (click)="getFile(attachment)">
+                                            {{attachment.fileName}}
+                                          </a>
+                                        </div>
+                                      </td>
+                                      <td class="width-140">
+                                        {{attachment.fileDesc}}
+                                      </td>
+                                      <td class="width-60">
+                                        <button class="secondary-cta small" (click)="removeAttachment(i)"
+                                          style="margin-left:10px">
+                                          <i class="fa fa-trash"></i>
+                                        </button>
+                                      </td>
+                                    </tr>
+                                  </tbody>
+                                </table>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="tab-content" id="tab3">
+                      <div class="content-container">
+                        <div class="col-sm-12">
+                          <div class="row marginTop15">
+                            <div class="my-input-group col-lg-4">
+                              <label class="light" for="">{{ 'EDIT_CLAIM.LBL_INVOICE' | translate}}</label>
+                              <p class="input-value wordbreak">{{invoiceDetailModel.invoiceNo}}</p>
+                            </div>
+                            <div class="my-input-group col-lg-4">
+                              <label class="light" for="">{{ 'EDIT_CLAIM.LBL_INVOICE_FEES' | translate}}</label>
+                              <p class="input-value wordbreak" *ngIf="invoiceDetailModel.totalInvoiceFees > 0">
+                                {{invoiceDetailModel.totalInvoiceFees}} {{invoiceDetailModel.invoiceCurrencyName}}</p>
+                            </div>
+                            <div class="my-input-group col-lg-4">
+                              <label class="light" for="">{{ 'EDIT_CLAIM.LBL_BILLED_DATE' | translate}}</label>
+                              <p class="input-value wordbreak">{{invoiceDetailModel.invoiceDate}}</p>
+                            </div>
+                          </div>
+                          <div class="row marginTop15">
+                            <div class="my-input-group col-lg-4">
+                              <label class="light" for="">{{ 'EDIT_CLAIM.LBL_CREDIT_NOTE' | translate}}</label>
+                              <p class="input-value wordbreak"></p>
+                            </div>
+                            <div class="my-input-group col-lg-4">
+                              <label class="light" for="">{{ 'EDIT_CLAIM.LBL_CREDIT_NOTE_DATE' | translate}}</label>
+                              <p class="input-value wordbreak"></p>
+                            </div>
+                            <div class="my-input-group col-lg-4">
+                              <label class="light" for="">{{ 'EDIT_CLAIM.LBL_CREDIT_NOTE_AMOUNT' | translate}}</label>
+                              <p class="input-value wordbreak"></p>
+                            </div>
+                          </div>
+                          <div class="row marginTop15">
+                            <div class="col-sm-3">
+                              <div class="my-input-group">
+                                <label>{{ 'EDIT_CLAIM.LBL_REALINSPECTION_FEES' | translate }}</label>
+                                <input maxlength="200" [(ngModel)]="model.realInspectionFees"
+                                  placeholder="{{ 'EDIT_CLAIM.LBL_REALINSPECTION_FEES' | translate }}" type="number"
+                                  (keypress)="numericValidation($event)" oninput="validity.valid||(value='');" />
+
+                              </div>
+                            </div>
+                            <div class="col-sm-3">
+                              <div class="my-input-group">
+                                <label>{{'EDIT_CLAIM.LBL_REALINSPECTION_FEES_CURRENCY'| translate}}</label>
+                                <ng-select [items]="masterModel.currencyList" [hideSelected]="true" appendTo="body"
+                                  [multiple]="false" [closeOnSelect]="true" [loading]="masterModel.currencyListLoading"
+                                  [searchable]="true" bindLabel="name" bindValue="id"
+                                  [(ngModel)]="model.realInspectionCurrencyId"
+                                  placeholder="--- {{ (masterModel.currencyList!=null && masterModel.currencyList.length!=0? 'COMMON.LBL_SELECT':'COMMON.LBL_NO_DATA' ) | translate }} ---">
+                                </ng-select>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="tab-content" id="tab4">
+                      <div class="content-container">
+                        <div class="col-sm-12">
+                          <div class="row marginTop15">
+                            <div class="col-sm-4" *ngIf="isValidateClaimRole || isValidateTab || isClosed">
+                              <div class="my-input-group">
+                                <label class="required">{{ 'EDIT_CLAIM.LBL_CLAIM_RESULT' | translate }}</label>
+                                <ng-select [items]="masterModel.claimResultList" [hideSelected]="true" appendTo="body"
+                                  [multiple]="false" [closeOnSelect]="true" [loading]="masterModel.claimResultLoading"
+                                  [searchable]="true" bindLabel="name" bindValue="id" [(ngModel)]="model.claimResultId"
+                                  placeholder="--- {{ (masterModel.claimResultList!=null && masterModel.claimResultList.length!=0? 'COMMON.LBL_SELECT':'COMMON.LBL_NO_DATA' ) | translate }} ---">
+                                </ng-select>
+                                <div *ngIf="!validator.isValid('claimResultId')" class="invalid-feedback">
+                                  <div *ngFor="let error of validator.getErrors('claimResultId')">
+                                    {{ error | translate }}
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                            <div class="col-sm-4 mobile-margin-top-15">
+                              <div class="my-input-group">
+                                <label class="">{{ 'EDIT_CLAIM.LBL_CLAIM_REMARKS' | translate }}</label>
+                                <textarea maxlength="1000" [(ngModel)]="model.claimRemarks" class="form-control"
+                                  type="text" placeholder="{{ 'EDIT_CLAIM.LBL_CLAIM_REMARKS' | translate }}"></textarea>
+                              </div>
+                            </div>
+                            <div class="col-sm-4 mobile-margin-top-15">
+                              <div class="my-input-group">
+                                <label class="">{{ 'EDIT_CLAIM.LBL_CLAIM_RECOMMENDATION' | translate }}</label>
+                                <textarea maxlength="1000" [(ngModel)]="model.claimRecommendation" class="form-control"
+                                  type="text"
+                                  placeholder="{{ 'EDIT_CLAIM.LBL_CLAIM_RECOMMENDATION' | translate }}"></textarea>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="tab-content" id="tab5">
+                      <div class="content-container">
+                        <div class="col-sm-12">
+                          <div class="row marginTop15">
+                            <div class="col-sm-3" *ngIf="isAccountingClaimRole || isClosed">
+                              <div class="my-input-group">
+                                <label class="required">{{ 'EDIT_CLAIM.LBL_FINAL_DECISION' | translate }}</label>
+                                <ng-select [items]="masterModel.finalResultList" [hideSelected]="true" appendTo="body"
+                                  [multiple]="true" class="multiple" [closeOnSelect]="true"
+                                  (change)="ChangeFinalDecision($event)" [loading]="masterModel.finalResultLoading"
+                                  [searchable]="true" bindLabel="name" bindValue="id"
+                                  [(ngModel)]="model.finalDecisionIdList"
+                                  placeholder="--- {{ (masterModel.finalResultList!=null && masterModel.finalResultList.length!=0? 'COMMON.LBL_SELECT':'COMMON.LBL_NO_DATA' ) | translate }} ---">
+                                </ng-select>
+                                <div *ngIf="!validator.isValid('finalDecisionIdList')" class="invalid-feedback">
+                                  <div *ngFor="let error of validator.getErrors('finalDecisionIdList')">
+                                    {{ error | translate }}
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                            <div class="col-sm-3" *ngIf="isFinalDecision">
+                              <div class="my-input-group">
+                                <label>{{ 'EDIT_CLAIM.LBL_FINAL_REFUND' | translate }}</label>
+                                <ng-select [items]="masterModel.customerRequestRefundList" [hideSelected]="true"
+                                  appendTo="body" [multiple]="true" class="multiple" [closeOnSelect]="true"
+                                  (change)="ChangeFinalRefund($event)"
+                                  [loading]="masterModel.customerRequestRefundListLoading" [searchable]="true"
+                                  bindLabel="name" bindValue="id" [(ngModel)]="model.finalRefundIdList"
+                                  placeholder="--- {{ (masterModel.customerRequestRefundList!=null && masterModel.customerRequestRefundList.length!=0? 'COMMON.LBL_SELECT':'COMMON.LBL_NO_DATA' ) | translate }} ---">
+                                </ng-select>
+                              </div>
+                            </div>
+                            <div class="col-sm-3" *ngIf="isFinalCompensation">
+                              <div class="my-input-group">
+                                <label>{{ 'EDIT_CLAIM.LBL_FINAL_REFUND_AMOUNT' | translate }}</label>
+                                <input maxlength="200" [(ngModel)]="model.finalAmount"
+                                  placeholder="{{ 'EDIT_CLAIM.LBL_FINAL_REFUND_AMOUNT' | translate }}" type="number"
+                                  (keypress)="numericValidation($event)" oninput="validity.valid||(value='');" />
+
+                              </div>
+                            </div>
+                            <div class="col-sm-3" *ngIf="isFinalCompensation">
+                              <div class="my-input-group">
+                                <label>{{'EDIT_CLAIM.LBL_FINAL_REFUND_CURRENCY'| translate}}</label>
+                                <ng-select [items]="masterModel.currencyList" [hideSelected]="true" appendTo="body"
+                                  [multiple]="false" [closeOnSelect]="true" [loading]="masterModel.currencyListLoading"
+                                  [searchable]="true" bindLabel="name" bindValue="id"
+                                  [(ngModel)]="model.finalCurrencyId"
+                                  placeholder="--- {{ (masterModel.currencyList!=null && masterModel.currencyList.length!=0? 'COMMON.LBL_SELECT':'COMMON.LBL_NO_DATA' ) | translate }} ---">
+                                </ng-select>
+                                <div *ngIf="!validator.isValid('finalCurrencyId')" class="invalid-feedback">
+                                  <div *ngFor="let error of validator.getErrors('finalCurrencyId')">
+                                    {{ error | translate }}
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                            <div class="col-sm-4">
+                              <div class="my-input-group">
+                                <label class="">{{ 'EDIT_CLAIM.LBL_FINAL_REFUND_REMARKS' | translate }}</label>
+                                <textarea maxlength="1000" [(ngModel)]="model.claimFinalRefundRemarks"
+                                  class="form-control" type="text"
+                                  placeholder="{{ 'EDIT_CLAIM.LBL_FINAL_REFUND_REMARKS' | translate }}"></textarea>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="form-action-container" *ngIf="!isStatusCancelled">
+              <button *ngIf="isCancel" class="primary-cta small mr-2" [disabled]="_cancelloader"
+                (click)="openConfirm(content)">
+                {{ 'EDIT_CLAIM.LBL_CANCEL' | translate }}
+                <span *ngIf="_cancelloader">
+                  <i class="fa fa-refresh fa-spin" aria-hidden="true"></i>
+                </span>
+              </button>
+              <button *ngIf="isNew" class="category-cta small mr-2 common-tooltip common-tooltip-top-2"
+                data-tooltip="Reset">
+                <img src="assets/images/reload-new.svg" alt="Reset">
+                <span>{{'COMMON.LBL_RESET'| translate}}</span>
+              </button>
+              <button *ngIf="isCreateClaimRole || isAnalyzeClaimRole" class="primary-cta small" [disabled]="_saveloader"
+                (click)="save()">
+                {{ 'EDIT_CLAIM.LBL_SAVE' | translate }}
+                <span *ngIf="_saveloader">
+                  <i class="fa fa-refresh fa-spin" aria-hidden="true"></i>
+                </span>
+              </button>
+              &nbsp;
+              <button *ngIf="isAnalyzeClaimRole" class="primary-cta small" [disabled]="_analyzeloader"
+                (click)="saveAnalzye()">
+                {{ 'EDIT_CLAIM.LBL_ANALYZE' | translate }}
+                <span *ngIf="_analyzeloader">
+                  <i class="fa fa-refresh fa-spin" aria-hidden="true"></i>
+                </span>
+              </button>
+              &nbsp;
+              <button *ngIf="isValidateClaimRole" class="primary-cta small" [disabled]="_validateloader"
+                (click)="saveValidate()">
+                {{ 'EDIT_CLAIM.LBL_VALIDATE' | translate }}
+                <span *ngIf="_validateloader">
+                  <i class="fa fa-refresh fa-spin" aria-hidden="true"></i>
+                </span>
+              </button>
+              &nbsp;
+              <button *ngIf="isAccountingClaimRole" class="primary-cta small" [disabled]="_closeloader"
+                (click)="Close()">
+                {{ 'EDIT_CLAIM.LBL_CLOSE' | translate }}
+                <span *ngIf="_closeloader">
+                  <i class="fa fa-refresh fa-spin" aria-hidden="true"></i>
+                </span>
+              </button>
+            </div>
+          </div>
+        </div>
+        <div class="loader-overlay" *ngIf="pageLoading">
+          <div class="loader-container">
+            <img src="assets/images/reload.svg" alt="">
+            <span>{{'COMMON.LBL_LOADER' | translate}}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<ng-template #content let-modal>
+  <div class="modal-body">
+    <div class="small-model">
+      <h2 class="title">{{ 'CLAIM_SUMMARY.LBL_CONFIRMDELETION' | translate }}</h2>
+      <p>{{ 'CLAIM_SUMMARY.MSG_CONFRMDELETE' | translate }} <strong>{{modelRemove.claimNo}} ?</strong></p>
+      <button class="secondary-cta" (click)="modal.dismiss('Cross click')">{{ 'COMMON.LBL_CONFIRMCANCEL' |
+        translate }}</button>
+      <button class="primary-cta" (click)="cancelClaim(modelRemove);">{{ 'COMMON.LBL_OK' | translate }}</button>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #conformClaimBooking let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title" id="modal-title">{{'EDIT_CLAIM.MSG_CLAIM_CONFIRM' | translate}}</h4>
+    <button type="button" class="close" aria-describedby="modal-title" (click)="modal.dismiss('Cross click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body" style="word-break: break-word;">
+    <p>{{existingClaims}} had created for {{bookingId}}</p>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-danger" (click)="modal.dismiss('cancel click')">
+      {{ 'COMMON.LBL_OK' | translate }}
+    </button>
+  </div>
+</ng-template>

@@ -1,0 +1,116 @@
+<div class="main-wrapper">
+    <div class="wrapper dashboard-wrapper">
+        <div class="my-container">
+            <div class="master-body">
+                <div class="title-container">
+                    <div class="header-back-button" *ngIf="isNoReturn!=true && isReadyForSubmit==true">
+                        <img src="assets/images/back-red.png" alt="back" (click)="return('cussearch/customer-summary')">
+                    </div>
+                    <h3 class="main-title">{{ 'CUSTOMER_BUYER.TITLE' | translate }}</h3>
+                </div>
+                <div class="content-container">
+                    <div class="row searchFormPadding">
+                        <div class="col-sm-12">
+                            <div class="row">
+                                <div class="col-sm-4 col-md-4 col-lg-4">
+                                    <div class="my-input-group">
+                                        <label class="control-label">{{ 'CUSTOMER_BUYER.LBL_CUSTOMER' | translate }}</label>
+                                        <ng-select [items]="customerList" [multiple]="false" [loading]="Initialloading" [closeOnSelect]="true" [searchable]="true" bindLabel="name" bindValue="id" [clearable]="false" placeholder="--- {{ 'CUSTOMER_BUYER.LBL_SELECT' | translate }} ---" [(ngModel)]="model.customerValue"
+                                            [ngClass]="{ 'is-invalid': !validator.isValid('customerValue')}" (change)="selectBuyer()">
+                                        </ng-select>
+                                        <div *ngIf="!validator.isValid('customerValue')" class="invalid-feedback" style="display:block">
+                                            <div *ngFor="let error of validator.getErrors('customerValue')">{{ error | translate }}</div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="master-search-cta-container">
+                        <div class="column">
+                            <button class="secondary-cta small" (click)="addBuyerRow()">
+                <i class="fa fa-plus"></i>&nbsp;&nbsp;{{ 'CUSTOMER_BUYER.LBL_ADD' | translate }}
+              </button>
+                        </div>
+                        <div class="column text-right">
+                        </div>
+                    </div>
+                    <!--Table-->
+                    <div class="content-container">
+                        <div class="formPadding">
+                            <div class="table-container">
+                                <table class="pagination-table bordered">
+                                    <thead>
+                                        <tr>
+                                            <th class="required">{{ 'CUSTOMER_BUYER.LBL_NAME' | translate }}</th>
+                                            <th>{{ 'CUSTOMER_BUYER.LBL_CODE' | translate }}</th>
+                                            <th class="required" style="width:300px;">{{ 'API_SERVICE.LBL_API_SERVICES' | translate }}</th>
+                                            <th></th>
+                                        </tr>
+                                    </thead>
+
+                                    <tbody>
+                                        <ng-container *ngFor="let item of buyerValidators; let i = index">
+                                            <tr>
+                                                <td>
+                                                    <input maxlength="100" [ngClass]="{ 'is-invalid':  !item.validator.isValid('name')}" [(ngModel)]="item.buyer.name" type="text" placeholder="{{ 'CUSTOMER_BUYER.LBL_NAME' | translate }}" />
+                                                    <div *ngIf="!item.validator.isValid('name')" class="invalid-feedback">
+                                                        <div *ngFor="let error of item.validator.getErrors('name')">
+                                                            {{ error | translate }}</div>
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <input maxlength="100" [(ngModel)]="item.buyer.code" type="text" placeholder="{{ 'CUSTOMER_BUYER.LBL_CODE' | translate }}" />
+                                                </td>
+                                                <td>
+                                                    <ng-select style="width:300px;" [items]="apiServiceList" [multiple]="true" class="multiple" [closeOnSelect]="true" [searchable]="true" bindLabel="name" bindValue="id" [loading]="loading" placeholder="--- {{ 'COMMON.LBL_SELECT' | translate }} ---" [(ngModel)]="item.buyer.apiServiceIds"
+                                                        [ngClass]="{ 'is-invalid':  !item.validator.isValid('apiServiceIds')}">
+                                                    </ng-select>
+                                                    <div *ngIf="!item.validator.isValid('apiServiceIds')" class="invalid-feedback">
+                                                        <div *ngFor="let error of item.validator.getErrors('apiServiceIds')">
+                                                            {{ error | translate }}</div>
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <button class="secondary-cta x-small" (click)="openConfirm(item.buyer.id,item.buyer.name,content,i)">
+                            <i class="fa fa-trash"></i>
+                          </button>
+                                                </td>
+                                            </tr>
+                                        </ng-container>
+                                    </tbody>
+                                </table>
+
+                            </div>
+                            <div class="form-action-container marginTop15">
+                                <!--   <button type="button" class="secondary-cta small" (click)="return('cussearch/customer-summary')"
+                  *ngIf="isNoReturn!=true && isReadyForSubmit==true">
+                  <i class="fa fa-undo"></i>&nbsp;&nbsp;{{ 'CUSTOMER_BUYER.LBL_RETURN' | translate }}
+                </button> -->
+
+                                <button class="primary-cta small" (click)="save()" [disabled]="Saveloading || Initialloading || isNoRows" *ngIf="isReadyForSubmit">
+                  <i class="fa fa-save"></i>&nbsp;&nbsp;{{ 'CUSTOMER_BUYER.LBL_SAVE' | translate }}
+                  <span *ngIf="Saveloading">
+                    <i class="fa fa-refresh fa-spin" aria-hidden="true"></i>
+                  </span>
+                </button>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<ng-template #content let-modal>
+    <div class="modal-body">
+        <div class="small-model">
+            <h2 class="title">{{ 'CUSTOMER_BUYER.LBL_CONFIRMDELETION' | translate }}</h2>
+            <p>{{ 'CUSTOMER_BUYER.MSG_CONFRMDELETE' | translate }} <strong>{{modelRemove.name}} ?</strong></p>
+            <button class="secondary-cta" (click)="modal.dismiss('Cross click')">{{ 'COMMON.LBL_CONFIRMCANCEL' | translate }}</button>
+            <button class="primary-cta" (click)="deleteCustomer(modelRemove);">{{ 'COMMON.LBL_OK' | translate }}</button> </div>
+    </div>
+</ng-template>

@@ -1,0 +1,314 @@
+<div class="main-wrapper">
+    <div class="wrapper dashboard-wrapper">
+        <div class="my-container">
+            <div class="master-body">
+                <div class="title-container">
+                    <h3 class="main-title">
+                        {{ 'INSPECTION_CERTIFICATE_SUMMARY.LBL_IC_SEARCH' | translate }}</h3>
+                </div>
+                <div class="content-container quotation-container">
+                    <div [@expandCollapse]="isFilterOpen ? 'open' : 'close'"
+                    class="centerContainerPadding common-filter-container">
+                    <div class="animated-icon-container" (click)="toggleFilterSection()" *ngIf="(model.items && model.items.length>0)">
+                      <img src="assets/images/cta-close-grey.svg" alt="close">
+                    </div>
+                         
+                            <div class="row">
+                                <div class="col-sm-6 col-md-4 col-lg-3">
+                                    <div class="my-input-group">
+                                        <div class="styled-radio-container"
+                                            *ngFor="let item of icSearchTypeList;let idx = index">
+                                            <input type="radio" class="styled-radio" id="{{item.id}}" name="radio-group"
+                                                [value]="item.id" [checked]="idx === 0"
+                                                (change)="SetSearchTypemodel(item.id)">
+                                            <label for="{{item.id}}">{{item.name}}</label>
+                                        </div>
+                                        <input maxlength="200" (ngModelChange)="BookingNoValidation()"
+                                            [(ngModel)]="model.searchTypeText" type="text"
+                                            [ngClass]="{ 'is-invalid': model.searchTypeText!='' && _customvalidationforbookid}" />
+                                        <div *ngIf="model.searchTypeText!='' && _customvalidationforbookid"
+                                            class="invalid-feedback">
+                                            <div>{{ 'BOOKING_SUMMARY.MSG_BOOKINGNO_ERROR' | translate }}</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-6 col-md-8 col-lg-9">
+                                    <div class="my-input-group">
+                                        <div class="styled-radio-container"
+                                        *ngFor="let item of dateTypeList;let idx = index">
+                                        <input type="radio" class="styled-radio" id="{{item.id}}"
+                                            name="radio-group1" [value]="item.id" [checked]="idx === 0"
+                                            (change)="SetSearchDatetype(item.id)">
+                                        <label for="{{item.id}}">{{item.name}}</label>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="my-input-group col-sm-3 col-md-5 col-lg-3">
+                                                <div class="calendar-wrapper">
+                                                    <input type="text" maxlength="10" container="body"
+                                                        [ngClass]="{ 'is-invalid':  !validator.isValidIf('fromdate',IsDateValidationRequired())}"
+                                                        readonly=readonly [(ngModel)]="model.fromdate" ngbDatepicker
+                                                        #sdf="ngbDatepicker" (click)="sdf.toggle()">
+                                                    <img src="assets/images/cta-close-grey.svg" alt="" class="close-icon" (click)="clearDateInput('Fromdate')" *ngIf="model.fromdate">
+                                                    <img src="assets/images/calendar-icon.svg" alt="" class="calendar-icon"
+                                                        (click)="sdf.toggle()">
+                                                </div>
+                                                <div *ngIf="!validator.isValidIf('fromdate',IsDateValidationRequired())"
+                                                    class="invalid-feedback">
+                                                    <div *ngFor="let error of validator.getErrors('fromdate')">
+                                                        {{ error | translate }}</div>
+                                                </div>
+                                            </div>
+                                            <div class="my-input-group col-sm-3 col-md-5 col-lg-3">
+                                                <div class="calendar-wrapper">
+                                                    <input type="text" maxlength="10" container="body"
+                                                        [ngClass]="{ 'is-invalid':  !validator.isValidIf('todate',IsDateValidationRequired())}"
+                                                         appendTo="body" readonly=readonly [(ngModel)]="model.todate" ngbDatepicker
+                                                        #sdt="ngbDatepicker" (click)="sdt.toggle()">
+                                                    <img src="assets/images/cta-close-grey.svg" alt="" class="close-icon" (click)="clearDateInput('Todate')" *ngIf="model.todate">
+                                                    <img src="assets/images/calendar-icon.svg" alt="" class="calendar-icon"
+                                                        (click)="sdt.toggle()">
+                                                </div>
+                                                <div *ngIf="!validator.isValidIf('todate',IsDateValidationRequired())"
+                                                    class="invalid-feedback">
+                                                    <div *ngFor="let error of validator.getErrors('todate')">
+                                                        {{ error | translate }}</div>
+                                                </div>
+                                            </div>
+                                       </div>
+                                      </div>                                       
+                               </div>
+                            <div class="row marginTop15">
+                                <div class="col-sm-4 col-md-4 col-lg-4">
+                                    <div class="my-input-group">
+                                        <label
+                                            for="">{{ 'INSPECTION_CERTIFICATE_SUMMARY.LBL_CUSTOMER' | translate }}</label>
+                                        <ng-select #customer [searchable]="true" [hideSelected]="true" appendTo="body"
+                                            [items]="icSummaryMasterModel.customerList" bindLabel="name"
+                                            (clear)="clearCustomer()" 
+                                            [loading]="icSummaryMasterModel.customerLoading" bindValue="id"
+                                            bindLabel="name" (change)="setSupplierCustomerChange($event)"
+                                            placeholder="--- {{ 'INSPECTION_CERTIFICATE_SUMMARY.LBL_SELECT'  | translate }} ---"
+                                            [(ngModel)]="model.customerId">>
+                                            <ng-template ng-option-tmp let-item="item">
+                                                <div class="text-wrap">{{ item.name }}</div>
+                                            </ng-template>
+                                        </ng-select>
+                                        <!-- <div *ngIf="!validator.isValidIf('customerid')" class="invalid-feedback">
+                        <div *ngFor="let error of validator.getErrors('customerid')">{{ error | translate }}</div>
+                      </div> -->
+                                    </div>
+                                </div>
+                                <div class="col-sm-4 col-md-4 col-lg-4 mobile-margin-top-15">
+                                    <div class="my-input-group">
+                                        <label
+                                            for="">{{ 'INSPECTION_CERTIFICATE_SUMMARY.LBL_SUPPLIER' | translate }}</label>
+                                        <ng-select [multiple]="false" [closeOnSelect]="true" [searchable]="true" appendTo="body"
+                                            [hideSelected]="true" [loading]=icSummaryMasterModel.supplierLoading bindLabel="name" bindValue="id"
+                                            [items]="icSummaryMasterModel.supplierList"
+                                            placeholder="--- {{(icSummaryMasterModel.supplierList && icSummaryMasterModel.supplierList.length>0? 'INSPECTION_CERTIFICATE_SUMMARY.LBL_SELECT':'COMMON.LBL_NO_DATA')  | translate }} ---"
+                                            [(ngModel)]="model.supplierId">
+                                            <ng-template ng-option-tmp let-item="item">
+                                                <div class="text-wrap">{{ item.name }}</div>
+                                            </ng-template>
+                                        </ng-select>
+                                    </div>
+                                </div>
+                                <div class="col-sm-4 col-md-4 col-lg-4 mobile-margin-top-15">
+                                    <div class="my-input-group">
+                                        <label
+                                            for="">{{ 'INSPECTION_CERTIFICATE_SUMMARY.LBL_STATUS' | translate }}</label>
+                                        <ng-select [multiple]="true" class="multiple" [searchable]="true" appendTo="body"
+                                            [hideSelected]="true" [loading]=icSummaryMasterModel.statusLoading
+                                            [items]="icSummaryMasterModel.icStatusList" bindLabel="name" bindValue="id"
+                                            placeholder="--- {{ 'INSPECTION_CERTIFICATE_SUMMARY.LBL_SELECT' | translate }} ---"
+                                            [(ngModel)]="model.statusIdlst">
+                                        </ng-select>
+                                    </div>
+                                </div>
+                            </div>
+                        
+                   
+                        <div class="row marginTop25">
+                            <div class="col-12 col-sm-12 text-right mt-3 mt-sm-0"> 
+                                <button class="category-cta small mr-2 common-tooltip common-tooltip-top-2" data-tooltip="Reset"
+                                  (click)="Reset()">
+                                  <img src="assets/images/reload-new.svg" alt="Reset">  
+                                  <span>{{'COMMON.LBL_RESET'| translate}}</span>
+                                </button>
+                               <button class="primary-cta small" (loading)=icSummaryMasterModel.searchloading
+                                [disabled]="icSummaryMasterModel.searchloading"
+                                (click)="SearchDetails()">
+                                {{ 'BOOKING_SUMMARY.LBL_SEARCH_BTN' | translate }}
+                                <span *ngIf="icSummaryMasterModel.searchloading">
+                                    <i class="fa fa-refresh fa-spin" aria-hidden="true"></i>
+                                </span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                    
+                <div class="centerContainerPadding float-left" *ngIf="(model.items && model.items.length>0)">
+                        
+                      <div class="row">
+                            <div class="col-6 col-sm-3 col-xl-2 d-flex">
+                                <p  class="search-trigger-heading" [innerHtml]="showPaginationText()"></p>
+                            </div>
+                             
+                            <div class="col-6 col-sm-9 col-xl-10 text-right">
+                                <ul class="table-badge-container mobile-hide tablet-hide">
+                                  <li (click)="SearchByStatus(status.id)" [ngStyle]="{'background-color': status.statusColor}"
+                                    *ngFor="let status of _statuslist | slice:0:4">
+                                    <span>{{status.totalCount}}</span> <span>{{status.statusName}}</span>
+                                  </li>
+                                  <ng-container *ngIf="_statuslist.length>4">
+                                    <li class="more has-dropdown">
+                                      <img src="assets/images/cta-menu-grey.svg" alt="">
+                                      <ul class="cta-dropdown bottom-left">
+                                        <li (click)="SearchByStatus(status.id)" [ngStyle]="{'color': status.statusColor}"
+                                        *ngFor="let status of _statuslist |  slice:4:_statuslist.length">
+                                        <span>{{status.totalCount}}</span> <span>{{status.statusName}}</span>
+                                      </li>
+                                      </ul>
+                                    </li>
+                                  </ng-container>
+                                  </ul>
+                                  <div class="animated-icon-container" *ngIf="!isFilterOpen" (click)="toggleFilterSection()">
+                                    <img src="assets/images/cta-search-grey.svg" alt="search">
+                                  </div>
+                              </div>
+                        </div>
+                        <div class="row mt-3 desktop-hide">
+							<div class="col-sm-12">
+                            <ul class="table-badge-container">
+                            <li (click)="SearchByStatus(status.id)" [ngStyle]="{'background-color': status.statusColor}"
+                            *ngFor="let status of _statuslist">
+                            <span>{{status.totalCount}}</span>{{status.statusName}}
+                            </li>
+                            </ul>
+                             </div>
+                        </div>
+                        <div class="quotation-search-container">
+                            <div  class="table-container h-scroll table-max-height-550"> 
+                                <table class="pagination-table simple-table bordered">
+                                <thead>
+                                  <tr class="sticky-top-row">
+                                        <th class="width40"></th>
+                                        <th class="width-100"></th>
+                                        <th class="width-100">{{ 'INSPECTION_CERTIFICATE_SUMMARY.LBL_ICNO' | translate }}</th>
+                                        <th class="width-100">{{ 'INSPECTION_CERTIFICATE_SUMMARY.LBL_BOOKINGNO' | translate }}</th>
+                                        <th class="width-100">{{ 'INSPECTION_CERTIFICATE_SUMMARY.LBL_CUSTOMER' | translate }}</th>
+                                        <th class="width-100">{{ 'EDIT_INSPECTION_CERTIFICATE.LBL_BUYER_NAME' | translate }}</th>
+                                        <th class="width-100">{{ 'INSPECTION_CERTIFICATE_SUMMARY.LBL_SUPPLIER' | translate }}</th>
+                                        <th class="width-100">{{ 'INSPECTION_CERTIFICATE_SUMMARY.LBL_SERVICE_DATE' | translate }}</th>
+                                      
+
+                                    </tr>
+                                </thead>
+                                <tbody>
+
+                                    <ng-container *ngFor="let iteminfo of model.items">
+                                        <tr style="border-left: 5px solid #fff;"
+                                            [ngStyle]="{'border-left-color': GetStatusColor(iteminfo.statusId)}">
+                                            <td class="width40">
+                                                <a *ngIf="!iteminfo.isExpand" style="cursor:pointer"
+                                                    (click)="expand(iteminfo.icId)">
+                                                    <i class="fa fa-plus-circle"></i></a>
+
+                                                <a *ngIf="iteminfo.productList != null && iteminfo.productList.length > 0 
+                                                    && iteminfo.isExpand" style="cursor:pointer" (click)="collapse(iteminfo.icId)">
+                                                    <i class="fa fa-minus-circle"></i></a>
+                                            </td>
+                                            <td class="Center_Middle width-100">
+                                                <span class="table-cta icon-cta common-tooltip" *ngIf="icuserAccessData.isInternalUser"
+                                                (click)="redirectPage(iteminfo.icId)" data-tooltip="Edit">
+                                                    <img src="assets/images/cta-edit.svg" alt="Edit">
+                                                </span>
+                                                <span class="table-cta icon-cta common-tooltip" *ngIf="!icuserAccessData.isInternalUser"
+                                                (click)="redirectPage(iteminfo.icId)" data-tooltip="View">
+                                                <img src="assets/images/cta-search-grey.svg" alt="View">
+                                              </span>
+                                                <button class="category-cta small mr-2 common-tooltip common-tooltip-top-2" data-tooltip="Download"
+                                                *ngIf ="iteminfo.statusId != icStatus.Canceled" [disabled]="icSummaryMasterModel.isPreview" (click)="preview(iteminfo.icId)">
+                                                <img src="assets/images/cta-download.svg" alt="Download">  
+                                                <span>{{'INSPECTION_CERTIFICATE_SUMMARY.LBL_DOWNLOAD'| translate}}</span>
+                                              </button>
+                                            </td>
+                                             
+                                            <td class="width-100">{{iteminfo.icNumber}}</td>
+                                            <td class="width-100">{{iteminfo.bookingNumber}}</td>
+
+                                            <td class="wordbreak width-100">{{iteminfo.customerName}}</td>
+                                            <td class="wordbreak width-100">{{iteminfo.buyerName}}</td>
+                                            <td class="wordbreak width-100">{{iteminfo.supplierName}}</td>
+                                            <td class="wordbreak width-100">{{iteminfo.serviceDate}}</td>
+                                           
+                                        </tr>
+
+                                        <ng-container
+                                            *ngIf="iteminfo.productList != null && iteminfo.productList.length > 0 && iteminfo.isExpand">
+
+                                            <tr
+                                                style="font-size: 11px;font-weight:500;font-family:roboto-medium; color: rgba(32, 59, 78, 0.5);background-color: #e1e8f5;padding-top: 10px;">
+
+                                                <td class="width40">{{ 'INSPECTION_CERTIFICATE_SUMMARY.LBL_BookingNo' | translate }}</td>
+                                                <td>{{ 'INSPECTION_CERTIFICATE_SUMMARY.LBL_PoNo' | translate }}</td>
+                                                <td>{{ 'INSPECTION_CERTIFICATE_SUMMARY.LBL_ProductCode' | translate }}</td>
+                                                <td>{{ 'INSPECTION_CERTIFICATE_SUMMARY.LBL_ProductDesc' | translate }}</td>
+                                                <td>{{ 'INSPECTION_CERTIFICATE_SUMMARY.LBL_BookingQuantity' | translate }}</td>
+                                                <td>{{ 'INSPECTION_CERTIFICATE_SUMMARY.LBL_InspectedQuantity' | translate }}</td>
+                                                <td>{{ 'INSPECTION_CERTIFICATE_SUMMARY.LBL_ICShipmentQuantity' | translate }}</td>
+                                                <!-- <td>{{ 'INSPECTION_CERTIFICATE_SUMMARY.LBL_ReportTitle' | translate }}</td>
+                                                <td>{{ 'INSPECTION_CERTIFICATE_SUMMARY.LBL_ReportStatus' | translate }}</td> -->
+                                            </tr>
+
+                                            <tr *ngFor="let itemProduct of iteminfo.productList"
+                                                [ngStyle]='{"background-color" : itemProduct.colorCode}'>
+
+                                                <td class="width40 wordbreak">{{itemProduct.bookingNumber}}</td>
+                                                <td class="width-100 wordbreak">{{itemProduct.poNo}}</td>
+                                                <td class="width-100 wordbreak">{{itemProduct.productCode}}</td>
+                                                <td class="width-100 wordbreak">{{itemProduct.productDesc}}</td>
+                                                <td class="width-100 wordbreak Center_Middle">{{itemProduct.bookingQuantity}}</td>
+                                                <td class="width-100 wordbreak Center_Middle">{{itemProduct.inspectedQuantity}}</td>
+                                                <td class="width-100 wordbreak Center_Middle">{{itemProduct.icShipmentQuantity}}</td>
+                                               <!--  <td class="width-100 wordbreak">{{itemProduct.reportTitle}}</td>
+                                                <td class="width-100 wordbreak">{{itemProduct.reportStatus}}</td>
+                                                <td *ngIf="itemProduct.isParentProduct"
+                                                    [attr.rowspan]="itemProduct.combineProductCount"
+                                                    [ngStyle]='{"color" : itemProduct.resultColor}'>
+                                                    {{itemProduct.result}}</td> -->
+                                            </tr>
+                                        </ng-container>
+
+                                    </ng-container>
+                                </tbody>
+                            </table>
+                            </div>
+                        </div>
+                        <div class="pagination-container">
+                            <select class="small" [(ngModel)]="selectedPageSize" (change)="SearchDetails()">
+                                <option *ngFor="let item of pagesizeitems" [ngValue]=item>{{item}}</option>
+                            </select>
+                            <ngb-pagination (pageChange)="onPager($event)" [pageSize]="model.pageSize"
+                                [collectionSize]="model.totalCount" [(page)]="model.index" [maxSize]="5">
+                            </ngb-pagination>
+                          </div>
+                    </div>
+ 
+                    <div class="centerContainerPadding" *ngIf="model.noFound">
+                        <div class="error-container">
+                        <img src="assets/images/no-result.svg" alt="" class="thumbnail">
+                        <h4 class="title">{{'COMMON.LBL_No_ITEM' | translate}}</h4>
+                        <p class="error-subtitle">{{'CS_CONFIG_SUMMARY.LBL_NODATA' | translate}}</p>
+
+                        <button (click)="Reset()" class="category-cta">
+                            <img src="assets/images/reload-new.svg" alt="reload">
+                            <span> {{'INSPECTION_CERTIFICATE_SUMMARY.MSG_CLEAR_SEARCH' | translate}}</span></button>
+                        </div>
+                    </div>
+                 
+            </div>
+        </div>
+    </div>
+</div>

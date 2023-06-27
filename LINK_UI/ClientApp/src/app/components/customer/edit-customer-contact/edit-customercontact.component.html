@@ -1,0 +1,278 @@
+<div class="main-wrapper">
+  <div class="wrapper dashboard-wrapper">
+    <div class="my-container">
+      <div class="master-body">
+        <div class="title-container">
+          <div class="header-back-button" *ngIf="!initialloading">
+            <img src="assets/images/back-red.png" alt="back"
+              (click)="this.return('cuscontactsearch/customer-contact-summary');">
+          </div>
+          <h3 class="main-title">
+            {{ 'EDIT_CUSTOMER_CONTACT_SUMMARY.TITLE' | translate }}
+          </h3>
+        </div>
+        <div class="content-container">
+          <h4 class="container-head">{{ 'EDIT_SUPPLIER.LBL_MAIN' | translate }}</h4>
+          <div class="formPadding">
+            <div class="row">
+              <div class="col-sm-3">
+                <div class="my-input-group">
+                  <label class="control-label required">{{ 'EDIT_CUSTOMER_CONTACT_SUMMARY.LBL_CONTACT' | translate
+                    }}</label>
+                  <input [(ngModel)]="model.name" [ngClass]="{ 'is-invalid':  !validator.isValid('name')}" type="text"
+                    maxlength="300" placeholder="{{ 'EDIT_CUSTOMER_CONTACT_SUMMARY.LBL_CONTACT' | translate }}" />
+                  <div *ngIf="!validator.isValid('name')" class="invalid-feedback">
+                    <div *ngFor="let error of validator.getErrors('name')">{{ error | translate }}</div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-sm-3 mobile-margin-top-15">
+                <div class="my-input-group">
+                  <label>{{ 'EDIT_CUSTOMER_CONTACT_SUMMARY.LBL_LASTNAME' | translate }}</label>
+                  <input [(ngModel)]="model.lastName" type="text" maxlength="500"
+                    placeholder="{{ 'EDIT_CUSTOMER_CONTACT_SUMMARY.LBL_LASTNAME' | translate }}">
+                </div>
+              </div>
+              <div class="col-sm-3 mobile-margin-top-15">
+                <div class="my-input-group">
+                  <label>{{ 'EDIT_CUSTOMER_CONTACT_SUMMARY.LBL_JobTitle' | translate }}</label>
+                  <input [(ngModel)]="model.jobTitle" type="text" maxlength="300"
+                    placeholder="{{ 'EDIT_CUSTOMER_CONTACT_SUMMARY.LBL_JobTitle' | translate }}">
+                </div>
+              </div>
+              <div class="col-sm-3 mobile-margin-top-15">
+                <div class="my-input-group">
+                  <label class="control-label required">{{ 'EDIT_CUSTOMER_CONTACT_SUMMARY.LBL_EMAIL' | translate
+                    }}</label>
+                  <input [(ngModel)]="model.email" [ngClass]="{ 'is-invalid':  !validator.isValid('email')}" type="text"
+                    maxlength="300" placeholder="{{ 'EDIT_CUSTOMER_CONTACT_SUMMARY.LBL_EMAIL' | translate }}">
+                  <div *ngIf="!validator.isValid('email')" class="invalid-feedback">
+                    <div *ngFor="let error of validator.getErrors('email')">{{ error | translate }}</div>
+                  </div>
+                </div>
+              </div>             
+            </div>
+            <div class="row marginTop15">
+              <div class="col-sm-3 mobile-margin-top-15">
+                <div class="my-input-group">
+                  <label>{{ 'EDIT_CUSTOMER_CONTACT_SUMMARY.LBL_MOBILE' | translate }}</label>
+                  <input [(ngModel)]="model.mobile" type="text" maxlength="300"
+                    placeholder="{{ 'EDIT_CUSTOMER_CONTACT_SUMMARY.LBL_MOBILE' | translate }}">
+                </div>
+              </div>
+              <div class="col-sm-3">
+                <div class="my-input-group">
+                  <label>{{ 'EDIT_CUSTOMER_CONTACT_SUMMARY.LBL_PHONE' | translate }}</label>
+                  <input [(ngModel)]="model.phone" type="text" maxlength="300"
+                    placeholder="{{ 'EDIT_CUSTOMER_CONTACT_SUMMARY.LBL_PHONE' | translate }}" />
+                </div>
+              </div>
+              <div class="col-sm-3 mobile-margin-top-15">
+                <div class="my-input-group">
+                  <label>{{ 'EDIT_CUSTOMER_CONTACT_SUMMARY.LBL_FAX' | translate }}</label>
+                  <input [(ngModel)]="model.fax" type="text" maxlength="300"
+                    placeholder="{{ 'EDIT_CUSTOMER_CONTACT_SUMMARY.LBL_FAX' | translate }}">
+                </div>
+              </div>
+              <div class="col-sm-3">
+                <div class="my-input-group mobile-margin-top-15">
+                  <label>{{ 'EDIT_CUSTOMER_CONTACT_SUMMARY.LBL_OTHERS' | translate }}</label>
+                  <input [(ngModel)]="model.others" type="text" maxlength="300"
+                    placeholder="{{ 'EDIT_CUSTOMER_CONTACT_SUMMARY.LBL_OTHERS' | translate }}">
+                </div>
+              </div>
+              
+            </div>
+            <div class="row marginTop15">
+              <div class="col-sm-3">
+                <div class="my-input-group mobile-margin-top-15">
+
+                  <label class="control-label required">{{ 'EDIT_CUSTOMER_CONTACT_SUMMARY.LBL_OFFICE' | translate
+                    }}</label>
+
+                  <ng-select [multiple]="false" [closeOnSelect]="true" [searchable]="true" [hideSelected]="true"
+                    bindLabel="address" bindValue="id" [items]="customerAddressList"
+                    placeholder="--- {{ 'EDIT_CUSTOMER.LBL_SELECT' | translate }}---"
+                    [ngClass]="{'is-invalid': !validator.isValid('office')}" [(ngModel)]="model.office">
+                  </ng-select>
+
+                  <div *ngIf="!validator.isValid('office')" class="invalid-feedback" style="display:block">
+                    <div *ngFor="let error of validator.getErrors('office')">{{ error | translate }}</div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-sm-3">
+                <div class="my-input-group">
+                  <label class="control-label required">{{ 'EDIT_CUSTOMER_CONTACT_SUMMARY.LBL_CONTACTYPE' | translate
+                    }}</label>
+
+                  <ng-select [items]="contactTypeList" [multiple]="true" [closeOnSelect]="false" [searchable]="true"
+                    bindLabel="type" [loading]="initialloading" class="multiple"
+                    [ngClass]="{ 'is-invalid': !validator.isValid('contactTypeItems')}"
+                    placeholder="--- {{ 'EDIT_STAFF.LBL_SELECT' | translate }} ---"
+                    [(ngModel)]="model.contactTypeItems">
+                  </ng-select>
+                  <div *ngIf="!validator.isValid('contactTypeItems')" class="invalid-feedback" style="display:block">
+                    <div *ngFor="let error of validator.getErrors('contactTypeItems')">{{ error | translate }}</div>
+                  </div>
+
+                </div>
+              </div>
+              <div class="col-sm-3">
+                <div class="my-input-group">
+                  <label class="control-label">{{ 'EDIT_CUSTOMER_CONTACT_SUMMARY.LBL_REPORTTO' | translate }}</label>
+
+                  <ng-select [items]="reportToList" [multiple]="false" [closeOnSelect]="true" [searchable]="true"
+                    bindLabel="name" bindValue="id" [loading]="initialloading" [hideSelected]="true"
+                    placeholder="--- {{ 'EDIT_STAFF.LBL_SELECT' | translate }} ---" [(ngModel)]="model.reportTo">
+                  </ng-select>
+                </div>
+              </div>
+              <div class="col-sm-3 mobile-margin-top-15">
+                <div class="my-input-group">
+                  <label>{{ 'EDIT_CUSTOMER_CONTACT_SUMMARY.LBL_PROMOTIONAL EMAIL' | translate }}</label>
+                  <ng-select [multiple]="false" [closeOnSelect]="true" [searchable]="true" [hideSelected]="true"
+                    bindLabel="name" bindValue="id" [items]="promotionalEmailList"
+                    placeholder="--- {{ 'EDIT_CUSTOMER.LBL_SELECT' | translate }}---"
+                    [(ngModel)]="model.promotionalEmail">
+                  </ng-select>
+                  <!--  <select [(ngModel)]="model.promotionalEmail">
+                        <option value="0" selected>--- Select---</option>
+                        <option value="true">Yes</option>
+                        <option value="false">No</option>
+                      </select> -->
+                </div>
+              </div>
+              <div class="col-sm-3 mobile-margin-top-15" *ngIf="isItTeamRole">
+                <div class="my-input-group">
+                  <label class="control-label">{{ 'EDIT_CUSTOMER.LBL_SISTERCOMPANY' | translate}}</label>
+                  <ng-select bindLabel="name" bindValue="id" class="multiple" [multiple]="true" [items]="customerList" [clearable]="true"
+                    [(ngModel)]="model.contactSisterCompanyIds" [virtualScroll]="false"
+                    placeholder="--- {{ (customerList!=null && customerList.length!=0? 'COMMON.LBL_SELECT':'COMMON.LBL_NO_DATA' ) | translate }} ---"
+                    appendTo="body" [loading]="customerLoading">
+                    <ng-template ng-option-tmp let-item="item">
+                      <div class="text-wrap">{{ item.name }}</div>
+                    </ng-template>
+                  </ng-select>
+                </div>
+              </div>
+
+              <div class="col-sm-6 mobile-margin-top-15">
+                <div class="my-input-group">
+                  <label>{{ 'EDIT_CUSTOMER_CONTACT_SUMMARY.LBL_COMMENTS' | translate }}</label>
+                  <textarea maxlength="1000" [(ngModel)]="model.comments"
+                    placeholder="{{ 'EDIT_CUSTOMER_CONTACT_SUMMARY.LBL_COMMENTS' | translate }}" type="text"></textarea>
+                </div>
+              </div>
+            </div>
+            <div class="row marginTop15">
+              <div class="col-sm-3">
+                <div class="my-input-group">
+                  <label class="control-label">{{ 'EDIT_CUSTOMER_CONTACT_SUMMARY.LBL_CONTACT_BRAND' | translate
+                    }}</label>
+
+                  <ng-select [items]="contactBrandList" [multiple]="true" [closeOnSelect]="false" [searchable]="true"
+                    bindValue="id" bindLabel="name" [loading]="initialloading" class="multiple"
+                    placeholder="--- {{ 'EDIT_STAFF.LBL_SELECT' | translate }} ---"
+                    [(ngModel)]="model.contactBrandList">
+                  </ng-select>
+                </div>
+              </div>
+              <div class="col-sm-3 mobile-margin-top-15">
+                <div class="my-input-group">
+                  <label class="control-label">{{ 'EDIT_CUSTOMER_CONTACT_SUMMARY.LBL_CONTACT_DEPARTMENT' | translate
+                    }}</label>
+
+                  <ng-select [items]="contactDepartmentList" [multiple]="true" [closeOnSelect]="false"
+                    [searchable]="true" bindValue="id" bindLabel="name" [loading]="initialloading" class="multiple"
+                    placeholder="--- {{ 'EDIT_STAFF.LBL_SELECT' | translate }} ---"
+                    [(ngModel)]="model.contactDepartmentList">
+                  </ng-select>
+                </div>
+              </div>
+              <div class="col-sm-3 mobile-margin-top-15">
+                <div class="my-input-group">
+                  <label class="control-label required">{{ 'EDIT_CUSTOMER_CONTACT_SUMMARY.LBL_CONTACT_SERVICE' |
+                    translate }}</label>
+
+                  <ng-select [items]="contactServiceList" [multiple]="true" [closeOnSelect]="false" [searchable]="true"
+                    bindValue="id" bindLabel="name" [loading]="initialloading" class="multiple"
+                    (clear)="onClearServiceList()" (change)="onChnageEntityServiceList()"
+                    placeholder="--- {{ 'EDIT_STAFF.LBL_SELECT' | translate }} ---"
+                    [ngClass]="{'is-invalid': !validator.isValid('contactServiceList')}"
+                    [(ngModel)]="model.contactServiceList">
+                  </ng-select>
+                  <div *ngIf="!validator.isValid('contactServiceList')" class="invalid-feedback">
+                    <div *ngFor="let error of validator.getErrors('contactServiceList')">
+                      {{ error | translate }}</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="row marginTop15">
+              <div class="col-sm-3">
+                <div class="my-input-group mobile-margin-top-15">
+                  <label class="control-label required">{{ 'EDIT_CUSTOMER_CONTACT_SUMMARY.LBL_ENTITY' | translate
+                    }}</label>
+                  <ng-select [items]="apiEntityList" [multiple]="true" class="multiple" [closeOnSelect]="true"
+                    [searchable]="true" bindLabel="name" bindValue="id" [loading]="loading"
+                    (clear)="onClearEntityList()" (change)="onChnageEntityServiceList()"
+                    placeholder="--- {{ 'COMMON.LBL_SELECT' | translate }} ---" [(ngModel)]="model.apiEntityIds"
+                    [ngClass]="{'is-invalid': !validator.isValid('apiEntityIds')}">
+                  </ng-select>
+                  <div *ngIf="!validator.isValid('apiEntityIds')" class="invalid-feedback">
+                    <div *ngFor="let error of validator.getErrors('apiEntityIds')">
+                      {{ error | translate }}</div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-sm-3">
+                <div class="my-input-group mobile-margin-top-15">
+                  <label class="control-label required">{{ 'EDIT_USER_ACCOUNT.LBL_ENTITY_SERVICE' | translate }}</label>
+                  <ng-select [items]="entityServiceList" [multiple]="true" 
+                  appendTo="body" [ngClass]="{'is-invalid': !validator.isValid('entityServiceIds')}"
+                  class="multiple" 
+                  [closeOnSelect]="true"
+                  [searchable]="true" bindLabel="name"  [loading]="entityServiceLoading"
+                  placeholder="--- {{ 'COMMON.LBL_SELECT' | translate }} ---" 
+                  [(ngModel)]="model.entityServiceIds">
+                </ng-select>
+                </div>
+                <div *ngIf="!validator.isValid('entityServiceIds')" class="invalid-feedback">
+                  <div *ngFor="let error of validator.getErrors('entityServiceIds')">
+                    {{ error | translate }}</div>
+                </div>
+              </div>
+
+              <div class="col-sm-3">
+                <div class="my-input-group">
+                  <label class="required">{{ 'EDIT_USER_ACCOUNT.LBL_ENTITY' | translate }}</label>
+                  <ng-select [items]="primaryEntityList" appendTo="body" [closeOnSelect]="true" [searchable]="true"
+                    bindLabel="name" bindValue="id" [loading]="primaryEntityLoading"
+                    placeholder="--- {{ 'COMMON.LBL_SELECT' | translate }} ---" [(ngModel)]="model.primaryEntity"
+                    [ngClass]="{'is-invalid': !validator.isValid('primaryEntity')}">
+                  </ng-select>
+                  <div *ngIf="!validator.isValid('primaryEntity')" class="invalid-feedback">
+                    <div *ngFor="let error of validator.getErrors('primaryEntity')">
+                      {{ error | translate }}</div>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+          </div>
+
+          <div class="form-action-container">
+            <button class="primary-cta small" (click)="save()" [disabled]="initialloading || saveloading">
+              {{ 'EDIT_CUSTOMER_CONTACT_SUMMARY.LBL_SAVE' | translate }}
+              <span *ngIf="saveloading">
+                <i class="fa fa-refresh fa-spin" aria-hidden="true"></i>
+              </span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

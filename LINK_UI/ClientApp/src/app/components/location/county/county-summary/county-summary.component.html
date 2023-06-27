@@ -1,0 +1,168 @@
+<div class="main-wrapper">
+  <div class="wrapper dashboard-wrapper">
+    <div class="my-container">
+      <div class="master-body">
+        <div class="title-container">
+          <h3 class="main-title">{{ 'COUNTY_SUMMARY.TITLE' | translate }}</h3>
+        </div>
+        <div class="content-container quotation-container">
+          <div  [@expandCollapse]="isFilterOpen ? 'open' : 'close'" class="centerContainerPadding common-filter-container">
+            <div class="animated-icon-container" (click)="toggleFilterSection()" *ngIf="(model.items && model.items.length>0)">
+              <img src="assets/images/cta-close-grey.svg" alt="close">
+            </div>
+           
+              <div class="row">
+                <div class="col-sm-4 col-lg-3">
+                  <div class="my-input-group">
+                    <label  for="">{{ 'COUNTY_SUMMARY.LBL_COUNTRY' | translate }}</label>
+                    <ng-select [items]="data.countryList" [hideSelected]="true" [multiple]="false" appendTo="body"
+                      (ngModelChange)="refreshprovince($event)" [searchable]="true" bindLabel="countryName"
+                      [(ngModel)]="model.CountryValues" (clear)=Reset()
+                      placeholder="--- {{ 'COUNTY_SUMMARY.LBL_SELECT' | translate }} ---">
+                    </ng-select>
+                  </div>
+                </div>
+                <div class="col-sm-3 col-lg-3 mobile-margin-top-15">
+                  <div class="my-input-group">
+                    <label for="ddlprovince">{{ 'EDIT_COUNTY.LBL_PROVINCE' | translate }}</label>
+                    <ng-select [items]="provinceList" [hideSelected]="true" [loading]="provinceLoading" appendTo="body"
+                      (ngModelChange)="refreshcity($event)" [searchable]="true" bindLabel="name"
+                      (clear)="ResetProvince()" [(ngModel)]="model.ProvinceValues"
+                      placeholder="--- {{ 'CITY_SUMMARY.LBL_SELECT' | translate }} ---">
+                    </ng-select>
+                  </div>
+                </div>
+                <div class="col-sm-3 col-lg-3 mobile-margin-top-15">
+                  <div class="my-input-group">
+                    <label for="" class="required">{{ 'COUNTY_SUMMARY.LBL_REGION' | translate }}</label>
+                    <ng-select [loading]="cityLoading" [hideSelected]="true" appendTo="body"
+                      placeholder="--- {{ 'COUNTY_SUMMARY.LBL_SELECT' | translate }} ---" [searchable]="true"
+                      [items]="cityList" [(ngModel)]="model.CityValues"
+                      [ngClass]="{'is-invalid': !validator.isValidIf('CityValues',IsCountyValidationRequired())}"
+                      bindLabel="name" 
+                      [closeOnSelect]="true" [searchable]="true">                    
+                    </ng-select>
+                      
+                  </div>
+                </div>
+                 
+              </div>
+              <div class="row marginTop15">
+                <div class="col-sm-3 mobile-margin-top-15">
+                    <div class="my-input-group">
+                      <label class="required">{{ 'COUNTY_SUMMARY.LBL_COUNTY' | translate }}</label>
+                      <input [(ngModel)]="model.CountyValues" bind
+                      [ngClass]="{'is-invalid': !validator.isValidIf('CountyValues',IsCityValidationRequired())}"
+                        placeholder="{{ 'COUNTY_SUMMARY.LBL_COUNTY' | translate }}" type="text" />
+  
+                    </div>
+                </div>
+            </div>
+         
+              <div class="row marginTop25">
+                <div class="col-12 col-sm-12 text-right mt-3 mt-sm-0"> 
+              <button id="btnAdd" [disabled]="searchloading || loading" class="secondary-cta small"
+                (click)="NavigatenewPath('county/edit-county')">
+                + {{
+                  'COMMON.LBL_NEW' | translate
+                }}
+              </button>
+              &nbsp;
+              <button id="btnSearch" [disabled]="searchloading || loading" class="primary-cta small"
+                (click)="SearchDetails()">
+                {{
+                  'COUNTY_SUMMARY.LBL_SEARCH' | translate
+                }}
+                <span *ngIf="searchloading">
+                  <i class="fa fa-refresh fa-spin" aria-hidden="true"></i>
+                </span>
+              </button>
+            </div>
+          </div>
+        </div>
+          <div class="centerContainerPadding float-left" *ngIf="model.items && model.items.length>0">
+             
+              <div class="row">
+                <div class="col-6 col-sm-4 col-xl-2 d-flex">
+                  <p  class="search-trigger-heading" [innerHtml]="showPaginationText()"></p>
+                </div>
+                <div class="col-6 col-sm-8 col-xl-10 text-right">
+                  <div class="animated-icon-container" *ngIf="!isFilterOpen" (click)="toggleFilterSection()">
+                    <img src="assets/images/cta-search-grey.svg" alt="search">
+                  </div>
+                </div>
+              </div>
+              <div class="quotation-search-container">
+                <div class="table-container h-scroll table-max-height-400">
+                  <table class="pagination-table simple-table bordered">
+                  <thead>
+                    <tr class="sticky-top-row">
+                      <th class="width-100"></th>
+                    <th>{{ 'COUNTY_SUMMARY.LBL_COUNTRY' | translate }}</th>
+                    <th>{{ 'COUNTY_SUMMARY.LBL_PROVINCE' | translate }}</th>
+                    <th>{{ 'COUNTY_SUMMARY.LBL_REGION' | translate }}</th>
+                    <th>{{ 'COUNTY_SUMMARY.LBL_COUNTY' | translate }}</th>
+                    <th>{{ 'COUNTY_SUMMARY.LBL_REGION_CODE' | translate }}</th>
+                  </tr>
+                </thead>
+                <tbody>
+
+                  <tr *ngFor="let iteminfo of model.items">
+                    <td class="Center_Middle">
+                      
+                        <span class="table-cta icon-cta common-tooltip" 
+                        (click)="getDetails(iteminfo.id)" data-tooltip="Edit">
+                        <img src="assets/images/cta-edit.svg" alt="Edit">
+                      </span>
+                      &nbsp;
+                      
+                        <span class="table-cta icon-cta common-tooltip" 
+                        (click)="openConfirm(iteminfo.id,iteminfo.countyName,content)" data-tooltip="Delete">
+                        <img src="assets/images/cta-delete.svg" alt="Delete">
+                      </span>
+                    </td>
+                    <td>{{iteminfo.country}}</td>
+                    <td>{{iteminfo.provinceName}}</td>
+                    <td>{{iteminfo.cityName}}</td>
+                    <td class="wordbreak">{{iteminfo.countyName}}</td>
+                    <td class="wordbreak">{{iteminfo.countyCode}}</td>
+                     
+                  </tr>
+                </tbody>
+              </table>
+              </div>
+            </div>
+            <div class="pagination-container">
+              <select class="small" [(ngModel)]="selectedPageSize" (change)="SearchDetails()">
+                <option *ngFor="let item of pagesizeitems" [ngValue]=item>{{item}}</option>
+              </select>
+              <ngb-pagination (pageChange)="onPager($event)" [pageSize]="model.pageSize"
+                [collectionSize]="model.totalCount" [(page)]="model.index" [maxSize]="5"></ngb-pagination>
+            </div>
+          </div>
+         
+
+          <div class="centerContainerPadding" *ngIf="model.noFound">
+            <div class="error-container">
+              <img src="assets/images/no-result.svg" alt="" class="thumbnail">
+              <h4 class="title">{{'COUNTY_SUMMARY.LBL_No_ITEM' | translate}}</h4>
+              <p class="error-subtitle">{{'CS_CONFIG_SUMMARY.LBL_NODATA' | translate}}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<ng-template #content let-modal>
+  <div class="modal-body">
+    <div class="small-model">
+      <h2 class="title">{{ 'COUNTY_SUMMARY.LBL_CONFIRMDELETION' | translate }}</h2>
+      <p>{{ 'COUNTY_SUMMARY.MSG_CONFRMDELETE' | translate }} <strong>{{modelRemove.countyName}}</strong></p>
+      <button class="secondary-cta"
+        (click)="modal.dismiss('Cross click')">{{ 'COMMON.LBL_CONFIRMCANCEL' | translate }}</button>
+      <button class="primary-cta" (click)="DeleteCounty(modelRemove.id);">{{ 'COMMON.LBL_OK' | translate }}</button>
+    </div>
+  </div>
+</ng-template>

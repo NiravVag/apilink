@@ -1,0 +1,387 @@
+<div class="main-wrapper">
+  <div class="wrapper dashboard-wrapper">
+    <div class="my-container">
+      <div class="master-body">
+        <div class="title-container">
+          <div class="header-back-button" *ngIf="fromSummary">
+            <img src="assets/images/back-red.png" alt="back" (click)="return('invoicesummary')">
+          </div>
+          <h3 class="main-title">
+            Invoice Send
+          </h3>
+        </div>
+        <div class="content-container quotation-container">
+          <div class="container-head">
+            <img class="head-icon" src="assets/images/general.png" alt="">
+           Invoice Details
+
+          </div>
+          <div class="row formPadding">          
+
+            <div class="col-sm-12">
+              <div class="quotation-search-container">
+                <div class="table-container h-scroll table-max-height-550">
+                  <table class="pagination-table simple-table bordered" *ngIf="masterModel.invoiceList.length >0 &&
+                    !masterModel.isEachBookingHasDifferentRule && !masterModel.isNoRuleFound">
+                    <thead>
+                      <tr class="sticky-top-row">
+                        <th class="width-60 Center_Middle">
+                          <div class="styled-checkbox-container">
+                            <input type="checkbox" class="styled-checkbox" id="checkboxall"
+                              [(ngModel)]="masterModel.selectedBookingReport" (change)="selectAllBooking();" />
+                            <label for="checkboxall"></label>
+                          </div>
+                        </th>
+                        <th class="width-60">{{'COMMON.LBL_PREVIEW' | translate}}</th>
+                        <th class="width-60">{{'INVOICE_MODIFY.LBL_INVOICE_NO' | translate}}</th>                    
+                        <th class="width-60">{{'INVOICE_MODIFY.LBL_INVOICE_DATE' | translate}}</th>
+                        <th class="width-60">{{'INVOICE_MODIFY.LBL_BILLING_TO' | translate}}</th>
+                        <th class="width-60">{{'INVOICE_MODIFY.LBL_BILLED_NAME' | translate}}</th>
+                        <th class="width-60">{{'INVOICE_ACCESS.LBL_INVOICE_TYPE' | translate}}</th>    
+                        <th class="width-60">{{'INVOICE_ACCESS.LBL_INVOICE_TOTAL' | translate}}</th>                 
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <ng-template ngFor let-iteminfo [ngForOf]="masterModel.invoiceList" let-i="index">
+                        <tr>  
+                          <td                           
+                          class="width-60 Center_Middle">
+                          <div class="styled-checkbox-container">
+                            <input type="checkbox" id="checkbox-{{i}}" class="styled-checkbox"
+                              [(ngModel)]="iteminfo.isSelected" (change)="checkIfAllBookingSelected();">
+                            <label for="checkbox-{{i}}"></label>
+                          </div>
+                        </td>  
+
+                        <td class="width-60">
+                          <a (click)="RedirectToFileReport(iteminfo.invoiceFileUrl)"><span
+                                  class="table-cta icon-cta common-tooltip"
+                                  data-tooltip="View">
+                                  <img src="assets/images/cta-view.svg" alt="view">
+                              </span></a>
+                          </td>
+                        
+                        <td class="width-60">
+                          <a [ngStyle]="{'color': iteminfo.invoiceNo && iteminfo.invoiceNo != '' ?  'blue' : ''}"
+                            [ngClass]="{ 'right-link': iteminfo.invoiceNo && iteminfo.invoiceNo != ''}"
+                            (click)="redirectToEditInvoice(iteminfo.invoiceNo)">
+                            {{iteminfo.invoiceNo}}
+                          </a>
+                        </td>
+                          <td class="width-60">{{iteminfo.invoiceDate}}</td>
+                          <td class="width-60">{{iteminfo.billTo}}</td>   
+                          <td class="width-60">{{iteminfo.billedName}}</td>  
+                          <td class="width-60">{{iteminfo.invoiceType}}</td>  
+                          <td class="width-60">{{iteminfo.invoiceTotal}} ({{iteminfo.currencyCode}})</td>   
+                        </tr>
+                      </ng-template>
+                    </tbody>
+                  </table>
+                  <div class="error-container"  *ngIf="!(masterModel.invoiceList.length>0)">
+                    <img src="assets/images/no-data.svg" alt="" class="thumbnail">
+                    <h4 class="error-title">{{'COMMON.LBL_No_ITEM' | translate}}
+                    </h4>
+                    <p class="error-subtitle">{{'COMMON.LBL_NODATA' | translate}}</p>
+                  </div>
+
+                  <div class="error-container" *ngIf="(masterModel.isNoRuleFound)">
+                    <img src="assets/images/no-data.svg" alt="" class="thumbnail">
+                    <h4 class="error-title">{{'EDIT_EMAIL_SEND.MSG_NO_RULE_TITLE' | translate}}
+                    </h4>
+                    <p class="error-subtitle">{{'EDIT_EMAIL_SEND.MSG_NO_RULE_SUB' | translate}}</p>
+                  </div>
+                  <div class="error-container" *ngIf="(masterModel.isEachBookingHasDifferentRule)">
+                    <img src="assets/images/no-data.svg" alt="" class="thumbnail">
+                    <h4 class="error-title">{{'EDIT_EMAIL_SEND.LBL_MULTIPLE_RULE' | translate}}
+                    </h4>
+                    <p class="error-subtitle">{{'EDIT_EMAIL_SEND.MSG_NO_RULE_SUB' | translate}}</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="content-container quotation-container"
+          *ngIf="!masterModel.isNoRuleFound && !masterModel.isEachBookingHasDifferentRule">
+          <div class="container-head">
+            <img class="head-icon" src="assets/images/general.png" alt="">
+            {{ 'EDIT_EMAIL_SEND.LBL_UPLOAD_FILE' | translate }}
+          </div>
+          <div class="row formPadding">
+            <div class="col-sm-12">
+              <div class="row">
+            <div class="col-sm-3 col-md-3 col-lg-3">
+              <div class="my-input-group">
+                <label class="required" for="">Invoice Number</label>
+                 <ng-select [items]="masterModel.invoiceNumberList" 
+                    [searchable]="true" bindLabel="invoiceNo" appendTo="body" bindValue="invoiceId" [(ngModel)]="model.invoiceId"
+                    placeholder="--- {{ (masterModel.invoiceNumberList && masterModel.invoiceNumberList.length>0? 'COMMON.LBL_SELECT':'COMMON.LBL_NO_DATA' ) | translate }} ---"
+                    [ngClass]="{ 'is-invalid':  !validator.isValid('invoiceId')}">
+                    <ng-template ng-option-tmp let-item="item">
+                      <div class="text-wrap"><span>{{item.invoiceNo}}</span></div>
+                    </ng-template>
+                  </ng-select>
+                    <div *ngIf="!validator.isValid('invoiceId')" class="invalid-feedback">
+                      <div *ngFor="let error of validator.getErrors('invoiceId')">
+                        {{ error | translate }}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+    
+                <div class="col-sm-3 col-md-3 col-lg-3">
+                  <div class="my-input-group">
+                    <label class="required" for="">{{'EDIT_EMAIL_SEND.LBL_FILE_TYPE' | translate }}</label>
+                    <ng-select [items]="masterModel.fileTypeList" [loading]="masterModel.fileTypeLoading"
+                      [searchable]="true" bindLabel="name" appendTo="body" bindValue="id" [(ngModel)]="model.fileTypeId"
+                      placeholder="--- {{ (masterModel.fileTypeList && masterModel.fileTypeList.length>0? 'COMMON.LBL_SELECT':'COMMON.LBL_NO_DATA' ) | translate }} ---"
+                      [ngClass]="{ 'is-invalid':  !validator.isValid('fileTypeId')}">
+                      <ng-template ng-option-tmp let-item="item">
+                        <div class="text-wrap"><span>{{item.name}}</span></div>
+                      </ng-template>
+                    </ng-select>
+                    <div *ngIf="!validator.isValid('fileTypeId')" class="invalid-feedback">
+                      <div *ngFor="let error of validator.getErrors('fileTypeId')">
+                        {{ error | translate }}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-sm-3 col-md-3 col-lg-3">
+                  <div class="my-input-group">
+                    <label class="control-label"></label>
+                    <app-drag-drop [fileLimit]="masterModel.uploadLimit" [fileSizeLimit]="masterModel.fileSize"
+                      [Bigupload]="false" [SmallUploadImage]="" [SmallUploadTitle]="" [SmallUploadSubTitle]=""
+                      [fileExtension]="masterModel.uploadFileExtensions" (fileUpload)="onSelectFile($event)">
+                    </app-drag-drop>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-sm-12">
+              <div class="quotation-search-container">
+                <div class="table-container h-scroll table-max-height-550">
+                  <table class="pagination-table simple-table bordered"
+                    *ngIf="masterModel.emailSendFileDetails && masterModel.emailSendFileDetails.length >0 && !masterModel.searchLoading">
+                    <thead>
+                      <tr class="sticky-top-row">
+                        <th class="width-60 Center_Middle">
+                          <div class="styled-checkbox-container" *ngIf="masterModel.isheaderReportShow">
+                            <input type="checkbox" class="styled-checkbox" id="checkboxal"
+                              [(ngModel)]="masterModel.selectedReportUpload" (change)="selectAllUpload();" />
+                            <label for="checkboxal"></label>
+                            <!--  -->
+                          </div>
+                        </th>
+                        <th class="width-60 Center_Middle">{{'COMMON.LBL_DELETE' | translate}}</th>
+                        <th class="width-60">Invoice No</th>                      
+                        <th class="width-60">{{'EDIT_EMAIL_SEND.LBL_FILE_TYPE' | translate}}</th>
+                        <th class="width-60">{{'EDIT_EMAIL_SEND.LBL_FILE_NAME' | translate}}</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <ng-template ngFor let-iteminfo [ngForOf]="masterModel.emailSendFileDetails" let-i="index">
+                        <tr>
+                          <td class="width-60 Center_Middle">
+                            <div class="styled-checkbox-container" *ngIf="iteminfo.isShow">
+                              <input type="checkbox" id="checkbo-{{i}}" class="styled-checkbox"
+                                [(ngModel)]="iteminfo.isSelected" (change)="checkIfAllUpload();">
+                              <label for="checkbo-{{i}}"></label>
+                              <!-- [checked]="iteminfo.isSelected" -->
+                            </div>
+                          </td>
+                          <td class="width-60" class="Center_Middle"><a
+                              (click)="openConfirm(iteminfo.emailSendFileId, content)">
+                              <span class="table-cta icon-cta common-tooltip" data-tooltip="Delete">
+                                <img src="assets/images/cta-delete.svg" alt="Delete">
+                              </span>
+                            </a>
+                          </td>
+                          <td class="width-60">{{iteminfo.invoiceNo}}</td>                        
+                          <td class="width-60">{{iteminfo.fileTypeName}}</td>
+                          <td class="width-60">
+                            <a [ngStyle]="{'color': iteminfo.fileLink && iteminfo.fileLink != '' ?  'blue' : ''}"
+                              [ngClass]="{ 'right-link': iteminfo.fileLink && iteminfo.fileLink != ''}"
+                              (click)="RedirectToFileReport(iteminfo.fileLink)">
+                              {{iteminfo.fileName}}
+                            </a>
+                          </td>
+                        </tr>
+                      </ng-template>
+                    </tbody>
+                  </table>             
+                </div>
+              </div>
+            </div>
+            <div class="col-sm-12">
+              <div class="row form-action-container">
+                <div class="col-sm-12">
+                  <button class="primary-cta MarginR-20" *ngIf="isPreviewShown()" (click)="emailPreview()">
+                    {{'COMMON.LBL_PREVIEW' | translate}} ( {{masterModel.selectedReport}} )
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="loader-overlay" *ngIf="masterModel.pageLoader">
+          <div class="loader-container">
+            <img src="assets/images/reload.svg" alt="">
+            <span>{{'COMMON.LBL_LOADER' | translate}}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<ng-template #content let-modal>
+  <div class="modal-body">
+    <div class="small-model new-padding">
+      <h2 class="confirm-title"><img class="mr-2" src="assets/images/caution-red.svg" alt="">{{
+        'EDIT_EMAIL_SEND.LBL_CONFIRMDELETION' | translate }}</h2>
+      <p class="light">{{ 'EDIT_EMAIL_SEND.MSG_QUESTION_SURE' | translate }} </p>
+      <div class="text-right">
+        <button class="tertiary-cta small" (click)="modal.dismiss('Cross click');getId();"
+          [disabled]="masterModel.deleteLoading">
+          {{ 'COMMON.LBL_CONFIRMCANCEL' | translate }}</button>
+        <button class="primary-cta small" [disabled]="masterModel.deleteLoading" (click)="deleteEmailSendFile();">{{
+          'COMMON.LBL_OK' | translate }}
+          <span *ngIf="masterModel.deleteLoading">
+            <i class="fa fa-refresh fa-spin" aria-hidden="true"></i>
+          </span>
+        </button>
+      </div>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #emailPreviewContent let-modal>
+  <app-email-preview 
+  (sendEmailEvent)="sendEmail($event)" 
+  (closeEmailPreview)="closeEmailPreview($event)"
+  [serialNumberList]="masterModel.bookingNoList"
+  [emailPreviewTitle]="emailPreviewTitle"
+  [emailModelItem]="emailModelItem" >
+  </app-email-preview> 
+</ng-template>
+
+<ng-template #emailruleinfo let-modal>
+  <div class="modal-header custom-modal-header">
+    <h4 class="modal-title" id="modal-basic-title">{{ 'EDIT_EMAIL_SEND.LBL_EMAIL_RULE' | translate }}</h4>
+    <button type="button" class="close" aria-label="Close"
+      (click)="modal.dismiss('Cross click');return('invoicesummary')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body custom-modal-body">
+    <div class="content-container schedule-allocation-container">
+      <div class="formPadding">
+        <div class="row">
+          <div class="col-sm-12 marginTop20">
+            <div class="table-container">
+              <table class="pagination-table bordered">
+                <thead>
+                  <tr>
+                    <th class="width-60">{{ 'COMMON.LBL_CHOOSE' | translate }}</th>
+                    <th class="width-60">{{ 'EMAIL_CONFIGURATION.LBL_SUPPLIER' | translate }}</th>
+                    <th class="width-60">{{ 'EMAIL_CONFIGURATION.LBL_FACTORY' | translate }}</th>
+                    <th class="width-60">{{ 'EMAIL_CONFIGURATION.LBL_DEPARTMENT' | translate }}</th>
+                    <th class="width-60">{{ 'EMAIL_CONFIGURATION.LBL_BRAND' | translate }}</th>
+                    <th class="width-60">{{ 'EMAIL_CONFIGURATION.LBL_COLLECTION' | translate }}</th>
+                    <th class="width-60">{{ 'EMAIL_CONFIGURATION.LBL_BUYER' | translate }}</th>
+                    <th class="width-60">{{ 'EMAIL_CONFIGURATION.LBL_SERVICE_TYPE' | translate }}</th>
+                    <th class="width-100">{{ 'EMAIL_CONFIGURATION.LBL_PRODUCT_CATEGORY' | translate }}</th>
+                    <th class="width-60">{{ 'EMAIL_CONFIGURATION.LBL_API_RESULT' | translate }}</th>
+                    <th class="width-60">{{ 'EMAIL_CONFIGURATION.LBL_FACTORY_COUNTRY' | translate }}</th>
+                    <th class="width-60">{{ 'EMAIL_CONFIGURATION.LBL_SPECIAL_RULE' | translate }}</th>
+                    <th class="width-60">{{ 'EMAIL_CONFIGURATION.LBL_REPORT_SEND_TYPE' | translate }}</th>
+                    <th class="width-60">{{ 'EMAIL_CONFIGURATION.LBL_REPORT_IN_EMAIL' | translate }}</th>
+                    <th class="width-60"></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let iteminfo of masterModel.emailRuleList; let i = index"
+                    [ngClass]="(((i+1) % 2)== 0)?'even':'odd'">
+                    <td class="Center_Middle">
+                      <div class="styled-radio-container">
+                        <input type="radio" class="styled-radio" id="{{iteminfo.ruleId}}"
+                          [(ngModel)]="iteminfo.isSelected" [value]="iteminfo.ruleId" name="radrule-group"
+                          [checked]="i === 0" (click)="getRuleId(iteminfo.ruleId)">
+                        <label for="{{iteminfo.ruleId}}"></label>
+                      </div>
+                    </td>
+                    <td class="width-60">{{iteminfo.supplierName}}</td>
+                    <td class="width-60">{{iteminfo.factoryName}}</td>
+                    <td class="width-60">{{iteminfo.departmentName}}</td>
+                    <td class="width-60">{{iteminfo.brandName}}</td>
+                    <td class="width-60">{{iteminfo.collectionName}}</td>
+                    <td class="width-60">{{iteminfo.buyerName}}</td>
+                    <td class="width-60">{{iteminfo.serviceTypeName}}</td>
+                    <td class="width-100">{{iteminfo.productCategoryName}}</td>
+                    <td class="width-60">{{iteminfo.apiResultName}}</td>
+                    <td class="width-60">{{iteminfo.factoryCountryName}}</td>
+                    <td class="width-60">{{iteminfo.specialRuleName}}</td>
+                    <td class="width-60">{{iteminfo.reportSendType}}</td>
+                    <td class="width-60">{{iteminfo.reportInEmail}}</td>
+                    <td class="width-60"><span class="table-cta icon-cta common-tooltip"
+                        data-tooltip="Rule details"><img (click)="returnToRule(iteminfo.ruleId)"
+                          src="assets/images/cta-view.svg" alt="view rule"></span></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button type="button" [disabled]="popupOk()" class="primary-cta small" (click)="modal.dismiss('cancel click')">
+      {{ 'COMMON.LBL_OK' | translate }}
+    </button>
+    <button type="button" class="tertiary-cta small" (click)="modal.dismiss('Cross click');return('invoicesummary')">
+      {{ 'QUOTATION.LBL_CONFIRMCANCEL' | translate }}
+    </button>
+  </div>
+</ng-template>
+
+<ng-template #emailSendHistory let-modal>
+  <div class="modal-header custom-modal-header">
+    <h4 class="modal-title" id="modal-basic-title">{{ 'EDIT_EMAIL_SEND.LBL_REPORT_SENT_HISTORY' | translate }}</h4>
+    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click');">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body custom-modal-body">
+    <div class="content-container schedule-allocation-container">
+      <div class="formPadding">
+        <div class="row">
+          <div class="col-sm-12 marginTop20">
+            <div class="table-container" style="overflow-y: scroll;max-height:500px;">
+              <table class="pagination-table bordered">
+                <thead>
+                  <tr class="sticky-top-row">
+                    <th class="width-100">{{ 'EDIT_EMAIL_SEND.LBL_SENT_BY' | translate }}</th>
+                    <th class="width-100">{{ 'EDIT_EMAIL_SEND.LBL_SENT_ON' | translate }}</th>
+                    <th class="width-100">{{ 'EDIT_EMAIL_SEND.LBL_STATUS' | translate }}</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let iteminfo of emailSendHistoryResponse.emailSendHistoryList; let i = index"
+                    [ngClass]="(((i+1) % 2)== 0)?'even':'odd'">
+                    <td>{{iteminfo.emailSentBy}}</td>
+                    <td>{{iteminfo.emailSentOn | dateUTCPipe | date:standardDateFormat}}</td>
+                    <td>{{iteminfo.emailStatus}}</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-template>

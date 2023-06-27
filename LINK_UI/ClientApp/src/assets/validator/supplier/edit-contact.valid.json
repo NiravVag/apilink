@@ -1,0 +1,66 @@
+{
+  "model": "edit-supplier.model",
+  "fields": {
+    "contactName": [
+      {
+        "type": "required",
+        "fieldType": "T",
+        "ressource": "EDIT_SUPPLIER.MSG_CONTACTNAME_REQ"
+      }
+    ],
+    "contactEmail": [
+      {
+        "type": "required",
+        "fieldType": "T",
+        "ressource": "EDIT_SUPPLIER.MSG_CONTACTEMAIL_REQ"
+      },
+      {
+        "type": "email",
+        "ressource": "EDIT_SUPPLIER.MSG_CONTACTEMAIL_EMAIL"
+      }
+    ],
+    "phone": [
+      {
+        "type": "required",
+        "fieldType": "T",
+        "ressource": "EDIT_SUPPLIER.MSG_PHONE_REQ"
+      }
+    ],
+    "customerList": [
+      {
+        "type": "required",
+        "fieldType": "A",
+        "ressource": "EDIT_SUPPLIER.MSG_CUSTOMERS_REQ"
+      }
+    ],
+    "contactAPIServiceIds": [
+      {
+        "type": "required",
+        "fieldType": "N",
+        "ressource": "API_SERVICE.MSG_API_SERVICE_REQ"
+      }
+    ],
+    "apiEntityIds": [
+      {
+        "type": "required",
+        "fieldType": "N",
+        "ressource": "EDIT_CUSTOMER_CONTACT_SUMMARY.MSG_API_ENTITY_REQ"
+      }
+    ]  ,
+    "primaryEntity": [
+      {
+        "type": "required",
+        "fieldType": "N",
+        "ressource": "EDIT_STAFF.MSG_PRIMARY_REQ"
+      }
+    ]  ,
+    "entityServiceIds": [
+      {
+        "type": "required",
+        "fieldType": "N",
+        "ressource": "EDIT_CUSTOMER_CONTACT_SUMMARY.MSG_API_ENTITY_SERVICE_REQ"
+      }
+    ] 
+  }
+
+}

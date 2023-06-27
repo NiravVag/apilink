@@ -1,0 +1,107 @@
+﻿@using DTO.Common; 
+@{
+    ViewData["Title"] = "VoucherExpenseClaimTemplate";
+}
+
+@model DTO.Expense.ExpenseClaimVoucherData
+
+
+<xls-sheet name="Voucher Summary Kpi">
+    <table xls-begin="A:1" style="border-style:solid">
+        <tr>
+            <td style="font-weight:bold"> Staff  Costing  Monthly  Summary</td>
+        </tr>
+        <tr>
+            <td style="font-weight:bold">Entity/ Company:</td>
+        </tr>
+        <tr>
+            <td style="font-weight:bold">Office:</td>
+            <td>@Model.Office</td>
+            <td></td>
+            <td style="font-weight:bold">Date From</td>
+            <td xls-type="date" xls-format="@ApiCommonData.StandardDateFormat">@Model.DateFrom</td>
+            <td style="font-weight:bold">To</td>
+            <td xls-type="date" xls-format="@ApiCommonData.StandardDateFormat">@Model.DateTo</td>
+        </tr>
+        <tr>
+            <td style="font-weight:bold">Claim Type</td>
+            <td>@Model.ClaimType</td>
+        </tr>
+        <tr>
+            <td style="font-weight:bold">English Name</td>
+            <td>@Model.EnglishName</td>
+            <td></td>
+            <td style="font-weight:bold">Regional Language  Name</td>
+            <td>@Html.Raw(@Model.RegionalName)</td>
+        </tr>
+        <tr style="background-color:#f5f5f5;font-weight:bold;text-align:center">
+            <col>
+            <colgroup span="2"></colgroup>
+            <colgroup span="2"></colgroup>
+            <th rowspan="2">Claim Date</th>
+            <th rowspan="2">Inspection No.</th>
+            <th rowspan="2">Audit No.</th>
+            <th rowspan="2">Claim No.</th>
+            <th rowspan="2">Expense Status</th>
+            <th rowspan="2">Office</th>
+            <th rowspan="2">Payroll Company</th>
+            <th colspan="4" scope="colgroup" style="text-align:center; border:solid">Allowance</th>
+            <th colspan="14" scope="colgroup" style="text-align:center; border:solid">Travel Expenses</th>
+            <th rowspan="2">Total</th>
+        </tr>
+        <tr style="background-color:#f5f5f5;font-weight:bold;text-align:center">
+            <th scope="col">Travel Allowance</th>
+            <th scope="col">Report  Allowance</th>
+            <th scope="col">Add or Deduct Allowance(Financial staff Input)</th>
+            <th scope="col">Allowance  Total</th>
+            <th scope="col">Traveling by Plane</th>
+            <th scope="col">Traveling  by Ferry</th>
+            <th scope="col">Traveling by Taxi</th>
+            <th scope="col">Traveling by DD</th>
+            <th scope="col">Traveling by Train</th>
+            <th scope="col">Traveling by Bus（Longdistance)</th>
+            <th scope="col">Traveling (Other Modes)</th>
+            <th scope="col">Hotel Expenses</th>
+            <th scope="col">Airport Taxes</th>
+            <th scope="col">Visa</th>
+            <th scope="col">Other Expenses</th>
+            <th scope="col">Miscellaneous expenses</th>
+            <th scope="col">Entertainment</th>
+            <th scope="col">Travel Fee Total</th>
+            <th>Auto Expense</th>
+        </tr>
+
+        @foreach (var item in Model.ClaimData)
+        {
+    <tr>
+        <td width="150px" xls-type="date" xls-format="@ApiCommonData.StandardDateFormat">@item.Date</td>
+        <td width="150px">@item.InspNo</td>
+        <td width="150px">@item.AuditNo</td>
+        <td width="150px">@item.ClaimNo</td>
+        <td width="150px">@item.ExpenseStatus</td>
+        <td width="150px">@item.OfficeName</td>
+        <td width="150px">@item.PayrollCompanyName</td>
+        <td width="250px" xls-type="number">@item.TravelAllowance</td>
+        <td width="250px" xls-type="number">@item.ReportAllowance</td>
+        <td></td>
+        <td width="150px" xls-type="number">@item.AllowanceTotal</td>
+        <td width="150px" xls-type="number">@item.PlaneTravel</td>
+        <td width="150px" xls-type="number">@item.FerryTravel</td>
+        <td width="150px" xls-type="number">@item.TaxiTravel</td>
+        <td></td>
+        <td width="150px" xls-type="number">@item.TrainTravel</td>
+        <td width="150px" xls-type="number">@item.BusTravel</td>
+        <td width="150px" xls-type="number">@item.OtherTravel</td>
+        <td width="150px" xls-type="number">@item.HotelExpense</td>
+        <td width="150px" xls-type="number">@item.AirportTax</td>
+        <td width="150px" xls-type="number">@item.Visa</td>
+        <td width="150px" xls-type="number">@item.OtherExpense</td>
+        <td width="150px" xls-type="number">@item.MiscellaneousExpense</td>
+        <td width="150px" xls-type="number">@item.EntertainmentExpense</td>
+        <td width="150px" xls-type="number">@item.TravelFeeTotal</td>
+        <td width="150px" xls-type="number">@item.Total</td>
+        <td width="150px">@item.AutoExpense</td>
+    </tr>
+        }
+    </table>
+</xls-sheet>

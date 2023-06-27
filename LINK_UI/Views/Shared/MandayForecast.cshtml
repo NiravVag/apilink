@@ -1,0 +1,31 @@
+﻿
+@{
+    ViewData["Title"] = "Manday Forecast";
+}
+
+
+@model DTO.Schedule.MandayForecastResponse
+
+<xls-sheet name="Manday Forecast">
+    <table xls-begin="A:1" style="border-style:solid">
+        <tr style="background-color:#f5f5f5;font-weight:bold;text-align:center">
+            <th>Service date</th>
+            <th>Location</th>
+            <th>Man day</th>
+            <th>Available QC</th>
+            <th>QC Leave</th>
+        </tr>
+        @foreach (var item in Model.Data.OrderBy(x=>x.Location))
+        {
+
+        <tr>
+            <td width="150px"  style="text-align:center">@item.Date</td>
+            <td width="150px" >@item.Location</td>
+            <td width="150px" xls-type="number" style="text-align:center">@item.ManDaycount</td>
+            <td width="150px" xls-type="number" style="text-align:center">@item.AvailableQcCount</td>
+            <td width="150px" xls-type="number" style="text-align:center">@item.QcOnLeaveCount</td>
+        </tr>
+            }
+
+    </table>
+</xls-sheet>

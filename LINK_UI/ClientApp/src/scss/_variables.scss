@@ -1,0 +1,38 @@
+:root {
+	--primary-color: #12141a;
+	--white-color: #ffffff;
+	--brand-color: #cd2d2f;
+	--brand-dark-color: #b70b0d;
+	--brand-light-color: rgba(205, 45, 47, 0.1);
+	--brand-light-hover-color: rgba(205, 45, 47, 0.16);
+	--secondary-brand-color: #00a7ff;
+	--secondary-brand-light-color: rgba(0, 167, 255, 0.1);
+	--table-header-color: #527cb1;
+}
+
+body{
+
+	&.sgt-theme {
+		--primary-color: #12141a;
+		--white-color: #ffffff;
+		--brand-color: #d00054;
+		--brand-dark-color: #bc0b50;
+		--brand-light-color: rgba(208, 0, 84, 0.1);
+		--brand-light-hover-color: rgba(208, 0, 84, 0.16);
+		--secondary-brand-color: #06c0cb;
+		--secondary-brand-light-color: rgba(6, 192, 203, 0.1);
+		--table-header-color: #9d828d;
+	}
+
+	&.aqf-theme {
+		--primary-color: #12141a;
+		--white-color: #ffffff;
+		--brand-color: #de2f24;
+		--brand-dark-color: #bc1005;
+		--brand-light-color: rgba(222, 47, 36, 0.1);
+		--brand-light-hover-color: rgba(222, 47, 36, 0.16);
+		--secondary-brand-color: #12c5ff;
+		--secondary-brand-light-color: rgba(18, 197, 255, 0.1);
+		--table-header-color: #9599b9;
+	}
+}

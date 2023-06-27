@@ -1,0 +1,278 @@
+<div class="main-wrapper">
+    <div class="wrapper dashboard-wrapper">
+        <div class="my-container">
+            <div class="master-body">
+                <div class="title-container">
+                    <h3 class="main-title">
+                        {{ 'INSPECTION_OCCUPANCY.Title' | translate }}</h3>
+                </div>
+                <div class="content-container quotation-container">
+                    <div [@expandCollapse]="isFilterOpen ? 'open' : 'close'"
+                        class="centerContainerPadding common-filter-container">
+                        <div class="animated-icon-container" (click)="toggleFilterSection()"
+                            *ngIf="(model.items && model.items.length>0)">
+                            <img src="assets/images/cta-close-grey.svg" alt="close">
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-4 col-md-4 col-lg-4 mobile-margin-top-15">
+                                <div class="my-input-group">
+                                    <label>{{'INSPECTION_OCCUPANCY.LBL_DATE'|translate}}</label>
+                                </div>
+                                <div class="my-input-group">
+                                    <div class="d-flex my-input-group">
+                                        <div class="calendar-wrapper flex-fill mr-2">
+                                            <input type="text" maxlength="10" container="body"
+                                                [ngClass]="{ 'is-invalid':  !validator.isValid('fromDate')}"
+                                                readonly=readonly [(ngModel)]="model.fromDate" ngbDatepicker
+                                                #sdf="ngbDatepicker" (click)="sdf.toggle()">
+                                            <img src="assets/images/cta-close-grey.svg" alt="" class="close-icon"
+                                                (click)="clearDateInput('FromDate');" *ngIf="model.fromDate">
+                                            <img src="assets/images/cta-calendar-grey.svg" alt="" class="calendar-icon"
+                                                (click)="sdf.toggle()">
+
+                                            <div *ngIf="!validator.isValid('fromDate')" class="invalid-feedback">
+                                                <div *ngFor="let error of validator.getErrors('fromDate')">{{ error |
+                                                    translate }}</div>
+                                            </div>
+
+                                        </div>
+
+                                        <div class="calendar-wrapper flex-fill">
+                                            <input type="text" maxlength="10" container="body"
+                                                [ngClass]="{ 'is-invalid':  !validator.isValid('toDate')}"
+                                                readonly=readonly [(ngModel)]="model.toDate" ngbDatepicker
+                                                #sdt="ngbDatepicker" (click)="sdt.toggle()">
+                                            <img src="assets/images/cta-close-grey.svg" alt="" class="close-icon"
+                                                (click)="clearDateInput('ToDate');" *ngIf="model.toDate">
+                                            <img src="assets/images/cta-calendar-grey.svg" alt="" class="calendar-icon"
+                                                (click)="sdt.toggle()">
+
+                                            <div *ngIf="!validator.isValid('toDate')" class="invalid-feedback">
+                                                <div *ngFor="let error of validator.getErrors('toDate')">{{ error |
+                                                    translate }}</div>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-4 col-md-4 col-lg-4 mobile-margin-top-15">
+                                <div class="my-input-group">
+                                    <label>{{'INSPECTION_OCCUPANCY.LBL_OFFICE_COUNTRY' | translate}}</label>
+                                    <ng-select [searchable]="true" [loading]="masterModel.officeCountryLoading"
+                                        [clearable]="true" [multiple]="false" [items]="masterModel.officeCountryList"
+                                        appendTo="body" bindLabel="name" bindValue="id" [hideSelected]="true"
+                                        class="single"
+                                        placeholder="--- {{(masterModel.officeCountryList!=null && masterModel.officeCountryList.length!=0? 'COMMON.LBL_SELECT':'COMMON.LBL_NO_DATA')  | translate }} ---"
+                                        [(ngModel)]="model.officeCountryId">
+                                    </ng-select>
+                                </div>
+                            </div>
+                            <div class="col-sm-4 col-md-4 col-lg-4 mobile-margin-top-15">
+                                <div class="my-input-group">
+                                    <label>{{'INSPECTION_OCCUPANCY.LBL_OFFICE' | translate}}</label>
+                                    <ng-select [searchable]="true" [loading]="masterModel.officeLoading"
+                                        [clearable]="true" [multiple]="false" [items]="masterModel.officeList"
+                                        appendTo="body" bindLabel="name" bindValue="id" [hideSelected]="true"
+                                        class="single"
+                                        placeholder="--- {{(masterModel.officeList!=null && masterModel.officeList.length!=0? 'COMMON.LBL_SELECT':'COMMON.LBL_NO_DATA')  | translate }} ---"
+                                        [(ngModel)]="model.officeId">
+                                    </ng-select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row marginTop25">
+                            <div class="col-sm-4 col-md-4 col-lg-4 mobile-margin-top-15">
+                                <div class="my-input-group">
+                                    <label>{{'INSPECTION_OCCUPANCY.LBL_EMPLOYEE_TYPE' | translate}}</label>
+                                    <ng-select [searchable]="true" [loading]="masterModel.employeeTypeLoading"
+                                        [clearable]="true" [multiple]="false" [items]="masterModel.employeeTypeList"
+                                        appendTo="body" bindLabel="name" bindValue="id" [hideSelected]="true"
+                                        (change)="onChangeEmployeeType()" class="single" (clear)="clearEmployeeType()"
+                                        placeholder="--- {{(masterModel.employeeTypeList!=null && masterModel.employeeTypeList.length!=0 ? 'COMMON.LBL_SELECT' : 'COMMON.LBL_NO_DATA') | translate}} ---"
+                                        [(ngModel)]="model.employeeType">
+                                    </ng-select>
+                                </div>
+                            </div>
+                            <div class="col-sm-4 col-lg-4 mobile-margin-top-15"
+                                *ngIf="model.employeeType===_EmployeeType.Outsource">
+                                <div class="my-input-group">
+                                    <label>{{'INSPECTION_OCCUPANCY.LBL_OUTSOURCE_COMPANY' | translate}}</label>
+                                    <ng-select [searchable]="true" [loading]="masterModel.outSourceCompanyLoading"
+                                        [clearable]="true" [multiple]="false" [items]="masterModel.outSourceCompanyList"
+                                        appendTo="body" bindLabel="name" bindValue="id" [hideSelected]="true"
+                                        (change)="changeOutsourceCompany()" class="single" placeholder="--- {{ (masterModel.outSourceCompanyList!=null && masterModel.outSourceCompanyList.length!=0? 'COMMON.LBL_SELECT':
+                                        'COMMON.LBL_NO_DATA' ) | translate }} --- "
+                                        [(ngModel)]="model.outSourceCompany">
+                                    </ng-select>
+                                </div>
+                            </div>
+                            <div class="col-sm-4 col-lg-4 mobile-margin-top-15">
+                                <div class="my-input-group">
+                                    <label>{{'INSPECTION_OCCUPANCY.LBL_STAFF' | translate}}</label>
+                                    <ng-select bindLabel="name" bindValue="id" [(ngModel)]="model.qA"
+                                        [items]="masterModel.staffList" [clearable]="true" [virtualScroll]="true"
+                                        (clear)="clearStaff()" (scrollToEnd)="getStaffData(true)" [minTermLength]="3"
+                                        [typeahead]="masterModel.staffInput" placeholder="--- {{ (masterModel.staffList!=null && masterModel.staffList.length!=0? 'COMMON.LBL_SELECT':
+                                        'COMMON.LBL_NO_DATA' ) | translate }} --- " appendTo="body "
+                                        [loading]="masterModel.staffLoading ">
+                                        <ng-template ng-option-tmp let-item="item ">
+                                            <div class="text-wrap ">{{ item.name }}</div>
+                                        </ng-template>
+                                    </ng-select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row marginTop25">
+                            <div class="col-sm-4 col-lg-4 mobile-margin-top-15">
+                                <div class="my-input-group">
+                                    <div class="styled-checkbox-container marginTop25">
+                                        <input class="styled-checkbox" id="checkbox" type="checkbox"
+                                            [(ngModel)]="model.utilizationRate" />
+                                        <label for="checkbox">{{ 'INSPECTION_OCCUPANCY.LBL_UTILIZATION_RATE' |
+                                            translate}}</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row marginTop25">
+                            <div class="col-12 col-sm-12 text-right mt-3 mt-sm-0">
+                                <button class="secondary-cta small" (click)="export()"
+                                    [disabled]="masterModel.exportLoading"
+                                    *ngIf="model.items != null && model.items.length != 0  && !model.noFound">
+                                    <img src="assets/images/red-export.svg" alt="export">
+                                    {{ 'COMMON.LBL_EXPORT' | translate }}
+                                    <span *ngIf="masterModel.exportLoading">
+                                        <i class="fa fa-refresh fa-spin" aria-hidden="true"></i>
+                                    </span>
+                                </button> &nbsp;
+                                <button id="btnSearch" class="primary-cta small" [disabled]="searchLoading"
+                                    style="margin-right: 5px;" (click)="search()">
+                                    {{ 'COMMON.LBL_SEARCH' | translate }}
+                                    <span *ngIf="searchLoading">
+                                        <i class="fa fa-refresh fa-spin" aria-hidden="true"></i>
+                                    </span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="centerContainerPadding float-left" *ngIf="(model.items && model.items.length>0)">
+                        <div class="row">
+                            <div class="col-6 col-sm-4 col-xl-2 d-flex">
+                                <p class="search-trigger-heading" [innerHtml]="showPaginationText()"></p>
+                            </div>
+                            <div class="col-6 col-sm-8 col-xl-10 text-right">
+                                <ul class="table-badge-container mobile-hide tablet-hide">
+                                    <li *ngFor="let status of masterModel.statusList" [class]="status.color"
+                                        [ngClass]="{'active':  checkInspectionOccupancyCategory(status.inspectionOccupancyCategory)}"
+                                        (click)="filterInspectionOccupancyCategory(status.inspectionOccupancyCategory)">
+                                        {{status.label}}<span>{{status.count}}</span>
+                                        <img *ngIf="checkInspectionOccupancyCategory(status.inspectionOccupancyCategory)"
+                                            src="assets/images/white-close.svg" alt="">
+                                    </li>
+                                </ul>
+                                <div class="animated-icon-container" *ngIf="!isFilterOpen"
+                                    (click)="toggleFilterSection()">
+                                    <img src="assets/images/cta-search-grey.svg" alt="search">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="quotation-search-container">
+                            <div class="table-container h-scroll">
+                                <table class="pagination-table bordered">
+                                    <thead>
+                                        <tr>
+                                            <th>{{ 'INSPECTION_OCCUPANCY.LBL_OFFICE_COUNTRY' | translate }}</th>
+                                            <th>{{ 'INSPECTION_OCCUPANCY.LBL_OFFICE' | translate }}</th>
+                                            <th>{{ 'INSPECTION_OCCUPANCY.LBL_STAFF' | translate }}</th>
+                                            <th>{{ 'INSPECTION_OCCUPANCY.LBL_EMPLOYEE_TYPE' | translate }}</th>
+                                            <th *ngIf="model.employeeType===_EmployeeType.Outsource">{{
+                                                'INSPECTION_OCCUPANCY.LBL_OUTSOURCE_COMPANY' | translate }}</th>
+                                            <th>{{ 'INSPECTION_OCCUPANCY.LBL_JOINDATE' | translate }}</th>
+                                            <th>{{ 'INSPECTION_OCCUPANCY.LBL_NUMBER_OF_WDS' | translate }}</th>
+                                            <th>{{ 'INSPECTION_OCCUPANCY.LBL_MAX_WDS' | translate }}</th>
+                                            <th>{{ 'INSPECTION_OCCUPANCY.LBL_LEAVES' | translate }}</th>
+                                            <th>{{ 'INSPECTION_OCCUPANCY.LBL_BANK_HOLIDAYS' | translate }}</th>
+                                            <th>{{ 'INSPECTION_OCCUPANCY.LBL_OTHER_MANDAY' | translate }}</th>
+                                            <th>{{ 'INSPECTION_OCCUPANCY.LBL_TOTAL_ACTUAL_WDS' | translate }}</th>
+                                            <th>{{ 'INSPECTION_OCCUPANCY.LBL_MAX_CAPACITY' | translate }}</th>
+                                            <th *ngIf="masterModel.utilizationRate">{{
+                                                'INSPECTION_OCCUPANCY.LBL_UTILIZATION_RATE' | translate }}</th>
+                                            <th>{{ 'INSPECTION_OCCUPANCY.LBL_CONTRACT_END' | translate }}</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <ng-template ngFor let-iteminfo [ngForOf]="model.items" let-i="index">
+                                            <tr style="border-left: 5px solid #fff;">
+                                                <td> {{iteminfo.officeCountry}}</td>
+                                                <td>{{iteminfo.office}}</td>
+                                                <td class="wordbreak width-150 whitespacenormal sticky-left-column">
+                                                    <span class="number-badge"
+                                                        [class]="getStatusColor(iteminfo.inspectionOccupancyCategory)">
+                                                        {{iteminfo.name}}
+                                                    </span>
+                                                </td>
+                                                <td>{{iteminfo.employeeType}}</td>
+                                                <td *ngIf="model.employeeType===_EmployeeType.Outsource">
+                                                    {{iteminfo.outsourceCompany}}</td>
+                                                <td>{{iteminfo.joinDate}}</td>
+                                                <td>{{iteminfo.numberOfWds}}</td>
+                                                <td>{{iteminfo.maxWds}}</td>
+                                                <td>{{iteminfo.leaves}}</td>
+                                                <td>{{iteminfo.bankHolidays}}</td>
+                                                <td>{{iteminfo.otherManday}}</td>
+                                                <td>{{iteminfo.totalActualWds}}</td>
+                                                <td>{{iteminfo.maxCapacity}}</td>
+                                                <td *ngIf="masterModel.utilizationRate">{{iteminfo.utilizationRate}} %
+                                                </td>
+                                                <td>{{iteminfo.contractEnd}}</td>
+                                            </tr>
+                                        </ng-template>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <div class="pagination-container" *ngIf="(model && model.items && model.items.length>0)">
+                            <div class="page-count-list">
+                                <select class="small" [(ngModel)]="model.pageSize" (change)="search()">
+                                    <option *ngFor="let item of pagesizeitems" [ngValue]=item>{{item}}</option>
+                                </select>
+                                <span> Records per page</span>
+                            </div>
+                            <div class="pagination-action-container text-right">
+                                <ngb-pagination [pageSize]="model.pageSize" [collectionSize]="model.totalCount"
+                                    [boundaryLinks]="true" [(page)]="model.index" [maxSize]="5"
+                                    (pageChange)="onPager($event)">
+                                    <ng-template ngbPaginationFirst>
+                                        <img src="assets/images/new-set/double-arrow.svg" alt="">
+                                    </ng-template>
+                                    <ng-template ngbPaginationPrevious>
+                                        <img src="assets/images/new-set/single-arrow.svg" alt="" class="left-arrow">
+                                    </ng-template>
+                                    <ng-template ngbPaginationNext>
+                                        <img src="assets/images/new-set/single-arrow.svg" alt="" class="right-arrow">
+                                    </ng-template>
+                                    <ng-template ngbPaginationLast>
+                                        <img src="assets/images/new-set/double-arrow.svg" alt=""
+                                            class="right-most-arrow">
+                                    </ng-template>
+                                </ngb-pagination>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="master-body" *ngIf="model.noFound">
+                        <div class="error-container plain page-level">
+                            <img src="assets/images/no-result.svg" alt="" class="thumbnail">
+                            <h4 class="error-title">{{'INSPECTION_OCCUPANCY.MSG_NO_ITEM_FOUND' | translate}}</h4>
+                            <p class="error-subtitle">{{'INSPECTION_OCCUPANCY.LBL_NODATA' | translate}}</p>
+                            <button (click)="reset()" class="secondary-cta link to-primary text-transform-initial">
+                                {{'COMMON.MSG_CLEAR_SEARCH' | translate}}
+                            </button>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

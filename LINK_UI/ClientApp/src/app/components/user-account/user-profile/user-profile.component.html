@@ -1,0 +1,84 @@
+<div class="main-wrapper">
+    <div class="wrapper dashboard-wrapper">
+        <div class="my-container">
+            <div class="master-body">
+                <div class="title-container">
+                    <h3 class="main-title">{{'USER_PROFILE.TITLE' | translate}}</h3>
+                </div>
+                <div class="content-container">
+                    <h4 class="container-head">{{'USER_PROFILE.LBL_PERSINFO' | translate}}</h4>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="accordion-container">
+                                <div class="row marginTop25">
+                                    <div class="col-sm-6 col-md-6 col-lg-3 marginTop15">
+                                        <div class="profile-upload-thumb">
+                                            <img  *ngIf="!loadingPicture" src="assets/images/user-upload.svg" alt="User" style="width: 100px;" [src]="getUrl()" >
+                                             <i *ngIf="loadingPicture" style="margin-top:50px;width: 150px;"
+                                            class="fa fa-cog fa-spin fa-3x fa-fw"></i>
+                                            <button class="primary-cta small" (click)="getPicure()" >{{'EDIT_STAFF.LBL_UPLOAD' | translate}}</button>
+                                        </div>
+                                        <div>
+                                            <input style="display:none" id="fileInput" accept="image/x-png,image/gif,image/jpeg" type="file"
+                                              (change)="onSelectFile($event)" value="">
+                                          </div>
+                                    </div>
+                                    <div class="col-sm-6 col-md-6 col-lg-4  tablet-margin-top-15 mobile-margin-top-15">
+                                        <div class="my-input-group marginTop20">
+                                            <label for="">{{'EDIT_USER_ACCOUNT.LBL_USERNAME' | translate}}</label>
+                                            <input type="text" placeholder="User Name" [(ngModel)]="model.userName" disabled="true">
+                                        </div>
+                                        <div class="my-input-group marginTop20">
+                                            <label for="">{{'USER_PROFILE.LBL_EMAIL' | translate}}</label>
+                                            <input type="text" placeholder="Email Id" [(ngModel)]="model.emailId"
+                                            [ngClass]="{ 'is-invalid': !validator.isValid('emailId')}">
+                                            <div *ngIf="!validator.isValid('emailId')" class="invalid-feedback">
+                                                <div *ngFor="let error of validator.getErrors('emailId')">
+                                                  {{ error | translate }}
+                                                </div>
+                                              </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6 col-md-6 col-lg-4  tablet-margin-top-15 mobile-margin-top-15">
+                                        <div class="my-input-group marginTop20">
+                                            <label for="">{{'USER_PROFILE.LBL_DISPLAY_NAME' | translate}}</label>
+                                            <input type="text" placeholder="Display Name" [(ngModel)]="model.displayName"
+                                            [ngClass]="{ 'is-invalid': !validator.isValid('displayName')}">
+                                            <div *ngIf="!validator.isValid('displayName')" class="invalid-feedback">
+                                                <div *ngFor="let error of validator.getErrors('displayName')">
+                                                  {{ error | translate }}
+                                                </div>
+                                              </div>
+                                        </div>
+                                        <div class="my-input-group marginTop20">
+                                            <label for="">{{'EDIT_CUSTOMER.LBL_PHONE' | translate}}</label>
+                                            <input type="text" placeholder="Phone" [(ngModel)]="model.phone">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-action-container">
+                        <!-- <button class="secondary-cta" 
+                            (click)="modal.dismiss('Cross click');">{{ 'COMMON.LBL_CONFIRMCANCEL' | translate }}
+                        </button> -->
+                        <button class="primary-cta" [disabled]="saveLoader"
+                        (click)="save()">{{'QUOTATION.LBL_SAVE' | translate}}
+                            <span *ngIf="saveLoader">
+                                <i class="fa fa-refresh fa-spin" aria-hidden="true"></i>
+                            </span>
+                        </button>
+                        
+                    </div>
+                </div>
+            </div>
+            <div class="loader-overlay" *ngIf="pageLoader">
+                <div class="loader-container">
+                  <img src="assets/images/reload.svg" alt="">
+                  <span>{{'COMMON.LBL_LOADER' | translate}}</span>
+                </div>
+              </div>
+        </div>
+    </div>
+</div>

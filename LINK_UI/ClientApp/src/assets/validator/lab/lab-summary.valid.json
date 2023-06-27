@@ -1,0 +1,13 @@
+{
+  "model": "labsummary.model",
+  "fields": {
+    "labTypeValues": [
+      {
+        "type": "required",
+        "fieldType": "A",
+        "ressource": "LAB_SUMMARY.MSG_TYPES_REQ"
+      }
+    ]
+  }
+
+}

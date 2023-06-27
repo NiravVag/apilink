@@ -1,0 +1,31 @@
+{
+  "model": "staffToRemove.model",
+  "fields": {
+    "leaveDate": [
+      {
+        "type": "required",
+        "fieldType": "D",
+        "ressource": "STAFF_SUMMARY.MSG_LEAVEDATE_REQ"
+      },
+      {
+        "type": "date",
+        "ressource": "STAFF_SUMMARY.MSG_LEAVEDATE_DATE"
+      }
+    ],
+    "reason": [
+      {
+        "type": "required",
+        "fieldType": "T",
+        "ressource": "STAFF_SUMMARY.MSG_REASON_REQ"
+      }
+    ],
+    "statusId": [
+      {
+        "type": "required",
+        "fieldType": "N",
+        "ressource": "STAFF_SUMMARY.MSG_STATUS_REQ"
+      }
+    ]
+  }
+
+}

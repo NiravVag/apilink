@@ -1,0 +1,57 @@
+{
+    "model": "edit-supplier.model",
+    "fields": {
+        "name": [{
+            "type": "required",
+            "fieldType": "T",
+            "ressource": "EDIT_SUPPLIER.MSG_NAME_REQ"
+        }],
+        "typeId": [{
+            "type": "required",
+            "fieldType": "N",
+            "ressource": "EDIT_SUPPLIER.MSG_TYPE_REQ"
+        }],
+        "email": [{
+                "type": "required",
+                "fieldType": "T",
+                "ressource": "EDIT_SUPPLIER.MSG_EMAIL_REQ"
+            },
+            {
+                "type": "email",
+                "ressource": "EDIT_SUPPLIER.MSG_EMAIL_EMAIL"
+            }
+        ],
+        "contactPersonName": [{
+            "type": "required",
+            "fieldType": "T",
+            "ressource": "EDIT_SUPPLIER.MSG_CONTACT_REQ"
+        }],
+        "status": [{
+            "type": "required",
+            "fieldType": "N",
+            "ressource": "EDIT_SUPPLIER.MSG_STATUS_REQ"
+        }],
+        "apiServiceIds": [{
+            "type": "required",
+            "fieldType": "N",
+            "ressource": "API_SERVICE.MSG_API_SERVICE_REQ"
+        }],
+        "supplierParentList": [{
+            "type": "required",
+            "fieldType": "N",
+            "ressource": "EDIT_SUPPLIER.MSG_SUPPLIERPARENT_REQ"
+        }],
+        "supplierEntityIds": [{
+            "type": "required",
+            "fieldType": "N",
+            "ressource": "EDIT_SUPPLIER.MSG_ENTITY_REQ"
+        }],
+        "companyId": [
+            {
+              "type": "required",
+              "fieldType": "N",
+              "ressource": "EDIT_SUPPLIER.MSG_COMPANY_REQ"
+            }
+          ]
+    }
+}

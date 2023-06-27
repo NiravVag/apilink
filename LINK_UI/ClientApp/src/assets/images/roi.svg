@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+    <defs>
+        <style>
+            .cls-2,.cls-3{fill:none;stroke:#9299b0;stroke-linecap:round;stroke-linejoin:round}.cls-3{stroke-width:.8px}
+        </style>
+    </defs>
+    <g id="Group_17880" transform="translate(-237 -631)">
+        <path id="Rectangle_5410" fill="none" d="M0 0H24V24H0z" transform="translate(237 631)"/>
+        <g id="Group_17878">
+            <g id="rotate-ccw" transform="translate(238 633)">
+                <path id="Path_8688" d="M0 4.812L.5 0l4.193.541" class="cls-2" transform="translate(3.039 6.665) rotate(-127)"/>
+                <path id="Path_8689" d="M0 6.682A9.974 9.974 0 0 1 9.9.016 9.867 9.867 0 1 1 2.358 16.85" class="cls-2" transform="translate(2.548 -0.664)"/>
+            </g>
+            <g id="dollar-sign_1_" transform="translate(246.866 636.839)">
+                <path id="Line_728" d="M0 0L0 12.06" class="cls-3" transform="translate(3.289 0)"/>
+                <path id="Path_8690" d="M11.842 5H7.859a1.859 1.859 0 0 0 0 3.718h2.655a1.859 1.859 0 0 1 0 3.718H6" class="cls-3" transform="translate(-6 -2.876)"/>
+            </g>
+        </g>
+    </g>
+</svg>

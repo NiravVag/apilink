@@ -1,0 +1,80 @@
+﻿@using DTO.Common; 
+@{
+    ViewData["Title"] = "StokomaniQcPerformanceBreakdownTemplate";
+}
+
+@model DTO.Kpi.ExportResult
+
+<xls-sheet name="Qc Performance Breakdown">
+    <table xls-begin="A:1" style="border-style:solid">
+        <tr style="background-color:#f5f5f5;font-weight:bold;text-align:center">
+            <th>Date from</th>
+            <th>Date To</th>
+            <th>PROVINCE</th>
+            <th>CITY/COUNTY</th>
+            <th>WHO</th>
+            <th>WHAT</th>
+            <th>SUPPLIER CODE</th>
+            <th>SUPPLIER NAME</th>
+            <th>PRODUCT NAME</th>
+            <th>ORDER NO.</th>
+            <th>ITEM QTY</th>
+            <th>INSPECTION/ AUDIT RESULT</th>
+            <th>CONCLUSION</th>
+            <th>3RD PARTY REPORT NUMBER</th>
+            <th>COMMENTS</th>
+            <th style="text-align:center">MANDAY</th>
+            <th style="text-align:center">NBR/PERSONS</th>
+            <th>PLANE FEES </th>
+            <th>HOTEL FEES</th>
+            <th>TRAIN/BUS FEES</th>
+            <th>TAXI FEES</th>
+            <th>FOOD FEES</th>
+            <th style="text-align:center">3RD PARTY HOTEL FEE</th>
+            <th style="text-align:center">3RD PARTY TRAVELING COST</th>
+            <th style="text-align:center">3RD PARTY OTHER COST</th>
+            <th style="text-align:center">AMOUNT</th>
+            <th>Merchandiser</th>
+            <th>TOTAL</th>
+            <th style="text-align:center">Total in USD</th>
+            <th>Paid by</th>
+        </tr>
+
+        @foreach (var item in Model.Data)
+        {
+        <tr>
+            <td width="150px" xls-type="date" xls-format="@ApiCommonData.StandardDateFormat">@item.InspectionStartDate</td>
+            <td width="250px" xls-type="date" xls-format="@ApiCommonData.StandardDateFormat">@item.InspectionEndDate</td>
+            <td width="150px">@Html.Raw(@item.FactoryState)</td>
+            <td width="150px">@Html.Raw(@item.FactoryCity)</td>
+            <td width="150px">API</td>
+            <td width="150px">@item.InspectionName</td>
+            <td width="150px">@item.SupplierCode</td>
+            <td width="150px">@Html.Raw(@item.SupplierName)</td>
+            <td width="150px">@Html.Raw(@item.ProductDescription)</td>
+            <td width="250px">@Html.Raw(@item.PONumber)</td>
+            <td width="150px" xls-type="number" style="text-align:center">@item.ProductCount</td>
+            <td width="150px">@item.ReportResult</td>
+            <td></td>
+            <td width="150px" xls-type="number" style="text-align:center">@item.BookingNo</td>
+            <td></td>
+            <td width="150px" xls-type="number" style="text-align:center">@item.ManDay</td>
+            <td width="150px" xls-type="number" style="text-align:center">@item.QcCount</td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td width="150px" xls-type="number" style="text-align:center">@item.HotelFee</td>
+            <td width="150px" xls-type="number" style="text-align:center">@item.TravellingCost</td>
+            <td width="150px"></td>
+            <td width="150px" xls-type="number" style="text-align:center">@item.InspectionFee</td>
+            <td width="150px">@item.Merchandise</td>
+            <td></td>
+            <td width="150px" xls-type="number" style="text-align:center">@item.TotalInspectionFee</td>
+            <td width="250px">@item.PaidBy</td>
+        </tr>
+        }
+    </table>
+</xls-sheet>
+

@@ -1,0 +1,126 @@
+﻿@{
+    ViewData["Title"] = "TravelTariffSendEmail";
+}
+
+@model DTO.ScheduleJob.QcExpenseEmailResponse
+
+<style>
+    .th-table {
+        color: black;
+        vertical-align: top;
+        font-size: 13px;
+        font-family: tahoma;
+    }
+
+    .td-table {
+        font-size: 13px;
+        font-family: tahoma;
+    }
+</style>
+<table>
+    <tr>
+        <td style="font-size:13px; font-family:tahoma;">
+            Dear @Model.QcExpenseEmailList.FirstOrDefault().QcName,  Refer next day inspection assignment details
+            <br /><br />
+
+            <table id='TblList' style="border:solid 1px #d4d0c8;border-collapse:collapse;font-size:12px;
+                 font-family:tahoma;" cellspacing='0' cellpadding='1' rules='all' align='left' border='1' width='100%'>
+                <tr>
+                    <th bgcolor=#f8f4f3 style="color: black; font-size:13px;" align=center width='10%' height=35>Customer</th>
+                    <th bgcolor=#f8f4f3 style="color: black; font-size:13px;" align=center width='10%' height=35>Booking No</th>
+                    <th bgcolor=#f8f4f3 style="color: black; font-size:13px;" align=center width='10%' height=35>Order Qty</th>
+                    <th bgcolor=#f8f4f3 style="color: black; font-size:13px;" align=center width='10%' height=35>Service Type</th>
+                    <th bgcolor=#f8f4f3 style="color: black; font-size:13px;" align=center width='20%' height=35>Factory Address</th>
+                    <th bgcolor=#f8f4f3 style="color: black; font-size:13px;" align=center width='10%' height=35>Travel Fee (@Model.QcExpenseEmailList.FirstOrDefault().Currency)</th>
+                    <th bgcolor=#f8f4f3 style="color: black; font-size:13px;" align=center width='10%' height=35>Trip Mode</th>
+                    <th bgcolor=#f8f4f3 style="color: black; font-size:13px;" align=center width='20%' height=35>Travel Port From</th>
+                    <th bgcolor=#f8f4f3 style="color: black; font-size:13px;" align=center width='20%' height=35>Travel Port To</th>
+                    <th bgcolor=#f8f4f3 style="color: black; font-size:13px;" align=center width='10%' height=35>Food Allowance (@Model.QcExpenseEmailList.FirstOrDefault().Currency)</th>
+
+                </tr>
+                @{
+                    int i = 1;
+
+                    @foreach (var item in Model.QcExpenseEmailList)
+                    {
+                        <tr>
+                            <td align=center style="font-size: 12px;" height=30>
+                                @item.CustomerName
+                            </td>
+                            <td align=center style="font-size: 12px;" height=30>
+                                @item.BookingId
+                            </td>
+                            <td align=center style="font-size: 12px;" height=30>
+                                @item.OrderQty
+                            </td>
+                            <td align=center style="font-size: 12px;" height=30>
+                                @item.ServiceType
+                            </td>
+                            <td align=center style="font-size: 12px;" height=30>
+                                @item.FactoryENAddress +  @item.FactoryLocalAddress
+                            </td>
+                            <td  align=center style="font-size: 12px;color:red" height=30>
+                                @item.TravelFee
+                            </td>
+                            <td align=center style="font-size: 12px;" height=30>
+                                @item.TripMode
+                            </td>
+                            <td align=center style="font-size: 12px;" height=30>
+                                @item.StartPort
+                            </td>
+                            <td align=center style="font-size: 12px;" height=30>
+                                @item.EndPort
+                            </td>
+
+                            @if (i == 1)
+                            {
+                                 <td align=center rowspan="@Model.QcExpenseEmailList.Count" style="font-size: 12px; color: red" height=30>
+                                    @Model.QcExpenseEmailList.Where(x => x.FoodAllowance > 0).FirstOrDefault()?.FoodAllowance
+                                </td>
+                            }
+                        </tr>
+                        i += 1;
+                    }
+                }
+
+            </table>
+        </td>
+    </tr>
+
+    <tr>
+        <td class="td-table">
+            <br />
+
+            <div style="padding-bottom: 5px; margin-bottom:5px;">
+                If you cannot find a corresponding route on the Annex 1, then you should report to Accounting department for the actual expense happened with valid ticket within one week. After verified by accounting department, the expense will be fixed as a new rule for future inspections.
+            </div>
+            <br />
+
+            <div style="padding-bottom: 5px; margin-bottom:5px;">
+                如果你在附表1 中找不到相应的费用路线，你应该在费用产生后的一星期内将实际发生的费用通知财务部，同时提交正式的有效票据。财务部通过核实后，将生成新的路线费用标准。
+            </div>
+            <br />
+
+            <div style="padding-bottom: 5px; margin-bottom:5px;">
+                If any questions related to above Inspection assignment, please contact related office Schedule In charge or Planning Manager.
+            </div>
+            <br />
+
+            @if (Model.QcExpenseEmailList.FirstOrDefault().IsChinaCountry)
+            {
+            <div style="padding-bottom: 5px; margin-bottom:5px;">
+                If the above inspection arrangement is scheduled on Saturday or Sunday, the company will arrange compensation leave in priority. The working days are not scheduled inspection are considered as compensation leave for Saturday or Sunday inspection (no need to apply by inspector).
+            </div>
+            <br />
+            }
+            <div style="padding-bottom: 5px; margin-bottom:5px;">
+                Thanks
+            </div>
+            <div style="padding-bottom: 5px; margin-bottom:5px;">
+                IT-Team
+            </div>
+            <br /><br />
+            <span style="font-style:italic"> Note: - This receipt is auto generated from Link. Please do not reply to email.</span>
+        </td>
+    </tr>
+</table>

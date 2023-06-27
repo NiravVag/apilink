@@ -1,0 +1,693 @@
+<div class="main-wrapper">
+    <div class="wrapper dashboard-wrapper">
+        <div class="dashboard-body customer-dashboard-body dashbaord-placeholder-container">
+            <div class="filter-container" [@expandCollapse]="isFilterOpen ? 'open' : 'close'" [@.disabled]="isMobile">
+                <div class="my-dashboard-container customer-dashboard-mobile-filte">
+                    <div class="row">
+                        <div class="col-sm-3 mobile-margin-top-15">
+                            <div class="my-input-group">
+                                <label for="">{{ 'BOOKING_SUMMARY.LBL_CUSTOMER' | translate }}</label>
+                                <ng-select appendTo="body" [items]="auditDashboardMasterData.customerList"
+                                    [virtualScroll]="true" [loading]="auditDashboardMasterData.customerLoading"
+                                    bindLabel="name" bindValue="id" [clearable]="false"
+                                    placeholder="--- {{ (auditDashboardMasterData.customerList!=null && auditDashboardMasterData.customerList!=0? 'BOOKING_SUMMARY.LBL_SELECT':'BOOKING_SUMMARY.MSG_NO_DATA' ) | translate }} ---"
+                                    [typeahead]="auditDashboardMasterData.customerInput" [minTermLength]="3"
+                                    [(ngModel)]="model.customerid" [multiple]="false"
+                                    (scrollToEnd)="getCustomerData(true)" (change)="changeCustomerData($event)" #select>
+                                    <ng-template ng-option-tmp let-item="item">
+                                        <div class="text-wrap"><span>{{item.name}}</span></div>
+                                    </ng-template>
+                                </ng-select>
+                            </div>
+                        </div>
+                        <div class="col-sm-3 mobile-margin-top-15">
+                            <div class="my-input-group">
+                                <label for="">{{ 'BOOKING_SUMMARY.LBL_SUPPLIER' | translate }}</label>
+                                <ng-select appendTo="body" [items]="auditDashboardMasterData.supplierList"
+                                    [virtualScroll]="true" [loading]="auditDashboardMasterData.supLoading"
+                                    bindLabel="name" bindValue="id"
+                                    placeholder="--- {{ (auditDashboardMasterData.supplierList!=null && auditDashboardMasterData.supplierList.length!=0? 'BOOKING_SUMMARY.LBL_SELECT':'BOOKING_SUMMARY.MSG_NO_DATA' ) | translate }} ---"
+                                    [typeahead]="auditDashboardMasterData.supInput" [minTermLength]="3"
+                                    [(ngModel)]="model.supplierid" [multiple]="false"
+                                    (scrollToEnd)="getSupplierData(true)" (change)="supplierChange($event)" #select>
+                                    <ng-template ng-option-tmp let-item="item">
+                                        <div class="text-wrap"><span>{{item.name}}</span></div>
+                                    </ng-template>
+                                </ng-select>
+                            </div>
+                        </div>
+                        <div class="col-sm-3 mobile-margin-top-15">
+                            <div class="my-input-group">
+                                <label for="">{{ 'BOOKING_SUMMARY.LBL_FACTORY' | translate }}</label>
+                                <ng-select appendTo="body" [items]="auditDashboardMasterData.factoryList"
+                                    [virtualScroll]="true" [loading]="auditDashboardMasterData.factLoading"
+                                    bindLabel="name" bindValue="id"
+                                    placeholder="--- {{ (auditDashboardMasterData.factoryList!=null && auditDashboardMasterData.factoryList.length!=0? 'BOOKING_SUMMARY.LBL_SELECT':'BOOKING_SUMMARY.MSG_NO_DATA' ) | translate }} ---"
+                                    [typeahead]="auditDashboardMasterData.factInput" [minTermLength]="3"
+                                    [(ngModel)]="model.factoryidlst" [multiple]="true" class="multiple"
+                                    (scrollToEnd)="getFactoryData(true)" (change)="factoryChange($event)" #select>
+                                    <ng-template ng-option-tmp let-item="item">
+                                        <div class="text-wrap"><span>{{item.name}}</span></div>
+                                    </ng-template>
+                                    <ng-template ng-multi-label-tmp let-items="model.factoryidlst" let-clear="clear">
+                                        <div class="ng-value"
+                                            *ngIf="model.factoryidlst && model.factoryidlst.length > 0">
+                                            <span class="ng-value-label">{{model.factoryidlst.length}}
+                                                {{'MANDAY_UTILIZATION_DASHBOARD.LBL_SELECTED' | translate }}</span>
+                                        </div>
+                                    </ng-template>
+                                </ng-select>
+                            </div>
+                        </div>
+                        <div class="col-sm-3 mobile-margin-top-15">
+                            <div class="my-input-group">
+                                <label for="">{{ 'CUSTOMER_PRICE_CARD_SUMMARY.LBL_FACTORY_COUNTRY' | translate}}</label>
+                                <ng-select appendTo="body" [items]="auditDashboardMasterData.countryList"
+                                    [virtualScroll]="true" [loading]="auditDashboardMasterData.countryLoading"
+                                    bindLabel="name" bindValue="id"
+                                    placeholder="--- {{ (auditDashboardMasterData.countryList!=null && auditDashboardMasterData.countryList.length!=0? 'BOOKING_SUMMARY.LBL_SELECT':'BOOKING_SUMMARY.MSG_NO_DATA' ) | translate }} ---"
+                                    [typeahead]="auditDashboardMasterData.countryInput" [minTermLength]="3"
+                                    [(ngModel)]="model.factoryCountryIdList" [multiple]="true" class="multiple"
+                                    (scrollToEnd)="getCountryData(true)" (change)="countryChange($event)" #select>
+                                    <ng-template ng-option-tmp let-item="item" let-index="index"
+                                        let-search="searchTerm">
+                                        <span>{{item.name}}</span>
+                                    </ng-template>
+                                    <ng-template ng-multi-label-tmp let-items="model.factoryCountryIdList"
+                                        let-clear="clear">
+                                        <div class="ng-value"
+                                            *ngIf="model.factoryCountryIdList && model.factoryCountryIdList.length > 0">
+                                            <span class="ng-value-label">{{model.factoryCountryIdList.length}}
+                                                {{'MANDAY_UTILIZATION_DASHBOARD.LBL_SELECTED' | translate }}</span>
+                                        </div>
+                                    </ng-template>
+                                </ng-select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-3 mobile-margin-top-15">
+                            <div class="my-input-group">
+                                <label for="">{{'MANDAY_DASHBOARD.LBL_OFFICE' | translate }}</label>
+                                <ng-select [items]="auditDashboardMasterData.officeList" bindLabel="name" bindValue="id"
+                                    [hideSelected]="false" [loading]="auditDashboardMasterData.officeLoading"
+                                    [clearable]="true" [searchable]="true" [multiple]="true" class="multiple"
+                                    appendTo="body"
+                                    placeholder="--- {{ (auditDashboardMasterData.officeList && auditDashboardMasterData.officeList.length>0? 'MANDAY_DASHBOARD.LBL_OFFICE':'COMMON.LBL_NO_DATA') | translate }} ---"
+                                    [(ngModel)]="model.officeidlst" (change)="changeOffice($event)">
+                                    <ng-template ng-option-tmp let-item="item">
+                                        <div class="text-wrap">{{ item.name }}</div>
+                                    </ng-template>
+                                    <ng-template ng-multi-label-tmp let-items="model.officeidlst" let-clear="clear">
+                                        <div class="ng-value" *ngIf="model.officeidlst && model.officeidlst.length > 0">
+                                            <span class="ng-value-label">{{model.officeidlst.length}}
+                                                {{'MANDAY_UTILIZATION_DASHBOARD.LBL_SELECTED' | translate }}
+                                            </span>
+                                        </div>
+                                    </ng-template>
+                                </ng-select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row marginTop25">
+                        <div class="col-12 col-sm-12 text-right mt-3 mt-sm-0">
+                            <div class="mobile-hide">
+                                <button class="primary-cta small" (click)="search()" [disabled]="searchloading">
+                                    {{'COMMON.LBL_SEARCH' | translate }}
+                                    <span *ngIf="searchloading">
+                                        <i class="fa fa-refresh fa-spin" aria-hidden="true"></i>
+                                    </span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="filter-bar-container" *ngIf="auditDashboardMasterData.filterDataShown">
+                <div class="my-dashboard-container" *ngIf="!isMobile">
+                    <p class="heading">
+                        {{'CUSTOMER_DASHBOARD.LBL_DATA_SHOWING' | translate}}
+                    </p>
+                    <ul class="applied-filter-list">
+                        <li *ngIf="model.fromdate">
+                            {{'EXCHANGE_RATE.LBL_FROMDATE' | translate}} :
+                            {{model.fromdate.day}}/
+                            {{model.fromdate.month}}/
+                            {{model.fromdate.year}}
+                            <span *ngIf="model.todate" class="ml-2">
+                                {{'EXCHANGE_RATE.LBL_TODATE' | translate}} :
+                                {{model.todate.day}}/
+                                {{model.todate.month}}/
+                                {{model.todate.year}}
+                            </span>
+                        </li>
+                        <li *ngIf="auditDashboardMasterData.customerName">
+                            {{ 'BOOKING_SUMMARY.LBL_CUSTOMER' | translate }} :
+                            {{auditDashboardMasterData.customerName}}
+                        </li>
+                        <li *ngIf="auditDashboardMasterData.supplierName">{{ 'BOOKING_SUMMARY.LBL_SUPPLIER' | translate
+                            }}
+                            :
+                            {{auditDashboardMasterData.supplierName}}
+                        </li>
+                        <li
+                            *ngIf="auditDashboardMasterData.factoryNameList && auditDashboardMasterData.factoryNameList.length >0">
+                            {{ 'BOOKING_SUMMARY.LBL_FACTORY' | translate}} :
+                            <!-- {{dashBoardFilterMaster.factoryName}} -->
+                            <span
+                                *ngFor="let item of auditDashboardMasterData.factoryNameList;let i=index;  let isLast=last"><label
+                                    *ngIf="i < 3">{{item}}{{isLast ? '' : ', '}}</label></span>
+                            <label *ngIf="auditDashboardMasterData.factoryNameList.length > 3">...</label>
+                        </li>
+                        <li
+                            *ngIf="auditDashboardMasterData.countryNameList && auditDashboardMasterData.countryNameList.length >0">
+                            {{ 'EDIT_CUSTOMER.LBL_COUNTRY' | translate}} :
+                            <!-- {{dashBoardFilterMaster.factoryName}} -->
+                            <span
+                                *ngFor="let item of auditDashboardMasterData.countryNameList;let i=index; let isLast=last"><label
+                                    *ngIf="i < 3">{{item}}{{isLast ? '' : ', '}}</label></span>
+                            <label *ngIf="auditDashboardMasterData.countryNameList.length > 3">...</label>
+                        </li>
+                        <li
+                            *ngIf="auditDashboardMasterData.officeNameList && auditDashboardMasterData.officeNameList.length >0">
+                            {{ 'MANDAY_DASHBOARD.LBL_OFFICE' | translate}} :
+                            <!-- {{dashBoardFilterMaster.factoryName}} -->
+                            <span
+                                *ngFor="let item of auditDashboardMasterData.officeNameList;let i=index;  let isLast=last"><label
+                                    *ngIf="i < 3">{{item}}{{isLast ? '' : ', '}}</label></span>
+                            <label *ngIf="auditDashboardMasterData.officeNameList.length > 3">...</label>
+                        </li>
+                    </ul>
+                    <div class="filter-reset-cta" (click)="cancelFilter()">
+                        <img src="assets/images/reset-white.svg" alt="">
+                        {{'CUSTOMER_DASHBOARD.LBL_RESET' | translate}}
+                    </div>
+                    <div class="my-dashboard-container" *ngIf="isMobile">
+                        <p class="heading">
+                            {{auditDashboardMasterData.filterCount}} {{'CUSTOMER_DASHBOARD.LBL_FILTER_SELECTED' |
+                            translate}}
+                        </p>
+                        <div class="filter-reset-cta" (click)="cancelFilter()">
+                            <img src="assets/images/reset-white.svg" alt="">
+                            {{'CUSTOMER_DASHBOARD.LBL_RESET' | translate}}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="map-overlay-container dashbaord-placeholder-container">
+                <div class="my-dashboard-container">
+                    <div class="filter-control-container" *ngIf="(!showFactoryResult && isMobile) || !isMobile">
+                        <div class="calendar-input-container">
+                            <div class="calendar-value" (click)="datepicker.toggle()">
+                                {{'SCHEDULE_SUMMARY.LBL_SEARCHDATE_FROM' | translate}}: <span
+                                    class="date">{{formatter.format(model.fromdate)}}</span>
+                                {{'SCHEDULE_SUMMARY.LBL_SEARCHDATE_TO' | translate}}: <span
+                                    class="date">{{formatter.format(model.todate)}}</span>
+                            </div>
+                            <img src="assets/images/cta-calendar-grey.svg" alt="" class="icon"
+                                (click)="datepicker.toggle()">
+                            <input class="calendar-input" name="datepicker" ngbDatepicker #datepicker="ngbDatepicker"
+                                [autoClose]="'outside'" (dateSelect)="onDateSelection($event, false)"
+                                [displayMonths]="2" [dayTemplate]="t" outsideDays="hidden" [startDate]="model.fromdate">
+                            <ng-template #t let-date let-focused="focused">
+                                <span class="custom-day" [class.focused]="focused" [class.range]="isRange(date)"
+                                    [class.faded]="isHovered(date) || isInside(date)" (mouseenter)="hoveredDate = date"
+                                    (mouseleave)="hoveredDate = null">
+                                    {{ date.day }}
+                                </span>
+                            </ng-template>
+                            <input class="d-none" #dpFromDate name="dpFromDate"
+                                [value]="formatter.format(model.fromdate)"
+                                (input)="model.fromdate = validateInput(model.fromdate, dpFromDate.value)"
+                                (click)="datepicker.toggle()">
+                            <input class="d-none" #dpToDate name="dpToDate" [value]="formatter.format(model.todate)"
+                                (input)="model.todate = validateInput(model.todate, dpToDate.value)"
+                                (click)="datepicker.toggle()">
+                        </div>
+                        <div class="filter-cta search-cta ml-0" (click)="openSearchBox($event)" #searchTrigger
+                            hidden="true">
+                            <ng-container *ngIf="!searchActive; else CloseButton">
+                                <img src="assets/images/cta-search-grey.svg" alt="">
+                            </ng-container>
+                            <ng-template #CloseButton>
+                                <img src="assets/images/cta-close-grey.svg" alt="">
+                            </ng-template>
+                        </div>
+                        <div class="filter-cta" *ngIf="!isFilterOpen" (click)="toggleFilter(false)">
+                            <img src="assets/images/cta-filter-grey.svg" alt="">
+                        </div>
+                        <div class="filter-cta filter-active" *ngIf="isFilterOpen" (click)="toggleFilter(false)">
+                            <img src="assets/images/cta-close-white.svg" alt="">
+                        </div>
+                    </div>
+                </div>
+                <div class="customer-map-placeholder-container mb-4" *ngIf="mapLoading"></div>
+                <div class="map-container" id="mapView" [style.height.px]="mapHeight" *ngIf="!mapLoading"></div>
+            </div>
+            <div class="my-dashboard-container">
+                <div class="dashboard-body customer-dashboard-body dashbaord-placeholder-container">
+                    <div class="row mandays-dashboard-container management-dashboard mt-4">
+                        <div class="col-sm-12">
+                            <div class="dashboard-stats-card">
+                                <img src="assets/images/dashboard-inspection.svg" alt="icon">
+                                <div class="info">
+                                    <p class="card-title">{{ 'AUIDT_SUMMARY.LBL_AUDIT_IN_PROGRESS' | translate }}</p>
+                                    <div class="value item-value">
+                                        <p class="card-number">
+                                            {{auditDashboardMasterData.auditDashboardCount.totalAuditInProgressCount}}
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="dashboard-stats-card">
+                                <img src="assets/images/dashboard-mandays.svg" alt="icon">
+                                <div class="info">
+                                    <p class="card-title">{{ 'AUIDT_SUMMARY.LBL_AUDIT_PLANNING' | translate }}</p>
+                                    <div class="value">
+                                        <p class="card-number">
+                                            {{auditDashboardMasterData.auditDashboardCount.totalAuditPlanningCount}}
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="dashboard-stats-card">
+                                <img src="assets/images/dashboard-audit.svg" alt="icon">
+                                <div class="info">
+                                    <p class="card-title">{{ 'AUIDT_SUMMARY.LBL_AUDIT_AUDITED' | translate }}</p>
+                                    <div class="value">
+                                        <p class="card-number">
+                                            {{auditDashboardMasterData.auditDashboardCount.totalAuditedCount}}</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="dashboard-stats-card">
+                                <img src="assets/images/dashboard-report.svg" alt="icon">
+                                <div class="info">
+                                    <p class="card-title">{{'AUIDT_SUMMARY.LBL_FACTORY' | translate}}</p>
+                                    <div class="value">
+                                        <p class="card-number">
+                                            {{auditDashboardMasterData.auditDashboardCount.totalFactoryCount}}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row customer-dashboard-graph-wrapper">
+                        <div
+                            class="col-sm-4 col-md-12 col-lg-12 col-xl-4 grid-column mobile-margin-top-15 tablet-margin-top-15">
+                            <ng-container
+                                *ngIf="auditDashboardLoader.serviceTypeDashboardLoading; else ServiceTypeResult">
+                                <div class="dashboard-graph-container">
+                                    <div class="common-graph-placeholder">
+                                        <img src="assets/images/donut-placeholder.png" alt="graph">
+                                        <div class="content-container">
+                                            <div class="rect animate"></div>
+                                            <div class="rect animate width80"></div>
+                                            <div class="rect animate width50"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </ng-container>
+                            <ng-template #ServiceTypeResult>
+                                <div class="error-container"
+                                    *ngIf="auditDashboardLoader.serviceTypeDashboardError; else ServiceTypeData">
+                                    <img src="assets/images/went-wrong.svg" alt="" class="thumbnail">
+                                    <h4 class="error-title">{{ 'ERROR.MSG_ERROR_TITLE' | translate }}</h4>
+                                    <p class="error-subtitle">
+                                        {{'CUSTOMER_DASHBOARD.LBL_UNAUTHORISED_ACCESS' | translate}}</p>
+                                </div>
+                                <ng-template #ServiceTypeData>
+                                    <div class="error-container dashboard-graph-container" *ngIf="!dataFound.serviceTypeDashboardDataFound">
+                                        <div class="new-graph-head text-center text-sm-left">
+                                            <div class="graph-title-container">
+                                                <h3 class="title">
+                                                    {{'MANAGEMENT_DASHBOARD.SERVICE_TYPE_OVERVIEW' | translate }}</h3>
+                                            </div>
+                                        </div>
+                                        <img src="assets/images/no-result.svg" alt="" class="thumbnail">
+                                        <h4 class="error-title">{{ 'MANDAY_DASHBOARD.LBL_NO_DATA_FOUND' | translate }}
+                                        </h4>
+                                        <p class="error-subtitle">{{'CUSTOMER_DASHBOARD.LBL_NO_DATA' | translate}}</p>
+                                    </div>
+                                    <div class="dashboard-graph-container"
+                                        *ngIf="dataFound.serviceTypeDashboardDataFound">
+                                        <div class="new-graph-head text-center text-sm-left">
+                                            <div class="graph-title-container">
+                                                <h3 class="title">
+                                                    {{'MANAGEMENT_DASHBOARD.SERVICE_TYPE_OVERVIEW' | translate }}</h3>
+                                            </div>
+                                            <button class="secondary-cta x-small"
+                                                [disabled]="auditDashboardLoader.serviceTypeExportLoading || (auditDashboardMasterData.serviceTypeDashboard && auditDashboardMasterData.serviceTypeDashboard.length==0)"
+                                                (click)="getServiceTypeExport()">
+                                                {{'COMMON.LBL_EXPORT' | translate }}
+                                            </button>
+                                        </div>
+                                        <div class="row graph-body">
+                                            <div class="col-md-12 col-lg-12 col-xl-7 mb-3 mb-xl-0">
+                                                <div id="chartdiv-circle3" style="width: 100%; height: 164px">
+                                                </div>
+                                            </div>
+                                            <div class="col-md-12 col-lg-12 col-xl-5 vertical-center">
+                                                <div class="legend-wrapper two-column">
+                                                    <div class="legend-item"
+                                                        *ngFor="let item of auditDashboardMasterData.serviceTypeDashboard | slice:0:5;">
+                                                        <div class="label">
+                                                            <span class="tile"
+                                                                [ngStyle]="{'background-color':item.statusColor }">
+                                                            </span>
+                                                            <span class="text common-tooltip"
+                                                                [attr.data-tooltip]="item.statusName">{{item.name}}</span>
+                                                        </div>
+                                                        <span class="count">{{item.totalCount}}</span>
+                                                    </div>
+                                                    <div class="legend-item"
+                                                        *ngIf="auditDashboardMasterData.serviceTypeDashboard.length>5">
+                                                        <div class="label has-dropdown">
+                                                            <span class="link">
+                                                                {{ 'CUSTOMER_DASHBOARD.LBL_SHOW' | translate }}
+                                                                {{auditDashboardMasterData.serviceTypeDashboard.length -
+                                                                5}}
+                                                                {{ 'CUSTOMER_DASHBOARD.LBL_MORE' | translate }}</span>
+                                                            <div class="cta-dropdown top-right min-width-230">
+                                                                <div class="legend-wrapper two-column">
+                                                                    <div class="legend-item"
+                                                                        *ngFor="let item of auditDashboardMasterData.serviceTypeDashboard | slice:5:auditDashboardMasterData.serviceTypeDashboard.length;">
+                                                                        <div class="label">
+                                                                            <span class="tile"
+                                                                                [ngStyle]="{'background-color':item.statusColor }">
+                                                                            </span><span class="text common-tooltip"
+                                                                                [attr.data-tooltip]="item.statusName">{{item.name}}</span>
+                                                                        </div>
+                                                                        <span class="count">{{item.totalCount}}</span>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </ng-template>
+                            </ng-template>
+                        </div>
+
+                        <div
+                            class="col-sm-4 col-md-6 col-lg-6 col-xl-4 grid-column mobile-margin-top-15 tablet-margin-top-15">
+                            <ng-container *ngIf="auditDashboardLoader.overviewChartLoading; else OverviewResult">
+                                <div class="dashboard-graph-container">
+                                    <div class="common-graph-placeholder">
+                                        <img src="assets/images/donut-placeholder.png" alt="graph">
+                                        <div class="content-container">
+                                            <div class="rect animate"></div>
+                                            <div class="rect animate width80"></div>
+                                            <div class="rect animate width50"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </ng-container>
+                            <ng-template #OverviewResult>
+                                <div class="error-container"
+                                    *ngIf="auditDashboardLoader.overviewChartError; else OverviewData">
+                                    <img src="assets/images/went-wrong.svg" alt="" class="thumbnail">
+                                    <h4 class="error-title">{{ 'ERROR.MSG_ERROR_TITLE' | translate }}</h4>
+                                    <p class="error-subtitle">
+                                        {{'CUSTOMER_DASHBOARD.LBL_UNAUTHORISED_ACCESS' | translate}}</p>
+                                </div>
+                                <ng-template #OverviewData>
+                                    <div class="error-container dashboard-graph-container" *ngIf="!dataFound.overviewDataFound">
+                                        <div class="new-graph-head text-center text-sm-left align-items-center">
+                                            <div class="graph-title-container">
+                                                <h3 class="title">{{'TCF_DASHBOARD.LBL_OVERVIEW' | translate}}</h3>
+                                            </div>
+                                        </div>
+                                        <img src="assets/images/no-result.svg" alt="" class="thumbnail">
+                                        <h4 class="error-title">{{ 'MANDAY_DASHBOARD.LBL_NO_DATA_FOUND' | translate }}
+                                        </h4>
+                                        <p class="error-subtitle">{{'CUSTOMER_DASHBOARD.LBL_NO_DATA' | translate}}</p>
+                                    </div>
+                                    <div class="dashboard-graph-container management-dashboard"
+                                        *ngIf="dataFound.overviewDataFound">
+                                        <div class="new-graph-head text-center text-sm-left align-items-center">
+                                            <div class="graph-title-container">
+                                                <h3 class="title">{{'TCF_DASHBOARD.LBL_OVERVIEW' | translate}}</h3>
+                                            </div>
+                                        </div>
+                                        <div class="body-container">
+                                            <div class="upper-body border-bottom mb-4">
+                                                <div class="report">
+                                                    <div class="icon-wrapper">
+                                                        <img class="icon" src="assets/images/dashboard-report.svg"
+                                                            alt="">
+                                                    </div>
+                                                    <div class="legend-wrapper">
+                                                        <div class="text lite-font">
+                                                            {{'BOOKING_COMBINEORDERS.LBL_REPORTS' | translate}}</div>
+                                                        <div class="value"
+                                                            *ngIf="auditDashboardMasterData.auditDashboardCount">
+                                                            <div class="my-value bold-font">
+                                                                {{auditDashboardMasterData.overviewChart.totalReports}}
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="lower-body">
+                                                <div class="legend-container mb-4">
+                                                    <div class="legend-item padding-right">
+                                                        <img src="assets/images/Booking.svg" alt="">
+                                                        <div class="item-value">
+                                                            <span class="text">{{'MANAGEMENT_DASHBOARD.LBL_BOOKINGS' |
+                                                                translate}}</span>
+                                                            <div class="values"
+                                                                *ngIf="auditDashboardMasterData.auditDashboardCount">
+                                                                <span
+                                                                    class="mr-2">{{auditDashboardMasterData.overviewChart.totalBookingCount}}</span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="legend-item padding-left" style="border-right: 0;">
+                                                        <img src="assets/images/Customer.svg" alt="">
+                                                        <div class="item-value">
+                                                            <span class="text">{{'EDIT_SUPPLIER.LBL_CUSTOMERS' |
+                                                                translate}}</span>
+                                                            <div class="values"
+                                                                *ngIf="auditDashboardMasterData.auditDashboardCount">
+                                                                <span
+                                                                    class="mr-2">{{auditDashboardMasterData.overviewChart.totalCustomerCount}}</span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </ng-template>
+                            </ng-template>
+                        </div>
+
+                        <div
+                            class="col-sm-4 col-md-12 col-lg-12 col-xl-4 grid-column mobile-margin-top-15 tablet-margin-top-15">
+                            <ng-container *ngIf="auditDashboardLoader.auditTypeDashboardLoading; else AuditTypeResult">
+                                <div class="dashboard-graph-container">
+                                    <div class="common-graph-placeholder">
+                                        <img src="assets/images/donut-placeholder.png" alt="graph">
+                                        <div class="content-container">
+                                            <div class="rect animate"></div>
+                                            <div class="rect animate width80"></div>
+                                            <div class="rect animate width50"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </ng-container>
+                            <ng-template #AuditTypeResult>
+                                <div class="error-container"
+                                    *ngIf="auditDashboardLoader.auditTypeDashboardError; else AuditTypeData">
+                                    <img src="assets/images/went-wrong.svg" alt="" class="thumbnail">
+                                    <h4 class="error-title">{{ 'ERROR.MSG_ERROR_TITLE' | translate }}</h4>
+                                    <p class="error-subtitle">
+                                        {{'CUSTOMER_DASHBOARD.LBL_UNAUTHORISED_ACCESS' | translate}}</p>
+                                </div>
+                                <ng-template #AuditTypeData>
+                                    <div class="error-container dashboard-graph-container" *ngIf="!dataFound.auditTypeDashboardDataFound">
+                                        <div class="new-graph-head text-center text-sm-left">
+                                            <div class="graph-title-container">
+                                                <h3 class="title">
+                                                    {{'EDIT_AUDIT.LBL_AUDIT_TYPE' | translate}}</h3>
+                                            </div>
+                                        </div>
+                                        <img src="assets/images/no-result.svg" alt="" class="thumbnail">
+                                        <h4 class="error-title">{{ 'MANDAY_DASHBOARD.LBL_NO_DATA_FOUND' | translate }}
+                                        </h4>
+                                        <p class="error-subtitle">{{'CUSTOMER_DASHBOARD.LBL_NO_DATA' | translate}}</p>
+                                    </div>
+                                    <div class="dashboard-graph-container"
+                                        *ngIf="dataFound.auditTypeDashboardDataFound">
+                                        <div class="new-graph-head text-center text-sm-left">
+                                            <div class="graph-title-container">
+                                                <h3 class="title">
+                                                    {{'EDIT_AUDIT.LBL_AUDIT_TYPE' | translate}}</h3>
+                                            </div>
+                                            <button class="secondary-cta x-small"
+                                                [disabled]="auditDashboardLoader.auditTypeExportLoading || (auditDashboardMasterData.auditTypeDashboard && auditDashboardMasterData.auditTypeDashboard.length==0)"
+                                                (click)="getAuditTypeExport()">
+                                                {{'COMMON.LBL_EXPORT' | translate }}
+                                            </button>
+                                        </div>
+                                        <div class="row graph-body">
+                                            <div class="col-md-12 col-lg-12 col-xl-7 mb-3 mb-xl-0">
+                                                <div id="chartdiv-circle2" style="width: 100%; height: 164px">
+                                                </div>
+                                            </div>
+                                            <div class="col-md-12 col-lg-12 col-xl-5 vertical-center">
+                                                <div class="legend-wrapper two-column">
+                                                    <div class="legend-item"
+                                                        *ngFor="let item of auditDashboardMasterData.auditTypeDashboard | slice:0:5;">
+                                                        <div class="label">
+                                                            <span class="tile"
+                                                                [ngStyle]="{'background-color':item.statusColor }">
+                                                            </span>
+                                                            <span class="text common-tooltip"
+                                                                [attr.data-tooltip]="item.statusName">{{item.name}}</span>
+                                                        </div>
+                                                        <span class="count">{{item.totalCount}}</span>
+                                                    </div>
+                                                    <div class="legend-item"
+                                                        *ngIf="auditDashboardMasterData.auditTypeDashboard.length>5">
+                                                        <div class="label has-dropdown">
+                                                            <span class="link">
+                                                                {{ 'CUSTOMER_DASHBOARD.LBL_SHOW' | translate }}
+                                                                {{auditDashboardMasterData.auditTypeDashboard.length -
+                                                                5}}
+                                                                {{ 'CUSTOMER_DASHBOARD.LBL_MORE' | translate }}</span>
+                                                            <div class="cta-dropdown top-right min-width-230">
+                                                                <div class="legend-wrapper two-column">
+                                                                    <div class="legend-item"
+                                                                        *ngFor="let item of auditDashboardMasterData.auditTypeDashboard | slice:5:auditDashboardMasterData.auditTypeDashboard.length;">
+                                                                        <div class="label">
+                                                                            <span class="tile"
+                                                                                [ngStyle]="{'background-color':item.statusColor }">
+                                                                            </span><span class="text common-tooltip"
+                                                                                [attr.data-tooltip]="item.statusName">{{item.name}}</span>
+                                                                        </div>
+                                                                        <span class="count">{{item.totalCount}}</span>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </ng-template>
+                            </ng-template>
+                        </div>
+                    </div>
+                    <div class="row dashboard-table-wrapper">
+                        <div class="col-sm-12 table-margin-top-15">
+                            <ng-container *ngIf="searchloading; else AuditDataResult">
+                                <div class="product-overview-placeholder-container">
+                                    <div class="product-card">
+                                        <div class="content-container">
+                                            <div class="rect animate width80"></div>
+                                            <div class="rect animate width80"></div>
+                                            <div class="rect animate width80"></div>
+                                        </div>
+                                    </div>
+                                    <div class="product-card">
+                                        <div class="content-container">
+                                            <div class="rect animate width80"></div>
+                                            <div class="rect animate width80"></div>
+                                            <div class="rect animate width80"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </ng-container>
+                            <ng-template #AuditDataResult>
+                                <div class="error-container" *ngIf="error; else AuditDataShown">
+                                    <img src="assets/images/went-wrong.svg" alt="" class="thumbnail">
+                                    <h4 class="error-title">{{ 'ERROR.MSG_ERROR_TITLE' | translate }}</h4>
+                                    <p class="error-subtitle">
+                                        {{'SUPPLIER_FACTORY_DASHBOARD.LBL_UNAUTHORISED_ACCESS' | translate}}</p>
+                                </div>
+                            </ng-template>
+
+                            <ng-template #AuditDataShown>
+                                <div class="table-head">
+                                    <h4 class="title">{{'AUDIT_REPORT.LBL_MAIN_DETAILS' | translate}}
+                                    </h4>
+                                </div>
+                                <div class="error-container" *ngIf="model.noFound">
+                                    <img src="assets/images/no-result.svg" alt="" class="thumbnail">
+                                    <h4 class="error-title">{{ 'MANDAY_DASHBOARD.LBL_NO_DATA_FOUND' | translate }}
+                                    </h4>
+                                    <p class="error-subtitle">{{'SUPPLIER_FACTORY_DASHBOARD.LBL_NO_DATA' | translate}}
+                                    </p>
+                                </div>
+                                <div class="table-container" *ngIf="!model.noFound">
+                                    <table *ngIf="model.items && model.items.length > 0"
+                                        class="pagination-table bordered">
+                                        <thead>
+                                            <tr class="sticky-top-row">
+                                                <th class="width-150">{{ 'AUIDT_SUMMARY.LBL_AUDIT_NO'| translate }}</th>
+                                                <th class="width-150">{{ 'AUIDT_SUMMARY.LBL_CUSTOMER' | translate }}
+                                                </th>
+                                                <th class="width-150">{{ 'AUIDT_SUMMARY.LBL_SUPPLIER' | translate }}
+                                                </th>
+                                                <th class="width-150">{{ 'AUIDT_SUMMARY.LBL_FACTORY' | translate }}</th>
+                                                <th class="width-150">{{ 'COMMON.LBL_FACTORY_COUNTRY' | translate }}
+                                                </th>
+                                                <th class="width-150">{{ 'AUIDT_SUMMARY.LBL_SERVICETYPE' | translate }}
+                                                </th>
+                                                <th class="width-150">{{ 'AUIDT_SUMMARY.LBL_SERVICE_DATE' | translate }}
+                                                </th>
+                                                <th class="Center_Middle">{{ 'AUIDT_SUMMARY.LBL_REPORT' | translate }}
+                                                </th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <ng-template ngFor let-iteminfo [ngForOf]="model.items" let-i="index">
+                                                <tr [ngClass]="(((i+1) % 2)== 0)?'even':'odd'">
+                                                    <td class="width-150">{{iteminfo.auditId}}</td>
+                                                    <td class="width-150 text-wrap">{{iteminfo.customer}}</td>
+                                                    <td class="width-150 text-wrap">{{iteminfo.supplier}}</td>
+                                                    <td class="width-150 text-wrap">{{iteminfo.factory}}</td>
+                                                    <td class="width-150 text-wrap">{{iteminfo.factoryCountry}}</td>
+                                                    <td class="width-150">{{iteminfo.serviceType}}</td>
+                                                    <td class="width-150">{{iteminfo.serviceDate}}</td>
+                                                    <td class="Center_Middle">
+                                                        <button class="category-cta small mr-2 common-tooltip common-tooltip-top-2" data-tooltip="Download"
+                                                        *ngIf="iteminfo.reportid" [disabled]="auditDashboardMasterData.downloadreport" (click)="downloadreport(iteminfo)">
+                                                        <img src="assets/images/cta-download.svg" alt="Download">  
+                                                        <span>{{'AUDIT_CUS_REPORT.LBL_DOWNLOAD'| translate}}</span>
+                                                      </button>
+                                                      </td>
+                                                </tr>
+                                            </ng-template>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </ng-template>
+                        </div>
+                    </div>
+                </div>
+                <div class="footer independent">
+                    <div class="column">
+                        <p class="text">{{'SUPPLIER_FACTORY_DASHBOARD.LBL_FOOTER_CONTENT' | translate}}</p>
+                    </div>
+                    <div class="column">
+                        <ul class="footer-item">
+                            <li><a href="">{{'COMMON.LBL_USER_GUIDE' | translate}}</a></li>
+                            <li><a href="">{{'COMMON.LBL_CONTACT' | translate}}</a></li>
+                            <li><a href="">{{'COMMON.LBL_HELP' | translate}}</a></li>
+                            <li><a href="">{{'COMMON.LBL_TERMS' | translate}}</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

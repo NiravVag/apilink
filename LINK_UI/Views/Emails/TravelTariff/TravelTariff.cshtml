@@ -1,0 +1,67 @@
+﻿@{
+    ViewData["Title"] = "TravelTariffSendEmail";
+}
+
+@model DTO.ScheduleJob.ScheduleTravelTariffEmailResponse
+
+<style>
+    .th-table {
+        color: black;
+        vertical-align: top;
+        font-size: 13px;
+        font-family: tahoma;
+    }
+
+    .td-table {
+        font-size: 13px;
+        font-family: tahoma;
+    }
+</style>
+<table>
+    <tr>
+        <td style="font-size:13px; font-family:tahoma;">
+            Dear All,
+            <br /><br />
+            <div style="padding-bottom: 5px; margin-bottom:5px;">
+                Following are the travel tariff info missing the configuration:
+            </div>
+            <br />
+            <table id='TblList' style="border:solid 1px #d4d0c8;border-collapse:collapse;font-size:12px; 
+                 font-family:tahoma;" cellspacing='0' cellpadding='1' rules='all' align='left' border='1' width='60%'>
+                <tr>
+                    <th bgcolor=#f8f4f3 style="color: black; font-size:13px;" align=center width='25%' height=35>Start Port</th>
+                    <th bgcolor=#f8f4f3 style="color: black; font-size:13px;" align=center width='25%' height=35>End Port</th>
+                    <th bgcolor=#f8f4f3 style="color: black; font-size:13px;" align=center width='10%' height=35>View</th>
+
+                </tr>
+                @foreach (var item in @Model.TravelTariffList)
+                {
+                    <tr>
+                        <td align=center style="font-size: 12px;" height=30>
+                            @item.StartPortName
+                        </td>
+                        <td align=center style="font-size: 12px;" height=30>
+                            @item.FactoryTown
+                        </td>
+                        <td align=center style="font-size: 12px;" height=30>
+                            <a href="@item.TravelTariffUrl"> View</a>
+                        </td>
+                    </tr>
+                }
+
+            </table>
+        </td>
+    </tr>
+
+    <tr>
+        <td class="td-table">
+            <br />
+            <div style="padding-bottom: 5px; margin-bottom:5px;">
+                Thanks
+            </div>
+            <div style="padding-bottom: 5px; margin-bottom:5px;">
+                IT-Team
+            </div>
+        </td>
+    </tr>
+</table>

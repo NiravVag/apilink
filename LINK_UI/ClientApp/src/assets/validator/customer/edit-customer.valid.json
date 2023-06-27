@@ -1,0 +1,79 @@
+{
+  "model": "edit-customer.model",
+  "fields": {
+    "name": [
+      {
+        "type": "required",
+        "fieldType": "T",
+        "ressource": "EDIT_CUSTOMER.MSG_NAME_REQ"
+      }
+    ],
+    "startDate": [
+      {
+        "type": "required",
+        "fieldType": "T",
+        "ressource": "EDIT_CUSTOMER.MSG_STARTDATE_REQ"
+      }
+    ],
+    "group": [
+      {
+        "type": "required",
+        "fieldType": "N",
+        "ressource": "EDIT_CUSTOMER.MSG_GROUP_REQ"
+      }
+    ],
+
+    "invoiceType": [
+      {
+        "type": "required",
+        "fieldType": "N",
+        "ressource": "EDIT_CUSTOMER.MSG_INVOICE_TYPE_REQ"
+      }
+    ],
+    "businessCountryItems": [
+      {
+        "type": "required",
+        "fieldType": "N",
+        "ressource": "EDIT_CUSTOMER.MSG_BUSINESS_COUNTRY_REQ"
+      }
+    ],
+    "glCode": [
+      {
+        "type": "required",
+        "fieldType": "N",
+        "ressource": "EDIT_CUSTOMER.MSG_GL_CODE_REQ"
+      }
+    ],
+    "apiServiceIds": [
+      {
+        "type": "required",
+        "fieldType": "N",
+        "ressource": "API_SERVICE.MSG_API_SERVICE_REQ"
+      }
+    ],
+    "customerEntityIds": [
+      {
+        "type": "required",
+        "fieldType": "A",
+        "ressource": "EDIT_CUSTOMER.MSG_ENTITY_REQ"
+      }
+    ],
+    "mapCustomerContactEntityIds": [
+      {
+        "type": "required",
+        "fieldType": "A",
+        "ressource": "EDIT_CUSTOMER.MSG_CONTACT_ENTITY_REQ"
+      }
+    ],
+    "companyId": [
+      {
+        "type": "required",
+        "fieldType": "N",
+        "ressource": "EDIT_CUSTOMER.MSG_COMPANY_REQ"
+      }
+    ]
+
+
+  }
+
+}

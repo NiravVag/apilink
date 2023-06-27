@@ -1,0 +1,132 @@
+﻿@using DTO.Common; 
+@{
+    ViewData["Title"] = "Gifi";
+}
+
+@model DTO.Kpi.ExportResult
+
+<xls-sheet name="Detail_Gifi insp & picking">
+    <table xls-begin="A:1" style="border-style:solid">
+        <tr style="background-color:#f5f5f5;font-weight:bold;text-align:center">
+            <th>Inspection Company</th>
+            <th>Operation Office</th>
+            <th>GIFI Office</th>
+            <th>GIFI Ref</th>
+            <th>Supplier Ref</th>
+            <th>Product Designation</th>
+            <th>Supplier</th>
+            <th>Manufacturer</th>
+            <th>Factory City</th>
+            <th>Factory State/Province</th>
+            <th>Factory Country</th>
+            <th>Inpsection location GPS coordinates</th>
+            <th>PO#</th>
+            <th>Service</th>
+            <th>Stage</th>
+            <th>First Inspection / Re-Inspection</th>
+            <th>Report folder / Master report number</th>
+            <th>Report Number</th>
+            <th>Inspection AQL level</th>
+            <th>Inspection Date</th>
+            <th>Report Date</th>
+            <th>No of Manday</th>
+            <th>Result</th>
+            <th>
+                On-site CC Result
+            </th>
+            <th>Currency</th>
+            <th>
+                Inspection / Manday cost
+            </th>
+            <th>
+                Extra cost (travel, accomodation, taxes...)
+            </th>
+            <th>Amount per report</th>
+            <th>
+                Bill To
+            </th>
+            <th>
+                Invoice #
+            </th>
+            <th>
+                Invoice date
+            </th>
+            <th>
+                Quotation #
+            </th>
+            <th>
+                Quotation date
+            </th>
+            <th>
+                Comment
+            </th>
+            <th>
+                GiFi QA name
+            </th>
+            <th>
+                Gifi Partner
+            </th>
+            <th>
+                Color Target card available in factory (Yes / No / Missing)
+            </th>
+            <th>
+                Color check finding
+            </th>
+            <th>
+                Golden sample available in factory (Yes / No / Missing)
+            </th>
+            <th>
+                Golden sample finding
+            </th>
+        </tr>
+        @foreach (var item in Model.Data)
+        {
+            <tr>
+                <td width="150px">Asia Pacific Inspection Ltd</td>
+                <td width="150px">@Html.Raw(@item.Office)</td>
+                <td width="150px">@Html.Raw(@item.GifiOfficeName)</td>
+
+                <td width="150px">@Html.Raw(@item.ProductName)</td>
+                <td width="150px">@Html.Raw(@item.FactoryRef)</td>
+                <td width="150px">@Html.Raw(@item.ProductDescription)</td>
+
+                <td width="150px">@Html.Raw(@item.SupplierName)</td>
+                <td width="150px">@Html.Raw(@item.FactoryName)</td>
+                <td width="150px">@Html.Raw(@item.FactoryCity)</td>
+                <td width="150px">@Html.Raw(@item.FactoryState)</td>
+                <td width="150px">@Html.Raw(@item.FactoryCountry)</td>
+                <td width="150px">@Html.Raw(@item.FactoryCountry)</td>
+                <td width="150px">@Html.Raw(@item.PONumber)</td>
+                <td width="150px">@Html.Raw(@item.ServiceTypeName)</td>
+                <td width="150px">@Html.Raw(@item.bookingStatus)</td>
+                <td width="150px">@Html.Raw(@item.InspectionName)</td>
+                <td width="150px" xls-type="number">@item.BookingNo</td>
+                <td width="150px" xls-type="number">@item.BookingNo</td>
+                <td width="150px">@Html.Raw(@item.AQLLevelName)</td>
+                <td width="150px" xls-type="date" xls-format="@ApiCommonData.StandardDateFormat">@item.InspectionStartDate</td>
+                <td width="150px" xls-type="date" xls-format="@ApiCommonData.StandardDateFormat">@item.ReportDate</td>
+                <td width="150px" xls-type="number">@item.ManDay</td>
+                <td width="150px">@Html.Raw(@item.ReportResult)</td>
+                <td width="150px"></td> @*empty*@
+                <td width="150px">@Html.Raw(@item.CurrencyName)</td>
+                <td width="150px" xls-type="number">@item.InspectionFee</td>
+                <td width="150px" xls-type="number">@item.TravellingCost</td>
+                <td width="150px" xls-type="number">@item.TotalInspectionFee</td>
+                <td width="150px">@Html.Raw(@item.PaidBy)</td>
+                <td width="150px">@Html.Raw(@item.InvoiceNumber)</td>
+                <td width="150px" xls-type="date" xls-format="@ApiCommonData.StandardDateFormat">@item.InvoiceDate</td>
+                <td width="150px" xls-type="number">@item.BookingNo</td>
+                <td width="150px" xls-type="date" xls-format="@ApiCommonData.StandardDateFormat">@item.QuotationDate</td>
+
+                <td width="150px"></td>@*empty*@
+                <td width="150px">@Html.Raw(@item.GifiQAContactName)</td>
+                <td width="150px">@Html.Raw(@item.BuyerName)</td>
+
+                <td width="150px">@Html.Raw(@item.ColorTargetAvailable)</td>
+                <td width="150px">@Html.Raw(@item.ColorCheckFinding)</td>
+                <td width="150px">@Html.Raw(@item.GoldenSampleAvailable)</td>
+                <td width="150px">@Html.Raw(@item.GoldenSampleFinding)</td>
+            </tr>
+        }
+    </table>
+</xls-sheet>

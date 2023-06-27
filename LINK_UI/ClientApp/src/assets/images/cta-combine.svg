@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16">
+    <defs>
+        <style>
+            .cls-3{fill:#cd2d2f;fill-rule:evenodd}
+        </style>
+    </defs>
+    <g id="Component_33_3" data-name="Component 33 – 3" opacity="0.8">
+        <path id="Rectangle_1133" fill="none" d="M0 0H16V16H0z" data-name="Rectangle 1133"/>
+        <g id="noun_clone_3094510" transform="translate(-.484 -556)">
+            <g id="Group_3197" data-name="Group 3197" transform="translate(1.484 557)">
+                <path id="Path_1595" d="M605.1 557h-7.065a1.043 1.043 0 0 0-1.035 1.04v7.065a1.041 1.041 0 0 0 1.038 1.038h7.062a1.042 1.042 0 0 0 1.04-1.038v-7.065a1.044 1.044 0 0 0-1.04-1.04zm-6.577 1.347h6.091a.183.183 0 0 1 .179.179v6.092a.184.184 0 0 1-.179.179h-6.091a.186.186 0 0 1-.181-.179v-6.092a.184.184 0 0 1 .184-.179z" class="cls-3" data-name="Path 1595" transform="translate(-597 -557)"/>
+                <path id="Path_1596" d="M3026.1 3058h-2.7v1.346h2.214a.184.184 0 0 1 .179.179v6.093a.182.182 0 0 1-.179.179h-6.091a.184.184 0 0 1-.181-.179v-2.463H3018v2.949a1.041 1.041 0 0 0 1.038 1.038h7.065a1.042 1.042 0 0 0 1.04-1.038v-7.065a1.042 1.042 0 0 0-1.043-1.039z" class="cls-3" data-name="Path 1596" transform="translate(-3013.438 -3053.287)"/>
+            </g>
+        </g>
+    </g>
+</svg>

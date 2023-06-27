@@ -1,0 +1,287 @@
+{
+    "model": "EditInspectionBooking",
+    "fields": {
+        "internalReferencePo": [
+            {
+                "type": "required",
+                "fieldType": "T",
+                "ressource": "EDIT_BOOKING.MSG_PO_REQ"
+            }
+        ],
+        "officeId": [
+            {
+                "type": "required",
+                "fieldType": "N",
+                "ressource": "EDIT_BOOKING.MSG_OFFICE_REQ"
+            }
+        ],
+        "customerId": [
+            {
+                "type": "required",
+                "fieldType": "N",
+                "ressource": "EDIT_BOOKING.MSG_CUS_REQ"
+            }
+        ],
+        "inspectionCustomerContactList": [
+            {
+                "type": "required",
+                "fieldType": "A",
+                "ressource": "EDIT_BOOKING.MSG_CUS_CONTACT_REQ"
+            }
+        ],
+        "inspectionCustomerBuyerList": [
+            {
+                "type": "required",
+                "fieldType": "A",
+                "ressource": "EDIT_BOOKING.MSG_BUYER_REQ"
+            }
+        ],
+        "inspectionCustomerBrandList": [
+            {
+                "type": "required",
+                "fieldType": "A",
+                "ressource": "EDIT_BOOKING.MSG_CUS_BRAND_REQ"
+            }
+        ],
+        "inspectionCustomerDepartmentList": [
+            {
+                "type": "required",
+                "fieldType": "A",
+                "ressource": "EDIT_BOOKING.MSG_CUS_DEPARTMENT_REQ"
+            }
+        ],
+        "seasonId": [
+            {
+                "type": "required",
+                "fieldType": "N",
+                "ressource": "EDIT_BOOKING.MSG_SEASON_REQ"
+            }
+        ],
+        "seasonYearId": [
+            {
+                "type": "required",
+                "fieldType": "N",
+                "ressource": "EDIT_BOOKING.MSG_SEASONYEAR_REQ"
+            }
+        ],
+        "supplierId": [
+            {
+                "type": "required",
+                "fieldType": "N",
+                "ressource": "EDIT_BOOKING.MSG_SUP_REQ"
+            }
+        ],
+        "inspectionSupplierContactList": [
+            {
+                "type": "required",
+                "fieldType": "A",
+                "ressource": "EDIT_BOOKING.MSG_SUP_CONTACT_REQ"
+            }
+        ],
+        "factoryId": [
+            {
+                "type": "required",
+                "fieldType": "N",
+                "ressource": "EDIT_BOOKING.MSG_FACT_REQ"
+            }
+        ],
+        "inspectionFactoryContactList": [
+            {
+                "type": "required",
+                "fieldType": "A",
+                "ressource": "EDIT_BOOKING.MSG_FACT_CONTACT_REQ"
+            }
+        ],
+        "firstServiceDateFrom": [
+            {
+                "type": "isLessOrEqual",
+                "fieldType": "D",
+                "fieldCible": "firstServiceDateTo",
+                "ressource": "EDIT_BOOKING.MSG_SERVICE_FROMDATE_GREATER_REQ"
+            }
+        ],
+        "containerLimit": [
+            {
+                "type": "required",
+                "fieldType": "N",
+                "fieldCible": "containerLimit",
+                "ressource": "EDIT_BOOKING.MSG_CONTAINER_LIMIT_REQ"
+            }
+        ],
+        "firstServiceDateTo": [
+            {
+                "type": "isGreatOrEqual",
+                "fieldType": "D",
+                "fieldCible": "firstServiceDateFrom",
+                "ressource": "EDIT_BOOKING.MSG_Service_TODATE_LESS_REQ"
+            }
+        ],
+        "serviceDateFrom": [
+            {
+                "type": "required",
+                "fieldType": "D",
+                "ressource": "EDIT_BOOKING.MSG_SERVICE_FROMDATE_REQ"
+            },
+            {
+                "type": "isLessOrEqual",
+                "fieldType": "D",
+                "fieldCible": "serviceDateTo",
+                "ressource": "EDIT_BOOKING.MSG_SERVICE_FROMDATE_GREATER_REQ"
+            }
+        ],
+        "serviceDateTo": [
+            {
+                "type": "required",
+                "fieldType": "D",
+                "ressource": "EDIT_BOOKING.MSG_Service_TODATE_REQ"
+            },
+            {
+                "type": "isGreatOrEqual",
+                "fieldType": "D",
+                "fieldCible": "serviceDateFrom",
+                "ressource": "EDIT_BOOKING.MSG_Service_TODATE_LESS_REQ"
+            }
+        ],
+        "serviceTypeId": [
+            {
+                "type": "required",
+                "fieldType": "N",
+                "ressource": "EDIT_BOOKING.MSG_CUS_SERVICETYPE_REQ"
+            }
+        ],
+        "reinspectionType": [
+            {
+                "type": "required",
+                "fieldType": "N",
+                "ressource": "ReInspection Type is required"
+            }
+        ],
+        "productCategoryId": [
+            {
+                "type": "required",
+                "fieldType": "N",
+                "ressource": "EDIT_BOOKING.MSG_CUS_PRODUCTCATEGORY_REQ"
+            }
+        ],
+        "applicantName": [
+            {
+                "type": "required",
+                "fieldType": "T",
+                "ressource": "EDIT_BOOKING.MSG_REQ_APPLICANT_NAME"
+            }
+        ],
+        "applicantEmail": [
+            {
+                "type": "required",
+                "fieldType": "T",
+                "ressource": "EDIT_BOOKING.MSG_REQ_APPLICANT_EMAIL"
+            },
+            {
+                "type": "email",
+                "ressource": "EDIT_BOOKING.MSG_REQ_APPLICANT_EMAIL_FORMAT"
+            }
+        ],
+        "applicantPhoneNo": [
+            {
+                "type": "required",
+                "fieldType": "T",
+                "ressource": "EDIT_BOOKING.MSG_REQ_APPLICANT_PH"
+            }
+        ],
+        "inspectionCustomerMerchandiserList": [
+            {
+                "type": "required",
+                "fieldType": "A",
+                "ressource": "EDIT_BOOKING.MSG_CUS_MERCHANDISER_REQ"
+            }
+        ],
+        "collectionId": [
+            {
+                "type": "required",
+                "fieldType": "A",
+                "ressource": "EDIT_BOOKING.MSG_COLLECTION_REQ"
+            }
+        ],
+        "priceCategoryId": [
+            {
+                "type": "required",
+                "fieldType": "A",
+                "ressource": "EDIT_BOOKING.MSG_PRICE_CATEGORY_REQ"
+            }
+        ],
+        "holdReasonTypeId": [
+            {
+                "type": "required",
+                "fieldType": "N",
+                "ressource": "EDIT_BOOKING.MSG_HEAD_REASON_TYPE_REQ"
+            }
+        ],
+        "holdReason": [
+            {
+                "type": "required",
+                "fieldType": "T",
+                "ressource": "EDIT_BOOKING.MSG_HEAD_REASON_REQ"
+            }
+        ],
+        "asReceivedDate": [
+            {
+                "type": "required",
+                "fieldType": "D",
+                "ressource": "EDIT_BOOKING.MSG_AS_RECEIVED_DATE_REQ"
+            }
+        ],
+        "tfReceivedDate": [
+            {
+                "type": "required",
+                "fieldType": "D",
+                "ressource": "EDIT_BOOKING.MSG_TF_RECEIVED_DATE_REQ"
+            }
+        ],
+        "businessLine": [
+            {
+                "type": "required",
+                "fieldType": "N",
+                "ressource": "EDIT_BOOKING.MSG_BUSINESS_LINE_REQ"
+            }
+        ],
+        "bookingType": [
+            {
+                "type": "required",
+                "fieldType": "N",
+                "ressource": "EDIT_BOOKING.MSG_BOOKING_TYPE_REQ"
+            }
+        ],
+        "daCorrelationId": [
+            {
+                "type": "required",
+                "fieldType": "N",
+                "ressource": "EDIT_BOOKING.MSG_DA_CORELATION_REQ"
+            }
+        ],
+        "gapDAName": [
+            {
+                "type": "required",
+                "fieldType": "T",
+                "ressource": "EDIT_BOOKING.MSG_DA_NAME_REQ"
+            }
+        ],
+        "gapDAEmail": [
+            {
+                "type": "required",
+                "fieldType": "T",
+                "ressource": "EDIT_BOOKING.MSG_DA_EMAIL_REQ"
+            },
+            {
+                "type": "email",
+                "ressource": "EDIT_BOOKING.MSG_REQ_APPLICANT_EMAIL_FORMAT"
+            }
+        ],
+        "paymentOptions": [
+            {
+                "type": "required",
+                "fieldType": "N",
+                "ressource": "EDIT_BOOKING.MSG_PAYMENT_OPTIONS_REQ"
+            }
+        ]
+    }
+}

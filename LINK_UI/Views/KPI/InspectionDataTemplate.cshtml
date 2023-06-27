@@ -1,0 +1,96 @@
+﻿
+@{
+    ViewData["Title"] = "InspectionDataTemplate";
+}
+
+@model DTO.Kpi.ExportResult
+
+
+<xls-sheet name="InspectionData">
+    <table xls-begin="A:1" style="border-style:solid">
+        <tr style="background-color:#f5f5f5;font-weight:bold;text-align:center">
+            <th>Inspection</th>
+            <th>Product Code</th>
+            <th>Product Description</th>
+            <th>Customer Booking</th>
+            <th>Supplier</th>
+            <th>Factory</th>
+            <th>Service Type</th>
+            <th>Inspection Status</th>
+            <th>Service From Date</th>
+            <th>Service To Date</th>
+            @foreach (var name in Model.ResultName)
+            {
+                <th>@Html.Raw(@name)</th>
+            }
+            <th>Report Result</th>
+            <th>Customer Result</th>
+            <th>Order Qty</th>
+            <th>Presented Qty</th>
+            <th>Inspection Qty</th>
+            <th>Critical</th>
+            <th>Major</th>
+            <th>Minor</th>
+            <th>Critical Defects</th>
+            <th>Major Defects</th>
+            <th>Minor Defects</th>
+            <th>Factory Country</th>
+            <th>Office Country</th>
+            <th>Office</th>
+            <th>Season</th>
+            <th>Product Category</th>
+            <th>Product Sub category </th>
+            <th>Product Name</th>
+            <th>Department</th>
+            <th>Brand</th>
+            <th>Shipment Date</th>
+        </tr>
+        @foreach (var item in Model.Data)
+        {
+            <tr>
+                <td xls-type="number">@item.BookingNo</td>
+                <td>@item.ProductName</td>
+                <td>@item.ProductDescription</td>
+                <td>@item.CustomerBookingNo</td>
+                <td>@item.SupplierName</td>
+                <td>@item.FactoryName</td>
+                <td>@item.ServiceTypeName</td>
+                <td>@item.bookingStatus</td>
+                <td xls-type="date">@item.ServiceFromDate</td>
+                <td xls-type="date">@item.ServiceToDate</td>
+                @foreach (var resultName in Model.ResultName)
+                {
+                    var result = item.FbResult.Where(x => x.Name == resultName).Select(x => x.Result).FirstOrDefault();
+                    <td width="250px">@result </td>
+                }
+                <td>@item.ReportResult</td>
+                <td>@item.CustomerResult</td>
+                <td xls-type="number">@item.OrderQty</td>
+                <td xls-type="number">@item.ProducedQty</td>
+                <td xls-type="number">@item.InspectedQty</td>
+                <td xls-type="number">@item.CriticalDefect</td>
+                <td xls-type="number">@item.MajorDefect</td>
+                <td xls-type="number">@item.MinorDefect</td>
+                <td height="100%">@Html.Raw(item.CriticalDefects)</td>
+                <td height="100%">@Html.Raw(item.MajorDefects)</td>
+                <td height="100%">@Html.Raw(item.MinorDefects)</td>
+                <td>@item.FactoryCountry</td>
+                <td>@item.OfficeCountry</td>
+                <td>@item.Office</td>
+                <td>
+                    @if (item.SeasonYear.HasValue)
+                    {
+                        @(string.Concat(item.Season, "-", item.SeasonYear))
+                    }
+                </td>
+                <td>@item.ProductCategory</td>
+                <td>@item.ProductSubCategory</td>
+                <td>@item.ProductSubCategory2</td>
+                <td>@item.DeptCode</td>
+                <td>@item.BrandName</td>
+                <td xls-type="date">@item.ShipmentDate</td>
+            </tr>
+        }
+    </table>
+</xls-sheet>
+

@@ -1,0 +1,84 @@
+﻿@using DTO.Common;
+@{
+    ViewData["Title"] = "GenericInvoiceTemplate";
+}
+
+@model DTO.Kpi.ExportResult
+
+<xls-sheet name="Generic Invoice Template">
+    <table xls-begin="A:1" style="border-style:solid">
+        <tr style="background-color:#f5f5f5;font-weight:bold;text-align:center">
+            <th>Invoice#</th>
+            <th>Booking#</th>
+            <th>Quotation#</th>
+            <th>Customer Name</th>
+            <th>Contact Name</th>
+            <th>Department</th>
+            <th>Brand</th>
+            <th>Buyer</th>
+            <th>Collection</th>
+            <th>Supplier Name</th>
+            <th>Supplier Name</th>
+            <th>Supplier Code</th>
+            <th>Factory Name</th>
+            <th>Factory Reference</th>
+            <th>Product Reference</th>
+            <th>Product Description</th>
+            <th>PO Number</th>
+            <th>Service Request</th>
+            <th>First Request Date</th>
+            <th>Inspection Start Date</th>
+            <th>Inspection End Date</th>
+            <th>Result</th>
+            <th>Lot Size</th>
+            <th>Sample Size</th>
+            <th>AQL</th>
+            <th style="text-align:center">Man Day</th>
+            <th>InspectionCost USD</th>
+            <th style="text-align:center">Hotel Cost</th>
+            <th style="text-align:center">Travelling Cost</th>
+            <th style="text-align:center">Extra Fee</th>
+            <th style="text-align:center">Other Fee</th>
+            <th>Total amount USD</th>
+            <th>Fee remark</th>
+        </tr>
+        @foreach (var item in Model.Data)
+        {
+            <tr>
+                <td width="150px">@Html.Raw(@item.InvoiceNumber)</td>
+                <td width="150px">@item.BookingNo</td>
+                <td width="150px">@item.QuotationId</td>
+                <td width="250px">@Html.Raw(@item.CustomerName)</td>
+                <td width="250px">@Html.Raw(@item.CustomerContact)</td>
+                <td width="150px">@Html.Raw(@item.DeptCode)</td>
+                <td width="150px">@Html.Raw(@item.BrandName)</td>
+                <td width="150px">@Html.Raw(@item.BuyerName)</td>
+                <td width="150px">@Html.Raw(@item.CollectionName)</td>
+                <td width="150px">@Html.Raw(@item.SupplierName)</td>
+                <td width="150px">@Html.Raw(@item.SupplierCode)</td>
+                <td width="150px">@Html.Raw(@item.FactoryName)</td>
+                <td width="150px">@Html.Raw(@item.FactoryRef)</td>
+                <td width="150px">@Html.Raw(@item.ProductName)</td>
+                <td width="150px">@Html.Raw(@item.ProductDescription)</td>
+                <td width="150px">@Html.Raw(@item.PONumber)</td>
+                <td width="150px">@Html.Raw(@item.ServiceTypeName)</td>
+                <td xls-type="date" xls-format="@ApiCommonData.StandardDateFormat">@item.FirstServiceDateFrom</td>
+                <td xls-type="date" xls-format="@ApiCommonData.StandardDateFormat">@item.InspectionStartDate</td>
+                <td xls-type="date" xls-format="@ApiCommonData.StandardDateFormat">@item.InspectionEndDate</td>
+                <td width="150px">@item.ReportResult</td>
+                <td xls-type="number" style="text-align:center">@item.OrderQty</td>
+                <td width="150px" xls-type="number" style="text-align:center">@item.SampleSize</td>
+                <td width="150px">@Html.Raw(@item.AQLLevelName)</td>
+                <td width="150px" style="text-align:center"> @item.ManDay</td>
+                <td width="150px" xls-type="number" style="text-align:center"> @item.InspectionFee</td>
+                <td width="150px" xls-type="number" style="text-align:center"> @item.HotelFee</td>
+                <td width="150px" xls-type="number" style="text-align:center"> @item.TravellingCost</td>
+                <td width="150px" xls-type="number" style="text-align:center"> @item.ExtraFee</td>
+                <td width="150px" xls-type="number" style="text-align:center"> @item.OtherFee</td>
+                <td width="150px" xls-type="number" style="text-align:center"> @item.TotalInspectionFee</td>
+                <td>@item.InvoiceRemarks</td>
+            </tr>
+        }
+    </table>
+</xls-sheet>
+

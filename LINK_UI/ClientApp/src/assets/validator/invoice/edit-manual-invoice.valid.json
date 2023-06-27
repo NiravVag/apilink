@@ -1,0 +1,108 @@
+{
+    "model": "EditManualInvoiceModel",
+    "fields": {
+        "customerId": [
+            {
+                "type": "required",
+                "fieldType": "N",
+                "ressource": "MANUAL_INVOICE_REGISTER.MSG_CUSTOMER_REQ"
+            }
+        ],
+        "email": [
+            {
+                "type": "email",
+                "fieldType": "T",
+                "ressource": "MANUAL_INVOICE_REGISTER.MSG_EMAIL_FORMAT"
+            }
+        ],
+        "supplierId": [
+            {
+                "type": "required",
+                "fieldType": "N",
+                "ressource": "MANUAL_INVOICE_REGISTER.MSG_SUPPLIER_REQ"
+            }
+        ],
+        "invoiceTo": [
+            {
+                "type": "required",
+                "fieldType": "T",
+                "ressource": "MANUAL_INVOICE_REGISTER.MSG_INVOICE_TO_REQ"
+            }
+        ],
+        "invoiceNo": [
+            {
+                "type": "required",
+                "fieldType": "T",
+                "ressource": "MANUAL_INVOICE_REGISTER.MSG_INVOICE_NO_REQ"
+            }
+        ],
+        "invoiceDate": [
+            {
+                "type": "required",
+                "fieldType": "D",
+                "ressource": "MANUAL_INVOICE_REGISTER.MSG_INVOICE_DATE_REQ"
+            }
+        ],
+        "billedName": [
+            {
+                "type": "required",
+                "fieldType": "T",
+                "ressource": "MANUAL_INVOICE_REGISTER.MSG_BILLED_NAME_REQ"
+            }
+        ],
+        "billedAddress": [
+            {
+                "type": "required",
+                "fieldType": "T",
+                "ressource": "MANUAL_INVOICE_REGISTER.MSG_BILLED_ADDRESS_REQ"
+            }
+        ],
+        "currencyId": [
+            {
+                "type": "required",
+                "fieldType": "T",
+                "ressource": "MANUAL_INVOICE_REGISTER.MSG_CURRENCY_REQ"
+            }
+        ],
+        "bankId": [
+            {
+                "type": "required",
+                "fieldType": "N",
+                "ressource": "MANUAL_INVOICE_REGISTER.MSG_BANK_REQ"
+            }
+        ],
+        "officeId": [
+            {
+                "type": "required",
+                "fieldType": "N",
+                "ressource": "MANUAL_INVOICE_REGISTER.MSG_OFFICE_REQ"
+            }
+        ],
+        "fromDate": [
+            {
+                "type": "required",
+                "fieldType": "D",
+                "ressource": "MANUAL_INVOICE_REGISTER.MSG_FROM_DATE_REQ"
+            },
+            {
+                "type": "isLessOrEqual",
+                "fieldType": "D",
+                "fieldCible": "toDate",
+                "ressource": "MANUAL_INVOICE_REGISTER.MSG_FROMDATE_GREATER_REQ"
+            }
+        ],
+        "toDate": [
+            {
+                "type": "required",
+                "fieldType": "D",
+                "ressource": "MANUAL_INVOICE_REGISTER.MSG_TO_DATE_REQ"
+            },
+            {
+                "type": "isGreatOrEqual",
+                "fieldType": "D",
+                "fieldCible": "fromDate",
+                "ressource": "MANUAL_INVOICE_REGISTER.MSG_TODATE_LESS_REQ"
+            }
+        ]
+    }
+}

@@ -1,0 +1,563 @@
+<div class="main-wrapper">
+	<div class="wrapper dashboard-wrapper">
+		<div class="my-container">
+			<div class="master-body">
+				<div class="row title-container">
+
+					<div class="col-sm-6 paddingTop5">
+						<div class="header-back-button">
+							<img src="assets/images/back-red.png" alt="back"
+								(click)="returnToTCFList('tcfsummary/tcf-summary')">
+						</div>
+						<h3 class="main-title">{{tcfDetail.tcfName}}</h3>
+
+
+						<span *ngIf="tcfDetail.statusId==tcfStage.Completed"
+							class="title-badge complete-badge align-middle"><img src="assets/images/white-tick.svg"
+								alt="">{{ tcfDetail.statusName }}</span>
+						<span *ngIf="tcfDetail.statusId!=tcfStage.Completed"
+							class="title-badge progress-badge align-middle">
+							<img src="assets/images/white-process.svg" alt="">{{ tcfDetail.statusName }}</span>
+					</div>
+					<div *ngIf="tcfDetail.statusId==tcfStage.ToBeFinalized && tcfDetail.tcfValidate"
+						class="col-sm-6 text-left mobile-margin-top-30 text-md-right text-lg-right text-xl-right">
+						<button class="primary-cta small marginLeft10 mobile-sticky-bottom-button"
+							(click)="validateTCF()">{{ 'TCF_DETAIL.LBL_VALIDATE_TCF' | translate }}</button>
+					</div>
+
+				</div>
+
+				<div class="content-container tracking-container">
+					<div class="container-head">
+						<img class="head-icon" src="assets/images/circle-file.svg" alt="">
+						{{ 'TCF_DETAIL.LBL_PRODUCT_INFORMATION' | translate }}
+					</div>
+					<div class="row formPadding">
+						<div class="col-sm-3">
+							<div class="thumbnail-container" style="border: none;">
+								<img *ngIf="!tcfDetail.productUrl" style="height: 210px;"
+									src="assets/images/alt-image.jpg" alt="assets/images/alt-image">
+								<img *ngIf="tcfDetail.productUrl" style="height: 210px;" src="{{tcfDetail.productUrl}}"
+									alt="thumbnail" (click)="getPreviewProductImage(productImage)">
+							</div>
+						</div>
+						<div class="col-sm-9">
+							<div class="row">
+								<div class="col-sm-4 result-border-right mobile-margin-top-30">
+									<div class="my-input-group">
+										<label for="" class="light">{{ 'TCF_DETAIL.LBL_CUSTOMER' | translate }}</label>
+										<p class="input-value">{{ tcfDetail.customerName }}</p>
+									</div>
+									<div class="my-input-group marginTop15">
+										<label for="" class="light">{{ 'TCF_DETAIL.LBL_CUSTOMER_REFERENCE' | translate
+											}}</label>
+										<p class="input-value">{{ tcfDetail.customerRef }}</p>
+									</div>
+									<div class="my-input-group marginTop15">
+										<label for="" class="light">{{ 'TCF_DETAIL.LBL_DEPARTMENT' | translate
+											}}</label>
+										<p class="input-value">{{ tcfDetail.departmentName }}</p>
+									</div>
+									<div class="my-input-group marginTop15">
+										<label for="" class="light">{{ 'TCF_DETAIL.LBL_DESCRIPTION' | translate
+											}}</label>
+										<p class="input-value">{{ tcfDetail.productDescription }}</p>
+									</div>
+									<div class="my-input-group marginTop15">
+										<label for="" class="light">{{ 'TCF_DETAIL.LBL_RAW_MATERIALS' | translate
+											}}</label>
+										<p class="input-value" *ngIf="tcfDetail.rawMaterial">{{ tcfDetail.rawMaterial }}</p>
+									</div>
+								</div>
+								<div class="col-sm-4 product-info-card result-border-right mobile-margin-top-15">
+									<div class="my-input-group mobile-margin-top-15">
+										<label for="" class="light">{{ 'TCF_DETAIL.LBL_SUPPLIER' | translate }}</label>
+										<p class="input-value">{{ tcfDetail.supplierName }}</p>
+									</div>
+									<div class="my-input-group marginTop15">
+										<label for="" class="light">{{ 'TCF_DETAIL.LBL_SUPPLIER_REFERENCE' | translate
+											}}</label>
+										<p class="input-value">{{ tcfDetail.supplierRef }}</p>
+									</div>
+									<div class="my-input-group marginTop15">
+										<label for="" class="light">{{ 'TCF_DETAIL.LBL_QA_CONTACT' | translate
+											}}</label>
+										<p class="input-value">{{ tcfDetail.qaName }}</p>
+									</div>
+									<div class="my-input-group marginTop15">
+										<label for="" class="light">{{ 'TCF_DETAIL.LBL_COUNTRY_ORIGIN' | translate
+											}}</label>
+										<p class="input-value">{{ tcfDetail.countryOrigin }}</p>
+									</div>
+									<div class="my-input-group marginTop15">
+										<label for="" class="light">{{ 'TCF_DETAIL.LBL_DESTINATION' | translate
+											}}</label>
+										<p class="input-value">{{ tcfDetail.destination }}</p>
+									</div>
+								</div>
+								<div class="col-sm-4 product-info-card mobile-margin-top-15">
+									<div class="my-input-group mobile-margin-top-15">
+										<label for="" class="light">{{ 'TCF_DETAIL.LBL_REQUEST_DATE' | translate
+											}}</label>
+										<p class="input-value">{{ tcfDetail.requestDate }}</p>
+									</div>
+									<div class="my-input-group marginTop15">
+										<label for="" class="light">{{ 'TCF_DETAIL.LBL_COMPLETE_DATE' | translate
+											}}</label>
+										<p class="input-value">{{ tcfDetail.completeDate }}</p>
+									</div>
+									<div class="my-input-group marginTop15">
+										<label for="" class="light">{{ 'TCF_DETAIL.LBL_MERCHANDISER' | translate
+											}}</label>
+										<p class="input-value">{{ tcfDetail.merchandiser }}</p>
+									</div>
+									<div class="my-input-group marginTop15">
+										<label for="" class="light">{{ 'TCF_DETAIL.LBL_BARCODE' | translate }}</label>
+										<p class="input-value">{{ tcfDetail.barcode }}</p>
+									</div>
+								</div>
+							</div>
+							<div class="row small-info-container">
+								<div class="col-sm-5 col-md-12 col-xl-5 result-border-right">
+									<div class="small-info-block" *ngIf="tcfDetail.firstDocSubmission>=0">
+										<small>{{ 'TCF_DETAIL.LBL_FIRST_DOC_SUBMISSION' | translate }}</small>
+										<span class="big">{{ tcfDetail.firstDocSubmission }}
+											<span>Days</span></span>
+									</div>
+									<div class="small-info-block" *ngIf="tcfDetail.lastDocReceived">
+										<small>{{ 'TCF_DETAIL.LBL_LAST_DOC_RECEIVED' | translate }}</small>
+										<span class="big">{{ tcfDetail.lastDocReceived }}</span>
+									</div>
+								</div>
+								<div class="col-sm-7 col-md-12 col-xl-7 mobile-margin-top-30 tablet-margin-top-15">
+									<div class="small-info-block blue">
+										<small>{{ 'TCF_DETAIL.LBL_DOC_RECEIVED' | translate }}</small>
+										<span class="big">{{ tcfDetail.docReceived }}</span>
+									</div>
+									<div class="small-info-block red">
+										<small>{{ 'TCF_DETAIL.LBL_DOC_REJECTED' | translate }}</small>
+										<span class="big">{{ tcfDetail.docRejected }}</span>
+									</div>
+									<div class="small-info-block orange">
+										<small>{{ 'TCF_DETAIL.LBL_DOC_UNDER_REVIEW' | translate }}</small>
+										<span class="big">{{ tcfDetail.docUnderReview }}</span>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+
+					<div class="row formPadding">
+
+						<div class="col-sm-12">
+							<div class="drag-drop-container type-two" (click)="openAddProduct(uploadproductimage)">
+								<img src="assets/images/upload-icon.svg" class="icon" alt="drag drop">
+								<div class="info">
+									<h4 class="title">Select the product images to upload, <span>
+											{{ 'EDIT_BOOKING.LBL_BROWSE' | translate }}</span></h4>
+								</div>
+							</div>
+
+						</div>
+
+					</div>
+
+				</div>
+				<div class="content-container tracking-container" *ngIf="tcfScopeList && tcfScopeList.length>0">
+					<div class="container-head">
+						<img class="head-icon" src="assets/images/circle-upload.svg" alt="">
+						{{ 'TCF_DETAIL.LBL_TCF_SCOPE' | translate }}
+					</div>
+					<div class="row formPadding">
+						<div class="col-sm-3">
+							<div class="tcf-page-progress-container">
+								<div class="color-bar">
+									<div *ngIf="tcfDetailMaster.completeStatusColor && tcfDetailMaster.completeStatusColor==completeStatusColor.Red"
+										class="color red" [style.width.%]="tcfDetailMaster.completeStatus"></div>
+									<div *ngIf="tcfDetailMaster.completeStatusColor && tcfDetailMaster.completeStatusColor==completeStatusColor.Grey"
+										class="color grey" [style.width.%]="tcfDetailMaster.completeStatus"></div>
+									<div *ngIf="tcfDetailMaster.completeStatusColor && tcfDetailMaster.completeStatusColor==completeStatusColor.Green"
+										class="color green" [style.width.%]="tcfDetailMaster.completeStatus"></div>
+									<div *ngIf="tcfDetailMaster.completeStatusColor && tcfDetailMaster.completeStatusColor==completeStatusColor.Orange"
+										class="color orange" [style.width.%]="tcfDetailMaster.completeStatus"></div>
+								</div>
+								<div class="small">
+									<strong>{{tcfDetailMaster.completeStatus}} % Done
+									</strong>
+									<!-- Will be completed on 30
+									Jan 2020 -->
+								</div>
+							</div>
+						</div>
+						<div
+							class="col-sm-9 text-sm-right text-md-right text-lg-right text-xl-right mobile-margin-top-15">
+							<!-- <button class="secondary-cta small">Export</button> -->
+							<button class="secondary-cta green small ml-0 ml-sm-2 mobile-margin-top-15"
+								(click)="getTCFDocumentByType(this.tcfId,tcfDownloadDocument.AllValidDocuments)">{{
+								'TCF_DETAIL.LBL_DOWNLOAD_VALID_DOCUMENTS' | translate }}</button>
+							<button class="secondary-cta small marginLeft10"
+								(click)="getTCFDocumentByType(this.tcfId,tcfDownloadDocument.AllDocuments)">{{
+								'TCF_DETAIL.LBL_DOWNLOAD_ALL_DOCUMENTS' | translate }}</button>
+
+						</div>
+						<div class="col-sm-12 marginTop25">
+							<div class="my-input-group marginTop10">
+								<label><strong>{{
+										'TCF_DETAIL.LBL_SCOPE_DETAILS' | translate }}</strong></label>
+							</div>
+							<div class="table-container marginTop10">
+								<table class="pagination-table bordered simple-table">
+									<thead>
+										<tr>
+											<th class="width40 text-center"></th>
+											<th style="width:220px;">{{ 'TCF_DETAIL.LBL_STANDARD' | translate }}</th>
+											<th style="width:180px;">{{ 'TCF_DETAIL.LBL_STANDARD_Remarks' | translate }}</th>
+											<th class="width80 text-center">{{ 'TCF_DETAIL.LBL_VIND' | translate }}</th>
+											<th class="width120">{{ 'TCF_DETAIL.LBL_VERSION' | translate }}</th>
+											<th style="width:180px;">{{ 'TCF_DETAIL.LBL_REGULATION' | translate }}</th>
+											<th class="width120"> {{ 'TCF_DETAIL.LBL_STATUS' | translate }}</th>
+										</tr>
+									</thead>
+									<tbody>
+
+
+
+										<ng-template ngFor let-tcfScope [ngForOf]="tcfScopeList" let-i="index">
+											<tr [ngClass]="(((i+1) % 2)== 0)?'even':'odd'">
+												<td class="width40 text-center">
+													<span class="expandable-trigger"
+														(click)=toggleExpandRow($event,i,tcfScope)>+</span>
+												</td>
+												<td>{{ tcfScope.standardName }}</td>
+												<td>{{ tcfScope.remark }}</td>
+												<td class="text-center">
+													<img *ngIf="tcfScope.trafficColor==trafficLightColor.Red"
+														src="assets/images/red-close-thick.svg" alt="clock"
+														class="clock-icon">
+													<img *ngIf="tcfScope.trafficColor==trafficLightColor.Green"
+														src="assets/images/green-tick.svg" alt="clock"
+														class="clock-icon">
+													<img *ngIf="tcfScope.trafficColor==trafficLightColor.Orange"
+														src="assets/images/process.svg" alt="clock" class="clock-icon">
+												</td>
+												<td>{{ tcfScope.version }}</td>
+												<td>{{ tcfScope.regulationName }}</td>
+												<td>{{ tcfScope.status }}</td>
+											</tr>
+
+											<ng-container>
+												<ng-template [ngTemplateOutlet]="scopeDetailTemplate"
+													[ngTemplateOutletContext]="{ tcfScope: tcfScope, i:i}">
+												</ng-template>
+											</ng-container>
+
+										</ng-template>
+
+									</tbody>
+								</table>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="content-container tracking-container">
+					<div class="container-head">
+						<img class="head-icon" src="assets/images/circle-upload.svg" alt="">
+						{{ 'TCF_DETAIL.LBL_UPLOAD_DOCUMENT' | translate
+						}}
+					</div>
+					<div class="row searchFormPadding">
+						<div class="col-sm-3">
+							<div class="my-input-group">
+								<label for="">{{ 'TCF_DETAIL.LBL_UPLOAD_NAME' | translate }}</label>
+								<input [(ngModel)]="tcfDocumentUpload.documentName" type="text" value="">
+							</div>
+						</div>
+						<div class="col-sm-8">
+							<div class="row">
+								<div class="col-sm-4 mobile-margin-top-15">
+									<div class="my-input-group">
+										<label class="required" for="">{{ 'TCF_DETAIL.LBL_UPLOAD_STANDARD' | translate
+											}}</label>
+										<ng-select [searchable]="true" class="multiple" multiple="true"
+											[items]="tcfDetailMaster.standardList" bindLabel="name" [clearable]="false"
+											bindValue="id" [hideSelected]="true" placeholder="--- Select ---"
+											[ngClass]="{ 'is-invalid':  !tcfDetailValidator.isValid('standardIds')}"
+											[(ngModel)]="tcfDocumentUpload.standardIds" appendTo="body">
+											<ng-template ng-option-tmp let-item="item">
+												<div class="text-wrap">{{ item.name }}</div>
+											</ng-template>
+										</ng-select>
+										<div *ngIf="!tcfDetailValidator.isValid('standardIds')"
+											class="invalid-feedback">
+											<div *ngFor="let error of tcfDetailValidator.getErrors('standardIds')">{{
+												error |
+												translate
+												}}</div>
+										</div>
+									</div>
+								</div>
+								<div class="col-sm-4 mobile-margin-top-15">
+									<div class="my-input-group">
+										<label for="">{{ 'TCF_DETAIL.LBL_UPLOAD_TYPE' | translate }}</label>
+										<ng-select [searchable]="true" [items]="tcfDetailMaster.typeList"
+											bindLabel="name" [clearable]="false" bindValue="id" [hideSelected]="true"
+											placeholder="--- Select ---" [(ngModel)]="tcfDocumentUpload.typeId"
+											appendTo="body">
+											<ng-template ng-option-tmp let-item="item">
+												<div class="text-wrap">{{ item.name }}</div>
+											</ng-template>
+										</ng-select>
+									</div>
+								</div>
+								<div class="col-sm-4 mobile-margin-top-15">
+									<div class="my-input-group">
+										<label class="required" for="">{{ 'TCF_DETAIL.LBL_UPLOAD_ISSUE_DATE' | translate
+											}}</label>
+										<div class="calendar-wrapper">
+											<input type="text" maxlength="10" readonly=readonly
+												[maxDate]="tcfDetailMaster.currentDate"
+												[ngClass]="{ 'is-invalid':  !tcfDetailValidator.isValid('issueDate')}"
+												[(ngModel)]="tcfDocumentUpload.issueDate" ngbDatepicker
+												#sdf="ngbDatepicker" (click)="sdf.toggle()">
+											<img src="assets/images/calendar-icon.svg" alt="" class="calendar-icon"
+												(click)="sdf.toggle()">
+										</div>
+										<div *ngIf="!tcfDetailValidator.isValid('issueDate')" class="invalid-feedback">
+											<div *ngFor="let error of tcfDetailValidator.getErrors('issueDate')">{{
+												error |
+												translate
+												}}</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="col-sm-12 marginTop20">
+							<div class="row">
+								<div class="col-sm-3">
+									<div class="my-input-group">
+										<label for="">{{ 'TCF_DETAIL.LBL_UPLOAD_ISSUER' | translate }}</label>
+										<ng-select [searchable]="true" [items]="tcfDetailMaster.issuerList"
+											bindLabel="name" [clearable]="false" bindValue="id" [hideSelected]="true"
+											placeholder="--- Select ---" [(ngModel)]="tcfDocumentUpload.issuerId"
+											appendTo="body">
+											<ng-template ng-option-tmp let-item="item">
+												<div class="text-wrap">{{ item.name }}</div>
+											</ng-template>
+										</ng-select>
+									</div>
+								</div>
+
+							</div>
+						</div>
+
+						<div class="col-sm-12 marginTop15">
+							<app-drag-drop [fileLimit]="uploadLimit" [fileExtension]="uploadFileExtensions"
+								[fileSizeLimit]="fileSize" (fileUpload)="selectFiles($event)"></app-drag-drop>
+						</div>
+						<ng-container *ngIf="fileAttachments != null && fileAttachments.length>0">
+							<div class="col-sm-12">
+								<div class="drag-drop-files-container">
+									<div class="row col-sm-12">
+										<div class="file col-sm-3"
+											*ngFor="let file of fileAttachments ;  let j = index">
+											<a (click)="getFile(file)">
+												<img src="assets/images/uploaded-file-success.png" class="icon" alt="">
+											</a>
+											<div class="info">
+												<h4 class="file-title">{{file.fileName}}</h4>
+											</div>
+											<img src="assets/images/red-close.svg" alt="" (click)="removeAttachment(j)"
+												class="close">
+										</div>
+									</div>
+								</div>
+							</div>
+						</ng-container>
+						<div class="col-sm-12 marginTop20 text-right"
+							*ngIf="tcfDetailMaster.standardList && tcfDetailMaster.standardList.length>0">
+							<button class="secondary-cta small" (click)="resetUploadData()">{{
+								'TCF_DETAIL.LBL_UPLOAD_CANCEL_BTN' | translate }}</button>
+							<button class="primary-cta small marginLeft10"
+								[disabled]="tcfDetailMaster.uploadTCFProductFileLoading"
+								(click)="uploadTCFDocument()">{{
+								'TCF_DETAIL.LBL_UPLOAD_UPLOAD_BTN' | translate }}
+								<span *ngIf="tcfDetailMaster.uploadTCFProductFileLoading">
+									<i class="fa fa-refresh fa-spin" aria-hidden="true"></i>
+								</span>
+							</button>
+						</div>
+					</div>
+				</div>
+
+
+			</div>
+		</div>
+	</div>
+</div>
+
+<ng-template #scopeDetailTemplate let-tcfScope="tcfScope" let-i="i">
+
+	<tr class="expandable-row" [attr.data-expand-id]="'scopeDetail' + i">
+		<td colspan="6">
+			<div class="table-container padding10">
+				<table class="pagination-table simple-table">
+					<thead>
+						<tr>
+							<th>{{ 'TCF_DETAIL.LBL_ATTACHMENT_NAME' | translate }}</th>
+							<th>{{ 'TCF_DETAIL.LBL_TRAFFIC_LIGHT' | translate }}</th>
+							<th>{{ 'TCF_DETAIL.LBL_ISSUER' | translate }}</th>
+							<th>{{ 'TCF_DETAIL.LBL_RECEIVED_DATE' | translate }}</th>
+							<th>{{ 'TCF_DETAIL.LBL_REVIEW_DATE' | translate }}</th>
+							<th>{{ 'TCF_DETAIL.LBL_ISSUE_DATE' | translate }}</th>
+							<th>{{ 'TCF_DETAIL.LBL_DOC_EXPIRY_DATE' | translate }}</th>
+							<th>{{ 'TCF_DETAIL.LBL_REPORT_NAME' | translate }}</th>
+							<th>{{ 'TCF_DETAIL.LBL_VERSION_VALIDATED' | translate }}</th>
+							<th>{{ 'TCF_DETAIL.LBL_SCOPE_STATUS' | translate }}</th>
+							<th>{{ 'TCF_DETAIL.LBL_SCOPE_COMMENTS' | translate }}</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr *ngIf="tcfScope.scopeDetailLoading" [ngClass]="(((i+1) % 2)== 0)?'even':'odd'">
+							<td>
+								<div class="table-placeholder-block animate"></div>
+							</td>
+							<td>
+								<div class="table-placeholder-block animate"></div>
+							</td>
+							<td>
+								<div class="table-placeholder-block animate"></div>
+							</td>
+							<td>
+								<div class="table-placeholder-block animate"></div>
+							</td>
+							<td>
+								<div class="table-placeholder-block animate"></div>
+							</td>
+							<td>
+								<div class="table-placeholder-block animate"></div>
+							</td>
+							<td>
+								<div class="table-placeholder-block animate"></div>
+							</td>
+							<td>
+								<div class="table-placeholder-block animate"></div>
+							</td>
+							<td>
+								<div class="table-placeholder-block animate"></div>
+							</td>
+							<td>
+								<div class="table-placeholder-block animate"></div>
+							</td>
+							<td>
+								<div class="table-placeholder-block animate"></div>
+							</td>
+						</tr>
+						<ng-template *ngIf="!tcfScope.scopeDetailLoading" ngFor let-scopeDetail
+							[ngForOf]="tcfScope.scopeDetailList" let-p="index">
+							<tr class="odd">
+								<td style="width:10%">
+									<a style="color: blue;" triggers="mouseenter:mouseleave"
+										(click)="getTCFDocumentByType(scopeDetail.attachmentId,tcfDownloadDocument.SpecificDocument)"
+										class="right-link">
+										{{scopeDetail.attachmentName}}</a>
+								</td>
+								<td style="width:5%;text-align: center;">
+									<img *ngIf="scopeDetail.trafficColor==trafficLightColor.Red"
+										src="assets/images/red-close-thick.svg" alt="clock" class="clock-icon">
+									<img *ngIf="scopeDetail.trafficColor==trafficLightColor.Green"
+										src="assets/images/green-tick.svg" alt="clock" class="clock-icon">
+									<img *ngIf="scopeDetail.trafficColor==trafficLightColor.Orange"
+										src="assets/images/process.svg" alt="clock" class="clock-icon">
+								</td>
+								<td style="width:5%">{{scopeDetail.issuerName}}</td>
+								<td style="width:5%">{{scopeDetail.receiveDate}}</td>
+								<td style="width:5%">{{scopeDetail.reviewDate}}</td>
+								<td style="width:5%">{{scopeDetail.issueDate}}</td>
+								<td style="width:5%">{{scopeDetail.docExpDate}}</td>
+								<td style="width:5%">{{scopeDetail.reportName}}</td>
+								<td style="width:5%">{{scopeDetail.versionValidated}}</td>
+								<td style="width:5%">
+									<div class="booking-status">
+										<span>{{scopeDetail.status}}</span>
+									</div>
+								</td>
+								<td style="width:8%">{{scopeDetail.comment}}</td>
+							</tr>
+						</ng-template>
+
+
+					</tbody>
+				</table>
+			</div>
+		</td>
+	</tr>
+
+</ng-template>
+
+<div class="loader-overlay" *ngIf="tcfDetailMaster.isDetailLoader">
+	<div class="loader-container">
+	  <img src="assets/images/reload.svg" alt="">
+	  <span>{{'COMMON.LBL_LOADER' | translate}}</span>
+	</div>
+  </div>
+
+<ng-template #productImage let-modal>
+	<div class="modal-header custom-modal-header">
+		<h4 class="modal-title" id="modal-basic-title">{{'EDIT_BOOKING.VIEW_PRODUCT_TITLE' | translate}}</h4>
+		<button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+			<span aria-hidden="true">&times;</span>
+		</button>
+	</div>
+	<div class="modal-body custom-modal-body">
+		<ngx-gallery [options]="productGalleryOptions" [images]="productGalleryImages"></ngx-gallery>
+	</div>
+</ng-template>
+
+<ng-template #uploadproductimage let-modal>
+	<div class="modal-header custom-modal-header">
+		<h4 class="modal-title" id="modal-basic-title">Upload Product Image</h4>
+		<button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+			<span aria-hidden="true">&times;</span>
+		</button>
+	</div>
+	<div class="modal-body custom-modal-body">
+		<div class="row">
+			<div class="col-sm-12 marginTop15">
+				<app-drag-drop [fileLimit]="uploadLimit" [fileExtension]="uploadFileExtensions"
+					[fileSizeLimit]="fileSize" (fileUpload)="selectProductFiles($event)"></app-drag-drop>
+			</div>
+			<ng-container *ngIf="productFileAttachments != null && productFileAttachments.length>0">
+				<div class="col-sm-12">
+					<div class="drag-drop-files-container">
+						<div class="row col-sm-12">
+							<div class="file col-sm-3" *ngFor="let file of productFileAttachments ;  let j = index">
+								<a (click)="getFile(file)">
+									<img src="assets/images/uploaded-file-success.png" class="icon" alt="">
+								</a>
+								<div class="info">
+									<h4 class="file-title">{{file.fileName}}</h4>
+								</div>
+								<img src="assets/images/red-close.svg" alt="" (click)="removeProductAttachment(j)"
+									class="close">
+							</div>
+						</div>
+					</div>
+				</div>
+			</ng-container>
+		</div>
+		<div class="row">
+			<div class="col-sm-12 marginTop15 text-right">
+
+				<button class="secondary-cta" [disabled]="tcfDetailMaster.uploadTCFProductFileLoading"
+					style="margin-right: 1%;" (click)="modal.dismiss('Cross click');">Cancel</button>
+				<button class="primary-cta" [disabled]="tcfDetailMaster.uploadTCFProductFileLoading"
+					(click)="uploadTCFProductImage();">Upload
+					<span *ngIf="tcfDetailMaster.uploadTCFProductFileLoading">
+						<i class="fa fa-refresh fa-spin" aria-hidden="true"></i>
+					</span>
+				</button>
+			</div>
+		</div>
+	</div>
+</ng-template>

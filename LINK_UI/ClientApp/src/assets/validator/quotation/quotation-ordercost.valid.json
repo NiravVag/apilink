@@ -1,0 +1,42 @@
+{
+  "model": "quotation.model",
+  "fields": {
+    "unitPrice": [
+      {
+        "type": "required",
+        "fieldType": "NU",
+        "ressource": "QUOTATION.MSG_UNIT_PRICE_REQ"
+      }
+    ]
+    ,
+    "noOfManday": [
+      {
+        "type": "required",
+        "fieldType": "NU",
+        "ressource": "QUOTATION.MSG_MAN_DAY_REQ"
+      }
+    ],
+    "inspFees": [
+      {
+        "type": "required",
+        "fieldType": "NU",
+        "ressource": "QUOTATION.MSG_INSP_FEES_REQ"
+      }
+    ],
+    "billedQtyType": [
+      {
+        "type": "required",
+        "fieldType": "NU",
+        "ressource": "QUOTATION.MSG_Billed_QTY_TYPE_REQ"
+      }
+    ],
+    "quantity": [
+      {
+        "type": "required",
+        "fieldType": "NU",
+        "ressource": "QUOTATION.MSG_QUANTITY_REQ"
+      }
+    ]
+  }
+
+}

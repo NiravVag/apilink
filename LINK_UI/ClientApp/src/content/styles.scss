@@ -1,0 +1,1057 @@
+$mobile-min-width: 360px;
+$mobile-max-width: 767px;
+$white: #ffffff;
+
+/* You can add global styles to this file, and also import other style files */
+.is-invalid {
+  border-color: #dc3545 !important;
+}
+
+.invalid-feedback {
+  display: block !important;
+  font-size: 70% !important;
+  color: #dc3545 !important;
+  margin-bottom: 5px;
+}
+
+.borderline {
+  margin-bottom: 40px;
+  padding-bottom: 35px;
+  border-bottom: 2px solid rgba(189, 210, 226, 0.2);
+}
+
+.MarginR-20 {
+  margin-right: 20px;
+}
+
+.MarginL-10 {
+  margin-left: 10px;
+}
+
+.checkboxListContainer {
+  border: 1px solid #abafb1;
+  height: 200px;
+  border-radius: 5px;
+  padding: 5px 5px;
+  width: 95%;
+  overflow: scroll;
+  overflow-x: hidden;
+}
+
+.width-150 {
+  min-width: 150px !important;
+}
+
+//edit-booking booking-products table textarea
+.textarea-products {
+  margin-top: 10px !important;
+  height: 48px !important;
+}
+
+//after order success label display
+.order-success {
+  margin-top: 10px !important;
+  margin-bottom: 10px !important;
+}
+
+//edit-booking table vertical scroll
+.scroll-y {
+  max-height: 1000px;
+  overflow-y: scroll;
+}
+
+.scroll-ytable {
+  max-height: 468px;
+  overflow-y: scroll;
+
+  &::-webkit-scrollbar-track {
+    border-radius: 10px;
+    background-color: #F5F5F5;
+  }
+
+  &::-webkit-scrollbar {
+    width: 6px;
+    background-color: #F5F5F5;
+    height: 10px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    border-radius: 10px;
+    background-color: #999;
+  }
+}
+
+.scroll-ytableQuotation {
+  max-height: 1000px;
+  overflow-y: scroll;
+
+  &::-webkit-scrollbar-track {
+    border-radius: 10px;
+    background-color: #F5F5F5;
+  }
+
+  &::-webkit-scrollbar {
+    width: 6px;
+    background-color: #F5F5F5;
+    height: 10px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    border-radius: 10px;
+    background-color: #999;
+  }
+}
+
+//override the audit.scss style for edit booking
+.last-preview {
+  @media only screen and (min-width: $mobile-min-width) and (max-width: $mobile-max-width) {
+    margin-top: 0px !important;
+  }
+}
+
+.Center_Middle {
+  text-align: center !important;
+  vertical-align: middle !important;
+}
+
+.wordbreak {
+  -ms-word-break: break-all;
+  word-break: break-all;
+  /* Non standard for webkit */
+  word-break: break-word;
+  -webkit-hyphens: auto;
+  -moz-hyphens: auto;
+  -ms-hyphens: auto;
+  hyphens: auto;
+}
+
+.alink {
+  cursor: pointer !important;
+  text-decoration: underline !important;
+  color: blue !important;
+  font-weight: bold !important;
+  font-size: 11px;
+}
+
+label.required:after {
+  content: " *";
+  color: red;
+  font-weight: bold
+}
+
+th.required:after {
+  content: " *";
+  color: red;
+  font-weight: bold
+}
+
+//added in _modal.scss .small-model h2{margin-bottom: 0.5rem;}
+//customer check point table class
+.tableMargin {
+  margin: 12px 0px !important;
+}
+
+//  Below css used to fix the table header
+.clsTablheaderFix {
+  position: relative;
+  border-collapse: collapse;
+}
+
+.clsTablheaderFix thead th {
+  position: -webkit-sticky;
+  /* for Safari */
+  position: sticky;
+  top: 0;
+  background: #e7cfc9;
+  color: black;
+  font-weight: bold;
+  z-index: 1;
+}
+
+.clsDivTableHeaderFix {
+  height: 500px;
+  overflow: scroll;
+  position: relative;
+}
+
+//customer check points table button display
+.Center-Middle-Table {
+  text-align: center !important;
+}
+
+//quotation popup no record show
+.no-result-table {
+  margin: 12px 0;
+  text-align: center;
+  padding: 20px 0 40px;
+  margin-left: 0.84406295%;
+  width: 98.31187411%;
+  float: left;
+  margin-right: 1.28755365%;
+  background-color: rgba(225, 232, 245, 0.4);
+}
+
+.table-border {
+  border: 3px solid rgba(189, 210, 226, 0.4) !important;
+}
+
+.expand-table-icon {
+  cursor: pointer;
+  text-align: center;
+}
+
+.th-text-center {
+  text-align: center;
+}
+
+.expand-texttop {
+  vertical-align: text-top;
+}
+
+.textfont-bold {
+  font-weight: bold;
+}
+
+// override the css from main.css
+
+$tablet-min-width: 768px;
+$tablet-max-width: 1024px;
+$mobile-min-width: 360px;
+$mobile-max-width: 767px;
+
+.scroll-x {
+  overflow-x: scroll;
+
+  @media only screen and (min-width: $tablet-min-width) and (max-width: $tablet-max-width) {
+
+    white-space: normal !important;
+  }
+
+  @media only screen and (min-width: $mobile-min-width) and (max-width: $mobile-max-width) {
+
+    white-space: normal !important;
+  }
+
+  &::-webkit-scrollbar-track {
+    border-radius: 10px;
+    background-color: #F5F5F5;
+  }
+
+  &::-webkit-scrollbar {
+    width: 6px;
+    background-color: #F5F5F5;
+    height: 10px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    border-radius: 10px;
+    background-color: #999;
+  }
+}
+
+.onglet {
+  margin-top: 10px;
+  border: 1px solid rgba(189, 210, 226, 0.8);
+  border-radius: 10px;
+}
+
+.padding {
+  padding: 10px 40px 26px
+}
+
+.border-collapse {
+  border-collapse: separate !important;
+  border-spacing: 0px !important;
+  border: 1px solid rgba(189, 210, 226, 0.8);
+}
+
+.width-80 {
+  min-width: 80px !important;
+  max-width: 80px !important;
+
+  @media only screen and (min-width: $mobile-min-width) and (max-width: $mobile-max-width) {
+    min-width: initial !important;
+    max-width: initial !important;
+  }
+}
+
+.width-60 {
+  min-width: 60px !important;
+  max-width: 60px !important;
+
+  @media only screen and (min-width: $mobile-min-width) and (max-width: $mobile-max-width) {
+    min-width: initial !important;
+    max-width: initial !important;
+  }
+}
+
+.marignT-20 {
+  margin-top: 20px;
+}
+
+.scroll-maintable-y {
+  max-height: 700px;
+  overflow-y: scroll;
+
+  &::-webkit-scrollbar-track {
+    border-radius: 10px;
+    background-color: #F5F5F5;
+  }
+
+  &::-webkit-scrollbar {
+    width: 6px;
+    background-color: #F5F5F5;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    border-radius: 10px;
+    background-color: #999;
+  }
+}
+
+.table-td-header {
+  font-size: 11px;
+  font-weight: 500;
+  font-family: roboto-medium;
+  color: rgba(32, 59, 78, 0.5);
+  background-color: #e1e8f5;
+}
+
+.text-wrap {
+  white-space: pre-wrap !important;
+  // hide text that can't wrap with an ellipsis 
+  overflow: hidden;
+  text-overflow: ellipsis;
+  overflow-wrap: break-word;
+}
+
+.width-120 {
+  min-width: 120px !important;
+  max-width: 120px !important;
+}
+
+.width-160 {
+  min-width: 160px !important;
+  max-width: 160px !important;
+}
+
+.width-100 {
+  width: 100px !important;
+}
+
+.width-20 {
+  width: 20px !important;
+}
+
+.width-50 {
+  width: 50px !important;
+}
+
+.width-70 {
+  width: 70px !important;
+}
+
+.width-80 {
+  width: 80px !important;
+}
+
+.width-290 {
+  min-width: 290px !important;
+  max-width: 290px !important;
+}
+
+.allocation-row .allocation-column {
+  min-width: 160px !important;
+}
+
+//bold the text using in quotation
+.input-value {
+  font-size: 12px !important;
+  font-weight: bold !important;
+}
+
+.lgModelWidth .modal-dialog {
+  max-width: 1100px !important;
+}
+
+.lightgreen {
+  background-color: #b0d136 !important;
+  border-bottom: solid 0.2px #b0d136 !important;
+}
+
+.darkgreen {
+  background-color: #0f9747 !important;
+  border-bottom: solid 0.2px #0f9747 !important;
+}
+
+.lightgrey {
+  color: #9eb9ce !important;
+}
+
+//quotation summary table format name
+.textcaps {
+  text-transform: capitalize;
+}
+
+//quotation summary tile view validation button
+.text-transform-none {
+  text-transform: none !important;
+}
+
+.whitespacenormal {
+  white-space: normal !important;
+}
+
+.h-scroll {
+  overflow-y: auto !important;
+  overflow-x: auto !important;
+}
+
+.table-max-height-400 {
+  max-height: 400px !important;
+}
+
+.table-max-height-450 {
+  max-height: 450px !important;
+}
+
+.table-max-height-500 {
+  max-height: 500px !important;
+}
+
+.table-max-height-550 {
+  max-height: 550px !important;
+}
+
+.table-max-height-650 {
+  max-height: 650px !important;
+}
+
+.table-max-height-300 {
+  max-height: 300px !important;
+}
+
+.child-table-padding {
+  padding: 10px 0px 0px 5px !important;
+}
+
+
+.popoverScroll {
+  height: 200px !important;
+  overflow-y: auto !important;
+}
+
+//used in extra fee register page
+.extra-fee-table-height {
+  max-height: 600px;
+  overflow-y: auto !important;
+}
+
+.extra-fee-text-area {
+  margin-top: 0px;
+  margin-bottom: 6px;
+  height: 41px;
+}
+
+.width80 {
+  width: 80px;
+}
+
+.tcf-page-progress-container {
+
+  .color-bar {
+    width: 220px;
+    height: 7px;
+    border-radius: 6px;
+    margin-right: 12px;
+    display: inline-block;
+    background-color: rgba(#a8cae6, 0.4);
+
+    .color {
+      height: 7px;
+      display: block;
+      border-radius: 6px;
+
+      &.red {
+        background-color: #e02e2e;
+      }
+
+      &.grey {
+        background-color: #FFCCCB;
+      }
+
+      &.orange {
+        background-color: #FFA500;
+      }
+
+      &.green {
+        background-color: #008000;
+      }
+    }
+  }
+}
+
+// drag and drop design css starts
+.column-container {
+  width: 400px;
+  max-width: 100%;
+  margin: 0 25px 25px 0;
+  display: inline-block;
+  vertical-align: top;
+  overflow: hidden;
+  border-bottom: 1px solid #ccc;
+}
+
+.column-list {
+  border: solid 1px #ccc;
+  height: 100%;
+  background: white;
+  border-radius: 4px;
+  overflow: hidden;
+  display: block;
+  min-height: 500px !important;
+  max-height: 500px !important;
+}
+
+.column-box {
+  padding: 20px 10px;
+  border-bottom: solid 1px #ccc;
+  color: rgba(0, 0, 0, 0.87);
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  box-sizing: border-box;
+  cursor: move;
+  background: white;
+  font-size: 14px;
+  min-height: 65px;
+}
+
+.cdk-drag-preview {
+  box-sizing: border-box;
+  border-radius: 4px;
+  box-shadow: 0 5px 5px -3px rgba(0, 0, 0, 0.2),
+    0 8px 10px 1px rgba(0, 0, 0, 0.14),
+    0 3px 14px 2px rgba(0, 0, 0, 0.12);
+}
+
+.cdk-drag-placeholder {
+  opacity: 0;
+}
+
+.cdk-drag-animating {
+  transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
+}
+
+.column-box:last-child {
+  border: none;
+}
+
+.example-list.cdk-drop-list-dragging .column-box:not(.cdk-drag-placeholder) {
+  transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
+}
+
+.hover {
+  cursor: pointer;
+}
+
+.card-body {
+  background: #F5F5F5;
+}
+
+// drag and drop design css ends
+
+.marginTop35 {
+  margin-top: 35px;
+}
+
+.marginTop60 {
+  margin-top: 60px;
+}
+
+.angular-editor-toolbar button i {
+  font-family: FontAwesome !important;
+  color: #474d6d !important;
+
+}
+
+.redColor {
+  color: red !important;
+}
+
+.greencolor {
+  color: #10ed39 !important;
+}
+
+
+.stats-container {
+  padding: 10px;
+  padding-right: 20px;
+}
+
+.stats-container span {
+  font-size: 12px;
+  line-height: 1.33;
+  margin-left: 40px;
+  display: inline-block;
+  color: rgba(32, 59, 78, 0.6);
+  font-family: roboto-medium;
+}
+
+.stats-container span.big {
+  color: #24424d;
+  font-size: 36px;
+  margin-left: 20px;
+  line-height: 0.64;
+  font-family: roboto-light;
+}
+
+.ahover {
+  color: white !important;
+}
+
+.insp-send {
+  color: #167412 !important;
+  background-color: #E8F1E7 !important;
+
+  &:hover {
+    color: $white  !important;
+    background-color: #167412 !important;
+  }
+
+  &:active {
+    color: $white  !important;
+    background-color: #167412 !important;
+  }
+
+  &.active {
+    color: $white  !important;
+    background-color: #167412 !important;
+  }
+}
+
+.insp-pending {
+  color: #00A5CC !important;
+  background-color: #D3F7FF !important;
+
+  &:hover {
+    color: $white  !important;
+    background-color: #00A5CC !important;
+  }
+
+  &:active {
+    color: $white  !important;
+    background-color: #00A5CC !important;
+  }
+
+  &.active {
+    color: $white  !important;
+    background-color: #00A5CC !important;
+  }
+}
+
+.insp-cancel {
+  color: #F81538 !important;
+  background-color: #FEE8EB !important;
+
+  &:hover {
+    color: $white  !important;
+    background-color: #F81538 !important;
+  }
+
+  &:active {
+    color: $white  !important;
+    background-color: #F81538 !important;
+  }
+
+  &.active {
+    color: $white  !important;
+    background-color: #f81538 !important;
+  }
+}
+
+.insp-inspected {
+  color: #24C11E !important;
+  background-color: #E9F9E8 !important;
+
+  &:hover {
+    color: $white  !important;
+    background-color: #24C11E !important;
+  }
+
+  &:active {
+    color: $white  !important;
+    background-color: #24C11E !important;
+  }
+
+  &.active {
+    color: $white  !important;
+    background-color: #24C11E !important;
+  }
+}
+
+.insp-confirm {
+  color: #0085CC !important;
+  background-color: #E8F1F6 !important;
+
+  &:hover {
+    color: $white  !important;
+    background-color: #0085CC !important;
+  }
+
+  &:active {
+    color: $white  !important;
+    background-color: #0085CC !important;
+  }
+
+  &.active {
+    color: $white  !important;
+    background-color: #0085CC !important;
+  }
+}
+
+.insp-hold {
+  color: #E85785 !important;
+  background-color: #FDEEF3 !important;
+
+  &:hover {
+    color: $white  !important;
+    background-color: #E85785 !important;
+  }
+
+  &:active {
+    color: $white  !important;
+    background-color: #E85785 !important;
+  }
+
+  &.active {
+    color: $white  !important;
+    background-color: #E85785 !important;
+  }
+}
+
+.insp-allocate {
+  color: #997600 !important;
+  background-color: #F7F4EB !important;
+
+  &:hover {
+    color: $white  !important;
+    background-color: #997600 !important;
+  }
+
+  &:active {
+    color: $white  !important;
+    background-color: #997600 !important;
+  }
+
+  &.active {
+    color: $white  !important;
+    background-color: #997600 !important;
+  }
+}
+
+.insp-verify {
+  color: #935DC6 !important;
+  background-color: #F6F0FC !important;
+
+  &:hover {
+    color: $white  !important;
+    background-color: #935DC6 !important;
+  }
+
+  &:active {
+    color: $white  !important;
+    background-color: #935DC6 !important;
+  }
+
+  &.active {
+    color: $white  !important;
+    background-color: #935DC6 !important;
+  }
+}
+
+.insp-validate {
+  color: #c65db9 !important;
+  background-color: rgba(220, 103, 206, 0.1) !important;
+
+  &:hover {
+    color: $white  !important;
+    background-color: #dc67ce !important;
+  }
+
+  &:active {
+    color: $white  !important;
+    background-color: #dc67ce !important;
+  }
+
+  &.active {
+    color: $white  !important;
+    background-color: #dc67ce !important;
+  }
+}
+
+.insp-schedule {
+  color: #E8B300 !important;
+  background-color: #FFF9E5 !important;
+
+  &:hover {
+    color: $white  !important;
+    background-color: #FFC500 !important;
+  }
+
+  &:active {
+    color: $white  !important;
+    background-color: #FFC500 !important;
+  }
+
+  &.active {
+    color: $white  !important;
+    background-color: #FFC500 !important;
+  }
+}
+
+.insp-reschedule {
+  color: #FF5626 !important;
+  background-color: #FFEEE9 !important;
+
+  &:hover {
+    color: $white  !important;
+    background-color: #FF5626 !important;
+  }
+
+  &:active {
+    color: $white  !important;
+    background-color: #FF5626 !important;
+  }
+
+  &.active {
+    color: $white  !important;
+    background-color: #FF5626 !important;
+  }
+}
+
+//booking summary page
+.text-transform-initial {
+  text-transform: initial !important;
+}
+
+.width-200 {
+  min-width: 200px !important;
+  max-width: 200px !important;
+}
+
+.created-name-odd {
+  background-color: #dc67ce !important;
+}
+
+.created-name-even {
+  background-color: #00ceff !important;
+}
+
+
+.page-head-container {
+  flex: 1;
+  display: flex;
+  padding: 16px 0;
+  box-shadow: 0 2px 4px 0 #12141a14;
+
+  @media only screen and (min-width: $mobile-min-width) and (max-width: $mobile-max-width) {
+    padding: 16px 14px;
+  }
+
+  .header-back-button {
+    cursor: pointer;
+    margin-right: 24px;
+    display: inline-block;
+    padding: 5px 24px 5px 0;
+    border-right: 1px solid #e0e1e2;
+
+    img {
+      width: 24px;
+    }
+
+    &:hover {
+
+      img {
+        animation-duration: 2s;
+        animation-fill-mode: both;
+        animation-iteration-count: 1;
+        animation-name: wobble;
+      }
+    }
+  }
+}
+
+
+
+toolTip {
+  padding: 25px;
+}
+
+.item {
+  display: block;
+  width: 150px;
+  text-align: center;
+  border: 2px solid grey;
+  border-radius: 5px;
+  margin: 5px;
+}
+
+.ml-8 {
+  margin-left: 8% !important;
+}
+
+.br-product-primary {
+  border-top: 2px solid #beb7b7;
+}
+
+
+.tree-view-overflow {
+  overflow: inherit !important;
+}
+
+.bookingNote {
+  float: right;
+  font-size: smaller;
+}
+
+.productPopupMarginLeft {
+  margin-left: 0px;
+}
+
+
+.booking-product-table-container {
+  thead>tr>th {
+    padding: 18px 3px !important;
+  }
+
+  tbody>tr>td {
+    padding: 15px 3px !important;
+  }
+}
+
+.bookingAdditionalFields {
+  border-bottom: none !important;
+  padding-bottom: 0px !important;
+}
+
+.bookingAdditionalFieldsPaddingTop {
+  padding-top: 0px !important;
+}
+
+.bookingProductDescription {
+  white-space: normal !important;
+}
+
+.cursorPointer {
+  cursor: pointer;
+}
+.scroll-xradiolist {
+  overflow-x: scroll !important;
+  white-space: nowrap !important;
+
+  @media only screen and (min-width: $tablet-min-width) and (max-width: $tablet-max-width){
+		overflow-x: hidden;
+		white-space: normal;
+	}
+
+	@media only screen and (min-width: $mobile-min-width) and (max-width: $mobile-max-width){
+		overflow-x: hidden;
+		white-space: normal;
+	}
+
+	&::-webkit-scrollbar-track{
+		border-radius: 10px;
+		background-color: #F5F5F5;
+	}
+
+	&::-webkit-scrollbar{
+		height: 6px;
+		background-color: #F5F5F5;
+	}
+
+	&::-webkit-scrollbar-thumb{
+		border-radius: 10px;
+		background-color: #b7c3d1;
+	}
+}
+
+
+.fontStyleTravel {
+  font-size: 14px !important;
+  font-family: roboto-regular !important;
+}
+
+.fontColor {
+  color: red !important;
+}
+
+.quotationtablemargin {
+  margin-top: 5px !important;
+}
+
+.quotationlastcolumnmargin {
+  margin-bottom: 30px !important;
+}
+
+.th-border-report {
+  border-left: 0px !important;
+}
+.td-position-report {
+  position: inherit !important;  
+}
+
+report-margin-bottom {
+  margin-bottom: 12px !important;
+}
+button-float {
+    float: right !important;
+}
+.quotation-booking-file {
+    font-family: roboto-bold;
+    font-size: 13px !important;
+}
+.quotation-supplier-margin {
+    margin-top: -10px;
+}
+.dashboard-supplier-margin {
+    margin-top: -13px;
+}
+.width60 {
+  width: 60px !important;
+}
+
+.communication-btn-top {
+  margin-top: 30px !important;
+}
+
+.communication-invoice-popup-top {
+  padding-top: 10px !important;
+}
+
+.auto-expense-a {
+  display: inline !important;
+  padding-right: 10px !important;
+}
+
+.tdright-link {
+  float: right;
+  line-height: 1;
+  font-size: 12px;
+  font-weight: bold;
+  color: #cd2d2f !important;
+  font-family: roboto-bold;
+}
+
+.notification-card-container {
+  .notification-card {
+    &.type-four {
+      background-color: #ffc107;
+
+      &:hover {
+        background-color: #ffc107;
+      }
+    }
+  }
+}

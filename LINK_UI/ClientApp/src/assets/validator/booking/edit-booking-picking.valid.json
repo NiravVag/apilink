@@ -1,0 +1,54 @@
+{
+    "model": "inspectionpicking.model",
+    "fields": {
+        "poId": [
+            {
+                "type": "required",
+                "fieldType": "N",
+                "ressource": "BOOKING_INSPECTIONPICKING.MSG_PO_REQ"
+            }
+        ],
+        "productId": [
+            {
+                "type": "required",
+                "fieldType": "N",
+                "ressource": "BOOKING_INSPECTIONPICKING.MSG_PRODUCT_REQ"
+            }
+        ],
+        "labId": [
+            {
+                "type": "required",
+                "fieldType": "N",
+                "ressource": "BOOKING_INSPECTIONPICKING.MSG_LAB_REQ"
+            }
+        ],
+        "labAddressId": [
+            {
+                "type": "required",
+                "fieldType": "A",
+                "ressource": "BOOKING_INSPECTIONPICKING.MSG_LAB_ADDRESS_REQ"
+            }
+        ],
+        "labContactId": [
+            {
+                "type": "required",
+                "fieldType": "N",
+                "ressource": "BOOKING_INSPECTIONPICKING.MSG_LAB_CONTACT_REQ"
+            }
+        ],
+        "pickingQuantity": [
+            {
+                "type": "required",
+                "fieldType": "N",
+                "ressource": "BOOKING_INSPECTIONPICKING.MSG_LAB_PICKINGQTY_REQ"
+            }
+        ],
+      "labContactTypeItems": [
+        {
+          "type": "required",
+          "fieldType": "N",
+          "ressource": "BOOKING_INSPECTIONPICKING.MSG_LAB_CONTACT_TYPE_REQ"
+        }
+      ]
+    }
+}

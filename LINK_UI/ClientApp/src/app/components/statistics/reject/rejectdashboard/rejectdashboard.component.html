@@ -1,0 +1,950 @@
+<div class="main-wrapper">
+    <div class="wrapper dashboard-wrapper mandays-dashboard-wrapper">
+        <div class="filter-bar-container" *ngIf="model.filterDataShown">
+            <div class="my-dashboard-container" *ngIf="!isMobile">
+                <p class="heading">
+                    {{'REJECTION_DASHBOARD.LBL_DATA_SHOWING' | translate}}
+                </p>
+                <ul class="applied-filter-list">
+                    <li *ngIf="requestModel.serviceDateFrom">
+                        {{'REJECTION_DASHBOARD.LBL_FROMDATE' | translate}} : {{requestModel.serviceDateFrom.day}}/ {{requestModel.serviceDateFrom.month}}/ {{requestModel.serviceDateFrom.year}}
+                        <span *ngIf="requestModel.serviceDateTo" class="ml-2">
+                            {{'REJECTION_DASHBOARD.LBL_TODATE' | translate}} :
+                            {{requestModel.serviceDateTo.day}}/
+                            {{requestModel.serviceDateTo.month}}/
+                            {{requestModel.serviceDateTo.year}}
+                        </span>
+                    </li>
+                    <li *ngIf="model.customerName">
+                        {{ 'REJECTION_DASHBOARD.LBL_CUSTOMER' | translate }} : {{model.customerName}}
+                    </li>
+                    <li *ngIf="model.supplierName">{{ 'REJECTION_DASHBOARD.LBL_SUPPLIER' | translate }} : {{model.supplierName}}
+                    </li>
+                    <li *ngIf="model.countryListName && model.countryListName.length >0">
+                        {{ 'REJECTION_DASHBOARD.LBL_FACTORY_COUNTRY' | translate}} : {{model.countryListName}}
+                    </li>
+                    <li *ngIf="(requestModel.selectedBrandIdList && requestModel.selectedBrandIdList.length >0) ||
+                        (requestModel.selectedBuyerIdList && requestModel.selectedBuyerIdList.length >0) ||
+                        (requestModel.selectedCollectionIdList && requestModel.selectedCollectionIdList.length >0) ||
+                        (requestModel.selectedDeptIdList && requestModel.selectedDeptIdList.length >0)">
+                        {{ 'COMMON.LBL_MORE' | translate}} ...
+                    </li>
+                </ul>
+            </div>
+            <div class="my-dashboard-container" *ngIf="isMobile">
+                <p class="heading">
+                    {{model.filterCount}} {{'REJECTION_DASHBOARD.LBL_FILTER_SELECTED' | translate}}
+                </p>
+                <div class="filter-reset-cta" (click)="cancelFilter()">
+                    <img src="assets/images/reset-white.svg" alt=""> {{'COMMON.LBL_RESET' | translate}}
+                </div>
+            </div>
+        </div>
+        <div class="filter-container style-2" [@expandCollapse]="isFilterOpen ? 'open' : 'close'" [@.disabled]="isMobile">
+            <div class="my-dashboard-container">
+                <div class="row">
+                    <div class="col-sm-3 mobile-margin-top-15">
+                        <div class="my-input-group">
+                            <label for="">{{'REJECTION_DASHBOARD.LBL_DATE_PERIOD' | translate}}</label>
+                            <div class="d-flex my-input-group">
+                                <div class="calendar-wrapper inline mr-2">
+                                    <input type="text" container="body" [(ngModel)]="requestModel.serviceDateFrom" ngbDatepicker #sdf="ngbDatepicker" [ngClass]="{ 'is-invalid':  !validator.isValid('serviceDateFrom')}" placeholder="{{  'REJECTION_DASHBOARD.LBL_SERVICE_DATE_FROM'  | translate }}"
+                                        (click)="sdf.toggle()">
+                                    <img src="assets/images/cta-calendar-grey.svg" alt="" class="calendar-icon" (click)="sdf.toggle()">
+                                </div>
+                                <div class="calendar-wrapper inline">
+                                    <input type="text" maxlength="10" container="body" [ngClass]="{ 'is-invalid':  !validator.isValid('serviceDateTo')}" placeholder="{{  'REJECTION_DASHBOARD.LBL_SERVICE_DATE_TO'  | translate }}" [(ngModel)]="requestModel.serviceDateTo" ngbDatepicker #sdt="ngbDatepicker"
+                                        (click)="sdt.toggle()">
+                                    <img src="assets/images/cta-calendar-grey.svg" alt="" class="calendar-icon" (click)="sdt.toggle()">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-3 mobile-margin-top-15">
+                        <div class="my-input-group">
+                            <label for="">{{'REJECTION_DASHBOARD.LBL_CUSTOMER' | translate}}</label>
+                            <ng-select bindLabel="name" bindValue="id" [multiple]="false" [items]="model.customerList" [clearable]="false" [(ngModel)]="requestModel.customerId" [virtualScroll]="true" (scrollToEnd)="getCustomerData(true)" [typeahead]="model.customerInput" [minTermLength]="3"
+                                (change)="changeCustomerData($event)" placeholder="--- {{ (model.customerList && model.customerList.length>0? 'COMMON.LBL_SELECT':'COMMON.LBL_NO_DATA' ) | translate }} ---" appendTo="body" [loading]="model.customerLoading">
+                                <ng-template ng-option-tmp let-item="item">
+                                    <div class="text-wrap">{{ item.name }}</div>
+                                </ng-template>
+                            </ng-select>
+                        </div>
+                    </div>
+                    <div class="col-sm-3 mobile-margin-top-15 dashboard-supplier-margin">
+                        <div class="my-input-group">
+                            <div class="my-input-group">
+                                <div class="styled-radio-container" *ngFor="let item of supplierTypeList;let idx = index">
+                                  <input type="radio" class="styled-radio" id="{{item.id}}" name="radio-group3" [value]="item.id"
+                                    [checked]="true"  [(ngModel)]="model.supplierTypeId"
+                                    (change)="changeSupplierType(item)">
+                                  <label for="{{item.id}}">{{item.name}}</label>
+                                </div>
+                              </div>
+                            <ng-select appendTo="body" [items]="model.supplierList" [virtualScroll]="true" [loading]="model.supLoading" bindLabel="name" bindValue="id" placeholder="--- {{ (model.supplierList && model.supplierList.length>0? 'COMMON.LBL_SELECT':'COMMON.LBL_NO_DATA' ) | translate }} ---"
+                                [disabled]="currentUser.usertype == userTypeEnum.Supplier"
+                                [typeahead]="model.supInput" [minTermLength]="3" [(ngModel)]="requestModel.supplierId" [multiple]="false" (scrollToEnd)="getSupplierData()" (clear)="clearSupplier()" (change)="supplierChange($event)" #select>
+                                <ng-template ng-option-tmp let-item="item">
+                                    <div class="text-wrap"><span>{{item.name}}</span></div>
+                                </ng-template>
+                            </ng-select>
+                        </div>
+                    </div>
+                    <div class="col-sm-3 mobile-margin-top-15">
+                        <div class="my-input-group">
+                            <label for="">{{'DEFECT_DASHBOARD.LBL_FACTORY' | translate}}</label>
+                            <ng-select appendTo="body" [items]="model.factoryList" [virtualScroll]="true" [loading]="model.factoryLoading" bindLabel="name" bindValue="id" placeholder="--- {{ (model.factoryList!=null && model.factoryList.length!=0? 'COMMON.LBL_SELECT':'COMMON.LBL_NO_DATA' ) | translate }} ---"
+                                [disabled]="currentUser.usertype == userTypeEnum.Factory" [typeahead]="model.factoryInput" [minTermLength]="3" [(ngModel)]="requestModel.selectedFactoryIdList" [multiple]="true" (scrollToEnd)="getFactoryData()" class="multiple" #select>
+                                <!-- <ng-template ng-multi-label-tmp let-items="model.factoryIds" let-clear="clear">
+                                    <div class="ng-value" *ngIf="model.factoryIds && model.factoryIds.length > 0">
+                                        <span class="ng-value-label">{{model.factoryIds.length}}
+											{{'COMMON.LBL_SELECTED' | translate }}</span>
+                                    </div>
+                                </ng-template> -->
+                            </ng-select>
+                        </div>
+                    </div>
+
+
+                    
+                    <div class="col-12 filter-cta-container">
+                        <button class="primary-cta small float-right" [disabled]="model.searchLoading" (click)="search();toggleFilter()">{{'COMMON.LBL_APPLY' | translate}}</button>
+                        <button class="tertiary-cta small float-right mr-2" (click)="toggleFilter()">{{'COMMON.LBL_CANCEL' | translate}}</button>
+                    </div>
+                </div>
+                <div class="row marginTop20" *ngIf="toggleFormSection">
+                    <div class="col-sm-3 mobile-margin-top-15">
+                        <div class="my-input-group">
+                            <label for="">{{'REJECTION_DASHBOARD.LBL_BRAND' | translate}}</label>
+                            <ng-select appendTo="body" [items]="model.brandList" [virtualScroll]="true" [loading]="model.brandLoading" bindLabel="name" bindValue="id" placeholder="--- {{ (model.brandList && model.brandList.length>0? 'COMMON.LBL_SELECT':'COMMON.LBL_NO_DATA' ) | translate }} ---"
+                                [typeahead]="model.brandInput" [minTermLength]="3" [(ngModel)]="requestModel.selectedBrandIdList" [multiple]="true" class="multiple" (scrollToEnd)="getBrandData()" #select>
+
+                                <ng-template ng-multi-label-tmp let-items="requestModel.selectedBrandIdList" let-clear="clear">
+                                    <div class="ng-value" *ngIf="requestModel.selectedBrandIdList && requestModel.selectedBrandIdList.length > 0">
+                                        <span class="ng-value-label">{{requestModel.selectedBrandIdList.length}}
+                                            {{'COMMON.LBL_SELECTED' | translate }}</span>
+                                    </div>
+                                </ng-template>
+                            </ng-select>
+                        </div>
+                    </div>
+                    <div class="col-sm-3 mobile-margin-top-15">
+                        <div class="my-input-group">
+                            <label for="">{{'REJECTION_DASHBOARD.LBL_DEPARTMENT' | translate}}</label>
+                            <ng-select appendTo="body" [items]="model.deptList" [virtualScroll]="true" [loading]="model.deptLoading" bindLabel="name" bindValue="id" placeholder="--- {{ (model.deptList && model.deptList.length>0? 'COMMON.LBL_SELECT':'COMMON.LBL_NO_DATA' ) | translate }} ---"
+                                [typeahead]="model.deptInput" [minTermLength]="3" [(ngModel)]="requestModel.selectedDeptIdList" [multiple]="true" class="multiple" (scrollToEnd)="getDeptData()" #select>
+
+                                <ng-template ng-multi-label-tmp let-items="requestModel.selectedDeptIdList" let-clear="clear">
+                                    <div class="ng-value" *ngIf="requestModel.selectedDeptIdList && requestModel.selectedDeptIdList.length > 0">
+                                        <span class="ng-value-label">{{requestModel.selectedDeptIdList.length}}
+                                            {{'COMMON.LBL_SELECTED' | translate }}</span>
+                                    </div>
+                                </ng-template>
+                            </ng-select>
+                        </div>
+                    </div>
+                    <div class="col-sm-3 mobile-margin-top-15">
+                        <div class="my-input-group">
+                            <label for="">{{'REJECTION_DASHBOARD.LBL_BUYER' | translate}}</label>
+                            <ng-select appendTo="body" [items]="model.buyerList" [virtualScroll]="true" [loading]="model.buyerLoading" bindLabel="name" bindValue="id" placeholder="--- {{ (model.buyerList && model.buyerList.length>0? 'COMMON.LBL_SELECT':'COMMON.LBL_NO_DATA' ) | translate }} ---"
+                                [typeahead]="model.buyerInput" [minTermLength]="3" [(ngModel)]="requestModel.selectedBuyerIdList" [multiple]="true" class="multiple" (scrollToEnd)="getBuyerData()" #select>
+
+                                <ng-template ng-multi-label-tmp let-items="requestModel.selectedBuyerIdList" let-clear="clear">
+                                    <div class="ng-value" *ngIf="requestModel.selectedBuyerIdList && requestModel.selectedBuyerIdList.length > 0">
+                                        <span class="ng-value-label">{{requestModel.selectedBuyerIdList.length}}
+                                            {{'COMMON.LBL_SELECTED' | translate }}</span>
+                                    </div>
+                                </ng-template>
+                            </ng-select>
+                        </div>
+                    </div>
+                    <div class="col-sm-3 mobile-margin-top-15">
+                        <div class="my-input-group">
+                            <label for="">{{'REJECTION_DASHBOARD.LBL_COLLECTION' | translate}}</label>
+                            <ng-select appendTo="body" [items]="model.collectionList" [virtualScroll]="true" [loading]="model.collectionLoading" bindLabel="name" bindValue="id" placeholder="--- {{ (model.collectionList && model.collectionList.length>0? 'COMMON.LBL_SELECT':'COMMON.LBL_NO_DATA' ) | translate }} ---"
+                                [typeahead]="model.collectionInput" [minTermLength]="3" [(ngModel)]="requestModel.selectedCollectionIdList" [multiple]="true" class="multiple" (scrollToEnd)="getCollectionData()" #select>
+
+                                <ng-template ng-multi-label-tmp let-items="requestModel.selectedCollectionIdList" let-clear="clear">
+                                    <div class="ng-value" *ngIf="requestModel.selectedCollectionIdList && requestModel.selectedCollectionIdList.length > 0">
+                                        <span class="ng-value-label">{{requestModel.selectedCollectionIdList.length}}
+                                            {{'COMMON.LBL_SELECTED' | translate }}</span>
+                                    </div>
+                                </ng-template>
+                            </ng-select>
+                        </div>
+                    </div>
+                </div>
+                <div class="row marginTop20" *ngIf="toggleFormSection">
+                    <div class="col-sm-3 mobile-margin-top-15">
+                        <div class="my-input-group">
+                            <label for="">{{'REJECTION_DASHBOARD.LBL_PRODUCT_CATEGORY' | translate}}</label>
+                            <ng-select [items]="model.productCategoryList" bindLabel="name" bindValue="id" [hideSelected]="false" [clearable]="true" [searchable]="true" appendTo="body" [multiple]="true" class="multiple" [loading]="model.productCategoryListLoading" placeholder="--- {{ (model.productCategoryList && model.productCategoryList.length>0? 'COMMON.LBL_SELECT':'COMMON.LBL_NO_DATA') | translate }} ---"
+                                [(ngModel)]="requestModel.selectedProdCategoryIdList">
+                                <ng-template ng-option-tmp let-item="item">
+                                    <div class="text-wrap">{{ item.name }}</div>
+                                </ng-template>
+                            </ng-select>
+                        </div>
+                    </div>
+                    <div class="col-sm-3 col-md-3 col-lg-3 mobile-margin-top-15">
+                        <div class="my-input-group">
+                            <label for="">{{ 'REJECTION_DASHBOARD.LBL_PRODUCT' | translate }}</label>
+                            <ng-select appendTo="body" [items]="model.productList" [virtualScroll]="true" [loading]="model.productLoading" bindLabel="productId" bindValue="id" class="width-180" (clear)="clearProductRef()" placeholder="--- {{ (model.productList!=null && model.productList.length!=0? 'COMMON.LBL_SELECT':'COMMON.LBL_NO_DATA' ) | translate }} ---"
+                                [typeahead]="model.productInput" [minTermLength]="3" (change)="changeProductRef()" [(ngModel)]="requestModel.selectedProductIdList" [multiple]="true" class="multiple" (scrollToEnd)="getProductData()" #select>
+                                <ng-template ng-option-tmp let-item="item">
+                                    <div class="text-wrap">{{ item.productId }}</div>
+                                </ng-template>
+                            </ng-select>
+                        </div>
+                    </div>
+                    <div class="col-sm-3 mobile-margin-top-15">
+                        <div class="my-input-group">
+                            <label for="">{{'REJECTION_DASHBOARD.LBL_FACTORY_COUNTRY' | translate}}</label>
+                            <ng-select appendTo="body" [items]="model.countryList" [virtualScroll]="true" [loading]="model.countryLoading" bindLabel="name" bindValue="id" placeholder="--- {{ (model.countryList && model.countryList.length>0? 'COMMON.LBL_SELECT':'COMMON.LBL_NO_DATA' ) | translate }} ---"
+                                [typeahead]="model.countryInput" [minTermLength]="3" [(ngModel)]="requestModel.selectedCountryIdList" [multiple]="true" class="multiple" (scrollToEnd)="getCountryData()" (change)="countryChange($event)" #select>
+
+                                <ng-template ng-multi-label-tmp let-items="requestModel.selectedCountryIdList" let-clear="clear">
+                                    <div class="ng-value" *ngIf="requestModel.selectedCountryIdList && requestModel.selectedCountryIdList.length > 0">
+                                        <span class="ng-value-label">{{requestModel.selectedCountryIdList.length}}
+                                            {{'MANDAY_UTILIZATION_DASHBOARD.LBL_SELECTED' | translate }}</span>
+                                    </div>
+                                </ng-template>
+                            </ng-select>
+                        </div>
+                    </div>
+                </div>
+                <div class="row marginTop20 align-items-center">
+                    <div class="col-6">
+                        <div class="advanced-search" (click)="toggleSection()">
+                            <img class="icon" src="assets/images/expand-new.svg" alt="" *ngIf="!toggleFormSection">
+                            <img class="icon" src="assets/images/collapse-new.svg" alt="" *ngIf="toggleFormSection"> {{'COMMON.LBL_ADVANCED_SEARCH' | translate}}
+                        </div>
+                    </div>
+                    <div class="col-6 text-right">
+                        <div class="mobile-hide">
+                            <button class="category-cta small mr-2" (click)="reset()">
+                                <img src="assets/images/reload-new.svg" alt="reload">
+                                <span>{{'COMMON.LBL_RELOAD' | translate}}</span>
+                            </button>
+                            <button class="primary-cta small" [disabled]="model.searchLoading" (click)="search()">{{'COMMON.LBL_SEARCH' | translate }}
+                                <span *ngIf="model.searchLoading">
+                                    <i class="fa fa-refresh fa-spin" aria-hidden="true"></i>
+                                </span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="my-dashboard-container">
+            <div class="dashboard-body">
+                <div class="title-container row align-items-center">
+                    <div class="col-8">
+                        <h3 class="main-title">{{'REJECTION_DASHBOARD.TITLE' | translate}}</h3>
+                    </div>
+                    <div class="col-4 text-right">
+
+                        <div class="filter-cta style-2" *ngIf="!isFilterOpen" (click)="toggleFilter()">
+                            <img src="assets/images/cta-filter-grey.svg" alt="">
+                        </div>
+                        <div class="filter-cta filter-active" *ngIf="isFilterOpen" (click)="toggleFilter()">
+                            <img src="assets/images/cta-close-white.svg" alt="">
+                        </div>
+                    </div>
+                </div>
+                <div class="row customer-dashboard-graph-wrapper dashbaord-placeholder-container mt-0">
+
+                    <div class="col-sm-6 col-lg-4 grid-column mobile-margin-top-15 tablet-margin-top-15">
+
+                        <ng-container *ngIf="rejectionDashboardLoader.apiResultDashboardLoading; else apiResultDashboardResult">
+                            <div class="dashboard-graph-container">
+                                <div class="common-graph-placeholder">
+                                    <img src="assets/images/donut-placeholder.png" alt="graph">
+                                    <div class="content-container">
+                                        <div class="rect animate"></div>
+                                        <div class="rect animate width80"></div>
+                                        <div class="rect animate width50"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </ng-container>
+                        <ng-template #apiResultDashboardResult>
+                            <div class="error-container dashboard-graph-container" *ngIf="rejectionDashboardLoader.apiResultDashboardError; else apiResultDashboardData">
+                                <div class="new-graph-head text-center text-sm-left align-items-center">
+                                    <div class="graph-title-container">
+                                        <h3 class="title">{{'REJECTION_DASHBOARD.LBL_API_RESULT_ANALYSIS' | translate}}
+                                        </h3>
+                                    </div>
+                                </div>
+                                <img src="assets/images/went-wrong.svg" alt="" class="thumbnail">
+                                <h4 class="error-title">{{ 'ERROR.MSG_ERROR_TITLE' | translate }}</h4>
+                                <p class="error-subtitle">
+                                    {{'CUSTOMER_DASHBOARD.LBL_UNAUTHORISED_ACCESS' | translate}}</p>
+                            </div>
+                            <ng-template #apiResultDashboardData>
+                                <div class="dashboard-graph-container error-container" *ngIf="!dataFound.apiResultDashboardDataFound">
+
+                                    <div class="new-graph-head text-center text-sm-left align-items-center">
+                                        <div class="graph-title-container">
+                                            <h3 class="title">{{'REJECTION_DASHBOARD.LBL_API_RESULT_ANALYSIS' | translate}}
+                                            </h3>
+                                        </div>
+                                    </div>
+                                    <img src="assets/images/no-data.svg" al t="" class="thumbnail">
+                                    <h4 class="error-title">{{ 'REJECTION_DASHBOARD.LBL_NO_DATA_FOUND' | translate }}
+                                    </h4>
+                                    <p class="error-subtitle">{{'REJECTION_DASHBOARD.LBL_NO_DATA' | translate}}</p>
+                                </div>
+                                <div class="dashboard-graph-container" *ngIf="dataFound.apiResultDashboardDataFound">
+                                    <div class="new-graph-head text-center text-sm-left align-items-center">
+                                        <div class="graph-title-container">
+                                            <h3 class="title">{{'REJECTION_DASHBOARD.LBL_API_RESULT_ANALYSIS' | translate}}
+                                            </h3>
+                                        </div>
+                                        <div class="graph-filter text-center text-sm-right">
+                                            <button class="secondary-cta small" (click)="getApiResultExport()" [disabled]="rejectionDashboardLoader.apiResultDashboardExportLoading">Export</button>
+                                        </div>
+                                    </div>
+                                    <div class="row graph-body">
+                                        <div class="col-md-12 col-lg-12 col-xl-7 mb-3 mb-xl-0">
+                                            <ng-container *ngIf="loadingLineChart">
+                                                <div class="loadingChart"></div>
+                                            </ng-container>
+                                            <div id="chartdiv-circle" style="width: 100%; height: 190px"></div>
+                                        </div>
+                                        <div class="col-md-12 col-lg-12 col-xl-5 vertical-center">
+                                            <!-- <div class="legend-title text-center mt-3">
+                                                <span>{{'CUSTOMER_DASHBOARD.LBL_TOTAL_REPORTS' | translate}} </span>
+                                                <p class="count">{{model.apiResultDashboard.totalReports}}</p>
+                                            </div> -->
+                                            <div class="legend-wrapper two-column">
+                                                <div class="legend-item" *ngFor="let item of model.apiResultDashboard.dashboardData| slice : 0 : dataLengthTrim">
+                                                    <div class="label">
+                                                        <span class="tile" [ngStyle]="{'background-color':item.statusColor }">
+                                                        </span>
+                                                        <span class="text common-tooltip" [attr.data-tooltip]="item.statusName">{{item.name}}</span>
+                                                    </div>
+                                                    <span class="count">{{item.totalCount}}</span>
+                                                </div>
+                                                <div class="legend-item" *ngIf="model.apiResultDashboard.dashboardData.length>dataLengthTrim">
+                                                    <div class="label has-dropdown">
+                                                        <span class="link">{{ 'COMMON.LBL_SHOW' | translate }}
+															                          {{model.apiResultDashboard.dashboardData.length - dataLengthTrim}}
+															                          {{ 'COMMON.LBL_MORE' | translate }}</span>
+                                                        <div class="cta-dropdown top-right min-width-230">
+                                                            <div class="legend-wrapper two-column">
+                                                                <div class="legend-item" *ngFor="let item of model.apiResultDashboard.dashboardData | slice: dataLengthTrim : model.apiResultDashboard.dashboardData.length;">
+                                                                    <div class="label">
+                                                                        <span class="tile" [ngStyle]="{'background-color':item.statusColor }">
+																		                                    </span>
+                                                                        <span class="text" [attr.data-tooltip]="item.statusName">{{item.name}}</span>
+                                                                    </div>
+                                                                    <span class="count">{{item.totalCount}}</span>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </ng-template>
+                        </ng-template>
+                    </div>
+                    <div class="col-sm-6 col-lg-4 grid-column mobile-margin-top-15 tablet-margin-top-15">
+
+                        <ng-container *ngIf="rejectionDashboardLoader.customerResultDashboardLoading; else customerResultDashboardResult">
+                            <div class="dashboard-graph-container">
+                                <div class="common-graph-placeholder">
+                                    <img src="assets/images/donut-placeholder.png" alt="graph">
+                                    <div class="content-container">
+                                        <div class="rect animate"></div>
+                                        <div class="rect animate width80"></div>
+                                        <div class="rect animate width50"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </ng-container>
+                        <ng-template #customerResultDashboardResult>
+                            <div class="error-container dashboard-graph-container" *ngIf="rejectionDashboardLoader.customerResultDashboardError; else customerResultDashboardData">
+                                <div class="new-graph-head text-center text-sm-left align-items-center">
+                                    <div class="graph-title-container">
+                                        <h3 class="title">{{'REJECTION_DASHBOARD.LBL_CUSTOMER_RESULT_ANALYSIS' | translate}}
+                                        </h3>
+                                    </div>
+                                </div>
+                                <img src="assets/images/went-wrong.svg" alt="" class="thumbnail">
+                                <h4 class="error-title">{{ 'ERROR.MSG_ERROR_TITLE' | translate }}</h4>
+                                <p class="error-subtitle">
+                                    {{'CUSTOMER_DASHBOARD.LBL_UNAUTHORISED_ACCESS' | translate}}</p>
+                            </div>
+                            <ng-template #customerResultDashboardData>
+                                <div class="error-container dashboard-graph-container" *ngIf="!dataFound.customerResultDashboardDataFound">
+                                    <div class="new-graph-head text-center text-sm-left align-items-center">
+                                        <div class="graph-title-container" [ngClass]="{'mt-2':!dataFound.customerResultDashboardDataFound}">
+                                            <h3 class="title">{{'REJECTION_DASHBOARD.LBL_CUSTOMER_RESULT_ANALYSIS' | translate}}
+                                            </h3>
+                                        </div>
+                                    </div>
+                                    <img src="assets/images/no-data.svg" al t="" class="thumbnail">
+                                    <h4 class="error-title">{{ 'REJECTION_DASHBOARD.LBL_NO_DATA_FOUND' | translate }}
+                                    </h4>
+                                    <p class="error-subtitle">{{'REJECTION_DASHBOARD.LBL_NO_DATA' | translate}}</p>
+                                </div>
+                                <div class="dashboard-graph-container" *ngIf="dataFound.customerResultDashboardDataFound">
+                                    <div class="new-graph-head text-center text-sm-left align-items-center">
+                                        <div class="graph-title-container">
+                                            <h3 class="title">{{'REJECTION_DASHBOARD.LBL_CUSTOMER_RESULT_ANALYSIS' | translate}}
+                                            </h3>
+                                        </div>
+                                        <div class="graph-filter text-center text-sm-right">
+                                            <button class="secondary-cta small" (click)="getCustomerResultExport()" [disabled]="rejectionDashboardLoader.customerResultDashboardExportLoading">Export</button>
+                                        </div>
+                                    </div>
+                                    <div class="row graph-body">
+                                        <div class="col-md-12 col-lg-12 col-xl-7 mb-3 mb-xl-0">
+                                            <ng-container *ngIf="loadingLineChart">
+                                                <div class="loadingChart"></div>
+                                            </ng-container>
+                                            <div id="chartdiv-circle_customer" style="width: 100%; height: 190px"></div>
+                                        </div>
+                                        <div class="col-md-12 col-lg-3 col-xl-5 vertical-center">
+                                            <!-- <div class="legend-title text-center mt-3">
+                                                <span>{{'CUSTOMER_DASHBOARD.LBL_TOTAL_REPORTS' | translate}} </span>
+                                                <p class="count">{{model.customerResultDashboard.totalReports}}</p>
+                                            </div> -->
+                                            <div class="legend-wrapper two-column">
+                                                <div class="legend-item" *ngFor="let item of model.customerResultDashboard.dashboardData">
+                                                    <div class="label">
+                                                        <span class="tile" [ngStyle]="{'background-color':item.statusColor }">
+                                                        </span>
+                                                        <span class="text common-tooltip" [attr.data-tooltip]="item.statusName">{{item.name}}</span>
+                                                    </div>
+                                                    <span class="count">{{item.totalCount}}</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </ng-template>
+                        </ng-template>
+                    </div>
+                    <div class="col-sm-4 col-md-12 col-lg-4 col-xl-4 grid-column mobile-margin-top-15 tablet-margin-top-15">
+                        <ng-container *ngIf="rejectionDashboardLoader.productCategoryDashboardLoading; else productCategoryDashboardResult">
+                            <div class="dashboard-graph-container">
+                                <div class="common-graph-placeholder">
+                                    <img src="assets/images/donut-placeholder.png" alt="graph">
+                                    <div class="content-container">
+                                        <div class="rect animate"></div>
+                                        <div class="rect animate width80"></div>
+                                        <div class="rect animate width50"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </ng-container>
+                        <ng-template #productCategoryDashboardResult>
+                            <div class="error-container dashboard-graph-container" *ngIf="rejectionDashboardLoader.productCategoryDashboardError; else productCategoryDashboardData">
+                                <div class="new-graph-head text-center text-sm-left align-items-center">
+                                    <div class="graph-title-container">
+                                        <h3 class="title">{{'REJECTION_DASHBOARD.LBL_RESULT_PROD_CATEGORY' | translate}}
+                                        </h3>
+                                    </div>
+                                </div>
+                                <img src="assets/images/went-wrong.svg" alt="" class="thumbnail">
+                                <h4 class="error-title">{{ 'ERROR.MSG_ERROR_TITLE' | translate }}</h4>
+                                <p class="error-subtitle">
+                                    {{'CUSTOMER_DASHBOARD.LBL_UNAUTHORISED_ACCESS' | translate}}</p>
+                            </div>
+                            <ng-template #productCategoryDashboardData>
+                                <div class="error-container dashboard-graph-container" *ngIf="!dataFound.productCategoryDashboardDataFound">
+                                    <div class="new-graph-head text-center text-sm-left align-items-center">
+                                        <div class="graph-title-container">
+                                            <h3 class="title">{{'REJECTION_DASHBOARD.LBL_RESULT_PROD_CATEGORY' | translate}}
+                                            </h3>
+                                        </div>
+                                    </div>
+                                    <img src="assets/images/no-data.svg" al t="" class="thumbnail">
+                                    <h4 class="error-title">{{ 'REJECTION_DASHBOARD.LBL_NO_DATA_FOUND' | translate }}
+                                    </h4>
+                                    <p class="error-subtitle">{{'REJECTION_DASHBOARD.LBL_NO_DATA' | translate}}</p>
+                                </div>
+                                <div class="dashboard-graph-container" *ngIf="dataFound.productCategoryDashboardDataFound">
+                                    <div class="new-graph-head text-center text-sm-left align-items-center">
+                                        <div class="graph-title-container">
+                                            <h3 class="title">{{'REJECTION_DASHBOARD.LBL_RESULT_PROD_CATEGORY' | translate}}
+                                            </h3>
+                                        </div>
+                                        <div class="graph-filter text-center text-sm-right">
+                                            <button class="secondary-cta small" (click)="getProductCategoryExport()" [disabled]="rejectionDashboardLoader.productCategoryDashboardExportLoading">Export</button>
+                                        </div>
+                                    </div>
+                                    <div class="row graph-body">
+                                        <div class="col-md-12 col-lg-12 col-xl-12 mb-3 mb-xl-0">
+                                            <ng-container *ngIf="loadingLineChart">
+                                                <div class="loadingChart"></div>
+                                            </ng-container>
+                                            <div id="barchartdiv" style="width: 100%; height: 200px;"></div>
+                                        </div>
+                                        <!-- <div class="col-md-12 col-lg-12 col-xl-12 vertical-center">
+                                            <div class="legend-wrapper two-column">
+                                              
+                                                <div class="legend-item"
+                                                    *ngFor="let item of model.productCategoryDashboard.legendList | slice:0:4">
+                                                    <div class="label">
+                                                        <span class="tile">
+                                                        </span>
+                                                        <span class="text">{{item.name}}</span>
+                                                    </div>
+                                                    <span class="count">{{item.id}}</span>
+                                                   
+                                                </div>
+                                                <div class="legend-item"
+                                                    *ngIf="model.productCategoryDashboard.legendList.length>4">
+                                                    <div class="label has-dropdown">
+                                                        <span class="link">
+                                                            {{ 'COMMON.LBL_SHOW' | translate }}
+                                                            {{model.productCategoryDashboard.legendList.length - 4}}
+                                                            {{ 'COMMON.LBL_MORE' | translate }}</span>
+                                                        <div class="cta-dropdown top-right">
+                                                            <div class="legend-wrapper two-column">
+                                                                <div class="legend-item"
+                                                                    *ngFor="let item of model.productCategoryDashboard.legendList | slice:4:model.productCategoryDashboard.legendList.length;">
+                                                                    <div class="label">
+                                                                        <span class="tile">
+                                                                        </span><span class="text">{{item.name}}</span>
+                                                                    </div>
+                                                                    <span class="count">{{item.id}}</span>
+                                                                   
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div> -->
+                                    </div>
+                                </div>
+                            </ng-template>
+                        </ng-template>
+                    </div>
+                </div>
+                <div class="row customer-dashboard-graph-wrapper  dashbaord-placeholder-container full-height-column-wrapper mt-3">
+
+                    <div class="col-lg-6 grid-column col-md-12">
+                        <ng-container *ngIf="rejectionDashboardLoader.countryDashboardLoading; else countryResultDashboardResult">
+                            <div class="dashboard-graph-container">
+                                <div class="common-graph-placeholder">
+                                    <img src="assets/images/donut-placeholder.png" alt="graph">
+                                    <div class="content-container">
+                                        <div class="rect animate"></div>
+                                        <div class="rect animate width80"></div>
+                                        <div class="rect animate width50"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </ng-container>
+                        <ng-template #countryResultDashboardResult>
+                            <div class="error-container dashboard-graph-container" *ngIf="rejectionDashboardLoader.countryDashboardError; else countryResultDashboardData">
+                                <div class="new-graph-head text-center text-sm-left align-items-center">
+                                    <div class="graph-title-container">
+                                        <h3 class="title">{{'REJECTION_DASHBOARD.LBL_RESULT_COUNTRY' | translate}}
+                                        </h3>
+                                    </div>
+                                    <div class="graph-filter filter-input-group text-center text-sm-right">
+                                        <div class="my-input-group mr-2">
+                                            <ng-select #customer [searchable]="true" [items]="model.innerCountryList" bindLabel="name" (change)="innerFilterCountryChange($event)" [loading]="model.innerCountryLoading" bindValue="id" [hideSelected]="true" appendTo="body" class="small" placeholder="--- {{(model.innerCountryList!=null && model.innerCountryList.length!=0? 'BOOKING_SUMMARY.LBL_SELECT':'BOOKING_SUMMARY.MSG_NO_DATA')  | translate }} ---"
+                                                [(ngModel)]="requestModel.countryId">
+                                                <ng-template ng-option-tmp let-item="item">
+                                                    <div class="text-wrap">{{ item.name }}</div>
+                                                </ng-template>
+                                            </ng-select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <img src="assets/images/went-wrong.svg" alt="" class="thumbnail">
+                                <h4 class="error-title">{{ 'ERROR.MSG_ERROR_TITLE' | translate }}</h4>
+                                <p class="error-subtitle">
+                                    {{'CUSTOMER_DASHBOARD.LBL_UNAUTHORISED_ACCESS' | translate}}</p>
+                            </div>
+                            <ng-template #countryResultDashboardData>
+                                <div class="error-container dashboard-graph-container" *ngIf="!dataFound.countryDashboardDataFound">
+                                    <div class="new-graph-head text-center text-sm-left align-items-center">
+                                        <div class="graph-title-container">
+                                            <h3 class="title">{{'REJECTION_DASHBOARD.LBL_RESULT_COUNTRY' | translate}}
+                                            </h3>
+                                        </div>
+                                        <div class="graph-filter filter-input-group text-center text-sm-right">
+                                            <div class="my-input-group mr-2">
+                                                <ng-select #customer [searchable]="true" [items]="model.innerCountryList" bindLabel="name" (change)="innerFilterCountryChange($event)" [loading]="model.innerCountryLoading" bindValue="id" [hideSelected]="true" appendTo="body" class="small" placeholder="--- {{(model.innerCountryList!=null && model.innerCountryList.length!=0? 'BOOKING_SUMMARY.LBL_SELECT':'BOOKING_SUMMARY.MSG_NO_DATA')  | translate }} ---"
+                                                    [(ngModel)]="requestModel.countryId">
+                                                    <ng-template ng-option-tmp let-item="item">
+                                                        <div class="text-wrap">{{ item.name }}</div>
+                                                    </ng-template>
+                                                </ng-select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <img src="assets/images/no-data.svg" al t="" class="thumbnail">
+                                    <h4 class="error-title">{{ 'REJECTION_DASHBOARD.LBL_NO_DATA_FOUND' | translate }}
+                                    </h4>
+                                    <p class="error-subtitle">{{'REJECTION_DASHBOARD.LBL_NO_DATA' | translate}}</p>
+                                </div>
+                                <div class="dashboard-graph-container" *ngIf="dataFound.countryDashboardDataFound">
+                                    <div class="new-graph-head text-center text-sm-left align-items-center">
+                                        <div class="graph-title-container">
+                                            <h3 class="title">{{'REJECTION_DASHBOARD.LBL_RESULT_COUNTRY' | translate}}
+                                            </h3>
+                                        </div>
+                                        <div class="graph-filter filter-input-group text-center text-sm-right">
+                                            <div class="my-input-group mr-2">
+                                                <ng-select #customer [searchable]="true" [items]="model.innerCountryList" bindLabel="name" (change)="innerFilterCountryChange($event)" [loading]="model.innerCountryLoading" bindValue="id" [hideSelected]="true" appendTo="body" class="small" placeholder="--- {{(model.innerCountryList!=null && model.innerCountryList.length!=0? 'BOOKING_SUMMARY.LBL_SELECT':'BOOKING_SUMMARY.MSG_NO_DATA')  | translate }} ---"
+                                                    [(ngModel)]="requestModel.countryId">
+                                                    <ng-template ng-option-tmp let-item="item">
+                                                        <div class="text-wrap">{{ item.name }}</div>
+                                                    </ng-template>
+                                                </ng-select>
+                                            </div>
+                                            <button class="secondary-cta small" (click)="getCountryResultChartExport()" [disabled]="rejectionDashboardLoader.countryDashboardExportLoading">Export</button>
+                                        </div>
+                                    </div>
+                                    <div class="row graph-body">
+                                        <div class="col-md-12 col-lg-12 col-xl-12 mb-3 mb-xl-0">
+                                            <ng-container *ngIf="loadingLineChart">
+                                                <div class="loadingChart"></div>
+                                            </ng-container>
+                                            <div id="chartdiv_country" style="width: 100%; height: 400px">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </ng-template>
+                        </ng-template>
+                    </div>
+
+                    <div class="col-lg-6 grid-column col-md-12 mt-3 mt-lg-0">
+                        <ng-container *ngIf="rejectionDashboardLoader.vendorDashboardLoading; else vendorDashboardResult">
+                            <div class="dashboard-graph-container">
+                                <div class="common-graph-placeholder">
+                                    <img src="assets/images/donut-placeholder.png" alt="graph">
+                                    <div class="content-container">
+                                        <div class="rect animate"></div>
+                                        <div class="rect animate width80"></div>
+                                        <div class="rect animate width50"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </ng-container>
+                        <ng-template #vendorDashboardResult>
+                            <div class="error-container dashboard-graph-container" *ngIf="rejectionDashboardLoader.vendorDashboardError; else vendorDashboardData">
+                                <div class="new-graph-head defect-wrapper text-center text-sm-left align-items-center">
+                                    <div class="graph-title-container">
+                                        <h3 class="title">{{'REJECTION_DASHBOARD.LBL_VENDOR_PERFORMANCE' | translate}}
+                                        </h3>
+                                    </div>
+                                </div>
+                                <img src="assets/images/went-wrong.svg" alt="" class="thumbnail">
+                                <h4 class="error-title">{{ 'ERROR.MSG_ERROR_TITLE' | translate }}</h4>
+                                <p class="error-subtitle">
+                                    {{'CUSTOMER_DASHBOARD.LBL_UNAUTHORISED_ACCESS' | translate}}</p>
+                            </div>
+                            <ng-template #vendorDashboardData>
+                                <div class="error-container dashboard-graph-container" *ngIf="!dataFound.vendorDashboardDataFound">
+                                    <div class="new-graph-head defect-wrapper text-center text-sm-left align-items-center">
+                                        <div class="graph-title-container">
+                                            <h3 class="title">{{'REJECTION_DASHBOARD.LBL_VENDOR_PERFORMANCE' | translate}}
+                                            </h3>
+                                        </div>
+                                    </div>
+                                    <img src="assets/images/no-data.svg" al t="" class="thumbnail">
+                                    <h4 class="error-title">{{ 'REJECTION_DASHBOARD.LBL_NO_DATA_FOUND' | translate }}
+                                    </h4>
+                                    <p class="error-subtitle">{{'REJECTION_DASHBOARD.LBL_NO_DATA' | translate}}</p>
+                                    <div class="float-right">
+                                        <a (click)="navigateRejectionRate()">{{'COMMON.LBL_VIEW_DETAILS' | translate}}</a>
+                                    </div>
+                                </div>
+                                <div class="dashboard-graph-container" *ngIf="dataFound.vendorDashboardDataFound">
+                                    <div class="new-graph-head defect-wrapper text-center text-sm-left align-items-center">
+                                        <div class="graph-title-container">
+                                            <h3 class="title">{{'REJECTION_DASHBOARD.LBL_VENDOR_PERFORMANCE' | translate}}
+                                            </h3>
+                                        </div>
+                                        <div class="graph-filter text-center text-sm-right">
+                                            <button class="secondary-cta small" (click)="getVendorExport()" [disabled]="rejectionDashboardLoader.vendorDashboardExportLoading">Export</button>
+                                        </div>
+                                    </div>
+                                    <div class="row graph-body">
+                                        <!-- <div class="col-md-12 col-lg-12 col-xl-12 mb-3 mb-xl-0"> -->
+                                        <div id="horizontalBar-chart" style="width:100%;height:400px">
+                                        </div>
+                                        <!-- </div> -->
+                                        <!-- <div class="col-md-12 col-lg-12 col-xl-12 vertical-center">
+                                            <div class="legend-wrapper two-column">
+                                                <div class="legend-head">
+                                                    <span class="title">{{'CUSTOMER_DASHBOARD.LBL_TOTAL_REPORTS' | translate}}</span>
+                                                    <span class="count">{{model.vendorDashboard.totalReports}}</span>
+                                                </div>
+                                                <div class="legend-item"
+                                                    *ngFor="let item of model.vendorDashboard.data">
+                                                    <div class="label">
+                                                        <span class="tile" [ngStyle]="{'background-color':item.color }">
+                                                        </span>
+                                                        <span class="text">{{item.resultName}}</span>
+                                                    </div>
+                                                    <span class="count">{{item.count}}</span>
+                                                </div>
+                                            </div>
+                                        </div> -->
+                                    </div>
+                                    <div class="float-right">
+                                        <a (click)="navigateRejectionRate()">{{'COMMON.LBL_VIEW_DETAILS' | translate}}</a>
+                                    </div>
+                                </div>
+                            </ng-template>
+                        </ng-template>
+                    </div>
+                </div>
+                <div class="row customer-dashboard-graph-wrapper mt-3">
+                    <div class="col-lg-12 rejection-dashboard-table-wrapper">
+                        <div class="dashboard-graph-container">
+                            <div class="new-graph-head text-center text-sm-left align-items-center">
+                                <div class="graph-title-container">
+                                    <h3 class="title">
+                                        {{model.lblfbReportHead}}</h3>
+                                </div>
+                                <div class="graph-filter filter-input-group text-center text-sm-right mt-2 mt-sm-0">
+                                    <div class="my-input-group">
+                                        <label>{{'REJECTION_DASHBOARD.LBL_RESULT_TYPE' | translate}}</label>
+                                        <ng-select #FBReport [clearable]="false" [items]="FBReportResultList" bindLabel="name" (change)="innerFilterFBResultChange($event)" [loading]="model.innerCountryLoading" bindValue="id" appendTo="body" class="small" [(ngModel)]="model.fbReportResultId">
+                                            <ng-template ng-option-tmp let-item="item">
+                                                <div class="text-wrap">{{ item.name }}</div>
+                                            </ng-template>
+                                        </ng-select>
+                                    </div>
+                                    <div class="my-input-group  mr-3" *ngIf="model.fbReportResultReasonList!=null && model.fbReportResultReasonList.length!=0">
+                                        <label>{{'REJECTION_DASHBOARD.LBL_CATEGORY' | translate}}</label>
+                                        <ng-select #FBReportReason [items]="model.fbReportResultReasonList" (change)="innerFilterFBResultReasonChange($event)" [loading]="model.innerCountryLoading" appendTo="body" [multiple]="true" class="small multiple" placeholder="--- {{ (model.fbReportResultReasonList !=null && model.rejectDashboard.rejectReasonList.length!=0? 'BOOKING_SUMMARY.LBL_SELECT':'BOOKING_SUMMARY.MSG_NO_DATA' ) | translate }} ---"
+                                            [(ngModel)]="model.selectedReasonList">
+                                            <ng-template ng-option-tmp let-item="item">
+                                                <div class="text-wrap">{{ item }}</div>
+                                            </ng-template>
+                                            <ng-template ng-multi-label-tmp let-items="model.selectedReasonList" let-clear="clear">
+                                                <div class="ng-value" *ngIf="model.selectedReasonList && model.selectedReasonList.length > 0">
+                                                    <span class="ng-value-label">{{model.selectedReasonList.length}}
+                                                {{'COMMON.LBL_SELECTED' | translate }}</span>
+                                                </div>
+                                            </ng-template>
+                                        </ng-select>
+                                    </div>
+                                    <div class="my-input-group mr-3" *ngIf="model.fbReportResultSubCatogoryList!=null && model.fbReportResultSubCatogoryList.length!=0">
+                                        <label>{{'REJECTION_DASHBOARD.LBL_SUB_CATEGORY' | translate}}</label>
+                                        <ng-select #FBReportSubCatogory [items]="model.fbReportResultSubCatogoryList" (change)="innerFilterFBResultSubCaotgoryChange($event)" [loading]="model.innerCountryLoading" appendTo="body" [multiple]="true" class="small multiple" placeholder="--- {{ (model.fbReportResultSubCatogoryList!=null && model.fbReportResultSubCatogoryList.length!=0? 'BOOKING_SUMMARY.LBL_SELECT':'BOOKING_SUMMARY.MSG_NO_DATA' ) | translate }} ---"
+                                            [(ngModel)]="model.selectedSubCatogoryList">
+                                            <ng-template ng-option-tmp let-item="item">
+                                                <div class="text-wrap">{{ item }}</div>
+                                            </ng-template>
+                                            <ng-template ng-multi-label-tmp let-items="model.selectedSubCatogoryList" let-clear="clear">
+                                                <div class="ng-value" *ngIf="model.selectedSubCatogoryList && model.selectedSubCatogoryList.length > 0">
+                                                    <span class="ng-value-label">{{model.selectedSubCatogoryList.length}}
+                                                    {{'COMMON.LBL_SELECTED' | translate }}</span>
+                                                </div>
+                                            </ng-template>
+                                        </ng-select>
+                                    </div>
+                                    <div class="my-input-group marginTop20">
+                                        <div class="graph-filter text-center text-sm-right">
+                                            <button class="secondary-cta small" (click)="exportRejectionDashboardAnalysisTable()" [disabled]="rejectionDashboardLoader.rejectDashboardTableExportLoading">Export</button>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+
+                            <div class="row graph-body" *ngIf="(model.rejectDashboard.data && model.rejectDashboard.data.length>0)">
+                                <div class="col-lg-12">
+                                    <div class="table-container rejection-table-container   h-scroll table-max-height-300">
+
+
+                                        <table class="pagination-table bordered no-hover-table">
+                                            <thead>
+                                                <tr class="sticky-top-row">
+                                                    <th>{{model.lblfbReportReason}}</th>
+                                                    <th>{{'REJECTION_DASHBOARD.LBL_TOTAL' | translate}}</th>
+                                                    <th class="text-center" *ngFor="let month of model.rejectDashboard.monthNameList">
+                                                        {{month.monthName}}</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr *ngFor="let item of model.rejectDashboard.rejectReasonList">
+                                                    <td>{{item}}</td>
+                                                    <td>{{getRejectTotalValue(item)}}<span class="ml-2 light">{{getRejectPercentage(item)}}%</span>
+                                                    </td>
+                                                    <td *ngFor="let month of model.rejectDashboard.monthNameList" class="defect-value" (click)="openRejectionPopup(item, month)" [ngStyle]="{'background-color': getDefectColor(item, month)}" [ngClass]="{'disabled': getRejectMonthValue(item, month)==''}">
+                                                        {{getRejectMonthValue(item, month)}}</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="error-container" *ngIf="(model.rejectDashboard.data && model.rejectDashboard.data.length==0)">
+                                <img src="assets/images/no-data.svg" al t="" class="thumbnail">
+                                <h4 class="error-title">{{ 'REJECTION_DASHBOARD.LBL_NO_DATA_FOUND' | translate }}
+                                </h4>
+                                <p class="error-subtitle">{{'REJECTION_DASHBOARD.LBL_NO_DATA' | translate}}</p>
+                            </div>
+                            <div class="row graph-body" *ngIf="rejectionDashboardLoader.rejectDashboardLoading">
+                                <div class="col-sm-4">
+                                    <img class="graph-icon" src="assets/images/donut-placeholder.png" alt="graph">
+                                </div>
+                                <div class="col-sm-8">
+                                    <div class="legend-wrapper">
+                                        <div class="content-container">
+                                            <div class="rect width150 animate"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="footer independent">
+                <div class="column">
+                    <p class="text">© 2019 All rights reserved. api - hk.com</p>
+                </div>
+                <div class="column">
+                    <ul class="footer-item">
+                        <li><a href="">User Guide</a></li>
+                        <li><a href="">Contact</a></li>
+                        <li><a href="">Help</a></li>
+                        <li><a href="">Terms</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="loader-overlay" *ngIf="rejectionPopupState && rejectionDashboardLoader.rejectDashboardPopUpLoading" [ngStyle]="{'z-index': '60'}">
+        <div class="loader-container">
+            <img src="assets/images/reload.svg" alt="">
+            <span>{{loaderMsg}}</span>
+        </div>
+    </div>
+    <div class="rejection-detail-popup-wrapper" *ngIf="rejectionPopupState">
+        <!-- <div class="confirmation-loader" *ngIf="rejectionDashboardLoader.rejectDashboardPopUpLoading"
+            [ngStyle]="{'z-index': '60'}">
+            <div class="loader">
+                <img src="assets/images/loader.gif" alt="Loader">
+                <p>{{loaderMsg}}</p>
+            </div>
+        </div> -->
+        <div class="rejection-detail-container" *ngIf="dataFound.rejectDashboardPopUpDataFound">
+            <img src="assets/images/cta-close-grey.svg" alt="" class="close" (click)="closePopUp()">
+            <div class="rejection-info">
+                <h4 class="title">{{popUpMonthData.month_Year}}</h4>
+                <p class="subtitle">{{rejectionName}}<span>{{rejectionCount}} {{model.lblfbReportCount}}</span></p>
+            </div>
+            <div class="rejection-stats">
+                <div class="stat-container">
+                    <img src="assets/images/rejection-report.svg" alt="icon">
+                    <div class="info">
+                        <h5 class="stat-title">{{'REJECTION_DASHBOARD.LBL_REPORTS' | translate}} </h5>
+                        <span>{{model.rejectDashboardPopUpData.reportCount}}</span>
+                    </div>
+                </div>
+                <div class="stat-container">
+                    <img src="assets/images/rejection-inspection.svg" alt="icon">
+                    <div class="info">
+                        <h5 class="stat-title">{{'REJECTION_DASHBOARD.LBL_INSPECTIONS' | translate}}</h5>
+                        <span>{{model.rejectDashboardPopUpData.inspectionCount}}</span>
+                    </div>
+                </div>
+                <div class="stat-container">
+                    <img src="assets/images/factory.svg" alt="icon">
+                    <div class="info">
+                        <h5 class="stat-title">{{'REJECTION_DASHBOARD.LBL_FACTORY' | translate}} </h5>
+                        <span>{{model.rejectDashboardPopUpData.factoryCount}}</span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-12 rejection-detail-filter-container">
+                <div class="col-sm-6  my-input-group mr-0 mr-sm-2">
+                    <div class="my-input-group">
+                        <label for="">{{'REJECTION_DASHBOARD.LBL_SUPPLIER' | translate}}</label>
+                        <ng-select #customer [searchable]="true" [items]="popUpModel.supplierPopUpList" bindLabel="name" (change)="popUpSupplierChange($event)" [loading]="popUpModel.supPopUpLoading" bindValue="id" [hideSelected]="true" appendTo="body" placeholder="--- {{(popUpModel.supplierPopUpList!=null && popUpModel.supplierPopUpList.length!=0? 'BOOKING_SUMMARY.LBL_SELECT':'BOOKING_SUMMARY.MSG_NO_DATA')  | translate }} ---"
+                            [(ngModel)]="requestModel.popUpSupplierId">
+                            <ng-template ng-option-tmp let-item="item">
+                                <div class="text-wrap">{{ item.name }}</div>
+                            </ng-template>
+                        </ng-select>
+                    </div>
+                </div>
+                <div class="col-sm-6 my-input-group ml-0 ml-sm-2 mt-2 mt-sm-0">
+
+                    <div class="my-input-group">
+                        <label for="">{{'REJECTION_DASHBOARD.LBL_FACTORY' | translate}}</label>
+                        <ng-select #customer [searchable]="true" [items]="popUpModel.factoryPopUpList" bindLabel="name" (change)="popUpFactoryChange($event)" [loading]="popUpModel.factPopUpLoading" bindValue="id" [hideSelected]="true" appendTo="body" placeholder="--- {{(popUpModel.factoryPopUpList!=null && popUpModel.factoryPopUpList.length!=0? 'BOOKING_SUMMARY.LBL_SELECT':'BOOKING_SUMMARY.MSG_NO_DATA')  | translate }} ---"
+                            [(ngModel)]="requestModel.popUpFactoryId">
+                            <ng-template ng-option-tmp let-item="item">
+                                <div class="text-wrap">{{ item.name }}</div>
+                            </ng-template>
+                        </ng-select>
+                    </div>
+                </div>
+            </div>
+            <div class="table-container rejection-table-container" [ngClass]="{ 'h-scroll table-max-height-300': model.rejectDashboardPopUpData && model.rejectDashboardPopUpData.supplierData.length>10 }">
+                <table class="pagination-table bordered no-hover-table">
+                    <thead>
+                        <tr class="sticky-top-row">
+                            <th>{{'REJECTION_DASHBOARD.LBL_SUPPLIERS' | translate}}</th>
+                            <th>{{'REJECTION_DASHBOARD.LBL_FACTORIES' | translate}}</th>
+                            <th>{{model.lblfbReportCount}}</th>
+                            <th>{{'REJECTION_DASHBOARD.LBL_REPORTS' | translate}}</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let item of model.rejectDashboardPopUpData.supplierData">
+                            <td>{{item.supplierName}}</td>
+                            <td>{{item.factoryName}}</td>
+                            <td class="major-light red ">
+                                <div class="align-space-between-td">
+                                    <span>{{item.rejectionCount}}</span>
+                                    <span> <img *ngIf="item.photoCount > 0"
+                                    src="assets/images/gallary.svg" alt="" 
+                                    (click)="getRejectPhotoList(imagepopup,item.supplierId,item.factoryId)"></span>
+                                </div>
+                            </td>
+                            <td>
+                                <span class="report-image">
+                                        <img src="assets/images/report-details-hover.svg" alt="" class=" mr-2">
+                                        <ul class="cta-dropdown bottom-left width-140 max-height-250">
+                                            <li class="no-hover head">
+                                                <span class="font-weight-bold">{{'REJECTION_DASHBOARD.LBL_REPORT_No' | translate}}</span>
+                                </li>
+                                <li *ngFor="let _report of item.reportInfo">
+                                    <a (click)="openReport(_report)" target="_blank"><img src="assets/images/report-details-hover.svg" alt=""><span>#{{_report.reportNo}}</span></a>
+                                </li>
+                                </ul>{{item.reportCount}}
+                                </span>
+                            </td>
+
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+<ng-template #imagepopup let-modal>
+    <div class="modal-header custom-modal-header">
+        <h4 class="modal-title" id="modal-basic-title">{{'REJECTION_DASHBOARD.LBL_REJECT_IMAGES' | translate}}</h4>
+        <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body custom-modal-body">
+        <ngx-gallery [options]="popUpModel.rejectOptions" [images]="popUpModel.rejectionImages"></ngx-gallery>
+    </div>
+</ng-template>

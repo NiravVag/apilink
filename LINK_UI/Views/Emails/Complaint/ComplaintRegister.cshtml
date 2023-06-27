@@ -1,0 +1,125 @@
+﻿@model (DTO.Customer.CustomerComplaintEmailTemplate, string)
+@{
+    ViewData["Title"] = "ComplaintEmail";
+
+}
+
+<style>
+    .th-table {
+        color: black;
+        vertical-align: top;
+        font-size: 13px;
+        font-family: tahoma;
+    }
+
+    .td-table {
+        font-size: 13px;
+        font-family: tahoma;
+    }
+
+    .div-style {
+        padding-bottom: 5px;
+        margin-bottom: 5px;
+    }
+</style>
+
+<table>
+    <tr>
+        <td style="font-size:13px; font-family:tahoma;">
+            Dear @Model.Item1.Staffname
+            <br /><br />
+            @if (Model.Item1.Service > 0)
+            {
+                <div class="div-style">
+                    @Model.Item1.ServiceName complaint registered for #@Model.Item1.BookingNo in the Link . please click <a href="@Model.Item2">here</a> to view the details and take the appropriate action.
+                </div>
+            }
+            else
+            {
+                <div class="div-style">
+                    General complaint registered in the Link . please click <a href="@Model.Item2">here</a> to view the details and take the appropriate action.
+                </div>
+            }
+            <br />
+            <table id='TblList' style="border:solid 1px #d4d0c8;border-collapse:collapse;font-size:12px; font-family:tahoma;" cellspacing='0' cellpadding='1' rules='all' align='left' border='1' cellspacing=0 cellpadding=0 width='80%'>
+                <tr>
+
+                    @if (@Model.Item1.Service > 0)
+                    {
+                        <th bgcolor=#f8f4f3 style="color: black; font-size:13px;" align=center width='10%' height=35>Booking No</th>
+                        <th bgcolor=#f8f4f3 style="color: black; font-size:13px;" align=center width='15%' height=35>Service</th>
+                    }
+                    @if (@Model.Item1.Service != 1)
+                    {
+                        <th bgcolor=#f8f4f3 style="color: black; font-size:13px;" align=center width='20%' height=35>Customer</th>
+                    }
+
+                    <th bgcolor=#f8f4f3 style="color: black; font-size:13px;" align=center width='10%' height=35>Complaint Date</th>
+                    <th bgcolor=#f8f4f3 style="color: black; font-size:13px;" align=center width='20%' height=35>Complaint Category</th>
+                    <th bgcolor=#f8f4f3 style="color: black; font-size:13px;" align=center width='25%' height=35>Department </th>
+                </tr>
+
+                <tr>
+
+                    @if (@Model.Item1.Service > 0)
+                    {
+                        <td align=center style="font-size: 12px;" height=30>
+                            @Model.Item1.BookingNo
+                        </td>
+                        <td align=center style="font-size: 12px;" height=30>
+                            @Model.Item1.ServiceName
+                        </td>
+                    }
+                    @if (@Model.Item1.Service != 1)
+                    {
+                        <td align=center style="font-size: 12px;" height=30>
+                            @Model.Item1.Customer
+                        </td>
+                    }
+                    <td align=center style="font-size: 12px;" height=30>
+                        @Model.Item1.ComplaintDate
+                    </td>
+                    <td align=center style="font-size: 12px;" height=30>
+                        @Model.Item1.Category
+                    </td>
+                    <td align=center style="font-size: 12px;" height=30>
+                        @Model.Item1.Department
+                    </td>
+
+                </tr>
+
+
+            </table>
+            <br />
+            <br />
+        </td>
+    </tr>
+    
+    <tr>
+        <td class="td-table">
+            <div style="padding-bottom: 5px;margin-bottom:5px;">
+                Please login our <a href="https://apilink.api-hk.com/">Link</a> to view the updated status & details.
+            </div>
+        </td>
+
+    </tr>
+
+
+
+    <tr>
+        <td class="td-table">
+            <br />
+            <div class="div-style">
+                Thanks
+            </div>
+            <div class="div-style">
+                IT-Team
+            </div>
+            <br />
+            <span style="font-style:normal"> Note: - This receipt is auto generated from Link Booking System. Please do not reply to @Model.Item1.SenderEmail.</span>
+            <br />
+            <br />
+
+        </td>
+    </tr>
+</table>

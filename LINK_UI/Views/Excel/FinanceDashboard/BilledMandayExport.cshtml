@@ -1,0 +1,118 @@
+﻿
+@{
+    ViewData["Title"] = "BilledMandayExport";
+}
+
+@model DTO.FinanceDashboard.FinanceDashboardMandayExportItem
+
+<style>
+    td {
+        border-style: solid;
+    }
+
+    th {
+        text-align: center;
+    }
+</style>
+
+<xls-sheet name="Year-Manday">
+    <table xls-begin="A:1" style="border-style:solid">
+        <tr>
+            <td width="130px" style="font-weight:bold">Service Date From :</td>
+            <td width="100px">@Model.RequestFilters.ServiceDateFrom</td>
+
+            <td width="120px" style="font-weight:bold">Service Date To :</td>
+            <td width="100px">@Model.RequestFilters.ServiceDateTo</td>
+
+            @if (!string.IsNullOrEmpty(@Model.RequestFilters.CountryList))
+            {
+                <td width="100px" style="font-weight: bold">Country :</td>
+                <td width="100px">@Model.RequestFilters.CountryList</td>
+            }
+            @if (!string.IsNullOrEmpty(@Model.RequestFilters.OfficeList))
+            {
+                <td style="font-weight: bold">Office :</td>
+                <td width="100px">@Model.RequestFilters.OfficeList</td>
+            }
+            @if (!string.IsNullOrEmpty(@Model.RequestFilters.Customer))
+            {
+                <td style="font-weight: bold">Customer :</td>
+                <td width="100px">@Html.Raw(@Model.RequestFilters.Customer)</td>
+            }
+
+            @if (!string.IsNullOrEmpty(@Model.RequestFilters.Supplier))
+            {
+                <td width="100px" style="font-weight: bold">Supplier :</td>
+                <td width="100px">@Model.RequestFilters.Supplier</td>
+            }
+
+            @if (!string.IsNullOrEmpty(@Model.RequestFilters.FactoryList))
+            {
+                <td width="100px" style="font-weight: bold">Factory :</td>
+                <td width="100px">@Model.RequestFilters.FactoryList</td>
+            }
+            @if (!string.IsNullOrEmpty(@Model.RequestFilters?.BrandList))
+            {
+                <td width="100px" style="font-weight: bold">Brand :</td>
+                <td width="100px">@Model.RequestFilters?.BrandList</td>
+            }
+            @if (!string.IsNullOrEmpty(@Model.RequestFilters?.DeptList))
+            {
+                <td width="100px" style="font-weight: bold">Department :</td>
+                <td width="100px">@Model.RequestFilters?.DeptList</td>
+            }
+            @if (!string.IsNullOrEmpty(@Model.RequestFilters?.BuyerList))
+            {
+                <td width="100px" style="font-weight: bold">Buyer :</td>
+                <td width="100px">@Model.RequestFilters?.BuyerList</td>
+            }
+            @if (!string.IsNullOrEmpty(@Model.RequestFilters?.ServiceTypeList))
+            {
+                <td width="100px" style="font-weight: bold">Service Type :</td>
+                <td width="100px">@Model.RequestFilters?.ServiceTypeList</td>
+            }
+        </tr>
+        <tr>
+            <td></td>
+        </tr>
+
+        <tr style="background-color:#f5f5f5;font-weight:bold;text-align:center">
+            <th style="border-style:solid; text-align:center">Year</th>
+            <th style="border-style:solid">Month</th>
+            @if (@Model.IsBilledManday)
+            {
+                <th style="border-style:solid; text-align:center">Manday</th>
+            }
+            else
+            {
+                <th style="border-style:solid; text-align:center">Manday Rate</th>
+            }
+
+            @if (@Model.IsBilledManday)
+            {
+                <th style="border-style:solid;">Budget Manday</th>
+            }
+            else
+            {
+                <th style="border-style:solid;">Budget Manday Rate</th>
+            }
+        </tr>
+
+        @foreach (var item in Model.Data)
+        {
+        <tr>
+            <td style="text-align:center; border-style:solid" xls-type="number">@item.Year</td>
+            <td style="border-style:solid">@item.MonthName</td>
+            <td style="text-align:center; border-style:solid" xls-type="number">@item.MonthManDay</td>
+            <td style="text-align:center; border-style:solid" xls-type="number" width="150px">@item.BudgetManday</td>
+        </tr>
+        }
+        <tr>
+            <td style="font-weight:bold; border-style:solid;text-align:center" colspan="2">Total</td>
+            <td style="text-align:center; border-style:solid" xls-type="number">@Model.Total</td>
+            <td style="text-align:center; border-style:solid" xls-type="number">@Model.BudgetMandayTotal</td>
+        </tr>
+    </table>
+</xls-sheet>
+
+

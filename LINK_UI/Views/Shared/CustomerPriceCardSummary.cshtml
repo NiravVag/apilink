@@ -1,0 +1,107 @@
+﻿
+@{
+    ViewData["Title"] = "CustomerPriceCardSummary";
+}
+
+@model IEnumerable<DTO.Customer.ExportSummary>
+
+<xls-sheet name="Price Card Summary">
+    <table xls-begin="A:1" style="border-style:solid">
+        <tr style="background-color:#f5f5f5;font-weight:bold;text-align:center">
+            <th>Customer Name</th>
+            <th>Supplier Name</th>
+            <th>Billing Method</th>
+            <th>Billing Paid By</th>
+            <th>Service</th>
+            <th>Product Category</th>
+            <th>Service Type</th>
+            <th>Factory Country</th>
+            <th>Factory Province</th>
+            <th>Currency</th>
+            <th>Unit Price</th>
+            <th>Tax Included</th>
+            <th>Travel Included</th>
+            <th>Period From</th>
+            <th>Period To</th>
+            <th>Free Travel KM</th>
+            <th>Remarks</th>
+            <th>Department</th>
+            <th>Brand</th>
+            <th>Buyer</th>
+            <th>PriceCategory</th>
+            <th>HolidayType</th>
+            <th>MinBillingFeePerDay</th>
+            <th>MaximumProductCount</th>
+            <th>InvoiceRequest</th>
+            <th>BillingEntity</th>
+            <th>InvoiceBank </th>
+            <th>BilledName </th>
+            <th>ContactName </th>
+            <th>BillingAddress </th>
+            <th>InvoiceDigitalNo </th>
+            <th>InvoiceNoPrefix </th>
+            <th>InvoiceOffice </th>
+            <th>PaymentTypeValue </th>
+            <th>PaymentTerms </th>
+            <th>InspectionFee </th>
+            <th>TravelExpense </th>
+            <th>Discount </th>
+            <th>OtherFee </th>
+            <th>TariffType </th>
+            <th>Created By </th>
+            <th>Created On </th>
+            <th>Updated By </th>
+            <th>Updated On </th>
+
+        </tr>
+        @foreach (var item in Model)
+        {
+    <tr>
+        <td width="150px">@Html.Raw(@item.CustomerName)</td>
+        <td width="150px">@Html.Raw(@item.SupplierNames)</td>
+        <td width="150px">@item.BillMethod</td>
+        <td width="150px">@item.BillPaidBy</td>
+        <td width="150px">@item.Service</td>
+        <td width="150px">@Html.Raw(@item.ProductCategorys)</td>
+        <td width="150px">@Html.Raw(@item.ServiceTypes)</td>
+        <td width="150px">@Html.Raw(@item.FactoryCountry)</td>
+        <td width="150px">@Html.Raw(@item.FactoryProvince)</td>
+        <td width="150px">@item.CurrencyName</td>
+        <td width="150px">@item.UnitPrice</td>
+        <td width="150px">@item.TaxInclude</td>
+        <td width="150px">@item.TraveInclude  </td>
+        <td width="150px">@item.PeriodFrom</td>
+        <td width="150px">@item.PeriodTo</td>
+        <td width="150px">@item.FreeTravelKM</td>
+        <td width="150px">@Html.Raw(@item.Remarks)</td>
+        <td width="150px">@Html.Raw(@item.Department) </td>
+        <td width="150px">@Html.Raw(@item.Brand) </td>
+        <td width="150px">@Html.Raw(@item.Buyer) </td>
+        <td width="150px">@item.PriceCategory </td>
+        <td width="150px">@item.HolidayType </td>
+        <td width="150px">@item.MinBillingFeePerDay</td>
+        <td width="150px">@item.MaximumProductCount</td>
+        <td width="150px">@item.InvoiceRequest</td>
+        <td width="150px">@item.BillingEntity</td>
+        <td width="150px">@item.InvoiceBank </td>
+        <td width="150px">@Html.Raw(@item.BilledName) </td>
+        <td width="150px">@Html.Raw(@item.ContactName) </td>
+        <td width="150px">@item.BillingAddress </td>
+        <td width="150px">@item.InvoiceDigitalNo </td>
+        <td width="150px">@item.InvoiceNoPrefix </td>
+        <td width="150px">@item.InvoiceOffice </td>
+        <td width="150px">@item.PaymentTypeValue </td>
+        <td width="150px">@item.PaymentTerms </td>
+        <td width="150px">@item.InspectionFee </td>
+        <td width="150px">@item.TravelExpense </td>
+        <td width="150px">@item.Discount </td>
+        <td width="150px">@item.OtherFee </td>
+        <td width="150px">@item.TariffType </td>
+        <td width="150px">@item.CreatedByName </td>
+        <td width="150px">@item.CreatedOn </td>
+        <td width="150px">@item.UpdatedByName </td>
+        <td width="150px">@item.UpdatedOn </td>
+    </tr>
+        }
+    </table>
+</xls-sheet>

@@ -1,0 +1,45 @@
+{
+    "model": "edit-lab.model",
+    "fields": {
+        "countryId": [{
+            "type": "required",
+            "fieldType": "N",
+            "ressource": "EDIT_LAB.MSG_COUNTRY_REQ"
+        }],
+        "regionId": [{
+            "type": "required",
+            "fieldType": "N",
+            "ressource": "EDIT_LAB.MSG_REGION_REQ"
+        }],
+        "cityId": [{
+            "type": "required",
+            "fieldType": "N",
+            "ressource": "EDIT_LAB.MSG_CITY_REQ"
+        }],
+        "zipCode": [{
+            "type": "required",
+            "fieldType": "T",
+            "ressource": "EDIT_LAB.MSG_ZIPCODE_REQ"
+        }],
+        "way": [{
+            "type": "required",
+            "fieldType": "T",
+            "ressource": "EDIT_LAB.MSG_ADDRESS_REQ"
+        }],
+        "localLanguage": [{
+            "type": "required",
+            "fieldType": "T",
+            "ressource": "EDIT_LAB.MSG_LOCALLANG_REQ"
+        }],
+        "addressTypeId": [{
+            "type": "required",
+            "fieldType": "N",
+            "ressource": "EDIT_LAB.MSG_ADDRESSTYPE_REQ"
+        }],
+        "townId": [{
+            "type": "required",
+            "fieldType": "N",
+            "ressource": "EDIT_LAB.MSG_TOWN_REQ"
+        }]
+    }
+}

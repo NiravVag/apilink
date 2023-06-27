@@ -1,0 +1,40 @@
+{
+ "model": "leave-summary.model",
+  "fields": {
+    "startDate": [
+      {
+        "type": "required",
+        "fieldType": "D",
+        "ressource": "LEAVE_REQUEST.MSG_STARTDATE_REQ"
+      },
+      {
+        "type": "date",
+        "ressource": "LEAVE_REQUEST.MSG_STARTDATE_DATE"
+      },
+      {
+        "type": "isLessOrEqual",
+        "ressource": "LEAVE_REQUEST.MSG_STARTDATE_GERAT_ENDDATE",
+        "fieldType": "D",
+        "fieldCible": "endDate"
+      }
+    ],
+    "endDate": [
+      {
+        "type": "required",
+        "fieldType": "D",
+        "ressource": "LEAVE_REQUEST.MSG_ENDDATE_REQ"
+      },
+      {
+        "type": "date",
+        "ressource": "LEAVE_REQUEST.MSG_ENDDATE_DATE"
+      },
+      {
+        "type": "isGreatOrEqual",
+        "ressource": "LEAVE_REQUEST.MSG_ENDDATE_LESS_STARTDATE",
+        "fieldType": "D",
+        "fieldCible": "startDate"
+      }
+    ]
+  }
+
+}

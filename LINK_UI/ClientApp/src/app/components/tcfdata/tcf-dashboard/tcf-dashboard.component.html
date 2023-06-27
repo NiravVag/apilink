@@ -1,0 +1,810 @@
+<div class="main-wrapper">
+    <!-- <app-header></app-header> -->
+    <div class="wrapper dashboard-wrapper" *ngIf="false">
+        <div class="dashboard-body customer-dashboard-body dashbaord-placeholder-container">
+            <div class="map-overlay-placeholder-container" *ngIf="false">
+                <div class="my-container">
+                    <div class="notification-card"></div>
+                    <div class="notification-card"></div>
+                </div>
+            </div>
+            <!-- <div id="mapView" class="customer-map-placeholder-container mb-4"></div> -->
+            <div class="my-container">
+                <div class="customer-content-space-wrapper">
+                    <div class="result-analytics-placeholder-container">
+                        <div class="result-card">
+                            <img src="assets/images/donut-placeholder.png" alt="graph">
+                            <div class="content-container">
+                                <div class="rect animate"></div>
+                                <div class="rect animate width80"></div>
+                                <div class="rect animate width50"></div>
+                            </div>
+                        </div>
+                        <div class="result-card">
+                            <img src="assets/images/donut-placeholder.png" alt="graph">
+                            <div class="content-container">
+                                <div class="rect animate"></div>
+                                <div class="rect animate width80"></div>
+                                <div class="rect animate width50"></div>
+                            </div>
+                        </div>
+                        <div class="result-card">
+                            <img src="assets/images/donut-placeholder.png" alt="graph">
+                            <div class="content-container">
+                                <div class="rect animate"></div>
+                                <div class="rect animate width80"></div>
+                                <div class="rect animate width50"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="product-overview-placeholder-container">
+                        <div class="product-card">
+                            <div class="content-container">
+                                <div class="rect animate width80"></div>
+                                <div class="rect animate width50"></div>
+                                <div class="rect animate width50"></div>
+                            </div>
+                        </div>
+                        <div class="product-card">
+                            <div class="content-container">
+                                <div class="rect animate width80"></div>
+                                <div class="rect animate width50"></div>
+                                <div class="rect animate width50"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="footer">
+                        <p class="text desktop-hide">© 2019 All rights reserved. api - hk.com</p>
+                        <ul class="footer-item">
+                            <li><a href="">User Guide</a></li>
+                            <li><a href="">Contact</a></li>
+                            <li><a href="">Help</a></li>
+                            <li><a href="">Terms</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="wrapper dashboard-wrapper">
+        <div class="filter-container style-2" [@expandCollapse]="isFilterOpen ? 'open' : 'close'"
+            [@.disabled]="isMobile">
+            <div class="my-container">
+                <div class="row">
+                    <div class="col-sm-3 col-md-3 col-lg-3 mobile-margin-top-15">
+                        <div class="my-input-group">
+                            <label for="">{{ 'TCF_DASHBOARD.LBL_TERM' | translate }}</label>
+                          <ng-select [items]="tcfDashboardMaster.tcfTermList" bindLabel="name" bindValue="id" appendTo="body"
+                            [searchable]="true" (change)="changeTCFTerm($event)" [clearable]="false" [hideSelected]="false"
+                            placeholder="--- {{ (tcfDashboardMaster.tcfTermList && tcfDashboardMaster.tcfTermList.length>0? 'COMMON.LBL_SELECT':'COMMON.LBL_NO_DATA') | translate }} ---"
+                            [(ngModel)]="model.globalDateTypeId">
+                            <ng-template ng-option-tmp let-item="item">
+                              <div class="text-wrap">{{ item.name}}</div>
+                            </ng-template>
+                          </ng-select>
+                        </div>
+                      </div>
+                      <div class="col-sm-2 mobile-margin-top-15" *ngIf="tcfDashboardMaster.isDateShow">
+                        <div class="my-input-group">
+                            <label for="">{{ 'COMMON.LBL_FROMDATE' | translate }}</label>
+                            <div class="calendar-wrapper">
+                                <input type="text" maxlength="10" container="body"
+                                    [ngClass]="{ 'is-invalid':  !validator.isValidIf('fromdate',IsDateValidationRequired())}"
+                                    readonly=readonly [(ngModel)]="model.fromdate" ngbDatepicker
+                                    #sdf="ngbDatepicker" (click)="sdf.toggle()">
+                                <img src="assets/images/cta-close-grey.svg" alt="" class="close-icon"
+                                    (click)="clearDateInput('Fromdate')" *ngIf="model.fromdate">
+                                <img src="assets/images/calendar-icon.svg" alt="" class="calendar-icon"
+                                    (click)="sdf.toggle()">
+                            </div>
+                            <div *ngIf="!validator.isValidIf('fromdate',IsDateValidationRequired())"
+                                class="invalid-feedback">
+                                <div *ngFor="let error of validator.getErrors('fromdate')">{{ error |
+                                    translate }}</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-2 mobile-margin-top-15" *ngIf="tcfDashboardMaster.isDateShow">
+                        <div class="my-input-group">
+                            <label for="">{{ 'COMMON.LBL_TODATE' | translate }}</label>
+                            <div class="calendar-wrapper">
+                                <input type="text" maxlength="10" container="body" readonly=readonly
+                                    [ngClass]="{ 'is-invalid':  !validator.isValidIf('todate',IsDateValidationRequired())}"
+                                    [(ngModel)]="model.todate" ngbDatepicker #sdt="ngbDatepicker"
+                                    (click)="sdt.toggle()">
+                                <img src="assets/images/cta-close-grey.svg" alt="" class="close-icon"
+                                    (click)="clearDateInput('Todate')" *ngIf="model.todate">
+                                <img src="assets/images/calendar-icon.svg" alt="" class="calendar-icon"
+                                    (click)="sdt.toggle()">
+                            </div>
+                            <div *ngIf="!validator.isValidIf('todate',IsDateValidationRequired())"
+                                class="invalid-feedback">
+                                <div *ngFor="let error of validator.getErrors('todate')">{{ error |
+                                    translate }}</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-5 mobile-margin-top-15 dashboard-supplier-margin">
+                        <div class="my-input-group">
+                            <div class="scroll-xradiolist mb-2">
+                                <div class="styled-radio-container"
+                                *ngFor="let item of tcfSearchtypelst;let idx = index">
+                                <input type="radio" class="styled-radio" id="{{item.id}}" name="radio-group"
+                                    [value]="item.id" [checked]="true" (change)="SetSearchTypemodel(item.id)"
+                                    [(ngModel)]="model.searchTypeId">
+                                <label for="{{item.id}}">{{item.name}}</label>
+                                </div>
+                            </div>
+                            <input maxlength="200" [(ngModel)]="model.searchTypeText" type="text" />
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-3 col-md-3 col-lg-3 mobile-margin-top-15 marginTop15">
+                        <div class="my-input-group">
+                            <label for="">{{ 'TCF_LIST.LBL_STAGE' | translate }}</label>
+                            <ng-select [items]="tcfDashboardMaster.statusList" class="multiple" appendTo="body"
+                                       [loading]="tcfDashboardMaster.statusLoading" multiple="true" bindLabel="name"
+                                       bindValue="id" [(ngModel)]="model.statusIds" [clearable]="true"
+                                       placeholder="--- {{ (tcfDashboardMaster.statusList!=null && tcfDashboardMaster.statusList.length!=0? 'BOOKING_SUMMARY.LBL_SELECT':'BOOKING_SUMMARY.MSG_NO_DATA' ) | translate }} ---">
+                            </ng-select>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-3 col-md-3 col-lg-3 mobile-margin-top-15 marginTop15">
+                        <div class="my-input-group">
+                            <label for="">{{ 'TCF_LIST.LBL_CUSTOMER' | translate }}</label>
+                            <ng-select [items]="tcfDashboardMaster.customerList" [virtualScroll]="true"
+                                [loading]="tcfDashboardMaster.customerLoading" bindLabel="name"
+                                bindValue="glCode" appendTo="body"
+                                placeholder="--- {{ (tcfDashboardMaster.customerList!=null && tcfDashboardMaster.customerList.length!=0? 'BOOKING_SUMMARY.LBL_SELECT':'BOOKING_SUMMARY.MSG_NO_DATA' ) | translate }} ---"
+                                [typeahead]="tcfDashboardMaster.customerInput" [minTermLength]="3"
+                                [clearable]="true" (clear)="clearCustomerSelection()"
+                                (change)="changeCustomerData()" [(ngModel)]="model.customerGLCodes"
+                                [multiple]="true" class="multiple" (scrollToEnd)="getCustomerData(true)"
+                                #select>
+                                <ng-template ng-option-tmp let-item="item">
+                                    <div class="text-wrap"><span>{{item.name}}</span></div>
+                                </ng-template>
+                            </ng-select>
+
+                        </div>
+                    </div>
+
+                    <div class="col-sm-3 col-md-3 col-lg-3 mobile-margin-top-15">
+                        <div class="my-input-group">
+                            <div class="styled-radio-container" *ngFor="let item of supplierTypeList;let idx = index">
+                              <input type="radio" class="styled-radio" id="{{item.id}}" name="radio-group3" [value]="item.id"
+                                [checked]="true" [(ngModel)]="model.supplierTypeId" (change)="changeSupplierType()">
+                              <label for="{{item.id}}">{{item.name}}</label>
+                            </div>
+                            <ng-select [items]="tcfDashboardMaster.supplierList" [virtualScroll]="true"
+                                appendTo="body" [loading]="tcfDashboardMaster.supplierLoading" bindLabel="name"
+                                bindValue="id"
+                                placeholder="--- {{ (tcfDashboardMaster.supplierList!=null && tcfDashboardMaster.supplierList.length!=0? 'BOOKING_SUMMARY.LBL_SELECT':'BOOKING_SUMMARY.MSG_NO_DATA' ) | translate }} ---"
+                                [typeahead]="tcfDashboardMaster.supplierInput" [minTermLength]="3"
+                                [clearable]="true" (clear)="clearSupplierSelection()"
+                                [(ngModel)]="model.supplierIds" [multiple]="true" class="multiple"
+                                (scrollToEnd)="getSupplierData(true)" #select>
+                                <ng-template ng-option-tmp let-item="item">
+                                    <div class="text-wrap"><span>{{item.name}}</span></div>
+                                </ng-template>
+                            </ng-select>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-3 col-md-3 col-lg-3 mobile-margin-top-15 marginTop15">
+                        <div class="my-input-group">
+                            <label for="">{{ 'TCF_LIST.LBL_BUYER' | translate }}</label>
+
+                            <ng-select [items]="tcfDashboardMaster.buyerList" [virtualScroll]="true"
+                                appendTo="body" [loading]="tcfDashboardMaster.buyerLoading" bindLabel="name"
+                                bindValue="id"
+                                placeholder="--- {{ (tcfDashboardMaster.buyerList!=null && tcfDashboardMaster.buyerList.length!=0? 'BOOKING_SUMMARY.LBL_SELECT':'BOOKING_SUMMARY.MSG_NO_DATA' ) | translate }} ---"
+                                [typeahead]="tcfDashboardMaster.buyerInput" [minTermLength]="4"
+                                [clearable]="true" (clear)="clearBuyerSelection()"
+                                [(ngModel)]="model.buyerIds" [multiple]="true" class="multiple"
+                                (scrollToEnd)="getBuyerData(true)" #select>
+                                <ng-template ng-option-tmp let-item="item">
+                                    <div class="text-wrap"><span>{{item.name}}</span></div>
+                                </ng-template>
+                            </ng-select>
+                        </div>
+                    </div>
+                </div>
+                <div [hidden]="!toggleFormSection">
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div class="row marginTop25">
+
+                                <div class="col-sm-3 col-md-3 col-lg-3 mobile-margin-top-15">
+                                    <div class="my-input-group">
+                                        <label for="">{{ 'TCF_LIST.LBL_CUSTOMER_CONTACTS' | translate }}</label>
+
+                                        <ng-select [items]="tcfDashboardMaster.customerContactList" appendTo="body"
+                                            [virtualScroll]="true" [loading]="tcfDashboardMaster.customerContactLoading"
+                                            bindLabel="name" bindValue="id"
+                                            placeholder="--- {{ (tcfDashboardMaster.customerContactList!=null && tcfDashboardMaster.customerContactList.length!=0? 'BOOKING_SUMMARY.LBL_SELECT':'BOOKING_SUMMARY.MSG_NO_DATA' ) | translate }} ---"
+                                            [typeahead]="tcfDashboardMaster.customerContactInput" [minTermLength]="4"
+                                            [clearable]="true" (clear)="clearCustomerContactSelection()"
+                                            [(ngModel)]="model.customerContactIds" [multiple]="true"
+                                            class="multiple" (scrollToEnd)="getCustomerContactData(true)"
+                                            #select>
+                                            <ng-template ng-option-tmp let-item="item">
+                                                <div class="text-wrap"><span>{{item.name}}</span></div>
+                                            </ng-template>
+                                        </ng-select>
+                                    </div>
+                                </div>
+                                <div class="col-sm-3 col-md-3 col-lg-3">
+                                    <div class="my-input-group">
+                                        <label for="">{{ 'TCF_LIST.LBL_PRODUCT_CATEGORY' | translate }}</label>
+
+                                        <ng-select [items]="tcfDashboardMaster.productCategoryList" appendTo="body"
+                                            [virtualScroll]="true" [loading]="tcfDashboardMaster.productCategoryLoading"
+                                            bindLabel="name" bindValue="id"
+                                            placeholder="--- {{ (tcfDashboardMaster.productCategoryList!=null && tcfDashboardMaster.productCategoryList.length!=0? 'BOOKING_SUMMARY.LBL_SELECT':'BOOKING_SUMMARY.MSG_NO_DATA' ) | translate }} ---"
+                                            [typeahead]="tcfDashboardMaster.productCategoryInput" [minTermLength]="4"
+                                            [clearable]="true" (clear)="clearProductCategorySelection()"
+                                            (change)="changeProductCategoryData()"
+                                            [(ngModel)]="model.productCategoryIds" [multiple]="true"
+                                            class="multiple" (scrollToEnd)="getProductCategoryData(true)"
+                                            #select>
+                                            <ng-template ng-option-tmp let-item="item">
+                                                <div class="text-wrap"><span>{{item.name}}</span></div>
+                                            </ng-template>
+                                        </ng-select>
+                                    </div>
+                                </div>
+
+                                <div class="col-sm-3 col-md-3 col-lg-3">
+                                    <div class="my-input-group">
+                                        <label for="">{{ 'TCF_LIST.LBL_PRODUCT_SUB_CATEGORY' | translate
+                                            }}</label>
+                                        <ng-select [items]="tcfDashboardMaster.productSubCategoryList" appendTo="body"
+                                            [virtualScroll]="true" [loading]="tcfDashboardMaster.customerContactLoading"
+                                            bindLabel="name" bindValue="id"
+                                            placeholder="--- {{ (tcfDashboardMaster.productSubCategoryList!=null && tcfDashboardMaster.productSubCategoryList.length!=0? 'BOOKING_SUMMARY.LBL_SELECT':'BOOKING_SUMMARY.MSG_NO_DATA' ) | translate }} ---"
+                                            [typeahead]="tcfDashboardMaster.productSubCategoryInput" [minTermLength]="4"
+                                            [clearable]="true" (clear)="clearProductSubCategorySelection()"
+                                            [(ngModel)]="model.productSubCategoryIds" [multiple]="true"
+                                            class="multiple" (scrollToEnd)="getProductSubCategoryData(true)"
+                                            #select>
+                                            <ng-template ng-option-tmp let-item="item">
+                                                <div class="text-wrap"><span>{{item.name}}</span></div>
+                                            </ng-template>
+                                        </ng-select>
+                                    </div>
+                                </div>
+                                <div class="col-sm-3 col-md-3 col-lg-3">
+                                    <div class="my-input-group">
+                                        <label for="">{{ 'TCF_LIST.LBL_COUNTRY_ORIGIN' | translate }}</label>
+
+                                        <ng-select [items]="tcfDashboardMaster.countryOriginList" [virtualScroll]="true"
+                                            appendTo="body" [loading]="tcfDashboardMaster.countryOriginLoading"
+                                            bindLabel="name" bindValue="id"
+                                            placeholder="--- {{ (tcfDashboardMaster.countryOriginList!=null && tcfDashboardMaster.countryOriginList.length!=0? 'BOOKING_SUMMARY.LBL_SELECT':'BOOKING_SUMMARY.MSG_NO_DATA' ) | translate }} ---"
+                                            [typeahead]="tcfDashboardMaster.countryOriginInput" [minTermLength]="4"
+                                            [clearable]="true" (clear)="clearCountryOriginSelection()"
+                                            [(ngModel)]="model.countryOriginIds" [multiple]="true"
+                                            class="multiple" (scrollToEnd)="getCountryOriginData(true)" #select>
+                                            <ng-template ng-option-tmp let-item="item">
+                                                <div class="text-wrap"><span>{{item.name}}</span></div>
+                                            </ng-template>
+                                        </ng-select>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div class="row marginTop25">
+
+                                <div class="col-sm-3 col-md-3 col-lg-3 mobile-margin-top-15">
+                                    <div class="my-input-group">
+                                        <label for="">{{ 'TCF_LIST.LBL_COUNTRY_DESTINATION' | translate
+                                            }}</label>
+
+                                        <ng-select [items]="tcfDashboardMaster.countryDestinationList" appendTo="body"
+                                            [virtualScroll]="true"
+                                            [loading]="tcfDashboardMaster.countryDestinationLoading" bindLabel="name"
+                                            bindValue="id"
+                                            placeholder="--- {{ (tcfDashboardMaster.countryDestinationList!=null && tcfDashboardMaster.countryDestinationList.length!=0? 'BOOKING_SUMMARY.LBL_SELECT':'BOOKING_SUMMARY.MSG_NO_DATA' ) | translate }} ---"
+                                            [typeahead]="tcfDashboardMaster.countryDestinationInput" [minTermLength]="4"
+                                            [clearable]="true" (clear)="clearCountryDestinationSelection()"
+                                            [(ngModel)]="model.countryDestinationIds" [multiple]="true"
+                                            class="multiple" (scrollToEnd)="getCountryDestinationData(true)"
+                                            #select>
+                                            <ng-template ng-option-tmp let-item="item">
+                                                <div class="text-wrap"><span>{{item.name}}</span></div>
+                                            </ng-template>
+                                        </ng-select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row marginTop25">
+                    <div class="col-12 col-sm-6">
+                        <button class="tertiary-cta small" (click)="toggleSection()">
+                            <span class="icon" *ngIf="!toggleFormSection">+</span>
+                            <span class="icon" *ngIf="toggleFormSection">-</span>
+                            {{'COMMON.LBL_ADVANCED_SEARCH' | translate}}
+                        </button>
+
+                    </div>
+                    <div class="col-12 col-sm-6 text-right mt-3 mt-sm-0">
+                        <button class="category-cta small mr-2 common-tooltip common-tooltip-top-2"
+                            data-tooltip="Reset" (click)="reset()">
+                            <img src="assets/images/reload-new.svg" alt="Reset">
+                            <span>{{ 'COMMON.LBL_RESET' | translate}}</span>
+                        </button>
+                         <button class="primary-cta small" (click)="SearchDetails()"
+                            [disabled]="tcfDashboardMaster.tokenLoading || tcfDashboardMaster.tcfStatusLoading
+                            || tcfDashboardMaster.tcfRejectedAnalysisLoading || tcfDashboardMaster.tcfInProgressLoading
+                            || tcfDashboardMaster.tcfSupplierBoardLoading || tcfDashboardMaster.tcfScopeDashboardLoading">
+                           {{
+                            'COMMON.LBL_SEARCH' | translate }}
+                            <span
+                                  *ngIf="tcfDashboardMaster.tokenLoading || tcfDashboardMaster.tcfStatusLoading
+                            || tcfDashboardMaster.tcfRejectedAnalysisLoading || tcfDashboardMaster.tcfInProgressLoading
+                            || tcfDashboardMaster.tcfSupplierBoardLoading || tcfDashboardMaster.tcfScopeDashboardLoading">
+                                <i class="fa fa-refresh fa-spin" aria-hidden="true"></i>
+                            </span>
+                        </button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        <div class="tcf-first-section">
+            <div class="my-container">
+                <div class="page-title-container">
+                    <h4 class="page-title">Hello, {{user.fullName}}</h4>
+                    <div class="page-filter">
+                        <!--   <div class="filter-cta style-2 common-tooltip" data-tooltip="print">
+                            <img src="assets/images/cta-print.svg" alt="">
+                        </div> -->
+                        <div class="filter-cta style-2 common-tooltip" *ngIf="!isFilterOpen" (click)="toggleFilter()"
+                            data-tooltip="filter">
+                            <img src="assets/images/cta-filter-grey.svg" alt="">
+                        </div>
+                        <div class="filter-cta filter-active" *ngIf="isFilterOpen" (click)="toggleFilter()">
+                            <img src="assets/images/cta-close-white.svg" alt="">
+                        </div>
+                    </div>
+                </div>
+                <div class="page-body">
+                    <div class="column col-md-5">
+                        <h6 class="column-heading">{{ 'TCF_DASHBOARD.LBL_BELOWTASKS' | translate }}</h6>
+                        <div class="notification-card-container">
+                            <div class="color-card-widget-container" *ngIf="tcfDashboardMaster.tcfStatusLoading">
+                                <div class="rect-title animate"></div>
+                                <div class="color-card-widget-placeholder-container">
+                                    <div class="rect-card animate two-column"></div>
+                                </div>
+                            </div>
+
+                            <div class="notification-card type-three" *ngIf="!tcfDashboardMaster.tcfStatusLoading"
+                                (click)="navigateTCFSummary(tcfStage.Completed)">
+                                <span class="icon">
+                                    <img src="assets/images/quote-white-tick.svg" alt="">
+                                </span>
+                                <h3 class="number">{{tcfDashboardResponse.statusDashBoardData.completedCount}}</h3>
+                                <h4 class="heading">{{ 'TCF_DASHBOARD.LBL_TCF_COMPLETED' | translate }}</h4>
+                                <p class="description">{{ 'TCF_DASHBOARD.LBL_VIEW_TCF_COMPLETED' | translate }}</p>
+                            </div>
+                            <div class="notification-card type-four" *ngIf="!tcfDashboardMaster.tcfStatusLoading"
+                                (click)="navigateTCFSummary(tcfStage.ToBeFinalized)">
+                                <span class="icon">
+                                    <img src="assets/images/quote-white-pending.svg" alt="">
+                                </span>
+                                <h3 class="number">{{tcfDashboardResponse.statusDashBoardData.finlizedCount}}</h3>
+                                <h4 class="heading">{{ 'TCF_DASHBOARD.LBL_TO_BE_FINALIZED' | translate }}</h4>
+                                <p class="description">{{ 'TCF_DASHBOARD.LBL_VIEW_TO_BE_FINALIZED' | translate }}</p>
+                            </div>
+
+                            <div class="notification-card type-one" *ngIf="!tcfDashboardMaster.tcfStatusLoading"
+                                (click)="navigateTCFSummary(tcfStage.InProgress)">
+                                <span class="icon">
+                                    <img src="assets/images/quote-white-pending.svg" alt="">
+                                </span>
+                                <h3 class="number">{{tcfDashboardResponse.statusDashBoardData.inProgressCount}}</h3>
+                                <h4 class="heading">{{ 'TCF_DASHBOARD.LBL_IN_PROGRESS' | translate }}</h4>
+                                <p class="description">{{ 'TCF_DASHBOARD.LBL_VIEW_IN_PROGRESS' | translate }}</p>
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="column big">
+                        <h6 class="column-heading">{{ 'TCF_DASHBOARD.LBL_SUPPLIER_LEAD_TIME' | translate }} </h6>
+
+                        <div class="tcf-progress-container">
+                             <div class="progress-sidebar">{{ 'TCF_DASHBOARD.LBL_MAN_DAY_REALIZED' | translate }}
+                            </div> 
+                            <div class="progress-body">
+
+                                <div class="content-container" *ngIf="tcfDashboardMaster.tcfSupplierBoardLoading">
+                                    <div class="rect animate width50"></div>
+                                    <div class="rect animate width50"></div>
+                                </div>
+
+                                <div class="progress-header" *ngIf="!tcfDashboardMaster.tcfSupplierBoardLoading">
+                                    <div class="head">
+                                        <p>{{ 'TCF_DASHBOARD.LBL_DAY_1_6' | translate }}</p>
+                                    </div>
+                                    <div class="head">
+                                        <p>{{ 'TCF_DASHBOARD.LBL_DAY_6-12' | translate }}</p>
+                                    </div>
+                                    <div class="head">
+                                        <p>{{ 'TCF_DASHBOARD.LBL_DAY_12-18' | translate }}</p>
+                                    </div>
+                                    <div class="head">
+                                        <p>{{ 'TCF_DASHBOARD.LBL_DAY_18-24' | translate }}</p>
+                                    </div>
+                                    <div class="head">
+                                        <p>{{ 'TCF_DASHBOARD.LBL_DAY_24-30' | translate }}</p>
+                                    </div>
+                                </div>
+                                <div class="progress-bar-container" *ngIf="!tcfDashboardMaster.tcfSupplierBoardLoading">
+                                    <div class="bar bar1" [style.width.px]="bar1Config.width"
+                                        [style.margin-left.px]="bar1Config.offset">
+                                        <p>{{ 'TCF_DASHBOARD.LBL_AVERAGE_FIRST_DOC_SUBMISSION' | translate }}</p>
+                                        <b>{{tcfDashboardResponse.supplierScoreBoard.averageFirstDocSubmission}}
+                                            Days</b>
+                                    </div>
+                                    <div class="bar bar2" [style.width.px]="bar2Config.width"
+                                        [style.margin-left.px]="bar2Config.offset">
+                                        <p>{{ 'TCF_DASHBOARD.LBL_AVERAGE_COMPLETION_TIME' | translate }}</p>
+                                        <b>{{tcfDashboardResponse.supplierScoreBoard.averageCompletionTime}} Days</b>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- <div class="column">
+                        <h6 class="column-heading" *ngIf="false">{{ 'TCF_DASHBOARD.LBL_TCF_EVALUATION_ROUND' | translate
+                            }}</h6>
+                        <div class="error-container" *ngIf="false">
+                            <img src="assets/images/no-result.svg" alt="" class="thumbnail">
+                            <h4 class="error-title">{{ 'MANDAY_DASHBOARD.LBL_NO_DATA_FOUND' | translate }}
+                            </h4>
+                            <p class="error-subtitle">{{'CUSTOMER_DASHBOARD.LBL_NO_DATA' | translate}}</p>
+                        </div>
+                    </div> -->
+                </div>
+            </div>
+        </div>
+        <div class="my-container">
+            <div class="dashboard-body customer-dashboard-body dashbaord-placeholder-container">
+                <div class="row customer-dashboard-graph-wrapper">
+                    <div class="col-sm-4 col-md-6 col-lg-4 col-xl-4 grid-column tablet-margin-top-15">
+                        <div class="dashboard-graph-container">
+
+                            <div class="common-graph-placeholder" *ngIf="tcfDashboardMaster.tcfRejectedAnalysisLoading">
+                                <img src="assets/images/donut-placeholder.png" alt="graph">
+                                <div class="content-container">
+                                    <div class="rect animate"></div>
+                                    <div class="rect animate width80"></div>
+                                    <div class="rect animate width50"></div>
+                                </div>
+                            </div>
+
+                            <div class="new-graph-head text-center text-sm-left align-items-center"
+                                *ngIf="!tcfDashboardMaster.tcfRejectedAnalysisLoading">
+                                <div class="graph-title-container">
+                                    <h3 class="title">{{ 'TCF_DASHBOARD.LBL_REJECTION_ANALYTICS' | translate }}</h3>
+                                </div>
+                                <!--   <div class="graph-filter filter-input-group text-center text-sm-right mt-2 mt-sm-0">
+                                    <div class="my-input-group">
+                                        <ng-select [items]="sampleList" class="small" bindLabel="name" bindValue="id"
+                                            [clearable]="false" placeholder="Select Month"></ng-select>
+                                    </div>
+                                </div> -->
+                            </div>
+
+                            <div class="error-container" *ngIf="tcfDashboardMaster.tcfRejectedAnalysisNotFound">
+                                <img src="assets/images/no-result.svg" alt="" class="thumbnail">
+                                <h4 class="error-title">{{ 'MANDAY_DASHBOARD.LBL_NO_DATA_FOUND' | translate }}
+                                </h4>
+                                <p class="error-subtitle">{{'CUSTOMER_DASHBOARD.LBL_NO_DATA' | translate}}</p>
+                            </div>
+
+                            <div class="row graph-body"
+                                *ngIf="!tcfDashboardMaster.tcfRejectedAnalysisLoading && !tcfDashboardMaster.tcfRejectedAnalysisNotFound">
+                                <div class="col-sm-12 mb-3 mb-xl-0">
+                                    <ng-container *ngIf="loadingLineChart">
+                                        <div class="loadingChart"></div>
+                                    </ng-container>
+                                    <div id="chartdiv" style="width: 100%; height: 200px"></div>
+                                </div>
+                                <div class="col-sm-12 vertical-center">
+                                    <div class="legend-wrapper">
+                                        <div class="legend-item">
+                                            <div class="label">
+                                                <span class="tile" style="background-color: #24c11e"></span><span
+                                                    class="text">{{ 'TCF_DASHBOARD.LBL_VALIDATED' | translate }}</span>
+                                            </div>
+                                            <span
+                                                class="count">{{tcfDashboardResponse.rejectedAnalysisData.docValidated}}</span>
+                                            <span
+                                                class="percent">{{tcfDashboardResponse.rejectedAnalysisData.docValidatedPercentage}}
+                                                %</span>
+                                        </div>
+                                        <div class="legend-item">
+                                            <div class="label">
+                                                <span class="tile" style="background-color: #ff5626"></span><span
+                                                    class="text">{{ 'TCF_DASHBOARD.LBL_UNDER_REVIEW' | translate
+                                                    }}</span>
+                                            </div>
+                                            <span
+                                                class="count">{{tcfDashboardResponse.rejectedAnalysisData.docUnderReview}}</span>
+                                            <span
+                                                class="percent">{{tcfDashboardResponse.rejectedAnalysisData.docUnderReviewedPerecentage}}
+                                                %</span>
+                                        </div>
+                                        <div class="legend-item">
+                                            <div class="label">
+                                                <span class="tile" style="background-color: #9eb9ce"></span><span
+                                                    class="text">{{ 'TCF_DASHBOARD.LBL_PENDING' | translate }}</span>
+                                            </div>
+                                            <span
+                                                class="count">{{tcfDashboardResponse.rejectedAnalysisData.docPending}}</span>
+                                            <span
+                                                class="percent">{{tcfDashboardResponse.rejectedAnalysisData.docPendingPercentage}}
+                                                %</span>
+                                        </div>
+                                        <div class="legend-item">
+                                            <div class="label">
+                                                <span class="tile" style="background-color: #f81538"></span><span
+                                                    class="text">{{ 'TCF_DASHBOARD.LBL_REJECTED' | translate }}</span>
+                                            </div>
+                                            <span
+                                                class="count">{{tcfDashboardResponse.rejectedAnalysisData.docRejected}}</span>
+                                            <span
+                                                class="percent">{{tcfDashboardResponse.rejectedAnalysisData.docRejectedPercentage}}
+                                                %</span>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <div class="col-sm-4 col-md-6 col-lg-4 col-xl-4 grid-column tablet-margin-top-15">
+                        <div class="dashboard-graph-container">
+
+                            <div class="common-graph-placeholder" *ngIf="tcfDashboardMaster.tcfScopeDashboardLoading">
+                                <img src="assets/images/donut-placeholder.png" alt="graph">
+                                <div class="content-container">
+                                    <div class="rect animate"></div>
+                                    <div class="rect animate width80"></div>
+                                    <div class="rect animate width50"></div>
+                                </div>
+                            </div>
+
+                            <div class="new-graph-head text-center text-sm-left align-items-center"
+                                *ngIf="!tcfDashboardMaster.tcfScopeDashboardLoading">
+                                <div class="graph-title-container">
+                                    <h3 class="title">{{ 'TCF_DASHBOARD.LBL_TCF_SCOPE' | translate }}</h3>
+                                </div>
+                                <!--   <div class="graph-filter filter-input-group text-center text-sm-right mt-2 mt-sm-0">
+                                    <div class="my-input-group">
+                                        <ng-select [items]="sampleList" class="small" bindLabel="name" bindValue="id"
+                                            [clearable]="false" placeholder="Select Month"></ng-select>
+                                    </div>
+                                </div> -->
+                            </div>
+
+                            <div class="error-container" *ngIf="tcfDashboardMaster.tcfScopeDashboardNotFound">
+                                <img src="assets/images/no-result.svg" alt="" class="thumbnail">
+                                <h4 class="error-title">{{ 'MANDAY_DASHBOARD.LBL_NO_DATA_FOUND' | translate }}
+                                </h4>
+                                <p class="error-subtitle">{{'CUSTOMER_DASHBOARD.LBL_NO_DATA' | translate}}</p>
+                            </div>
+
+                            <div class="row graph-body"
+                                *ngIf="!tcfDashboardMaster.tcfScopeDashboardNotFound && !tcfDashboardMaster.tcfScopeDashboardLoading">
+                                <div class="col-sm-12 mb-3 mb-xl-0">
+                                    <ng-container *ngIf="loadingLineChart">
+                                        <div class="loadingChart"></div>
+                                    </ng-container>
+                                    <div id="chartdiv1" style="width: 100%; height: 200px"></div>
+                                </div>
+                                <div class="col-sm-12 vertical-center">
+                                    <div class="legend-wrapper">
+
+                                        <div class="legend-item">
+                                            <div class="label">
+                                                <span class="tile" style="background-color: #24c11e"></span><span
+                                                    class="text">{{ 'TCF_DASHBOARD.LBL_TCF_SCOPE_CONFIRM' | translate
+                                                    }}</span>
+                                            </div>
+                                            <span
+                                                class="count">{{tcfDashboardResponse.scopeDashboardData.scopeConfirm}}</span>
+                                            <span
+                                                class="percent">{{tcfDashboardResponse.scopeDashboardData.scopeConfirmPercentage}}
+                                                %</span>
+                                        </div>
+
+                                        <div class="legend-item">
+                                            <div class="label">
+                                                <span class="tile" style="background-color: #e04f4f"></span><span
+                                                    class="text">{{ 'TCF_DASHBOARD.LBL_TCF_SCOPE_UNDER_REVIEW' |
+                                                    translate }}</span>
+                                            </div>
+                                            <span
+                                                class="count">{{tcfDashboardResponse.scopeDashboardData.scopeUnderReview}}</span>
+                                            <span
+                                                class="percent">{{tcfDashboardResponse.scopeDashboardData.scopeUnderReviewPerecentage}}
+                                                %</span>
+                                        </div>
+                                        <div class="legend-item">
+                                            <div class="label">
+                                                <span class="tile" style="background-color: #e99485ee"></span><span
+                                                    class="text">{{ 'TCF_DASHBOARD.LBL_TCF_SCOPE_UNDER_WAITING' |
+                                                    translate }}</span>
+                                            </div>
+                                            <span
+                                                class="count">{{tcfDashboardResponse.scopeDashboardData.scopeWaiting}}</span>
+                                            <span
+                                                class="percent">{{tcfDashboardResponse.scopeDashboardData.scopeWaitingPercentage}}
+                                                %</span>
+                                        </div>
+
+                                        <div class="legend-item">
+                                            <div class="label">
+                                                <span class="tile" style="background-color: #f81538"></span><span
+                                                    class="text">{{ 'TCF_DASHBOARD.LBL_TCF_SCOPE_EXPIRED' | translate
+                                                    }}</span>
+                                            </div>
+                                            <span
+                                                class="count">{{tcfDashboardResponse.scopeDashboardData.scopeExpired}}</span>
+                                            <span
+                                                class="percent">{{tcfDashboardResponse.scopeDashboardData.scopeExpiredPercentage}}
+                                                %</span>
+                                        </div>
+
+                                        <!-- <div class="legend-item">
+                                            <div class="label">
+                                                <span class="tile" style="background-color: #9eb9ce"></span><span
+                                                    class="text">{{ 'TCF_DASHBOARD.LBL_TCF_STATUS_NOT_SET' | translate }}</span>
+                                            </div>
+                                            <span
+                                                class="count">{{tcfDashboardResponse.scopeDashboardData.scopeNotSet}}</span>
+                                            <span
+                                                class="percent">{{tcfDashboardResponse.scopeDashboardData.scopeNotSetPercentage}}
+                                                %</span>
+                                        </div> -->
+
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <div
+                        class="col-sm-4 col-md-6 col-lg-4 col-xl-4 grid-column mobile-margin-top-15 tablet-margin-top-15">
+                        <div class="dashboard-graph-container">
+                            <div class="new-graph-head text-center text-sm-left align-items-center"
+                                *ngIf="!tcfDashboardMaster.tcfInProgressLoading">
+                                <div class="graph-title-container">
+                                    <h3 class="title">{{ 'TCF_DASHBOARD.LBL_TCF_IN_PROGRESS' | translate }}</h3>
+                                </div>
+
+                            </div>
+
+                            <div class="error-container" *ngIf="tcfDashboardMaster.tcfInProgressNotFound">
+                                <img src="assets/images/no-result.svg" alt="" class="thumbnail">
+                                <h4 class="error-title">{{ 'MANDAY_DASHBOARD.LBL_NO_DATA_FOUND' | translate }}
+                                </h4>
+                                <p class="error-subtitle">{{'CUSTOMER_DASHBOARD.LBL_NO_DATA' | translate}}</p>
+                            </div>
+
+                            <div class="common-graph-placeholder" *ngIf="tcfDashboardMaster.tcfInProgressLoading">
+                                <img src="assets/images/donut-placeholder.png" alt="graph">
+                                <div class="content-container">
+                                    <div class="rect animate"></div>
+                                    <div class="rect animate width80"></div>
+                                    <div class="rect animate width50"></div>
+                                </div>
+                            </div>
+
+                            <div class="row graph-body" *ngIf="!tcfDashboardMaster.tcfInProgressNotFound && !tcfDashboardMaster.tcfInProgressLoading">
+                                <div id="horizontalBar-chart" style="width:100%;height:400px">
+                                </div>
+                             </div>
+                        </div>
+
+
+
+                    </div>
+
+                    <!--    <div
+                        class="col-sm-4 col-md-12 col-lg-4 col-xl-4 grid-column mobile-margin-top-15 tablet-margin-top-15">
+                        <div class="dashboard-graph-container">
+                            <div class="new-graph-head text-center text-sm-left align-items-center">
+                                <div class="graph-title-container">
+                                    <h3 class="title">{{ 'TCF_DASHBOARD.LBL_OVERVIEW' | translate }} </h3>
+                                </div>
+                                 <div class="graph-filter filter-input-group text-center text-sm-right mt-2 mt-sm-0">
+                                    <div class="my-input-group">
+                                        <ng-select [items]="sampleList" class="small" bindLabel="name" bindValue="id"
+                                            [clearable]="false" placeholder="Last Month"></ng-select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="error-container">
+                                <img src="assets/images/no-result.svg" alt="" class="thumbnail">
+                                <h4 class="error-title">{{ 'MANDAY_DASHBOARD.LBL_NO_DATA_FOUND' | translate }}
+                                </h4>
+                                <p class="error-subtitle">{{'CUSTOMER_DASHBOARD.LBL_NO_DATA' | translate}}</p>
+                            </div>
+                            <div class="row graph-body">
+                                <div class="col-sm-12 mb-3 mb-xl-0">
+                                    <ng-container *ngIf="loadingLineChart">
+                                        <div class="loadingChart"></div>
+                                    </ng-container>
+                                    <div id="linechartdiv" style="width: 100%; height: 200px"></div>
+                                </div>
+                                <div class="col-sm-12 tcf-legend-wrapper">
+                                    <div class="row mt-4">
+                                        <div class="col-6 seperator">
+                                            <p class="legend-title"><img class="left" src="assets/images/grey-arrow.svg"
+                                                    alt=""> 30 Days</p>
+                                            <p class="legend-value">12 TCF <span class="percent">35%</span></p>
+                                        </div>
+                                        <div class="col-6">
+                                            <p class="legend-title">31 - 60 Days</p>
+                                            <p class="legend-value">40 TCF <span class="percent">35%</span></p>
+                                        </div>
+                                    </div>
+                                    <div class="row mt-4">
+                                        <div class="col-6 seperator">
+                                            <p class="legend-title">61 - 90 Days</p>
+                                            <p class="legend-value">42 TCF <span class="percent">35%</span></p>
+                                        </div>
+                                        <div class="col-6">
+                                            <p class="legend-title"><img class="right"
+                                                    src="assets/images/grey-arrow.svg" alt=""> 90 Days</p>
+                                            <p class="legend-value">32 TCF <span class="percent">35%</span></p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div> -->
+                </div>
+            </div>
+            <!-- <app-global-loader *ngIf="false"></app-global-loader> -->
+            <div class="footer independent">
+                <div class="column">
+                    <p class="text">© 2019 All rights reserved. api - hk.com</p>
+                </div>
+                <div class="column">
+                    <ul class="footer-item">
+                        <li><a href="">User Guide</a></li>
+                        <li><a href="">Contact</a></li>
+                        <li><a href="">Help</a></li>
+                        <li><a href="">Terms</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- <div class="confirmation-loader" *ngIf="tcfDashboardMaster.tcfStatusLoading || tcfDashboardMaster.tcfSupplierBoardLoading || tcfDashboardMaster.tcfRejectedAnalysisLoading 
+    || tcfDashboardMaster.tcfRejectedRateLoading" [ngStyle]="{'z-index': '123'}">
+    <div class="loader">
+        <img src="assets/images/loader.gif" alt="Loader">
+        <p>{{ 'TCF_DETAIL.LBL_DETAILS_LOADING' | translate }} ..</p>
+    </div>
+</div> -->

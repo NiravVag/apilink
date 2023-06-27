@@ -1,0 +1,6 @@
+﻿CREATE TABLE [dbo].[Language]
+(
+	[Id] [int] IDENTITY(1,1) NOT FOR REPLICATION NOT NULL PRIMARY KEY,
+ 
+    [Name] VARCHAR(100) NOT NULL
+)

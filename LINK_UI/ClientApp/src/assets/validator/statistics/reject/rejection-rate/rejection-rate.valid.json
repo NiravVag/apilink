@@ -1,0 +1,45 @@
+{
+    "model": "GroupByFilterEnum",
+    "fields": {
+        "serviceDateFrom": [
+            {
+                "type": "required",
+                "fieldType": "D",
+                "ressource": "COMMON.MSG_SERVICE_FROMDATE_REQ"
+            },
+            {
+                "type": "isLessOrEqual",
+                "fieldType": "D",
+                "fieldCible": "serviceDateTo",
+                "ressource": "COMMON.MSG_SERVICE_FROMDATE_GREATER_REQ"
+            }
+        ],
+        "serviceDateTo": [
+            {
+                "type": "required",
+                "fieldType": "D",
+                "ressource": "COMMON.MSG_SERVICE_TODATE_REQ"
+            },
+            {
+                "type": "isGreatOrEqual",
+                "fieldType": "D",
+                "fieldCible": "serviceDateFrom",
+                "ressource": "COMMON.MSG_SERVICE_TODATE_LESS_REQ"
+            }
+        ],
+        "groupByFilter": [
+            {
+                "type": "required",
+                "fieldType": "N",
+                "ressource": "REJECTION_RATE.MSG_GROUP_REQ"
+            }
+        ],
+        "customerId": [
+            {
+                "type": "required",
+                "fieldType": "N",
+                "ressource": "COMMON.MSG_CUSTOMER_REQUIRED"
+            }
+        ]
+    }
+}

@@ -1,0 +1,29 @@
+{
+    "model": "InvoiceDiscountModel",
+    "fields": {
+        "periodFrom": [{
+                "type": "required",
+                "fieldType": "D",
+                "ressource": "INV_DIS_SUMMARY.MSG_FROMDATE_REQ"
+            },
+            {
+                "type": "isLessOrEqual",
+                "fieldType": "D",
+                "fieldCible": "periodTo",
+                "ressource": "INV_DIS_SUMMARY.MSG_FROMDATE_GREATER_REQ"
+            }
+        ],
+        "periodTo": [{
+                "type": "required",
+                "fieldType": "D",
+                "ressource": "INV_DIS_SUMMARY.MSG_TODATE_REQ"
+            },
+            {
+                "type": "isGreatOrEqual",
+                "fieldType": "D",
+                "fieldCible": "periodFrom",
+                "ressource": "INV_DIS_SUMMARY.MSG_TODATE_LESS_REQ"
+            }
+        ]
+    }
+}

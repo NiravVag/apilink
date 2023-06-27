@@ -1,0 +1,156 @@
+<div class="main-wrapper">
+  <div class="wrapper dashboard-wrapper">
+    <div class="my-container">
+      <div class="master-body">
+        <div class="title-container">
+          <h3 class="main-title">{{ 'DF_CONFIG_SUMMARY.TITLE' | translate }}</h3>
+        </div>
+        <div class="content-container quotation-container">
+          <div  [@expandCollapse]="isFilterOpen ? 'open' : 'close'" class="centerContainerPadding common-filter-container">
+            <div class="animated-icon-container" (click)="toggleFilterSection()" *ngIf="(model.items && model.items.length>0)">
+             <img src="assets/images/cta-close-grey.svg" alt="close">
+             </div>
+           
+              <div class="row">
+                <div class="col-sm-4 col-md-4 col-lg-4">
+                  <div class="my-input-group">
+                    <label class="control-label">{{ 'DF_CONFIG_SUMMARY.LBL_MODULES' | translate }}</label>
+                    <ng-select [multiple]="false" [closeOnSelect]="true" [searchable]="true" appendTo="body" [hideSelected]="true"
+                      bindLabel="name"   bindValue="id" [items]="dfCustomerConfigMaster.moduleList"
+                      [ngClass]="{ 'is-invalid':  !validator.isValid('moduleId')}" [(ngModel)]="model.moduleId"
+                      placeholder="--- {{ 'EDIT_CUSTOMER.LBL_SELECT' | translate }}---">
+                    </ng-select>
+                    <div *ngIf="!validator.isValid('moduleId')" class="invalid-feedback">
+                      <div *ngFor="let error of validator.getErrors('moduleId')">{{ error | translate }}</div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-sm-4 col-md-4 col-lg-4 mobile-margin-top-15">
+                  <div class="my-input-group">
+                    <label class="control-label">{{ 'DF_CONFIG_SUMMARY.LBL_CUSTOMERS' | translate }}</label>
+
+                    <ng-select [multiple]="true" class="multiple" [searchable]="true" appendTo="body"
+                      placeholder="--- {{ 'EDIT_CUSTOMER.LBL_SELECT' | translate }}---"
+                      [items]="dfCustomerConfigMaster.customerList" bindLabel="name" bindValue="id"
+                      [ngClass]="{ 'is-invalid':  !validator.isValid('customerDataList')}" [hideSelected]="true"
+                      [(ngModel)]="model.customerDataList">
+                    </ng-select>
+                    <div *ngIf="!validator.isValid('customerDataList')" class="invalid-feedback">
+                      <div *ngFor="let error of validator.getErrors('customerDataList')">{{ error | translate }}</div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-sm-3 col-md-3 col-lg-3 mobile-margin-top-15">
+                  <div class="my-input-group">
+                    <label class="control-label">{{ 'DF_CONFIG_SUMMARY.LBL_CONTROLS' | translate }}</label>
+                    <ng-select [multiple]="true" [closeOnSelect]="true" [searchable]="true" [hideSelected]="true"
+                      bindLabel="name" appendTo="body" bindValue="id" class="multiple"
+                      [items]="dfCustomerConfigMaster.controlTypeList" [(ngModel)]="model.controlTypeDataList"
+                      placeholder="--- {{ 'EDIT_CUSTOMER.LBL_SELECT' | translate }}---">
+                    </ng-select>
+                  </div>
+                </div>
+              </div>
+            
+         
+              <div class="row marginTop25">
+                <div class="col-12 col-sm-12 text-right mt-3 mt-sm-0"> 
+              <button id="btnAdd" class="secondary-cta small" (click)="getEditDetails(0, 0)">
+                +{{ 
+                  'CUSTOMER_PRODUCT_SUMMARY.LBL_ADDNEW' | translate 
+                }}
+              </button>
+              &nbsp;
+              <button id="btnSearch" class="primary-cta small" (click)="search()"
+                [disabled]="searchloading || Initialloading">
+                {{ 'CUSTOMER_SUMMARY.LBL_SEARCH' | translate }}
+                <span *ngIf="searchloading">
+                  <i class="fa fa-refresh fa-spin" aria-hidden="true"></i>
+                </span>
+              </button>
+
+            </div>
+          </div>
+        </div>
+        <div class="centerContainerPadding float-left" *ngIf="(model.items && model.items.length>0)">
+            <div class="row">
+              <div class="col-6 col-sm-4 col-xl-2 d-flex">
+                <p  class="search-trigger-heading" [innerHtml]="showPaginationText()"></p>
+                
+              </div>
+              <div class="col-6 col-sm-8 col-xl-10 text-right">
+                <div class="animated-icon-container" *ngIf="!isFilterOpen" (click)="toggleFilterSection()">
+                  <img src="assets/images/cta-search-grey.svg" alt="search">
+                </div>
+              </div>
+            </div>
+            <div class="quotation-search-container">
+              <div  class="table-container h-scroll">
+                <table class="pagination-table simple-table bordered">
+                <thead>
+                  <tr>
+                    <th class="width-100"></th>
+                    <th>{{ 'DF_CONFIG_SUMMARY.LBL_MODULE_NAME' | translate }}</th>
+                    <th>{{ 'DF_CONFIG_SUMMARY.LBL_CUSTOMER_NAME' | translate }}</th>
+                    <th>{{ 'DF_CONFIG_SUMMARY.LBL_CONTROL_TYPE' | translate }}</th>
+                    <th>{{ 'DF_CONFIG_SUMMARY.LBL_LABEL' | translate }}</th>
+                    <th>{{ 'DF_CONFIG_SUMMARY.LBL_DISPLAYORDER' | translate }}</th>
+                    
+                  </tr>
+
+                </thead>
+                <tbody>
+                  <ng-container *ngFor="let iteminfo of model.items">
+                    <tr>
+                      <td class="Center_Middle">
+                        <span class="table-cta icon-cta common-tooltip" 
+                        (click)="getDetails(iteminfo.id)" data-tooltip="Edit">
+                        <img src="assets/images/cta-edit.svg" alt="Edit">
+                      </span>
+                      &nbsp;
+                        <span class="table-cta icon-cta common-tooltip"  
+                        (click)="openConfirm(iteminfo.id,iteminfo.label,content)" data-tooltip="Delete">
+                        <img src="assets/images/cta-delete.svg" alt="Delete">
+                      </span>
+                      </td>
+                      <td style="word-break:break-all;min-width:110px">{{iteminfo.moduleName}}</td>
+                      <td style="word-break:break-all;min-width:110px">{{iteminfo.customerName}}</td>
+                      <td style="word-break:break-all;min-width:110px">{{iteminfo.controlName}}</td>
+                      <td style="word-break:break-all;min-width:110px">{{iteminfo.label}}</td>
+                      <td style="text-align:center">{{iteminfo.displayOrder}}</td>
+                      
+                    </tr>
+                  </ng-container>
+                </tbody>
+              </table>
+              </div>
+            </div>
+            <div class="pagination-container">
+              <ngb-pagination (pageChange)="onPager($event)" [pageSize]="model.pageSize"
+                  [collectionSize]="model.totalCount" [(page)]="model.index" [maxSize]="5">
+              </ngb-pagination>
+          </div>
+          </div>
+          <div class="centerContainerPadding" *ngIf="model.noFound">
+            <div class="error-container">
+              <img src="assets/images/no-result.svg" alt="" class="thumbnail">
+              <h4 class="title">{{ 'CUSTOMER_SUMMARY.LBL_NOITEMS' | translate }}</h4>
+              <p class="error-subtitle">{{'CS_CONFIG_SUMMARY.LBL_NODATA' | translate}}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<ng-template #content let-modal>
+  <div class="modal-body">
+      <div class="small-model">
+          <h2 class="title">{{ 'DF_CONFIG_SUMMARY.LBL_CONFIRMDELETION' | translate }}</h2>
+      <p>{{ 'DF_CONFIG_SUMMARY.MSG_DELETE_CONFIRM' | translate }} <strong>{{modelRemove.name}} ?</strong></p>
+          <button class="secondary-cta" (click)="modal.dismiss('Cross click')">{{ 'COMMON.LBL_CONFIRMCANCEL' | translate }}</button>
+         <button class="primary-cta" (click)="deleteDFCustomerConfiguration(modelRemove.id);">{{ 'COMMON.LBL_OK' | translate }}</button>        
+   </div>
+  </div>
+</ng-template>

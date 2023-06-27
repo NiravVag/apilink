@@ -1,0 +1,79 @@
+﻿@using DTO.Manday
+@{
+    ViewData["Title"] = "MandayYearChartExport";
+}
+
+@model DTO.Manday.MandayYearExport
+
+<style>
+    td {
+        border-style: solid;
+    }
+
+    th {
+        text-align: center;
+    }
+</style>
+
+<xls-sheet name="Year-Manday">
+    <table xls-begin="A:1" style="border-style:solid">
+        <tr>
+            <td style="font-weight:bold">Service :</td>
+            <td width="100px">@Model.RequestFilters.Service</td>
+
+            <td width="130px" style="font-weight:bold">Service Date From :</td>
+            <td width="100px">@Model.RequestFilters.ServiceDateFrom</td>
+
+            <td width="120px" style="font-weight:bold">Service Date To :</td>
+            <td width="100px">@Model.RequestFilters.ServiceDateTo</td>
+
+            @if (!string.IsNullOrEmpty(@Model.RequestFilters.CountryIdList))
+            {
+                <td width="100px" style="font-weight: bold">Country :</td>
+                <td width="100px">@Model.RequestFilters.CountryIdList</td>
+            }
+            @if (!string.IsNullOrEmpty(@Model.RequestFilters.OfficeIdList))
+            {
+                <td style="font-weight: bold">Office :</td>
+                <td width="100px">@Model.RequestFilters.OfficeIdList</td>
+            }
+            @if (!string.IsNullOrEmpty(@Model.RequestFilters.CustomerList))
+            {
+                <td style="font-weight: bold">Customer :</td>
+                <td width="100px">@Html.Raw(@Model.RequestFilters.CustomerList)</td>
+            }
+            @if (!string.IsNullOrEmpty(@Model.RequestFilters.MandayYearSubCustomer))
+            {
+                <td width="100px" style="font-weight: bold">SubCustomer :</td>
+                <td width="100px">@Html.Raw(@Model.RequestFilters.MandayYearSubCustomer)</td>
+            }
+            @if (!string.IsNullOrEmpty(@Model.RequestFilters.MandayYearSubCountry))
+            {
+                <td width="100px" style="font-weight: bold">SubCountry :</td>
+                <td width="100px">@Model.RequestFilters.MandayYearSubCountry</td>
+            }
+        </tr>
+        <tr>
+            <td></td>
+        </tr>
+
+        <tr style="background-color:#f5f5f5;font-weight:bold;text-align:center">
+            <th style="border-style:solid; text-align:center">Year</th>
+            <th style="border-style:solid">Month</th>
+            <th style="border-style:solid; text-align:center">Manday</th>
+        </tr>
+
+        @foreach (var item in Model.Data)
+        {
+            <tr>
+                <td style="text-align:center; border-style:solid" xls-type="number">@item.Year</td>
+                <td style="border-style:solid">@item.MonthName</td>
+                <td style="text-align:center; border-style:solid" xls-type="number">@(Model.RequestFilters.MandayType == (int)MandayType.EstimatedManday ? item.MonthManDay : item.MonthActualManDay) </td>
+            </tr>
+        }
+        <tr>
+            <td style="font-weight:bold; border-style:solid;text-align:center" colspan="2">Total</td>
+            <td style="text-align:center; border-style:solid" xls-type="number">@Model.Total</td>
+        </tr>
+    </table>
+</xls-sheet>

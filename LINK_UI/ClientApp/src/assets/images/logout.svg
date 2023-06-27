@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="15.38" height="15.38" viewBox="0 0 15.38 15.38">
+  <defs>
+    <style>
+      .cls-1 {
+        opacity: 0.6;
+      }
+
+      .cls-2 {
+        fill: #24424d;
+      }
+    </style>
+  </defs>
+  <g id="circle-with-left-arrow" class="cls-1" transform="translate(0)">
+    <path id="Path_163" data-name="Path 163" class="cls-2" d="M7.69,0a7.69,7.69,0,1,0,7.69,7.69A7.7,7.7,0,0,0,7.69,0Zm0,14.883a7.194,7.194,0,1,1,7.187-7.442L6.83,7.426l1.4-1.4-.351-.351L5.882,7.672,7.911,9.7l.351-.351L6.833,7.921l8.045.016A7.2,7.2,0,0,1,7.69,14.883Z"/>
+  </g>
+</svg>

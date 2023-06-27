@@ -1,0 +1,89 @@
+{
+  "model": "InvoiceBaseDetail",
+  "fields": {
+    "invoiceNo": [
+      {
+        "type": "required",
+        "fieldType": "T",
+        "ressource": "Invoice No cannot be empty"
+      }
+    ],
+    "invoiceDate": [
+      {
+        "type": "required",
+        "fieldType": "D",
+        "ressource": "Invoice Date cannot be empty"
+      }
+    ],
+    "postDate": [
+      {
+        "type": "required",
+        "fieldType": "D",
+        "ressource": "Post Date cannot be empty"
+      }
+    ],
+    "billTo": [
+      {
+        "type": "required",
+        "fieldType": "N",
+        "ressource": "Bill To cannot be empty"
+      }
+    ],
+    "billMethod": [
+      {
+        "type": "required",
+        "fieldType": "N",
+        "ressource": "Billing Method cannot be empty"
+      }
+    ],
+    "billedAddress": [
+      {
+        "type": "required",
+        "fieldType": "T",
+        "ressource": "Billed Address cannot be empty"
+      }
+    ],
+    "contactIds": [
+      {
+        "type": "required",
+        "fieldType": "A",
+        "ressource": "Contacts cannot be empty"
+      }
+    ],
+    "paymentTerms": [
+      {
+        "type": "required",
+        "fieldType": "T",
+        "ressource": "Payment Terms cannot be empty"
+      }
+    ],
+    "paymentDuration": [
+      {
+        "type": "required",
+        "fieldType": "T",
+        "ressource": "Payment Duration cannot be empty"
+      }
+    ],
+    "office": [
+      {
+        "type": "required",
+        "fieldType": "N",
+        "ressource": "Office cannot be empty"
+      }
+    ],
+    "paymentStatus": [
+      {
+        "type": "required",
+        "fieldType": "N",
+        "ressource": "Payment Status cannot be empty"
+      }
+    ],
+    "invoiceType": [
+      {
+        "type": "required",
+        "fieldType": "N",
+        "ressource": "Invoice Type cannot be empty"
+      }
+    ]
+  }
+}

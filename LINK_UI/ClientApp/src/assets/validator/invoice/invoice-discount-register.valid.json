@@ -1,0 +1,44 @@
+{
+    "model": "EditInvoiceDiscountRegisterModel",
+    "fields": {
+        "customerId": [{
+            "type": "required",
+            "fieldType": "N",
+            "ressource": "INV_DIS_REGISTER.MSG_CUSTOMER_REQ"
+        }],
+        "discountType": [{
+            "type": "required",
+            "fieldType": "N",
+            "ressource": "INV_DIS_REGISTER.MSG_DISCOUNTTYPE_REQ"
+        }],
+        "countryIds": [{
+            "type": "required",
+            "fieldType": "A",
+            "ressource": "INV_DIS_REGISTER.MSG_COUNTRY_REQ"
+        }],
+        "periodFrom": [{
+                "type": "required",
+                "fieldType": "D",
+                "ressource": "INV_DIS_REGISTER.MSG_FROMDATE_REQ"
+            },
+            {
+                "type": "isLessOrEqual",
+                "fieldType": "D",
+                "fieldCible": "periodTo",
+                "ressource": "INV_DIS_REGISTER.MSG_FROMDATE_GREATER_REQ"
+            }
+        ],
+        "periodTo": [{
+                "type": "required",
+                "fieldType": "D",
+                "ressource": "INV_DIS_REGISTER.MSG_TODATE_REQ"
+            },
+            {
+                "type": "isGreatOrEqual",
+                "fieldType": "D",
+                "fieldCible": "periodFrom",
+                "ressource": "INV_DIS_REGISTER.MSG_TODATE_LESS_REQ"
+            }
+        ]
+    }
+}

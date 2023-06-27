@@ -1,0 +1,325 @@
+<div class="main-wrapper">
+  <div class="wrapper dashboard-wrapper">
+    <div class="my-container">
+      <div class="master-body">
+        <div class="title-container">
+          <h3 class="main-title"> {{ 'HOLIDAY_MASTER.TITLE' | translate }}</h3>
+        </div>
+        <div class="content-container">
+          <div class="row searchFormPadding">
+            <div class="col-sm-3 col-md-3 col-lg-3 mobile-margin-top-15">
+              <div class="my-input-group">
+                <label class="required control-label">{{ 'HOLIDAY_MASTER.LBL_COUNTRY' | translate }}</label>
+                <select [(ngModel)]="model.countryId" class="form-control"
+                  [ngClass]="{ 'is-invalid':  !validator.isValid('countryId')}">
+                  <option value="0">--- {{ 'EDIT_STAFF.LBL_SELECT' | translate }}---</option>
+                  <option *ngFor="let item of data.countryList" [ngValue]="item.id">{{item.countryName}}</option>
+                </select>
+                <div *ngIf="!validator.isValid('countryId')" class="invalid-feedback">
+                  <div *ngFor="let error of validator.getErrors('countryId')">{{ error | translate }}</div>
+                </div>
+              </div>
+            </div>
+            <div class="col-sm-3 col-md-3 col-lg-3 mobile-margin-top-15">
+              <div class="my-input-group">
+                <label class="control-label">{{ 'HOLIDAY_MASTER.LBL_BRANCHOFFICE' | translate }}</label>
+                <select [(ngModel)]="model.branchId" class="form-control"
+                  [ngClass]="{ 'is-invalid':  !validator.isValid('branchId')}">
+                  <option value="0">--- {{ 'EDIT_STAFF.LBL_SELECT' | translate }}---</option>
+                  <option *ngFor="let item of data.officeList" [ngValue]="item.id">{{item.name}}</option>
+                </select>
+                <div *ngIf="!validator.isValid('branchId')" class="invalid-feedback">
+                  <div *ngFor="let error of validator.getErrors('branchId')">{{ error | translate }}</div>
+                </div>
+              </div>
+            </div>
+            <div class="col-sm-2 col-md-2 col-lg-2 mobile-margin-top-15">
+              <div class="my-input-group">
+                <label class="control-label required">{{ 'HOLIDAY_MASTER.LBL_YEAR' | translate }}</label>
+                <select [(ngModel)]="model.year" class="form-control"
+                  [ngClass]="{ 'is-invalid':  !validator.isValid('year')}">
+                  <option value="0">--- {{ 'EDIT_STAFF.LBL_SELECT' | translate }}---</option>
+                  <option *ngFor="let item of data.yearList" [ngValue]="item">{{item}}</option>
+                </select>
+                <div *ngIf="!validator.isValid('year')" class="invalid-feedback">
+                  <div *ngFor="let error of validator.getErrors('year')">{{ error | translate }}</div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="master-search-cta-container">
+            <div class="column">
+            </div>
+            <div class="column text-right">
+              <button id="btnSearch" class="primary-cta small" style="margin-right: 5px;"
+                (click)="search()">{{ 'HOLIDAY_MASTER.LBL_SEARCH' | translate }}</button>
+            </div>
+          </div>
+          <div class="result-container formPadding">
+            <div class="container-head">
+              <div class="row">
+                <div class="col-sm-3">
+                  <div style="float:left;border:1px solid; height:20px;width:20px;background-color: rgb(2, 117, 216)">
+                  </div>
+                  <span style="margin-left:5px">{{ 'HOLIDAY_MASTER.LBL_MANUALLY' | translate }}</span>
+                </div>
+                <div class="col-sm-3">
+                  <div style="float:left;border:1px solid; height:20px;width:20px;background-color: rgb(255, 0, 0)">
+                  </div>
+                  <span style="margin-left:5px">{{ 'HOLIDAY_MASTER.LBL_EVERYYEAR' | translate }}</span>
+                </div>
+                <div class="col-sm-3">
+                  <div style="float:left;border:1px solid; height:20px;width:20px;background-color:rgb(128, 128, 128)">
+                  </div>
+                  <span style="margin-left:5px">{{ 'HOLIDAY_MASTER.LBL_EVERYMONTH' | translate }}</span>
+                </div>
+                <div class="col-sm-3">
+                  <div style="float:left;border:1px solid; height:20px;width:20px;background-color:rgb(189, 75, 198)">
+                  </div>
+                  <span style="margin-left:5px">{{ 'HOLIDAY_MASTER.LBL_EVERYWEEK' | translate }}</span>
+                </div>
+              </div>
+            </div>
+            <div class="formPadding">
+              <div class="row">
+                <div class="col-sm-3 col-cal-6 col-cal-12">
+                  <ngb-datepicker #jan [(ngModel)]="dateSelected" [navigation]="none" (click)="onDateSelection($event,content)" [dayTemplate]="t"
+                    outsideDays="hidden" [startDate]="{year: model.year, month: 1}">
+                  </ngb-datepicker>
+                </div>
+                <div class="col-sm-3 col-cal-6 col-cal-12 tablet-margin-top-15 mobile-margin-top-15">
+                  <ngb-datepicker #feb [(ngModel)]="dateSelected" [navigation]="none" (click)="onDateSelection($event,content)" [dayTemplate]="t"
+                    outsideDays="hidden" [startDate]="{year:  model.year, month: 2}">
+                  </ngb-datepicker>
+                </div>
+                <div class="col-sm-3 col-cal-6 col-cal-12 tablet-margin-top-15 mobile-margin-top-15">
+                  <ngb-datepicker #mar [(ngModel)]="dateSelected" [navigation]="none" (click)="onDateSelection($event,content)" [dayTemplate]="t"
+                    outsideDays="hidden" [startDate]="{year:  model.year, month: 3}">
+                  </ngb-datepicker>
+                </div>
+                <div class="col-sm-3 col-cal-6 col-cal-12 tablet-margin-top-15 mobile-margin-top-15">
+                  <ngb-datepicker #apr [(ngModel)]="dateSelected" [navigation]="none" (click)="onDateSelection($event,content)" [dayTemplate]="t"
+                    outsideDays="hidden" [startDate]="{year:  model.year, month: 4}">
+                  </ngb-datepicker>
+                </div>
+              </div>
+              <div class="row marginTop15">
+                <div class="col-sm-3 col-cal-6 col-cal-12">
+                  <ngb-datepicker #mai [(ngModel)]="dateSelected" [navigation]="none" (click)="onDateSelection($event,content)" [dayTemplate]="t"
+                    outsideDays="hidden" [startDate]="{year:  model.year, month: 5}">
+                  </ngb-datepicker>
+                </div>
+                <div class="col-sm-3 col-cal-6 col-cal-12 tablet-margin-top-15 mobile-margin-top-15">
+                  <ngb-datepicker #juin [(ngModel)]="dateSelected" [navigation]="none" (click)="onDateSelection($event,content)" [dayTemplate]="t"
+                    outsideDays="hidden" [startDate]="{year:  model.year, month: 6}">
+                  </ngb-datepicker>
+                </div>
+                <div class="col-sm-3 col-cal-6 col-cal-12 tablet-margin-top-15 mobile-margin-top-15">
+                  <ngb-datepicker #juil [(ngModel)]="dateSelected" [navigation]="none" (click)="onDateSelection($event,content)" [dayTemplate]="t"
+                    outsideDays="hidden" [startDate]="{year:  model.year, month: 7}">
+                  </ngb-datepicker>
+                </div>
+                <div class="col-sm-3 col-cal-6 col-cal-12 tablet-margin-top-15 mobile-margin-top-15">
+                  <ngb-datepicker #aug [(ngModel)]="dateSelected" [navigation]="none" (click)="onDateSelection($event,content)" [dayTemplate]="t"
+                    outsideDays="hidden" [startDate]="{year:  model.year, month: 8}">
+                  </ngb-datepicker>
+                </div>
+              </div>
+              <div class="row marginTop15">
+                <div class="col-sm-3 col-cal-6 col-cal-12">
+                  <ngb-datepicker #sep [(ngModel)]="dateSelected" [navigation]="none" (click)="onDateSelection($event,content)" [dayTemplate]="t"
+                    outsideDays="hidden" [startDate]="{year:  model.year, month: 9}">
+                  </ngb-datepicker>
+                </div>
+                <div class="col-sm-3 col-cal-6 col-cal-12 tablet-margin-top-15 mobile-margin-top-15">
+                  <ngb-datepicker #oct [(ngModel)]="dateSelected" [navigation]="none" (click)="onDateSelection($event,content)" [dayTemplate]="t"
+                    outsideDays="hidden" [startDate]="{year:  model.year, month: 10}">
+                  </ngb-datepicker>
+                </div>
+                <div class="col-sm-3 col-cal-6 col-cal-12 tablet-margin-top-15 mobile-margin-top-15">
+                  <ngb-datepicker #nov [(ngModel)]="dateSelected" [navigation]="none" (click)="onDateSelection($event,content)" [dayTemplate]="t"
+                    outsideDays="hidden" [startDate]="{year:  model.year, month: 11}">
+                  </ngb-datepicker>
+                </div>
+                <div class="col-sm-3 col-cal-6 col-cal-12 tablet-margin-top-15 mobile-margin-top-15">
+                  <ngb-datepicker #dec [(ngModel)]="dateSelected" [(ngModel)]="dateSelected" [navigation]="none" (click)="onDateSelection($event,content)" [dayTemplate]="t"
+                    outsideDays="hidden" [startDate]="{year:  model.year, month: 12}">
+                  </ngb-datepicker>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <ng-template #t let-date let-focused="focused">
+    <span [ngbTooltip]="tipContent" [disableTooltip]="!isDaySelected(date)" triggers="manual" #t1="ngbTooltip"
+      class="custom-day" [class.focused]="focused" [class.range]="isRange(date,0)" [class.rangeYear]="isRange(date,1)"
+      [class.rangeMonth]="isRange(date,2)" [class.rangeByWeek]="isRange(date,3)" [class.selected]="isSelected(date)"
+      [class.faded]="isHovered(date) || isInside(date)" (mouseenter)="hoveredDate = date;showTooltip(t1,date)"
+      (mouseleave)="hoveredDate = null;hideTooltip(t1)">
+      {{ date.day }}
+    </span>
+
+  </ng-template>
+  <ng-template #tipContent let-descript="descript">{{descript}}</ng-template>
+ <ng-template #content let-modal>
+    <div class="modal-header custom-modal-header">
+      <h4 class="modal-title" id="modal-basic-title">{{ 'HOLIDAY_MASTER.LBL_EDITHOLIDAY' | translate }}</h4>
+      <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body custom-modal-body">
+      <div class="row">
+        <div class="col-sm-4 mobile-margin-top-15">
+          <div class="my-input-group">
+            <label class="required">{{ 'HOLIDAY_MASTER.LBL_HOLIDAYDESCRIPTION' | translate }}</label>
+            <input maxlength="50" [ngClass]="{ 'is-invalid':  !editValidator.isValid('holidayName')}"
+              [(ngModel)]="editHoliday.holidayName"
+              placeholder="{{ 'HOLIDAY_MASTER.LBL_HOLIDAYDESCRIPTION' | translate }}" type="text" />
+            <div *ngIf="!editValidator.isValid('holidayName')" class="invalid-feedback">
+              <div *ngFor="let error of editValidator.getErrors('holidayName')">{{ error | translate }}</div>
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-4 mobile-margin-top-15">
+          <div class="my-input-group">
+            <label class="required">{{ 'HOLIDAY_MASTER.LBL_TYPE' | translate }}</label>
+            <select [(ngModel)]="editHoliday.recurrenceType">
+              <option [ngValue]="0">{{ 'HOLIDAY_MASTER.LBL_MANUALLY' | translate }}</option>
+              <option [ngValue]="1">{{ 'HOLIDAY_MASTER.LBL_EVERYYEAR' | translate }}</option>
+              <!-- <option [ngValue]="2">{{ 'HOLIDAY_MASTER.LBL_EVERYMONTH' | translate }}</option> -->
+              <option [ngValue]="3">{{ 'HOLIDAY_MASTER.LBL_EVERYWEEK' | translate }}</option>
+            </select>
+          </div>
+        </div>       
+      </div>
+      <div class="row marginTop25"  *ngIf="editHoliday.recurrenceType != 3">
+          <div class="col-sm-3 mobile-margin-top-15">
+              <div class="my-input-group">
+                <label class="required">{{ 'HOLIDAY_MASTER.LBL_FROMDATE' | translate }}</label>
+                <div class="calendar-wrapper">
+                    <input type="text" readonly="readonly"  maxlength="10" (click)="sd.toggle()" [ngClass]="{ 'is-invalid':  !editValidator.isValid('startDate')}"
+                     placeholder="{{ 'HOLIDAY_MASTER.LBL_FROMDATE' | translate }}"
+                   [(ngModel)]="editHoliday.startDate" ngbDatepicker #sd="ngbDatepicker">
+                   <img src="assets/images/calendar-icon.svg" alt="" class="calendar-icon" (click)="sd.toggle()"> 
+                  </div>
+                <div *ngIf="!editValidator.isValid('startDate')" class="invalid-feedback">
+                  <div *ngFor="let error of editValidator.getErrors('startDate')">{{ error | translate }}</div>
+                </div>
+              </div>
+            </div>
+        <div class="col-sm-3 mobile-margin-top-15">
+          <div class="my-input-group">
+            <label>{{ 'HOLIDAY_MASTER.LBL_STARTDAYTYPE' | translate }}</label>
+            <select [(ngModel)]="editHoliday.startDayType">
+              <option *ngFor="let item of data.holidayDayTypeList" [ngValue]="item.id">{{item.label}}</option>
+            </select>
+          </div>
+        </div>
+        <div class="col-sm-3 mobile-margin-top-15">
+          <div class="my-input-group">
+            <label class="required">{{ 'HOLIDAY_MASTER.LBL_ENDDATE' | translate }}</label>
+            <div class="calendar-wrapper">
+              <input type="text"  maxlength="10" readonly="readonly"
+                [ngClass]="{ 'is-invalid':  !editValidator.isValid('endDate')}" (click)="ed.toggle()"
+                placeholder="{{ 'HOLIDAY_MASTER.LBL_ENDDATE' | translate }}" [(ngModel)]="editHoliday.endDate" ngbDatepicker
+                #ed="ngbDatepicker">
+              <img src="assets/images/calendar-icon.svg" alt="" class="calendar-icon" (click)="ed.toggle()">
+            </div>
+            <div *ngIf="!editValidator.isValid('endDate')" class="invalid-feedback">
+              <div *ngFor="let error of editValidator.getErrors('endDate')">{{ error | translate }}</div>
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-3 mobile-margin-top-15">
+          <div class="my-input-group">
+            <label>{{ 'HOLIDAY_MASTER.LBL_ENDDAYTYPE' | translate }}</label>
+            <select [(ngModel)]="editHoliday.endDayType">
+              <option *ngFor="let item of data.holidayDayTypeList" [ngValue]="item.id">{{item.label}}</option>
+            </select>
+          </div>
+        </div>
+      </div>
+      <div class="row marginTop25" *ngIf="editHoliday.recurrenceType == 3">
+        <div class="col-sm-4 mobile-margin-top-15">
+          <div class="my-input-group">
+            <label class="required">{{ 'HOLIDAY_MASTER.LBL_FROMDATE' | translate }}</label>
+            <select [(ngModel)]="editHoliday.startDay">
+              <option [ngValue]="0">{{ 'HOLIDAY_MASTER.LBL_SUNDAY' | translate }}</option>
+              <option [ngValue]="1">{{ 'HOLIDAY_MASTER.LBL_MONDAY' | translate }}</option>
+              <option [ngValue]="2">{{ 'HOLIDAY_MASTER.LBL_TUESDAY' | translate }}</option>
+              <option [ngValue]="3">{{ 'HOLIDAY_MASTER.LBL_WEDNESDAY' | translate }}</option>
+              <option [ngValue]="4">{{ 'HOLIDAY_MASTER.LBL_THURSDAY' | translate }}</option>
+              <option [ngValue]="5">{{ 'HOLIDAY_MASTER.LBL_FRIDAY' | translate }}</option>
+              <option [ngValue]="6">{{ 'HOLIDAY_MASTER.LBL_SATURDAY' | translate }}</option>
+            </select>
+          </div>
+        </div>
+        <div class="col-sm-4 mobile-margin-top-15">
+          <div class="my-input-group">
+            <label>{{ 'HOLIDAY_MASTER.LBL_STARTDAYTYPE' | translate }}</label>
+            <select [(ngModel)]="editHoliday.startDayType">
+              <option *ngFor="let item of data.holidayDayTypeList" [ngValue]="item.id">{{item.label}}</option>
+            </select>
+          </div>
+        </div>
+      </div>
+      <div class="row marginTop25" *ngIf="editHoliday.recurrenceType == 3">
+          <div class="col-sm-4 mobile-margin-top-15">
+              <div class="my-input-group">
+                <label class="required">{{ 'HOLIDAY_MASTER.LBL_ENDDATE' | translate }}</label>
+                <select [(ngModel)]="editHoliday.endDay">
+                  <option [ngValue]="0">{{ 'HOLIDAY_MASTER.LBL_SUNDAY' | translate }}</option>
+                  <option [ngValue]="1">{{ 'HOLIDAY_MASTER.LBL_MONDAY' | translate }}</option>
+                  <option [ngValue]="2">{{ 'HOLIDAY_MASTER.LBL_TUESDAY' | translate }}</option>
+                  <option [ngValue]="3">{{ 'HOLIDAY_MASTER.LBL_WEDNESDAY' | translate }}</option>
+                  <option [ngValue]="4">{{ 'HOLIDAY_MASTER.LBL_THURSDAY' | translate }}</option>
+                  <option [ngValue]="5">{{ 'HOLIDAY_MASTER.LBL_FRIDAY' | translate }}</option>
+                  <option [ngValue]="6">{{ 'HOLIDAY_MASTER.LBL_SATURDAY' | translate }}</option>
+                </select>
+              </div>
+            </div>
+        <div class="col-sm-4 mobile-margin-top-15">
+          <div class="my-input-group">
+            <label>{{ 'HOLIDAY_MASTER.LBL_ENDDAYTYPE' | translate }}</label>
+            <select [(ngModel)]="editHoliday.endDayType">
+              <option *ngFor="let item of data.holidayDayTypeList" [ngValue]="item.id">{{item.label}}</option>
+            </select>
+          </div>
+        </div>
+        <div class="col-sm-4 mobile-margin-top-15">
+          <div class="my-input-group">
+            <label>{{ 'HOLIDAY_MASTER.LBL_ENDDATEWEEK' | translate }}</label>
+            <div class="calendar-wrapper">
+                <input type="text"  maxlength="10"
+                [startDate]="editHoliday.startDate" [minDate]="editHoliday.startDate" readonly="readonly"
+                [maxDate]="{year : model.year, month :12, day:31}" maxlength="10" (click)="edw.toggle()"
+                placeholder="{{ 'HOLIDAY_MASTER.LBL_ENDDATEWEEK' | translate }}" [(ngModel)]="editHoliday.endDateWeek"
+                ngbDatepicker #edw="ngbDatepicker">
+                <img src="assets/images/calendar-icon.svg" alt="" class="calendar-icon" (click)="edw.toggle()">
+              </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer custom-modal-footer">
+              <button *ngIf="editHoliday.id > 0" type="button" [disabled]="!editValidator.isFormValid()"
+                class="primary-cta small"
+                (click)="updateHolidayCurrent();">{{ 'HOLIDAY_MASTER.LBL_UPDATE_CURRENT' | translate }}</button>
+              <button *ngIf="editHoliday.id > 0" type="button" [disabled]="!editValidator.isFormValid()"
+                class="primary-cta small"
+                (click)="updateHolidayAll();">{{ 'HOLIDAY_MASTER.LBL_UPDATE_ALL' | translate }}</button>
+              <button *ngIf="editHoliday.id > 0" type="button" class="primary-cta small"
+                (click)="deleteHolidayCurrent(editHoliday.id);modal.close('Ok click');">{{ 'HOLIDAY_MASTER.LBL_REMOVE_CURRENT' | translate }}</button>
+              <button *ngIf="editHoliday.id > 0" type="button" class="primary-cta small"
+                (click)="deleteHolidayAll(editHoliday.id);modal.close('Ok click');">{{ 'HOLIDAY_MASTER.LBL_REMOVE_ALL' | translate }}</button>
+              <button type="button" class="secondary-cta small"
+                (click)="modal.dismiss('cancel click')">{{ 'HOLIDAY_MASTER.LBL_CONFIRMCANCEL' | translate }}</button>
+              <button *ngIf="editHoliday.id == 0" type="button" [disabled]="!editValidator.isFormValid()"
+                class="primary-cta small" (click)="updateHolidayAll();">{{ 'HOLIDAY_MASTER.LBL_ADD' | translate }}</button>
+      </div>
+  </ng-template>
+</div>

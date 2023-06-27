@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 22 22">
+    <defs>
+        <style>
+            .cls-2{fill:#afbbcb}
+        </style>
+    </defs>
+    <g id="Group_11089" data-name="Group 11089" transform="translate(-811 -266)">
+        <g id="Group_11067" data-name="Group 11067">
+            <g id="Group_11066" data-name="Group 11066">
+                <path id="Rectangle_2231" fill="none" d="M0 0H22V22H0z" data-name="Rectangle 2231" transform="translate(811 266)"/>
+                <g id="burger" transform="translate(807.546 264.021)">
+                    <g id="Group_11065" data-name="Group 11065" transform="translate(5.454 5.979)">
+                        <g id="Group_11064" data-name="Group 11064">
+                            <path id="Path_3290" d="M116.838 240.579h-16.224c-.491 0-.888.634-.888 1.416s.4 1.416.888 1.416h16.224c.491 0 .888-.634.888-1.416s-.398-1.416-.888-1.416z" class="cls-2" data-name="Path 3290" transform="translate(-99.726 -235.779)"/>
+                            <path id="Path_3294" d="M116.838 240.579h-16.224c-.491 0-.888.634-.888 1.416s.4 1.416.888 1.416h16.224c.491 0 .888-.634.888-1.416s-.398-1.416-.888-1.416z" class="cls-2" data-name="Path 3294" transform="translate(-99.726 -228.98)"/>
+                            <path id="Path_3293" d="M116.838 240.579h-16.224c-.491 0-.888.634-.888 1.416s.4 1.416.888 1.416h16.224c.491 0 .888-.634.888-1.416s-.398-1.416-.888-1.416z" class="cls-2" data-name="Path 3293" transform="translate(-99.726 -242.579)"/>
+                        </g>
+                    </g>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

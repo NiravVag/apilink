@@ -1,0 +1,90 @@
+<div class="common-popup-container">
+  <img src="assets/images/black-close.svg" alt="" class="close" (click)="closeModal('success');">
+  <h3 class="title">Upload</h3>
+
+  <!-- <p class="subtitle">Upload images for PO <span class="highlight-badge">22009 / 191178</span></p> -->
+
+  <app-drag-drop [fileLimit]="fileInfo.uploadLimit" [fileSizeLimit]="fileInfo.fileSize"
+    [fileExtension]="fileInfo.uploadFileExtensions" (fileUpload)="selectFiles($event)"></app-drag-drop>
+
+  <div class="row marginTop10" *ngIf="recentUploads != null && recentUploads.length>0">
+    <div class="col-lg-12" style="font-size: 18px;">
+      <span>Recent Uploads</span>
+    </div>
+  </div>
+
+  <div class="row marginTop15" *ngIf="recentUploads != null && recentUploads.length>0">
+
+    <div class="col-sm-12 col-md-12 col-lg-12">
+      <div class="table-container" style="max-height:240px;overflow-y: scroll;">
+        <table class="pagination-table">
+          <thead>
+            <tr>
+              <th></th>
+              <th> Name</th>
+              <th *ngIf="callFromBookingPage"> Description</th>
+              <th> Download</th>
+              <th> Delete</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+
+            <tr *ngFor="let file of recentUploads; let i=index">
+
+              <td class="Center_Middle">
+                <div class="styled-checkbox-container">
+                  <input [disabled]="!file.fileUrl || pageLoader" type="checkbox" class="styled-checkbox"
+                    id="uploadcheckbox-{{i}}" [(ngModel)]="file.isSelected">
+                  <label for="uploadcheckbox-{{i}}"></label>
+                </div>
+              </td>
+
+              <td class="width-120" [ngClass]="{ 'width-120': callFromBookingPage}">
+                {{ (file.fileName.length>20)? (file.fileName | slice:0:20)+'..':(file.fileName) }}</td>
+
+              <td *ngIf="callFromBookingPage">
+                <div class="my-input-group">
+                  <input type="text" class="width-180" [(ngModel)]="file.fileDescription" placeholder="Enter Description">
+                </div>
+              </td>
+
+              <td class="width-60 Center_Middle" style="color: blue; cursor:pointer;">
+                <button [disabled]="!file.fileUrl || pageLoader" (click)="getFile(file)" class="secondary-cta x-small"
+                  style="margin-left:10px">
+                  <i class="fa fa-cloud-download"></i>
+                </button>
+              </td>
+
+              <td class="width-60 Center_Middle">
+                <button [disabled]="!file.fileUrl || pageLoader" (click)="removeRecentUploads(i)"
+                  class="secondary-cta x-small" style="margin-left:10px">
+                  <i class="fa fa-trash"></i>
+                </button>
+              </td>
+
+              <td class="width-100">
+                <div class="progress" *ngIf="file.status==0">
+                  <div class="progress-bar progress-bar-striped bg-success" role="progressbar" style="width: 25%"
+                    aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
+                </div>
+
+                <div class="progress" *ngIf="file.status==100">
+                  <div class="progress-bar bg-success" role="progressbar" style="width: 100%" aria-valuenow="25"
+                    aria-valuemin="0" aria-valuemax="100">Success</div>
+                </div>
+              </td>
+            </tr>
+
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <div class="cta-container">
+    <button class="secondary-cta link cancel" (click)="closeModal('success');">Cancel</button>
+    <button class="primary-cta" (click)="insertFile();">Upload</button>
+  </div>
+
+</div>

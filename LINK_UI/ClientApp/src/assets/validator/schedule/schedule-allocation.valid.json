@@ -1,0 +1,33 @@
+{
+    "model": "allocationStaff",
+    "fields": {
+        "QC": [
+            {
+                "type": "required",
+                "fieldType": "N",
+                "ressource": "SCHEDULE_SUMMARY.MSG_QC_REQUIRED"
+            }
+        ],
+        "CS": [
+            {
+                "type": "required",
+                "fieldType": "N",
+                "ressource": "SCHEDULE_SUMMARY.MSG_CS_REQUIRED"
+            }
+        ],
+        "ProductQC": [
+            {
+                "type": "required",
+                "fieldType": "N",
+                "ressource": "SCHEDULE_SUMMARY.MSG_PROD_QC_REQUIRED"
+            }
+        ],
+        "ProductCS": [
+            {
+                "type": "required",
+                "fieldType": "N",
+                "ressource": "SCHEDULE_SUMMARY.MSG_PROD_CS_REQUIRED"
+            }
+        ]
+    }
+}

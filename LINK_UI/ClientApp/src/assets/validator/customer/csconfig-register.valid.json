@@ -1,0 +1,26 @@
+{
+  "model": "editCSConfigModel.model",
+  "fields": {
+    "customerId": [
+      {
+        "type": "required",
+        "fieldType": "N",
+        "ressource": "CS_CONFIG_REGISTER.MSG_CUSTOMER_REQ"
+      }
+    ],
+    "userId": [
+      {
+        "type": "required",
+        "fieldType": "N",
+        "ressource": "CS_CONFIG_REGISTER.MSG_CUSTOMER_SERVICE_REQ"
+      }
+    ],
+    "officeLocationId": [
+      {
+        "type": "required",
+        "fieldType": "N",
+        "ressource": "CS_CONFIG_REGISTER.MSG_OFFICE_REQ"
+      }
+    ]
+  }
+}

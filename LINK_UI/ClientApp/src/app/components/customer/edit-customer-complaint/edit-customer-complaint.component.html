@@ -1,0 +1,491 @@
+<div class="main-wrapper">
+	<div class="wrapper dashboard-wrapper">
+		<div class="my-container">
+			<div class="master-body">
+				<div class="title-container">
+          <div class="header-back-button" *ngIf="isFromSummary">
+            <img src="assets/images/back-red.png" alt="back" (click)="this.return('cuscomplaintsummary/customer-complaint-summary');">
+          </div>
+					<h3 class="main-title">Complaint </h3>
+				</div>
+				<div class="content-container schedule-allocation-container" *ngIf="modelsummary.showBookingDetails">
+					<div class="formPadding">
+						<div class="row">
+							<div class="col-sm-12 booking-detail-container">
+								<img src="assets/images/blue-file.svg" alt="" class="icon">
+								<h4 class="title">{{ 'EDIT_COMPLAINT.LBL_BOOKING_DETAILS' | translate}}</h4>
+							</div>
+							<div class="col-sm-12 marginTop20 detail-column-container">
+								<div class="my-input-group col-lg-3">
+									<label class="light" for="">{{ 'EDIT_COMPLAINT.LBL_BOOKINGNO' | translate}}</label>
+                                    <p class="input-value wordbreak" style="color: blue;cursor: pointer;" triggers="mouseenter:mouseleave"
+                                    (click)="RedirectToEdit(modelsummary.bookingDetailModel.bookingNo)" > {{ modelsummary.bookingDetailModel.bookingNo}}
+                                    </p>
+								</div>
+								<div class="my-input-group col-lg-3">
+									<label class="light" for="">{{ 'EDIT_COMPLAINT.LBL_CUSTOMER' | translate}}</label>
+									<p class="input-value wordbreak">{{modelsummary.bookingDetailModel.customerName}}</p>
+								</div>
+								<div class="my-input-group col-lg-3">
+									<label class="light" for="">{{ 'EDIT_COMPLAINT.LBL_SUPPLIER' | translate}}</label>
+									<p class="input-value wordbreak">{{modelsummary.bookingDetailModel.supplierName}}</p>
+								</div>
+								<div class="my-input-group col-lg-3">
+									<label class="light" for="">{{ 'EDIT_COMPLAINT.LBL_FACTORY' | translate }}</label>
+									<p class="input-value wordbreak">{{modelsummary.bookingDetailModel.factoryName}}</p>
+								</div>
+							</div>
+                            <div class="col-sm-12 marginTop20 detail-column-container">
+								<div class="my-input-group col-lg-3">
+									<label class="light" for="">{{'EDIT_COMPLAINT.LBL_SERVICEDATE' |translate}}</label>
+									<p class="input-value wordbreak"
+										*ngIf="modelsummary.bookingDetailModel.serviceDateFrom != modelsummary.bookingDetailModel.serviceDateTo">
+										{{modelsummary.bookingDetailModel.serviceDateFrom}} <span>To</span> {{modelsummary.bookingDetailModel.serviceDateTo}} </p>
+									<p class="input-value wordbreak"
+										*ngIf="modelsummary.bookingDetailModel.serviceDateFrom == modelsummary.bookingDetailModel.serviceDateTo">
+										{{modelsummary.bookingDetailModel.serviceDateFrom}}</p>
+								</div>
+								<div class="my-input-group col-lg-3 padding-left tablet-padding-left">
+									<label class="light" for="">{{ 'EDIT_COMPLAINT.LBL_SERVICETYPE' | translate}}</label>
+									<p class="input-value">{{modelsummary.bookingDetailModel.serviceType}}</p>
+								</div>
+								 
+								<div class="my-input-group col-lg-3">
+									<label class="light" for="">{{ 'EDIT_COMPLAINT.LBL_FACTORY_COUNTRY' | translate}}</label>
+									<p class="input-value">{{modelsummary.bookingDetailModel.countryName}}</p>
+								</div>
+                                <div class="my-input-group col-lg-3">
+									<label class="light" for="">{{ 'EDIT_COMPLAINT.LBL_OFFICE' | translate}}</label>
+									<p class="input-value">{{modelsummary.bookingDetailModel.officeName}}</p>
+								</div>
+							</div>
+                            <div class="col-sm-12 marginTop20 detail-column-container" *ngIf="modelsummary.showBookingProductDetails">
+								<div class="my-input-group col-lg-3">
+									<label class="light" for="">{{ 'EDIT_COMPLAINT.LBL_TOTAL_BOOKING_QTY' | translate}}</label>
+									<p class="input-value">{{modelsummary.bookingDetailModel.bookingQty}}</p>
+								</div>
+								<div class="my-input-group col-lg-3">
+									<label class="light" for="">{{ 'EDIT_COMPLAINT.LBL_PRODUCT' | translate}}</label>
+									<p class="input-value wordbreak" style="color: blue;cursor: pointer;" triggers="mouseenter:mouseleave" 
+                                    (click)="openProductInfoPopUp(ProductInfoPopUp)" class="input-value wordbreak">{{modelsummary.bookingDetailModel.firstProductName}}</p>
+								</div>
+								 
+							</div>
+						</div>
+					</div>
+				</div>
+                <div class="content-container marginTop15">
+                    <div class="row searchFormPadding">
+                        <div class="col-sm-12">
+                            <div class="row">
+                                <div class="col-sm-3 col-md-3 col-lg-3">
+                                    <div class="my-input-group" >
+                                        <label class="required">{{ 'EDIT_COMPLAINT.LBL_COMPLAINT_TYPE' | translate}}</label>
+                                        <ng-select [items]="modelsummary.complaintTypeList" [multiple]="false"
+                                        [closeOnSelect]="true" [searchable]="true" bindLabel="name" bindValue="id"
+                                        [loading]="modelsummary.complaintTypeLoading"
+                                        placeholder="--- {{ 'COMMON.LBL_SELECT' | translate }} ---"
+                                        [(ngModel)]="model.complaintTypeId"
+                                        [ngClass]="{'is-invalid': !validator.isValid('complaintTypeId')}"
+                                        (ngModelChange)="onChangeComplaintType($event)">
+                                    </ng-select>
+                                    <div *ngIf="!validator.isValid('complaintTypeId')" class="invalid-feedback">
+                                        <div *ngFor="let error of validator.getErrors('complaintTypeId')">
+                                            {{ error | translate }}
+                                        </div>
+                                    </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-3 col-md-3 col-lg-3">
+                                    <div class="my-input-group" *ngIf="modelsummary.showBookingControls">
+                                        <label class="required">{{ 'EDIT_COMPLAINT.LBL_SERVICE' | translate}}</label>
+                                        <ng-select [items]="modelsummary.serviceList" [multiple]="false"
+                                            [closeOnSelect]="true" [searchable]="true" bindLabel="name" bindValue="id"
+                                            [loading]="modelsummary.serviceLoading"
+                                            placeholder="--- {{ 'COMMON.LBL_SELECT' | translate }} ---"
+                                            [(ngModel)]="model.serviceId"
+                                            [ngClass]="{'is-invalid': !validator.isValid('serviceId')}"
+                                            (ngModelChange)="onChangeService($event)">
+                                        </ng-select>
+                                        <div *ngIf="!validator.isValid('serviceId')" class="invalid-feedback">
+                                            <div *ngFor="let error of validator.getErrors('serviceId')">
+                                                {{ error | translate }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-3 col-md-3 col-lg-3">
+                                    <div class="my-input-group" *ngIf="modelsummary.showBookingControls">
+                                        <label class="required">{{ 'EDIT_COMPLAINT.LBL_BOOKINGNO' | translate}}</label>
+                                        <ng-select appendTo="body" [items]="modelsummary.bookingNoList" [virtualScroll]="true" appendTo="body"
+                                        [loading]="modelsummary.bookingNoLoading" bindLabel="name" bindValue="id" (change)="onChangeBookingNo()"
+                                        placeholder="--- {{ (modelsummary.bookingNoList!=null && modelsummary.bookingNoList.length!=0? 'COMMON.LBL_SELECT':'COMMON.LBL_NO_DATA' ) | translate }} ---"
+                                        [typeahead]="modelsummary.bookingNoInput" [minTermLength]="3" [(ngModel)]="model.bookingNo"
+                                        [multiple]="false" (clear)="clearBookingNo()" (scrollToEnd)="getBookingNoData()" 
+                                        [ngClass]="{'is-invalid': !validator.isValid('bookingNo')}" #select>
+                                        <ng-template ng-option-tmp let-item="item">
+                                          <div class="text-wrap"><span>{{item.name}}</span></div>
+                                        </ng-template>
+                                      </ng-select>
+                                        <div *ngIf="!validator.isValid('bookingNo')" class="invalid-feedback">
+                                          <div *ngFor="let error of validator.getErrors('bookingNo')">{{ error | translate }}</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row marginTop20" >
+                              <div class="col-sm-3 col-md-3 col-lg-3 mobile-margin-top-15">
+                                <div class="my-input-group">
+                                  <label class="control-label" class="required">{{ 'EDIT_COMPLAINT.LBL_COMPLAINT_DATE' | translate}}</label>
+                                  <div class="calendar-wrapper">
+                                    <input type="text" maxlength="10" container="body" readonly=readonly [(ngModel)]="model.complaintDate"
+                                      ngbDatepicker #complaintDate="ngbDatepicker" (click)="complaintDate.toggle()"
+                                      [ngClass]="{'is-invalid': !validator.isValid('complaintDate')}">
+                                      <img src="assets/images/cta-close-grey.svg" alt="" class="close-icon" (click)="clearDateInput('complaintDate')" *ngIf="model.complaintDate">
+                                    <img src="assets/images/calendar-icon.svg" alt="" class="calendar-icon"
+                                      (click)="complaintDate.toggle()">
+                                  </div>
+                                </div>
+                                <div *ngIf="!validator.isValid('complaintDate')" class="invalid-feedback">
+                                  <div *ngFor="let error of validator.getErrors('complaintDate')">
+                                      {{ error | translate }}
+                                  </div>
+                              </div>
+                              </div>
+                              <div class="col-sm-3 col-md-3 col-lg-3">
+                                  <div class="my-input-group" >
+                                      <label class="required">{{ 'EDIT_COMPLAINT.LBL_RECIPIENT_TYPE' | translate}}</label>
+                                      <ng-select [items]="modelsummary.complaintRecipientTypeList" [multiple]="false"
+                                          [closeOnSelect]="true" [searchable]="true" bindLabel="name" bindValue="id"
+                                          [loading]="modelsummary.complaintRecipientTypeLoading"
+                                          placeholder="--- {{ 'COMMON.LBL_SELECT' | translate }} ---"
+                                          [(ngModel)]="model.recipientTypeId"
+                                          [ngClass]="{'is-invalid': !validator.isValid('recipientTypeId')}"
+                                           >
+                                      </ng-select>
+                                      <div *ngIf="!validator.isValid('recipientTypeId')" class="invalid-feedback">
+                                          <div *ngFor="let error of validator.getErrors('recipientTypeId')">
+                                              {{ error | translate }}
+                                          </div>
+                                      </div>
+                                  </div>
+                              </div>
+                              <div class="col-sm-3 col-md-3 col-lg-3">
+                                  <div class="my-input-group" >
+                                      <label class="required">{{ 'EDIT_COMPLAINT.LBL_DEPARTMENT' | translate}}</label>
+                                      <ng-select [items]="modelsummary.complaintDepartmentList" [multiple]="false"
+                                      [closeOnSelect]="true" [searchable]="true" bindLabel="name" bindValue="id"
+                                      [loading]="modelsummary.complaintDepartmentLoading"
+                                      placeholder="--- {{ 'COMMON.LBL_SELECT' | translate }} ---"
+                                      [(ngModel)]="model.departmentId"
+                                      [ngClass]="{'is-invalid': !validator.isValid('departmentId')}"
+                                       >
+                                  </ng-select>
+                                      <div *ngIf="!validator.isValid('departmentId')" class="invalid-feedback" style="display:block">
+                                        <div *ngFor="let error of validator.getErrors('departmentId')">{{ error | translate }}</div>
+                                      </div>
+                                  </div>
+                              </div>
+                              <div class="col-sm-3 col-md-3 col-lg-3">
+                                <div class="my-input-group">
+                                  <label class="required" for="">{{ 'EDIT_COMPLAINT.LBL_PERSON_INCHARGE' | translate}}</label>
+                                  <ng-select [items]="modelsummary.userList" [virtualScroll]="true" [loading]="modelsummary.userLoading"
+                                  bindLabel="name" bindValue="id"  appendTo="body"
+                                  placeholder="--- {{ (modelsummary.userList && modelsummary.userList.length>0? 'COMMON.LBL_SELECT':'COMMON.LBL_NO_DATA') | translate }} ---"
+                                  [typeahead]="modelsummary.userInput" [minTermLength]="3" [(ngModel)]="model.userIds" [multiple]="true"
+                                   class="multiple" 
+                                   [ngClass]="{'is-invalid': !validator.isValid('userIds')}" (scrollToEnd)="getUserData()" (clear)="clearPersonIncharge()" #select>
+                                  <ng-template ng-option-tmp let-item="item" let-index="index" let-search="searchTerm">
+                                    <span>{{item.name}}</span>
+                                  </ng-template>
+                                  <ng-template ng-multi-label-tmp let-items="model.userIds" let-clear="clear">
+                                    <div class="ng-value" *ngIf="model.userIds && model.userIds.length > 0">
+                                      <span class="ng-value-label">{{model.userIds.length}}
+                                        Selected</span>
+                                    </div>
+                                  </ng-template>
+                                </ng-select>
+                                <div *ngIf="!validator.isValid('userIds')" class="invalid-feedback" style="display:block">
+                                  <div *ngFor="let error of validator.getErrors('userIds')">{{ error | translate }}</div>
+                                </div>
+                                </div>
+                            </div>
+                          </div>
+                          <div class="row marginTop20"*ngIf="!modelsummary.showBookingProductDetails" >
+                            <div class="col-sm-3 col-md-3 col-lg-3 mobile-margin-top-15">
+                              <div class="my-input-group">
+                                <label class="required">{{ 'EDIT_COMPLAINT.LBL_CUSTOMER' | translate}}</label>
+                                <ng-select appendTo="body" [items]="modelsummary.customerList" [virtualScroll]="true" appendTo="body"
+                                [loading]="modelsummary.customerLoading" bindLabel="name" bindValue="id" 
+                                placeholder="--- {{ (modelsummary.customerList!=null && modelsummary.customerList.length!=0? 'COMMON.LBL_SELECT':'COMMON.LBL_NO_DATA' ) | translate }} ---"
+                                [typeahead]="modelsummary.customerInput" [minTermLength]="3" [(ngModel)]="model.customerId"
+                                [multiple]="false" (clear)="clearCustomer()" 
+                                [ngClass]="{'is-invalid': !validator.isValid('userIds')}" (scrollToEnd)="getCustomerData()" #select>
+                                  <ng-template ng-option-tmp let-item="item">
+                                       <!-- <b>{{index}} </b><span>{{item.name}}</span> -->
+                                <div class="text-wrap"><span>{{item.name}}</span></div>
+                                </ng-template>
+                              </ng-select>
+                              </div>
+                              <div *ngIf="!validator.isValid('customerId')" class="invalid-feedback">
+                                <div *ngFor="let error of validator.getErrors('customerId')">
+                                    {{ error | translate }}
+                                </div>
+                            </div>
+                            </div>
+                            <div class="col-sm-3 col-md-3 col-lg-3">
+                                <div class="my-input-group" >
+                                    <label>{{ 'EDIT_COMPLAINT.LBL_COUNTRY' | translate}}</label>
+                                    <ng-select appendTo="body" [items]="modelsummary.countryList" [virtualScroll]="true" appendTo="body"
+                                    [loading]="modelsummary.countryLoading" bindLabel="name" bindValue="id" 
+                                    placeholder="--- {{ (modelsummary.countryList!=null && modelsummary.countryList.length!=0? 'COMMON.LBL_SELECT':'COMMON.LBL_NO_DATA' ) | translate }} ---"
+                                    [typeahead]="modelsummary.countryInput" [minTermLength]="3" [(ngModel)]="model.countryId"
+                                    [multiple]="false"  (scrollToEnd)="getCountryData()"  (clear)="clearCountry()"  #select>
+                                    <ng-template ng-option-tmp let-item="item">
+                                      <!-- <b>{{index}} </b><span>{{item.name}}</span> -->
+                                      <div class="text-wrap"><span>{{item.name}}</span></div>
+                                    </ng-template>
+                                  </ng-select>
+                                    
+                                </div>
+                            </div>
+                            <div class="col-sm-3 col-md-3 col-lg-3">
+                              <div class="my-input-group">
+                                <label>{{ 'EDIT_COMPLAINT.LBL_OFFICE' | translate}}</label>
+                                <ng-select [items]="modelsummary.officeList" [multiple]="false"
+                                    [closeOnSelect]="true" [searchable]="true" bindLabel="name" bindValue="id"
+                                    [loading]="modelsummary.officeLoading"
+                                    placeholder="--- {{ 'COMMON.LBL_SELECT' | translate }} ---"
+                                    [(ngModel)]="model.officeId"
+                                    [ngClass]="{'is-invalid': !validator.isValid('officeId')}"
+                                     >
+                                </ng-select>
+                                
+                              </div>
+                            </div>
+                          
+                        </div>
+                        </div>
+                    </div>
+                  <div class="row">
+                    <div class="tab-container">
+                     
+                      <div class="tab-content-container" style="padding-top:0px ;">
+                        <div class="tab-content active" id="tab1" style="overflow-x: auto;">
+                            <div  *ngIf="modelsummary.showBookingProductDetails" class="table-action mobile-action desktop-hide tablet-hide">
+                              <button class="secondary-cta x-small" (click)="addComplaintDetail()">
+                                {{ 'EDIT_COMPLAINT.LBL_ADD_DETAIL' | translate }}</button>
+                            </div>
+                          <br>
+                            <table class="info-table">
+                              <thead>
+                                <tr>
+                                  <th *ngIf="modelsummary.showBookingProductDetails">{{ 'EDIT_COMPLAINT.LBL_PRODUCTID' | translate }}</th>
+                                  <th style="width:25%" *ngIf="modelsummary.showBookingProductDetails">{{ 'EDIT_COMPLAINT.LBL_PRODUCTDESCRIPTION' | translate }}</th>
+                                  <th class="required">{{ 'EDIT_COMPLAINT.LBL_CATEGORY' | translate }}</th>
+                                  <th *ngIf="!modelsummary.showBookingProductDetails">{{ 'EDIT_COMPLAINT.LBL_TITLE' | translate }}</th>
+                                  <th>{{ 'EDIT_COMPLAINT.LBL_COMP_DESCRIPTION' | translate }}</th>
+                                  <th>{{ 'EDIT_COMPLAINT.LBL_CORRECTIVE_ACTION' | translate }}</th>
+                                  <th class="width-180">{{ 'EDIT_COMPLAINT.LBL_ANSWER_DATE' | translate }}</th>
+                                  <th>{{ 'EDIT_COMPLAINT.LBL_REMARKS' | translate }}</th>
+                                  <th></th>
+                                </tr>
+                              </thead>
+                              <tbody>
+                                <tr *ngFor="let item of complaintDetailValidators;  let i = index">
+                                    <td *ngIf="modelsummary.showBookingProductDetails">
+                                        <div class="my-input-group">
+                                          <ng-select [items]="item.complaintDetails.productList" [multiple]="false" [closeOnSelect]="true"
+                                            [searchable]="true" class="width-150" bindLabel="name" appendTo="body"
+                                            bindValue="id"
+                                            placeholder="--- {{ 'PURCHASEORDER_SUMMARY.LBL_SELECT' | translate }} ---"
+                                            [(ngModel)]="item.complaintDetails.productId" (change)="changeProduct(item.complaintDetails)">
+                                            <ng-template ng-option-tmp let-item="item">
+                                              <div class="text-wrap">{{ item.name }}</div>
+                                            </ng-template>
+                                          </ng-select>
+                                        </div>
+                                      </td>
+                                  <td *ngIf="modelsummary.showBookingProductDetails" style="max-width:250px;word-wrap: break-word; white-space:normal;">
+                                    <div class="my-input-group">
+                                      <label for="">{{ 'EDIT_PURCHASEORDER.LBL_PRODUCTDESCRIPTION' | translate }}</label>
+                                      {{item.complaintDetails.productDesc}}
+                                    </div>
+                                  </td>
+                                  <td>
+                                    <div class="my-input-group">
+                                      <ng-select [items]="item.complaintDetails.categoryList" [multiple]="false" [closeOnSelect]="true"
+                                        [searchable]="true" class="width-150" bindLabel="name" appendTo="body"
+                                        bindValue="id"
+                                        placeholder="--- {{ 'PURCHASEORDER_SUMMARY.LBL_SELECT' | translate }} ---"
+                                        [ngClass]="{ 'is-invalid':  !item.validator.isValid('categoryId')}"
+                                        [(ngModel)]="item.complaintDetails.categoryId">
+                                        <ng-template ng-option-tmp let-item="item">
+                                          <div class="text-wrap">{{ item.name }}</div>
+                                        </ng-template>
+                                      </ng-select>
+                                      <div *ngIf="!item.validator.isValid('categoryId')" class="invalid-feedback"
+                                      style="display:block">
+                                      <div *ngFor="let error of item.validator.getErrors('categoryId')">{{ error | translate }}
+                                      </div>
+                                    </div>
+                                    </div>
+                                  </td>
+                                  <td *ngIf="!modelsummary.showBookingProductDetails">
+                                    <div class="my-input-group">
+                                      <label class="required" for="">Title</label>
+                                      <textarea class="width-150" [(ngModel)]="item.complaintDetails.title"
+                                         maxlength="300"
+                                        placeholder="Title"></textarea>
+                                    </div>
+                                  </td>
+                                  <td>
+                                    <div class="my-input-group">
+                                      <label class="required" for="">Description</label>
+                                      <textarea class="width-150" [(ngModel)]="item.complaintDetails.description"
+                                         maxlength="300"
+                                        placeholder="Description"></textarea>
+                                    </div>
+                                  </td>
+                                  <td>
+                                    <div class="my-input-group">
+                                      <label class="required" for="">Corrective Action</label>
+                                      <textarea class="width-150" [(ngModel)]="item.complaintDetails.correctiveAction"
+                                         maxlength="300"
+                                        placeholder="Corrective action"></textarea>
+                                    </div>
+                                  </td>
+                                  <td class="width-180">
+                                    <div class="my-input-group">
+                                      <label for="">Answer Date</label>
+                                      <div class="calendar-wrapper">
+                                        <input readonly=readonly type="text" class="width-150"
+                                          maxlength="10"
+                                          (click)="rsd.toggle()" placeholder="Answer Date"
+                                          [(ngModel)]="item.complaintDetails.answerDate" ngbDatepicker #rsd="ngbDatepicker"
+                                           container='body'>
+                                        <img src="assets/images/calendar-icon.svg" alt="" class="calendar-icon"
+                                          (click)="rsd.toggle()">
+                                      </div>
+                                    </div>
+                                  </td>
+                                  <td>
+                                    <div class="my-input-group">
+                                      <label class="required" for="">Remarks</label>
+                                      <textarea class="width-150" [(ngModel)]="item.complaintDetails.remarks"
+                                         maxlength="300"
+                                        placeholder="Remarks"></textarea>
+                                    </div>
+                                  </td>
+                                  <td>
+                                  <button *ngIf="complaintDetailValidators.length > 1 || model.index>1" (click)="removeComplaintDetail(i,item.complaintDetails.id,ConfirmRemove)"
+                                     class="secondary-cta x-small" style="margin-left:10px">
+                                    <i class="fa fa-trash"></i>
+                                  </button>
+                                </td>
+                                </tr>
+                              </tbody>
+                            </table>
+                            <div class="table-action mobile-hide"   *ngIf="modelsummary.showBookingProductDetails">
+                              <span><button class="secondary-cta x-small"  (click)="addComplaintDetail()">+
+                                  {{ 'EDIT_COMPLAINT.LBL_ADD_DETAIL' | translate }}</button> </span>
+                            </div>
+                         
+                            <!-- <div class="row">
+                              <div class="col-sm-6 col-md-6 col-lg-6 tablet-margin-top-15 mobile-margin-top-15">
+                                <div class="my-input-group">
+                                  <label for="">{{ 'EDIT_COMPLAINT.LBL_REMARKS' | translate }}</label>
+                                  <textarea maxlength="1000" [(ngModel)]="model.remarks" type="text"></textarea>
+                                </div>
+                              </div>
+                            </div> -->
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="row searchFormPadding" style="padding-top:0px ;">
+                      <div class="col-sm-12">
+                        <div class="my-input-group">
+                          <label for="">{{ 'EDIT_COMPLAINT.LBL_COMMENTS' | translate }}</label>
+                          <textarea maxlength="1000" [(ngModel)]="model.remarks" type="text"></textarea>
+                        </div>
+                      </div>
+                    </div>
+                      <div class="form-action-container">
+                        <button  class="primary-cta small" [disabled]="modelsummary.savedataloading" (click)="save()">
+                          {{'EDIT_COMPLAINT.LBL_SAVE' | translate}}
+                          <span *ngIf="modelsummary.savedataloading">
+                            <i class="fa fa-refresh fa-spin" aria-hidden="true"></i>
+                          </span>
+                        </button>
+                      </div>
+                </div>
+			</div>
+		</div>
+	</div>
+</div>
+<div class="loader-overlay" *ngIf="loading" [ngStyle]="{'z-index': '60'}">
+	<div class="loader-container">
+		<img src="assets/images/reload.svg" alt="">
+		<span>{{'COMMON.LBL_LOADER' | translate}}</span>
+	</div>
+</div>
+<ng-template #ProductInfoPopUp let-modal>
+    <div class="modal-header custom-modal-header">
+        <h4 class="modal-title" id="modal-basic-title">{{'EDIT_COMPLAINT.LBL_BOOKING_PRODUCTS' | translate}}</h4>
+        <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body custom-modal-body">
+       
+        <div class="table-container h-scroll table-max-height-400">
+            <!-- <div class="col-sm-8"> -->
+            <table class="pagination-table simple-table bordered">
+                <thead>
+                    <tr class="sticky-top-row">
+                        <th>{{'EDIT_COMPLAINT.LBL_PRODUCTID' | translate}}</th>
+                        <th > {{'EDIT_COMPLAINT.LBL_PRODUCTDESCRIPTION' | translate}}</th>
+                        <th> {{'EDIT_COMPLAINT.LBL_PO' | translate}}</th>
+                        <th class="width-80">{{'EDIT_COMPLAINT.LBL_BOOKING_QTY' | translate}}</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let product of bookingProductDetailModel;let i = index">
+                        <td>{{product.productName}}</td>
+                        <td>{{product.productDescription}}</td>
+                        <td>{{product.poNumbers}}</td>
+                        <td class="width-80">{{product.bookingQuantity}}</td>
+                    </tr>
+                </tbody>
+            </table>
+            <!-- </div> -->
+        </div>
+        <div class="modal-footer">
+            <button class="secondary-cta margin10" [disabled]="popUpLoading"
+                (click)="modal.dismiss('Cross click');">{{ 'COMMON.LBL_OK' | translate }}
+            </button>
+             
+        </div>
+    </div>
+</ng-template>
+
+<ng-template #ConfirmRemove let-modal>
+  <div class="modal-body">
+      <div class="small-model new-padding">
+          <h2 class="confirm-title"><img class="mr-2" src="assets/images/caution-red.svg" alt="">{{
+              'COMMON.LBL_CONFIRMDELETION' | translate }}</h2>
+          <p class="light">{{ 'COMPLAINT_SUMMARY.LBL_CONFIRMDEL' | translate }} </p>
+          <div class="text-right">
+              <button class="tertiary-cta small" (click)="modal.dismiss('Cross click');"
+                >
+                  {{ 'COMMON.LBL_CONFIRMCANCEL' | translate }}</button>
+              <button class="primary-cta small"  (click)="removeCompDetailConfirm()">{{
+                  'COMMON.LBL_OK' | translate }}
+                  
+              </button>
+          </div>
+      </div>
+  </div>
+</ng-template>
+ 

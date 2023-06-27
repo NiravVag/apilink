@@ -1,0 +1,33 @@
+{
+    "model": "EditCreditNoteItemModel",
+    "fields": {
+        "claimId": [
+            {
+                "type": "required",
+                "fieldType": "N",
+                "ressource": "EDIT_CREDIT_NOTE.MSG_CLAIM_REQ"
+            }
+        ],
+        "inspectionId": [
+            {
+                "type": "required",
+                "fieldType": "N",
+                "ressource": "EDIT_CREDIT_NOTE.MSG_INSPECTION_REQ"
+            }
+        ],
+        "invoiceId": [
+            {
+                "type": "required",
+                "fieldType": "T",
+                "ressource": "EDIT_CREDIT_NOTE.MSG_INVOICE_REQ"
+            }
+        ],
+        "refundAmount": [
+            {
+                "type": "required",
+                "fieldType": "N",
+                "ressource": "EDIT_CREDIT_NOTE.MSG_REFUND_AMOUNT_REQ"
+            }
+        ]
+    }
+}

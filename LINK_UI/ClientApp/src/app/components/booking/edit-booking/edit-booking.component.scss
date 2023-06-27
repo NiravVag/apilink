@@ -1,0 +1,32 @@
+    .title-container-search{
+        margin: 2px;
+        color: #143743;
+        font-size: 16px;
+        font-weight: 500;
+        line-height: 1.44;
+        padding: 1px 10px 10px 10px;
+        font-family: roboto-medium;
+        background-color: rgba(237, 228, 225, 0.6);
+
+    }
+
+   .PreviewTable{ border:  1px solid rgba(189, 210, 226, 0.4) !important}
+
+   .factory-req{
+       margin: 5px;
+       padding: 2px;
+       color: red;
+   }
+
+   .supplier-msg{
+    font-size:12px;
+    color: red;
+   }
+   #lnkcheckbox-terms:hover{
+    text-decoration: underline !important;
+   }
+   #lnkcheckbox-terms{
+    display: inline-block!important;
+    color: #cd2d2f!important;
+    font-size: 13px!important;
+   }

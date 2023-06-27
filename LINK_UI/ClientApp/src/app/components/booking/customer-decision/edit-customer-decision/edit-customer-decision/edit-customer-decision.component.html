@@ -1,0 +1,983 @@
+<div class="main-wrapper">
+	<div
+		class="wrapper dashboard-wrapper dashbaord-placeholder-container customer-decision-placeholder-container new-customer-decision-wrapper">
+		<div class="customer-decision-head" *ngIf="!loading">
+			<div class="my-container">
+				<div class="section-one">
+					<div class="column">
+						<img src="assets/images/left-icon.svg" alt="back" class="back-icon"
+							(click)="this.return('customerdecision/customer-decision');">
+						<h6 class="title">{{'CUSTOMER_DECISION.CUSTOMER_DECISION_RESULT' | translate}}</h6>
+						<div class="customer-id">#{{model.bookingData.bookingId}}</div>
+					</div>
+					<div class="column">
+						<div class="customer-detail">
+							<p class="detail-title">{{'COMMON.LBL_CUSTOMER' | translate}}</p>
+							<p class="detail-content">{{model.bookingData.customerName}}</p>
+						</div>
+						<div class="customer-detail">
+							<p class="detail-title">{{'COMMON.LBL_SUPPLIER' | translate}}</p>
+							<p class="detail-content">{{model.bookingData.supplierName}}</p>
+						</div>
+						<div class="customer-detail">
+							<p class="detail-title">{{'COMMON.LBL_FACTORY' | translate}}</p>
+							<p class="detail-content">{{model.bookingData.factoryName}}
+								<span class="address-popup-trigger">
+									<img src="assets/images/new-set/info.svg" alt="">
+									<div class="address-popup-container">
+										<img src="assets/images/location.svg" alt="">
+										<div class="address-container">
+											<p class="address">{{'EDIT_SUPPLIER.LBL_ADDRESS' | translate}}</p>
+											<p class="address">{{model.bookingData.factoryAddress}}</p>
+										</div>
+									</div>
+								</span>
+							</p>
+						</div>
+						<div class="customer-detail">
+							<p class="detail-title">{{'CUSTOMER_DECISION.LBL_SERVICE_TYPE' | translate}}</p>
+							<p class="detail-content">{{model.bookingData.inspectionType}}</p>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="customer-decision-body" *ngIf="!loading">
+			<div class="my-container">
+				<div class="customer-decision-container">
+					<div class="side-bar-container" *ngIf="!loading || !showDetailSection">
+						<div class="list-head-container">
+							<ng-container *ngIf="!model.bookingData.hideMultiSelectCustomerDecisionCheckPointExists">
+								<div class="column">
+									<div class="checkbox-container">
+										<div class="styled-checkbox-container">
+											<input id="checkbox-2" type="checkbox" value="value1" class="styled-checkbox"
+												[checked]="selectAllChecked" (change)="SelectAllCheckBox()">
+											<label for="checkbox-2"></label>
+										</div>
+									</div>
+								</div>
+							</ng-container>
+							<div class="column">
+								<div class="my-input-group inline width-100">
+									<label>{{'CUSTOMER_DECISION.LBL_API_RESULT' | translate}}</label>
+									<ng-select [items]="apiResultValues" (change)="filterByApiResult($event)"
+										class="new-small" bindLabel="name" bindValue="id" [clearable]="false"
+										placeholder="Select" appendTo="body"></ng-select>
+								</div>
+								<div class="my-input-group inline width-140">
+									<label>{{'CUSTOMER_DECISION.CUSTOMER_DECISION_RESULT' | translate}}</label>
+									<ng-select [items]="customerDecisionResultValues"
+										(change)="filterByCustomerDecisionResult($event)" class="new-small"
+										[(ngModel)]="cusDecddlSelectedId" bindLabel="name" bindValue="id"
+										[clearable]="false" placeholder="Select" appendTo="body"></ng-select>
+								</div>
+								<ng-container *ngIf="!model.bookingData.hideMultiSelectCustomerDecisionCheckPointExists">
+									<button class="primary-cta small mt-3" [disabled]="!editCustomerDecision"
+										(click)="openDecisionPopup(customerDecisionPopUp, 'product')"><img class="mr-0"
+										src="assets/images/new-set/plus-white.svg"
+										alt=""></button>
+								</ng-container>
+							</div>
+							<!-- <div class="column">
+								<span>{{noOfItemsSelected}} {{'CUSTOMER_DECISION.ITEM_SELECTED' | translate}}</span>
+							</div> -->
+						</div>
+						<div class="list-body-container">
+							<div *ngFor="let item of model.bookingProductList; let i = index"
+								[ngClass]="(selectedReportNo == item.reportId) ? 'list-item active' : 'list-item'"
+								(click)="toggleDetailSection(item)" class="hover">
+								<ng-container *ngIf="!model.bookingData.hideMultiSelectCustomerDecisionCheckPointExists">
+									<div class="checkbox-container">
+										<div class="styled-checkbox-container">
+											<input id="checkbox-{{item.reportId}}" type="checkbox"
+												[(ngModel)]="item.isCheckboxSelected" class="styled-checkbox"
+												(ngModelChange)="GetreportIds(item)" (click)="$event.stopPropagation();">
+											<label (click)="$event.stopPropagation();"
+												for="checkbox-{{item.reportId}}"></label>
+										</div>
+									</div>
+								</ng-container>
+								<div class="po-details-container" style="cursor: pointer;">
+									<img *ngIf="item.productPhoto!=null" src="{{item.productPhoto}}" class="item-icon">
+									<img *ngIf="item.productPhoto==null"
+										src="assets/images/customer-decision-placeholder.svg" class="item-icon">
+									<div class="po-details">
+										<div class="po-number" *ngFor="let prod of item.productIdList | slice:0:1">
+											{{prod}} 
+											<span *ngIf="item.productIdList.length > 1">
+												<ng-template #prodIdpopContent>
+													<div class="popoverScroll">
+														<div style="width: 150px;"
+															*ngFor="let prodName of item.productIdList">
+															{{prodName}}
+														</div>
+													</div>
+												</ng-template>
+												<a style="display: inline-block;" (click)="$event.stopPropagation();"
+													class="primary" container="body" [ngbPopover]="prodIdpopContent"
+													placement="right" [autoClose]="'outside'"
+													popoverTitle="Product Ref">
+													,+{{item.productIdList.length-1}}
+												</a>
+											</span>
+										</div>
+										<div class="po-status">
+											<div class="api-status" *ngIf="item.resportResultId == fbReportResult.Pass || item.resportResultId == fbReportResult.Conformed">
+												<span class="check-status">{{'CUSTOMER_DECISION.LBL_API_RESULT' |
+													translate}}</span>
+												<span class="result secondary pass">
+													<img src="assets/images/new-set/pass-color.svg" alt="">
+													{{item.reportResultName}}
+												</span>
+											</div>
+											<div class="api-status" *ngIf="item.resportResultId == fbReportResult.Fail || item.resportResultId == fbReportResult.NotConformed">
+												<span class="check-status">{{'CUSTOMER_DECISION.LBL_API_RESULT' |
+													translate}}</span>
+												<span class="result fail">
+													<img src="assets/images/new-set/fail-white.svg" alt="">
+													{{item.reportResultName}}
+												</span>
+											</div>
+											<div class="api-status" *ngIf="item.resportResultId == fbReportResult.Pending || item.resportResultId == fbReportResult.Delay">
+												<span class="check-status">{{'CUSTOMER_DECISION.LBL_API_RESULT' |
+													translate}}</span>
+												<span class="result pending">
+													<img src="assets/images/new-set/pending-white.svg" alt="">
+													{{item.reportResultName}}
+												</span>
+											</div>
+											<div class="api-status" *ngIf="item.resportResultId == fbReportResult.Not_Applicable">
+												<span class="check-status">{{'CUSTOMER_DECISION.LBL_API_RESULT' |
+													translate}}</span>
+												<span class="result secondary not-applicable">
+													<img src="assets/images/new-set/not-applicable-color.svg" alt="">
+													{{item.reportResultName}}
+												</span>
+											</div>
+											<div class="api-status" *ngIf="item.resportResultId == fbReportResult.Missing || item.resportResultId == fbReportResult.Note">
+												<span class="check-status">{{'CUSTOMER_DECISION.LBL_API_RESULT' |
+													translate}}</span>
+												<span class="result secondary missing">
+													<img src="assets/images/new-set/missing-color.svg" alt="">
+													{{item.reportResultName}}
+												</span>
+											</div>
+											<ng-container *ngIf="item.customerDecisionName != null">
+												<div class="api-status"
+													*ngIf="item.customerDecisionResultCusDecId == 1">
+													<span class="check-status">
+														{{'CUSTOMER_DECISION.CUSTOMER_DECISION_RESULT' |
+														translate}}</span>
+													<span class="result secondary pass">
+														<img src="assets/images/new-set/pass-color.svg" alt="">
+														{{item.customerDecisionName}}
+													</span>
+												</div>
+												<div class="api-status"
+													*ngIf="item.customerDecisionResultCusDecId == 2">
+													<span class="check-status">
+														{{'CUSTOMER_DECISION.CUSTOMER_DECISION_RESULT' |
+														translate}}</span>
+													<span class="result fail">
+														<img src="assets/images/new-set/fail-white.svg" alt="">
+														{{item.customerDecisionName}}
+													</span>
+												</div>
+												<div class="api-status"
+													*ngIf="item.customerDecisionResultCusDecId == 3">
+													<span class="check-status">
+														{{'CUSTOMER_DECISION.CUSTOMER_DECISION_RESULT' |
+														translate}}</span>
+													<span class="result pending">
+														<img src="assets/images/new-set/pending-white.svg" alt="">
+														{{item.customerDecisionName}}
+													</span>
+												</div>
+												<div class="api-status"
+													*ngIf="item.customerDecisionResultCusDecId == 4">
+													<span class="check-status">
+														{{'CUSTOMER_DECISION.CUSTOMER_DECISION_RESULT' |
+														translate}}</span>
+													<span class="result missing">
+														<img src="assets/images/new-set/pending-white.svg" alt="">
+														{{item.customerDecisionName}}
+													</span>
+												</div>
+											</ng-container>
+
+											<div class="api-status" style="cursor: default"
+												*ngIf="item.customerDecisionName == null">
+												<p class="add-status"> {{'CUSTOMER_DECISION.LBL_ADD_CUS_DECISION' |
+													translate}}</p>
+											</div>
+										</div>
+									</div>
+								</div>
+								<img src="assets/images/new-set/circle-arrow.svg" class="next-arrow" alt="">
+							</div>
+						</div>
+					</div>
+					<div class="order-details-container"
+						[ngClass]="{'responsive-layout': isTablet, 'show': showDetailSection}">
+						<div class="loader-overlay" *ngIf="model.dataLoading" [ngStyle]="{'z-index': '60'}">
+							<div class="loader-container">
+								<img src="assets/images/reload.svg" alt="">
+								<span>{{'COMMON.LBL_LOADER' | translate}}</span>
+							</div>
+						</div>
+						<!-- <div class="report-details-container" *ngIf="model.dataLoading">
+							<div class="item-detail-id">
+								<div class="rect-common animate width30 mb-0"></div>
+								<div class="rect-common animate width30 ml-2 mb-0"></div>
+							</div>
+							<div class="download-report-container-cus-decision">
+								<div class="rect-common animate width30 mb-0"></div>
+							</div>
+						</div> -->
+						<div class="report-details-container" *ngIf="!model.dataLoading">
+							<div class="item-detail-id">
+								<img class="mr-3" *ngIf="isTablet" src="assets/images/left-icon.svg"
+									(click)="toggleDetailSection()">
+								<!-- <span class="product-id highlight-badge"
+									*ngFor="let prod of model.reportProducts | slice:0:1">{{prod.productName}} <span
+										*ngIf="model.reportProducts.length > 1"
+										[ngClass]="{'small': !isMobile}">+{{model.reportProducts.length -
+										1}}</span></span> -->
+								<span class="product-id">{{reportProdNameTitle}} <span
+										*ngIf="model.reportProducts.length > 1 && !model.bookingData.isContainer"
+										[ngClass]="{'small': !isMobile}">,+{{model.reportProducts.length -
+										1}}</span></span>
+								<span class="highlight-badge">{{'CUSTOMER_DECISION.LBL_REPORT_NUMBER' | translate}}
+									#{{model.reportData.reportTitle}}</span>
+							</div>
+							<div class="download-report-container" data-tooltip="Download Report">
+								<button class="secondary-cta" [ngClass]="{'small': !isMobile}"
+									(click)="OpenReport(model.reportData)">
+									<img src="assets/images/new-set/download-primary.svg"
+										alt="">{{'CUSTOMER_DECISION.LBL_IR_DOWNLOAD'
+									| translate}}
+								</button>
+							</div>
+
+						</div>
+
+						<div class="item-container">
+							<!-- *ngIf="!showPlaceholder" -->
+							<div class="item-image-container">
+								<img *ngIf="model.reportData.reportPhoto!=null" src="{{model.reportData.reportPhoto}}"
+									class="thumbnail" alt=""
+									(click)="getPreviewProductImage(model.reportData.additionalPhotos,additionalImage)">
+
+								<img *ngIf="model.reportData.reportPhoto==null"
+									src="assets/images/customer-decision-placeholder.svg" class="thumbnail">
+
+								<div class="view-photos"
+									*ngIf="model.reportData.additionalPhotos!=null && model.reportData.additionalPhotos.length>0"
+									(click)="getPreviewProductImage(model.reportData.additionalPhotos,additionalImage, 'addImage')">
+									View all {{model.reportData.additionalPhotos.length}} photos</div>
+							</div>
+							<div class="item-details-container">
+								<div class="detail-row">
+									<div class="column">{{'CUSTOMER_DECISION.LBL_API_RESULT'
+										| translate}}</div>
+									<div class="column">
+										<div class="result medium fail" *ngIf="model.reportData.reportResultId == fbReportResult.Fail || model.reportData.reportResultId == fbReportResult.NotConformed">
+											<img src="assets/images/new-set/fail-white.svg" alt="">
+											<p class="fail">{{model.reportData.reportResult}}</p>
+										</div>
+										<div class="result medium pass" *ngIf="model.reportData.reportResultId == fbReportResult.Pass || model.reportData.reportResultId == fbReportResult.Conformed">
+											<img src="assets/images/new-set/pass-white-thick.svg" alt="">
+											<p class="pass">{{model.reportData.reportResult}}</p>
+										</div>
+										<div class="result medium pending" *ngIf="model.reportData.reportResultId == fbReportResult.Pending || model.reportData.reportResultId == fbReportResult.Delay">
+											<img src="assets/images/new-set/pending-white.svg" alt="">
+											<p class="pending">{{model.reportData.reportResult}}</p>
+										</div>
+										<div class="result medium not-applicable"
+											*ngIf="model.reportData.reportResultId == fbReportResult.Not_Applicable">
+											<img src="assets/images/new-set/not-applicable.svg" alt="tick">
+											<p class="hold">{{model.reportData.reportResult}}</p>
+										</div>
+										<div class="result medium missing" *ngIf="model.reportData.reportResultId == fbReportResult.Missing || model.reportData.reportResultId == fbReportResult.Note">
+											<img src="assets/images/new-set/missing-white.svg" alt="tick">
+											<p class="missing">{{model.reportData.reportResult}}</p>
+										</div>
+									</div>
+								</div>
+								<div class="detail-row">
+									<div class="column">{{'CUSTOMER_DECISION.CUSTOMER_DECISION_RESULT' | translate}}
+									</div>
+									<div class="column comment" *ngIf="model.reportData.customerResultId == 1">
+										<div class="customer-info">
+											<span class="result medium pass">
+												<img src="assets/images/new-set/pass-white-thick.svg" alt="">
+												{{model.reportData.customerDecisionStatus}}
+											</span>
+											<div class="advanced-search ml-2 add-customer-report"
+												*ngIf="noOfItemsSelected == 0 && !isMobile"
+												(click)="openDecisionPopup(customerDecisionPopUp, 'report')">
+												<ng-container *ngIf="isCDpopupvisible">
+													<img src="assets/images/new-set/minus.svg" alt="">
+												</ng-container>
+												<ng-container *ngIf="!isCDpopupvisible">
+													<img src="assets/images/new-set/plus.svg" alt="">
+												</ng-container> Change customer decision
+											</div>
+										</div>
+										<span class="comment-text">{{model.reportData.customerDecisionComments}}</span>
+									</div>
+									<div class="column comment" *ngIf="model.reportData.customerResultId == 2">
+										<div class="customer-info">
+											<span class="result medium fail">
+												<img src="assets/images/new-set/fail-white.svg" alt="">
+												{{model.reportData.customerDecisionStatus}}
+											</span>
+											<div class="advanced-search ml-2 add-customer-report"
+												*ngIf="noOfItemsSelected == 0 && !isMobile"
+												(click)="openDecisionPopup(customerDecisionPopUp, 'report')">
+												<ng-container *ngIf="isCDpopupvisible">
+													<img src="assets/images/new-set/minus.svg" alt="">
+												</ng-container>
+												<ng-container *ngIf="!isCDpopupvisible">
+													<img src="assets/images/new-set/plus.svg" alt="">
+												</ng-container> Change customer decision
+											</div>
+										</div>
+										<span class="comment-text">{{model.reportData.customerDecisionComments}}</span>
+										<!-- <div class="cta-arrow cursor-pointer" *ngIf="noOfItemsSelected == 0"
+											(click)="openDecisionPopup(customerDecisionPopUp, 'report')">
+										</div> -->
+									</div>
+									<div class="column comment" *ngIf="model.reportData.customerResultId == 3">
+										<div class="customer-info">
+											<span class="result medium pending">
+												<img src="assets/images/new-set/pending-white.svg" alt="">
+												{{model.reportData.customerDecisionStatus}}
+											</span>
+											<div class="advanced-search ml-2 add-customer-report"
+												*ngIf="noOfItemsSelected == 0 && !isMobile"
+												(click)="openDecisionPopup(customerDecisionPopUp, 'report')">
+												<ng-container *ngIf="isCDpopupvisible">
+													<img src="assets/images/new-set/minus.svg" alt="">
+												</ng-container>
+												<ng-container *ngIf="!isCDpopupvisible">
+													<img src="assets/images/new-set/plus.svg" alt="">
+												</ng-container> Change customer decision
+											</div>
+										</div>
+										<span class="comment-text">{{model.reportData.customerDecisionComments}}</span>
+										<!-- <div class="cta-arrow cursor-pointer" *ngIf="noOfItemsSelected == 0"
+											(click)="openDecisionPopup(customerDecisionPopUp, 'report')">
+										</div> -->
+									</div>
+
+									<div class="column comment" *ngIf="model.reportData.customerResultId == 4">
+										<div class="customer-info">
+											<span class="result medium missing">
+												<img src="assets/images/new-set/pending-white.svg" alt="">
+												{{model.reportData.customerDecisionStatus}}
+											</span>
+											<div class="advanced-search ml-2 add-customer-report"
+												*ngIf="noOfItemsSelected == 0 && !isMobile"
+												(click)="openDecisionPopup(customerDecisionPopUp, 'report')">
+												<ng-container *ngIf="isCDpopupvisible">
+													<img src="assets/images/new-set/minus.svg" alt="">
+												</ng-container>
+												<ng-container *ngIf="!isCDpopupvisible">
+													<img src="assets/images/new-set/plus.svg" alt="">
+												</ng-container> Change customer decision
+											</div>
+										</div>
+										<span class="comment-text">{{model.reportData.customerDecisionComments}}</span>
+										<!-- <div class="cta-arrow cursor-pointer" *ngIf="noOfItemsSelected == 0"
+											(click)="openDecisionPopup(customerDecisionPopUp, 'report')">
+										</div> -->
+									</div>
+
+									<div class="column comment d-inline" *ngIf="(noOfItemsSelected == 0 && (!model.reportData.customerResultId || model.reportData.customerResultId <= 0))
+										 && !isMobile">
+										<button class="secondary-cta small" [disabled]="!editCustomerDecision"
+											(click)="openDecisionPopup(customerDecisionPopUp)">+
+											{{'CUSTOMER_DECISION.LBL_ADD_CUS_DECISION'
+											| translate}}</button>
+									</div>
+								</div>
+								<button class="secondary-cta small" (click)="openDecisionPopup()"
+									*ngIf="model.reportData.customerResultId && model.reportData.customerResultId >0 && isMobile">
+									<img src="assets/images/new-set/plus.svg" alt="">
+									Change Customer decision
+								</button>
+								<div class="detail-row" *ngIf="model.reportProducts && model.reportProducts.length==1">
+									<div class="column">{{'CUSTOMER_DECISION.LBL_DESTINATION_COUNTRY' |
+										translate }}</div>
+									<div class="column country color">
+										{{model.reportProducts[0].destinationCountry}}
+									</div>
+								</div>
+								<div class="detail-row">
+									<div class="column">{{'CUSTOMER_DECISION.LBL_INSPECTION_DATE' | translate }}</div>
+									<div class="column"><span
+											class="highlight-badge in-progress">{{model.reportData.inspectionDate}}</span>
+									</div>
+								</div>
+								<!-- <div class="detail-row">
+									<div class="column">{{'CUSTOMER_DECISION.LBL_INSPECTION_TYPE' | translate }}</div>
+									<div class="column"><span
+											class="highlight-badge in-progress">{{model.bookingData.inspectionType}}</span>
+									</div>
+								</div> -->
+								<div class="detail-row">
+									<div class="column">{{'CUSTOMER_DECISION.LBL_PO' |
+										translate }}</div>
+									<div class="column"><em><span class=" in-progress"
+												*ngFor="let po of model.reportProducts[0].poNumber | slice:0:1">{{po}}</span></em>
+
+
+										<div *ngIf="model.reportProducts[0].poNumber.length > 1">
+											<ng-template #popopContent>
+												<div class="popoverScroll">
+													<div style="width: 150px;"
+														*ngFor="let poName of model.reportProducts[0].poNumber">
+														{{poName}}
+													</div>
+												</div>
+											</ng-template>
+											<a class="primary" [ngbPopover]="popopContent" placement="right"
+												[autoClose]="'outside'" popoverTitle="PO #">
+												,+{{model.reportProducts[0].poNumber.length-1}}
+											</a>
+										</div>
+									</div>
+								</div>
+								<div class="detail-row">
+									<div class="column">{{'CUSTOMER_DECISION.LBL_QUANTITY' | translate }}</div>
+									<div class="column mobile-display-initial dark-text">
+										<em><span>{{'CUSTOMER_DECISION.LBL_BOOKING' |
+												translate }}</span> <span>:</span> <span
+												class="count-dark">{{model.reportData.totalQuantity}},</span></em>
+										<em><span>{{'CUSTOMER_DECISION.LBL_PRESENTED' | translate }}</span>
+											<span>:</span>
+											<span class="count-dark">{{model.reportData.totalPresentedQty}},</span></em>
+										<em><span>{{'CUSTOMER_DECISION.LBL_INSPECTED' | translate }}</span>
+											<span>:</span> <span
+												class="count-dark">{{model.reportData.totalInspecttedQty}}</span></em>
+									</div>
+								</div>
+								<div class="detail-row"
+									*ngIf="model.reportProducts && model.reportProducts.length>1 && model.reportProducts[0].combineProductCount>1">
+									<div class="column"><i>{{'CUSTOMER_DECISION.LBL_COMBINED' | translate }}
+											{{model.reportProducts[0].combineProductCount}}
+											{{'CUSTOMER_DECISION.LBL_PRODUCTS_IN_ORDER' | translate }}</i></div>
+								</div>
+								<div class="detail-row" *ngIf="model.reportProducts && model.reportProducts.length==1">
+									<div class="column">{{'CUSTOMER_DECISION.LBL_PRODUCTDESCRIPTION' | translate}}</div>
+									<div class="column color"> {{model.reportProducts[0].productDescription}}</div>
+								</div>
+							</div>
+						</div>
+
+
+
+						<div class="item-status-container"
+							*ngIf="model.inspectionDefectList.length > 0 || model.inspectionReportSummaryList.length > 0">
+							<div class="defect-details-container">
+								<div class="defect-head">
+									<div class="details-icon"><img src="assets/images/defect-icon.svg"></div>
+									<h6 class="title">{{'CUSTOMER_DECISION.LBL_DEFECT_RESULT' | translate }}</h6>
+								</div>
+
+								<div class="dashboard-graph-container error-container"
+									*ngIf="model.inspectionDefectList.length == 0 && model.inspectionReportSummaryList.length > 0">
+									<img src="assets/images/no-result.svg" alt="" class="thumbnail">
+									<h4 class="error-title">{{ 'CUSTOMER_DECISION.LBL_NO_DATA_FOUND' | translate }}
+									</h4>
+								</div>
+								<div class="defect-details" *ngIf="model.inspectionDefectList.length>0">
+									<div class="defect-column">
+										<div class="defect-detail-head">
+											<span class="head">{{'CUSTOMER_DECISION.LBL_Critical' | translate
+												}} <span>: {{model.totalCriticalCount}}</span></span>
+										</div>
+										<ng-template ngFor let-item [ngForOf]="model.inspectionDefectList">
+											<div class="defect-detail-row"
+												*ngIf="item.critical !=0 && item.critical !=null">
+												<p class="defect-info"><span
+														class="count critical">{{item.critical}}</span>{{item.description}}
+												</p>
+											</div>
+										</ng-template>
+									</div>
+									<div class="defect-column">
+										<div class="defect-detail-head">
+											<span class="head">{{'CUSTOMER_DECISION.LBL_Major' | translate
+												}} <span>: {{model.totalMajorCount}}</span></span>
+										</div>
+										<ng-template ngFor let-item [ngForOf]="model.inspectionDefectList">
+											<div class="defect-detail-row" *ngIf="item.major!=0 && item.major!=null">
+												<p class="defect-info"><span
+														class="count major">{{item.major}}</span>{{item.description}}
+												</p>
+											</div>
+										</ng-template>
+									</div>
+									<div class="defect-column">
+										<div class="defect-detail-head">
+											<span class="head">{{'CUSTOMER_DECISION.LBL_Minor' | translate
+												}} <span>: {{model.totalMinorCount}}</span></span>
+										</div>
+										<ng-template ngFor let-item [ngForOf]="model.inspectionDefectList">
+											<div class="defect-detail-row" *ngIf="item.minor!=0 && item.minor!=null">
+												<p class="defect-info"><span
+														class="count minor">{{item.minor}}</span>{{item.description}}
+												</p>
+											</div>
+										</ng-template>
+									</div>
+									<div class="defect-column"></div>
+								</div>
+							</div>
+							<div class="inspection-details-container"
+								*ngIf="model.inspectionReportSummaryList.length > 0">
+								<div class="inspection-head">
+									<div class="details-icon"><img src="assets/images/inspection-details.svg"></div>
+									<h6 class="title">{{'CUSTOMER_DECISION.LBL_MAIN_DETAILS' | translate }}</h6>
+								</div>
+								<div class="inspection-details">
+									<div class="detail-column"
+										*ngFor="let summary of model.inspectionReportSummaryList">
+										<div class="column">
+											<p class="title">{{summary.name}}</p>
+										</div>
+										<div class="column">
+											<div class="detail-result">
+												<img *ngIf="summary.photos.length>0"
+													(click)="getAdditionalPreviewProductImage(summary.photos,summaryImage)"
+													src="assets/images/gallary-icon.svg">
+												<img src="assets/images/new-set/comment.svg"
+													*ngIf="summary.problematicRemarksCount >0"
+													(click)="getProblematicRemarks(summary.id, summary.fbReportDetailId, problematicRemarks,summary.name)">
+											</div>
+										</div>
+
+										<div class="column" *ngIf="summary.resultId==fbReportResult.Fail">
+											<span class="result fail">
+												<img src="assets/images/new-set/fail-white.svg" alt="">
+												{{'CUSTOMER_DECISION.LBL_REPORT_FAIL' | translate
+												}}
+											</span>
+										</div>
+										<div class="column" *ngIf="summary.resultId==fbReportResult.Pass">
+											<span class="result pass">
+												<img src="assets/images/new-set/pass-white-thick.svg" alt="">
+												{{'CUSTOMER_DECISION.LBL_REPORT_PASS' | translate
+												}}
+											</span>
+										</div>
+										<div class="column" *ngIf="summary.resultId==fbReportResult.Pending">
+											<span class="result pending">
+												<img src="assets/images/new-set/pending-white.svg" alt="">
+												{{'CUSTOMER_DECISION.LBL_REPORT_PENDING' | translate
+												}}
+											</span>
+										</div>
+										<div class="column" *ngIf="summary.resultId==fbReportResult.Not_Applicable">
+											<span class="result not-applicable">
+												<img src="assets/images/new-set/not-applicable.svg" alt="">
+												{{'CUSTOMER_DECISION.LBL_REPORT_NA' | translate
+												}}
+											</span>
+										</div>
+										<div class="column" *ngIf="summary.resultId==fbReportResult.Missing">
+											<span class="result missing">
+												<img src="assets/images/new-set/missing-white.svg" alt="">
+												{{'CUSTOMER_DECISION.LBL_REPORT_MISSING' | translate
+												}}
+											</span>
+										</div>
+										<div class="column" *ngIf="summary.resultId==fbReportResult.Conformed">
+											<span class="result pass">
+												<img src="assets/images/new-set/pass-white-thick.svg" alt="">
+												{{'CUSTOMER_DECISION.LBL_REPORT_CONFORMED' | translate
+												}}
+											</span>
+										</div>
+										<div class="column" *ngIf="summary.resultId==fbReportResult.NotConformed">
+											<span class="result fail">
+												<img src="assets/images/new-set/fail-white.svg" alt="">
+												{{'CUSTOMER_DECISION.LBL_REPORT_NOT_CONFORMED' | translate
+												}}
+											</span>
+										</div>
+										<div class="column" *ngIf="summary.resultId==fbReportResult.Delay">
+											<span class="result pending">
+												<img src="assets/images/new-set/pending-white.svg" alt="">
+												{{'CUSTOMER_DECISION.LBL_REPORT_DELAY' | translate
+												}}
+											</span>
+										</div>
+										<div class="column" *ngIf="summary.resultId==fbReportResult.Note">
+											<span class="result missing">
+												<img src="assets/images/new-set/missing-white.svg" alt="">
+												{{'CUSTOMER_DECISION.LBL_REPORT_NOTE' | translate
+												}}
+											</span>
+										</div>
+									</div>
+								</div>
+								<!-- <div class="inspection-details">
+									<div class="detail-column"
+										*ngFor="let summary of model.inspectionReportSummaryList |slice:4: model.inspectionReportSummaryList.length">
+										<div class="column">
+											<p class="title">{{summary.name}}</p>
+										</div>
+										<div class="column">
+											<div class="detail-result">
+												<img *ngIf="summary.photos.length>0"
+													(click)="getAdditionalPreviewProductImage(summary.photos,summaryImage)"
+													src="assets/images/gallary-icon.svg">
+												<img src="assets/images/new-set/comment.svg"
+													*ngIf="summary.problematicRemarksCount >0"
+													(click)="getProblematicRemarks(summary.id, summary.fbReportDetailId, problematicRemarks)">
+											</div>
+										</div>
+										<div class="detail-result">
+											<div class="column" *ngIf="summary.resultId==2">
+												<span class="result fail">
+													<img src="assets/images/new-set/fail-white.svg" alt="">
+													{{'CUSTOMER_DECISION.LBL_REPORT_FAIL' | translate
+													}}
+												</span>
+											</div>
+											<div class="column" *ngIf="summary.resultId==1">
+												<span class="result pass">
+													<img src="assets/images/new-set/pass-white-thick.svg" alt="">
+													{{'CUSTOMER_DECISION.LBL_REPORT_PASS' | translate
+													}}
+												</span>
+											</div>
+											<div class="column" *ngIf="summary.resultId==3">
+												<span class="result pending">
+													<img src="assets/images/new-set/pending-color.svg" alt="">
+													{{'CUSTOMER_DECISION.LBL_REPORT_PENDING' | translate
+													}}
+												</span>
+											</div>
+											<div class="column" *ngIf="summary.resultId==4">
+												<span class="result not-applicable">
+													<img src="assets/images/new-set/not-applicable-color.svg" alt="">
+													{{'CUSTOMER_DECISION.LBL_REPORT_NA' | translate
+													}}
+												</span>
+											</div>
+											<div class="column" *ngIf="summary.resultId==5">
+												<span class="result missing">
+													<img src="assets/images/new-set/missing-color.svg" alt="">
+													{{'CUSTOMER_DECISION.LBL_REPORT_MISSING' | translate
+													}}
+												</span>
+											</div>
+										</div>
+									</div>
+								</div> -->
+							</div>
+						</div>
+
+						<div class="product-list-container"
+							*ngIf="model.reportProducts && ((!model.bookingData.isContainer && model.reportProducts.length>1) || model.bookingData.isContainer)">
+							<div class="product-list-head">
+								<div class="details-icon"><img src="assets/images/product-list-icon.svg"></div>
+								<h6 class="title">{{'CUSTOMER_DECISION.LBL_PRODUCT_LIST' | translate}}</h6>
+							</div>
+							<div class="table-container h-scroll table-max-height-300">
+								<!-- h-scroll table-max-height-400 -->
+								<table class="pagination-table bordered">
+									<thead>
+										<tr class="sticky-top-row">
+											<th>{{'CUSTOMER_DECISION.LBL_PRODUCT_ID' | translate }}</th>
+											<th>{{'CUSTOMER_DECISION.LBL_PRODUCTDESCRIPTION' | translate }}</th>
+											<th>{{'CUSTOMER_DECISION.LBL_BookingQuantity' | translate }}</th>
+											<th>{{'CUSTOMER_DECISION.LBL_InspectedQuantity' | translate }}</th>
+											<th>{{'CUSTOMER_DECISION.LBL_PRESENTED_QTY' | translate }}</th>
+											<th>{{'CUSTOMER_DECISION.LBL_DESTINATION_COUNTRY' | translate
+												}}
+											</th>
+											<th class="critical">{{'CUSTOMER_DECISION.LBL_Critical' | translate }}
+											</th>
+											<th class="major">{{'CUSTOMER_DECISION.LBL_Major' | translate }}</th>
+											<th class="minor">{{'CUSTOMER_DECISION.LBL_Minor' | translate }}</th>
+										</tr>
+									</thead>
+									<tbody>
+										<tr *ngFor="let product of model.reportProducts">
+											<td class="width-100">{{product.productName}}
+											</td>
+											<td class="width-160 medium"
+												[ngClass]="{'text-tooltip-table': product.isDescTooltipShow }"
+												[attr.data-tooltip]="product.productDescription">
+												{{product.productDescTrim}}
+											</td>
+											<td class="width-80 Center_Middle">
+												<span class="highlight-badge">{{product.bookingQuantity}}</span>
+											</td>
+											<td class="width-80 Center_Middle">
+												<span class="highlight-badge">{{product.inspectedQuantity}}</span>
+											</td>
+											<td class="width-80 Center_Middle">
+												<span class="highlight-badge">{{product.presentedQuantity}}</span>
+											</td>
+											<td class="width-120">
+												<span class="highlight-badge">{{product.destinationCountry}}</span>
+											</td>
+											<td class="width-60"><span *ngIf="product.critical > 0"
+													(click)="openDefects(defectsModel,product.inspectionPoId, product.productName)"
+													class="critical count">{{product.critical}}<img
+														src="assets/images/diagonal-arrow.svg" alt="" class="table-icon"
+														data-tooltip="View Defect"></span>
+											</td>
+											<td class="width-60"><span *ngIf="product.major > 0"
+													(click)="openDefects(defectsModel,product.inspectionPoId, product.productName)"
+													class="major count">{{product.major}}<img
+														src="assets/images/diagonal-arrow.svg" alt="" class="table-icon"
+														data-tooltip="View Defect"></span>
+											</td>
+											<td class="width-60"
+												(click)="openDefects(defectsModel,product.inspectionPoId, product.productName)">
+												<span *ngIf="product.minor > 0"
+													class="minor count">{{product.minor}}<img
+														src="assets/images/diagonal-arrow.svg" alt="" class="table-icon"
+														data-tooltip="View Defect"></span>
+											</td>
+										</tr>
+									</tbody>
+								</table>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+
+	</div>
+
+	<ng-template #summaryImage let-modal>
+		<div class="modal-header custom-modal-header">
+			<h4 class="modal-title" id="modal-basic-title">{{'CUSTOMER_DECISION.INSPECTION_SUMMARY__TITLE' | translate}}
+			</h4>
+			<button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+				<span aria-hidden="true">&times;</span>
+			</button>
+		</div>
+		<div class="modal-body custom-modal-body">
+			<ngx-gallery [options]="model.productGalleryOptions" [images]="model.productGalleryImages"></ngx-gallery>
+		</div>
+	</ng-template>
+	<ng-template #customerDecisionPopUp let-modal>
+		<div class="modal-body header-small-modal customer-decision-popup-container">
+			<div class="small-model">
+				<div class="customer-head">
+					<div class="sub-head">
+						<h6 class="title">{{'CUSTOMER_DECISION.LBL_ADD_CUS_DECISION' | translate}}</h6>
+						<div class="customer-id" *ngIf="noOfItemsSelected >0">
+							{{checkedReportId}} <span style="padding-left: 8px;" *ngIf="noOfItemsSelected > 1">
+								+{{noOfItemsSelected - 1}}</span>
+						</div>
+					</div>
+					<p class="subheading">{{'CUSTOMER_DECISION.MSG_ADD_CUS_DEC_SELECTEd_REPORTS' | translate}}</p>
+				</div>
+				<div class="customer-body customer-decision-popup">
+					<ul>
+						<li *ngFor="let decision of model.inspectionCustomerDecisionList; let i=index"
+							[ngClass]="{'active': selectedCusD == decision.id}"
+							(click)="customerDecisionClick($event, decision)">
+							<span class="result medium pass" *ngIf="decision.id == 1">
+								<img src="assets/images/new-set/pass-white.svg" alt="">
+								{{decision.name}}
+							</span>
+							<div class="styled-radio-container" *ngIf="decision.id == 1">
+								<input type="radio" class="styled-radio" id="test1" name="radio-group"
+									[checked]="selectedCusD == 1">
+								<label for="test1"></label>
+							</div>
+
+							<span class="result medium fail" *ngIf="decision.id == 2">
+								<img src="assets/images/new-set/fail-white.svg" alt="">
+								{{decision.name}}
+							</span>
+							<div class="styled-radio-container" *ngIf="decision.id == 2">
+								<input type="radio" class="styled-radio" id="test2" name="radio-group"
+									[checked]="selectedCusD == 2">
+								<label for="test2"></label>
+							</div>
+							<span class="result medium pending" *ngIf="decision.id == 3">
+								<img src="assets/images/new-set/pending-white.svg" alt="">
+								{{decision.name}}
+							</span>
+							<div class="styled-radio-container" *ngIf="decision.id == 3">
+								<input type="radio" class="styled-radio" id="test3" name="radio-group"
+									[checked]="selectedCusD == 3">
+								<label for="test3"></label>
+							</div>
+							<span class="result medium missing" *ngIf="decision.id == 4">
+								<img src="assets/images/new-set/pending-white.svg" alt="">
+								{{decision.name}}
+							</span>
+							<div class="styled-radio-container" *ngIf="decision.id == 4">
+								<input type="radio" class="styled-radio" id="test4" name="radio-group"
+									[checked]="selectedCusD == 4">
+								<label for="test4"></label>
+							</div>
+							<!-- <img *ngIf="decision.id == 4" src="assets/images/hold-icon.svg" alt="">
+							<p *ngIf="decision.id == 4" class="hold">{{decision.name}}</p> -->
+						</li>
+					</ul>
+					<div class="decision-input-container">
+						<p class="comment">Comment</p>
+						<textarea rows="4" cols="50" name="comment" class="text-section"
+							placeholder="Enter your comment here"
+							[(ngModel)]="customerDecisionModel.comments"></textarea>
+						<div class="check-email-container">
+							<div class="checkbox-container">
+								<div class="styled-checkbox-container">
+									<input id="checkbox-1" type="checkbox" value="value1" class="styled-checkbox"
+										[(ngModel)]="customerDecisionModel.sendEmailToFactoryContacts">
+									<label for="checkbox-1"></label>
+								</div>
+							</div>
+							<span class="email-text">{{ 'BOOKING_SUMMARY.LBL_SEND_FACTORY_EMAIL' | translate
+								}}</span>
+						</div>
+						<div class="submit">
+							<button class="secondary-cta link" (click)="popUpClose()" [disabled]="model.saveLoading">{{
+								'COMMON.LBL_CANCEL' | translate }}</button>
+							<button class="primary-cta" (click)="SaveCustomerDecisionList()"
+								*ngIf="editCustomerDecision" [disabled]="model.saveLoading">
+								{{ 'COMMON.LBL_SAVE' | translate }}
+								<span *ngIf="model.saveLoading">
+									<i class="fa fa-refresh fa-spin" aria-hidden="true"></i>
+								</span>
+							</button>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</ng-template>
+	<ng-template #additionalImage let-modal>
+		<div class="modal-header custom-modal-header">
+			<h4 class="modal-title" id="modal-basic-title">{{'CUSTOMER_DECISION.INSPECTION_ADDITIONAL__TITLE' |
+				translate}}
+			</h4>
+			<button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+				<span aria-hidden="true">&times;</span>
+			</button>
+		</div>
+		<div class="modal-body custom-modal-body">
+			<ngx-gallery [options]="model.additionalproductGalleryOptions"
+				[images]="model.additionalproductGalleryImages">
+			</ngx-gallery>
+		</div>
+	</ng-template>
+	<ng-template #problematicRemarks let-modal>
+		<div class="order-tracking-popup-container">
+			<div class="po-details-container">
+				<div class="info-container">
+
+					<button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+						<span aria-hidden="true">&times;</span>
+					</button>
+					<h3 class="title">{{'CUSTOMER_DECISION.LBL_PROBLEMATIC_REMARKS' |
+						translate}} - <span class="highlight-badge in-progress">{{ProblematicRemarksTitle}}</span></h3>
+					<div class="record-count"></div>
+					<div class="table-container h-scroll table-max-height-650">
+						<table class="pagination-table simple-table bordered">
+							<thead>
+								<tr>
+									<th class="width-240">{{'CUSTOMER_DECISION.LBL_PRODUCT' | translate}}</th>
+									<th class="width-240">{{'CUSTOMER_DECISION.LBL_SUB_CAT' | translate}}</th>
+									<th class="width-240">{{'CUSTOMER_DECISION.LBL_SUB_CAT2' | translate}}</th>
+									<th class="width-240">{{'COMMON.LBL_REMARKS'|translate}}</th>
+									<th class="width-240">{{'COMMON.LBL_RESULT' | translate }}</th>
+								</tr>
+							</thead>
+							<tbody *ngFor="let item of model.problematicSummaryList">
+								<tr>
+									<td class="width-240 text-wrap">{{item.productId}}</td>
+									<td class="width-240 text-wrap">{{item.subCat}}</td>
+									<td class="width-240 text-wrap">{{item.subCat2}}</td>
+									<td class="width-240 text-wrap">{{item.remarks}}</td>
+									<td class="width-240" [ngStyle]="{'color': GetStatusColor(item.result)}">
+										{{item.result}}
+									</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+				</div>
+			</div>
+		</div>
+	</ng-template>
+
+	<ng-template #defectsModel let-modal>
+
+		<div class="modal-header custom-modal-header">
+			<h4 class="modal-title" id="modal-title">
+				{{'CUSTOMER_DECISION.LBL_DEFECT_DETAILS' | translate }} - {{selectedDefectproductName}}
+			</h4>
+			<button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+				<span aria-hidden="true">&times;</span>
+			</button>
+		</div>
+
+		<div class="modal-body custom-modal-body">
+			<div class="content-container tracking-container">
+				<div class="row formPadding"
+					*ngIf="model.inspectionProductDefectList && model.inspectionProductDefectList.length>0">
+					<div class="col-sm-12 position-relative">
+
+						<div *ngIf="model.isCriticalProductDefectavailable" class="defect-card col-md-4">
+							<h4 class="title">{{'CUSTOMER_DECISION.LBL_Critical' | translate }}</h4>
+							<div class="row defect-content">
+								<ng-template ngFor let-item [ngForOf]="model.inspectionProductDefectList">
+									<p *ngIf="item.critical!=0 && item.critical!=null" class="small col-sm-9 col-9">
+										{{item.description}}</p>
+									<p *ngIf="item.critical!=0 && item.critical!=null" class="small col-sm-3 col-3">
+										{{item.critical}}</p>
+								</ng-template>
+							</div>
+						</div>
+
+						<div *ngIf="model.isMajorProductDefectavailable" class="defect-card col-md-4">
+							<h4 class="title">{{'CUSTOMER_DECISION.LBL_Major' | translate }}</h4>
+							<div class="row defect-content">
+								<ng-template ngFor let-item [ngForOf]="model.inspectionProductDefectList">
+									<p *ngIf="item.major!=0 && item.major!=null" class="small col-sm-9 col-9">
+										{{item.description}}</p>
+									<p *ngIf="item.major!=0 && item.major!=null" class="small col-sm-3 col-3">
+										{{item.major}}
+									</p>
+								</ng-template>
+							</div>
+						</div>
+
+						<div *ngIf="model.isMinorProductDefectavailable" class="defect-card col-md-4">
+							<h4 class="title">{{'CUSTOMER_DECISION.LBL_Minor' | translate }}</h4>
+							<div class="row defect-content">
+								<ng-template ngFor let-item [ngForOf]="model.inspectionProductDefectList">
+									<p *ngIf="item.minor!=0 && item.minor!=null" class="small col-sm-9 col-9">
+										{{item.description}}</p>
+									<p *ngIf="item.minor!=0 && item.minor!=null" class="small col-sm-3 col-3">
+										{{item.minor}}
+									</p>
+								</ng-template>
+							</div>
+						</div>
+
+
+					</div>
+				</div>
+			</div>
+		</div>
+	</ng-template>
+</div>

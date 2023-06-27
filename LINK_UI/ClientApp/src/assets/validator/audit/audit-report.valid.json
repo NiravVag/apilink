@@ -1,0 +1,38 @@
+{
+    "model": "Auditreportmodel",
+    "fields": {
+        "servicedatefrom": [
+            {
+                "type": "required",
+                "fieldType": "D",
+                "ressource": "AUDIT_REPORT.MSG_SERVICE_FROMDATE_REQ"
+            },
+            {
+                "type": "isLessOrEqual",
+                "fieldType": "D",
+                "fieldCible": "servicedateto",
+                "ressource": "AUDIT_REPORT.MSG_SERVICE_FROMDATE_GREATER_REQ"
+            }
+        ],
+        "servicedateto": [
+            {
+                "type": "required",
+                "fieldType": "D",
+                "ressource": "AUDIT_REPORT.MSG_Service_TODATE_REQ"
+            },
+            {
+                "type": "isGreatOrEqual",
+                "fieldType": "D",
+                "fieldCible": "servicedatefrom",
+                "ressource": "AUDIT_REPORT.MSG_Service_TODATE_LESS_REQ"
+            }
+        ],
+        "auditors": [
+            {
+              "type": "required",
+              "fieldType": "A",
+              "ressource": "AUDIT_REPORT.MSG_AUDITORS_REQ"
+            }
+          ]
+    }
+}

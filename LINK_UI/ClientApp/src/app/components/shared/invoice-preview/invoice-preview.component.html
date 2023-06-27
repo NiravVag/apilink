@@ -1,0 +1,94 @@
+<div class="modal-header custom-modal-header" style="background-color: #78dc8f;" *ngIf="(invoicePreviewModel.invoicePreviewFrom==invoicePreviewFrom.InvoiceGenerate ||
+invoicePreviewModel.invoicePreviewFrom==invoicePreviewFrom.InvoiceStatusGenerate)">
+    <h4 class="modal-title"  
+     id="modal-basic-title">{{invoicePreviewModel.previewTitle}}
+    </h4>
+  
+    <button type="button" class="close" aria-label="Close" (click)="closePreview()">
+        <span aria-hidden="true">&times;</span>
+    </button>
+</div>
+
+<div class="modal-header custom-modal-header"  *ngIf="!(invoicePreviewModel.invoicePreviewFrom==invoicePreviewFrom.InvoiceGenerate ||
+   invoicePreviewModel.invoicePreviewFrom==invoicePreviewFrom.InvoiceStatusGenerate)">
+
+    <h4 class="modal-title" 
+    id="modal-basic-title">{{invoicePreviewModel.previewTitle}}
+   </h4>
+    <button type="button" class="close" aria-label="Close" (click)="closePreview()">
+        <span aria-hidden="true">&times;</span>
+    </button>
+</div>
+
+<div class="modal-body custom-modal-body">
+    <div class="row">
+        <div class="col-sm-6 col-md-6 col-lg-6">
+            <div class="my-input-group">
+                <label class="required">{{'COMMON.LBL_TEMPLATE' | translate}}</label>
+                <ng-select #select [searchable]="true" [items]="invoiceReportTemplateList" bindLabel="templateName" [loading]="invoiceReportTemplateListLoading" bindValue="templateId" [hideSelected]="true" placeholder="--- {{(invoiceReportTemplateList!=null && invoiceReportTemplateList.length!=0? 'COMMON.LBL_SELECT':'COMMON.LBL_NO_DATA')  | translate }} ---"
+                    [(ngModel)]="model.templateId">
+                    <ng-template ng-option-tmp let-item="item">
+                        <div class="text-wrap">{{ item.templateName }}</div>
+                    </ng-template>
+                </ng-select>                
+            </div>
+        </div>
+        <div class="col-sm-6 col-md-6 col-lg-6 marginTop25">
+
+            <button id="btnPreview" class="secondary-cta small" *ngIf="model.templateId"
+                (click)="generateInvoiceReport()">
+                {{'INVOICE_GENERATE.LBL_PREVIEW' | translate}}
+                <span *ngIf="invoiceReportTemplateListLoading">
+                    <i class="fa fa-refresh fa-spin" aria-hidden="true"></i>
+                </span>
+            </button>
+
+            <!-- <button id="btnSend" style="margin-left: 20px;" class="secondary-cta small"
+            *ngIf="model.templateId && invoicePreviewModel.invoicePreviewFrom==invoicePreviewFrom.InvoiceStatusSummary"
+            (click)="sendInvoiceReport()">
+            Send
+            <span *ngIf="invoiceReportTemplateListLoading">
+                <i class="fa fa-refresh fa-spin" aria-hidden="true"></i>
+            </span>
+           </button> -->
+        </div>
+    
+    </div>
+    <div class="table-container" *ngIf="!isInvoiceTableVisible">
+        <div class="row marginTop15">
+            <div class="col-sm-8">
+                <h6>{{'INVOICE_GENERATE.LBL_INVOICE_DETAILS' | translate}}</h6>
+            </div>
+        </div>
+        <div class="table-container marginTop25 scroll-x" style="overflow-y:scroll;max-height:200px;"
+            #scrollableTablepopup *ngIf="invoicePreviewModel.invoiceData && invoicePreviewModel.invoiceData.length > 0">
+            <table class="pagination-table invoiceResponseTable">
+
+                <thead>
+                    <tr class="sticky-top-row">
+                        <th></th>
+                        <th>{{'INVOICE_GENERATE.LBL_INVOICE_NO' | translate}}</th>
+                        <th class="text-center">{{'INVOICE_GENERATE.LBL_EDIT' | translate}}</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let invoiceNo of invoicePreviewModel.invoiceData;let i = index">
+                        <td class="Center_Middle">
+                            <div class="styled-radio-container">
+                                <input type="radio" class="styled-radio" id="{{invoiceNo}}" name="radio-group2"
+                                    value="{{index}}" [checked]="invoiceSelected">
+                                <label for="{{invoiceNo}}"></label>
+                            </div>
+                        </td>
+                        <td>{{invoiceNo}}</td>
+                        <td class="text-center"><a (click)="redirectToEditInvoice(invoiceNo)"><span
+                                    class="table-cta icon-cta common-tooltip" data-tooltip="Modify">
+                                    <img src="assets/images/cta-edit.svg" alt="Modify">
+                                </span></a>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

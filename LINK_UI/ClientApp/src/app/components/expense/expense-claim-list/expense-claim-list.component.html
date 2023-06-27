@@ -1,0 +1,538 @@
+<div class="main-wrapper">
+  <div class="wrapper dashboard-wrapper">
+    <div class="my-container">
+      <div class="master-body">
+        <div class="title-container">
+          <h3 class="main-title">
+            {{ isApproveSummary ? 'Expenses Claims To approve' : 'EXPENSE_SUMMARY.TITLE' | translate }}</h3>
+        </div>
+        <div class="content-container quotation-container">
+          <div [@expandCollapse]="isFilterOpen ? 'open' : 'close'"
+            class="centerContainerPadding common-filter-container filter-container style-3">
+            <div class="animated-icon-container" (click)="toggleFilterSection()"
+              *ngIf="(model.items && model.items.length>0)">
+              <img src="assets/images/cta-close-grey.svg" alt="close">
+            </div>
+            <div class="row">
+
+              <div class="col-sm-2 col-md-2 col-lg-2" *ngIf="isOutSourceVisible">
+                <div class="my-input-group marginTop15">
+                  <label class="">{{ 'EXPENSE_SUMMARY.LBL_EMPLOYEE_TYPE' | translate }}</label>
+                  <ng-select [items]="employeeTypeList" [searchable]="true" bindValue="id"
+                    bindLabel="name" [loading]="loading" appendTo="body" [clearable]="false"
+                    [disabled]="isOutSourceAccountingRole" (change)="changeEmployeeType()"
+                    placeholder="--- {{ 'EXPENSE.LBL_SELECT' | translate }} ---" [(ngModel)]="model.employeeTypeId">
+                  </ng-select>
+
+                </div>
+              </div>
+
+              <div class="col-sm-3 col-md-3 col-lg-3"
+                *ngIf="model.employeeTypeId == employeeTypeEnum.Outsource && isOutSourceVisible">
+                <div class="my-input-group marginTop15">
+                  <label class="">{{ 'EXPENSE_SUMMARY.LBL_OUTSOURCE_COMPANY' | translate }}</label>
+                  <ng-select [items]="hrOutSourceCompanyList" [multiple]="true" [closeOnSelect]="false"
+                    [searchable]="true" (change)="changeOrClearOutSourceCompany()" (clear)="changeOrClearOutSourceCompany()"
+                    [disabled]="isOutSourceAccountingRole" bindLabel="name" [loading]="loading" class="multiple"
+                    appendTo="body" bindValue="id" placeholder="--- {{ 'EXPENSE.LBL_SELECT' | translate }} ---"
+                    [(ngModel)]="model.companyIds">
+                  </ng-select>
+
+                </div>
+              </div>
+
+              <div class="col-sm-3 col-md-3 col-lg-3">
+                <div class="my-input-group marginTop15">
+                  <label class="">{{ 'EXPENSE_SUMMARY.LBL_EMPLOYEE' | translate }}</label>
+                  <ng-select [items]="data.employeeList" [multiple]="true" [closeOnSelect]="false" [searchable]="true"
+                    bindLabel="staffName" [loading]="expenseMasterData.employeeTypeLoading" class="multiple" appendTo="body"
+                    (change)="employeeChange()" placeholder="--- {{ 'EXPENSE.LBL_SELECT' | translate }} ---"
+                    [(ngModel)]="model.employeeValues"
+                    [ngClass]="{ 'is-invalid': !validator.isValid('employeeValues')}">
+                  </ng-select>
+                  <div *ngIf="!validator.isValid('employeeValues')" class="invalid-feedback" style="display:block">
+                    <div *ngFor="let error of validator.getErrors('employeeValues')">{{ error | translate }}</div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-sm-4 col-xl-4 ">
+                <div class="my-input-group">
+                  <div class="styled-radio-container">
+                    <input class="styled-radio" id="isClaimDateYes" name="isClaimDate" type="radio"
+                      [(ngModel)]="model.isClaimDate" [value]="true" />
+                    <label for="isClaimDateYes">{{ 'EXPENSE_SUMMARY.LBL_CLAIMDATE' | translate }}</label>
+                  </div>
+                  <div class="styled-radio-container">
+                    <input class="styled-radio" id="isClaimDateNo" name="isClaimDate" type="radio"
+                      [(ngModel)]="model.isClaimDate" [value]="false">
+                    <label for="isClaimDateNo">{{ 'EXPENSE_SUMMARY.LBL_EXPENSEDATE' | translate }}</label>
+                  </div>
+                </div>
+
+                <div class="row">
+                  <div class="my-input-group col-sm-6 col-lg-6">
+                    <div class="calendar-wrapper">
+                      <input type="text" readonly=readonly maxlength="10" container="body"
+                        [ngClass]="{ 'is-invalid':  !validator.isValid('startDate')}" (click)="fd.toggle()"
+                        placeholder="{{ 'EXPENSE_SUMMARY.LBL_FROMDATE' | translate }}" [(ngModel)]="model.startDate"
+                        ngbDatepicker #fd="ngbDatepicker">
+                      <img src="assets/images/cta-close-grey.svg" alt="" class="close-icon"
+                        (click)="clearDateInput('StartDate')" *ngIf="model.startDate!=null||model.startDate!=undefined">
+                      <img src="assets/images/calendar-icon.svg" alt="" class="calendar-icon" (click)="fd.toggle()">
+                    </div>
+                    <div *ngIf="!validator.isValid('startDate')" class="invalid-feedback">
+                      <div *ngFor="let error of validator.getErrors('startDate')">{{ error | translate }}</div>
+                    </div>
+                  </div>
+                  <div class="my-input-group col-sm-6 col-lg-6">
+                    <div class="calendar-wrapper">
+                      <input readonly=readonly type="text" maxlength="10" container="body"
+                        [ngClass]="{ 'is-invalid':  !validator.isValid('endDate')}" (click)="td.toggle()"
+                        placeholder="{{ 'EXPENSE_SUMMARY.LBL_TODATE' | translate }}" [(ngModel)]="model.endDate"
+                        ngbDatepicker #td="ngbDatepicker">
+                      <img src="assets/images/cta-close-grey.svg" alt="" class="close-icon"
+                        (click)="clearDateInput('EndDate')" *ngIf="model.endDate!=null||model.endDate!=undefined">
+                      <img src="assets/images/calendar-icon.svg" alt="" class="calendar-icon" (click)="td.toggle()">
+
+                    </div>
+                    <div *ngIf="!validator.isValid('endDate')" class="invalid-feedback">
+                      <div *ngFor="let error of validator.getErrors('endDate')">{{ error | translate }}</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+           
+            </div>
+
+
+            <div class="row marginTop15">
+
+             
+
+              <div class="col-sm-3 col-md-3 col-lg-3 mobile-margin-top-15 ">
+                <div class="my-input-group">
+                  <label class="">{{ 'EXPENSE_SUMMARY.LBL_LOCATION' | translate }}</label>
+                  <ng-select [items]="data.locationList" [multiple]="true" class="multiple" [closeOnSelect]="false"
+                    [searchable]="true" bindLabel="name" [loading]="loading" appendTo="body"
+                    placeholder="--- {{ 'EXPENSE.LBL_SELECT' | translate }} ---" [(ngModel)]="model.locationValues">
+                  </ng-select>
+                </div>
+              </div>
+              <div class="col-sm-3 col-md-3 col-lg-3">
+                <div class="my-input-group">
+                  <label class="">{{ 'EXPENSE_SUMMARY.LBL_STATUS' | translate }}</label>
+                  <ng-select [disabled]="isApproveSummary" [items]="data.statusList" [multiple]="true" appendTo="body"
+                    [closeOnSelect]="false" [searchable]="true" bindLabel="label" class="multiple" [loading]="loading"
+                    placeholder="--- {{ 'EXPENSE.LBL_SELECT' | translate }} ---" [(ngModel)]="model.statusValues">
+                  </ng-select>
+                </div>
+              </div>
+              <div class="col-sm-3 col-md-3 col-lg-3">
+                <div class="my-input-group">
+                  <label class="">{{ 'EXPENSE.LBL_CLAIMTYPE' | translate }}</label>
+                  <ng-select [items]="expenseClaimTypeList" [multiple]="true" [closeOnSelect]="false" bindLabel="name"
+                    bindValue="id" appendTo="body" [(ngModel)]="model.claimTypeIds" class="multiple" appendTo="body"
+                    placeholder="--- {{ 'CUSTOMER_PRODUCT_SUMMARY.LBL_SELECT' | translate }} ---" [clearable]="false">
+                  </ng-select>
+                </div>
+              </div>
+              <div class="col-sm-3 col-md-3 col-lg-3">
+                <div class="my-input-group">
+                  <label class="">{{ 'EXPENSE.LBL_PAYROLL_COMPANY' | translate }}</label>
+                  <ng-select [items]="expenseMasterData.payrollCompanyList" [multiple]="true" 
+                  [closeOnSelect]="false" bindLabel="name" [loading] = "expenseMasterData.payrollCompanyLoading"
+                    bindValue="id" appendTo="body" [(ngModel)]="model.payrollCompanyIds" class="multiple" appendTo="body"
+                    placeholder="--- {{ 'CUSTOMER_PRODUCT_SUMMARY.LBL_SELECT' | translate }} ---" [clearable]="true">
+                  </ng-select>
+
+                </div>
+              </div>
+            </div>
+            <div [hidden]="!expenseMasterData.toggleFormSection">
+              <div class="row">
+                <div class="col-sm-12">
+                  <div class="row marginTop10">  
+                    <div class="col-sm-3 col-md-3 col-lg-2">
+                      <div class="my-input-group marginTop25">
+                        <div class="styled-checkbox-container">
+                          <input class="styled-checkbox" id="checkbox1" type="checkbox" [(ngModel)]="model.isAutoExpense">
+                          <label for="checkbox1">{{ 'EXPENSE_SUMMARY.LBL_AUTO_EXPENSE' | translate }}</label>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+         <!-- Advance Search starts-->
+        <div class="row filter-cta-container">
+          <div class="col-6">
+            <div class="advanced-search" (click)="toggleSection()">
+              <img class="icon" src="assets/images/expand-new.svg" alt="" *ngIf="!expenseMasterData.toggleFormSection">
+              <img class="icon" src="assets/images/collapse-new.svg" alt="" *ngIf="expenseMasterData.toggleFormSection">
+              {{'COMMON.LBL_ADVANCED_SEARCH' | translate}}
+            </div>
+          </div>
+          <div class="col-6 text-right">
+            <div class="col-12 col-sm-12 text-right mt-3 mt-sm-0">
+              <button id="btnUpdateStatus" class="primary-cta small mr-2" (click)="openUpdateStatusConfirm(UpdateStatusPopUp)"
+                [disabled]="_searchloader || _initialloader || exportVoucherKpiLoading || exportExpenseSummaryKpiLoading || exportDataLoading ||
+                expenseMasterData.updateStatusLoading || expenseMasterData.pendingExpenseExistLoading"
+                *ngIf="expenseMasterData.hasExpenseRole && expenseMasterData.showUpdateStatusBtn">
+                <span>{{ 'EXPENSE_SUMMARY.LBL_UPDATE_STATUS' | translate}} </span>
+                <span *ngIf="expenseMasterData.pendingExpenseExistLoading">
+                  <i class="fa fa-refresh fa-spin" aria-hidden="true"></i>
+                </span>
+                </button>
+              <button class="secondary-cta small  mr-2" (click)="voucherExport()"
+                [disabled]="exportVoucherKpiLoading || exportExpenseSummaryKpiLoading || exportDataLoading || expenseMasterData.updateStatusLoading
+                || expenseMasterData.pendingExpenseExistLoading"
+                 *ngIf="hasAccountingRole && showVoucherExport">
+                <span>{{ 'EXPENSE_SUMMARY.LBL_VOUCHER_KPI' | translate}} </span>
+                <span *ngIf="exportVoucherKpiLoading">
+                  <i class="fa fa-refresh fa-spin" aria-hidden="true"></i>
+                </span>
+              </button>
+              <button class="secondary-cta small  mr-2" (click)="openExportPopup(exportExpenseSummary)"
+                [disabled]="exportExpenseSummaryKpiLoading || exportDataLoading || exportVoucherKpiLoading || expenseMasterData.updateStatusLoading
+                || expenseMasterData.pendingExpenseExistLoading"
+                      *ngIf="hasAccountingRole && showExpenseKpi">
+                <span>{{ 'EXPENSE_SUMMARY.LBL_EXPENSE_SUMMARY_KPI' | translate}} </span>
+                <span *ngIf="exportExpenseSummaryKpiLoading">
+                  <i class="fa fa-refresh fa-spin" aria-hidden="true"></i>
+                </span>
+              </button>
+              <button
+                [disabled]="model.items == null || model.items.length == 0 || model.noFound || _searchloader || _initialloader || exportDataLoading || exportExpenseSummaryKpiLoading ||exportVoucherKpiLoading || expenseMasterData.updateStatusLoading || expenseMasterData.pendingExpenseExistLoading"
+                class="secondary-cta small" (click)="export()">
+                {{ 'EXPENSE_SUMMARY.LBL_EXPORT' | translate }}
+                <span *ngIf="exportDataLoading">
+                  <i class="fa fa-refresh fa-spin" aria-hidden="true"></i>
+                </span>
+              </button>
+              &nbsp;
+              <button id="btnSearch" class="primary-cta small"
+                [disabled]=" _searchloader || _initialloader || exportExpenseSummaryKpiLoading || exportDataLoading || exportVoucherKpiLoading || expenseMasterData.updateStatusLoading || expenseMasterData.pendingExpenseExistLoading"
+                (click)="searchData()">
+                {{ 'EXPENSE_SUMMARY.LBL_SEARCH' | translate }}
+                <span *ngIf="_searchloader">
+                  <i class="fa fa-refresh fa-spin" aria-hidden="true"></i>
+                </span>
+              </button>
+
+            </div>
+          </div>
+        </div>
+        <!-- Advance Search end-->
+          </div>
+          <div class="centerContainerPadding float-left" *ngIf="(model.items && model.items.length>0)">
+
+            <div class="row">
+              <div class="col-6 col-sm-3 col-xl-2 d-flex">
+                <p class="search-trigger-heading" [innerHtml]="showPaginationText()"></p>
+              </div>
+              <div class="col-6 col-sm-9 col-xl-10 text-right">
+                <ul class="table-badge-container mobile-hide tablet-hide">
+                  <li (click)="SearchByStatus(status)" [ngStyle]="{'background-color': status.labelColor}"
+                    *ngFor="let status of _statuslist| slice:0:4">
+                    <span>{{status.totalCount}}</span> <span>{{status.label}}</span>
+                  </li>
+                  <ng-container *ngIf="_statuslist.length>4">
+                    <li class="more has-dropdown">
+                      <img src="assets/images/cta-menu-grey.svg" alt="">
+                      <ul class="cta-dropdown bottom-left">
+                        <li (click)="SearchByStatus(status)" [ngStyle]="{'color': status.labelColor}"
+                          *ngFor="let status of _statuslist | slice:4:_statuslist.length">
+                          <span>{{status.totalCount}}</span> <span>{{status.label}}</span>
+                        </li>
+                      </ul>
+                    </li>
+                  </ng-container>
+                </ul>
+                <div class="animated-icon-container" *ngIf="!isFilterOpen" (click)="toggleFilterSection()">
+                  <img src="assets/images/cta-search-grey.svg" alt="search">
+                </div>
+              </div>
+            </div>
+            <div class="row mt-3 desktop-hide">
+              <div class="col-sm-12">
+                <ul class="table-badge-container">
+                  <li (click)="SearchByStatus(status)" [ngStyle]="{'background-color': status.labelColor}"
+                    *ngFor="let status of _statuslist">
+                    <span>{{status.totalCount}}</span> <span>{{status.label}}</span>
+                  </li>
+                </ul>
+              </div>
+            </div>
+            <div class="quotation-search-container">
+              <div class="table-container h-scroll">
+                <table class="pagination-table bordered">
+                  <thead>
+                    <tr>
+                      <th class="width-20 Center_Middle">
+                        <div class="styled-checkbox-container">
+                          <input class="styled-checkbox" id="checkbook" [(ngModel)]="selectAllChecked" type="checkbox"
+                            (change)="selectAllCheckBox()">
+                          <label for="checkbook"></label>
+                        </div>
+                      </th>
+                      <th class="width-20"></th>
+                      <th class="width-20"></th>
+                      <th class="width-20"></th>
+                      <th class="width-120">{{ 'EXPENSE_SUMMARY.LBL_CLAIMNO' | translate }}</th>
+                      <th class="width-100">{{ 'EXPENSE_SUMMARY.LBL_EMPLOYEE' | translate }}</th>
+                      <th class="width-100">{{ 'EXPENSE_SUMMARY.LBL_EMPLOYEE_TYPE' | translate }}</th>
+                      <th class="width-100">{{ 'EXPENSE_SUMMARY.LBL_OUTSOURCE_COMPANY' | translate }}</th>
+                      <th class="width-20">{{ 'EXPENSE_SUMMARY.LBL_EXPENSEAMOUNT' | translate }}</th>
+                      <th class="width-80">{{ 'EXPENSE_SUMMARY.LBL_FOODALLOW' | translate }}</th>
+                      <th class="width-80">{{ 'EXPENSE_SUMMARY.LBL_TOTAMOUNT' | translate }}</th>
+                      <th class="width-100">{{ 'EXPENSE_SUMMARY.LBL_CURRENCY' | translate }}</th>
+                      <th class="width-100">{{ 'EXPENSE_SUMMARY.LBL_OFFICE' | translate }}</th>
+                      <th class="width-100">{{ 'EXPENSE.LBL_PAYROLL_COMPANY' | translate }}</th>
+                      <th class="width-60">{{ 'EXPENSE_SUMMARY.LBL_STATUS' | translate }}</th>
+                      <th class="width-100">{{ 'EXPENSE.LBL_CLAIMTYPE' | translate }}</th>
+                      <th class="width-80">{{ 'EXPENSE_SUMMARY.LBL_CLAIMDATE' | translate }}</th>
+                      <!-- <th class="width-100">{{ 'EXPENSE_SUMMARY.LBL_CREATED_ON' | translate }}</th> -->
+                      <th class="width-100">{{ 'EXPENSE_SUMMARY.LBL_REJECTED_REASON' | translate }}</th>
+
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <ng-container *ngFor="let group of model.items">
+                      <ng-container *ngFor="let iteminfo of group.items">
+                        <tr style="border-left: 5px solid #fff;"
+                          [ngStyle]="{'border-left-color': GetStatusColor(iteminfo.statusId)}">
+
+                          <td class="width-20 Center_Middle">
+                            <div class="styled-checkbox-container">
+                              <input class="styled-checkbox" id="checkbookid-{{iteminfo.id}}" type="checkbox"
+                                [(ngModel)]="iteminfo.isChecked" (change)="selectedClaimData(iteminfo)">
+                              <label for="checkbookid-{{iteminfo.id}}"></label>
+                            </div>
+                          </td>
+                          <td class="Center_Middle width-20">
+
+                            <span class="table-cta icon-cta common-tooltip"
+                              *ngIf="iteminfo.statusId == 1 && model.canCheck && !iteminfo.isAutoExpense"
+                              (click)="openConfirmStatus(contentStatus, iteminfo.id, 5)" data-tooltip="Checked">
+                              <img src="assets/images/green-tick.svg" alt="Checked">
+                            </span>
+
+                            <span class="table-cta icon-cta common-tooltip"
+                              *ngIf="iteminfo.statusId == 5 && iteminfo.canApprove && !iteminfo.isAutoExpense"
+                              (click)="openConfirmStatus(contentStatus, iteminfo.id, 2)" data-tooltip="Approved">
+                              <img src="assets/images/cta-tick-green.svg" alt="Approved">
+                            </span>
+
+                            <span class="table-cta icon-cta common-tooltip && !iteminfo.isAutoExpense"
+                              *ngIf="iteminfo.statusId == 2 && model.canCheck"
+                              (click)="openConfirmStatus(contentStatus, iteminfo.id, 4)" data-tooltip="Paid">
+                              <img src="assets/images/payment-card.svg" alt="Paid">
+                            </span>
+                          </td>
+                          <td class="Center_Middle width-20">
+
+                            <span class="table-cta icon-cta common-tooltip"
+                              *ngIf="(iteminfo.statusId == 2 && model.canCheck && !iteminfo.isAutoExpense) || (iteminfo.statusId == 5 && iteminfo.canApprove && !iteminfo.isAutoExpense) || (iteminfo.statusId == 1 && model.canCheck && !iteminfo.isAutoExpense)"
+                              (click)="openConfirm(content, iteminfo.id)" data-tooltip="Rejected">
+                              <img src="assets/images/cta-close.svg" alt="Rejected">
+                            </span>
+                          </td>
+                          <td class="Center_Middle width-20">
+
+                            <span class="table-cta icon-cta common-tooltip" (click)="exportItem(iteminfo)"
+                              data-tooltip="Export">
+                              <img src="assets/images/cta-download.svg" alt="Export">
+                            </span>
+                          </td>
+                          <td class="width-180">
+                            <a class="alink auto-expense-a" (click)="getDetails(iteminfo.id)">{{iteminfo.claimNo}}</a>
+                            <img *ngIf="iteminfo.isAutoExpense" src="assets/images/auto.svg" alt="auto">
+                          </td>
+                         
+                          <td style="word-break:break-all;min-width:110px" class="width-100">{{iteminfo.name}}</td>
+                          <td style="word-break:break-all;min-width:110px"
+                            *ngIf="iteminfo.employeeTypeId==employeeTypeEnum.Permanent"
+                            class="width-100 "><span class="highlight-badge disabled">{{iteminfo.employeeType}}</span></td>
+                          <td style="word-break:break-all;min-width:110px"
+                            *ngIf="iteminfo.employeeTypeId!=employeeTypeEnum.Permanent"
+                            class="width-100 "><span class="highlight-badge in-progress">{{iteminfo.employeeType}}</span></td>
+                          <!--   <td style="word-break:break-all;min-width:110px"
+                            *ngIf="iteminfo.employeeTypeId==employeeTypeEnum.OutSource"
+                            class="width-100 highlight-badge in-progress">{{iteminfo.employeeType}}</td> -->
+                          <td style="word-break:break-all;min-width:110px" class="width-100">
+                            {{iteminfo.outSourceCompanyName}}</td>
+                          <td class="width-20">{{iteminfo.expenseAmout}}</td>
+                          <td style="word-break:break-all;min-width:110px" class="width-80">{{iteminfo.foodAllowance}}
+                          </td>
+                          <td style="word-break:break-all;min-width:110px" class="width-80">{{iteminfo.totalAmount}}
+                          </td>
+                          <td style="word-break:break-all;min-width:110px" class="width-100">{{iteminfo.currencyName}}
+                          </td>
+                          <td style="word-break:break-all;min-width:110px" class="width-100">{{iteminfo.officeName}}
+                          </td>
+                          <td style="word-break:break-all;min-width:110px" class="width-140">{{iteminfo.payrollCompanyName}}
+                          </td>
+                          <td style="word-break:break-all;min-width:110px" class="width-60">{{iteminfo.status}}</td>
+                          <td style="word-break:break-all;min-width:110px" class="width-100">{{iteminfo.claimType}}</td>
+                          <td style="word-break:break-all;min-width:110px" class="width-80">
+                            {{iteminfo.claimDate.day}}/{{iteminfo.claimDate.month}}/{{iteminfo.claimDate.year}}
+                          </td>
+                          <!-- <td style="word-break:break-all;min-width:110px" class="width-100">{{iteminfo.createdOn}}</td> -->
+                          <td style="word-break:break-all;min-width:110px" class="width-100">
+                            {{iteminfo.comment}}
+                          </td>
+                        </tr>
+                      </ng-container>
+                      <tr *ngIf="model.items.length >= 1">
+                        <td style="color:red" colspan="8">Sub Total</td>
+                        <td style="color:red">{{group.expenseAmout}}</td>
+                        <td style="word-break:break-all;min-width:110px;color:red">{{group.foodAllowance}}</td>
+                        <td style="word-break:break-all;min-width:110px;color:red">{{group.totalAmount}}</td>
+                        <td colspan="4"></td>
+                        <!-- <td class="mobile-hide tablet-hide" colspan="4"></td> -->
+                      </tr>
+                    </ng-container>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            <div class="pagination-container">
+              <div class="page-count-list">
+                <select class="small" [(ngModel)]="selectedPageSize" (change)="SearchDetails()">
+                  <option *ngFor="let item of pagesizeitems" [ngValue]=item>{{item}}</option>
+                </select>
+                <span> Records per page</span>
+              </div>
+              <div class="pagination-action-container text-right">
+                <ngb-pagination [pageSize]="model.pageSize" [collectionSize]="model.totalCount" [boundaryLinks]="true"
+                  [(page)]="model.index" [maxSize]="5" (pageChange)="onPager($event)">
+                  <ng-template ngbPaginationFirst>
+                    <img src="assets/images/new-set/double-arrow.svg" alt="">
+                  </ng-template>
+                  <ng-template ngbPaginationPrevious>
+                    <img src="assets/images/new-set/single-arrow.svg" alt="" class="left-arrow">
+                  </ng-template>
+                  <ng-template ngbPaginationNext>
+                    <img src="assets/images/new-set/single-arrow.svg" alt="" class="right-arrow">
+                  </ng-template>
+                  <ng-template ngbPaginationLast>
+                    <img src="assets/images/new-set/double-arrow.svg" alt="" class="right-most-arrow">
+                  </ng-template>
+                </ngb-pagination>
+              </div>
+            </div>
+          </div>
+
+          <div class="centerContainerPadding" *ngIf="model.noFound">
+            <div class="error-container">
+              <img src="assets/images/no-result.svg" alt="" class="thumbnail">
+              <h4 class="title">{{ 'EXPENSE_SUMMARY.LBL_NOITEMS' | translate }}</h4>
+              <p class="error-subtitle">{{'CS_CONFIG_SUMMARY.LBL_NODATA' | translate}}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<ng-template #contentStatus let-modal>
+  <div class="modal-body">
+    <div class="small-model">
+      <h2 class="title">{{ 'EXPENSE_SUMMARY.LBL_UPDATESTATUS' | translate }}</h2>
+      <p>{{ 'EXPENSE_SUMMARY.MSG_CONFIRMSTATUS' | translate }} {{ nextStatusLabel }} !!!</p>
+      <button class="secondary-cta" (click)="modal.dismiss('Cross click')">{{ 'EXPENSE_SUMMARY.LBL_CONFIRMCANCEL' |
+        translate }}</button>
+      <button class="primary-cta" (click)="setStatus(currentItemId, nextStatusId);">{{ 'EXPENSE_SUMMARY.LBL_CONFIRMOK' |
+        translate }}</button>
+    </div>
+  </div>
+</ng-template>
+<ng-template #content let-modal>
+  <div class="modal-header custom-modal-header">
+    <h4 class="modal-title" id="modal-basic-title">{{ 'EXPENSE_SUMMARY.LBL_COMMENTREJECT' | translate }}</h4>
+    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body custom-modal-body">
+    <div class="row">
+      <div class="col-sm-10 mobile-margin-top-15">
+        <div class="my-input-group">
+          <label class=" required">{{ 'EXPENSE_SUMMARY.LBL_COMMENT' | translate }}</label>
+          <textarea [ngClass]="{ 'is-invalid': !isRejectValid}" [(ngModel)]="rejectComment" maxlength="600"
+            placeholder="{{ 'EXPENSE_SUMMARY.LBL_COMMENT' | translate }}"></textarea>
+          <div *ngIf="!isRejectValid" class="invalid-feedback">
+            <div>{{ 'EXPENSE_SUMMARY.MSG_COMMENT_REQ' | translate }}</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="modal-footer custom-modal-footer">
+    <button type="button" class="secondary-cta" (click)="modal.close('cancel click')">{{
+      'EXPENSE_SUMMARY.LBL_CONFIRMCANCEL' | translate }}</button>
+    <button type="button" class="primary-cta" (click)="reject();">{{ 'EXPENSE_SUMMARY.LBL_CONFIRMOK' | translate
+      }}</button>
+  </div>
+</ng-template>
+
+<ng-template #UpdateStatusPopUp let-modal>
+  <div class="delete-popup-container">
+    <div class="content">
+      <img src="assets/images/new-set/confirm-pending.svg" alt="">
+      <div class="title-container">
+        <h3>{{'COMMON.MSG_QUESTION_SURE' | translate }}</h3>
+        <p [innerHTML]="expenseMasterData.updatetitleMsg"> </p>
+      </div>
+    </div>
+    <div class="text-right">
+      <button class="secondary-cta link"
+      [disabled]="expenseMasterData.updateStatusLoading" (click)="modal.dismiss('Cross click')">
+        {{ 'COMMON.LBL_CONFIRMCANCEL' | translate }}</button>
+      <button class="primary-cta" (click)="updateStatusOk();"
+      [disabled]="expenseMasterData.updateStatusLoading">
+        <span>{{'COMMON.LBL_OK' | translate }}</span>
+        <span *ngIf="expenseMasterData.updateStatusLoading">
+          <i class="fa fa-refresh fa-spin" aria-hidden="true"></i>
+        </span>
+      </button>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #exportExpenseSummary let-modal>
+  <div class="modal-header custom-modal-header">
+      <h4 class="modal-title" id="modal-basic-title">{{ 'EXPENSE_SUMMARY.LBL_EXPORT_SUMMARY' | translate }}
+      </h4>
+      <button type="button" class="close" aria-label="Close" (click)="modal.dismiss( 'Cross click' ) ">
+          <span aria-hidden=" true ">&times;</span>
+      </button>
+  </div>
+  <div class=" modal-body custom-modal-body ">
+      <div class=" row ">
+          <div class=" col-sm-6 col-md-6 col-lg-6 ">
+              <div class=" my-input-group ">
+                  <label class=" required ">{{'EXPENSE_SUMMARY.LBL_EXPORT_TYPE' | translate}}</label>
+                  <ng-select #select [searchable]="true" [items]="expenseMasterData.expenseSummaryExportTypeList" bindLabel="name" bindValue="id" [hideSelected]="true" 
+                  placeholder="--- {{(expenseMasterData.expenseSummaryExportTypeList!=null && expenseMasterData.expenseSummaryExportTypeList.length!=0? 'COMMON.LBL_SELECT' : 'COMMON.LBL_NO_DATA' ) | translate }} ---"
+                      [(ngModel)]="model.exportType">
+                  </ng-select>
+              </div>
+          </div>
+      </div>
+  </div>
+  <div class="marginTop20 modal-footer">
+      <button [disabled]="exportExpenseSummaryKpiLoading" class="secondary-cta small" (click)="modal.dismiss('Cross click')">
+          {{'COMMON.LBL_CONFIRMCANCEL' | translate}}
+      </button>
+      <button class="primary-cta small" *ngIf="model.exportType" [disabled]="exportExpenseSummaryKpiLoading" (click)="expenseSummaryKpiExport()">
+          {{'COMMON.LBL_SUBMIT' | translate}}
+          <span *ngIf="exportExpenseSummaryKpiLoading">
+              <i class="fa fa-refresh fa-spin" aria-hidden=" true "></i>
+          </span>
+      </button>
+  </div>
+</ng-template>

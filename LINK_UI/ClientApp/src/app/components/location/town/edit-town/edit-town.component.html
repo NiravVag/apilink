@@ -1,0 +1,100 @@
+<div class="main-wrapper">
+  <div class="wrapper dashboard-wrapper">
+    <div class="my-container">
+      <div class="master-body">
+        <div class="title-container">
+            <div class="header-back-button" *ngIf="fromSummary && !loading">
+                <img src="assets/images/back-red.png" alt="back" (click)="this.return('town/town-summary');">
+                </div>
+          <h3 class="main-title">
+            {{model.id==null?('EDIT_TOWN.LBL_ADD' | translate):('EDIT_TOWN.LBL_EDIT' | translate)}}&nbsp;{{ 'EDIT_TOWN.TITLE' | translate }}
+          </h3>
+        </div>
+        <div class="content-container">
+          <h4 class="container-head">{{ 'EDIT_TOWN.LBL_DETAILS' | translate }}</h4>
+          <div class="formPadding">
+            <div class="row">
+              <div class="col-sm-3">
+                <div class="my-input-group">
+                  <label>{{ 'EDIT_TOWN.LBL_COUNTRY' | translate }}</label>
+                  <ng-select [loading]="loading" placeholder="--- {{ 'EDIT_TOWN.LBL_SELECT' | translate }} ---"
+                    [searchable]="true" [items]="data.countryValues" [(ngModel)]="model.countryId" (clear)="Reset()"
+                    bindLabel="countryName" bindValue="id" class="multiple" (ngModelChange)="refreshprovince($event)"
+                    [multiple]="false" [searchable]="true"></ng-select>
+
+                </div>
+              </div>
+              <div class="col-sm-3 mobile-margin-top-15">
+                <div class="my-input-group">
+                  <label for="ddlprovince">{{ 'EDIT_TOWN.LBL_PROVINCE' | translate }}</label>
+                  <ng-select [items]="data.provinceValues" [hideSelected]="true" [loading]="provinceLoading" [multiple]="false"
+                    (ngModelChange)="refreshcity($event)" [searchable]="true" bindLabel="name"
+                    (clear)="resetProvinceDetails()" [(ngModel)]="model.provinceId" bindValue="id"
+                    placeholder="--- {{ 'CITY_SUMMARY.LBL_SELECT' | translate }} ---">
+                  </ng-select>
+                </div>
+              </div>
+              <div class="col-sm-3  mobile-margin-top-15">
+                <div class="my-input-group">
+                  <label for="">{{ 'EDIT_TOWN.LBL_CITY' | translate }}</label>
+                  <ng-select [loading]="cityLoading" [hideSelected]="true"
+                    placeholder="--- {{ 'COUNTY_SUMMARY.LBL_SELECT' | translate }} ---"
+                    (ngModelChange)="refreshcounty($event)" [searchable]="true" bindValue="id" [items]="data.cityValues"
+                    [(ngModel)]="model.cityId" bindLabel="name" class="multiple" [multiple]="false" [searchable]="true">
+                  </ng-select>
+                </div>
+              </div>
+              <div class="col-sm-3  mobile-margin-top-15">
+                <div class="my-input-group">
+                  <label for="" class="required">{{ 'EDIT_TOWN.LBL_COUNTY' | translate }}</label>
+                  <ng-select [loading]="countyLoading" [hideSelected]="true"
+                    placeholder="--- {{ 'COUNTY_SUMMARY.LBL_SELECT' | translate }} ---" [items]="data.countyValues"
+                    [(ngModel)]="model.countyId" bindLabel="countyName" class="multiple"
+                    [ngClass]="{'is-invalid': !validator.isValid('countyId')}" [multiple]="false" [searchable]="true"
+                    bindValue="id"></ng-select>
+                  <div *ngIf="!validator.isValid('countyId')" class="invalid-feedback">
+                    <div *ngFor="let error of validator.getErrors('countyId')">{{ error | translate }}</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+              <div class="row marginTop15">
+                <div class="col-sm-3">
+                <div class="my-input-group ">
+                  <label class="required">{{ 'EDIT_TOWN.LBL_TOWN' | translate }}</label>
+                  <input [(ngModel)]="model.townName" maxlength="500" placeholder="{{ 'EDIT_TOWN.MSG_TOWN_NAME' | translate }}"
+                    type="text" [ngClass]="{'is-invalid': !validator.isValid('townName')}"/>
+                  <div *ngIf="!validator.isValid('countyId')" class="invalid-feedback">
+                    <div *ngFor="let error of validator.getErrors('townName')">{{ error | translate }}</div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-sm-3 mobile-margin-top-15">
+                <div class="my-input-group">
+                  <label>{{ 'EDIT_TOWN.LBL_TOWN_CODE' | translate }}</label>
+                  <input [(ngModel)]="model.townCode" maxlength="500" placeholder="{{ 'EDIT_TOWN.MSG_TOWN_CODE' | translate }}"
+                    type="text" />
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-action-container">
+            <button class="category-cta small mr-2 common-tooltip common-tooltip-top-2" data-tooltip="Reset"
+            (click)="Reset()">
+             <img src="assets/images/reload-new.svg" alt="Reset">
+             <span>{{'COMMON.LBL_RESET'| translate}}</span>
+           </button>
+            <button class="primary-cta small" [disabled]="loading" (click)="save()">
+              {{
+                    'EDIT_TOWN.LBL_SAVE' | translate
+                    }}
+              <span *ngIf="loading">
+                <i class="fa fa-refresh fa-spin" aria-hidden="true"></i>
+              </span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>

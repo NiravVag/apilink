@@ -1,0 +1,69 @@
+{
+    "model":"EditLocationmodel",
+    "fields": {
+        "name": [
+            {
+                "type": "required",
+                "ressource": "EDIT_OFFICE.MSG_OFFICE_NAME_REQ" 
+            }
+        ],
+        "address": [
+            {
+                "type": "required",
+                "ressource": "EDIT_OFFICE.MSG_OFFICE_ADDRESS1_REQ"
+            }
+        ],
+        "address2": [
+            {
+                "type": "required",
+                "ressource": "EDIT_OFFICE.MSG_OFFICE_ADDRESS2_REQ"
+            }
+        ],
+        "email": [
+            {
+                "type": "email",
+                "ressource": "EDIT_OFFICE.MSG_EMAIL_EMAIL"
+            }
+        ],
+        "locationTypeId": [
+            {
+                "type": "required",
+                "fieldType": "N",
+                "ressource": "EDIT_OFFICE.MSG_OFFICE_TYPE"
+            }
+        ],
+        "countryId": [
+            {
+                "type": "required",
+                "fieldType": "N",
+                "ressource": "EDIT_OFFICE.MSG_OFFICE_COUNTRY"
+            }
+        ],
+        "cityId": [
+            {
+                "type": "required",
+                "fieldType": "N",
+                "ressource": "EDIT_OFFICE.MSG_OFFICE_CITY"
+            }
+        ],
+        "operationcountries": [
+            {
+                "type": "required",
+                "fieldType": "N",
+                "ressource": "EDIT_OFFICE.MSG_OFFICE_OPERATION_COUNTRIES"
+            }
+        ],
+        "tel": [
+            {
+                "type": "required",
+                "ressource": "EDIT_OFFICE.MSG_OFFICE_TEL"
+            }
+        ],
+        "zipcode": [
+            {
+                "type": "required",
+                "ressource": "EDIT_OFFICE.MSG_OFFICE_ZIPCODE"
+            }
+        ]
+    }
+}

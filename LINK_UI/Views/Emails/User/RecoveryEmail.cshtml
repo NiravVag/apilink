@@ -1,0 +1,47 @@
+﻿@model (DTO.User.ForgotPasswordResponse, string)
+@{
+    ViewData["Title"] = "Recovery Email";
+}
+
+<style>
+    .th-table {
+        color: black;
+        vertical-align: top;
+        font-size: 13px;
+        font-family: tahoma;
+    }
+
+    .td-table {
+        font-size: 13px;
+        font-family: tahoma;
+    }
+
+    .div-style {
+        padding-bottom: 5px;
+        margin-bottom: 5px;
+    }
+</style>
+
+<table>
+    <tr>
+        <td style="font-size:13px; font-family:tahoma;">
+            Hi @Model.Item1.FullName,
+            <br /><br />
+            <div style="padding-bottom: 5px; margin-bottom:5px;">
+                We’ve received a request to set a new password for Link QMS account. Please click to <a href="@Model.Item1.Link" target="_blank">Reset</a> the password.
+            </div>
+
+        </td>
+    </tr>
+    <tr>
+        <td class="td-table">
+            <br />
+            <div style="padding-bottom: 5px; margin-bottom:5px;">
+                Thanks
+            </div>
+            <div style="padding-bottom: 5px; margin-bottom:5px;">
+                IT-Team
+            </div>
+        </td>
+    </tr>
+</table>

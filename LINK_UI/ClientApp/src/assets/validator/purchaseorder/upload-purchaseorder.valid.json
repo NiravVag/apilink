@@ -1,0 +1,14 @@
+{
+  "model": "UploadPurchaseOrderModel",
+   "fields": {
+    "customerId": [
+      {
+        "type": "required",
+        "fieldType": "N",
+        "ressource": "PURCHASEORDER_SUMMARY.MSG_CUSTOMER_REQ"
+      }
+    ]
+   }
+ 
+ }
+ 

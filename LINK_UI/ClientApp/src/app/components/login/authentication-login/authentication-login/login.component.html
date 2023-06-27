@@ -1,0 +1,116 @@
+<div class="login-container">
+    <div class="column">
+        <div class="login-child-1">
+            <div class="login-form-container">
+                <div class="icon-container">
+                    <img class="logo-icon" src="../assets/images/new-login-icons.png" alt="">
+                </div>
+                <h3 class="title">{{ 'LOGIN.TITLE_NEW' | translate }}</h3>
+                <p class="sub-text">Welcome to customer service portal. Login with username and password that you
+                    received.</p>
+                <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" action="" class="login-form">
+
+                    <div class="my-input-group">
+                        <label for="username">{{'LOGIN.LBL_USERNAME' | translate }}</label>
+                        <input formControlName="username" [ngClass]="{ 'is-invalid': submitted && f.username.errors }" type="text"
+                            placeholder="{{ 'LOGIN.LBL_USERNAME' | translate }}" #txtUserName>
+                        </div>
+
+                    <div class="my-input-group">
+                        <label for="password">{{'LOGIN.LBL_PASSWORD' | translate }}</label>
+                        <input #input type="Password" formControlName="password" [ngClass]="{ 'is-invalid': submitted && f.password.errors }"
+                            placeholder="{{ 'LOGIN.LBL_PASSWORD' | translate }}">
+                        <img [src]="passwordicon" (click)="showPassword(input)" alt="" class="password-icon">
+                        <span *ngIf="error" class="error-message">{{'LOGIN.MSG_LOGINFAILED' | translate }}</span>
+                    </div>
+                    <div class="password-container">
+                        <div class="password-column">
+                            <a class="forgot-link" (click)="openForgotPasswordPopUp(forgotPassword)">
+                                {{'LOGIN.FORGOT_PASSWORD' | translate }}
+                            </a>
+                        </div>
+                    </div>
+                    <button [(disabled)]="(loginForm.invalid && loginForm.touched) || loading"
+                        class="full-width login-button">{{ 'LOGIN.LBL_LOGIN' | translate }}
+                        <span *ngIf="loading">
+                            <i class="fa fa-refresh fa-spin" aria-hidden="true"></i>
+                        </span>
+                    </button>
+                </form>
+            </div>
+        </div>
+        <div class="login-child-2">
+            <p class="copyright">{{'LOGIN.FOOTER_COPYRIGHT' | translate }} © {{year}}- {{ 'LOGIN.FOOTER_NEW' | translate
+                }}</p>
+        </div>
+    </div>
+    <div class="mobile-footer-container">
+        <img src="../assets/images/worms-safety-white-icon.svg" alt="">
+        <p>{{'LOGIN.FOOTER_COPYRIGHT' | translate }} © {{year}}- {{ 'LOGIN.FOOTER_NEW' | translate }}</p>
+        <div class="footer-column">
+            <div><a target="_blank" href="https://www.worms-safety.com/">{{'LOGIN.LBL_WARM_SAFETY' | translate }}</a>
+            </div>
+            <!-- <div><a href="">{{'LOGIN.LBL_Contact' | translate }}</a></div>
+            <div><a href="">{{'LOGIN.LBL_TERMS_CONDITION' | translate }}</a></div> -->
+        </div>
+    </div>
+    <div class="column">
+        <div class="language-dropdown language-menu">
+            <ng-select [items]="languages" bindLabel="name" class="width-100" (change)="languageChange($event)" bindValue="id"
+                [searchable]="false" [(ngModel)]="selectedlanguage" [clearable]="false">
+            </ng-select>
+        </div>
+        <div class="footer">
+            <div class="footer-column">
+                <div><a target="_blank" href="https://www.worms-safety.com/">{{'LOGIN.LBL_WARM_SAFETY' | translate
+                        }}</a></div>
+                <!-- <div><a href="">{{'LOGIN.LBL_Contact' | translate }}</a></div>
+				<div><a href="">{{'LOGIN.LBL_TERMS_CONDITION' | translate }}</a></div> -->
+            </div>
+            <div class="footer-column">
+                <img src="../assets/images/footer-new-logo.png" alt="">
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--#region Forgot Password Popup-->
+<ng-template #forgotPassword let-modal>
+    <div class="modal-header custom-modal-header">
+        <h4 class="modal-title" id="modal-basic-title">{{ 'LOGIN.FORGOT_PASSWORD_TITLE' | translate }}</h4>
+        <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body custom-modal-body">
+        <div class="content-container schedule-allocation-container">
+            <div class="formPadding">
+                <div class="row">
+                    <div class="col-md-12">
+
+                        <div class="my-input-group">
+                            <label class="required" for="">{{ 'LOGIN.LBL_USERNAME' | translate}}</label>
+                            <input type="text" [(ngModel)]="model.userName"
+                            placeholder="{{ 'LOGIN.LBL_USERNAME' | translate }}"  [ngClass]="{ 'is-invalid': !validator.isValid('userName')}"
+                                >
+                            <div *ngIf="!validator.isValid('userName')" class="invalid-feedback" style="display:block">
+                                <div *ngFor="let error of validator.getErrors('userName')">{{ error | translate }}</div>
+                            </div>
+                        </div>
+                        <div class="marginTop20 text-right">
+                            <!-- <button class="secondary-cta" (click)="modal.dismiss('Cross click')">
+                                {{'LOGIN.LBL_CONFIRMCANCEL' | translate}}
+                            </button> -->
+                            <button class="primary-cta" (click)="forGotConfirm();">
+                                {{'LOGIN.LBL_CONFIRMOK' | translate}}
+                            </button>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</ng-template>
+
+<!--#endregion Forgot Password Popup-->

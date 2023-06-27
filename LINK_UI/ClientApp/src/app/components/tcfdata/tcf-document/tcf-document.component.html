@@ -1,0 +1,647 @@
+<div class="main-wrapper">
+	<!-- <app-header></app-header> -->
+	<div class="wrapper dashboard-wrapper">
+		<div class="my-container">
+			<div class="master-body">
+				<div class="title-container">
+					<h3 class="main-title">{{ 'TCF_DOCUMENT.LBL_TITLE' | translate }}</h3>
+				</div>
+				<div class="content-container tcf-page-container">
+					<div class="searchFormPadding">
+						<div class="row">
+							<div class="col-sm-12">
+								<div class="row">
+									<div class="col-sm-8 col-md-8 col-lg-7">
+										<div class="my-input-group">
+											<div class="styled-radio-container"
+												*ngFor="let item of tcfSearchtypelst;let idx = index">
+												<input type="radio" class="styled-radio" id="{{item.id}}"
+													name="radio-group" [value]="item.id" [checked]="true"
+													(change)="SetSearchTypemodel(item.id)"
+													[(ngModel)]="model.searchTypeId">
+												<label for="{{item.id}}">{{item.name}}</label>
+											</div>
+											<input maxlength="200" [(ngModel)]="model.searchTypeText" type="text" />
+										</div>
+									</div>
+									<div class="col-sm-6 col-md-8 col-xl-5 mobile-margin-top-15">
+										<div class="my-input-group">
+											<div class="styled-radio-container"
+												*ngFor="let item of tcfDatetypelst;let idx = index">
+												<input type="radio" class="styled-radio" id="{{item.id}}"
+													name="radio-group1" [value]="item.id" [checked]="true"
+													(change)="SetSearchDatetype(item.id)"
+													[(ngModel)]="model.dateTypeId">
+												<label for="{{item.id}}">{{item.name}}</label>
+											</div>
+										</div>
+										<div class="row">
+											<div class="my-input-group col-sm-3 col-md-6 col-lg-6">
+												<div class="calendar-wrapper">
+													<input type="text" maxlength="10" container="body"
+														[ngClass]="{ 'is-invalid':  !validator.isValidIf('fromdate',IsDateValidationRequired())}"
+														readonly=readonly [(ngModel)]="model.fromdate" ngbDatepicker
+														#sdf="ngbDatepicker" (click)="sdf.toggle()">
+													<img src="assets/images/cta-close-grey.svg" alt=""
+														class="close-icon" (click)="clearDateInput('Fromdate')"
+														*ngIf="model.fromdate">
+													<img src="assets/images/calendar-icon.svg" alt=""
+														class="calendar-icon" (click)="sdf.toggle()">
+												</div>
+												<div *ngIf="!validator.isValidIf('fromdate',IsDateValidationRequired())"
+													class="invalid-feedback">
+													<div *ngFor="let error of validator.getErrors('fromdate')">{{ error
+														| translate }}</div>
+												</div>
+											</div>
+											<div class="my-input-group col-sm-3 col-md-6 col-lg-6">
+												<div class="calendar-wrapper">
+													<input type="text" maxlength="10" container="body" readonly=readonly
+														[ngClass]="{ 'is-invalid':  !validator.isValidIf('todate',IsDateValidationRequired())}"
+														[(ngModel)]="model.todate" ngbDatepicker #sdt="ngbDatepicker"
+														(click)="sdt.toggle()">
+													<img src="assets/images/cta-close-grey.svg" alt=""
+														class="close-icon" (click)="clearDateInput('Todate')"
+														*ngIf="model.todate">
+													<img src="assets/images/calendar-icon.svg" alt=""
+														class="calendar-icon" (click)="sdt.toggle()">
+												</div>
+												<div *ngIf="!validator.isValidIf('todate',IsDateValidationRequired())"
+													class="invalid-feedback">
+													<div *ngFor="let error of validator.getErrors('todate')">{{ error |
+														translate }}</div>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="col-sm-12">
+								<div class="row marginTop15">
+									<div class="col-sm-12">
+										<div class="row">
+											<div class="col-sm-3 col-md-3 col-lg-3">
+												<div class="my-input-group">
+													<label for="">{{ 'TCF_LIST.LBL_STAGE' | translate }}</label>
+													<ng-select [items]="masterData.statusList" class="multiple"
+														[loading]="masterData.statusLoading" multiple="true"
+														bindLabel="name" bindValue="id" [(ngModel)]="model.statusIds"
+														[clearable]="true" placeholder="Select"></ng-select>
+												</div>
+											</div>
+
+											<div class="col-sm-3 col-md-3 col-lg-3 mobile-margin-top-15">
+												<div class="my-input-group">
+													<label for="">{{ 'TCF_LIST.LBL_CUSTOMER' | translate }}</label>
+
+													<ng-select [items]="masterData.customerList" [virtualScroll]="true"
+														[loading]="masterData.customerLoading" bindLabel="name"
+														bindValue="id"
+														placeholder="--- {{ (masterData.customerList!=null && masterData.customerList.length!=0? 'BOOKING_SUMMARY.LBL_SELECT':'BOOKING_SUMMARY.MSG_NO_DATA' ) | translate }} ---"
+														[typeahead]="masterData.customerInput" [minTermLength]="4"
+														[clearable]="true" (clear)="clearCustomerSelection()"
+														(change)="changeCustomerData()" [(ngModel)]="model.customerIds"
+														[multiple]="true" class="multiple"
+														(scrollToEnd)="getCustomerData(true)" #select>
+														<ng-template ng-option-tmp let-item="item">
+															<!-- <b>{{index}} </b><span>{{item.name}}</span> -->
+															<div class="text-wrap"><span>{{item.name}}</span></div>
+														</ng-template>
+													</ng-select>
+
+												</div>
+											</div>
+
+											<div class="col-sm-3 col-md-3 col-lg-3 mobile-margin-top-15">
+												<div class="my-input-group">
+													<label for="">{{ 'TCF_LIST.LBL_SUPPLIER' | translate }}</label>
+
+													<ng-select [items]="masterData.supplierList" [virtualScroll]="true"
+														[loading]="masterData.supplierLoading" bindLabel="name"
+														bindValue="id"
+														placeholder="--- {{ (masterData.supplierList!=null && masterData.supplierList.length!=0? 'BOOKING_SUMMARY.LBL_SELECT':'BOOKING_SUMMARY.MSG_NO_DATA' ) | translate }} ---"
+														[typeahead]="masterData.supplierInput" [minTermLength]="4"
+														[clearable]="true" (clear)="clearSupplierSelection()"
+														[(ngModel)]="model.supplierIds" [multiple]="true"
+														class="multiple" (scrollToEnd)="getSupplierData(true)" #select>
+														<ng-template ng-option-tmp let-item="item">
+															<!-- <b>{{index}} </b><span>{{item.name}}</span> -->
+															<div class="text-wrap"><span>{{item.name}}</span></div>
+														</ng-template>
+													</ng-select>
+												</div>
+											</div>
+
+											<div class="col-sm-3 col-md-3 col-lg-3 mobile-margin-top-15">
+												<div class="my-input-group">
+													<label for="">{{ 'TCF_LIST.LBL_BUYER' | translate }}</label>
+
+													<ng-select [items]="masterData.buyerList" [virtualScroll]="true"
+														[loading]="masterData.buyerLoading" bindLabel="name"
+														bindValue="id"
+														placeholder="--- {{ (masterData.buyerList!=null && masterData.buyerList.length!=0? 'BOOKING_SUMMARY.LBL_SELECT':'BOOKING_SUMMARY.MSG_NO_DATA' ) | translate }} ---"
+														[typeahead]="masterData.buyerInput" [minTermLength]="4"
+														[clearable]="true" (clear)="clearBuyerSelection()"
+														[(ngModel)]="model.buyerIds" [multiple]="true" class="multiple"
+														(scrollToEnd)="getBuyerData(true)" #select>
+														<ng-template ng-option-tmp let-item="item">
+															<!-- <b>{{index}} </b><span>{{item.name}}</span> -->
+															<div class="text-wrap"><span>{{item.name}}</span></div>
+														</ng-template>
+													</ng-select>
+												</div>
+											</div>
+
+
+										</div>
+									</div>
+
+								</div>
+							</div>
+
+
+
+
+							<div class="col-sm-12" *ngIf="toggleFormSection">
+								<div class="row marginTop25">
+
+									<div class="col-sm-3 col-md-3 col-lg-3 mobile-margin-top-15">
+										<div class="my-input-group">
+											<label for="">{{ 'TCF_LIST.LBL_CUSTOMER_CONTACTS' | translate }}</label>
+
+											<ng-select [items]="masterData.customerContactList" [virtualScroll]="true"
+												[loading]="masterData.customerContactLoading" bindLabel="name"
+												bindValue="id"
+												placeholder="--- {{ (masterData.customerContactList!=null && masterData.customerContactList.length!=0? 'BOOKING_SUMMARY.LBL_SELECT':'BOOKING_SUMMARY.MSG_NO_DATA' ) | translate }} ---"
+												[typeahead]="masterData.customerContactInput" [minTermLength]="4"
+												[clearable]="true" (clear)="clearCustomerContactSelection()"
+												[(ngModel)]="model.customerContactIds" [multiple]="true"
+												class="multiple" (scrollToEnd)="getCustomerContactData(true)" #select>
+												<ng-template ng-option-tmp let-item="item">
+													<!-- <b>{{index}} </b><span>{{item.name}}</span> -->
+													<div class="text-wrap"><span>{{item.name}}</span></div>
+												</ng-template>
+											</ng-select>
+										</div>
+									</div>
+
+									<div class="col-sm-3 col-md-3 col-lg-3">
+										<div class="my-input-group">
+											<label for="">{{ 'TCF_LIST.LBL_BUYING_DEPARTMENT' | translate }}</label>
+											<ng-select [items]="masterData.buyerDepartmentList" class="multiple"
+												[loading]="masterData.buyerdepartmentLoading" multiple="true"
+												bindLabel="name" [(ngModel)]="model.buyerDepartmentIds" bindValue="id"
+												[clearable]="true" placeholder="Select"></ng-select>
+										</div>
+									</div>
+
+									<div class="col-sm-3 col-md-3 col-lg-3">
+										<div class="my-input-group">
+											<label for="">{{ 'TCF_LIST.LBL_PRODUCT_CATEGORY' | translate }}</label>
+
+											<ng-select [items]="masterData.productCategoryList" [virtualScroll]="true"
+												[loading]="masterData.productCategoryLoading" bindLabel="name"
+												bindValue="id"
+												placeholder="--- {{ (masterData.productCategoryList!=null && masterData.productCategoryList.length!=0? 'BOOKING_SUMMARY.LBL_SELECT':'BOOKING_SUMMARY.MSG_NO_DATA' ) | translate }} ---"
+												[typeahead]="masterData.productCategoryInput" [minTermLength]="4"
+												[clearable]="true" (clear)="clearProductCategorySelection()"
+												(change)="changeProductCategoryData()"
+												[(ngModel)]="model.productCategoryIds" [multiple]="true"
+												class="multiple" (scrollToEnd)="getProductCategoryData(true)" #select>
+												<ng-template ng-option-tmp let-item="item">
+													<!-- <b>{{index}} </b><span>{{item.name}}</span> -->
+													<div class="text-wrap"><span>{{item.name}}</span></div>
+												</ng-template>
+											</ng-select>
+										</div>
+									</div>
+
+									<div class="col-sm-3 col-md-3 col-lg-3">
+										<div class="my-input-group">
+											<label for="">{{ 'TCF_LIST.LBL_PRODUCT_SUB_CATEGORY' | translate }}</label>
+
+											<ng-select [items]="masterData.productSubCategoryList"
+												[virtualScroll]="true" [loading]="masterData.customerContactLoading"
+												bindLabel="name" bindValue="id"
+												placeholder="--- {{ (masterData.productSubCategoryList!=null && masterData.productSubCategoryList.length!=0? 'BOOKING_SUMMARY.LBL_SELECT':'BOOKING_SUMMARY.MSG_NO_DATA' ) | translate }} ---"
+												[typeahead]="masterData.productSubCategoryInput" [minTermLength]="4"
+												[clearable]="true" (clear)="clearProductSubCategorySelection()"
+												[(ngModel)]="model.productSubCategoryIds" [multiple]="true"
+												class="multiple" (scrollToEnd)="getProductSubCategoryData(true)"
+												#select>
+												<ng-template ng-option-tmp let-item="item">
+													<!-- <b>{{index}} </b><span>{{item.name}}</span> -->
+													<div class="text-wrap"><span>{{item.name}}</span></div>
+												</ng-template>
+											</ng-select>
+										</div>
+									</div>
+								</div>
+								<div class="row marginTop25">
+									<div class="col-sm-3 col-md-3 col-lg-3 mobile-margin-top-15">
+										<div class="my-input-group">
+											<label for="">{{ 'TCF_LIST.LBL_COUNTRY_ORIGIN' | translate }}</label>
+
+											<ng-select [items]="masterData.countryOriginList" [virtualScroll]="true"
+												[loading]="masterData.countryOriginLoading" bindLabel="name"
+												bindValue="id"
+												placeholder="--- {{ (masterData.countryOriginList!=null && masterData.countryOriginList.length!=0? 'BOOKING_SUMMARY.LBL_SELECT':'BOOKING_SUMMARY.MSG_NO_DATA' ) | translate }} ---"
+												[typeahead]="masterData.countryOriginInput" [minTermLength]="4"
+												[clearable]="true" (clear)="clearCountryOriginSelection()"
+												[(ngModel)]="model.countryOriginIds" [multiple]="true" class="multiple"
+												(scrollToEnd)="getCountryOriginData(true)" #select>
+												<ng-template ng-option-tmp let-item="item">
+													<!-- <b>{{index}} </b><span>{{item.name}}</span> -->
+													<div class="text-wrap"><span>{{item.name}}</span></div>
+												</ng-template>
+											</ng-select>
+										</div>
+									</div>
+
+									<div class="col-sm-3 col-md-3 col-lg-3 mobile-margin-top-15">
+										<div class="my-input-group">
+											<label for="">{{ 'TCF_LIST.LBL_COUNTRY_DESTINATION' | translate }}</label>
+
+											<ng-select [items]="masterData.countryDestinationList"
+												[virtualScroll]="true" [loading]="masterData.countryDestinationLoading"
+												bindLabel="name" bindValue="id"
+												placeholder="--- {{ (masterData.countryDestinationList!=null && masterData.countryDestinationList.length!=0? 'BOOKING_SUMMARY.LBL_SELECT':'BOOKING_SUMMARY.MSG_NO_DATA' ) | translate }} ---"
+												[typeahead]="masterData.countryDestinationInput" [minTermLength]="4"
+												[clearable]="true" (clear)="clearCountryDestinationSelection()"
+												[(ngModel)]="model.countryDestinationIds" [multiple]="true"
+												class="multiple" (scrollToEnd)="getCountryDestinationData(true)"
+												#select>
+												<ng-template ng-option-tmp let-item="item">
+													<!-- <b>{{index}} </b><span>{{item.name}}</span> -->
+													<div class="text-wrap"><span>{{item.name}}</span></div>
+												</ng-template>
+											</ng-select>
+										</div>
+									</div>
+
+									<div
+										class="col-sm-3 col-md-6 col-lg-3 mt-lg-0 tablet-margin-top-15 mobile-margin-top-15">
+										<div class="my-input-group">
+											<label for="">{{ 'TCF_LIST.LBL_PICTURE_UPLOADED' | translate }}</label>
+											<div class="row marginTop20">
+												<div class="col-6 styled-checkbox-container">
+													<input class="styled-checkbox" id="styled-checkbox-1"
+														type="checkbox" value="value1">
+													<label class="for-filter"
+														for="styled-checkbox-1"><strong>Uploaded</strong></label>
+												</div>
+											</div>
+										</div>
+									</div>
+
+								</div>
+
+							</div>
+						</div>
+					</div>
+
+					<div class="master-search-cta-container">
+						<div class="column">
+							<button class="tertiary-cta small" (click)="toggleSection()">
+								<span class="icon" *ngIf="!toggleFormSection">+</span>
+								<span class="icon" *ngIf="toggleFormSection">-</span>
+								{{'TCF_DOCUMENT.LBL_ADVANCED_SEARCH' | translate}}
+							</button>
+						</div>
+						<div class="column text-right">
+							<button class="category-cta small mr-2" (click)="reset()">
+								<img src="assets/images/reload-new.svg" alt="reload">
+								<span>{{ 'TCF_DOCUMENT.LBL_RESET' | translate}}</span>
+							</button>
+							<button class="primary-cta small" [disabled]="searchloading || masterData.customerLoading || masterData.supplierLoading || masterData.buyerLoading 
+								|| masterData.productCategoryLoading || masterData.productSubCategoryLoading || masterData.countryOriginLoading  || masterData.countryDestinationLoading
+								|| masterData.statusLoading  || masterData.buyerdepartmentLoading" (click)="SearchDetails()">
+								{{ 'TCF_DOCUMENT.LBL_SEARCH_BTN' | translate }}
+								<span *ngIf="searchloading">
+									<i class="fa fa-refresh fa-spin" aria-hidden="true"></i>
+								</span>
+							</button>
+						</div>
+					</div>
+
+					<div class="result-container"
+						*ngIf="(tcfDocumentResponse.tcfDocumentList && tcfDocumentResponse.tcfDocumentList.length>0)">
+						<div class="record-count">
+
+						</div>
+						<div class="table-container">
+							<table class="pagination-table simple-table">
+								<thead>
+									<tr>
+										<th class="width40 text-center"></th>
+										<!-- <th></th> -->
+										<th class="sorting">{{ 'TCF_DOCUMENT.LBL_TCF_NO' | translate }} </th>
+										<th></th>
+									</tr>
+								</thead>
+								<tbody>
+									<ng-template ngFor let-iteminfo [ngForOf]="tcfDocumentResponse.tcfDocumentList"
+										let-i="index">
+										<tr [ngClass]="(((i+1) % 2)== 0)?'even':'odd'">
+
+											<td class="text-center">
+												<span class="expandable-trigger"
+													(click)=toggleExpandRow($event,i,iteminfo)>+</span>
+											</td>
+											<td class="fontSize14">{{iteminfo.documentName}}</td>
+
+											<td>
+												<button class="secondary-cta x-small"
+													(click)="openModalPopup(documentModel,iteminfo)">{{ 'TCF_DOCUMENT.LBL_UPLOAD_DOCUMENT' | translate }}</button>
+											</td>
+
+										</tr>
+
+
+										<ng-container>
+											<ng-template [ngTemplateOutlet]="tcfDocumentListTemplate"
+												[ngTemplateOutletContext]="{ iteminfo: iteminfo, i:i}">
+											</ng-template>
+										</ng-container>
+									</ng-template>
+
+								</tbody>
+							</table>
+						</div>
+						<div class="pagination-container" *ngIf="model.totalCount">
+							<ngb-pagination (pageChange)="onPager($event)" [pageSize]="model.pageSize"
+								[collectionSize]="model.totalCount" [(page)]="model.index" [maxSize]="5">
+							</ngb-pagination>
+						</div>
+					</div>
+
+					<div class="no-result-container"
+						*ngIf="(tcfDocumentResponse.tcfDocumentList && tcfDocumentResponse.tcfDocumentList.length==0)">
+						<img src="assets/images/no-data.png" alt="" class="icon">
+						<h4 class="title">{{ 'TCF_COMMON.LBL_NO_DATA_FOUND' | translate }}</h4>
+						<p>{{ 'TCF_COMMON.LBL_NO_DATA_MATCH' | translate }}</p>
+						<button class="secondary-cta">{{ 'TCF_COMMON.LBL_CLEAR_SEARCH' | translate }}</button>
+					</div>
+				</div>
+			</div>
+			<div class="footer independent">
+				<div class="column">
+					<p class="text">© 2019 All rights reserved. api - hk.com</p>
+				</div>
+				<div class="column">
+					<ul class="footer-item">
+						<li><a href="">User Guide</a></li>
+						<li><a href="">Contact</a></li>
+						<li><a href="">Help</a></li>
+						<li><a href="">Terms</a></li>
+					</ul>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<ng-template #tcfDocumentListTemplate let-iteminfo="iteminfo" let-i="i">
+	<tr class="expandable-row" [attr.data-expand-id]="'tcfDocumentDetail' + i">
+		<td colspan="8">
+
+			<div class="content-container">
+				<div class="table-container child-table" style="overflow-y: scroll;max-height:500px;">
+					<table class="pagination-table simple-table">
+						<thead>
+							<tr>
+								<th></th>
+								<th class="desktop-hide"></th>
+								<th>{{ 'TCF_DOCUMENT.LBL_ATTACHMENT_NAME' | translate }}</th>
+								<th>{{ 'TCF_DOCUMENT.LBL_V_IND' | translate }}</th>
+								<th>{{ 'TCF_DOCUMENT.LBL_STANDARD' | translate }}</th>
+								<th> {{ 'TCF_DOCUMENT.LBL_DOC_NAME' | translate }} </th>
+								<th>{{ 'TCF_DOCUMENT.LBL_DOC_TYPE' | translate }}</th>
+								<th>{{ 'TCF_DOCUMENT.LBL_DATE_RECEIVED' | translate }}</th>
+								<th>{{ 'TCF_DOCUMENT.LBL_DOC_STATUS' | translate }}</th>
+								<th>{{ 'TCF_DOCUMENT.LBL_COMMENT' | translate }}</th>
+							</tr>
+						</thead>
+						<tbody>
+
+							<tr *ngIf="iteminfo.isPlaceHolderVisible">
+								<td>
+									<div class="table-placeholder-block animate"></div>
+								</td>
+								<td>
+									<div class="table-placeholder-block animate"></div>
+								</td>
+								<td>
+									<div class="table-placeholder-block animate"></div>
+								</td>
+								<td>
+									<div class="table-placeholder-block animate"></div>
+								</td>
+								<td>
+									<div class="table-placeholder-block animate"></div>
+								</td>
+								<td>
+									<div class="table-placeholder-block animate"></div>
+								</td>
+								<td>
+									<div class="table-placeholder-block animate"></div>
+								</td>
+								<td>
+									<div class="table-placeholder-block animate"></div>
+								</td>
+								<td>
+									<div class="table-placeholder-block animate"></div>
+								</td>
+							</tr>
+
+
+							<ng-template ngFor let-documentDetail [ngForOf]="iteminfo.tcfDocumentDetails" let-p="index">
+
+								<tr>
+
+									<td class="Center_Middle">{{p+1}}</td>
+
+									<td> <a style="color: blue;" triggers="mouseenter:mouseleave"
+											(click)="getTCFDocument(documentDetail.attachmentId)"
+											class="right-link">
+											{{documentDetail.attachmentName}}</a></td>
+
+									<td class="text-center">
+										<span *ngIf="documentDetail.trafficColor==trafficLightColor.Red"
+											class="dot-circle red">&nbsp;</span>
+										<span *ngIf="documentDetail.trafficColor==trafficLightColor.Green"
+											class="dot-circle green">&nbsp;</span>
+										<span *ngIf="documentDetail.trafficColor==trafficLightColor.Orange"
+											class="dot-circle orange">&nbsp;</span>
+									</td>
+
+									<td>
+										{{documentDetail.standardStatus}}
+									</td>
+									<td>
+
+										{{documentDetail.docName}}
+									</td>
+
+									<td>
+										{{documentDetail.docType}}
+									</td>
+
+									<td>
+										{{documentDetail.receiveDate}}
+									</td>
+
+									<td>
+										{{documentDetail.status}}
+									</td>
+
+									<td>
+										{{documentDetail.comment}}
+									</td>
+
+
+
+								</tr>
+
+							</ng-template>
+
+						</tbody>
+					</table>
+				</div>
+				<div class="pagination-container child-table">
+					<span class="small"></span>
+					<span class="dark"></span>
+				</div>
+			</div>
+		</td>
+	</tr>
+</ng-template>
+<!-- <app-drawer-menu></app-drawer-menu>
+<app-side-filter [toggleFilter]="filterState"></app-side-filter> -->
+
+<ng-template #documentModel let-modal>
+	<div class="modal-header custom-modal-header">
+		<h4 class="modal-title" id="modal-basic-title">{{tcfDocumentUploadValidator.tcfDocumentUpload.tcfName}}</h4>
+		<button type="button" tabindex="-1" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+			<span aria-hidden="true">&times;</span>
+		</button>
+	</div>
+	<div class="modal-body custom-modal-body">
+		<div class="row">
+			<div class="col-sm-4 mobile-margin-top-15">
+				<div class="my-input-group">
+					<label for="">{{ 'TCF_DETAIL.LBL_UPLOAD_NAME' | translate }}</label>
+					<input [(ngModel)]="tcfDocumentUploadValidator.tcfDocumentUpload.documentName" type="text" value="">
+				</div>
+			</div>
+			<div class="col-sm-8">
+				<div class="my-input-group">
+					<label class="required" for="">{{ 'TCF_DETAIL.LBL_UPLOAD_STANDARD' | translate
+						}}</label>
+					<ng-select [searchable]="true" class="multiple" multiple="true"
+						[items]="tcfDocumentMaster.standardList" bindLabel="name" [clearable]="false" bindValue="id"
+						[hideSelected]="true" placeholder="--- Select ---"
+						[ngClass]="{ 'is-invalid':  !tcfDocumentUploadValidator.documentValidator.isValid('standardIds')}"
+						[(ngModel)]="tcfDocumentUploadValidator.tcfDocumentUpload.standardIds" appendTo="body">
+						<ng-template ng-option-tmp let-item="item">
+							<div class="text-wrap">{{ item.name }}</div>
+						</ng-template>
+					</ng-select>
+					<div *ngIf="!tcfDocumentUploadValidator.documentValidator.isValid('standardIds')"
+						class="invalid-feedback">
+						<div
+							*ngFor="let error of tcfDocumentUploadValidator.documentValidator.getErrors('standardIds')">
+							{{ error |
+							translate
+							}}</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="row marginTop25">
+			<div class="col-sm-4 mobile-margin-top-15">
+				<div class="my-input-group">
+					<label for="">{{ 'TCF_DETAIL.LBL_UPLOAD_TYPE' | translate }}</label>
+					<ng-select [searchable]="true" [items]="tcfDocumentMaster.typeList" bindLabel="name"
+						[clearable]="false" bindValue="id" [hideSelected]="true" placeholder="--- Select ---"
+						[(ngModel)]="tcfDocumentUploadValidator.tcfDocumentUpload.typeId" appendTo="body">
+						<ng-template ng-option-tmp let-item="item">
+							<div class="text-wrap">{{ item.name }}</div>
+						</ng-template>
+					</ng-select>
+				</div>
+			</div>
+			<div class="col-sm-4 mobile-margin-top-15">
+				<div class="my-input-group">
+					<label class="required" for="">{{ 'TCF_DETAIL.LBL_UPLOAD_ISSUE_DATE' | translate
+						}}</label>
+					<div class="calendar-wrapper">
+						<input type="text" maxlength="10" readonly=readonly
+							[ngClass]="{ 'is-invalid':  !tcfDocumentUploadValidator.documentValidator.isValid('issueDate')}"
+							[(ngModel)]="tcfDocumentUploadValidator.tcfDocumentUpload.issueDate" ngbDatepicker
+							#sdf="ngbDatepicker" (click)="sdf.toggle()">
+						<img src="assets/images/calendar-icon.svg" alt="" class="calendar-icon" (click)="sdf.toggle()">
+					</div>
+					<div *ngIf="!tcfDocumentUploadValidator.documentValidator.isValid('issueDate')"
+						class="invalid-feedback">
+						<div *ngFor="let error of tcfDocumentUploadValidator.documentValidator.getErrors('issueDate')">
+							{{ error |
+							translate
+							}}</div>
+					</div>
+				</div>
+			</div>
+			<div class="col-sm-4 mobile-margin-top-15">
+				<div class="my-input-group">
+					<label for="">{{ 'TCF_DETAIL.LBL_UPLOAD_ISSUER' | translate }}</label>
+					<ng-select [searchable]="true" [items]="tcfDocumentMaster.issuerList" bindLabel="name"
+						[clearable]="false" bindValue="id" [hideSelected]="true" placeholder="--- Select ---"
+						[(ngModel)]="tcfDocumentUploadValidator.tcfDocumentUpload.issuerId" appendTo="body">
+						<ng-template ng-option-tmp let-item="item">
+							<div class="text-wrap">{{ item.name }}</div>
+						</ng-template>
+					</ng-select>
+				</div>
+			</div>
+		</div>
+		<div class="row marginTop25">
+			<div class="col-sm-12">
+				<app-drag-drop [fileLimit]="uploadLimit" [fileExtension]="uploadFileExtensions"
+					[fileSizeLimit]="fileSize" (fileUpload)="selectFiles($event)"></app-drag-drop>
+			</div>
+		</div>
+		<ng-container *ngIf="fileAttachments != null && fileAttachments.length>0">
+			<div class="col-sm-12">
+				<div class="drag-drop-files-container">
+					<div class="row col-sm-12">
+						<div class="file col-sm-3" *ngFor="let file of fileAttachments ;  let j = index">
+							<a (click)="getFile(file)">
+								<img src="assets/images/uploaded-file-success.png" class="icon" alt="">
+							</a>
+							<div class="info">
+								<h4 class="file-title">{{file.fileName}}</h4>
+							</div>
+							<img src="assets/images/red-close.svg" alt="" (click)="removeAttachment(j)" class="close">
+						</div>
+					</div>
+				</div>
+			</div>
+		</ng-container>
+	</div>
+	<div class="modal-footer custom-modal-footer">
+		<button type="button" class="secondary-cta" [disabled]="tcfDocumentMaster.uploadTCFDocumentLoading" (click)="modal.close('Save click')">Cancel</button>
+		<button type="button" class="primary-cta" [disabled]="tcfDocumentMaster.uploadTCFDocumentLoading"
+			(click)="uploadTCFDocument()">Upload
+			<span *ngIf="tcfDocumentMaster.uploadTCFDocumentLoading">
+				<i class="fa fa-refresh fa-spin" aria-hidden="true"></i>
+			</span>
+		</button>
+	</div>
+</ng-template>
+
+<div class="loader-overlay" *ngIf="masterData.isProcessLoader">
+	<div class="loader-container">
+	  <img src="assets/images/reload.svg" alt="">
+	  <span>{{'COMMON.LBL_LOADER' | translate}}</span>
+	</div>
+  </div>

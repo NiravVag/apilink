@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" id="Component_51_10" width="16" height="16" viewBox="0 0 16 16">
+    <defs>
+        <style>
+            .cls-3{fill:#4c698d}.cls-4,.cls-5{stroke:none}.cls-5{fill:#fff}
+        </style>
+    </defs>
+    <path id="Rectangle_2006" fill="none" d="M0 0H16V16H0z"/>
+    <g id="noun_receipt_1668842" transform="translate(1.635 .588)">
+        <g id="Group_3002">
+            <g id="Group_3001">
+                <path id="Path_1553" fill="#4c698d" d="M525.559 100h9.36a2.194 2.194 0 0 1 2.178 2.21v12.584l-2.12-1.451-1.61 1.258-1.538-1.246-1.6 1.245-1.582-1.257-2.156 1.445v-13.21a.936.936 0 1 0-1.871 0v2.237h2.325v.631H524v-2.868a1.564 1.564 0 0 1 1.559-1.578zm2.807 4.418v-.631h6.86v.631zm0 1.893v-.631h6.86v.631zm0 1.893v-.631h6.86v.631zm0 1.893v-.631h4.366v.631z" transform="translate(-524 -100)"/>
+                <g id="Group_3008" transform="translate(4.084 3.519)">
+                    <g id="Path_1560" class="cls-3">
+                        <path d="M.641 0h7.6v.645h-7.6z" class="cls-4" transform="translate(-.572)"/>
+                        <path d="M.64 0h7.603v.645H.64V0z" class="cls-5" transform="translate(-.572)"/>
+                    </g>
+                    <g id="Path_1561" class="cls-3">
+                        <path d="M.559-.528h7.685v.67H.559z" class="cls-4" transform="translate(-.559 2.599)"/>
+                        <path d="M.559-.528h7.685v.67H.56v-.67z" class="cls-5" transform="translate(-.559 2.599)"/>
+                    </g>
+                    <g id="Path_1562" class="cls-3">
+                        <path d="M.559-1.067h7.685v.708H.559z" class="cls-4" transform="translate(-.559 5.2)"/>
+                        <path d="M.559-1.067h7.685v.708H.56v-.708z" class="cls-5" transform="translate(-.559 5.2)"/>
+                    </g>
+                    <g id="Path_1563" class="cls-3">
+                        <path d="M.559-1.557h4.847l.071.706H.559z" class="cls-4" transform="translate(-.559 7.792)"/>
+                        <path d="M.559-1.557h4.847l.07.707H.56v-.707z" class="cls-5" transform="translate(-.559 7.792)"/>
+                    </g>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

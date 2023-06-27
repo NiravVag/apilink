@@ -1,0 +1,12 @@
+{
+    "model": "InvoiceCommunicationSaveRequest",
+    "fields": {
+        "comment": [
+            {
+                "type": "required",
+                "fieldType": "T",
+                "ressource": "INVOICE_STATUS.LBL_COMMENT_REQUIRED"
+            }
+        ]
+    }
+}

@@ -1,0 +1,44 @@
+{
+  "model": "UserAccountModel",
+  "fields": {
+      "userName": [
+          {
+            "type": "required",
+            "ressource": "EDIT_USER_ACCOUNT.MSG_USERNAME_REQ"
+          }
+        ],
+        "password": [
+          {
+            "type": "required",
+            "ressource": "EDIT_USER_ACCOUNT.MSG_PASSWORD_REQ"
+          }
+        ],
+        "roles": [
+          {
+            "type": "required",
+            "fieldType": "N",
+            "ressource": "EDIT_USER_ACCOUNT.MSG_ROLE_REQ"
+          }
+        ],
+        "fullname": [
+          {
+            "type": "required",
+            "ressource": "EDIT_USER_ACCOUNT.MSG_FULLNAME_REQ"
+          }
+        ],
+        "contact": [
+          {
+            "type": "required",
+            "fieldType": "N",
+            "ressource": "EDIT_USER_ACCOUNT.CONTACT_REQUIRED"
+          }
+        ],       
+        "primaryEntity": [
+          {
+            "type": "required",
+            "fieldType": "N",
+            "ressource": "EDIT_USER_ACCOUNT.API_ENTITY_REQUIRED"
+          }
+        ]
+  }
+}

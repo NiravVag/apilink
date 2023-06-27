@@ -1,0 +1,13 @@
+{
+    "model": "csConfigSearchModel.model",
+    "fields": {
+      "customerId": [
+        {
+          "type": "required",
+          "fieldType": "N",
+          "ressource": "CS_CONFIG_SUMMARY.MSG_CUSTOMER_REQ"
+        }
+      ]
+    }
+  }
+  

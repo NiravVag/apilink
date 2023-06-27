@@ -1,0 +1,40 @@
+﻿@using DTO.Common; 
+@{
+    ViewData["Title"] = "AdeoFranceInspSummaryTemplate";
+}
+
+@model DTO.Kpi.ExportResult
+
+<xls-sheet name="AdeoFranceInspSummary">
+    <table xls-begin="A:1" style="border-style:solid">
+        <tr style="background-color:#f5f5f5;font-weight:bold;text-align:center">
+            <th>INSPECTION COMPANY</th>
+            <th>SOURCING OFFICE</th>
+            <th>INSPECTION NUMBER</th>
+            <th>INSPECTION DATE</th>
+            <th>SUPPLIER</th>
+            <th>ORDER N°</th>
+            <th>MONTH/YEAR OF ETD</th>
+            <th>EA NS</th>
+            <th>FIRST STATUS</th>
+            <th>Final status - Following PENDING status, ADEO decision</th>
+            <th>DEPARTMENT</th>
+        </tr>
+        @foreach (var item in Model.Data)
+        {
+        <tr>
+            <td width="150px">API</td>
+            <td width="150px"></td>
+            <td width="150px">@item.BookingNo</td>
+            <td width="250px">@item.InspectionReportDate</td>
+            <td width="250px">@Html.Raw(@item.SupplierName)</td>
+            <td width="150px">@Html.Raw(@item.PONumber)</td>
+            <td width="150px"  xls-type="date" xls-format="@ApiCommonData.StandardDateFormat" >@item.Etd</td>
+            <td width="150px">@item.Barcode</td>
+            <td width="150px">@item.ReportStatus</td>
+            <td width="150px">@item.FinalReportStatus</td>
+            <td width="150px">@Html.Raw(@item.DeptCode)</td>
+        </tr>
+        }
+    </table>
+</xls-sheet>

@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" viewBox="0 0 26 26">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: #fff;
+      }
+
+      .cls-2 {
+        fill: rgba(205,45,47,0.05);
+      }
+
+      .cls-2, .cls-3 {
+        stroke: #cd2d2f;
+        stroke-width: 0.5px;
+      }
+
+      .cls-3 {
+        fill: #cd2d2f;
+      }
+
+      .cls-4 {
+        stroke: none;
+      }
+
+      .cls-5 {
+        fill: none;
+      }
+    </style>
+  </defs>
+  <g id="Group_502" data-name="Group 502" transform="translate(-1432 -77)">
+    <g id="Group_546" data-name="Group 546">
+      <circle id="Ellipse_19" data-name="Ellipse 19" class="cls-1" cx="13" cy="13" r="13" transform="translate(1432 77)"/>
+      <g id="Ellipse_25" data-name="Ellipse 25" class="cls-2" transform="translate(1432 77)">
+        <circle class="cls-4" cx="13" cy="13" r="13"/>
+        <circle class="cls-5" cx="13" cy="13" r="12.75"/>
+      </g>
+      <path id="filter" class="cls-3" d="M9.758,0H.912a.416.416,0,0,0-.37.226A.421.421,0,0,0,.575.664L3.815,5.23l0,0A.926.926,0,0,1,4,5.784V9.506a.414.414,0,0,0,.414.416.426.426,0,0,0,.163-.033L6.4,9.195a.394.394,0,0,0,.272-.389V5.784a.926.926,0,0,1,.182-.549l0,0L10.1.664a.421.421,0,0,0,.033-.438A.416.416,0,0,0,9.758,0ZM6.446,4.936a1.434,1.434,0,0,0-.279.848V8.745L4.5,9.378V5.784a1.433,1.433,0,0,0-.28-.848L1.078.5H9.592Zm0,0" transform="translate(1439.504 85)"/>
+    </g>
+  </g>
+</svg>

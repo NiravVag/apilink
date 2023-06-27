@@ -1,0 +1,123 @@
+<div class="main-wrapper">
+  <div class="wrapper dashboard-wrapper">
+    <div class="my-container" style="margin-left:0px">
+      <div class="master-body">
+
+        <div class="content-container">
+          <div class="centerContainerPadding common-filter-container">
+            <div class="row">
+
+              <div class="col-sm-5 col-md-5 col-lg-4">
+                <div class="my-input-group">
+                  <label class="control-label"></label>
+
+                  <app-drag-drop [fileLimit]="uploadLimit" [fileSizeLimit]="fileSize"
+                                 [Bigupload]="false" [SmallUploadImage]="uploadfileimage"
+                                 [SmallUploadTitle]="smallSignatureTitle"
+                                 [SmallUploadButtonText]="smallUploadButtonText"
+                                 [fileExtension]="uploadFileExtensions" (fileUpload)="selectFiles($event)">
+                  </app-drag-drop>
+
+                </div>
+              </div>
+
+              <ng-container *ngIf="purchaseOrderAttachments != null && purchaseOrderAttachments.length>0">
+                <div class="col-lg-3">
+                  <div class="drag-drop-files-container">
+                    <div class="file"
+                         *ngFor="let file of purchaseOrderAttachments ;  let j = index">
+                      <a (click)="getFile(file)">
+                        <img src="assets/images/uploaded-files.svg"
+                             class="icon" alt="">
+                      </a>
+                      <div class="info">
+                        <h4 class="file-title">{{file.fileName}}</h4>
+                      </div>
+                      <img src="assets/images/red-close.svg" alt="" (click)="removeAttachment(j)"
+                           class="close">
+                    </div>
+                  </div>
+                </div>
+              </ng-container>
+
+              <div class="col-sm-4 col-md-4 col-lg-4" style="margin-top:65px;">
+
+                <div (click)="downloadPOSampleFile(_purchaseOrderSampleFile.ImportPOSampleFile)"
+                     class="advanced-search cursor-pointer mr-2" style="text-decoration: underline;">
+                  {{
+'UPLOAD_PURCHASE_ORDER_LITE.LBL_DOWNLOAD_FILE' | translate
+                  }}
+                </div>
+
+                <div (click)="downloadPOSampleFile(_purchaseOrderSampleFile.ImportPODateFormat)"
+                     class="advanced-search cursor-pointer mr-2" style="text-decoration: underline;">
+                  {{
+                          'UPLOAD_PURCHASE_ORDER_LITE.LBL_USER_GUIDE' | translate
+                  }}
+                </div>
+              </div>
+
+            </div>
+
+            <div class="row">
+              <div class="col-lg-12" style="color: red;font-size: 12px">
+                {{'UPLOAD_PURCHASE_ORDER_LITE.LBL_SUPPORT_XLSX' | translate }}
+              </div>
+            </div>
+
+          </div>
+
+          <div style="margin-top:2%" *ngIf="poUploadErrorMessageList && poUploadErrorMessageList.length>0">
+
+            <div style="padding-left: 10px;font-size: 14px;font-weight: bold;">{{'UPLOAD_PURCHASE_ORDER_LITE.LBL_CORRECT_ISSUES' | translate }}</div>
+
+            <ul style="margin-top: 1%;font-size: 14px;">
+              <li *ngFor="let errorMessage of poUploadErrorMessageList;">{{errorMessage}}</li>
+            </ul>
+
+            <div class="table-container" style="overflow-y:scroll;max-height:500px;">
+              <table class="pagination-table clsTablheaderFix">
+                <thead>
+                  <tr>
+                    <th>{{'UPLOAD_PURCHASE_ORDER_LITE.LBL_PO_NUMBER' | translate }}</th>
+                    <th>{{'UPLOAD_PURCHASE_ORDER_LITE.LBL_PRODUCT_REF' | translate }}</th>
+                    <th>{{'UPLOAD_PURCHASE_ORDER_LITE.LBL_PRODUCT_DESC' | translate }}</th>
+                    <th>{{'UPLOAD_PURCHASE_ORDER_LITE.LBL_DEST_COUNTRY' | translate }}</th>
+                    <th>{{'UPLOAD_PURCHASE_ORDER_LITE.LBL_ETD' | translate }}</th>
+                    <th>{{'UPLOAD_PURCHASE_ORDER_LITE.LBL_QUANTITY' | translate }}</th>
+                    <th>{{'UPLOAD_PURCHASE_ORDER_LITE.LBL_COLOR_CODE' | translate }}</th>
+                    <th>{{'UPLOAD_PURCHASE_ORDER_LITE.LBL_COLOR_NAME' | translate }}</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let item of poUploadErrorList;">
+                    <td>{{item.poNumber}}</td>
+                    <td>{{item.productReference}}</td>
+                    <td>{{item.productDescription}}</td>
+                    <td>{{item.destinationCountry}}</td>
+                    <td>{{item.etd}}</td>
+                    <td>{{item.quantity}}</td>
+                    <td>{{item.colorCode}}</td>
+                    <td>{{item.colorName}}</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+          </div>
+        </div>
+
+
+
+
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="loader-overlay" *ngIf="processFileLoading">
+  <div class="loader-container">
+    <img src="assets/images/reload.svg" alt="">
+    <span>{{'COMMON.LBL_LOADER' | translate}}</span>
+  </div>
+</div>

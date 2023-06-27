@@ -1,0 +1,8 @@
+﻿CREATE TABLE HR_FileType
+(
+	Id INT NOT NULL IDENTITY(1,1) PRIMARY KEY,
+	FileTypeName  NVARCHAR(200) NOT NULL,
+	Active BIT NOT NULL,
+    [EntityId] INT NULL, 
+	FOREIGN KEY([EntityId]) REFERENCES [dbo].[AP_Entity](Id)
+)

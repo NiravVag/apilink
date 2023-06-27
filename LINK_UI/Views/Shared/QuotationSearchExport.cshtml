@@ -1,0 +1,179 @@
+﻿
+@*@{
+    ViewData["Title"] = "QuotationSearchExport";
+}
+
+@model DTO.Quotation.QuotationExportData
+
+<xls-sheet name="Quotation Search Summary">
+    <table xls-begin="A:1" style="border-style:solid">
+        <tr style="background-color:#f5f5f5;font-weight:bold;text-align:center">
+            <th>Quotation Number</th>
+            <th>Booking No</th>
+            <th>Customer Booking No</th>
+            <th>Customer</th>
+            <th>Buyer</th>
+            <th>Supplier</th>
+            <th>Factory</th>
+            <th>
+                Country
+            </th>
+            <th>Province</th>
+            <th>City</th>
+            <th>County</th>
+            <th>Quotation Date</th>
+            <th>Service Date</th>
+            <th>Service Type</th>
+            <th>Office</th>
+            <th>Quotation Status</th>
+            <th>Total Man Day</th>
+            <th>Inspection Cost</th>
+            <th>Discount</th>
+            <th>Travel Cost</th>
+            <th>Other Cost</th>
+            <th>Total Fees</th>
+            <th>Currency</th>
+            <th>Bill Paid By</th>
+            <th>Bill Paid By Address</th>
+            <th>Bill Paid By Contact</th>
+            <th>Api Remark</th>
+            <th>Customer Remark</th>
+            <th>Customer Legal name</th>
+            <th>Supplier Legal name</th>
+            <th>Factory Legal name</th>
+            <th>Product Reference</th>
+            <th>Product Description</th>
+            <th>Po Number</th>
+            <th>Container Name</th>
+            <th>Booking Quantity</th>
+            <th>Sample Size</th>
+            <th>Report Result</th>
+            <th>Factory Reference</th>
+            <th>Actual Inspection Date</th>
+            <th>Inspection Status</th>
+            <th>Billing Entity</th>
+            <th>Invoice No</th>
+            <th>Invoice Date</th>
+            <th>Invoice Remarks</th>
+            <th>Payment Term</th>
+            <th>Travel Distance</th>
+            <th>Travel Time</th>
+            <th>Validated By</th>
+            <th>Validated On</th>
+            @foreach (var dfHeaderValue in Model.BookingDFHeaderList)
+            {
+                <th>@dfHeaderValue</th>
+            }
+
+        </tr>
+        @foreach (var item in Model.QuotationExportList)
+        {
+        <tr>
+            <td height="200px" width="250px">@item.QuotationNo</td>
+            <td width="150px">@item.BookingNo </td>
+            <td width="150px">@item.CustomerBookingNo </td>
+            <td width="250px">@item.Customer</td>
+            <td width="100px">@item.BuyerName</td>
+            <td width="100px">@item.Supplier</td>
+            <td width="150px">@item.Factory</td>
+            <td width="150px">@Html.Raw(item.CountryName)</td>
+            <td width="150px">@Html.Raw(item.ProvinceName)</td>
+            <td width="150px">@Html.Raw(item.CityName)</td>
+            <td width="150px">@Html.Raw(item.CountyName)</td>
+            <td width="150px">@item.QuotationDate</td>
+            <td width="150px">@item.ServiceDate </td>
+            <td width="150px">@item.ServiceType </td>
+            <td width="150px">@item.Office</td>
+            <td width="150px">@item.Status</td>
+            <td width="150px" xls-type="number">@item.TotalManDay</td>
+            <td width="150px" xls-type="number">@item.InspectionCost</td>
+            <td width="150px" xls-type="number">@(item.Discount ?? 0)</td>
+            <td width="150px" xls-type="number">@item.TravelCost</td>
+            <td width="150px" xls-type="number">@item.OtherCost</td>
+            <td width="150px" xls-type="number">@item.TotalFees</td>
+            <td width="150px">@item.Currency</td>
+            <td width="150px">@(item.BillPaidBy ?? "-")</td>
+            <td width="250px">@(item.BillPaidByAddress ?? "-")</td>
+            <td width="250px">@(item.BillPaidByContact)</td>
+            <td width="250px">@item.APIRemark</td>
+            <td width="150px">@item.CustomerRemark</td>
+            <td width="150px">@item.CustomerLegalName</td>
+            <td width="150px">@item.SupplierLegalName</td>
+            <td width="150px">@item.FactoryLegalName </td>
+            <td width="150px">@item.ProductReference </td>
+            <td width="150px">@item.ProductDesc</td>
+            <td width="150px">@item.PoNumber </td>
+            <td width="150px">@item.ContainerName </td>
+            <td width="150px">@item.BookingQty</td>
+            <td width="150px">@item.SampleSize</td>
+            <td width="150px">@item.ReportStatus</td>
+            <td width="150px">@item.FactoryReference</td>
+            <td width="150px">@item.ActualInspectionDate </td>
+            <td width="150px">@item.InspectionStatus </td>
+            <td width="150px">@item.BillingEntity</td>
+            <td width="150px">@item.InvoiceNo</td>s
+            <td width="150px">@item.InvoiceDate</td>
+            <td width="150px">@item.InvoiceRemarks</td>
+            <td width="150px">@item.PaymentTerm</td>
+            <td width="150px">@item.Traveldistance</td>
+            <td width="150px">@item.TravelTime</td>
+            <td width="150px">@item.ValidatedByName</td>
+            <td width="150px">@item.ValidatedOn</td>
+            @if (item.bookingDynamicList != null && item.bookingDynamicList.Any())
+            {
+                @foreach (var dfHeaderValue in Model.BookingDFHeaderList)
+                {
+                    var dataExist = item.bookingDynamicList.Where(x => x.DFName == dfHeaderValue).FirstOrDefault();
+                    if (dataExist != null)
+                    {
+                        <td width="150px">@dataExist.DFValue</td>
+                    }
+                    else
+                    {
+                        <td></td>
+                    }
+
+                }
+            }
+
+        </tr>
+            @*foreach (var bookingData in item.bookingDataList)
+                {
+                    <tr style="background-color:#f5f5f5;font-weight:bold;text-align:center">
+                        <th></th>
+                        <th>Booking No</th>
+                        <th>Service Date</th>
+                        <th>Service Type</th>
+                        <th>Product Reference</th>
+                        <th>Po Number</th>
+                        <th>Actual Inspection Date</th>
+                        <th>Inspection Status</th>
+                        @if (bookingData.bookingDynamicList != null && bookingData.bookingDynamicList.Any())
+                        {
+                            foreach (var dynamicData in bookingData.bookingDynamicList)
+                            {
+                                <th>@dynamicData.DFName</th>
+                            }
+                        }
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td>@bookingData.BookingNo</td>
+                        <td>@bookingData.ServiceDate</td>
+                        <td>@bookingData.ServiceType</td>
+                        <td>@bookingData.ProductReference</td>
+                        <td>@bookingData.PoNumber</td>
+                        <td>@bookingData.ActualInspectionDate</td>
+                        <td>@bookingData.InspectionStatus</td>
+                        @if (bookingData.bookingDynamicList != null && bookingData.bookingDynamicList.Any())
+                        {
+                            foreach (var dynamicData in bookingData.bookingDynamicList)
+                            {
+                                <td>@dynamicData.DFValue</td>
+                            }
+                        }
+                    </tr>
+                } 
+        }
+    </table>
+</xls-sheet>*@

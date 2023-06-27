@@ -1,0 +1,13 @@
+﻿@model (DTO.Expense.ExpenseClaim, string)
+<span style="font-size: 13px; font-family: tahoma;">
+    Dear All, <br /><br />
+
+    This is to inform you that expense claim " @Model.Item1.ClaimNo " has been @Model.Item1.Status. Click  <a href="@Model.Item2">here</a> to view expense details.
+
+    <br /><br />
+    Thanks<br />
+    IT-Team
+    <br /><br />
+    <span style="font-style:italic"> Note: - This receipt is auto generated from Link. Please do not reply to this message.</span>
+</span>
+

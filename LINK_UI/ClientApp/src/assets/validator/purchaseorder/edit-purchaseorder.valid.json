@@ -1,0 +1,26 @@
+{
+    "model": "eidt-purchaseorder.model",
+    "fields": {
+      "customerId": [
+        {
+          "type": "required",
+          "fieldType": "A",
+          "ressource": "PURCHASEORDER_SUMMARY.MSG_CUSTOMER_REQ"
+        }
+      ], "pono": [
+        {
+          "type": "required",
+          "fieldType": "A",
+          "ressource": "PURCHASEORDER_SUMMARY.MSG_PONO_REQ"
+        }
+        
+      ],
+      "supplierIds": [
+        {
+          "type": "required",
+          "fieldType": "A",
+          "ressource": "PURCHASEORDER_SUMMARY.MSG_SUPPLIER_REQ"
+        }
+      ]
+    }    
+  }

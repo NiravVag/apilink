@@ -1,0 +1,42 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="40" height="32" viewBox="0 0 40 32">
+    <defs>
+        <clipPath id="clip-path">
+            <path d="M0 0H16.404V20.943H0z" class="cls-1"/>
+        </clipPath>
+        <clipPath id="clip-path-2">
+            <path id="Rectangle_3565" fill="none" stroke="#707070" d="M0 0H20V22H0z" transform="translate(14 8)"/>
+        </clipPath>
+        <linearGradient id="linear-gradient" x1="-.743" x2="-.44" y1=".083" y2=".185" gradientUnits="objectBoundingBox">
+            <stop offset="0" stop-color="#f3f7ff"/>
+            <stop offset="1" stop-color="#cdd9ff"/>
+        </linearGradient>
+        <style>
+            .cls-1{fill:none}.cls-4{fill:#6771dc;stroke:#fff}.cls-9{fill:#fff}.cls-11{stroke:none}
+        </style>
+    </defs>
+    <g id="Bookings" transform="translate(-1380 -534)">
+        <g id="Group_12027" transform="translate(16.6 281)">
+            <g id="Group_12016" transform="translate(1366.4 254)">
+                <path id="Path_4041" fill="url(#linear-gradient)" d="M52.5 57.8H33.984A1.987 1.987 0 0 1 32 55.806V31.923a1.987 1.987 0 0 1 1.984-1.99c5.132 0 4.63-.454 4.63 1.99a.662.662 0 0 0 .661.663h7.936a.662.662 0 0 0 .661-.663V30.6a.662.662 0 0 1 .661-.663H52.5a1.987 1.987 0 0 1 1.984 1.99v23.879A1.987 1.987 0 0 1 52.5 57.8z" transform="translate(-31.307 -28.317)"/>
+                <path id="Path_4042" d="M50.566 57.8H31.99A1.99 1.99 0 0 1 30 55.807V31.924a1.99 1.99 0 0 1 1.99-1.99c4.891 0 4.68-.41 4.644 1.9V31.1h9.288v-.5a.663.663 0 0 1 .663-.663h3.98a1.99 1.99 0 0 1 1.99 1.99v23.88a1.99 1.99 0 0 1-1.989 1.993z" class="cls-4" transform="translate(-30 -28.318)"/>
+                <g id="Repeat_Grid_1">
+                    <g id="Path_4370" fill="#6771dc">
+                        <path d="M15.515 20.486l-7.056-7.43-.368-.388-.362.393-6.843 7.422C.714 20.298.5 19.826.5 19.152V1.896c0-.818.29-1.27.491-1.27l14.423.019c.206 0 .49.434.49 1.25v17.257c0 .679-.216 1.152-.39 1.334z" class="cls-11" transform="translate(3.047 2.365)"/>
+                        <path fill="#fff" d="M1.143 1.126c-.058.111-.143.358-.143.77v17.256c0 .161.015.305.037.43l6.324-6.86.725-.786.736.775 6.541 6.89c.025-.13.04-.28.04-.45V1.897c0-.4-.078-.642-.135-.751L1.143 1.126m-.152-1l14.424.019c.566 0 .989.692.989 1.75v17.257c0 1.059-.46 1.917-1.025 1.917l-7.282-7.67-7.072 7.67C.46 21.069 0 20.211 0 19.152V1.896C0 .836.425.126.991.126z" transform="translate(3.047 2.365)"/>
+                    </g>
+                </g>
+                <path id="Path_4048" fill="#dc67ce" stroke="#fff" stroke-width="0.2px" d="M73.85 54.76l-1.563-1.56a.834.834 0 0 1 1.176-1.18l.975.975 2.018-2.013a.834.834 0 0 1 1.176 1.18l-2.6 2.6a.834.834 0 0 1-1.18 0z" transform="translate(-60.214 -44.604)"/>
+                <g id="Rectangle_2614" fill="#dc67ce" stroke="#fff" transform="translate(5.69)">
+                    <rect width="11.523" height="4.116" class="cls-11" rx="2"/>
+                    <rect width="10.523" height="3.116" x=".5" y=".5" class="cls-1" rx="1.5"/>
+                </g>
+                <path id="Path_4371" d="M46.358 71.327H42.4c-.219 0-.4-.3-.4-.663s.177-.663.4-.663h3.961c.219 0 .4.3.4.663s-.185.663-.403.663z" class="cls-9" transform="translate(-36.841 -63.318)"/>
+                <path id="Path_4373" d="M46.358 71.327H42.4c-.219 0-.4-.3-.4-.663s.177-.663.4-.663h3.961c.219 0 .4.3.4.663s-.185.663-.403.663z" class="cls-9" transform="translate(-36.841 -59.803)"/>
+                <g id="Mask_Group_156" clip-path="url(#clip-path-2)">
+                    <path id="Path_4369" d="M14.278 6.821h-.03a1.643 1.643 0 0 0-1.108.421 1.728 1.728 0 0 0-1.6-1.171 1.664 1.664 0 0 0-1.189.511 1.7 1.7 0 0 0-1.52-.972H8.8a1.56 1.56 0 0 0-.978.326V1.809A1.772 1.772 0 0 0 6.1 0a1.768 1.768 0 0 0-1.72 1.808L4.372 10l-.464-.563a2.338 2.338 0 0 0-1.652-.868 2.3 2.3 0 0 0-1.723.61l-.4.334a.359.359 0 0 0-.089.441l3.918 7.536a4.043 4.043 0 0 0 3.56 2.237h4.418A4.208 4.208 0 0 0 16 15.391v-2.509-4.265a1.76 1.76 0 0 0-1.722-1.796zM7.522 19.009z" class="cls-4" transform="rotate(-25 37.614 -19.11)"/>
+                </g>
+            </g>
+        </g>
+        <path id="Rectangle_2676" d="M0 0H40V32H0z" class="cls-1" transform="translate(1380 534)"/>
+    </g>
+</svg>

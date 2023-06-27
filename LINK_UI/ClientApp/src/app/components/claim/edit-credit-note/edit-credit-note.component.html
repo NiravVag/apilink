@@ -1,0 +1,361 @@
+<div class="main-wrapper">
+    <div class="wrapper dashboard-wrapper">
+        <div class="my-container">
+            <div class="master-body">
+                <div class="title-container">
+                    <div class="header-back-button">
+                        <img src="assets/images/back-red.png" alt="back" (click)="this.return('editClaim/credit-note-summary');">
+                    </div>
+                    <h3 class="main-title">{{title | translate}}
+                        <span class="audit-id" *ngIf="masterModel.oldCreditNo">
+                            {{masterModel.oldCreditNo}} </span>
+                    </h3>
+                </div>
+                <div class="content-container">
+                    <div class="formPadding">
+                        <div class="row">
+                            <div class="col-sm-4 mobile-margin-top-15">
+                                <div class="my-input-group">
+                                    <a (click)="checkCreditNoExists()" *ngIf="masterModel.isAccountingCreditNoteRole && model.creditNo && masterModel.oldCreditNo!==model.creditNo" class="right-link">
+                                        <img src="assets/images/red-question.png" style="width: 13px;" alt=""> {{ 'EDIT_CREDIT_NOTE.LBL_CHECK' | translate }}
+                                    </a>
+                                    <label class="required">{{ 'EDIT_CREDIT_NOTE.LBL_CREDIT_NO' | translate }}</label>
+                                    <input maxlength="200" [(ngModel)]="model.creditNo" [disabled]="!masterModel.isAccountingCreditNoteRole" placeholder="{{ 'EDIT_CREDIT_NOTE.LBL_CREDIT_NO' | translate }}" [ngClass]="{ 'is-invalid':  !validator.isValid('creditNo')}" type="text" />
+                                    <div *ngIf="!validator.isValid('creditNo')" class="invalid-feedback">
+                                        <div *ngFor="let error of validator.getErrors('creditNo')">
+                                            {{ error | translate }}
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                            <div class="col-sm-4 mobile-margin-top-15">
+                                <div class="my-input-group">
+                                    <label class="required">{{'EDIT_CREDIT_NOTE.LBL_CREDIT_DATE' | translate
+                                        }}</label>
+                                    <div class="calendar-wrapper">
+                                        <input type="text" maxlength="10" container="body" [disabled]="!masterModel.isAccountingCreditNoteRole" readonly=readonly placeholder="{{ 'EDIT_CREDIT_NOTE.LBL_CREDIT_DATE' | translate }}" [ngClass]="{'is-invalid': !validator.isValid('creditDate')}" [(ngModel)]="model.creditDate"
+                                            ngbDatepicker #creditDate="ngbDatepicker" (click)="creditDate.toggle()">
+                                        <img src="assets/images/cta-close-grey.svg" alt="" class="close-icon" (click)="clearDateInput('creditDate')" *ngIf="model.creditDate">
+                                        <img src="assets/images/calendar-icon.svg" alt="" class="calendar-icon" (click)="creditDate.toggle()">
+                                    </div>
+                                    <div *ngIf="!validator.isValid('creditDate')" class="invalid-feedback">
+                                        <div *ngFor="let error of validator.getErrors('creditDate')">
+                                            {{ error | translate }}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-4 mobile-margin-top-15">
+                                <div class="my-input-group">
+                                    <label class="required">{{'EDIT_CREDIT_NOTE.LBL_POST_DATE' | translate}}</label>
+                                    <div class="calendar-wrapper">
+                                        <input type="text" maxlength="10" container="body" [disabled]="!masterModel.isAccountingCreditNoteRole" readonly=readonly placeholder="{{ 'EDIT_CREDIT_NOTE.LBL_POST_DATE' | translate }}" [ngClass]="{'is-invalid': !validator.isValid('postDate')}" [(ngModel)]="model.postDate"
+                                            ngbDatepicker #postDate="ngbDatepicker" (click)="postDate.toggle()">
+                                        <img src="assets/images/cta-close-grey.svg" alt="" class="close-icon" (click)="clearDateInput('postDate')" *ngIf="model.postDate">
+                                        <img src="assets/images/calendar-icon.svg" alt="" class="calendar-icon" (click)="postDate.toggle()">
+                                    </div>
+                                    <div *ngIf="!validator.isValid('postDate')" class="invalid-feedback">
+                                        <div *ngFor="let error of validator.getErrors('postDate')">
+                                            {{ error | translate }}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row marginTop15">
+                            <div class="col-sm-4 col-md-6 col-lg-4 mobile-margin-top-15">
+                                <div class="my-input-group">
+                                    <label class="required">{{'EDIT_CREDIT_NOTE.LBL_CUSTOMER' | translate}}</label>
+                                    <div class="calendar-wrapper">
+                                        <input type="text" maxlength="10" [disabled]="!masterModel.isAccountingCreditNoteRole" placeholder="{{ 'EDIT_CREDIT_NOTE.LBL_CUSTOMER' | translate }}" [ngClass]="{'is-invalid': !validator.isValid('billedTo')}" [(ngModel)]="model.billedTo">
+                                    </div>
+                                    <div *ngIf="!validator.isValid('billedTo')" class="invalid-feedback">
+                                        <div *ngFor="let error of validator.getErrors('billedTo')">
+                                            {{ error | translate }}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-4 col-md-6 col-lg-4">
+                                <div class="my-input-group">
+                                    <label>{{'EDIT_CREDIT_NOTE.LBL_ADDRESS' | translate }}</label>
+                                    <ng-select [closeOnSelect]="true" [searchable]="true" [disabled]="!masterModel.isAccountingCreditNoteRole" [items]="masterModel.customerAddressList" [(ngModel)]="masterModel.billedAddress" bindLabel="name" bindValue="name" (change)="setAddress($event)"
+                                        placeholder="--- {{(masterModel.customerAddressList && masterModel.customerAddressList.length>0? 'COMMON.LBL_SELECT':'COMMON.LBL_NO_DATA')  | translate }} ---" [loading]="masterModel.customerAddressLoading">
+                                        <ng-template ng-option-tmp let-item="item">
+                                            <div class="text-wrap">{{ item.name }}</div>
+                                        </ng-template>
+                                    </ng-select>
+
+                                </div>
+                            </div>
+                            <div class="col-sm-4 col-md-6 col-lg-4">
+                                <div class="my-input-group">
+                                    <label>{{ 'EDIT_CREDIT_NOTE.LBL_CREDIT_TYPE' |
+                                        translate }}</label>
+                                    <ng-select [items]="masterModel.creditTypeList" [disabled]="!masterModel.isAccountingCreditNoteRole" [(ngModel)]=" model.creditTypeId" [closeOnSelect]="true " [searchable]="true " bindLabel="name" bindValue="id" placeholder="--- {{(masterModel.creditTypeList && masterModel.creditTypeList.length>0? 'COMMON.LBL_SELECT':'COMMON.LBL_NO_DATA') | translate }} ---"
+                                        [ngClass]="{ 'is-invalid': !validator.isValid('creditTypeId')}" [loading]="masterModel.customerContactsLoading">
+                                        <ng-template ng-option-tmp let-item="item">
+                                            <div class="text-wrap">{{ item.name }}</div>
+                                        </ng-template>
+                                    </ng-select>
+                                    <div *ngIf="!validator.isValid('creditTypeId')" class="invalid-feedback">
+                                        <div *ngFor="let error of validator.getErrors('creditTypeId')">
+                                            {{ error | translate }}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row marginTop15">
+                            <div class="col-sm-8 col-md-8 col-lg-8">
+                                <div class="my-input-group">
+                                    <label>{{ 'EDIT_CREDIT_NOTE.LBL_BILLED_ADDRESS' | translate }}</label>
+                                    <textarea [ngClass]="{ 'is-invalid': !validator.isValid('billedAddress')}" [disabled]="!masterModel.isAccountingCreditNoteRole" [(ngModel)]="model.billedAddress"></textarea>
+
+                                    <div *ngIf="!validator.isValid('billedAddress')" class="invalid-feedback">
+                                        <div *ngFor="let error of validator.getErrors('billedAddress')">
+                                            {{ error | translate }}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row marginTop15">
+                            <div class="col-sm-4 col-md-6 col-lg-4">
+                                <div class="my-input-group">
+                                    <label>{{ 'EDIT_CREDIT_NOTE.LBL_INVOICE_CONTACT' |
+                                        translate }}</label>
+                                    <ng-select [items]="masterModel.customerContactList" [disabled]="!masterModel.isAccountingCreditNoteRole" [(ngModel)]="model.contactPersons" [closeOnSelect]="true" [searchable]="true" bindLabel="name" bindValue="id" [multiple]="true" class="multiple"
+                                        placeholder="--- {{(masterModel.customerContactList && masterModel.customerContactList.length>0? 'COMMON.LBL_SELECT':'COMMON.LBL_NO_DATA')  | translate }} ---" [ngClass]="{ 'is-invalid':  !validator.isValid('contactPersons')}"
+                                        [loading]="masterModel.customerContactsLoading">
+                                        <ng-template ng-option-tmp let-item="item">
+                                            <div class="text-wrap">{{ item.name }}</div>
+                                        </ng-template>
+                                    </ng-select>
+                                    <div *ngIf="!validator.isValid('contactPersons')" class="invalid-feedback">
+                                        <div *ngFor="let error of validator.getErrors('contactPersons')">
+                                            {{ error | translate }}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-sm-4 col-md-4 col-lg-4 mobile-margin-top-15">
+                                <div class="my-input-group">
+                                    <label>{{ 'EDIT_CREDIT_NOTE.LBL_PAYMENT_TERM' | translate }}</label>
+                                    <ng-select [items]="masterModel.paymentTermList" [disabled]="!masterModel.isAccountingCreditNoteRole" [(ngModel)]="model.paymentTerms" [closeOnSelect]="true" [searchable]="true" bindLabel="name" bindValue="name" (change)="onChangePaymentType($event);"
+                                        [ngClass]="{'is-invalid':!validator.isValid('paymentTerms')}" placeholder="--- {{(masterModel.paymentTermList && masterModel.paymentTermList.length>0? 'COMMON.LBL_SELECT':'COMMON.LBL_NO_DATA')  | translate }} ---" [loading]="masterModel.paymentTermLoading">
+                                        <ng-template ng-option-tmp let-item="item">
+                                            <div class="text-wrap">{{ item.name }}</div>
+                                        </ng-template>
+                                    </ng-select>
+                                    <div *ngIf="!validator.isValid('paymentTerms')" class="invalid-feedback">
+                                        <div *ngFor="let error of validator.getErrors('paymentTerms')">
+                                            {{ error | translate }}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-4 col-md-4 col-lg-4 mobile-margin-top-15">
+                                <div class="my-input-group">
+                                    <label>{{ 'EDIT_CREDIT_NOTE.LBL_PAYMENT_DURATION' | translate }}</label>
+                                    <input maxlength="200" [ngClass]="{'is-invalid':!validator.isValid('paymentDuration')}" [disabled]="!masterModel.isAccountingCreditNoteRole" placeholder="{{ 'EDIT_CREDIT_NOTE.LBL_PAYMENT_DURATION' | translate }}" (paste)="onPaste($event)" min="1" max="999"
+                                        (keypress)="numericValidation($event,3)" [(ngModel)]="model.paymentDuration" type="text" />
+                                    <div *ngIf="!validator.isValid('paymentDuration')" class="invalid-feedback">
+                                        <div *ngFor="let error of validator.getErrors('paymentDuration')">
+                                            {{ error | translate }}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row marginTop15">
+                            <div class="col-sm-4 col-md-4 col-lg-4 mobile-margin-top-15">
+                                <div class="my-input-group">
+                                    <label class="required" for="">{{
+                                        "EDIT_CREDIT_NOTE.LBL_CURRENCY" | translate
+                                        }}</label>
+                                    <ng-select [items]="masterModel.currencyList" [virtualScroll]="true" [disabled]="!masterModel.isAccountingCreditNoteRole" [loading]="masterModel.currencyLoading" bindLabel="name" bindValue="id" [ngClass]="{'is-invalid':!validator.isValid('currencyId')}"
+                                        placeholder="--- {{ (masterModel.currencyList!=null && masterModel.currencyList.length!=0? 'BOOKING_SUMMARY.LBL_SELECT':'BOOKING_SUMMARY.MSG_NO_DATA' ) | translate }} ---" appendTo="body" [(ngModel)]="model.currencyId"
+                                        [searchable]="true" [multiple]="false" #select>
+                                        <ng-template ng-option-tmp let-item="item">
+                                            <div class="text-wrap"><span>{{item.name}}</span></div>
+                                        </ng-template>
+                                    </ng-select>
+                                    <div *ngIf="!validator.isValid('currencyId')" class="invalid-feedback">
+                                        <div *ngFor="let error of validator.getErrors('currencyId')">
+                                            {{ error | translate }}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-4 col-md-6 col-lg-4">
+                                <div class="my-input-group">
+                                    <label class="required">{{ 'EDIT_CREDIT_NOTE.LBL_BILLING' |
+                                        translate }}</label>
+                                    <ng-select [closeOnSelect]="true" [searchable]="true" [disabled]="!masterModel.isAccountingCreditNoteRole" [items]="masterModel.billingEntityList" [(ngModel)]="model.billingEntity" bindLabel="name" bindValue="id" (change)="onChangeBillingEntity($event);"
+                                        (clear)="onClearBillingEntity();" [ngClass]="{'is-invalid':!validator.isValid('billingEntity')}" placeholder="--- {{(masterModel.billingEntityList && masterModel.billingEntityList.length>0? 'COMMON.LBL_SELECT':'COMMON.LBL_NO_DATA')  | translate }} ---"
+                                        [loading]="masterModel.billingLoading">
+                                        <ng-template ng-option-tmp let-item="item">
+                                            <div class="text-wrap">{{ item.name }}</div>
+                                        </ng-template>
+                                    </ng-select>
+                                    <div *ngIf="!validator.isValid('billingEntity')" class="invalid-feedback">
+                                        <div *ngFor="let error of validator.getErrors('billingEntity')">
+                                            {{ error | translate }}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-4 col-md-6 col-lg-4">
+                                <div class="my-input-group">
+                                    <label class="required">{{ 'EDIT_CREDIT_NOTE.LBL_BANK' |
+                                        translate}}</label>
+                                    <ng-select [closeOnSelect]="true" [searchable]="true" [disabled]="!masterModel.isAccountingCreditNoteRole" [items]="masterModel.bankList" [(ngModel)]="model.bankId" bindLabel="name" bindValue="id" [ngClass]="{'is-invalid':!validator.isValid('bankId')}"
+                                        placeholder="--- {{(masterModel.bankList && masterModel.bankList.length>0? 'COMMON.LBL_SELECT':'COMMON.LBL_NO_DATA')  | translate }} ---" [loading]="masterModel.bankLoading">
+                                        <ng-template ng-option-tmp let-item="item">
+                                            <div class="text-wrap">{{item.name }}</div>
+                                        </ng-template>
+                                    </ng-select>
+                                    <div *ngIf="!validator.isValid('bankId')" class="invalid-feedback">
+                                        <div *ngFor="let error of validator.getErrors('bankId')">
+                                            {{ error | translate }}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row marginTop15">
+                            <div class="col-sm-4 col-md-4 col-lg-4 mobile-margin-top-15">
+                                <div class="my-input-group">
+                                    <label class="required" for="">{{"EDIT_CREDIT_NOTE.LBL_OFFICE" | translate
+                                        }}</label>
+                                    <ng-select [items]="masterModel.officeList" [virtualScroll]="true" [disabled]="!masterModel.isAccountingCreditNoteRole" [loading]="masterModel.officeLoading" bindLabel="name" bindValue="id" [ngClass]="{'is-invalid':!validator.isValid('officeId')}" placeholder="--- {{ (masterModel.officeList!=null && masterModel.officeList.length!=0? 'COMMON.LBL_SELECT':'BOOKING_SUMMARY.MSG_NO_DATA' ) | translate }} ---"
+                                        appendTo="body" [(ngModel)]="model.officeId" [searchable]="true" [multiple]="false" #select>
+                                        <ng-template ng-option-tmp let-item="item">
+                                            <div class="text-wrap"><span>{{item.name}}</span></div>
+                                        </ng-template>
+                                    </ng-select>
+                                    <div *ngIf="!validator.isValid('officeId')" class="invalid-feedback">
+                                        <div *ngFor="let error of validator.getErrors('officeId')">
+                                            {{ error | translate }}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-4 col-md-4 col-lg-4 mobile-margin-top-15">
+                                <div class="my-input-group">
+                                    <label>{{'EDIT_CREDIT_NOTE.LBL_SUBJECT' | translate}}</label>
+                                    <input type="text" maxlength="10" [disabled]="!masterModel.isAccountingCreditNoteRole" placeholder="{{ 'EDIT_CREDIT_NOTE.LBL_SUBJECT' | translate }}" [ngClass]="{'is-invalid': !validator.isValid('subject')}" [(ngModel)]="model.subject">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row marginTop25">
+                            <div class="col-12 col-sm-12">
+                                <div class="table-container" style="overflow-x: scroll;">
+                                    <table class="pagination-table bordered">
+                                        <thead>
+                                            <tr>
+                                                <th>
+                                                    {{'EDIT_CREDIT_NOTE.LBL_INVOICE_NO' | translate}}
+                                                </th>
+                                                <th>{{'EDIT_CREDIT_NOTE.LBL_CLAIM_NO' | translate}}</th>
+                                                <th>{{'EDIT_CREDIT_NOTE.LBL_BOOKING_NO' | translate}}</th>
+                                                <th>{{'EDIT_CREDIT_NOTE.LBL_INSPECTION_DATE' | translate}}
+                                                </th>
+                                                <th>{{'EDIT_CREDIT_NOTE.LBL_PRODUCT' | translate}}</th>
+                                                <th>{{'EDIT_CREDIT_NOTE.LBL_PRODUCT_CATEGORY' | translate}}</th>
+                                                <th>{{'EDIT_CREDIT_NOTE.LBL_PRODUCT_SUB_CATEGORY' | translate}}</th>
+                                                <th>{{'EDIT_CREDIT_NOTE.LBL_PRODUCT_SUB_CATEGORY2' | translate}}</th>
+                                                <th>{{'EDIT_CREDIT_NOTE.LBL_INSPECTION_FEE' | translate}}</th>
+                                                <th class="required">{{'EDIT_CREDIT_NOTE.LBL_REFUND_AMOUNT' | translate}}
+                                                </th>
+                                                <th>{{'EDIT_CREDIT_NOTE.LBL_SORTING_AMOUNT' | translate}}
+                                                </th>
+                                                <th>{{'EDIT_CREDIT_NOTE.LBL_OFFICE' | translate}}</th>
+                                                <th>{{'EDIT_CREDIT_NOTE.LBL_REMARKS' | translate}}</th>
+                                                <th></th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <ng-container *ngFor="let item of creditNoteItemValidator;let i=index">
+                                                <tr>
+                                                    <td>{{item.creditNote.invoiceNo}}</td>
+                                                    <td>{{item.creditNote.claimNo}}</td>
+                                                    <td>{{item.creditNote.inspectionId}}</td>
+                                                    <td>{{item.creditNote.inspectionDate}}</td>
+                                                    <td>
+                                                        <div *ngIf="item.creditNote.product && item.creditNote.product.length>0">
+                                                            {{item.creditNote.product[0]}}
+                                                            <div>
+                                                                <ng-template #productContent>
+                                                                    <div style="width: 200px;">
+                                                                        {{item.creditNote.product.join(',')}}
+                                                                    </div>
+                                                                </ng-template>
+                                                                <a *ngIf="item.creditNote.product && item.creditNote.product.length>1" style="color: blue;" [ngbPopover]="productContent" triggers="mouseenter:mouseleave" placement="right" popoverTitle="Products">
+                                                                    More...
+                                                                </a>
+                                                            </div>
+                                                        </div>
+                                                    </td>
+                                                    <td>{{item.creditNote.productCategory}}</td>
+                                                    <td>{{item.creditNote.productSubCategory}}</td>
+                                                    <td>{{item.creditNote.productSubCategory2}}</td>
+                                                    <td>{{item.creditNote.inspectionFee}} USD</td>
+                                                    <td>
+                                                        <input [(ngModel)]="item.creditNote.refundAmount" [disabled]="!masterModel.isAccountingCreditNoteRole" (keypress)="numericValidation($event,8)" (paste)="onPaste($event)" (input)="validateDecimal(item.limit,'refundAmount')" min="1" max="99999999" [ngClass]="{'is-invalid':!item.validator.isValid('refundAmount')}"
+                                                            type="number" placeholder="{{ 'EDIT_CREDIT_NOTE.LBL_REFUND_AMOUNT' | translate }}">
+                                                        <div *ngIf="!item.validator.isValid('refundAmount')" class="invalid-feedback">
+                                                            <div *ngFor="let error of item.validator.getErrors('refundAmount')">
+                                                                {{ error | translate }}
+                                                            </div>
+                                                        </div>
+                                                    </td>
+                                                    <td>
+                                                        <input [(ngModel)]="item.creditNote.sortAmount" [disabled]="!masterModel.isAccountingCreditNoteRole" (keypress)="numericValidation($event,8)" (paste)="onPaste($event)" min="1" max="99999999" (input)="validateDecimal(item.limit,'sortAmount')"
+                                                            type="number" placeholder="{{ 'EDIT_CREDIT_NOTE.LBL_SORTING_AMOUNT' | translate }}">                                                      
+                                                    </td>
+                                                    <td>{{item.creditNote.office}}</td>
+                                                    <td>
+                                                        <input type="text" [(ngModel)]="item.creditNote.remarks" [disabled]="!masterModel.isAccountingCreditNoteRole" [ngClass]="{'is-invalid':!item.validator.isValid('remarks')}" placeholder="{{ 'EDIT_CREDIT_NOTE.LBL_REMARKS' | translate }}">
+                                                        <div *ngIf="!item.validator.isValid('remarks')" class="invalid-feedback">
+                                                            <div *ngFor="let error of item.validator.getErrors('remarks')">
+                                                                {{ error | translate }}
+                                                            </div>
+                                                        </div>
+                                                    </td>
+                                                    <td>
+                                                        <button *ngIf="creditNoteItemValidator.length!==1" [disabled]="!masterModel.isAccountingCreditNoteRole" (click)="removeItem(i)" class="secondary-cta x-small" style="margin-left:10px">
+                                                            <i class="fa fa-trash"></i>
+                                                        </button>
+                                                    </td>
+                                                </tr>
+                                            </ng-container>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-action-container ">
+                        <button id="btnSearch " class="primary-cta small " [disabled]="saveloading" *ngIf="hideSubmit || masterModel.isAccountingCreditNoteRole" style="margin-right: 5px; " (click)="save() ">
+                            {{ 'COMMON.LBL_SUBMIT' | translate }}
+                            <span *ngIf="saveloading ">
+                                <i class="fa fa-refresh fa-spin " aria-hidden="true "></i>
+                            </span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="loader-overlay" *ngIf="masterModel.isCreditNoLoading">
+            <div class="loader-container">
+                <img src="assets/images/reload.svg" alt="">
+                <span>{{'COMMON.LBL_LOADER' | translate}}</span>
+            </div>
+        </div>
+
+    </div>
+</div>

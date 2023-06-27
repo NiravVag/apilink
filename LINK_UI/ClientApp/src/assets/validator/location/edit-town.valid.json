@@ -1,0 +1,18 @@
+{
+    "model": "EditTownModel",
+    "fields": {
+        "townName": [
+            {
+                "type": "required",
+                "ressource": "EDIT_TOWN.MSG_TOWN_NAME_REQ"
+            }
+        ],
+        "countyId": [
+            {
+                "type": "required",
+                "fieldType": "N",
+                "ressource": "EDIT_TOWN.MSG_COUNTY_NAME_REQ"
+            }
+        ]
+    }
+}

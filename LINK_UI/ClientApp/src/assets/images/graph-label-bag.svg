@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 22 22">
+    <defs>
+        <style>
+            .cls-2{fill:#2c3e50}.cls-5{fill:#35495e}.cls-7{fill:#fff}
+        </style>
+    </defs>
+    <g id="Group_11153" data-name="Group 11153" transform="translate(-708 -721)">
+        <g id="Group_11151" data-name="Group 11151" transform="translate(-273 28)">
+            <g id="Group_11136" data-name="Group 11136" transform="translate(46 -1)">
+                <g id="Group_11127" data-name="Group 11127">
+                    <g id="Group_11123" data-name="Group 11123">
+                        <path id="Rectangle_2317" fill="none" d="M0 0H22V22H0z" data-name="Rectangle 2317" transform="translate(935 694)"/>
+                    </g>
+                </g>
+            </g>
+        </g>
+        <g id="Page-1" transform="translate(712.137 721)">
+            <g id="_013---Suitcase" data-name="013---Suitcase" transform="translate(.05 .373)">
+                <path id="Shape" d="M11.379 6.708A.428.428 0 0 1 11 6.244V3.463a.386.386 0 1 1 .757 0v2.781a.428.428 0 0 1-.378.464z" class="cls-2" transform="translate(-6.836 -2.873)"/>
+                <path id="Shape-2" d="M23.379 6.708A.428.428 0 0 1 23 6.244V3.463a.386.386 0 1 1 .757 0v2.781a.428.428 0 0 1-.378.464z" class="cls-2" data-name="Shape" transform="translate(-14.293 -2.873)"/>
+                <path id="Shape-3" fill="#68b8dc" d="M11.357 10H2.271A2.271 2.271 0 0 0 0 12.271v12.114a2.271 2.271 0 0 0 2.271 2.271v.757a.757.757 0 1 0 1.514 0v-.757h6.057v.757a.757.757 0 1 0 1.514 0v-.757a2.271 2.271 0 0 0 2.271-2.271V12.271A2.271 2.271 0 0 0 11.357 10z" data-name="Shape" transform="translate(0 -6.544)"/>
+                <rect id="Rectangle-path" width="10" height="15" fill="#84c4e1" rx="1" transform="translate(1.813 3.627)"/>
+                <path id="Shape-4" d="M6 54h1.514v.757a.757.757 0 0 1-1.514 0z" class="cls-5" data-name="Shape" transform="translate(-3.729 -33.887)"/>
+                <path id="Shape-5" d="M26 54h1.514v.757a.757.757 0 0 1-1.514 0z" class="cls-5" data-name="Shape" transform="translate(-16.158 -33.887)"/>
+                <path id="Shape-6" fill="#9fd0e7" d="M9.3 22a5.3 5.3 0 0 1 5.3 5.3v4.164a1.136 1.136 0 0 1-1.136 1.136H5.136A1.136 1.136 0 0 1 4 31.464V27.3A5.3 5.3 0 0 1 9.3 22z" data-name="Shape" transform="translate(-2.486 -14.001)"/>
+                <path id="Shape-7" d="M14.95 29.543a.379.379 0 0 1-.379-.379 3.407 3.407 0 1 0-6.814 0 .379.379 0 0 1-.757 0 4.164 4.164 0 1 1 8.328 0 .379.379 0 0 1-.378.379z" class="cls-7" data-name="Shape" transform="translate(-4.35 -15.865)"/>
+                <path id="Shape-8" fill="#3d324c" d="M14.464 13.757H5.379a.379.379 0 1 1 0-.757h9.085a.379.379 0 0 1 0 .757z" data-name="Shape" transform="translate(-3.107 -8.408)"/>
+                <path id="Shape-9" d="M7.379 14.893A.379.379 0 0 1 7 14.514v-1.135a.379.379 0 1 1 .757 0v1.136a.379.379 0 0 1-.378.378z" class="cls-7" data-name="Shape" transform="translate(-4.35 -8.408)"/>
+                <rect id="Rectangle-path-2" width="6" height="1" class="cls-5" data-name="Rectangle-path" rx=".5" transform="translate(3.813 -.373)"/>
+            </g>
+        </g>
+    </g>
+</svg>

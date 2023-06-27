@@ -1,0 +1,63 @@
+{
+    "model": "InvoiceGenerateModel",
+    "fields": {
+        "customerId": [
+            {
+                "type": "required",
+                "fieldType": "N",
+                "ressource": "INVOICE_GENERATE.MSG_CUSTOMER_REQ"
+            }
+        ],
+        "invoicingRequest": [
+            {
+                "type": "required",
+                "fieldType": "N",
+                "ressource": "INVOICE_GENERATE.MSG_INVOICE_REQUEST_TYPE_REQ"
+            }
+        ],
+        "realInspectionFromDate": [
+            {
+                "type": "required",
+                "fieldType": "D",
+                "ressource": "INVOICE_GENERATE.MSG_REAL_INSPECTION_FROM_DATE_REQ"
+            }
+        ],
+        "realInspectionToDate": [
+            {
+                "type": "required",
+                "fieldType": "D",
+                "ressource": "INVOICE_GENERATE.MSG_REAL_INSPECTION_TO_DATE_REQ"
+            }
+        ],
+        "invoiceTo": [
+            {
+                "type": "required",
+                "fieldType": "N",
+                "ressource": "INVOICE_GENERATE.MSG_REAL_BILLING_TO_REQ"
+            }
+        ],
+        "service": [
+            {
+                "type": "required",
+                "fieldType": "N",
+                "ressource": "INVOICE_GENERATE.MSG_SERVICE_REQ"
+            }
+        ]
+        ,
+        "invoiceType": [
+            {
+                "type": "required",
+                "fieldType": "N",
+                "ressource": "INVOICE_GENERATE.MSG_INVOICE_TYPE_REQ"
+            }
+        ],
+        "bankAccount": [
+            {
+                "type": "required",
+                "fieldType": "N",
+                "ressource": "INVOICE_GENERATE.MSG_Bank_REQ"
+            }
+        ]       
+        
+    }
+}

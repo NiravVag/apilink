@@ -1,0 +1,44 @@
+﻿
+@model LINK_UI.FileModels.KpiModel
+
+
+    <xls-sheet name="KPI Result">
+        <table xls-begin="A:1" style="border-style:solid">
+            <tr style="background-color:#f5f5f5;font-weight:bold;text-align:center">
+                @foreach (var column in Model.ColumnList)
+                {
+                    <th style="border-style:solid">@Html.Raw(column.ColumnName)</th>
+                }
+            </tr>
+            @foreach (var row in Model.Rows)
+            {
+                <tr style="@(row.IsSum ? "border-style:solid;font-weight:bold;text-align:center" : "")">
+                    @foreach (var column in row.Cells)
+                    {
+                        
+                            string type = "";
+
+                            if (column.Type == Entities.Enums.FieldType.Date || column.Type == Entities.Enums.FieldType.DateTime)
+                            {
+                                type = "date";
+                            }
+                            else if(column.Type == Entities.Enums.FieldType.Number)
+                            {
+                                type = "number";
+                            }
+                            else
+                            {
+                                type = "";
+                            }
+
+                        
+                        <td style="border-style:solid" colspan="@column.ColSpan" rowspan="@column.RowSpan"  xls-type= "@type" height="200px" width="250px">@(column.Type == Entities.Enums.FieldType.Number && column.Value != null && column.Value.Contains(",") ? column.Value.Replace(",",".") : column.Value)</td>
+                    }
+                </tr>
+                @if(Model.UseFormulas && Model.ColumnList.Any(x => x.SumFooter))
+                {
+
+                }
+            }
+        </table>
+    </xls-sheet>

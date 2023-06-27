@@ -1,0 +1,255 @@
+<div class="main-wrapper">
+  <div class="wrapper dashboard-wrapper">
+    <div class="my-container">
+      <div class="master-body">
+        <div class="title-container">
+          <h3 class="main-title"> {{ 'STAFF_SUMMARY.TITLE' | translate }}</h3>
+        </div>
+        <div class="content-container quotation-container"> 
+          <div  [@expandCollapse]="isFilterOpen ? 'open' : 'close'" class="centerContainerPadding common-filter-container">
+            <div class="animated-icon-container" (click)="toggleFilterSection()" *ngIf="(model.items && model.items.length>0)">
+              <img src="assets/images/cta-close-grey.svg" alt="close">
+            </div>
+            <div class="row">
+              <div class="col-sm-3 col-md-3 col-lg-3 mobile-margin-top-15">
+                <div class="my-input-group">
+                  <label for="txtEmployeeNo"
+                    class="control-label">{{ 'STAFF_SUMMARY.LBL_NEMPLOYEE' | translate }}</label>
+                  <input id="txtEmployeeNo" maxlength="100" type="text"
+                    placeholder="{{ 'STAFF_SUMMARY.PH_LNEMPLOYEE' | translate }}" 
+                    [(ngModel)]="model.employeeNumber" />
+                </div>
+              </div>
+              <div class="col-sm-3 col-md-3 col-lg-3 mobile-margin-top-15">
+                <div class="my-input-group">
+                  <label class="control-label">{{ 'STAFF_SUMMARY.LBL_POSITION' | translate }}</label>
+                  <ng-select [items]="data.positionList" [multiple]="true" [closeOnSelect]="false" appendTo="body" [searchable]="true"
+                    [loading]="loading" bindLabel="name" class="multiple"
+                    placeholder="--- {{ 'STAFF_SUMMARY.LBL_SELECT' | translate }} ---"
+                    [(ngModel)]="model.positionValues">
+                  </ng-select>
+                </div>
+              </div>
+             
+              <div class="col-sm-3 col-md-3 col-lg-3 mobile-margin-top-15">
+                <div class="my-input-group">
+                  <label for="txtStaffName"
+                    class="control-label">{{ 'STAFF_SUMMARY.LBL_STAFFNAME' | translate }}</label>
+                  <input id="txtStaffName" type="text" maxlength="100" placeholder="{{ 'STAFF_SUMMARY.PH_STAFFNAME' | translate }}"
+                    [(ngModel)]="model.staffName" value="" />
+                </div>
+              </div>
+            </div>
+
+
+
+            <div class="row" *ngIf="toggleFormSection">
+              <div class="col-sm-12">
+
+            <div class="row marginTop15">
+              <div class="col-sm-3 col-md-3 col-lg-3 mobile-margin-top-15">
+                <div class="my-input-group">
+                  <label class="control-label">{{ 'STAFF_SUMMARY.LBL_DEPARTMENT' | translate }}</label>
+                  <ng-select [items]="data.departmentList" [multiple]="true" appendTo="body" [closeOnSelect]="false" [searchable]="true"
+                    bindLabel="name" class="multiple" [loading]="loading"
+                    placeholder="--- {{ 'STAFF_SUMMARY.LBL_SELECT' | translate }} ---"
+                    [(ngModel)]="model.departmentValues">
+                  </ng-select>
+                </div>
+              </div>
+              <div class="col-sm-3 col-md-3 col-lg-3 mobile-margin-top-15">
+                <div class="my-input-group">
+                  <label for="ddlapiLocation" class="control-label">{{ 'STAFF_SUMMARY.LBL_OFFICE' | translate }}</label>
+                  <ng-select [items]="data.officeList" [multiple]="true" [closeOnSelect]="false" [searchable]="true"
+                    bindLabel="name" class="multiple" [loading]="loading" appendTo="body"
+                    placeholder="--- {{ 'STAFF_SUMMARY.LBL_SELECT' | translate }} ---" [(ngModel)]="model.officeValues">
+                  </ng-select>
+                </div>
+              </div>
+              <div class="col-sm-3 col-md-3 col-lg-3 mobile-margin-top-15">
+                <div class="my-input-group">
+                  <label for="ddlCountry" class="control-label">{{ 'STAFF_SUMMARY.LBL_COUNTRY' | translate }}</label>
+                  <ng-select [items]="data.countryList" [multiple]="true" [closeOnSelect]="false" [searchable]="true"
+                    bindLabel="countryName" class="multiple" [loading]="loading" appendTo="body"
+                    placeholder="--- {{ 'STAFF_SUMMARY.LBL_SELECT' | translate }} ---"
+                    [(ngModel)]="model.countryValues">
+                  </ng-select>
+                </div>
+              </div>
+              <div class="col-sm-3 col-md-3 col-lg-3 mobile-margin-top-15">
+                <div class="my-input-group">
+                  <label for="ddlEmployeeType"
+                    class="control-label">{{ 'STAFF_SUMMARY.LBL_EMPLOYEETYPE' | translate }}</label>
+                  <ng-select [items]="data.employeeTypeList" [multiple]="true" [closeOnSelect]="false"
+                    [searchable]="true" bindLabel="name" class="multiple" [loading]="loading" appendTo="body"
+                    placeholder="--- {{ 'STAFF_SUMMARY.LBL_SELECT' | translate }} ---"
+                    [(ngModel)]="model.employeeTypeValues">
+                  </ng-select>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+            <div class="row marginTop25">
+              <div class="col-12 col-sm-6">
+                <button class="tertiary-cta small" (click)="toggleSection()">
+                  <span class="icon" *ngIf="!toggleFormSection">+
+                  </span>
+                  <span class="icon" *ngIf="toggleFormSection">-
+                  </span>
+                  {{'BOOKING_SUMMARY.LBL_ADVANCED_SEARCH' | translate}}
+                </button>
+                
+              </div>
+              <div class="col-12 col-sm-12 text-right mt-3 mt-sm-0"> 
+              <button [disabled]="model.noFound || model.items == null || model.items.length == 0 || exportDataLoading" (click)="export()"
+                class="secondary-cta small">{{ 'STAFF_SUMMARY.LBL_EXPORT' | translate }}
+                <span *ngIf="exportDataLoading">
+                  <i class="fa fa-refresh fa-spin" aria-hidden="true"></i>
+                </span>
+              </button>
+              &nbsp;
+              <button id="btnSearch" class="primary-cta small" [disabled]="loading || _searchloader"
+                (click)="search()">
+                {{ 'STAFF_SUMMARY.LBL_SEARCH' | translate }}
+                <span *ngIf="_searchloader">
+                    <i class="fa fa-refresh fa-spin" aria-hidden="true"></i>
+                  </span></button>
+            </div>
+          </div>
+        </div>
+        <div class="centerContainerPadding float-left"  *ngIf="(model.items && model.items.length>0)">
+            <div class="row">
+              <div class="col-6 col-sm-4 col-xl-2 d-flex">
+                <p  class="search-trigger-heading" [innerHtml]="showPaginationText()"></p>
+              </div>
+              <div class="col-6 col-sm-8 col-xl-10 text-right">
+                <div class="animated-icon-container" *ngIf="!isFilterOpen" (click)="toggleFilterSection()">
+                  <img src="assets/images/cta-search-grey.svg" alt="search">
+                </div>
+              </div>
+            </div>
+            <div class="quotation-search-container">
+              <div  class="table-container h-scroll">
+              <table class="pagination-table simple-table bordered">
+                <thead>
+                  <tr>
+                    <th class="width-100" *ngIf="!searchIsLeft"></th>
+                    <th>{{ 'STAFF_SUMMARY.LBL_NAME' | translate }}</th>
+                    <th>{{ 'STAFF_SUMMARY.LBL_COUNTRYNAME' | translate }}</th>
+                    <th>{{ 'STAFF_SUMMARY.LBL_DEPARTMENT' | translate }}</th>
+                    <th>{{ 'STAFF_SUMMARY.LBL_POSITION' | translate }}</th>
+                    <th>{{ 'STAFF_SUMMARY.LBL_OFFICENAME' | translate }}</th>
+                    <th>{{ 'STAFF_SUMMARY.LBL_JOINDATE' | translate }}</th>
+                    <th>{{ 'STAFF_SUMMARY.LBL_EMPLOYEETYPE' | translate }}</th>
+                    <th>{{ 'STAFF_SUMMARY.LBL_STATUS_NAME' | translate }}</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let iteminfo of model.items">
+                      <td class="Center_Middle" *ngIf="!searchIsLeft">
+                          
+                          <span class="table-cta icon-cta common-tooltip" 
+                          (click)="getDetails(iteminfo.id)" data-tooltip="Edit">
+                          <img src="assets/images/cta-edit.svg" alt="Edit">
+                        </span>
+                        &nbsp;
+                          <span *ngIf="iteminfo.statusId==onJobStatus" class="table-cta icon-cta common-tooltip" 
+                          (click)="openConfirm(iteminfo.id,iteminfo.staffName,content)" data-tooltip="Delete">
+                          <img src="assets/images/cta-delete.svg" alt="Delete">
+                        </span>
+                        </td>
+                    <td style="word-break:break-all;min-width:110px">{{iteminfo.staffName}}</td>
+                    <td style="word-break:break-all;min-width:110px">{{iteminfo.countryName}}</td>
+                    <td style="word-break:break-all;min-width:180px">{{iteminfo.departmentName}}</td>
+                    <td style="word-break:break-all;min-width:110px">{{iteminfo.positionName}}</td>
+                    <td>{{iteminfo.officeName}}</td>
+                    <td>{{iteminfo.joinDate}}</td>
+                    <td style="word-break:break-all;min-width:110px">{{iteminfo.employeeType}}</td>
+                    <td class="width-60 Center_Middle" [class]="iteminfo.statusColor" >{{iteminfo.statusName}}                      
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+              </div>
+            </div>
+            <div class="pagination-container">
+              <ngb-pagination (pageChange)="onPager($event)" [pageSize]="model.pageSize"
+                  [collectionSize]="model.totalCount" [(page)]="model.index" [maxSize]="5">
+              </ngb-pagination>
+          </div>
+          </div>
+          <div class="centerContainerPadding" *ngIf="model.noFound">
+            <div class="error-container">
+              <img src="assets/images/no-result.svg" alt="" class="thumbnail">
+              <h4 class="title">{{ 'CUSTOMER_SUMMARY.LBL_NOITEMS' | translate }}</h4>
+              <p class="error-subtitle">{{'CS_CONFIG_SUMMARY.LBL_NODATA' | translate}}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+  <ng-template #content let-modal>
+    <div class="modal-header custom-modal-header">
+      <h4 class="modal-title" id="modal-basic-title">{{ 'STAFF_SUMMARY.LBL_CONFIRMDELETION' | translate }}</h4>
+      <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body custom-modal-body">
+      <div class="row">
+        <div class="col-sm-4 mobile-margin-top-15">
+          <div class="my-input-group">
+            <label class="required">{{ 'STAFF_SUMMARY.LBL_LEAVEDATE' | translate }}</label>
+              <div class="calendar-wrapper">
+                <input type="text" readonly=readonly maxlength="10"
+                  [ngClass]="{ 'is-invalid': !validator.isValid('leaveDate')}" [(ngModel)]="modelRemove.leaveDate"
+                  (click)="ld.toggle()" placeholder="{{ 'STAFF_SUMMARY.PH_LEAVEDATE' | translate }}" ngbDatepicker
+                  #ld="ngbDatepicker">
+                <img src="assets/images/calendar-icon.svg" alt="" class="calendar-icon" (click)="ld.toggle()">
+              </div>
+              <div *ngIf="!validator.isValid('leaveDate')" class="invalid-feedback">
+                <div *ngFor="let error of validator.getErrors('leaveDate')">{{ error | translate }}</div>
+              </div>
+          </div>
+        </div>
+        <div class="col-sm-4 mobile-margin-top-15">
+          <div class="my-input-group">
+            <label class="required">{{ 'STAFF_SUMMARY.LBL_REASON' | translate }}</label>
+            <input type="text"  [ngClass]="{ 'is-invalid': !validator.isValid('reason')}" [(ngModel)]="modelRemove.reason"
+              placeholder="{{ 'STAFF_SUMMARY.PH_REASON' | translate }}">
+          </div>
+          <div *ngIf="!validator.isValid('reason')" class="invalid-feedback">
+            <div *ngFor="let error of validator.getErrors('reason')">{{ error | translate }}</div>
+          </div>
+        </div>
+        <div class="col-sm-4 mobile-margin-top-15">
+          <div class="my-input-group">
+            <label class="required">{{ 'STAFF_SUMMARY.LBL_STATUS_NAME' | translate }}</label>
+            <ng-select [items]="masterModel.statusList" [(ngModel)]="modelRemove.statusId"
+            [closeOnSelect]="true" [searchable]="true" bindLabel="name" bindValue="id"
+            placeholder="--- {{(masterModel.statusList && masterModel.statusList.length>0? 'COMMON.LBL_SELECT':'COMMON.LBL_NO_DATA')  | translate }} ---"
+            [loading]="masterModel.statusLoading"
+            [ngClass]="{ 'is-invalid':  !validator.isValid('statusId')}">
+            <ng-template ng-option-tmp let-item="item">
+                <div class="text-wrap">{{ item.name }}</div>
+            </ng-template>
+        </ng-select>
+              <div *ngIf="!validator.isValid('statusId')" class="invalid-feedback">
+                <div *ngFor="let error of validator.getErrors('statusId')">{{ error | translate }}</div>
+              </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer custom-modal-footer">
+      <button type="button" class="secondary-cta" (click)="modal.close('cancel click')">
+        {{ 'STAFF_SUMMARY.LBL_CONFIRMCANCEL' | translate }}
+      </button>
+      <button type="button" class="primary-cta" (click)="deleteStaff(modelRemove);">
+        {{ 'STAFF_SUMMARY.LBL_CONFIRMOK' | translate }}
+      </button>
+    </div>
+  </ng-template>

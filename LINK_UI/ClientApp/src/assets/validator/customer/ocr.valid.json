@@ -1,0 +1,33 @@
+{
+    "model": "ocr-master-model",
+    "fields": {
+        "code": [
+            {
+                "type": "required",
+                "fieldType": "T",
+                "ressource": "EDIT_CUSTOMER_PRODUCT.MSG_SIZE_REQ"
+            }
+        ],
+        "description": [
+            {
+                "type": "required",
+                "fieldType": "T",
+                "ressource": "EDIT_CUSTOMER_PRODUCT.MSG_DESCRIPTION_REQ"
+            }
+        ],
+        "required": [
+            {
+                "type": "required",
+                "fieldType": "N",
+                "ressource": "EDIT_CUSTOMER_PRODUCT.MSG_REQ_VALUE_REQ"
+            }
+        ],
+        "tolerance1Up": [
+            {
+                "type": "required",
+                "fieldType": "NU",
+                "ressource": "EDIT_CUSTOMER_PRODUCT.MSG_TOL_PLUS_REQ"
+            }
+        ]
+    }
+}

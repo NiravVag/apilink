@@ -1,0 +1,29 @@
+{
+    "model": "EditInvoiceDiscountPeriodModel",
+    "fields": {
+        "limitFrom": [{
+                "type": "required",
+                "fieldType": "N",
+                "ressource": "INV_DIS_REGISTER.MSG_LIMITFROM_REQ"
+            },
+            {
+                "type": "isLessOrEqual",
+                "fieldType": "N",
+                "fieldCible": "limitTo",
+                "ressource": "INV_DIS_REGISTER.MSG_LIMITFROM_GREATER_REQ"
+            }
+        ],
+        "limitTo": [{
+                "type": "required",
+                "fieldType": "N",
+                "ressource": "INV_DIS_REGISTER.MSG_LIMITTO_REQ"
+            },
+            {
+                "type": "isGreatOrEqual",
+                "fieldType": "N",
+                "fieldCible": "limitFrom",
+                "ressource": "INV_DIS_REGISTER.MSG_LIMITTO_LESS_REQ"
+            }
+        ]
+    }
+}

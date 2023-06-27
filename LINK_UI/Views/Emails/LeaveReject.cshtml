@@ -1,0 +1,19 @@
+﻿@model DTO.HumanResource.LeaveApproveEmail
+<span style="font-size: 13px; font-family: tahoma;">
+    Dear @Model.StaffName, <br /><br />
+    I am sorry to inform you that your leave application from @Model.StartDate To @Model.EndDate (Leave Type:@Model.LeaveType;Total Day: @Model.TotalDays) which you applied on @Model.ApplyDate   <br />
+    was rejected by your manager.<br /><br />
+    @if (string.IsNullOrWhiteSpace(Model.Comment))
+    {
+        <span>If you want to know the reason,please contact your manager directly.</span>
+    }
+    else
+    {
+        <span>Reason : @Model.Comment</span>
+    }
+    <br /><br />
+    Thanks<br />
+    IT-Team
+    <br /><br />
+    <span style="font-style:italic"> Note: - This receipt is auto generated from Link. Please do not reply to this message.</span>
+</span>

@@ -1,0 +1,11 @@
+﻿CREATE TABLE [dbo].[INV_AUT_TRAN_Tax]
+(
+[Id] INT IDENTITY(1,1) PRIMARY KEY,
+[Invoice_Id] INT NULL,
+[TaxId] INT NULL,
+[CreatedBy] INT NULL,
+[CreatedOn] DateTime NULL,
+CONSTRAINT INV_AUT_TRAN_Tax_Invoice_Id FOREIGN KEY ([Invoice_Id]) REFERENCES [dbo].[INV_AUT_TRAN_Details](Id),
+CONSTRAINT INV_AUT_TRAN_Tax_TaxId FOREIGN KEY ([TaxId]) REFERENCES [dbo].[INV_TRAN_Bank_Tax](Id),
+CONSTRAINT INV_AUT_TRAN_Tax_CreatedBy FOREIGN KEY ([CreatedBy]) REFERENCES [dbo].[IT_UserMaster](Id)
+)

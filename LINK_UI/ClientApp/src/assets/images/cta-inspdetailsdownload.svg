@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16.2" viewBox="0 0 16 16.2">
+  <g id="Inspection_Details-Default" data-name="Inspection Details-Default" transform="translate(-127 -1115.8)">
+    <g id="Group_11570" data-name="Group 11570">
+      <g id="Group_11562" data-name="Group 11562">
+        <g id="Component_31_80" data-name="Component 31 – 80" transform="translate(127 1116)" opacity="0.8">
+          <rect id="Rectangle_1131" data-name="Rectangle 1131" width="16" height="16" fill="none"/>
+        </g>
+      </g>
+      <g id="Group_11568" data-name="Group 11568" transform="translate(0.725 -88)">
+        <g id="noun_inspection_2927634" transform="translate(129.275 1205)">
+          <g id="Group_11568-2" data-name="Group 11568" transform="translate(0 0)">
+            <path id="Subtraction_1" data-name="Subtraction 1" d="M-852.2,227h-7.453a1.358,1.358,0,0,1-1-.359,1.345,1.345,0,0,1-.346-.991v-11.3c0-.534.038-.863.246-1.072a1.534,1.534,0,0,1,1.1-.278H-854a.348.348,0,0,1,.247.1l2.8,2.8a.352.352,0,0,1,.1.247c0,.072-.062,7.224,0,7.308v2.193a1.547,1.547,0,0,1-.394,1A1.291,1.291,0,0,1-852.2,227Zm-5.39-2.779a.414.414,0,0,0-.413.413.414.414,0,0,0,.413.413h4.131a.414.414,0,0,0,.413-.413.414.414,0,0,0-.413-.413Zm.422-3.545a.44.44,0,0,0-.392.273.39.39,0,0,0,.1.44l1.674,1.668a.365.365,0,0,0,.257.106.361.361,0,0,0,.255-.105l1.688-1.669a.39.39,0,0,0,.1-.44.44.44,0,0,0-.392-.273.4.4,0,0,0-.287.129l-.725.727a.2.2,0,0,1-.127.07.076.076,0,0,1-.067-.041.24.24,0,0,1-.025-.119v-3.03a.413.413,0,0,0-.411-.413.413.413,0,0,0-.412.413v3.03c0,.1-.035.16-.092.16a.2.2,0,0,1-.126-.07l-.724-.727A.4.4,0,0,0-857.164,220.677Zm3.515-6.482v1.6h1.606l-1.606-1.6Z" transform="translate(859 -213)" fill="#d55254"/>
+          </g>
+        </g>
+      </g>
+    </g>
+    <path id="Path_4216" data-name="Path 4216" d="M3.5,0A3.5,3.5,0,1,0,7,3.5,3.5,3.5,0,0,0,3.5,0Z" transform="translate(133 1116)" fill="#d55254" stroke="#f3caca" stroke-width="0.4"/>
+    <path id="Path_4217" data-name="Path 4217" d="M2.5,0A2.5,2.5,0,1,0,5,2.5,2.5,2.5,0,0,0,2.5,0Z" transform="translate(134 1117)" fill="#fae9e9"/>
+    <path id="Path_4218" data-name="Path 4218" d="M353.617,352.58l-1.66-1.66a.147.147,0,0,0-.208,0l-.83.83a.147.147,0,0,0,0,.208l1.66,1.66a.734.734,0,0,0,1.038-1.038Z" transform="translate(-211.341 770.66)" fill="#d55254"/>
+  </g>
+</svg>

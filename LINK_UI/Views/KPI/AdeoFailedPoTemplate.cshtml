@@ -1,0 +1,50 @@
+﻿
+@{
+    ViewData["Title"] = "AdeoFailedPoTemplate";
+}
+
+@model DTO.Kpi.ExportResult
+
+<xls-sheet name="AdeoFailedPoTemplate">
+    <table xls-begin="A:1" style="border-style:solid">
+        <tr style="background-color:#f5f5f5;font-weight:bold;text-align:center">
+            <th>Inspection ID</th>
+            <th>PONo</th>
+            <th>Item Number</th>
+            <th>Inspetion Date</th>
+            <th>Department</th>
+            <th>PSI Result</th>
+            <th>Supplier Name</th>
+            <th>Supplier Code</th>
+            <th>Product</th>
+            <th>Reason</th>
+            <th>Next PSI ID</th>
+            <th>Remarks</th>
+        </tr>
+
+        @foreach (var item in Model.Data)
+        {
+        <tr>
+            <td width="150px" xls-type="number">@item.BookingNo</td>
+            <td width="150px">@Html.Raw(@item.PONumber)</td>
+            <td width="150px">@item.ProductName</td>
+            <td width="250px">@item.InspectionReportDate</td>
+            <td width="250px">@item.DeptCode</td>
+            <td width="150px">@item.ReportResult</td>
+            <td width="150px">@Html.Raw(@item.SupplierName)</td>
+            <td width="150px">@item.SupplierCode</td>
+            <td width="150px">@Html.Raw(@item.ProductDescription)</td>
+            <td></td>
+            @if (@item.ReinspectionId == 0)
+            {
+                <td width="150px"></td>
+            }
+            else
+            {
+                <td width="150px" xls-type="number">@item.ReinspectionId</td>
+            }
+            <td width="250px">@Html.Raw(@item.ReportRemarks)</td>
+        </tr>
+        }
+    </table>
+</xls-sheet>

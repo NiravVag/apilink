@@ -1,0 +1,187 @@
+<div class="main-wrapper">
+  <div class="wrapper dashboard-wrapper">
+
+    <div class="my-container">
+      <div class="master-body">
+        <div class="title-container">
+          <div class="header-back-button">
+            <img src="assets/images/back-red.png" alt="back" (click)="this.return('datamanagement/dmusermanagersummary');">
+          </div>
+          <h3 class="main-title">
+            {{ 'DATA_MANAGEMENT.USER_TITLE' | translate }}
+          </h3>
+        </div>
+
+        <div class="content-container">
+          <div class="formPadding">
+            <div class="row">
+              <div class="col-sm-1 col-md-1 col-lg-1 marginTop15">
+                <div class="my-input-group">
+                  <div class="styled-radio-container">
+                    <input type="radio" class="styled-radio" id="byRole" name="radio-group1" value="role"
+                      (change)="setModules('role')" [checked]="request.byRole">
+                    <label for="byRole">By Role</label>
+                  </div>
+                </div>
+              </div>
+              <div class="col-sm-2 col-md-2 col-lg-2 marginTop15">
+                <div class="my-input-group">
+                  <div class="styled-radio-container">
+                    <input type="radio" class="styled-radio" id="byEmployee" name="radio-group1" value="employee"
+                      (change)="setModules('employee')" [checked]="request.byEmployee">
+                    <label for="byEmployee">By Employee</label>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+            <div class="row marginTop15">
+
+              <div class="col-sm-3 col-md-3 col-lg-3 " *ngIf="request.byRole">
+                <div class="my-input-group">
+                  <label class="required">{{ 'DATA_MANAGEMENT.LBL_ROLES' | translate }}</label>
+                  <ng-select appendTo="body" [loading]="roleLoading" [items]="roles"
+                    [(ngModel)]="request.rightRequest.idRole" [multiple]="false" [closeOnSelect]="true"
+                    [searchable]="true" bindLabel="name" bindValue="id" (clear)="resetRoles()" (change)="changeRoles()"
+                    placeholder="--- {{ 'COMMON.LBL_SELECT' | translate }} ---" class="multiple ">
+                    <ng-template ng-option-tmp let-item="item">
+                      <div class="text-wrap">{{ item.name }}</div>
+                    </ng-template>
+                  </ng-select>
+                </div>
+              </div>
+              <div class="col-sm-3 col-md-3 col-lg-3" *ngIf="!request.byRole">
+                <div class="my-input-group">
+                  <label for="" class="required">{{'INVOICE_ACCESS.LBL_STAFF' | translate}}</label>
+                  <ng-select #staff [searchable]="true" [items]="userManagementMaster.staffList"
+                      bindLabel="name" [loading]="userManagementMaster.staffLoading" bindValue="id"
+                      [hideSelected]="true" appendTo="body" [virtualScroll]="true" (clear)="clearStaff()" [clearable]="true"
+                      (scrollToEnd)="getStaffData(true)" [typeahead]="userManagementMaster.staffInput"
+                      [minTermLength]="3"
+                      placeholder="--- {{(userManagementMaster.staffList!=null && userManagementMaster.staffList.length!=0? 'COMMON.LBL_SELECT_ALL':'BOOKING_SUMMARY.MSG_NO_DATA')  | translate }} ---"
+                      [(ngModel)]="request.rightRequest.idStaff">
+                      <ng-template ng-option-tmp let-item="item">
+                          <div class="text-wrap">{{ item.name }}</div>
+                      </ng-template>
+                  </ng-select>
+                </div>
+              </div>
+
+              <div class="col-sm-3 col-md-3 col-lg-2">
+                <div class="my-input-group marginTop25">
+                  <div class="styled-checkbox-container">
+                    <input class="styled-checkbox" id="checkedit" type="checkbox"
+                      [(ngModel)]="request.rightRequest.editRight">
+                    <label for="checkedit">{{ 'DATA_MANAGEMENT.LBL_CANEDIT' | translate }}</label>
+                  </div>
+                </div>
+              </div>
+              <div class="col-sm-3 col-md-3 col-lg-2">
+                <div class="my-input-group marginTop25">
+                  <div class="styled-checkbox-container">
+                    <input class="styled-checkbox" id="checkdownload" type="checkbox"
+                      [(ngModel)]="request.rightRequest.downloadRight">
+                    <label for="checkdownload">{{ 'DATA_MANAGEMENT.LBL_CANDOWNLOAD' | translate }}</label>
+                  </div>
+                </div>
+              </div>
+              <div class="col-sm-3 col-md-3 col-lg-2">
+                <div class="my-input-group marginTop25">
+                  <div class="styled-checkbox-container">
+                    <input class="styled-checkbox" id="checkdelete" type="checkbox"
+                      [(ngModel)]="request.rightRequest.deleteRight">
+                    <label for="checkdelete">{{ 'DATA_MANAGEMENT.LBL_CANDELETE' | translate }}</label>
+                  </div>
+                </div>
+              </div>
+              <div class="col-sm-3 col-md-3 col-lg-2">
+                <div class="my-input-group marginTop25">
+                  <div class="styled-checkbox-container">
+                    <input class="styled-checkbox" id="checkupload" type="checkbox"
+                      [(ngModel)]="request.rightRequest.uploadRight">
+                    <label for="checkupload">{{ 'DATA_MANAGEMENT.LBL_CANUPLOAD' | translate }}</label>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+
+            <div class="result-container formPadding" *ngIf="!noItem">
+              <div class="table-container">
+                <ngx-treeview class="treeview" [config]="config" [items]="treeviewList"
+                  (selectedChange)="request.modules = $event">
+                </ngx-treeview>
+              </div>
+            </div>
+
+            <!-- <div class="booking-step-container active">
+              <div class="step-header step1">
+                <div class="heading-container">
+                  <div class="thumb-container">
+                    <img src="assets/images/inspection-step1-default.svg" alt="">
+                  </div>
+                  <h3 class="title">{{ 'DATA_MANAGEMENT.USER_RIGHTS' | translate }}</h3>
+                </div>
+              </div>
+              <div class="step-body">
+
+                <div class="row">
+                  <div class="col-sm-3 col-md-3 col-lg-2">
+                    <div class="my-input-group marginTop25">
+                      <div class="styled-checkbox-container">
+                        <input class="styled-checkbox" id="checkedit" type="checkbox" [(ngModel)]="request.rightRequest.editRight"
+                               (change)="getRightModules()">
+                        <label for="checkedit">{{ 'DATA_MANAGEMENT.LBL_CANEDIT' | translate }}</label>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-sm-3 col-md-3 col-lg-2">
+                    <div class="my-input-group marginTop25">
+                      <div class="styled-checkbox-container">
+                        <input class="styled-checkbox" id="checkdownload" type="checkbox" [(ngModel)]="request.rightRequest.downloadRight"
+                               (change)="getRightModules()">
+                        <label for="checkdownload">{{ 'DATA_MANAGEMENT.LBL_CANDOWNLOAD' | translate }}</label>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-sm-3 col-md-3 col-lg-2">
+                    <div class="my-input-group marginTop25">
+                      <div class="styled-checkbox-container">
+                        <input class="styled-checkbox" id="checkdelete" type="checkbox" [(ngModel)]="request.rightRequest.deleteRight"
+                               (change)="getRightModules()">
+                        <label for="checkdelete">{{ 'DATA_MANAGEMENT.LBL_CANDELETE' | translate }}</label>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="result-container formPadding">
+                  <div class="table-container">
+                    <ngx-treeview class="treeview" [config]="config" [items]="treeviewList" (selectedChange)="request.modules = $event">
+                    </ngx-treeview>
+                  </div>
+                </div>
+
+              </div>
+
+            </div> -->
+
+          </div>
+
+          <div class="form-action-container">
+            <!--  <button class="secondary-cta small" [disabled]="_saveloader" (click)="cancel()">
+              {{ 'EDIT_BOOKING.LBL_CANCEL' | translate }}
+            </button> -->
+            <button class="primary-cta small" (click)="save()" [disabled]="_saveloader">
+              {{
+              'EDIT_SUPPLIER.LBL_SAVE' | translate
+              }}
+              <span *ngIf="_saveloader">
+                <i class="fa fa-refresh fa-spin" aria-hidden="true"></i>
+              </span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

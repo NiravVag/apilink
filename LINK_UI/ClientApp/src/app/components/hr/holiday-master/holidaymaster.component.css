@@ -1,0 +1,59 @@
+.custom-day {
+  text-align: center;
+  padding: 0.185rem 0.25rem;
+  display: inline-block;
+  height: 2rem;
+  width: 2rem;
+}
+
+  .custom-day.focused {
+    background-color: #e6e6e6;
+  }
+
+  .custom-day.range, .custom-day:hover {
+    background-color: rgb(2, 117, 216);
+    color: white;
+  }
+
+  .custom-day.rangeYear {
+    background-color: rgb(255, 0, 0);
+    color: white;
+  }
+
+  .custom-day.rangeMonth {
+    background-color: rgb(128, 128, 128);
+    color: white;
+  }
+  .custom-day.rangeByWeek {
+    background-color: rgb(189, 75, 198);
+    color: white;
+  }
+
+  .custom-day:hover {
+    background-color: rgb(76, 255, 0);
+    color: black;
+  }
+
+  .custom-day.faded {
+    background-color: rgba(2, 117, 216, 0.5);
+  }
+
+.selected {
+  background-color: rgb(76, 255, 0);
+  color: black;
+}
+
+
+@media (max-width: 1200px) {
+  .col-cal-6 {
+    flex: 0 0 50%;
+    max-width: 50%;
+  }
+}
+
+@media (max-width: 487px) {
+  .col-cal-12 {
+    flex: 0 0 100%;
+    max-width: 100%;
+  }
+}

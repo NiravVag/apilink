@@ -1,0 +1,19 @@
+<div class="main-wrapper">
+  <app-header></app-header>
+  <div class="wrapper dashboard-wrapper">
+      <!-- <div *ngIf="isShowingRouteLoadIndicator" class="router-load-indicator">
+          Loading Module...
+        </div> -->
+        <div class="loader-overlay" *ngIf="isShowingRouteLoadIndicator && _IsOnline">
+          <div class="loader-container">
+            <img src="assets/images/reload.svg" alt="">
+            <span>{{'COMMON.LBL_LOADER' | translate}}</span>
+          </div>
+        </div>
+    <router-outlet></router-outlet>
+  </div>
+</div>
+<app-drawer-menu></app-drawer-menu>
+<div class="scroll-top-container" *ngIf="allowScrollTop && showScrollTop" (click)="scrollToTop()">
+  <img src="assets/images/left-arrow.svg">
+</div>

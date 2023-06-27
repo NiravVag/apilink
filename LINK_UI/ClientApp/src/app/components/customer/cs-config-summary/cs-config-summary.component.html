@@ -1,0 +1,180 @@
+<div class="main-wrapper">
+  <div class="wrapper dashboard-wrapper">
+    <div class="my-container">
+      <div class="master-body">
+        <div class="title-container">
+          <h3 class="main-title"> {{ 'CS_CONFIG_SUMMARY.TITLE' | translate }}</h3>
+        </div>
+        <div class="content-container">
+          <div class="row searchFormPadding">
+            <div class="col-sm-12">
+              <div class="row">
+                <div class="col-sm-4 col-md-4 col-lg-4">
+                  <div class="my-input-group">
+                    <label>{{ 'CS_CONFIG_SUMMARY.LBL_CUSTOMER_LIST' | translate }}</label>
+                    <ng-select [items]="customerList" [multiple]="false" [closeOnSelect]="true" [searchable]="true"
+                      bindLabel="name" bindValue="id" [loading]="initialLoading" [hideSelected]="true"
+                      placeholder="--- {{ 'CS_CONFIG_SUMMARY.LBL_SELECT' | translate }} ---"
+                      (ngModelChange)="IsCustomerValidationRequired()"
+                      [(ngModel)]="model.customerId" [ngClass]="{ 'is-invalid': !validator.isValidIf('customerId',IsCustomerValidationRequired())}">
+                    </ng-select>
+                    <div *ngIf="(!validator.isValidIf('customerId',IsCustomerValidationRequired()))" class="invalid-feedback">
+                      <div *ngFor="let error of validator.getErrors('customerId')">{{ error | translate }}</div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-sm-4 col-md-4 col-lg-4 mobile-margin-top-15">
+                  <div class="my-input-group">
+                    <label>{{ 'CS_CONFIG_SUMMARY.LBL_CUSTOMERSERVICE' | translate }}</label>
+                    <ng-select [items]="customerServiceList" [multiple]="false" [closeOnSelect]="true"
+                      [searchable]="true" bindLabel="name" bindValue="id" [loading]="customerServiceLoading"
+                      placeholder="--- {{ 'CS_CONFIG_SUMMARY.LBL_SELECT' | translate }} ---"
+                      [(ngModel)]="model.userId"  [ngClass]="{ 'is-invalid': validator.isSubmitted && IsCustomerValidationRequired() && IsUserValidationRequired() }">
+                    </ng-select>
+                    <div *ngIf="validator.isSubmitted && IsCustomerValidationRequired() && IsUserValidationRequired()" class="invalid-feedback">
+                      <div>{{ 'CS_CONFIG_SUMMARY.MSG_CS_REQ' | translate }}</div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-sm-4 col-md-4 col-lg-4 mobile-margin-top-15">
+                  <div class="my-input-group">
+                    <label>{{ 'CS_CONFIG_SUMMARY.LBL_OFFICE' | translate }}</label>
+                    <ng-select [items]="officeList" [multiple]="true" [closeOnSelect]="true" [searchable]="true"
+                      bindLabel="name" bindValue="id" [loading]="officeLoading" [hideSelected]="true"
+                      placeholder="--- {{ 'CS_CONFIG_SUMMARY.LBL_SELECT' | translate }} ---"
+                      [(ngModel)]="model.officeLocationId" class="multiple">
+                    </ng-select>
+                  </div>
+                </div>
+              </div>
+              <div class="row marginTop15">
+                <div class="col-sm-4 col-md-4 col-lg-4">
+                  <div class="my-input-group">
+                    <label>{{ 'CS_CONFIG_SUMMARY.LBL_SERVICE' | translate }}</label>
+                    <ng-select [items]="serviceList" [multiple]="true" [closeOnSelect]="true" [searchable]="true"
+                      bindLabel="name" bindValue="id" [loading]="serviceLoading"
+                      placeholder="--- {{ 'CS_CONFIG_SUMMARY.LBL_SELECT' | translate }} ---"
+                      [(ngModel)]="model.serviceId" class="multiple">
+                    </ng-select>
+                  </div>
+                </div>
+                <div class="col-sm-4 col-md-4 col-lg-4 mobile-margin-top-15">
+                  <div class="my-input-group">
+                    <label>{{ 'CS_CONFIG_SUMMARY.LBL_PRODUCT_CATEGORY' | translate }}</label>
+                    <ng-select [items]="productCategoryList" [multiple]="true" [closeOnSelect]="true"
+                      [searchable]="true" bindLabel="name" bindValue="id" [loading]="productCategoryLoading"
+                      placeholder="--- {{ 'CS_CONFIG_SUMMARY.LBL_SELECT' | translate }} ---"
+                      [(ngModel)]="model.productCategoryId" class="multiple">
+                    </ng-select>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="master-search-cta-container">
+            <div class="column">
+              <button id="btnAdd" class="secondary-cta small" [disabled]="initialLoading" style="margin-right: 5px;"
+              (click)="this.NavigatenewPath('csconfigedit/csconfig-register');">
+              {{ 'CS_CONFIG_SUMMARY.LBL_ADDNEW' | translate }}</button>
+              <button *ngIf="deleteBtnShow" (click)="openConfirm(content)" class="secondary-cta small">
+                {{ 'CS_CONFIG_SUMMARY.LBL_DELETE' | translate }}
+              </button>
+            </div>
+
+            <div class="column text-right">
+              <button id="btnSearch" class="primary-cta small" [disabled]="searchLoading || initialLoading"
+                style="margin-right: 5px;" (click)="search()">
+                {{ 'CS_CONFIG_SUMMARY.LBL_SEARCH' | translate }}
+                <span *ngIf="searchLoading">
+                  <i class="fa fa-refresh fa-spin" aria-hidden="true"></i>
+                </span>
+              </button>
+            </div>
+          </div>
+
+          <div class="result-container">
+            <p class="record-count" *ngIf="(model.items && model.items.length>0)"> {{
+                      'CS_CONFIG_SUMMARY.MSG_SHOWING' |
+                                translate
+                                }}&nbsp;{{((model.index-1)*(model.pageSize))+1}}&nbsp;{{
+                      'CS_CONFIG_SUMMARY.MSG_TO' |
+                                translate
+                                }}&nbsp;{{(model.index*model.pageSize)>model.totalcount?model.totalCount:(model.index*model.pageSize)}}&nbsp;{{ 'CS_CONFIG_SUMMARY.MSG_OF' | translate }}&nbsp;{{model.totalCount}}&nbsp;{{
+                                'CS_CONFIG_SUMMARY.MSG_RECORDS' | translate
+                                }} </p>
+            <div class="table-container" *ngIf="(model.items && model.items.length>0)">
+              <table class="pagination-table">
+                <thead>
+                  <tr>
+                    <th class="Center_Middle">
+                      <div class="styled-checkbox-container">
+                        <input type="checkbox" class="styled-checkbox" id="checkboxall"
+                          [(ngModel)]="selectedAllCSSummary" (change)="selectAllCS();" />
+                        <label for="checkboxall"></label>
+                      </div>
+                    </th>
+                    <th class="desktop-hide"></th>
+                    <th>{{ 'CS_CONFIG_SUMMARY.LBL_CustomerName' | translate }}</th>
+                    <th>{{ 'CS_CONFIG_SUMMARY.LBL_CustomerService' | translate }}</th>
+                    <th>{{ 'CS_CONFIG_SUMMARY.LBL_Office' | translate }}</th>
+                    <th>{{ 'CS_CONFIG_SUMMARY.LBL_Service' | translate }}</th>
+                    <th>{{ 'CS_CONFIG_SUMMARY.LBL_ProductCategory' | translate }}</th>
+                    <th class="mobile-hide tablet-hide"></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <ng-container *ngFor="let iteminfo of model.items">
+                    <tr>
+                      <td class="Center_Middle">
+                        <div class="styled-checkbox-container">
+                          <input type="checkbox" class="styled-checkbox" id="checkbox-{{iteminfo.csConfigId}}" [(ngModel)]="iteminfo.selected" (change)="checkIfAllCSSelected();">
+                          <label for="checkbox-{{iteminfo.csConfigId}}"></label>
+                        </div>
+                      </td>
+                      <td class="desktop-hide Center_Middle">
+                          <button (click)="getEditDetails(iteminfo.csConfigId)" class="secondary-cta x-small">
+                              {{ 'CS_CONFIG_SUMMARY.LBL_EDIT' | translate }}</button>
+                        </td>
+                      <td>{{iteminfo.customerName}}</td>
+                      <td>{{iteminfo.customerService}}</td>
+                      <td>{{iteminfo.office}}</td>
+                      <td>{{iteminfo.service}}</td>
+                      <td>{{iteminfo.productCatgory}}</td>
+                      <td class="mobile-hide tablet-hide Center_Middle">
+                        <button (click)="getEditDetails(iteminfo.csConfigId)" class="secondary-cta x-small">
+                          {{ 'CS_CONFIG_SUMMARY.LBL_EDIT' | translate }}</button>
+                      </td>
+                    </tr>
+                  </ng-container>
+                </tbody>
+              </table>
+            </div>
+            <div *ngIf="(model.items && model.items.length>0)" class="pagination-container">
+              <div class="pagination">
+                <ngb-pagination (pageChange)="onPager($event)" [pageSize]="model.pageSize"
+                  [collectionSize]="model.totalCount" [(page)]="model.index" [maxSize]="5"></ngb-pagination>
+              </div>
+            </div>
+          </div>
+          <div class="no-result-container" *ngIf="model.noFound">
+            <img src="assets/images/no-data.png" alt="" class="icon">
+            <h4 class="title">{{ 'CS_CONFIG_SUMMARY.LBL_NOITEMS' | translate }}</h4>
+            <p>{{ 'CS_CONFIG_SUMMARY.LBL_NODATA' | translate }}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<ng-template #content let-modal>
+	<div class="modal-body">
+		<div class="small-model">
+			<h2 class="title">{{ 'CS_CONFIG_SUMMARY.LBL_CONFIRMDELETION' | translate }}</h2>
+			<p>{{ 'CS_CONFIG_SUMMARY.MSG_CONFRMDELETE' | translate }}</p>
+			<button class="secondary-cta" (click)="modal.dismiss('Cross click');deleteRefresh();">{{ 'COMMON.LBL_CONFIRMCANCEL' | translate }}</button>
+			<button class="primary-cta" (click)="deleteCustomerService(this.modelRemove);">{{ 'COMMON.LBL_OK' | translate }}</button>
+		</div>
+	</div> 
+</ng-template>

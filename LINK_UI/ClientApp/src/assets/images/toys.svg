@@ -1,0 +1,53 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+    <defs>
+        <style>
+            .cls-1,.cls-3,.cls-4{fill:none}.cls-2{fill:#fff}.cls-2,.cls-3,.cls-4{stroke:#8397af}.cls-2,.cls-3{stroke-width:.8px}.cls-4{stroke-width:.5px}.cls-7{stroke:none}
+        </style>
+    </defs>
+    <g id="Group_17905" transform="translate(-54 -503)">
+        <g id="Group_17904" transform="translate(-74 -152)">
+            <path id="Rectangle_5420" d="M0 0H24V24H0z" class="cls-1" transform="translate(128 655)"/>
+            <g id="Group_17901" transform="translate(40 -1)">
+                <g id="Group_17895" transform="translate(-15 42)">
+                    <g id="Group_17897">
+                        <g id="Ellipse_868" class="cls-2" transform="translate(118 614)">
+                            <circle cx="3" cy="3" r="3" class="cls-7"/>
+                            <circle cx="3" cy="3" r="2.6" class="cls-1"/>
+                        </g>
+                        <g id="Ellipse_869" class="cls-2" transform="translate(107 614)">
+                            <circle cx="3" cy="3" r="3" class="cls-7"/>
+                            <circle cx="3" cy="3" r="2.6" class="cls-1"/>
+                        </g>
+                        <g id="Ellipse_872" class="cls-2" transform="translate(108 614)">
+                            <ellipse cx="7.5" cy="6.5" class="cls-7" rx="7.5" ry="6.5"/>
+                            <ellipse cx="7.5" cy="6.5" class="cls-1" rx="7.1" ry="6.1"/>
+                        </g>
+                        <g id="Ellipse_866" class="cls-3" transform="translate(105 630)">
+                            <ellipse cx="3.5" cy="4" class="cls-7" rx="3.5" ry="4"/>
+                            <ellipse cx="3.5" cy="4" class="cls-1" rx="3.1" ry="3.6"/>
+                        </g>
+                        <g id="Ellipse_867" class="cls-3" transform="translate(119 630)">
+                            <ellipse cx="3.5" cy="4" class="cls-7" rx="3.5" ry="4"/>
+                            <ellipse cx="3.5" cy="4" class="cls-1" rx="3.1" ry="3.6"/>
+                        </g>
+                        <g id="Ellipse_870" class="cls-4" transform="translate(112 618)">
+                            <circle cx="1" cy="1" r="1" class="cls-7"/>
+                            <circle cx="1" cy="1" r=".75" class="cls-1"/>
+                        </g>
+                        <g id="Ellipse_871" class="cls-4" transform="translate(117 618)">
+                            <circle cx="1" cy="1" r="1" class="cls-7"/>
+                            <circle cx="1" cy="1" r=".75" class="cls-1"/>
+                        </g>
+                        <circle id="Ellipse_873" cx="1" cy="1" r="1" fill="#8397af" transform="translate(114 621)"/>
+                        <path id="Path_8713" fill="none" stroke="#8397af" stroke-linecap="round" stroke-width="0.8px" d="M3.054-1.083a3.718 3.718 0 0 1-.659 2.748A3.879 3.879 0 0 1 .15 2.913" transform="matrix(0.588, 0.809, -0.809, 0.588, 115.042, 621.682)"/>
+                        <path id="Path_8715" d="M297-14327.908s4.524 2.028 3.109 6.884" class="cls-3" transform="translate(-176.097 14952.108)"/>
+                        <path id="Path_8718" d="M300.581-14327.908s-4.732 1.605-3.317 6.461" class="cls-3" transform="translate(-190.159 14952.515)"/>
+                        <path id="Path_8716" d="M293.274-14324.818s1.908 3.619 1.486 5.611" class="cls-3" transform="translate(-174.017 14950.385)"/>
+                        <path id="Path_8717" d="M294.911-14324.818s-2.069 3.31-1.647 5.3" class="cls-3" transform="translate(-182.843 14950.79)"/>
+                        <path id="Path_8719" d="M277.188-14304.048a8.78 8.78 0 0 0 4.159 1.507 6.987 6.987 0 0 0 3.825-1.507" class="cls-3" transform="translate(-165.769 14938.789)"/>
+                    </g>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

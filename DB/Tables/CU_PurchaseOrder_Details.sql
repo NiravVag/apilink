@@ -1,0 +1,30 @@
+﻿CREATE TABLE [dbo].[CU_PurchaseOrder_Details]
+(
+	[Id] [int] IDENTITY(1,1) NOT FOR REPLICATION NOT NULL PRIMARY KEY, 
+	[PO_Id] int NOT NULL,    
+    [Product_Id] INT NOT NULL, 
+	[Unit_Id] INT, 
+	[Booking_Status] INT, 
+    [Destination_Country_Id] INT NULL, 
+	[ETD] DATETIME NULL,
+    [Supplier_Id] INT NULL, 
+	[Factory_Id] INT NULL, 
+    [FactoryReference] NVARCHAR(1000) NULL, 
+    [Quantity] int NOT NULL, 
+    [Active] BIT NULL, 
+    [CreatedBy] INT NULL, 
+    [CreatedTime] DATETIME NULL,
+	[DeletedBy] INT NULL, 
+    [DeletedTime] DATETIME NULL,
+	[EntityId] INT NULL,
+	CONSTRAINT CU_PurchaseOrder_Details_EntityId  FOREIGN KEY(EntityId) REFERENCES [dbo].[AP_Entity](Id),
+
+    FOREIGN KEY (PO_Id) REFERENCES [dbo].[CU_PurchaseOrder] (Id),
+	FOREIGN KEY (Product_Id) REFERENCES [dbo].[CU_Products] (Id),
+	FOREIGN KEY (Destination_Country_Id) REFERENCES [dbo].[REF_Country] (Id),
+	FOREIGN KEY (Unit_Id) REFERENCES [dbo].[REF_Product_Units] (Id),
+	FOREIGN KEY (Supplier_Id) REFERENCES [dbo].[SU_Supplier] (Id),
+	FOREIGN KEY (Factory_Id) REFERENCES [dbo].[SU_Supplier] (Id),
+	FOREIGN KEY (CreatedBy) REFERENCES [dbo].[IT_UserMaster] (Id),
+    FOREIGN KEY (DeletedBy) REFERENCES [dbo].[IT_UserMaster] (Id)
+)

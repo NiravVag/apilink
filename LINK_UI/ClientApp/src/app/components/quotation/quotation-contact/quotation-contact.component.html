@@ -1,0 +1,107 @@
+<div class="row">
+  <div class="col-sm-3">
+    <div class="my-input-group">
+      <label class="required">{{ label }}</label>
+      <ng-select appendTo="body" [items]="dataSource" [multiple]="false" [closeOnSelect]="true" [clearable]="false"
+        [searchable]="true" bindLabel="name" [loading]="dropdownloading"
+        placeholder="--- {{ 'QUOTATION.LBL_SELECT' | translate }} ---" [(ngModel)]="id"
+        [disabled]="type != 4 && (!isInternaluser || quotationId > 0 || isFromBookingSummary)"
+        (ngModelChange)="updateData($event)" [ngClass]="{ 'is-invalid': !currentValidator.isValid('id')}">
+        <ng-template ng-option-tmp let-item="item">
+          <div class="text-wrap">{{ item.name }}</div>
+        </ng-template>
+      </ng-select>
+      <div *ngIf="!currentValidator.isValid('id')" class="invalid-feedback">
+        <div *ngFor="let error of currentValidator.getErrors('id')">{{ error | translate }}</div>
+      </div>
+    </div>
+  </div>
+  <div class="col-sm-3 mobile-margin-top-15" *ngIf="type != 4">
+    <div class="my-input-group">
+      <label class="required">{{ 'QUOTATION.LBL_LEGALNAME' | translate }}</label>
+      <textarea [(ngModel)]="legalName" class="form-control" [disabled]="!isInternaluser" maxlength="300"
+        placeholder="{{ 'QUOTATION.LBL_LEGALNAME' | translate }}"
+        [ngClass]="{ 'is-invalid':  !currentValidator.isValid('legalName')}"></textarea>
+      <div *ngIf="!currentValidator.isValid('legalName')" class="invalid-feedback">
+        <div *ngFor="let error of currentValidator.getErrors('legalName')">{{ error | translate }}</div>
+      </div>
+    </div>
+  </div>
+  <div class="col-sm-3 mobile-margin-top-15">
+    <div class="my-input-group">
+      <label>{{ 'QUOTATION.LBL_CONTACT' | translate }}</label>
+      <ng-select appendTo="body" [items]="data" [multiple]="true" [closeOnSelect]="false" [disabled]="!isInternaluser"
+        [searchable]="true" bindLabel="contactName" [loading]="contactLoading"
+        placeholder="--- {{ 'QUOTATION.LBL_SELECT' | translate }} ---" [(ngModel)]="model" class="multiple"
+        [ngClass]="{ 'is-invalid': !currentValidator.isValid('model')}">
+        <ng-template ng-option-tmp let-item="item">
+          <div class="text-wrap">{{ item.contactName }}</div>
+        </ng-template>
+      </ng-select>
+    </div>
+  </div>
+  <div class="col-sm-3 mobile-margin-top-15" *ngIf="type != 1 && type!=4">
+    <div class="my-input-group">
+      <label>{{ 'QUOTATION.LBL_GRADE' | translate }}</label>
+      <input type="text" [(ngModel)]="grade" (onchange)="updateData($event)" class="form-control" disabled>
+    </div>
+  </div>
+</div>
+<div class="row marginTop15" *ngIf="type == 3">
+  <div class="col-sm-9">
+    <div class="my-input-group">
+      <label class="required">{{ 'QUOTATION.LBL_FACTADDRESS' | translate }}</label>
+      <textarea [(ngModel)]="address" [maxlength]="600" class="form-control" [disabled]="!isInternaluser"
+        placeholder="{{ 'QUOTATION.LBL_FACTADDRESS' | translate }}"
+        [ngClass]="{ 'is-invalid':  !currentValidator.isValid('address')}"></textarea>
+      <div *ngIf="!currentValidator.isValid('address')" class="invalid-feedback">
+        <div *ngFor="let error of currentValidator.getErrors('address')">{{ error | translate }}</div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="table-container marginTop15" *ngIf="model && model.length > 0">
+  <table class="pagination-table bordered">
+    <thead>
+      <tr>
+        <th>{{ 'QUOTATION.LBL_CONTACTNAME' | translate }}</th>
+        <th>{{ 'QUOTATION.LBL_CONTACTEMAIL' | translate }}</th>
+        <th>{{ 'QUOTATION.LBL_PHONE' | translate }}</th>
+        <th class="th-text-center">{{ 'QUOTATION.LBL_QUOTATION_PDF' | translate }}</th>
+        <th class="th-text-center">{{ 'QUOTATION.LBL_QUOTATION_EMAIL' | translate }}</th>
+        <th class="th-text-center" *ngIf="billPaidBy == type && paymentTerm == paymentTermEnum.PreInvoice">{{ 'QUOTATION.LBL_INVOICE_EMAIL' | translate }}</th>
+      </tr>
+    </thead>
+    <tbody>
+      <!-- <tr *ngIf="!model  || model.length <=0">
+            <td colspan="5">{{ 'QUOTATION.LBL_NOCONTACTSELECTED' | translate }}</td>
+          </tr> -->
+      <tr *ngFor="let item of model; let i =index">
+        <td>{{item.contactName}}</td>
+        <td>{{item.contactEmail}}</td>
+        <td>{{item.contactPhone}}</td>
+        <td class="Center_Middle">
+          <div class="styled-checkbox-container">
+            <input type="checkbox" class="styled-checkbox" [disabled]="!isInternaluser"
+              id="chkquo-{{fieldtype}}-{{item.contactId}}" [(ngModel)]="item.quotation">
+            <label for="chkquo-{{fieldtype}}-{{item.contactId}}"></label>
+          </div>
+        </td>
+        <td class="Center_Middle">
+          <div class="styled-checkbox-container">
+            <input type="checkbox" class="styled-checkbox" [disabled]="!isInternaluser"
+              id="chkemail-{{fieldtype}}-{{item.contactId}}" [(ngModel)]="item.email">
+            <label for="chkemail-{{fieldtype}}-{{item.contactId}}"></label>
+          </div>
+        </td>
+        <td class="Center_Middle" *ngIf="billPaidBy == type && paymentTerm == paymentTermEnum.PreInvoice">
+          <div class="styled-checkbox-container">
+            <input type="checkbox" class="styled-checkbox" [disabled]="!isInternaluser"
+              id="chkinvoiceemail-{{fieldtype}}-{{item.contactId}}" [(ngModel)]="item.invoiceEmail">
+            <label for="chkinvoiceemail-{{fieldtype}}-{{item.contactId}}"></label>
+          </div>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>

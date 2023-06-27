@@ -1,0 +1,29 @@
+{
+  "model": "expenseclaimlist.model",
+  "fields": {
+    "startDate": [
+      {
+        "type": "required",
+        "fieldType": "D",
+        "ressource": "EXPENSE_SUMMARY.MSG_STARTDATE_REQ"
+      },
+      {
+        "type": "date",
+        "ressource": "EXPENSE_SUMMARY.MSG_STARTDATE_DATE"
+      }
+    ],
+    "endDate": [
+      {
+        "type": "required",
+        "fieldType": "D",
+        "ressource": "EXPENSE_SUMMARY.MSG_ENDDATE_REQ"
+      },
+      {
+        "type": "date",
+        "ressource": "EXPENSE_SUMMARY.MSG_ENDDATE_DATE"
+      }
+    ]
+  }
+
+
+}

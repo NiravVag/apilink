@@ -1,0 +1,44 @@
+:host /deep/ .nav-tabs {
+  background-color: #9fa8b3 !important;
+  border-color: #abafb1 !important;
+  font-size: 14px;
+}
+
+
+  :host /deep/ .nav-tabs .nav-link {
+    color: #000
+  }
+
+.iterateContainer {
+  border: 1px solid #abafb1;
+  max-height: 200px;
+  border-radius: 5px;
+  padding: 5px 5px;
+  width: 100%;
+  overflow: scroll;
+  overflow-x: hidden;
+}
+
+.custom {
+  max-height: 22px !important;
+  border: none !important;
+}
+
+.multiselect-dropdown[test] {
+  width: 95% !important;
+}
+
+:host /deep/ .multiselect-dropdown {
+  width: 95% !important;
+  font-size: 12px !important;
+}
+
+  :host /deep/ .multiselect-dropdown .dropdown-btn {
+    font-size: 12px !important;
+    max-height: 27px !important;
+    line-height: unset !important;
+  }
+
+.is-invalid-date {
+  background-color: aqua;
+}

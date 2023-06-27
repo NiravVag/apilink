@@ -1,0 +1,258 @@
+<div class="main-wrapper">
+    <div class="wrapper dashboard-wrapper">
+        <div class="my-container">
+            <div class="master-body">
+                <div class="title-container">
+                    <div class="header-back-button" *ngIf="fromSummary">
+                        <img src="assets/images/back-red.png" alt="back" (click)="this.return('usersearch/user-account-summary');">
+                    </div>
+                    <h3 class="main-title">{{ 'EDIT_USER_ACCOUNT.TITLE' | translate }} - {{name}} ({{roleName}})</h3>
+                </div>
+                <div class="content-container quotation-container">
+                    <div [@expandCollapse]="isFilterOpen ? 'open' : 'close'" class="centerContainerPadding common-filter-container">
+                        <div class="animated-icon-container" (click)="toggleFilterSection()" *ngIf="(model.items && model.items.length>0)">
+                            <img src="assets/images/cta-close-grey.svg" alt="close">
+                        </div>
+
+                        <div class="row">
+
+                            <div class="col-sm-3 col-md-3 col-lg-3">
+                                <div class="my-input-group">
+                                    <label class="required">{{ 'EDIT_USER_ACCOUNT.LBL_USERNAME' | translate }}</label>
+                                    <input [(ngModel)]="modelAdd.userName" [ngClass]="{ 'is-invalid':  !validator.isValid('userName')}" type="text" maxlength="300" placeholder="{{ 'EDIT_USER_ACCOUNT.PH_NAME' | translate }}" />
+                                    <div *ngIf="!validator.isValid('userName')" class="invalid-feedback">
+                                        <div *ngFor="let error of validator.getErrors('userName')">
+                                            {{ error | translate }}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-3 col-md-3 col-lg-3 mobile-margin-top-15">
+                                <div class="my-input-group">
+                                    <label class="required">{{ 'EDIT_USER_ACCOUNT.LBL_PASSWORD' | translate }}</label>
+                                    <input [(ngModel)]="modelAdd.password" [ngClass]="{ 'is-invalid':  !validator.isValid('password')}" type="text" maxlength="300" placeholder="{{ 'EDIT_USER_ACCOUNT.PH_PASSWORD' | translate }}" />
+                                    <div *ngIf="!validator.isValid('password')" class="invalid-feedback">
+                                        <div *ngFor="let error of validator.getErrors('password')">
+                                            {{ error | translate }}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-3 col-md-3 col-lg-3 mobile-margin-top-15">
+                                <div class="my-input-group">
+                                    <label class="required">{{ 'EDIT_USER_ACCOUNT.LBL_FULLNAME' | translate }}</label>
+                                    <input [(ngModel)]="modelAdd.fullname" [ngClass]="{ 'is-invalid':  !validator.isValid('fullname')}" type="text" maxlength="300" placeholder="{{ 'EDIT_USER_ACCOUNT.PH_FULLNAME' | translate }}" />
+                                    <div *ngIf="!validator.isValid('fullname')" class="invalid-feedback">
+                                        <div *ngFor="let error of validator.getErrors('fullname')">
+                                            {{ error | translate }}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+
+
+                        </div>
+
+                        <div class="row marginTop15">
+                            <div class="col-sm-3 col-md-3 col-lg-3 mobile-margin-top-15">
+                                <div class="my-input-group">
+                                    <label class="required">{{ 'EDIT_USER_ACCOUNT.LBL_ROLE' | translate }}</label>
+                                    <ng-select [items]="roleList" [multiple]="true" class="multiple" appendTo="body" [searchable]="true" bindLabel="roleName" bindValue="id" [loading]="loading" [clearable]="true" (change)="roleChange($event)" placeholder="--- {{ 'COMMON.LBL_SELECT' | translate }} ---"
+                                        [(ngModel)]="modelAdd.roles" [ngClass]="{'is-invalid': !validator.isValid('roles')}">
+                                    </ng-select>
+                                    <div *ngIf="!validator.isValid('roles')" class="invalid-feedback">
+                                        <div *ngFor="let error of validator.getErrors('roles')">
+                                            {{ error | translate }}</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-3 col-md-3 col-lg-3 mobile-margin-top-15" *ngIf="!isInternalOrOutsourceUser">
+                                <div class="my-input-group">
+                                    <label class="required">{{ 'EDIT_USER_ACCOUNT.LBL_CONTACT' | translate }}</label>
+                                    <ng-select [items]="newContactList" [clearable]="false" [closeOnSelect]="true" [searchable]="true" bindLabel="contactName" bindValue="contactId" appendTo="body" [loading]="loading" (ngModelChange)="changeContactName($event)" placeholder="--- {{ 'COMMON.LBL_SELECT' | translate }} ---"
+                                        [(ngModel)]="modelAdd.contact" [ngClass]="{'is-invalid': !validator.isValid('contact')}">
+                                    </ng-select>
+                                    <div *ngIf="!validator.isValid('contact')" class="invalid-feedback">
+                                        <div *ngFor="let error of validator.getErrors('contact')">
+                                            {{ error | translate }}</div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- <div class="col-sm-3 col-md-3 col-lg-3 mobile-margin-top-15">
+                                    <div class="my-input-group">
+                                        <label class="required">{{ 'EDIT_USER_ACCOUNT.LBL_ENTITY' | translate }}</label>
+                                        <ng-select [items]="userEntityList" appendTo="body"
+                                            [closeOnSelect]="true" [searchable]="true" bindLabel="name"
+                                            bindValue="id" [loading]="loading"
+                                            placeholder="--- {{ 'COMMON.LBL_SELECT' | translate }} ---"
+                                            [(ngModel)]="modelAdd.primaryEntity"
+                                            [ngClass]="{'is-invalid': !validator.isValid('primaryEntity')}">
+                                        </ng-select>
+                                        <div *ngIf="!validator.isValid('primaryEntity')" class="invalid-feedback">
+                                            <div *ngFor="let error of validator.getErrors('primaryEntity')">
+                                                {{ error | translate }}</div>
+                                        </div>
+                                    </div>
+                                </div> -->
+
+                        </div>
+
+
+
+                        <div class="row marginTop25">
+                            <div class="col-12 col-sm-12 text-right mt-3 mt-sm-0">
+                                <button class="secondary-cta small" [hidden]="isNewItem" (click)="refresh()">
+                                {{ 'COMMON.LBL_CONFIRMCANCEL' | translate }}
+                            </button> &nbsp;
+                                <button class="primary-cta small" (click)="save()" [disabled]="saveloading || loading">
+                                {{ isNewItem ? ('COMMON.LBL_SUBMIT' | translate) : ('COMMON.LBL_UPDATE' | translate) }}
+                                <span *ngIf="saveloading">
+                                    <i class="fa fa-refresh fa-spin" aria-hidden="true"></i>
+                                </span>
+                            </button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="centerContainerPadding float-left" *ngIf="userRoleValidators && userRoleValidators.length>0">
+
+                        <div class="quotation-search-container" style="width: 800px;">
+                            <div style="overflow-y:hidden" class="table-container scroll-x">
+                                <table class="pagination-table simple-table bordered">
+                                    <thead>
+                                        <tr>
+
+                                            <th>RoleName</th>
+                                            <th>Entity</th>
+
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr *ngFor="let item of userRoleValidators;  let i = index">
+
+                                            <td>{{item.userRole.roleName}}</td>
+                                            <td>
+                                                <div class="my-input-group">
+                                                    <ng-select [items]="userEntityList" appendTo="body" [closeOnSelect]="true" [searchable]="true" bindLabel="name" bindValue="id" [loading]="loading" [multiple]="true" class="multiple" placeholder="--- {{ 'COMMON.LBL_SELECT' | translate }} ---" [(ngModel)]="item.userRole.roleEntity"
+                                                        [ngClass]="{'is-invalid': !item.validator.isValid('roleEntity')}">
+                                                    </ng-select>
+                                                    <div *ngIf="!item.validator.isValid('roleEntity')" class="invalid-feedback">
+                                                        <div *ngFor="let error of item.validator.getErrors('roleEntity')">
+                                                            {{ error | translate }}</div>
+                                                    </div>
+                                                </div>
+
+                                            </td>
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="centerContainerPadding float-left" *ngIf="model.items && model.items.length>0">
+                        <!-- <p class="record-count">
+                            {{
+                                        'COMMON.MSG_SHOWING' |
+                                                  translate
+                                }}&nbsp;{{((model.index-1)*(model.pageSize))+1}}&nbsp;{{
+                                        'COMMON.MSG_TO' |
+                                                  translate
+                                }}&nbsp;{{(model.index*model.pageSize)>model.totalcount?model.totalCount:(model.index*model.pageSize)}}&nbsp;{{ 'COMMON.MSG_OF' | translate }}&nbsp;{{model.totalCount}}&nbsp;{{
+                                                  'COMMON.MSG_RECORDS' | translate
+                                }}
+                        </p> -->
+                        <div class="row">
+                            <div class="col-6 col-sm-4 col-xl-2 d-flex">
+                                <p class="search-trigger-heading" [innerHtml]="showPaginationText(model.index,model.pageSize,model.totalCount)"></p>
+                            </div>
+                            <div class="col-6 col-sm-8 col-xl-10 text-right">
+                                <div class="animated-icon-container" *ngIf="!isFilterOpen" (click)="toggleFilterSection()">
+                                    <img src="assets/images/cta-search-grey.svg" alt="search">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="quotation-search-container">
+                            <div style="overflow-y:hidden" class="table-container scroll-x">
+                                <table class="pagination-table simple-table bordered">
+                                    <thead>
+                                        <tr>
+
+                                            <th class="width-20"></th>
+                                            <th class="width-20"></th>
+                                            <th *ngIf="isInternalOrOutsourceUser" class="width-20"></th>
+                                            <th>{{ 'EDIT_USER_ACCOUNT.LBL_FULLNAME' | translate }}</th>
+                                            <th>{{ 'EDIT_USER_ACCOUNT.LBL_USERNAME' | translate }}</th>
+                                            <th>{{ 'EDIT_USER_ACCOUNT.LBL_PASSWORD' | translate }}</th>
+                                            <th>{{ 'EDIT_USER_ACCOUNT.LBL_STATUS' | translate }}</th>
+                                            <th>{{ 'EDIT_USER_ACCOUNT.LBL_ROLE' | translate }}</th>
+
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr *ngFor="let item of model.items">
+
+                                            <td class="Center_Middle">
+                                                <span class="table-cta icon-cta common-tooltip" *ngIf="item.status" (click)="openEdit(item)" data-tooltip="Edit">
+                                            <img src="assets/images/cta-edit.svg" alt="Edit">
+                                          </span>
+                                            </td>
+                                            <td class="Center_Middle">
+
+                                                <span class="table-cta icon-cta common-tooltip" (click)="openConfirm(item,content)" *ngIf="item.status" data-tooltip="Delete">
+                                                <img src="assets/images/cta-delete.svg" alt="Delete">
+                                              </span>
+                                            </td>
+                                            <td *ngIf="isInternalOrOutsourceUser" class="Center_Middle">
+
+                                                <span class="table-cta icon-cta common-tooltip" (click)="getDetailsUser(item.id)" data-tooltip="User Config">
+                                            <img src="assets/images/cta-leader.svg" alt="Edit">
+                                          </span>
+                                            </td>
+                                            <td>{{item.fullname}}</td>
+                                            <td>{{item.userName}}</td>
+                                            <td>{{item.password}}</td>
+                                            <td [ngClass]="{'active' : item.status , 'disabled': !item.status }">
+                                                {{item.status ? ('EDIT_USER_ACCOUNT.LBL_ACTIVE' | translate) : ('EDIT_USER_ACCOUNT.LBL_DISABLE' | translate)}}
+                                            </td>
+                                            <td>{{item.roleName}}</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <div class="pagination-container">
+                            <select class="small" [(ngModel)]="selectedPageSize" (change)="changePageSize()">
+                                <option *ngFor="let item of pagesizeitems" [ngValue]=item>{{item}}</option>
+                            </select>
+                            <ngb-pagination (pageChange)="onPager($event)" [pageSize]="model.pageSize" [collectionSize]="model.totalCount" [(page)]="model.index" [maxSize]="5">
+                            </ngb-pagination>
+                        </div>
+                    </div>
+                    <!--No data returns-->
+                    <div class="centerContainerPadding" *ngIf="model.noFound">
+                        <div class="error-container">
+                            <img src="assets/images/no-result.svg" alt="" class="thumbnail">
+                            <h4 class="title">{{ 'USER_SUMMARY.LBL_NOITEMS' | translate }}</h4>
+                            <p class="error-subtitle">{{'CS_CONFIG_SUMMARY.LBL_NODATA' | translate}}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<ng-template #content let-modal>
+    <div class="modal-body">
+        <div class="small-model">
+            <h2 class="title">{{ 'COMMON.LBL_CONFIRMDELETION' | translate }}</h2>
+            <p>{{ 'EDIT_USER_ACCOUNT.MSG_CONFRMDELETE' | translate }} <strong>{{masterModel.removedName}} ?</strong></p>
+            <button class="secondary-cta" (click)="modal.dismiss('Cross click')">{{ 'COMMON.LBL_CONFIRMCANCEL' | translate }}</button>
+            <button class="primary-cta" (click)="delete();">{{ 'COMMON.LBL_OK' | translate }}</button>
+        </div>
+    </div>
+</ng-template>

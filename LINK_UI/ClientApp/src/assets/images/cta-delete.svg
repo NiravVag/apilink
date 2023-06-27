@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16">
+    <defs>
+        <style>
+            .cls-2{fill:none}
+        </style>
+    </defs>
+    <g id="Component_25_3" data-name="Component 25 – 3" opacity="0.8">
+        <path id="Rectangle_1102" d="M0 0H16V16H0z" class="cls-2" data-name="Rectangle 1102"/>
+        <g id="noun_Trash_1392360">
+            <g id="Group_10064" data-name="Group 10064">
+                <g id="Group_10063" data-name="Group 10063">
+                    <path id="Rectangle_1127" d="M0 0H16V16H0z" class="cls-2" data-name="Rectangle 1127"/>
+                </g>
+            </g>
+        </g>
+        <g id="Group_10068" data-name="Group 10068" transform="translate(2.372 .925)">
+            <path id="Path_2814" fill="#cd2d2f" d="M14.786 3.886h-2.814V2.472A.472.472 0 0 0 11.5 2H7.752a.472.472 0 0 0-.469.472v1.414H4.469a.472.472 0 0 0 0 .943h.957l.45 9.927a.473.473 0 0 0 .469.448h6.565a.473.473 0 0 0 .469-.448l.45-9.927h.957a.472.472 0 0 0 0-.943zM11.5 6.716v5.659a.469.469 0 1 1-.938 0V6.716a.469.469 0 1 1 .938 0zm-3.752 0a.469.469 0 1 1 .938 0v5.659a.469.469 0 1 1-.938 0zm.469-3.773h2.814v.943h-2.81z" data-name="Path 2814" transform="translate(-4 -2)"/>
+        </g>
+    </g>
+</svg>

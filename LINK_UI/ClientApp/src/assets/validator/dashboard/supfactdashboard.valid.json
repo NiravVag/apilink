@@ -1,0 +1,31 @@
+{
+    "model": "SupFactDashboardMasterModel",
+    "fields": {
+      "fromDate": [
+        {
+            "type": "required",
+            "fieldType": "D",
+            "ressource": "COMMON.MSG_SERVICE_FROMDATE_REQ"
+        },
+        {
+            "type": "isLessOrEqual",
+            "fieldType": "D",
+            "fieldCible": "toDate",
+            "ressource": "COMMON.MSG_SERVICE_FROMDATE_GREATER_REQ"
+        }
+    ],
+    "toDate": [
+        {
+            "type": "required",
+            "fieldType": "D",
+            "ressource": "COMMON.MSG_SERVICE_TODATE_REQ"
+        },
+        {
+            "type": "isGreatOrEqual",
+            "fieldType": "D",
+            "fieldCible": "fromDate",
+            "ressource": "COMMON.MSG_SERVICE_TODATE_LESS_REQ" 
+        }
+    ]
+    }    
+  }

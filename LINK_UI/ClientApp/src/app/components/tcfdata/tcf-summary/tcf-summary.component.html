@@ -1,0 +1,652 @@
+<div class="main-wrapper">
+	<div class="wrapper dashboard-wrapper">
+		<div class="my-container">
+			<div class="master-body">
+				<div class="title-container">
+					<h3 class="main-title">{{ 'TCF_LIST.TITLE' | translate }}</h3>
+				</div>
+				<div class="content-container tcf-page-container">
+					<div [@expandCollapse]="isFilterOpen ? 'open' : 'close'"
+						class="centerContainerPadding common-filter-container">
+						<div class="animated-icon-container" (click)="toggleFilterSection()"
+							*ngIf="(tcfResponse.tcfList && tcfResponse.tcfList.length>0)">
+							<img src="assets/images/cta-close-grey.svg" alt="close">
+						</div>
+						<div class="row">
+							<div class="col-sm-8 col-md-8 col-lg-6">
+								<div class="my-input-group">
+									<div class="scroll-xradiolist mb-2">
+										<div class="styled-radio-container"
+										*ngFor="let item of tcfSearchtypelst;let idx = index">
+										<input type="radio" class="styled-radio" id="{{item.id}}" name="radio-group"
+											[value]="item.id" [checked]="true" (change)="SetSearchTypemodel(item.id)"
+											[(ngModel)]="model.searchTypeId">
+										<label for="{{item.id}}">{{item.name}}</label>
+									</div>
+								</div>
+									<input maxlength="200" [(ngModel)]="model.searchTypeText" type="text" />
+								</div>
+							</div>
+							<div class="col-sm-6 col-md-8 col-xl-6 mobile-margin-top-15">
+								<div class="my-input-group">
+									<div class="styled-radio-container"
+										*ngFor="let item of tcfDatetypelst;let idx = index">
+										<input type="radio" class="styled-radio" id="{{item.id}}" name="radio-group1"
+											[value]="item.id" [checked]="true" (change)="SetSearchDatetype(item.id)"
+											[(ngModel)]="model.dateTypeId">
+										<label for="{{item.id}}">{{item.name}}</label>
+									</div>
+								</div>
+								<div class="row">
+									<div class="my-input-group col-sm-3 col-md-6 col-lg-5">
+										<div class="calendar-wrapper">
+											<input type="text" maxlength="10" container="body"
+												[ngClass]="{ 'is-invalid':  !validator.isValidIf('fromdate',IsDateValidationRequired())}"
+												readonly=readonly [(ngModel)]="model.fromdate" ngbDatepicker
+												#sdf="ngbDatepicker" (click)="sdf.toggle()">
+											<img src="assets/images/cta-close-grey.svg" alt="" class="close-icon"
+												(click)="clearDateInput('Fromdate')" *ngIf="model.fromdate">
+											<img src="assets/images/calendar-icon.svg" alt="" class="calendar-icon"
+												(click)="sdf.toggle()">
+										</div>
+										<div *ngIf="!validator.isValidIf('fromdate',IsDateValidationRequired())"
+											class="invalid-feedback">
+											<div *ngFor="let error of validator.getErrors('fromdate')">{{ error |
+												translate }}</div>
+										</div>
+									</div>
+									<div class="my-input-group col-sm-3 col-md-6 col-lg-5">
+										<div class="calendar-wrapper">
+											<input type="text" maxlength="10" container="body" readonly=readonly
+												[ngClass]="{ 'is-invalid':  !validator.isValidIf('todate',IsDateValidationRequired())}"
+												[(ngModel)]="model.todate" ngbDatepicker #sdt="ngbDatepicker"
+												(click)="sdt.toggle()">
+											<img src="assets/images/cta-close-grey.svg" alt="" class="close-icon"
+												(click)="clearDateInput('Todate')" *ngIf="model.todate">
+											<img src="assets/images/calendar-icon.svg" alt="" class="calendar-icon"
+												(click)="sdt.toggle()">
+										</div>
+										<div *ngIf="!validator.isValidIf('todate',IsDateValidationRequired())"
+											class="invalid-feedback">
+											<div *ngFor="let error of validator.getErrors('todate')">{{ error |
+												translate }}</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+
+						<div class="row">
+							<div class="col-sm-3 col-md-3 col-lg-3 mobile-margin-top-15 marginTop15">
+								<div class="my-input-group">
+									<label for="">{{ 'TCF_LIST.LBL_STAGE' | translate }}</label>
+									<ng-select [items]="masterData.statusList" class="multiple" appendTo="body"
+										[loading]="masterData.statusLoading" multiple="true" bindLabel="name"
+										bindValue="id" [(ngModel)]="model.statusIds" [clearable]="true"
+										placeholder="Select"></ng-select>
+								</div>
+							</div>
+
+							<div class="col-sm-3 col-md-3 col-lg-3 mobile-margin-top-15 marginTop15">
+								<div class="my-input-group">
+									<label for="">{{ 'TCF_LIST.LBL_CUSTOMER' | translate }}</label>
+
+									<ng-select [items]="masterData.customerList" [virtualScroll]="true"
+										[loading]="masterData.customerLoading" bindLabel="name"
+										bindValue="glCode" appendTo="body"
+										placeholder="--- {{ (masterData.customerList!=null && masterData.customerList.length!=0? 'BOOKING_SUMMARY.LBL_SELECT':'BOOKING_SUMMARY.MSG_NO_DATA' ) | translate }} ---"
+										[typeahead]="masterData.customerInput" [minTermLength]="3"
+										[clearable]="true" (clear)="clearCustomerSelection()"
+										(change)="changeCustomerData()" [(ngModel)]="model.customerGLCodes"
+										[multiple]="true" class="multiple" (scrollToEnd)="getCustomerData(true)"
+										#select>
+										<ng-template ng-option-tmp let-item="item">
+											<div class="text-wrap"><span>{{item.name}}</span></div>
+										</ng-template>
+									</ng-select>
+
+								</div>
+							</div>
+
+							<div class="col-sm-3 col-md-3 col-lg-3 mobile-margin-top-15">
+								<div class="my-input-group">
+									<div class="styled-radio-container" *ngFor="let item of supplierTypeList;let idx = index">
+									  <input type="radio" class="styled-radio" id="{{item.id}}" name="radio-group3" [value]="item.id"
+										[checked]="true" [(ngModel)]="model.supplierTypeId" (change)="changeSupplierType()">
+									  <label for="{{item.id}}">{{item.name}}</label>
+									</div>
+									<ng-select [items]="masterData.supplierList" [virtualScroll]="true"
+										appendTo="body" [loading]="masterData.supplierLoading" bindLabel="name"
+										bindValue="id"
+										placeholder="--- {{ (masterData.supplierList!=null && masterData.supplierList.length!=0? 'BOOKING_SUMMARY.LBL_SELECT':'BOOKING_SUMMARY.MSG_NO_DATA' ) | translate }} ---"
+										[typeahead]="masterData.supplierInput" [minTermLength]="3"
+										[clearable]="true" (clear)="clearSupplierSelection()"
+										[(ngModel)]="model.supplierIds" [multiple]="true" class="multiple"
+										(scrollToEnd)="getSupplierData(true)" #select>
+										<ng-template ng-option-tmp let-item="item">
+											<div class="text-wrap"><span>{{item.name}}</span></div>
+										</ng-template>
+									</ng-select>
+								</div>
+							</div>
+
+							<div class="col-sm-3 col-md-3 col-lg-3 mobile-margin-top-15 marginTop15">
+								<div class="my-input-group">
+									<label for="">{{ 'TCF_LIST.LBL_BUYER' | translate }}</label>
+
+									<ng-select [items]="masterData.buyerList" [virtualScroll]="true"
+										appendTo="body" [loading]="masterData.buyerLoading" bindLabel="name"
+										bindValue="id"
+										placeholder="--- {{ (masterData.buyerList!=null && masterData.buyerList.length!=0? 'BOOKING_SUMMARY.LBL_SELECT':'BOOKING_SUMMARY.MSG_NO_DATA' ) | translate }} ---"
+										[typeahead]="masterData.buyerInput" [minTermLength]="4"
+										[clearable]="true" (clear)="clearBuyerSelection()"
+										[(ngModel)]="model.buyerIds" [multiple]="true" class="multiple"
+										(scrollToEnd)="getBuyerData(true)" #select>
+										<ng-template ng-option-tmp let-item="item">
+											<div class="text-wrap"><span>{{item.name}}</span></div>
+										</ng-template>
+									</ng-select>
+								</div>
+							</div>
+						</div>
+
+						<div [hidden]="!toggleFormSection">
+							<!-- *ngIf="toggleFormSection" -->
+							<div class="row">
+								<div class="col-sm-12">
+									<div class="row marginTop25">
+
+										<div class="col-sm-3 col-md-3 col-lg-3 mobile-margin-top-15">
+											<div class="my-input-group">
+												<label for="">{{ 'TCF_LIST.LBL_CUSTOMER_CONTACTS' | translate }}</label>
+
+												<ng-select [items]="masterData.customerContactList" appendTo="body"
+													[virtualScroll]="true" [loading]="masterData.customerContactLoading"
+													bindLabel="name" bindValue="id"
+													placeholder="--- {{ (masterData.customerContactList!=null && masterData.customerContactList.length!=0? 'BOOKING_SUMMARY.LBL_SELECT':'BOOKING_SUMMARY.MSG_NO_DATA' ) | translate }} ---"
+													[typeahead]="masterData.customerContactInput" [minTermLength]="4"
+													[clearable]="true" (clear)="clearCustomerContactSelection()"
+													[(ngModel)]="model.customerContactIds" [multiple]="true"
+													class="multiple" (scrollToEnd)="getCustomerContactData(true)"
+													#select>
+													<ng-template ng-option-tmp let-item="item">
+														<!-- <b>{{index}} </b><span>{{item.name}}</span> -->
+														<div class="text-wrap"><span>{{item.name}}</span></div>
+													</ng-template>
+												</ng-select>
+											</div>
+										</div>
+
+										<!-- <div class="col-sm-3 col-md-3 col-lg-3">
+										<div class="my-input-group">
+											<label for="">{{ 'TCF_LIST.LBL_BUYING_DEPARTMENT' | translate }}</label>
+											<ng-select [items]="masterData.buyerDepartmentList" class="multiple"
+												[loading]="masterData.buyerdepartmentLoading" multiple="true"
+												bindLabel="name" [(ngModel)]="model.buyerDepartmentIds" bindValue="id"
+												[clearable]="true" placeholder="Select"></ng-select>
+										</div>
+									</div> -->
+
+										<div class="col-sm-3 col-md-3 col-lg-3">
+											<div class="my-input-group">
+												<label for="">{{ 'TCF_LIST.LBL_PRODUCT_CATEGORY' | translate }}</label>
+
+												<ng-select [items]="masterData.productCategoryList" appendTo="body"
+													[virtualScroll]="true" [loading]="masterData.productCategoryLoading"
+													bindLabel="name" bindValue="id"
+													placeholder="--- {{ (masterData.productCategoryList!=null && masterData.productCategoryList.length!=0? 'BOOKING_SUMMARY.LBL_SELECT':'BOOKING_SUMMARY.MSG_NO_DATA' ) | translate }} ---"
+													[typeahead]="masterData.productCategoryInput" [minTermLength]="4"
+													[clearable]="true" (clear)="clearProductCategorySelection()"
+													(change)="changeProductCategoryData()"
+													[(ngModel)]="model.productCategoryIds" [multiple]="true"
+													class="multiple" (scrollToEnd)="getProductCategoryData(true)"
+													#select>
+													<ng-template ng-option-tmp let-item="item">
+														<!-- <b>{{index}} </b><span>{{item.name}}</span> -->
+														<div class="text-wrap"><span>{{item.name}}</span></div>
+													</ng-template>
+												</ng-select>
+											</div>
+										</div>
+
+										<div class="col-sm-3 col-md-3 col-lg-3">
+											<div class="my-input-group">
+												<label for="">{{ 'TCF_LIST.LBL_PRODUCT_SUB_CATEGORY' | translate
+													}}</label>
+
+												<ng-select [items]="masterData.productSubCategoryList" appendTo="body"
+													[virtualScroll]="true" [loading]="masterData.customerContactLoading"
+													bindLabel="name" bindValue="id"
+													placeholder="--- {{ (masterData.productSubCategoryList!=null && masterData.productSubCategoryList.length!=0? 'BOOKING_SUMMARY.LBL_SELECT':'BOOKING_SUMMARY.MSG_NO_DATA' ) | translate }} ---"
+													[typeahead]="masterData.productSubCategoryInput" [minTermLength]="4"
+													[clearable]="true" (clear)="clearProductSubCategorySelection()"
+													[(ngModel)]="model.productSubCategoryIds" [multiple]="true"
+													class="multiple" (scrollToEnd)="getProductSubCategoryData(true)"
+													#select>
+													<ng-template ng-option-tmp let-item="item">
+														<!-- <b>{{index}} </b><span>{{item.name}}</span> -->
+														<div class="text-wrap"><span>{{item.name}}</span></div>
+													</ng-template>
+												</ng-select>
+											</div>
+										</div>
+
+										<div class="col-sm-3 col-md-3 col-lg-3">
+											<div class="my-input-group">
+												<label for="">{{ 'TCF_LIST.LBL_COUNTRY_ORIGIN' | translate }}</label>
+
+												<ng-select [items]="masterData.countryOriginList" [virtualScroll]="true"
+													appendTo="body" [loading]="masterData.countryOriginLoading"
+													bindLabel="name" bindValue="id"
+													placeholder="--- {{ (masterData.countryOriginList!=null && masterData.countryOriginList.length!=0? 'BOOKING_SUMMARY.LBL_SELECT':'BOOKING_SUMMARY.MSG_NO_DATA' ) | translate }} ---"
+													[typeahead]="masterData.countryOriginInput" [minTermLength]="4"
+													[clearable]="true" (clear)="clearCountryOriginSelection()"
+													[(ngModel)]="model.countryOriginIds" [multiple]="true"
+													class="multiple" (scrollToEnd)="getCountryOriginData(true)" #select>
+													<ng-template ng-option-tmp let-item="item">
+														<!-- <b>{{index}} </b><span>{{item.name}}</span> -->
+														<div class="text-wrap"><span>{{item.name}}</span></div>
+													</ng-template>
+												</ng-select>
+											</div>
+										</div>
+
+									</div>
+								</div>
+							</div>
+
+							<div class="row">
+								<div class="col-sm-12">
+									<div class="row marginTop25">
+
+										<div class="col-sm-3 col-md-3 col-lg-3 mobile-margin-top-15">
+											<div class="my-input-group">
+												<label for="">{{ 'TCF_LIST.LBL_COUNTRY_DESTINATION' | translate
+													}}</label>
+
+												<ng-select [items]="masterData.countryDestinationList" appendTo="body"
+													[virtualScroll]="true"
+													[loading]="masterData.countryDestinationLoading" bindLabel="name"
+													bindValue="id"
+													placeholder="--- {{ (masterData.countryDestinationList!=null && masterData.countryDestinationList.length!=0? 'BOOKING_SUMMARY.LBL_SELECT':'BOOKING_SUMMARY.MSG_NO_DATA' ) | translate }} ---"
+													[typeahead]="masterData.countryDestinationInput" [minTermLength]="4"
+													[clearable]="true" (clear)="clearCountryDestinationSelection()"
+													[(ngModel)]="model.countryDestinationIds" [multiple]="true"
+													class="multiple" (scrollToEnd)="getCountryDestinationData(true)"
+													#select>
+													<ng-template ng-option-tmp let-item="item">
+														<!-- <b>{{index}} </b><span>{{item.name}}</span> -->
+														<div class="text-wrap"><span>{{item.name}}</span></div>
+													</ng-template>
+												</ng-select>
+											</div>
+										</div>
+
+										<!-- 									<div
+										class="col-sm-3 col-md-6 col-lg-3 mt-lg-0 tablet-margin-top-15 mobile-margin-top-15">
+										<div class="my-input-group">
+											<label for="">{{ 'TCF_LIST.LBL_PICTURE_UPLOADED' | translate }}</label>
+											<div class="row marginTop20">
+												<div class="col-6 styled-checkbox-container">
+													<input class="styled-checkbox" id="styled-checkbox-1"
+														type="checkbox" value="value1">
+													<label class="for-filter"
+														for="styled-checkbox-1"><strong>Uploaded</strong></label>
+												</div>
+											</div>
+										</div>
+									</div> -->
+
+									</div>
+								</div>
+							</div>
+
+						</div>
+
+						<!-- Advance Search -->
+						<div class="row marginTop25">
+							<div class="col-12 col-sm-6">
+								<button class="tertiary-cta small" (click)="toggleSection()">
+									<span class="icon" *ngIf="!toggleFormSection">+</span>
+									<span class="icon" *ngIf="toggleFormSection">-</span>
+									{{'QUOTATION_SUMMARY.LBL_ADVANCED_SEARCH' | translate}}
+								</button>
+
+							</div>
+							<div class="col-12 col-sm-6 text-right mt-3 mt-sm-0">
+
+								<button class="category-cta small mr-2 common-tooltip common-tooltip-top-2"
+									data-tooltip="Reset" (click)="reset()">
+									<img src="assets/images/reload-new.svg" alt="Reset">
+									<span>{{ 'QUOTATION_SUMMARY.LBL_RESET' | translate}}</span>
+								</button>
+								<!-- <button class="secondary-cta small mr-2" (click)="export()"
+									[disabled]="exportDataLoading || cancelLoading"
+									*ngIf="model.items != null && model.items.length != 0  && !model.noFound">
+									<img src="assets/images/red-export.svg" alt="export"> {{
+									'QUOTATION_SUMMARY.LBL_EXPORT' | translate }}
+									<span *ngIf="exportDataLoading">
+										<i class="fa fa-refresh fa-spin" aria-hidden="true"></i>
+									</span>
+								</button> -->
+								<button class="primary-cta small" [disabled]="masterData.searchloading || masterData.customerLoading || masterData.supplierLoading || masterData.buyerLoading 
+									|| masterData.productCategoryLoading || masterData.productSubCategoryLoading || masterData.countryOriginLoading  || masterData.countryDestinationLoading
+									|| masterData.statusLoading  || masterData.buyerdepartmentLoading" (click)="SearchDetails()"> {{
+									'QUOTATION_SUMMARY.LBL_SEARCH_BTN' | translate }}
+									<span *ngIf="masterData.searchloading">
+										<i class="fa fa-refresh fa-spin" aria-hidden="true"></i>
+									</span>
+								</button>
+							</div>
+						</div>
+						<!-- Advance Search -->
+					</div>
+
+					<div class="centerContainerPadding float-left"
+						*ngIf="(tcfResponse.tcfList && tcfResponse.tcfList.length>0)">
+
+						<div class="row">
+							<div class="col-6 col-sm-3 col-xl-2 d-flex">
+								<p class="search-trigger-heading" [innerHtml]="showPaginationText()"></p>
+							</div>
+							<div class="col-6 col-sm-9 col-xl-10 text-right">
+								<div class="animated-icon-container" *ngIf="!isFilterOpen"
+									(click)="toggleFilterSection()">
+									<img src="assets/images/cta-search-grey.svg" alt="search">
+								</div>
+							</div>
+						</div>
+
+						<div class="quotation-search-container">
+							<div class="table-container h-scroll table-max-height-650">
+								<table class="pagination-table simple-table bordered">
+									<thead>
+										<tr class="sticky-top-row">
+											<th class="width40 text-center"></th>
+											<th>{{ 'TCF_LIST.LBL_TCF_NO' | translate }} </th>
+											<th>{{ 'TCF_LIST.LBL_TRAFFIC_LIGHT' | translate }}</th>
+											<th>{{ 'TCF_LIST.LBL_STAGE_COMPLETION' | translate }}</th>
+											<th>{{ 'TCF_LIST.LBL_CUSTOMER_REF' | translate }}</th>
+											<th>{{ 'TCF_LIST.LBL_PRODUCT_CATEGORY' | translate }}</th>
+											<th>{{ 'TCF_LIST.LBL_SUPPLIER' | translate }}</th>
+											<th>{{ 'TCF_LIST.LBL_CUSTOMER' | translate }}</th>
+											<th>{{ 'TCF_LIST.LBL_FIRST_ETD_CRD' | translate }}</th>
+											<th>{{ 'TCF_LIST.LBL_REQUEST_DATE' | translate }}</th>
+											<th>{{ 'TCF_LIST.LBL_TCF_REPORT' | translate }}</th>
+											<th>{{ 'TCF_LIST.LBL_TCF_ALL_VALIDATED_DOC' | translate }}</th>
+										</tr>
+									</thead>
+
+									<tbody>
+
+										<ng-template ngFor let-iteminfo [ngForOf]="tcfResponse.tcfList" let-i="index">
+											<tr [ngClass]="(((i+1) % 2)== 0)?'even':'odd'">
+												<td class="width40 text-center">
+													<span class="expandable-trigger"
+														(click)=toggleExpandRow($event,i,iteminfo)>+</span>
+												</td>
+												<td class="width40">
+													<a style="color: blue;" triggers="mouseenter:mouseleave"
+														(click)="redirectToTCFDetail(iteminfo.tcfId)"
+														class="right-link">
+														{{iteminfo.tcfNo}}</a>
+												</td>
+												<td class="width120">
+
+													<img *ngIf="iteminfo.trafficColor==trafficLightColor.Red"
+														src="assets/images/red-close-thick.svg" alt="clock"
+														class="clock-icon">
+													<img *ngIf="iteminfo.trafficColor==trafficLightColor.Green"
+														src="assets/images/green-tick.svg" alt="clock"
+														class="clock-icon">
+													<img *ngIf="iteminfo.trafficColor==trafficLightColor.Orange"
+														src="assets/images/process.svg" alt="clock" class="clock-icon">
+
+													<span *ngIf="iteminfo.trafficLight">{{iteminfo.trafficLight}}</span>
+												</td>
+												<td class="width40">
+
+													<span class="in-progress"
+														*ngIf="iteminfo.statusId==tcfStage.New || iteminfo.statusId==tcfStage.ScopeDefinition || 
+																	iteminfo.statusId==tcfStage.Pending || iteminfo.statusId==tcfStage.ToBeFinalized || 
+																	iteminfo.statusId==tcfStage.InProgress || iteminfo.statusId==tcfStage.Waiting">{{iteminfo.status}}</span>
+
+													<span class="completed"
+														*ngIf="iteminfo.statusId==tcfStage.Completed">{{iteminfo.status}}</span>
+
+													<span class="rejected" *ngIf="iteminfo.statusId==tcfStage.TerminatedByClient || iteminfo.statusId==tcfStage.Expired
+																	|| iteminfo.statusId==tcfStage.Cancel">{{iteminfo.status}}</span>
+
+													<span class="light"
+														*ngIf="iteminfo.completeStatus">{{iteminfo.completeStatus}}%
+														{{ 'TCF_LIST.LBL_COMPLETED' | translate }}</span>
+													<span class="light" *ngIf="!iteminfo.completeStatus">0%
+														{{ 'TCF_LIST.LBL_COMPLETED' | translate }}</span>
+												</td>
+												<td class="width120">
+													<div *ngIf="iteminfo.customrRefShortName">
+														<div>
+															<ng-template #CustomerRefContent>
+																<div style="width: 200px;">
+																	{{iteminfo.customerRefName}}
+																</div>
+															</ng-template>
+															<a [ngbPopover]="CustomerRefContent"
+																triggers="mouseenter:mouseleave" placement="right"
+																popoverTitle="Customer Ref">
+																{{iteminfo.customrRefShortName}}
+															</a>
+														</div>
+													</div>
+
+													<!-- <span class="dark">{{iteminfo.customerRefName}}</span> -->
+												</td>
+												<td class="width120">
+													<span class="dark">{{iteminfo.productCategory}}</span>
+												</td>
+												<td class="width120">
+													<span class="dark">{{iteminfo.supplier}}</span>
+													<span class="dark">{{iteminfo.supplierRef}}</span>
+												</td>
+												<td class="width120">
+													<span class="dark">{{iteminfo.customer}}</span>
+												</td>
+												<td class="width40">
+													<span class="dark">{{iteminfo.firstETD}}</span>
+												</td>
+												<td class="width40">
+													<span class="dark">{{iteminfo.requestDate}}</span>
+												</td>
+												<td class="width40">
+													<button
+														*ngIf="iteminfo.statusId==tcfStage.Completed && iteminfo.validReport && iteminfo.validReport>0"
+														class="category-cta small mr-2 common-tooltip common-tooltip-top-2"
+														data-tooltip="Download"
+														(click)="getTCFReportData(iteminfo.tcfId)">
+														<img src="assets/images/cta-download.svg" alt="Download">
+														<span>{{'EDIT_BOOKING.LBL_DOC_DOWNLOAD' | translate }}</span>
+													</button>
+												</td>
+												<td class="width40">
+													<button
+														class="category-cta small mr-2 common-tooltip common-tooltip-top-2"
+														data-tooltip="Download"
+														(click)="getTCFValidDocument(iteminfo.tcfId)">
+														<img src="assets/images/cta-download.svg" alt="Download">
+														<span>{{'EDIT_BOOKING.LBL_DOC_DOWNLOAD' | translate }}</span>
+													</button>
+												</td>
+											</tr>
+
+											<ng-container>
+												<ng-template [ngTemplateOutlet]="tcfDetailTemplate"
+													[ngTemplateOutletContext]="{ iteminfo: iteminfo, i:i}">
+												</ng-template>
+											</ng-container>
+
+										</ng-template>
+
+									</tbody>
+								</table>
+							</div>
+						</div>
+
+						<div class="pagination-container" *ngIf="model.totalCount">
+							<!-- <select class="small" [(ngModel)]="selectedPageSize" (change)="SearchDetails()">
+								<option *ngFor="let item of pagesizeitems" [ngValue]=item>{{item}}</option>
+							</select> -->
+							<ngb-pagination (pageChange)="onPager($event)" [pageSize]="model.pageSize"
+								[collectionSize]="model.totalCount" [(page)]="model.index" [maxSize]="5">
+							</ngb-pagination>
+						</div>
+
+					</div>
+
+					<div class="centerContainerPadding" *ngIf="model.noFound">
+						<div class="error-container">
+							<img src="assets/images/no-result.svg" alt="" class="thumbnail">
+							<h4 class="error-title">{{ 'TCF_LIST.LBL_NO_DATA_FOUND' | translate }}</h4>
+							<p class="error-subtitle">{{ 'TCF_LIST.LBL_NO_SEARCH_FOUND' | translate }}</p>
+
+							<button (click)="Reset()" class="category-cta">
+								<img src="assets/images/reload-new.svg" alt="reload">
+								<span> {{ 'TCF_LIST.LBL_CLEAR_SEARCH' | translate
+									}}</span></button>
+						</div>
+					</div>
+
+					<!-- </div> -->
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<ng-template #tcfDetailTemplate let-iteminfo="iteminfo" let-i="i">
+
+		<tr class="expandable-row" [attr.data-expand-id]="'tcfDetail' + i">
+
+			<td colspan="11" *ngIf="iteminfo.tcfDetail">
+				<div class="searchFormPadding tcf-booking-expand-container">
+					<div class="column-1" *ngIf="iteminfo.tcfDetail.productImage">
+						<div class="product-thumb-container">
+							<img style="height: 150px;" src="{{iteminfo.tcfDetail.productUrl}}" alt="">
+						</div>
+					</div>
+					<div class="column-2">
+						<div class="block">
+							<div class="my-input-group marginTop15">
+								<label class="light" for="">{{ 'TCF_LIST.LBL_CUSTOMER_CONTACT' | translate }}</label>
+								<p class="input-value">
+									{{iteminfo.tcfDetail.customerContact}}</p>
+							</div>
+							<div class="my-input-group marginTop15">
+								<label class="light" for="">{{ 'TCF_LIST.LBL_MERCHANDISING_CONTACT' | translate
+									}}</label>
+								<p class="input-value">
+									{{iteminfo.tcfDetail.merchandisingContact}}</p>
+							</div>
+							<div class="my-input-group marginTop15">
+								<label class="light" for="">{{ 'TCF_LIST.LBL_TCF_DET_COUNTRY_ORIGIN' | translate
+									}}</label>
+								<p class="input-value">{{iteminfo.tcfDetail.countryOrigin}}</p>
+							</div>
+						</div>
+						<div class="block">
+							<div class="my-input-group marginTop15">
+								<label class="light" for="">{{ 'TCF_LIST.LBL_BUYING_DEPARTMENT' | translate }}</label>
+								<p class="input-value">
+									{{iteminfo.tcfDetail.buyerDepartment}}
+								</p>
+							</div>
+							<div class="my-input-group marginTop15">
+								<label class="light" for="">{{ 'TCF_LIST.LBL_BUYER' | translate }}</label>
+								<p class="input-value">{{iteminfo.tcfDetail.buyer}}</p>
+							</div>
+
+							<div class="my-input-group marginTop15">
+								<label class="light" for="">{{ 'TCF_LIST.LBL_TCF_DET_COUNTRY_DESTINATION' | translate
+									}}</label>
+								<p class="input-value">{{iteminfo.tcfDetail.destination}}</p>
+							</div>
+						</div>
+
+						<div class="block">
+							<div class="my-input-group marginTop15">
+								<label class="light" for="">{{ 'TCF_LIST.LBL_FIRST_DOC_SUBMISSION' | translate
+									}}</label>
+								<p class="input-value">
+									{{iteminfo.tcfDetail.firstDocumentSubmission}}
+									Days</p>
+							</div>
+							<div class="my-input-group marginTop15">
+								<label class="light" for="">{{ 'TCF_LIST.LBL_LAST_DOC_RECEIVED' | translate }}</label>
+								<p class="input-value">
+									{{iteminfo.tcfDetail.lastDocumentSubmission}} Days
+								</p>
+							</div>
+						</div>
+
+					</div>
+					<div class="column-3"
+						*ngIf="iteminfo.tcfDetail.documentsReceived || iteminfo.tcfDetail.documentsRejected || iteminfo.tcfDetail.documentsUnderReview">
+						<div class="donut-chart-card no-padding">
+							<!-- <div id="analytics-chart2" class="donut-chart"></div> -->
+							<div attr.id="analytics-chart{{iteminfo.tcfId}}" class="donut-chart"></div>
+							<div class="chart-legend-container">
+								<div class="legend-item">
+									<span class="tile" style="background-color: rgb(88, 190, 0)"></span>
+									<span class="text">{{ 'TCF_LIST.LBL_NO_OF_DOC_RECEIVED' | translate }}</span>
+									<span class="count">{{iteminfo.tcfDetail.documentsReceived}}</span>
+								</div>
+								<div class="legend-item">
+									<span class="tile" style="background-color:rgb(229, 81, 81)"></span>
+									<span class="text">{{ 'TCF_LIST.LBL_NO_OF_DOC_REJECTED' | translate }}</span>
+									<span class="count">{{iteminfo.tcfDetail.documentsRejected}}</span>
+								</div>
+								<div class="legend-item">
+									<span class="tile" style="background-color: rgb(243, 144, 15)"></span>
+									<span class="text">{{ 'TCF_LIST.LBL_NO_OF_DOC_UNDERVIEW' | translate }}</span>
+									<span class="count">{{iteminfo.tcfDetail.documentsUnderReview}}</span>
+								</div>
+								<div class="legend-item">
+									<span class="tile" style="background-color: rgba(36, 159, 230, 0.603)"></span>
+									<span class="text">{{ 'TCF_LIST.LBL_NO_OF_DOC_WAITING' | translate }}</span>
+									<span class="count">{{iteminfo.tcfDetail.documentsWaiting}}</span>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</td>
+		</tr>
+	</ng-template>
+	<div class="loader-overlay" *ngIf="masterData.isProcessLoader">
+		<div class="loader-container">
+			<img src="assets/images/reload.svg" alt="">
+			<span>{{'COMMON.LBL_LOADER' | translate}}</span>
+		</div>
+	</div>
+
+
+	<!-- <ng-template #bookinfopopup let-modal>
+	<div class="modal-header custom-modal-header">
+	  <h4 class="modal-title" id="modal-basic-title">{{ 'BOOKING_SUMMARY.LBL_BOOKINGING_INFO' | translate }}</h4>
+	  <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+		<span aria-hidden="true">&times;</span>
+	  </button>
+	</div>
+	<div class="modal-body custom-modal-body">
+	  <div class="content-container schedule-allocation-container">
+		<div class="formPadding">
+		  <div class="row">
+			<div class="col-sm-12 marginTop20">
+			  <div class="my-input-group col-lg-12">
+				<label class="light" for="">{{ 'EDIT_BOOKING.LBL_CUS_BOOKING_NO' | translate }}</label>
+				<p class="input-value">{{ bookingInfo.customerBookingNo}}</p>
+			  </div>
+			</div>
+		  </div>
+		</div>
+	  </div>
+	</div>
+  </ng-template> -->

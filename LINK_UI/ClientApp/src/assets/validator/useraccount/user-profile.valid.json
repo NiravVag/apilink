@@ -1,0 +1,22 @@
+{
+    "model": "UserProfileModel",
+    "fields": {
+        "displayName": [
+            {
+                "type": "required",
+                "ressource": "EDIT_USER_ACCOUNT.MSG_FULLNAME_REQ"
+            }            
+        ],
+        "emailId": [
+            {
+                "type": "required",
+                "fieldType": "T",
+                "ressource": "EDIT_STAFF.PH_EMAIL"
+            },
+            {
+                "type": "email",
+                "ressource": "EDIT_BOOKING.MSG_REQ_APPLICANT_EMAIL_FORMAT"
+            }          
+        ]
+    }
+}

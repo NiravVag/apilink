@@ -1,0 +1,664 @@
+<div class="main-wrapper">
+	<div class="wrapper dashboard-wrapper" *ngIf="false">
+		<div class="dashboard-body customer-dashboard-body dashbaord-placeholder-container">
+			<div class="map-overlay-placeholder-container" *ngIf="false">
+				<div class="my-dashboard-container">
+					<div class="notification-card"></div>
+					<div class="notification-card"></div>
+				</div>
+			</div>
+			<!-- <div id="mapView" class="customer-map-placeholder-container mb-4"></div> -->
+			<div class="my-dashboard-container">
+				<div class="customer-content-space-wrapper">
+					<div class="result-analytics-placeholder-container">
+						<div class="result-card">
+							<img src="assets/images/donut-placeholder.png" alt="graph">
+							<div class="content-container">
+								<div class="rect animate"></div>
+								<div class="rect animate width80"></div>
+								<div class="rect animate width50"></div>
+							</div>
+						</div>
+						<div class="result-card">
+							<img src="assets/images/donut-placeholder.png" alt="graph">
+							<div class="content-container">
+								<div class="rect animate"></div>
+								<div class="rect animate width80"></div>
+								<div class="rect animate width50"></div>
+							</div>
+						</div>
+						<div class="result-card">
+							<img src="assets/images/donut-placeholder.png" alt="graph">
+							<div class="content-container">
+								<div class="rect animate"></div>
+								<div class="rect animate width80"></div>
+								<div class="rect animate width50"></div>
+							</div>
+						</div>
+					</div>
+					<div class="product-overview-placeholder-container">
+						<div class="product-card">
+							<div class="content-container">
+								<div class="rect animate width80"></div>
+								<div class="rect animate width50"></div>
+								<div class="rect animate width50"></div>
+							</div>
+						</div>
+						<div class="product-card">
+							<div class="content-container">
+								<div class="rect animate width80"></div>
+								<div class="rect animate width50"></div>
+								<div class="rect animate width50"></div>
+							</div>
+						</div>
+					</div>
+					<div class="footer">
+						<p class="text desktop-hide">© 2019 All rights reserved. api - hk.com</p>
+						<ul class="footer-item">
+							<li><a href="">User Guide</a></li>
+							<li><a href="">Contact</a></li>
+							<li><a href="">Help</a></li>
+							<li><a href="">Terms</a></li>
+						</ul>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="wrapper dashboard-wrapper">
+		<div class="filter-container" [@expandCollapse]="isFilterOpen ? 'open' : 'close'" [@.disabled]="isMobile">
+			<div class="my-dashboard-container">
+				<div class="row customer-dashboard-mobile-filter">
+					<div class="col-sm-3 mobile-margin-top-15">
+						<div class="my-input-group">
+							<label for="">{{'SUPPLIER_FACTORY_DASHBOARD.LBL_CUSTOMER' | translate}}</label>
+							<ng-select [items]="masterModel.customerList" [virtualScroll]="true"
+								[loading]="masterModel.customerLoading" bindLabel="name" bindValue="id"
+								placeholder="--- {{ (masterModel.customerList!=null && masterModel.customerList.length!=0? 'COMMON.LBL_SELECT':'COMMON.LBL_NO_DATA' ) | translate }} ---"
+								[typeahead]="masterModel.customerInput" [minTermLength]="3" [clearable]="true"
+								[(ngModel)]="model.customerId" (scrollToEnd)="getCustomerData()" #select
+								appendTo="body">
+								<ng-template ng-option-tmp let-item="item">
+									<div class="text-wrap">{{ item.name }}</div>
+								</ng-template>
+							</ng-select>
+						</div>
+					</div>
+					<div class="col-sm-3 mobile-margin-top-15">
+						<div class="my-input-group">
+							<label for="">{{'SUPPLIER_FACTORY_DASHBOARD.LBL_SUPPLIER' | translate}}</label>
+							<ng-select [items]="masterModel.supplierList" [virtualScroll]="true"
+								[loading]="masterModel.supplierLoading" [(ngModel)]="model.supplierId"
+								[closeOnSelect]="true" [searchable]="true" bindLabel="name" bindValue="id"
+								[typeahead]="masterModel.supplierInput" [minTermLength]="3" appendTo="body"
+								placeholder="--- {{(masterModel.supplierList && masterModel.supplierList.length>0? 'COMMON.LBL_SELECT':'COMMON.LBL_NO_DATA')  | translate }} ---"
+								(scrollToEnd)="getSupplierData()" [disabled]="masterModel.isSupplier" #select>
+								<ng-template ng-option-tmp let-item="item">
+									<div class="text-wrap">{{ item.name }}</div>
+								</ng-template>
+							</ng-select>
+						</div>
+					</div>
+					<div class="col-sm-3 mobile-margin-top-15">
+						<div class="my-input-group">
+							<label for="">{{'SUPPLIER_FACTORY_DASHBOARD.LBL_FACTORY' | translate}}</label>
+							<ng-select [items]="masterModel.factoryList" [virtualScroll]="true"
+								[loading]="masterModel.factoryLoading" bindLabel="name" bindValue="id"
+								placeholder="--- {{ (masterModel.factoryList!=null && masterModel.factoryList.length!=0? 'COMMON.LBL_SELECT':'COMMON.LBL_NO_DATA') | translate }} ---"
+								[typeahead]="masterModel.factoryInput" [minTermLength]="3" appendTo="body"
+								[clearable]="true" [disabled]="masterModel.isFactory" [(ngModel)]="model.factoryId"
+								(scrollToEnd)="getFactoryData()" #select>
+								<ng-template ng-option-tmp let-item="item">
+									<div class="text-wrap">{{ item.name }}</div>
+								</ng-template>
+							</ng-select>
+						</div>
+					</div>
+					<div class="col-sm-3 mobile-margin-top-15">
+						<div class="my-input-group">
+							<label for="">{{'SUPPLIER_FACTORY_DASHBOARD.LBL_STATUS' | translate}}</label>
+							<ng-select [searchable]="true" [loading]=masterModel.bookingStatusLoading
+								[items]="masterModel.bookingStatusList" bindLabel="name" bindValue="id"
+								[hideSelected]="true" appendTo="body" class="multiple" [multiple]="true"
+								placeholder="--- {{ (masterModel.bookingStatusList!=null && masterModel.bookingStatusList.length!=0? 'COMMON.LBL_SELECT':'COMMON.LBL_NO_DATA' ) | translate }} ---"
+								[(ngModel)]="model.statusIdList" #select>
+								<ng-template ng-option-tmp let-item="item">
+									<div class="text-wrap">{{ item.name }}</div>
+								</ng-template>
+							</ng-select>
+						</div>
+					</div>
+					<div class="col-6 grid-column first mobile-margin-top-15 desktop-hide tablet-hide">
+						<div class="my-input-group">
+							<label for="">{{'SUPPLIER_FACTORY_DASHBOARD.LBL_FROMDATE' | translate}}</label>
+							<div class="calendar-wrapper">
+								<input type="text" autocomplete="off" [value]="formatter.format(model.fromDate)"
+									[(ngModel)]="model.fromDate" ngbDatepicker placeholder="From" name="dp"
+									[ngClass]="{ 'is-invalid':  !validator.isValid('fromDate')}" #sdf="ngbDatepicker"
+									(click)="sdf.toggle()">
+								<img src="assets/images/cta-calendar-grey.svg" alt="" class="calendar-icon"
+									(click)="sdf.toggle()">
+							</div>
+							<div *ngIf="!validator.isValid('fromDate')" class="invalid-feedback">
+								<div *ngFor="let error of validator.getErrors('fromDate')">
+									{{ error | translate }}</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-6 grid-column last mobile-margin-top-15 desktop-hide tablet-hide">
+						<div class="my-input-group">
+							<label for="">{{'SUPPLIER_FACTORY_DASHBOARD.LBL_TODATE' | translate}}</label>
+							<div class="calendar-wrapper">
+								<input type="text" autocomplete="off" [(ngModel)]="model.toDate" ngbDatepicker
+									[value]="formatter.format(model.toDate)"
+									[ngClass]="{ 'is-invalid':  !validator.isValid('toDate')}" #sdt="ngbDatepicker"
+									(click)="sdt.toggle()">
+								<img src="assets/images/cta-calendar-grey.svg" alt="" class="calendar-icon"
+									(click)="sdt.toggle()">
+							</div>
+							<div *ngIf="!validator.isValid('toDate')" class="invalid-feedback">
+								<div *ngFor="let error of validator.getErrors('toDate')">
+									{{ error | translate }}</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-12 filter-cta-container">
+						<button class="primary-cta small float-right" (click)="mobileSearch()">{{'COMMON.LBL_APPLY' |
+							translate}}</button>
+						<button class="tertiary-cta small float-right mr-2"
+							(click)="toggleFilter()">{{'COMMON.LBL_CANCEL' | translate }}</button>
+					</div>
+				</div>
+				<div class="row marginTop25">
+					<div class="col-12 col-sm-12 text-right mt-3 mt-sm-0">
+
+						<div class="mobile-hide">
+							<button class="primary-cta small" (click)="search()"
+								[disabled]="masterModel.searchLoading">
+								{{'COMMON.LBL_SEARCH' | translate }}
+								<span *ngIf="masterModel.searchLoading">
+									<i class="fa fa-refresh fa-spin" aria-hidden="true"></i>
+								</span></button>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="filter-bar-container" *ngIf="false">
+			<div class="my-dashboard-container" *ngIf="!isMobile">
+				<p class="heading">Data Showing</p>
+				<ul class="applied-filter-list">
+					<li>From: 12/10/20 <span class="ml-2">To: 12/10/20</span></li>
+					<li>Season: Autumn, Winter</li>
+					<li>Country: China, Turkey, Iran</li>
+				</ul>
+				<div class="filter-reset-cta">
+					<img src="assets/images/reset-white.svg" alt=""> Reset
+				</div>
+			</div>
+			<div class="my-dashboard-container" *ngIf="isMobile">
+				<p class="heading">5 filter selected</p>
+				<div class="filter-reset-cta">
+					<img src="assets/images/reset-white.svg" alt=""> Reset
+				</div>
+			</div>
+		</div>
+		<div class="map-overlay-container dashbaord-placeholder-container">
+			<div class="my-dashboard-container">
+				<div class="filter-control-container" *ngIf="(!showFactoryResult && isMobile) || !isMobile">
+					<div class="calendar-input-container">
+						<div class="calendar-value" (click)="datepicker.toggle()">
+							From: <span class="date">{{formatter.format(model.fromDate)}}</span>
+							To: <span class="date">{{formatter.format(model.toDate)}}</span>
+						</div>
+						<img src="assets/images/cta-calendar-grey.svg" alt="" class="icon"
+							(click)="datepicker.toggle()">
+
+						<input class="calendar-input" name="datepicker" ngbDatepicker #datepicker="ngbDatepicker"
+							[autoClose]="'outside'" (dateSelect)="onDateSelection($event)" [displayMonths]="2"
+							[dayTemplate]="t" outsideDays="hidden" [startDate]="model.fromDate!">
+
+						<ng-template #t let-date let-focused="focused">
+							<span class="custom-day" [class.focused]="focused" [class.range]="isRange(date)"
+								[class.faded]="isHovered(date) || isInside(date)" (mouseenter)="hoveredDate = date"
+								(mouseleave)="hoveredDate = null">
+								{{ date.day }}
+							</span>
+						</ng-template>
+
+						<input class="d-none" #dpFromDate name="dpFromDate" [value]="formatter.format(model.fromDate)"
+							(input)="model.fromDate = validateInput(model.fromDate, dpFromDate.value)"
+							(click)="datepicker.toggle()">
+
+						<input class="d-none" #dpToDate name="dpToDate" [value]="formatter.format(model.toDate)"
+							(input)="model.toDate = validateInput(model.toDate, dpToDate.value)"
+							(click)="datepicker.toggle()">
+
+					</div>
+					<!-- <div class="search-input-container" #searchContainer>
+						<input type="text" placeholder="Search Factory" [(ngModel)]="searchQuery"
+						 (input)="handleSearchInput()">
+						<ul class="cta-dropdown">
+							<li>
+								<img class="icon" src="assets/images/cta-bell-grey.svg" alt="">
+								<span>Delete this</span>
+							</li>
+							<li>
+								<img class="icon" src="assets/images/cta-leader-grey.svg" alt="">
+								<span>Leave a remark</span>
+							</li>
+							<li>
+								<img class="icon" src="assets/images/cta-close-grey.svg" alt="">
+								<span>Submit a report</span>
+							</li>
+						</ul>
+						<div class="search-suggestion-container" *ngIf="hasSearchResult">
+							<ul>
+							 <li>No search result</li> 
+								<ng-container>
+									<li *ngFor="let result of searchResultData" (click)="selectSearchResult(result)">
+										{{result.factoryName}}
+									</li>
+								</ng-container>
+							</ul>
+						</div>
+					</div>
+				<div class="filter-cta search-cta ml-0" (click)="openSearchBox($event)" #searchTrigger>
+						<ng-container *ngIf="!searchActive; else CloseButton">
+							<img src="assets/images/cta-search-grey.svg" alt="">
+						</ng-container>
+						<ng-template #CloseButton>
+							<img src="assets/images/cta-close-grey.svg" alt="">
+						</ng-template>
+					</div> -->
+
+					<div class="filter-cta" *ngIf="!isFilterOpen" (click)="toggleFilter()">
+						<img src="assets/images/cta-filter-grey.svg" alt="">
+					</div>
+					<div class="filter-cta filter-active" *ngIf="isFilterOpen" (click)="toggleFilter()">
+						<img src="assets/images/cta-close-white.svg" alt="">
+					</div>
+				</div>
+				<!-- <div class="notification-card-container" *ngIf="!showFactoryResult && !isMobile">
+					<div class="notification-card type-one">
+						<span class="icon">
+							<img src="assets/images/cta-quotation-white.svg" alt="">
+						</span>
+						<h3 class="number">8</h3>
+						<h4 class="heading">Quotation Pending</h4>
+						<p class="description">Need to validate the quotation</p>
+					</div>
+				</div> -->
+			</div>
+			<div class="map-container customer-map-placeholder-container" id="mapView"
+				[style.height.px]="masterModel.mapHeight"></div>
+		</div>
+		<div class="my-dashboard-container">
+			<div class="dashboard-body customer-dashboard-body dashbaord-placeholder-container">
+				<!-- <div class="notification-card-container" *ngIf="isMobile">
+					<div class="notification-card type-one">
+						<span class="icon">
+							<img src="assets/images/cta-quotation-white.svg" alt="">
+						</span>
+						<h3 class="number">8</h3>
+						<h4 class="heading">Quotation Pending</h4>
+						<p class="description">Need to validate the quotation</p>
+					</div>
+				</div> -->
+				<div class="row customer-dashboard-graph-wrapper">
+					<div class="col-sm-4 col-md-6 col-lg-4 col-xl-4 grid-column tablet-margin-top-15">
+						<ng-container *ngIf="masterModel.apiresultLoading; else APIResult">
+							<div class="dashboard-graph-container">
+								<div class="common-graph-placeholder">
+									<img src="assets/images/donut-placeholder.png" alt="graph">
+									<div class="content-container">
+										<div class="rect animate"></div>
+										<div class="rect animate width80"></div>
+										<div class="rect animate width50"></div>
+									</div>
+								</div>
+							</div>
+						</ng-container>
+						<ng-template #APIResult>
+							<div class="error-container" *ngIf="masterModel.apiresultError;">
+								<img src="assets/images/went-wrong.svg" alt="" class="thumbnail">
+								<h4 class="error-title">{{ 'ERROR.MSG_ERROR_TITLE' | translate }}</h4>
+								<p class="error-subtitle">
+									{{'SUPPLIER_FACTORY_DASHBOARD.LBL_UNAUTHORISED_ACCESS' | translate}}</p>
+							</div>
+							<ng-container>
+								<div class="error-container" *ngIf="!masterModel.apiresultFound">
+									<img src="assets/images/no-result.svg" alt="" class="thumbnail">
+									<h4 class="error-title">{{ 'COMMON.LBL_No_ITEM' | translate }}
+									</h4>
+									<p class="error-subtitle">{{'SUPPLIER_FACTORY_DASHBOARD.LBL_NO_DATA' | translate}}
+									</p>
+								</div>
+								<div class="dashboard-graph-container" *ngIf="masterModel.apiresultFound">
+									<div class="new-graph-head text-center text-sm-left align-items-center">
+										<div class="graph-title-container">
+											<h3 class="title">
+												{{ 'CUSTOMER_DASHBOARD.LBL_API_RESULT_ANALYSIS' | translate }}</h3>
+										</div>
+									</div>
+									<div class="row graph-body">
+										<div class="col-sm-12 mb-3 mb-xl-0">
+											<div id="chartdiv" style="width: 100%; height: 200px"></div>
+										</div>
+										<div class="col-sm-12 vertical-center">
+											<div class="legend-wrapper">
+												<div class="legend-item"
+													*ngFor="let item of masterModel.apiraDashboard | slice:0:5">
+													<div class="label">
+														<span class="tile"
+															[ngStyle]="{'background-color': item.statusColor}"></span>
+														<span class="text">{{item.statusName}}</span>
+													</div>
+													<span class="count">{{item.totalCount}}</span>
+												</div>
+												<div class="legend-item" *ngIf="masterModel.apiraDashboard.length>5">
+													<div class="label has-dropdown">
+														<span class="link">
+															{{ 'CUSTOMER_DASHBOARD.LBL_SHOW' | translate }}
+															{{masterModel.apiraDashboard.length - 5}}
+															{{ 'CUSTOMER_DASHBOARD.LBL_MORE' | translate }}</span>
+														<div class="cta-dropdown top-right min-width-230">
+															<div class="legend-wrapper two-column">
+																<div class="legend-item"
+																	*ngFor="let item of masterModel.apiraDashboard | slice:5:masterModel.apiraDashboard.length;">
+																	<div class="label">
+																		<span class="tile"
+																			[ngStyle]="{'background-color':item.statusColor }">
+																		</span><span
+																			class="text">{{item.statusName}}</span>
+																	</div>
+																	<span class="count">{{item.totalCount}}</span>
+																</div>
+															</div>
+														</div>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</ng-container>
+						</ng-template>
+					</div>
+					<div
+						class="col-sm-4 col-md-6 col-lg-4 col-xl-4 grid-column mobile-margin-top-15 tablet-margin-top-15">
+						<ng-container *ngIf="masterModel.inspectionRejectLoading; else InspRejectResult">
+							<div class="dashboard-graph-container">
+								<div class="common-graph-placeholder">
+									<img src="assets/images/donut-placeholder.png" alt="graph">
+									<div class="content-container">
+										<div class="rect animate"></div>
+										<div class="rect animate width80"></div>
+										<div class="rect animate width50"></div>
+									</div>
+								</div>
+							</div>
+						</ng-container>
+						<ng-template #InspRejectResult>
+							<div class="error-container" *ngIf="masterModel.inspectionRejectError; else InspRejectData">
+								<img src="assets/images/went-wrong.svg" alt="" class="thumbnail">
+								<h4 class="error-title">{{ 'ERROR.MSG_ERROR_TITLE' | translate }}</h4>
+								<p class="error-subtitle">
+									{{'SUPPLIER_FACTORY_DASHBOARD.LBL_UNAUTHORISED_ACCESS' | translate}}</p>
+							</div>
+							<ng-template #InspRejectData>
+								<div class="error-container" *ngIf="!masterModel.inspectionRejectFound">
+									<img src="assets/images/no-result.svg" al t="" class="thumbnail">
+									<h4 class="error-title">{{ 'COMMON.LBL_No_ITEM' | translate }}
+									</h4>
+									<p class="error-subtitle">{{'SUPPLIER_FACTORY_DASHBOARD.LBL_NO_DATA' | translate}}
+									</p>
+								</div>
+								<div class="dashboard-graph-container" *ngIf="masterModel.inspectionRejectFound">
+									<div class="new-graph-head text-center text-sm-left align-items-center">
+										<div class="graph-title-container">
+											<h3 class="title">
+												{{ 'SUPPLIER_FACTORY_DASHBOARD.LBL_REJECT_ANALYTICS' | translate }}</h3>
+										</div>
+									</div>
+									<div class="row graph-body">
+										<div class="col-sm-12 mb-3 mb-xl-0">
+											<div id="halfdonutchart"
+												style="width: 100%; height: 210px; margin-top: -10px">
+											</div>
+										</div>
+										<div class="col-sm-12 vertical-center">
+											<div class="legend-wrapper two-column">
+												<div class="legend-item"
+													*ngFor="let inspRejectItem of masterModel.inspectionRejectDashboard | slice:0:5;">
+													<div class="label">
+														<span class="tile"
+															[ngStyle]="{'background-color':inspRejectItem.statusColor }">
+														</span>
+														<span class="text">{{inspRejectItem.statusName}}</span>
+													</div>
+													<span class="count">{{inspRejectItem.totalCount}}</span>
+												</div>
+												<div class="legend-item"
+													*ngIf="masterModel.inspectionRejectDashboard.length>5">
+													<div class="label has-dropdown">
+														<span class="link">
+															{{ 'SUPPLIER_FACTORY_DASHBOARD.LBL_SHOW' | translate }}
+															{{masterModel.inspectionRejectDashboard.length - 5}}
+															{{ 'SUPPLIER_FACTORY_DASHBOARD.LBL_MORE' | translate
+															}}</span>
+														<div class="cta-dropdown top-right">
+															<div class="legend-wrapper two-column">
+																<div class="legend-item"
+																	*ngFor="let inspRejectItem of masterModel.inspectionRejectDashboard | slice:5:masterModel.inspectionRejectDashboard.length;">
+																	<div class="label">
+																		<span class="tile"
+																			[ngStyle]="{'background-color':inspRejectItem.statusColor }">
+																		</span><span
+																			class="text">{{inspRejectItem.statusName}}</span>
+																	</div>
+																	<span
+																		class="count">{{inspRejectItem.totalCount}}</span>
+																</div>
+															</div>
+														</div>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</ng-template>
+						</ng-template>
+					</div>
+					<div
+						class="col-sm-4 col-md-12 col-lg-4 col-xl-4 grid-column mobile-margin-top-15 tablet-margin-top-15">
+						<ng-container *ngIf="masterModel.customerDataLoading; else InspDataResult">
+							<div class="dashboard-graph-container">
+								<div class="common-graph-placeholder">
+									<img src="assets/images/donut-placeholder.png" alt="graph">
+									<div class="content-container">
+										<div class="rect animate"></div>
+										<div class="rect animate width80"></div>
+										<div class="rect animate width50"></div>
+									</div>
+								</div>
+							</div>
+						</ng-container>
+						<ng-template #InspDataResult>
+							<div class="error-container" *ngIf="masterModel.customerDataError; else InspCustomerData">
+								<img src="assets/images/went-wrong.svg" alt="" class="thumbnail">
+								<h4 class="error-title">{{ 'ERROR.MSG_ERROR_TITLE' | translate }}</h4>
+								<p class="error-subtitle">
+									{{'SUPPLIER_FACTORY_DASHBOARD.LBL_UNAUTHORISED_ACCESS' | translate}}</p>
+							</div>
+							<ng-template #InspCustomerData>
+								<div class="error-container" *ngIf="!masterModel.customerDataFound">
+									<img src="assets/images/no-result.svg" alt="" class="thumbnail">
+									<h4 class="error-title">{{ 'COMMON.LBL_No_ITEM' | translate }}
+									</h4>
+									<p class="error-subtitle">{{'SUPPLIER_FACTORY_DASHBOARD.LBL_NO_DATA' | translate}}
+									</p>
+								</div>
+								<div class="dashboard-graph-container" *ngIf="masterModel.customerDataFound">
+									<!-- -->
+									<div class="new-graph-head text-center text-sm-left align-items-center">
+										<div class="graph-title-container">
+											<h3 class="title">{{'SUPPLIER_FACTORY_DASHBOARD.LBL_CUSTOMER_OVERVIEW' |
+												translate}} </h3>
+										</div>
+									</div>
+									<div class="row graph-body">
+										<div class="col-sm-12 mb-3 mb-xl-0">
+											<div id="fullPieChart" style="width: 100%; height: 200px"></div>
+										</div>
+										<div class="col-sm-12 vertical-center">
+											<div class="legend-wrapper two-column">
+												<div class="legend-item"
+													*ngFor="let item of masterModel.customerDataDashboard | slice:0:dataLengthTrim">
+													<div class="label">
+														<span class="tile"
+															[ngStyle]="{'background-color': item.statusColor}"></span>
+														<span class="text">{{item.customerName}}</span>
+													</div>
+													<span class="count">{{item.bookingCount}}</span>
+												</div>
+												<div class="legend-item"
+													*ngIf="masterModel.customerDataDashboard.length>dataLengthTrim">
+													<div class="label has-dropdown">
+														<span class="link">{{ 'SUPPLIER_FACTORY_DASHBOARD.LBL_SHOW' |
+															translate }}
+															{{masterModel.customerDataDashboard.length - dataLengthTrim}}
+															{{ 'SUPPLIER_FACTORY_DASHBOARD.LBL_MORE' | translate
+															}}</span>
+														<div class="cta-dropdown top-right">
+															<div class="legend-wrapper two-column">
+																<div class="legend-item"
+																	*ngFor="let item of masterModel.customerDataDashboard | slice:dataLengthTrim:masterModel.customerDataDashboard.length;">
+																	<div class="label">
+																		<span class="tile"
+																			[ngStyle]="{'background-color':item.statusColor}"></span>
+																		<span class="text">{{item.customerName}}</span>
+																	</div>
+																	<span class="count">{{item.bookingCount}}</span>
+																</div>
+															</div>
+														</div>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</ng-template>
+						</ng-template>
+					</div>
+				</div>
+				<div class="row dashboard-table-wrapper">
+					<div class="col-sm-12 table-margin-top-15">
+						<ng-container *ngIf="masterModel.bookingDataLoading; else BookingDataResult">
+							<div class="product-overview-placeholder-container">
+								<div class="product-card">
+									<div class="content-container">
+										<div class="rect animate width80"></div>
+										<div class="rect animate width80"></div>
+										<div class="rect animate width80"></div>
+									</div>
+								</div>
+								<div class="product-card">
+									<div class="content-container">
+										<div class="rect animate width80"></div>
+										<div class="rect animate width80"></div>
+										<div class="rect animate width80"></div>
+									</div>
+								</div>
+							</div>
+						</ng-container>
+						<ng-template #BookingDataResult>							
+								<div class="error-container" 
+								*ngIf="masterModel.bookingDataError; else BookingDataShown">
+									<img src="assets/images/went-wrong.svg" alt="" class="thumbnail">
+									<h4 class="error-title">{{ 'ERROR.MSG_ERROR_TITLE' | translate }}</h4>
+									<p class="error-subtitle">
+										{{'SUPPLIER_FACTORY_DASHBOARD.LBL_UNAUTHORISED_ACCESS' | translate}}</p>
+								</div>
+							</ng-template>
+
+							<ng-template #BookingDataShown>
+								<div class="table-head">
+									<h4 class="title">{{'SUPPLIER_FACTORY_DASHBOARD.LBL_RECENT_ORDERS' | translate}}</h4>
+								</div>
+								<div class="error-container" *ngIf="!masterModel.bookingDataFound">
+									<img src="assets/images/no-result.svg" alt="" class="thumbnail">
+									<h4 class="error-title">{{ 'COMMON.LBL_No_ITEM' | translate }}
+									</h4>
+									<p class="error-subtitle">{{'SUPPLIER_FACTORY_DASHBOARD.LBL_NO_DATA' | translate}}
+									</p>
+								</div>
+								<div class="table-container" *ngIf="masterModel.bookingDataFound">
+									<table *ngIf="masterModel.bookingDataDashboard && masterModel.bookingDataDashboard.length > 0"
+										class="pagination-table simple-table">
+										<thead>
+											<tr class="sticky-top-row">
+												<th>{{'SUPPLIER_FACTORY_DASHBOARD.LBL_BOOKING_NO' | translate}}</th>
+												<th>{{'SUPPLIER_FACTORY_DASHBOARD.LBL_CUSTOMER' | translate}}</th>
+												<th>{{'SUPPLIER_FACTORY_DASHBOARD.LBL_FACTORY' | translate}}</th>
+												<th>{{'SUPPLIER_FACTORY_DASHBOARD.LBL_SUPPLIER' | translate}}</th>
+												<th>{{'SUPPLIER_FACTORY_DASHBOARD.LBL_COUNTRY' | translate}}</th>
+												<th>{{'SUPPLIER_FACTORY_DASHBOARD.LBL_SERVICE_TYPE' | translate}}</th>
+												<th>{{'SUPPLIER_FACTORY_DASHBOARD.LBL_SERVICE_DATE_FROM' | translate}}
+												</th>
+												<th>{{'SUPPLIER_FACTORY_DASHBOARD.LBL_SERVICE_DATE_TO' | translate}}
+												</th>
+												<th></th>
+											</tr>
+										</thead>
+										<tbody>
+											<ng-template ngFor let-iteminfo [ngForOf]="masterModel.bookingDataDashboard"
+												let-i="index">
+												<tr [ngClass]="(((i+1) % 2)== 0)?'even':'odd'">
+													<td>{{iteminfo.bookingId}}</td>
+													<td>{{iteminfo.customerName}}</td>
+													<td>{{iteminfo.factoryName}}</td>
+													<td>{{iteminfo.supplierName}}</td>
+													<td>{{iteminfo.countryName}}</td>
+													<td>{{iteminfo.serviceType}}</td>
+													<td>{{iteminfo.serviceFromDate}}</td>
+													<td>{{iteminfo.serviceToDate}}</td>
+													<td>
+														<span *ngIf="!iteminfo.isEdit" class="table-cta icon-cta common-tooltip" data-tooltip="view"
+														(click)="return('inspedit/edit-booking/' + iteminfo.bookingId)">
+															<img src="assets/images/cta-eye.svg" alt="view">
+														</span>
+														<span *ngIf="iteminfo.isEdit"
+															class="table-cta icon-cta common-tooltip"
+															data-tooltip="edit"
+															(click)="return('inspedit/edit-booking/' + iteminfo.bookingId)">
+															<img src="assets/images/cta-edit.svg" alt="edit">
+														</span>
+													</td>
+												</tr>
+											</ng-template>
+										</tbody>
+									</table>
+								</div>
+							</ng-template>
+					</div>
+				</div>
+			</div>
+			<div class="footer independent">
+				<div class="column">
+					<p class="text">{{'SUPPLIER_FACTORY_DASHBOARD.LBL_FOOTER_CONTENT' | translate}}</p>
+				</div>
+				<div class="column">
+					<ul class="footer-item">
+						<li><a href="">{{'SUPPLIER_FACTORY_DASHBOARD.LBL_USER_GUIDE' | translate}}</a></li>
+						<li><a href="">{{'SUPPLIER_FACTORY_DASHBOARD.LBL_CONTACT' | translate}}</a></li>
+						<li><a href="">{{'SUPPLIER_FACTORY_DASHBOARD.LBL_HELP' | translate}}</a></li>
+						<li><a href="">{{'SUPPLIER_FACTORY_DASHBOARD.LBL_TERMS' | translate}}</a></li>
+					</ul>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

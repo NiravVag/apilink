@@ -1,0 +1,234 @@
+<div class="main-wrapper">
+    <div class="wrapper dashboard-wrapper">
+      <div class="my-container">
+        <div class="master-body">
+          <div class="title-container">
+            <div class="header-back-button">
+              <img src="assets/images/back-red.png" alt="back" (click)="this.return('traveltariffsummary/travel-tariff');">
+            </div>
+            <h3 class="main-title">
+              {{'EDIT_TRAVEL_TARIFF.TITLE' | translate }}
+            </h3>
+          </div>
+          <div class="content-container">
+            <h4 class="container-head">{{ 'EDIT_TRAVEL_TARIFF.LBL_MAIN' | translate }}</h4>
+            <div class="formPadding">
+              <div class="row marginTop15">
+                <div class="col-sm-4">
+                  <div class="my-input-group">
+                    <label class="control-label required">{{ 'EDIT_TRAVEL_TARIFF.LBL_STARTPORT' | translate }}</label>
+                    <ng-select  [searchable]="true" appendTo="body"
+                    [items]="startSpotList"
+                    bindLabel="name"                                                                               
+                    bindValue="id"
+                    placeholder="--- {{(startSpotList.length>0? 'COMMON.LBL_SELECT':'COMMON.LBL_NO_DATA')  | translate }} ---"
+                    [(ngModel)]="model.startPort"
+                    [ngClass]="{ 'is-invalid':  !validator.isValid('startPort')}">
+                   <ng-template ng-option-tmp
+                    let-item="item">
+                    <div class="text-wrap">
+                    {{ item.name }}</div>
+                    </ng-template>
+                  </ng-select>
+                  </div>
+                  <div *ngIf="!validator.isValid('startPort')" class="invalid-feedback">
+                    <div *ngFor="let error of validator.getErrors('startPort')">{{ error | translate }}</div>
+                  </div>
+                </div>      
+                <div class="col-sm-4 mobile-margin-top-15">
+                  <div class="my-input-group">
+                    <label class="control-label required">{{ 'TOWN_SUMMARY.LBL_COUNTRY' | translate }}</label>
+                
+                    <ng-select [searchable]="true" [loading]="countryLoading" appendTo="body" (ngModelChange)="refreshprovince($event)"
+                      [items]="countryList" bindLabel="countryName" bindValue="id" [hideSelected]="true" [multiple]="false"
+                      placeholder="--- {{(countryList!=null && countryList.length!=0? 'SCHEDULE_SUMMARY.LBL_SELECT':'SCHEDULE_SUMMARY.MSG_NO_DATA')  | translate }} ---"
+                      [(ngModel)]="model.countryId" (clear)="resetProvince()"
+                      [ngClass]="{ 'is-invalid':  !validator.isValid('countryId')}">
+                      <ng-template ng-option-tmp let-item="item">
+                        <div class="text-wrap">{{ item.countryName }}</div>
+                      </ng-template>
+                    </ng-select>
+                
+                  </div>
+                  <div *ngIf="!validator.isValid('countryId')" class="invalid-feedback">
+                    <div *ngFor="let error of validator.getErrors('countryId')">{{ error | translate }}</div>
+                  </div>
+                </div>
+                <div class="col-sm-4 mobile-margin-top-15">
+                  <div class="my-input-group">
+                    <label class="control-label required">{{ 'TOWN_SUMMARY.LBL_PROVINCE' | translate }}</label>
+                    <ng-select [items]="provinceList" [hideSelected]="true" appendTo="body" [loading]="provinceLoading"
+                      [multiple]="false" (ngModelChange)="refreshcity($event)" [searchable]="true" bindLabel="name" bindValue="id"
+                      [(ngModel)]="model.provinceId" (clear)="resetProvince()"
+                      placeholder="--- {{ (provinceList!=null && provinceList.length!=0? 'CITY_SUMMARY.LBL_SELECT':'COMMON.LBL_NO_DATA') | translate }} ---"
+                      [ngClass]="{ 'is-invalid':  !validator.isValid('provinceId')}">
+                      <ng-template ng-option-tmp let-item="item">
+                        <div class="text-wrap">{{ item.name }}</div>
+                      </ng-template>
+                    </ng-select>
+                
+                  </div>
+                  <div *ngIf="!validator.isValid('provinceId')" class="invalid-feedback">
+                    <div *ngFor="let error of validator.getErrors('provinceId')">{{ error | translate }}</div>
+                  </div>
+                </div>
+                </div>
+                
+                <div class="row marginTop15">
+                  <div class="col-sm-4">
+                    <div class="my-input-group">
+                      <label class="control-label required">{{ 'TOWN_SUMMARY.LBL_CITY' | translate }}</label>
+                      <ng-select [loading]="cityLoading" [hideSelected]="true" appendTo="body"
+                        placeholder="--- {{ (cityList!=null && cityList.length!=0? 'TOWN_SUMMARY.LBL_SELECT':'COMMON.LBL_NO_DATA') | translate }} ---"
+                        (ngModelChange)="refreshcounty($event)" [searchable]="true" [items]="cityList" [(ngModel)]="model.cityId"
+                        (clear)="resetCity()" bindLabel="name" bindValue="id" [closeOnSelect]="true" [multiple]="false"
+                        [ngClass]="{ 'is-invalid':  !validator.isValid('cityId')}">
+                        <ng-template ng-option-tmp let-item="item">
+                          <div class="text-wrap">{{ item.name }}</div>
+                        </ng-template>
+                      </ng-select>
+                    </div>
+                    <div *ngIf="!validator.isValid('cityId')" class="invalid-feedback">
+                      <div *ngFor="let error of validator.getErrors('cityId')">{{ error | translate }}</div>
+                    </div>
+                  </div>
+                
+                  <div class="col-sm-4 mobile-margin-top-15">
+                    <div class="my-input-group">
+                      <label class="control-label required">{{ 'TOWN_SUMMARY.LBL_COUNTY' | translate }}</label>
+                      <ng-select [loading]="countyLoading" [hideSelected]="true" appendTo="body"
+                        placeholder="--- {{ (countyList!=null && countyList.length!=0? 'TOWN_SUMMARY.LBL_SELECT':'COMMON.LBL_NO_DATA') | translate }} ---"
+                        (ngModelChange)="refreshTown($event)" [items]="countyList" [(ngModel)]="model.countyId" bindLabel="countyName"
+                        bindValue="id" [closeOnSelect]="true" [multiple]="false" [searchable]="true"
+                        [ngClass]="{ 'is-invalid':  !validator.isValid('countyId')}">
+                        <ng-template ng-option-tmp let-item="item">
+                          <div class="text-wrap">{{ item.countyName }}</div>
+                        </ng-template>
+                      </ng-select>
+                
+                    </div>
+                    <div *ngIf="!validator.isValid('countyId')" class="invalid-feedback">
+                      <div *ngFor="let error of validator.getErrors('countyId')">{{ error | translate }}</div>
+                    </div>
+                  </div>
+
+                    <div class="col-sm-4 mobile-margin-top-15">
+                    <div class="my-input-group">
+                      <label class="control-label required">{{ 'EDIT_TRAVEL_TARIFF.LBL_TOWN' | translate }}</label>
+                      <ng-select appendTo="body" [items]="townList" [loading]="townLoading" bindLabel="name" bindValue="id"
+                        [hideSelected]="true" [closeOnSelect]="true"
+                        placeholder="--- {{ (townList!=null && townList.length!=0? 'COMMON.LBL_SELECT':'COMMON.LBL_NO_DATA' ) | translate }} ---"
+                        [searchable]="true" [(ngModel)]="model.townId"
+                        [ngClass]="{ 'is-invalid':  !validator.isValid('townId')}" [multiple]="false" (clear)="clearTown()"
+                        #select>
+                        <ng-template ng-option-tmp let-item="item">
+                          <div class="text-wrap"><span>{{item.name}}</span></div>
+                        </ng-template>
+                      </ng-select>
+                    </div>
+                    <div *ngIf="!validator.isValid('townId')" class="invalid-feedback">
+                      <div *ngFor="let error of validator.getErrors('townId')">{{ error | translate }}</div>
+                    </div>
+                  </div>
+
+                </div>
+                
+                <div class="row marginTop15">
+                
+                  <div class="col-sm-4">
+                    <div class="my-input-group">
+                      <label class="control-label required">{{ 'EDIT_TRAVEL_TARIFF.LBL_TRAVEL_CURRENCY' | translate }}</label>
+                    <ng-select [searchable]="true" appendTo="body" [items]="currencyList" bindLabel="name" bindValue="id"
+                      placeholder="--- {{(currencyList.length>0? 'COMMON.LBL_SELECT':'COMMON.LBL_NO_DATA')  | translate }} ---"
+                      [(ngModel)]="model.travelCurrency" [ngClass]="{ 'is-invalid': !validator.isValid('travelCurrency')}">
+                      <ng-template ng-option-tmp let-item="item">
+                        <div class="text-wrap">
+                          {{ item.name }}</div>
+                      </ng-template>
+                    </ng-select>
+                    </div>
+                    <div *ngIf="!validator.isValid('travelCurrency')" class="invalid-feedback">
+                      <div *ngFor="let error of validator.getErrors('travelCurrency')">{{ error | translate }}</div>
+                    </div>
+                    </div>
+
+                <div class="col-sm-4  mobile-margin-top-15">
+                    <div class="my-input-group">
+                        <label class="control-label required">{{ 'EDIT_TRAVEL_TARIFF.LBL_STARTDATE' | translate }}</label>
+
+                        <div class="calendar-wrapper">
+                          <input container="body"  [(ngModel)]="model.startDate" 
+                          [ngClass]="{ 'is-invalid':  !validator.isValid('startDate')}"
+                            type="text" maxlength="10" placeholder="Start Date"
+                            (click)="ld1.toggle()" ngbDatepicker #ld1="ngbDatepicker">
+                            <img src="assets/images/cta-close-grey.svg" alt="" class="close-icon"
+                            (click)="clearDateInput('startDate')" *ngIf="model.startDate">
+                            <img src="assets/images/calendar-icon.svg" alt="" class="calendar-icon" (click)="ld1.toggle()">
+                        </div>
+                        <div *ngIf="!validator.isValid('startDate')" class="invalid-feedback">
+                          <div *ngFor="let error of validator.getErrors('startDate')">{{ error | translate }}</div>
+                        </div>
+                      </div>
+                  </div>
+
+                  <div class="col-sm-4 mobile-margin-top-15">
+                    <div class="my-input-group">
+
+                        <label class="control-label required">{{ 'EDIT_TRAVEL_TARIFF.LBL_ENDDATE' | translate }}</label>    
+                        
+                        <div class="calendar-wrapper">
+                          <input  container="body"
+                          [(ngModel)]="model.endDate" [ngClass]="{ 'is-invalid':  !validator.isValid('endDate')}"
+                            type="text" maxlength="10" placeholder="End Date"
+                            (click)="ld2.toggle()" ngbDatepicker #ld2="ngbDatepicker">
+                            <img src="assets/images/cta-close-grey.svg" alt="" class="close-icon"
+                            (click)="clearDateInput('endDate')" *ngIf="model.endDate">
+                          <img src="assets/images/calendar-icon.svg" alt="" class="calendar-icon" (click)="ld2.toggle()">
+                        </div>
+
+                        <div *ngIf="!validator.isValid('endDate')" class="invalid-feedback">
+                          <div *ngFor="let error of validator.getErrors('endDate')">{{ error | translate }}</div>
+                        </div>
+             
+                      </div>
+                  </div> 
+
+                            </div>
+                            
+                            <div class="row marginTop15">
+                              <div class="col-sm-4">
+                                <div class="my-input-group">
+                                  <label class="control-label required">{{ 'EDIT_TRAVEL_TARIFF.LBL_TRAVEL_TARIFF' | translate }}</label>
+                                  <input [(ngModel)]="model.travelTariff" [ngClass]="{ 'is-invalid':  !validator.isValid('travelTariff')}"
+                                    type="number" (paste)="onPaste($event)" (keypress)="numberOnly($event)" min="0" max="999"
+                                    placeholder="Travel Tariff" />
+                                  <div *ngIf="!validator.isValid('travelTariff')" class="invalid-feedback">
+                                    <div *ngFor="let error of validator.getErrors('travelTariff')">{{ error | translate }}</div>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+         </div>
+  
+  
+ 
+            <div class="form-action-container">           
+              <button class="primary-cta small" (click)="save()" [disabled]="saveloading">
+                {{'EDIT_CUSTOMER.LBL_SAVE' | translate}}
+                <span *ngIf="saveloading">
+                  <i class="fa fa-refresh fa-spin" aria-hidden="true"></i>
+                </span>
+              </button>
+            </div>
+          </div>  
+        </div>
+        <div class="loader-overlay" *ngIf="pageLoading">
+          <div class="loader-container">
+            <img src="assets/images/reload.svg" alt="">
+            <span>{{'COMMON.LBL_LOADER' | translate}}</span>
+          </div>
+        </div>
+
+      </div>  
+    </div>
+

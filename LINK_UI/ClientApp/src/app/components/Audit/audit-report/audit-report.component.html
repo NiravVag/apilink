@@ -1,0 +1,216 @@
+<div class="main-wrapper">
+  <div class="wrapper dashboard-wrapper">
+    <div class="my-container">
+      <div class="master-body">
+        <div class="title-container">
+          <div class="header-back-button"
+            *ngIf="fromSummary && !Initialloading && !savedataloading && !Auditorloading ">
+            <img src="assets/images/back-red.png" alt="back" (click)="return('auditsummary/audit-summary')">
+          </div>
+          <h3 class="main-title">
+            {{ 'AUDIT_REPORT.TITLE' | translate }}
+          </h3>
+        </div>
+        <div class="content-container">
+          <h4 class="container-head">{{ 'AUDIT_REPORT.LBL_MAIN_DETAILS' | translate }}</h4>
+          <div class="formPadding">
+            <div class="row">
+              <div class="col-sm-3">
+                <div class="my-input-group">
+                  <label>{{ 'AUDIT_REPORT.LBL_PO' | translate }}</label>
+                  <input disabled [(ngModel)]="data.poNumber" type="text" />
+                </div>
+              </div>
+              <div class="col-sm-3 mobile-margin-top-15">
+                <div class="my-input-group">
+                  <label>{{ 'AUDIT_REPORT.LBL_REPORTNO' | translate }}</label>
+                  <input disabled [(ngModel)]="data.reportNo" type="text" />
+                </div>
+              </div>
+              <div class="col-sm-3 mobile-margin-top-15">
+                <div class="my-input-group">
+                  <label>{{ 'AUDIT_REPORT.LBL_CUSTOMER' | translate }}</label>
+                  <input disabled [(ngModel)]="data.customerName" type="text" />
+                </div>
+              </div>
+              <div class="col-sm-3 mobile-margin-top-15">
+                <div class="my-input-group">
+                  <label>{{ 'AUDIT_REPORT.LBL_SUPPLIER' | translate }}</label>
+                  <input disabled [(ngModel)]="data.supplierName" type="text" />
+                </div>
+              </div>
+            </div>
+            <div class="row marginTop15">
+              <div class="col-sm-3 mobile-margin-top-15">
+                <div class="my-input-group">
+                  <label>{{ 'AUDIT_REPORT.LBL_FACTORY' | translate }}</label>
+                  <input disabled [(ngModel)]="data.factoryName" type="text" />
+                </div>
+              </div>
+              <div class="col-sm-3 mobile-margin-top-15">
+                <div class="my-input-group">
+                  <label>{{ 'AUDIT_REPORT.LBL_SERVICEDATE_FROM' | translate }}</label>
+                  <input disabled [(ngModel)]="data.serviceDateFrom" type="text" />
+                </div>
+              </div>
+              <div class="col-sm-3 mobile-margin-top-15">
+                <div class="my-input-group">
+                  <label>{{ 'AUDIT_REPORT.LBL_SERVICEDATE_TO' | translate }}</label>
+                  <input disabled [(ngModel)]="data.serviceDateTo" type="text" />
+                </div>
+              </div>
+              <div class="col-sm-3 mobile-margin-top-15">
+                <div class="my-input-group">
+                  <label>{{ 'AUDIT_REPORT.LBL_SERVICETYPE' | translate }}</label>
+                  <input disabled [(ngModel)]="data.serviceType" type="text" />
+                </div>
+              </div>
+            </div>
+            <div class="row marginTop15">
+              <div class="col-sm-3 mobile-margin-top-15">
+                <div class="my-input-group">
+                  <label>{{ 'AUDIT_REPORT.LBL_CUS_BOOKING_NO' | translate }}</label>
+                  <input disabled [(ngModel)]="data.customerBookingNo" type="text" />
+                </div>
+              </div>
+            </div>
+          </div>
+          <h4 class="container-head">
+            {{'AUDIT_REPORT.TITLE' | translate}}&nbsp;{{ 'AUDIT_REPORT.LBL_INFORMATION' | translate }}</h4>
+          <div class="formPadding">
+            <div class="row">
+              <div class="col-sm-3 mobile-margin-top-15">
+                <div class="my-input-group">
+                  <label class="required">{{ 'AUDIT_REPORT.LBL_SERVICE_FROMDATE' | translate }}</label>
+                  <div class="calendar-wrapper">
+                    <input type="text" autocomplete="off" placeholder="From" name="dp" ngbDatepicker #d2="ngbDatepicker"
+                      [ngClass]="{ 'is-invalid':  !validator.isValid('servicedatefrom')}" readonly=readonly
+                      [(ngModel)]="model.servicedatefrom" (click)="d2.toggle()">
+                    <img src="assets/images/calendar-icon.svg" alt="" class="calendar-icon" (click)="d2.toggle()">
+                  </div>
+                  <div *ngIf="!validator.isValid('servicedatefrom')" class="invalid-feedback">
+                    <div *ngFor="let error of validator.getErrors('servicedatefrom')">{{ error | translate }}</div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-sm-3 mobile-margin-top-15">
+                <div class="my-input-group">
+                  <label class="required">{{ 'AUDIT_REPORT.LBL_Service_TODATE' | translate }}</label>
+                  <div class="calendar-wrapper">
+                    <input type="text" autocomplete="off" placeholder="To" name="dp" ngbDatepicker #d1="ngbDatepicker"
+                      [ngClass]="{ 'is-invalid':  !validator.isValid('servicedateto')}" readonly=readonly
+                      [(ngModel)]="model.servicedateto" (click)="d1.toggle()">
+                    <img src="assets/images/calendar-icon.svg" alt="" class="calendar-icon" (click)="d1.toggle()">
+                  </div>
+                  <div *ngIf="!validator.isValid('servicedateto')" class="invalid-feedback">
+                    <div *ngFor="let error of validator.getErrors('servicedateto')">{{ error | translate }}</div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-sm-3 mobile-margin-top-15">
+                <div class="my-input-group">
+                  <label class="required">{{ 'AUDIT_REPORT.LBL_AUDITORS' | translate }}</label>
+                  <ng-select [multiple]="true" [closeOnSelect]="false" class="multiple" [searchable]="true"
+                    [loading]="Initialloading" [items]="_auditors" bindLabel="name" bindValue="id"
+                    [ngClass]="{ 'is-invalid': !validator.isValid('auditors')}" [hideSelected]="true"
+                    placeholder="--- {{(_auditors!=null && _auditors.length!=0? 'AUDIT_REPORT.LBL_SELECT':'AUDIT_REPORT.MSG_NO_DATA')  | translate }} ---"
+                    [(ngModel)]="model.auditors">
+                  </ng-select>
+                  <div *ngIf="!validator.isValid('auditors')" class="invalid-feedback" style="display:block">
+                    <div *ngFor="let error of validator.getErrors('auditors')">{{ error | translate }}</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="row marginTop15">
+              <!-- <ng-container *ngIf="model.attachments != null && model.attachments.length>0">
+                <div class="col-lg-3">
+                  <div class="drag-drop-files-container">
+                    <div class="file" *ngFor="let file of model.attachments ;  let j = index">
+                      <a (click)="getFile(file)"><img [src]="GetFileExtensionIcon(file)" class="icon" alt=""></a>
+                      <div class="info">
+                        <h4 class="file-title">{{file.fileName}}</h4>
+                      </div>
+                      <img src="assets/images/red-close.svg" alt="" (click)="removeAttachment(j)" class="close">
+                    </div>
+                  </div>
+                </div>
+              </ng-container>
+              <div class="col-sm-8 col-md-12 col-lg-5">
+                <app-drag-drop [fileLimit]="uploadLimit" [fileSizeLimit]="fileSize"
+                  [fileExtension]="uploadFileExtensions" (fileUpload)="selectFiles($event)"></app-drag-drop>
+              </div> -->
+              <div class="col-sm-12 col-md-12 col-lg-6">
+                <div class="row">
+                  <div class="col-sm-12">
+                    <div class="drag-drop-container type-two" (click)="selectFiles($event)">
+                      <img src="assets/images/upload-icon.svg" class="icon" alt="drag drop">
+                      <div class="info">
+                        <h4 class="title">
+                          {{ 'EDIT_BOOKING.LBL_SELECT_FILE' | translate }}, <span>
+                            {{ 'EDIT_BOOKING.LBL_BROWSE' | translate }}
+                          </span>
+                        </h4>
+                      </div>
+                    </div>
+                  </div>
+                  <ng-container *ngIf="model.attachments != null && model.attachments.length>0">
+                    <div class="col-sm-12">
+                      <div class="drag-drop-files-container">
+                        <div class="row col-sm-12">
+                          <div class="file col-sm-3" *ngFor="let file of model.attachments ;  let j = index">
+                            <a (click)="getFile(file)">
+                              <img [src]="GetFileExtensionIcon(file)" class="icon" alt="">
+                            </a>
+                            <div class="info">
+                              <h4 class="file-title">{{file.fileName}}</h4>
+                            </div>
+                            <img src="assets/images/red-close.svg" alt="" (click)="removeAttachment(j)" class="close">
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </ng-container>
+                </div>
+              </div>
+              <div class="col-sm-4 col-md-12 col-lg-4">
+                <div class="row">
+                  <div class="col-sm-6 col-md-6 col-lg-12 tablet-margin-top-15 mobile-margin-top-15">
+                    <div class="my-input-group big">
+                      <label for="">{{ 'AUDIT_REPORT.LBL_COMMENT' | translate }}</label>
+                      <textarea maxlength="1000" type="text" [(ngModel)]="model.comment"></textarea>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="loader-overlay" *ngIf="downloadloading">
+              <div class="loader-container">
+                <img src="assets/images/reload.svg" alt="">
+                <span>{{'COMMON.LBL_LOADER' | translate}}</span>
+              </div>
+            </div>
+          </div>
+          <div class="form-action-container">
+            <!-- <button *ngIf="fromSummary" [disabled]="Initialloading || savedataloading || Auditorloading" type="button" class="secondary-cta small"
+              (click)="return('auditsummary/audit-summary')">
+              {{'AUDIT_REPORT.LBL_RETURN' | translate}}
+            </button> -->
+            <button class="secondary-cta small" [disabled]="Initialloading || savedataloading || Auditorloading"
+              (click)="Reset()">
+              {{'AUDIT_REPORT.LBL_RESET' | translate }}
+            </button>
+            <button class="primary-cta small" [disabled]="Initialloading || savedataloading || Auditorloading"
+              (click)="Save()">
+              {{ 'AUDIT_REPORT.LBL_SAVE' | translate }}
+              <span *ngIf="savedataloading">
+                <i class="fa fa-refresh fa-spin" aria-hidden="true"></i>
+              </span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>

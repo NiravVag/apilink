@@ -1,0 +1,729 @@
+<div class="main-wrapper">
+  <div class="wrapper dashboard-wrapper">
+    <div class="my-container">
+      <div class="master-body">
+        <div class="title-container">
+          <div class="header-back-button" *ngIf="fromSummary && !initialloading">
+            <img src="assets/images/back-red.png" alt="back" (click)="this.return('cussearch/customer-summary');">
+          </div>
+          <h3 class="main-title">
+            {{'EDIT_CUSTOMER.TITLE' | translate }}
+          </h3>
+        </div>
+        <div class="content-container">
+          <h4 class="container-head">{{ 'EDIT_CUSTOMER.LBL_MAIN' | translate }}</h4>
+          <div class="formPadding">
+            <div class="row marginTop15">
+              <div class="col-sm-3">
+                <div class="my-input-group">
+                  <label class="control-label required">{{ 'EDIT_CUSTOMER.LBL_NAME' | translate
+                    }}</label>
+                  <input [(ngModel)]="model.name" [ngClass]="{ 'is-invalid':  !validator.isValid('name')}" type="text"
+                    maxlength="300" placeholder="{{ 'EDIT_CUSTOMER.LBL_NAME' | translate }}" />
+                  <div *ngIf="!validator.isValid('name')" class="invalid-feedback">
+                    <div *ngFor="let error of validator.getErrors('name')">{{ error | translate }}
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-sm-3 mobile-margin-top-15">
+                <div class="my-input-group">
+                  <label class="control-label required">{{ 'EDIT_CUSTOMER.LBL_STARTDATE' | translate
+                    }}</label>
+                  <div class="calendar-wrapper">
+                    <input [(ngModel)]="model.startDate" [ngClass]="{ 'is-invalid':  !validator.isValid('startDate')}"
+                      type="text" maxlength="10" placeholder="{{ 'EDIT_CUSTOMER.LBL_STARTDATE' | translate }}"
+                      (click)="ld.toggle()" ngbDatepicker #ld="ngbDatepicker">
+                    <img src="assets/images/calendar-icon.svg" alt="" class="calendar-icon" (click)="ld.toggle()">
+                  </div>
+                  <div *ngIf="!validator.isValid('startDate')" class="invalid-feedback">
+                    <div *ngFor="let error of validator.getErrors('startDate')">{{ error | translate }}
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-sm-3 mobile-margin-top-15">
+                <div class="my-input-group">
+                  <label class="control-label">{{ 'EDIT_CUSTOMER.LBL_GROUP' | translate }}</label>
+                  <ng-select [multiple]="false" [closeOnSelect]="true" [searchable]="true" [hideSelected]="true"
+                    bindLabel="name" bindValue="id" [items]="customergroupList"
+                    placeholder="--- {{ 'EDIT_CUSTOMER.LBL_SELECT' | translate }}---" [(ngModel)]="model.group">
+                  </ng-select>
+                </div>
+              </div>
+              <div class="col-sm-3 mobile-margin-top-15">
+                <div class="my-input-group">
+                  <label class="control-label">{{ 'EDIT_CUSTOMER.LBL_EMAIL' | translate }}</label>
+                  <input [(ngModel)]="model.email" type="text" maxlength="300"
+                    placeholder="{{ 'EDIT_CUSTOMER.LBL_EMAIL' | translate }}">
+                </div>
+              </div>
+            </div>
+
+            <div class="row marginTop15">
+              <div class="col-sm-3">
+                <div class="my-input-group">
+                  <label class="control-label">{{ 'EDIT_CUSTOMER.LBL_WEBSITE' | translate }}</label>
+                  <input [(ngModel)]="model.website" type="text" maxlength="300"
+                    placeholder="{{ 'EDIT_CUSTOMER.LBL_WEBSITE' | translate }}">
+                </div>
+              </div>
+              <div class="col-sm-3 mobile-margin-top-15">
+                <div class="my-input-group">
+                  <label class="control-label">{{ 'EDIT_CUSTOMER.LBL_PHONE' | translate }}</label>
+                  <input type="text" [(ngModel)]="model.phone" maxlength="300"
+                    placeholder="{{ 'EDIT_CUSTOMER.LBL_PHONE' | translate }}">
+                </div>
+              </div>
+              <div class="col-sm-3">
+                <div class="my-input-group mobile-margin-top-15">
+                  <label class="control-label">{{ 'EDIT_CUSTOMER.LBL_OTHER_PHONENUMBER' | translate
+                    }}</label>
+                  <input type="text" [(ngModel)]="model.otherPhone" maxlength="300"
+                    placeholder="{{ 'EDIT_CUSTOMER.LBL_PHONE' | translate }}">
+                </div>
+              </div>
+              <div class="col-sm-3">
+                <div class="my-input-group mobile-margin-top-15">
+                  <label class="control-label">{{ 'EDIT_CUSTOMER.LBL_FAX' | translate }}</label>
+                  <input type="text" [(ngModel)]="model.fax" maxlength="300"
+                    placeholder="{{ 'EDIT_CUSTOMER.LBL_FAX' | translate }}">
+                </div>
+              </div>
+            </div>
+
+            <div class="row marginTop15">
+              <div class="col-sm-3">
+                <div class="my-input-group">
+                  <label class="control-label">{{ 'EDIT_CUSTOMER.LBL_OTHERS' | translate }}</label>
+                  <input type="text" [(ngModel)]="model.others" maxlength="300"
+                    placeholder="{{ 'EDIT_CUSTOMER.LBL_OTHERS' | translate }}">
+                </div>
+              </div>
+              <div class="col-sm-3 mobile-margin-top-15">
+                <div class="my-input-group">
+                  <label class="control-label">{{ 'EDIT_CUSTOMER.LBL_CATEGORY' | translate }}</label>
+                  <ng-select [multiple]="false" [closeOnSelect]="true" [searchable]="true" [hideSelected]="true"
+                    bindLabel="name" bindValue="id" [items]="customerCategory"
+                    placeholder="--- {{ 'EDIT_CUSTOMER.LBL_SELECT' | translate }}---" [(ngModel)]="model.category">
+                  </ng-select>
+                </div>
+              </div>
+              <div class="col-sm-3 mobile-margin-top-15">
+                <div class="my-input-group">
+                  <label class="control-label">{{ 'EDIT_CUSTOMER.LBL_LANGUAGE' | translate }}</label>
+
+                  <ng-select [multiple]="false" [closeOnSelect]="true" [searchable]="true" [hideSelected]="true"
+                    bindLabel="name" bindValue="id" [items]="languageList"
+                    placeholder="--- {{ 'EDIT_CUSTOMER.LBL_SELECT' | translate }}---" [(ngModel)]="model.language">
+                  </ng-select>
+
+                </div>
+              </div>
+              <div class="col-sm-3 mobile-margin-top-15">
+                <div class="my-input-group">
+                  <label class="control-label">{{ 'EDIT_CUSTOMER.LBL_PROSPECT_STATUS' | translate
+                    }}</label>
+
+                  <ng-select [multiple]="false" [closeOnSelect]="true" [searchable]="true" [hideSelected]="true"
+                    bindLabel="name" bindValue="id" [items]="prospectstatusList"
+                    placeholder="--- {{ 'EDIT_CUSTOMER.LBL_SELECT' | translate }}---"
+                    [(ngModel)]="model.prospectStatus">
+                  </ng-select>
+
+                  <div *ngIf="!validator.isValid('typeId')" class="invalid-feedback">
+                    <div *ngFor="let error of validator.getErrors('typeId')">{{ error | translate }}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+
+            <div class="row marginTop15">
+
+              <div class="col-sm-3">
+                <div class="my-input-group">
+                  <label class="control-label">{{ 'EDIT_CUSTOMER.LBL_MARKET_SEGMENT' | translate
+                    }}</label>
+                  <ng-select [multiple]="false" [closeOnSelect]="true" [searchable]="true" [hideSelected]="true"
+                    bindLabel="name" bindValue="id" [items]="marketsegmentList"
+                    placeholder="--- {{ 'EDIT_CUSTOMER.LBL_SELECT' | translate }}---" [(ngModel)]="model.margetSegment">
+                  </ng-select>
+                </div>
+              </div>
+              <div class="col-sm-3 mobile-margin-top-15">
+                <div class="my-input-group">
+                  <label class="control-label">{{ 'EDIT_CUSTOMER.LBL_BUSINESS_TYPE' | translate
+                    }}</label>
+                  <ng-select [multiple]="false" [closeOnSelect]="true" [searchable]="true" [hideSelected]="true"
+                    bindLabel="name" bindValue="id" [items]="businesstypeList"
+                    placeholder="--- {{ 'EDIT_CUSTOMER.LBL_SELECT' | translate }}---" [(ngModel)]="model.businessType">
+                  </ng-select>
+                </div>
+              </div>
+              <div class="col-sm-3 mobile-margin-top-15">
+                <div class="my-input-group">
+                  <label class="control-label">{{ 'EDIT_CUSTOMER.LBL_CUSTOMER_COMPLEXITYLEVEL' |
+                    translate }}</label>
+                  <ng-select [multiple]="false" [closeOnSelect]="true" [searchable]="true" [hideSelected]="true"
+                    bindLabel="name" bindValue="id" [items]="complexityLevel"
+                    placeholder="--- {{ 'EDIT_CUSTOMER.LBL_SELECT' | translate }}---"
+                    [(ngModel)]="model.complexityLevel">
+                  </ng-select>
+                </div>
+              </div>
+              <div class="col-sm-3 mobile-margin-top-15">
+                <div class="my-input-group">
+                  <label class="control-label">{{ 'EDIT_CUSTOMER.LBL_SKILLS_REQUIRED' | translate
+                    }}</label>
+
+                  <ng-select [multiple]="false" [closeOnSelect]="true" [searchable]="true" [hideSelected]="true"
+                    bindLabel="name" bindValue="id" [items]="skills"
+                    placeholder="--- {{ 'EDIT_CUSTOMER.LBL_SELECT' | translate }}---"
+                    [(ngModel)]="model.skillsRequired">
+                  </ng-select>
+
+                  <div *ngIf="!validator.isValid('typeId')" class="invalid-feedback">
+                    <div *ngFor="let error of validator.getErrors('typeId')">{{ error | translate }}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+
+            <div class="row marginTop25">
+
+              <div class="col-sm-3">
+                <div class="my-input-group">
+                  <label class="control-label required">{{ 'EDIT_CUSTOMER.LBL_BUSINESS_COUNTRY' |
+                    translate }}</label>
+                  <ng-select [items]="countryList" [multiple]="true" [closeOnSelect]="false" [searchable]="true"
+                    bindLabel="countryName" [loading]="loading" class="multiple"
+                    [ngClass]="{ 'is-invalid': !validator.isValid('businessCountryItems')}"
+                    placeholder="--- {{ 'EDIT_STAFF.LBL_SELECT' | translate }} ---"
+                    [(ngModel)]="model.businessCountryItems">
+                  </ng-select>
+                  <div *ngIf="!validator.isValid('businessCountryItems')" class="invalid-feedback"
+                    style="display:block">
+                    <div *ngFor="let error of validator.getErrors('businessCountryItems')">{{ error | translate }}</div>
+                  </div>
+
+                </div>
+              </div>
+              <div class="col-sm-3 mobile-margin-top-15">
+                <div class="my-input-group">
+                  <label class="control-label">{{ 'EDIT_CUSTOMER.LBL_QUOTATION_NAME' | translate
+                    }}</label>
+                  <input type="text" [(ngModel)]="model.quatationName" maxlength="300"
+                    placeholder="{{ 'EDIT_CUSTOMER.LBL_QUOTATION_NAME' | translate }}">
+                </div>
+              </div>
+              <div class="col-sm-3 mobile-margin-top-15">
+                <div class="my-input-group">
+                  <label class="control-label required">{{ 'EDIT_CUSTOMER.LBL_INVOICE_TYPE' |
+                    translate }}</label>
+
+                  <ng-select [multiple]="false" [closeOnSelect]="true" [searchable]="true" [hideSelected]="true"
+                    bindLabel="name" bindValue="id" [items]="invoicetypeList"
+                    placeholder="--- {{ 'EDIT_CUSTOMER.LBL_SELECT' | translate }}---"
+                    [ngClass]="{ 'is-invalid':!validator.isValid('invoiceType')}" [(ngModel)]="model.invoiceType">
+                  </ng-select>
+
+                  <div *ngIf="!validator.isValid('invoiceType')" class="invalid-feedback">
+                    <div *ngFor="let error of validator.getErrors('invoiceType')">{{ error | translate }}</div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-sm-3 mobile-margin-top-15">
+                <div class="my-input-group">
+                  <label class="control-label">{{ 'EDIT_CUSTOMER.LBL_KAM' | translate }}</label>
+
+                  <ng-select [items]="kamList" [multiple]="true" [closeOnSelect]="false" [searchable]="true"
+                    bindLabel="name" [loading]="loading" class="multiple"
+                    [ngClass]="{ 'is-invalid': !validator.isValid('kamItems')}"
+                    placeholder="--- {{ 'EDIT_STAFF.LBL_SELECT' | translate }} ---" [(ngModel)]="model.kamItems">
+                  </ng-select>
+                  <div *ngIf="!validator.isValid('kamItems')" class="invalid-feedback" style="display:block">
+                    <div *ngFor="let error of validator.getErrors('kamItems')">{{ error | translate }}
+                    </div>
+                  </div>
+
+                </div>
+              </div>
+            </div>
+
+            <div class="row marginTop25">
+              <div class="col-sm-3 mobile-margin-top-15">
+                <div class="my-input-group">
+                  <label class="control-label required">{{ 'EDIT_CUSTOMER.LBL_GLCODE' | translate
+                    }}</label>
+                  <input type="text" [(ngModel)]="model.glCode" maxlength="300"
+                    [ngClass]="{ 'is-invalid':  !validator.isValid('glCode')}"
+                    placeholder="{{ 'EDIT_CUSTOMER.LBL_GLCODE' | translate }}">
+                  <div *ngIf="!validator.isValid('glCode')" class="invalid-feedback">
+                    <div *ngFor="let error of validator.getErrors('glCode')">{{ error | translate }}
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-sm-3 mobile-margin-top-15">
+                <div class="my-input-group">
+                  <label class="control-label required">{{ 'API_SERVICE.LBL_API_SERVICES' | translate
+                    }}</label>
+
+                  <ng-select [items]="apiServiceList" [multiple]="true" class="multiple" [closeOnSelect]="true"
+                    [searchable]="true" bindLabel="name" bindValue="id" [loading]="loading"
+                    placeholder="--- {{ 'COMMON.LBL_SELECT' | translate }} ---" [(ngModel)]="model.apiServiceIds"
+                    [ngClass]="{'is-invalid': !validator.isValid('apiServiceIds')}">
+                  </ng-select>
+                  <div *ngIf="!validator.isValid('apiServiceIds')" class="invalid-feedback">
+                    <div *ngFor="let error of validator.getErrors('apiServiceIds')">
+                      {{ error | translate }}</div>
+                  </div>
+
+                </div>
+              </div>
+
+              <div class="col-sm-3 mobile-margin-top-15">
+                <div class="my-input-group">
+                  <label class="control-label">{{ 'EDIT_CUSTOMER.LBL_ACCOUNTING_LEADER' | translate
+                    }}</label>
+
+                  <ng-select [multiple]="false" [closeOnSelect]="true" [searchable]="true" [hideSelected]="true"
+                    bindLabel="name" bindValue="id" [items]="accountingleaderList"
+                    placeholder="--- {{ 'EDIT_CUSTOMER.LBL_SELECT' | translate }}---"
+                    [(ngModel)]="model.accountingLeader">
+                  </ng-select>
+
+                </div>
+              </div>
+
+              <div class="col-sm-3 mobile-margin-top-15">
+                <div class="my-input-group">
+                  <label class="control-label">{{ 'EDIT_CUSTOMER.LBL_SALES_INCHARGE' | translate
+                    }}</label>
+
+                  <ng-select [items]="salesInchargeList" [multiple]="true" [closeOnSelect]="false" [searchable]="true"
+                    bindLabel="name" [loading]="loading" class="multiple"
+                    [ngClass]="{ 'is-invalid': !validator.isValid('salesInchargeItems')}"
+                    placeholder="--- {{ 'EDIT_STAFF.LBL_SELECT' | translate }} ---"
+                    [(ngModel)]="model.salesInchargeItems">
+                  </ng-select>
+                  <div *ngIf="!validator.isValid('salesInchargeItems')" class="invalid-feedback" style="display:block">
+                    <div *ngFor="let error of validator.getErrors('salesInchargeItems')">{{ error | translate }}</div>
+                  </div>
+
+                </div>
+              </div>
+
+            </div>
+
+            <div class="row marginTop25">
+
+
+              <div class="col-sm-3 mobile-margin-top-15">
+                <div class="my-input-group">
+                  <label class="control-label">{{ 'EDIT_CUSTOMER.LBL_ACTIVITIES_LEVEL' | translate
+                    }}</label>
+
+                  <ng-select [multiple]="false" [closeOnSelect]="true" [searchable]="true" [hideSelected]="true"
+                    bindLabel="name" bindValue="id" [items]="activitiesLevelList"
+                    placeholder="--- {{ 'EDIT_CUSTOMER.LBL_SELECT' | translate }}---"
+                    [(ngModel)]="model.activitiesLevel">
+                  </ng-select>
+
+                </div>
+              </div>
+
+              <div class="col-sm-3 mobile-margin-top-15">
+                <div class="my-input-group">
+                  <label class="control-label">{{ 'EDIT_CUSTOMER.LBL_RELATIONSHIP_STATUS' | translate
+                    }}</label>
+
+                  <ng-select [multiple]="false" [closeOnSelect]="true" [searchable]="true" [hideSelected]="true"
+                    bindLabel="name" bindValue="id" [items]="relationshipStatusList"
+                    placeholder="--- {{ 'EDIT_CUSTOMER.LBL_SELECT' | translate }}---"
+                    [(ngModel)]="model.relationshipStatus">
+                  </ng-select>
+
+                </div>
+              </div>
+
+              <div class="col-sm-3 mobile-margin-top-15">
+                <div class="my-input-group">
+                  <label class="control-label">{{ 'EDIT_CUSTOMER.LBL_BRAND_PRIORITY' | translate
+                    }}</label>
+
+                  <ng-select [items]="brandPriorityList" [multiple]="true" [closeOnSelect]="false" [searchable]="true"
+                    bindLabel="name" [loading]="loading" class="multiple"
+                    [ngClass]="{ 'is-invalid': !validator.isValid('brandPriorityItems')}"
+                    placeholder="--- {{ 'EDIT_STAFF.LBL_SELECT' | translate }} ---"
+                    [(ngModel)]="model.brandPriorityItems">
+                  </ng-select>
+                  <div *ngIf="!validator.isValid('brandPriorityItems')" class="invalid-feedback" style="display:block">
+                    <div *ngFor="let error of validator.getErrors('brandPriorityItems')">{{ error | translate }}</div>
+                  </div>
+
+                </div>
+              </div>
+
+              <div class="col-sm-3 mobile-margin-top-15">
+                <div class="my-input-group">
+                  <label class="control-label">{{ 'EDIT_CUSTOMER.LBL_DIRECT_COMPETITOR' | translate
+                    }}</label>
+                  <input type="text" [(ngModel)]="model.directCompetitor" maxlength="2000"
+                    placeholder="{{ 'EDIT_CUSTOMER.LBL_DIRECT_COMPETITOR' | translate }}">
+                </div>
+              </div>
+            </div>
+
+            <!-- add “Entity” multiple ddl in customer register page . mandatory  -->
+
+            <div class="row marginTop25">
+              <div class="col-sm-3 mobile-margin-top-15">
+                <div class="my-input-group">
+                  <label class="control-label required">{{ 'EDIT_CUSTOMER.LBL_ENTITY' | translate
+                    }}</label>
+                  <ng-select class="multiple" [multiple]="true" [closeOnSelect]="true" [searchable]="true"
+                    [hideSelected]="true" bindLabel="name" bindValue="id" [items]="entityList"
+                    placeholder="--- {{ 'EDIT_CUSTOMER.LBL_SELECT' | translate }}---"
+                    [ngClass]="{ 'is-invalid':  !validator.isValid('customerEntityIds')}"
+                    [(ngModel)]="model.customerEntityIds">
+                  </ng-select>
+                  <div *ngIf="!validator.isValid('customerEntityIds')" class="invalid-feedback">
+                    <div *ngFor="let error of validator.getErrors('customerEntityIds')">{{ error | translate}}
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-sm-3 mobile-margin-top-15">
+                <div class="my-input-group">
+                  <label class="control-label required">{{ 'EDIT_CUSTOMER.LBL_COMPANY' | translate
+                    }}</label>
+                  <ng-select [items]="entityList" [ngClass]="{ 'is-invalid': !validator.isValid('companyId')}"
+                    [clearable]="false" disabled bindLabel="name" bindValue="id"
+                    placeholder="--- {{ 'EDIT_CUSTOMER.LBL_SELECT' | translate }}---" [(ngModel)]="model.companyId">
+                    <ng-template ng-option-tmp let-item="item">
+                      <div class="text-wrap"><span>{{item.name}}</span></div>
+                    </ng-template>
+                  </ng-select>
+                  <div *ngIf="!validator.isValid('companyId')" class="invalid-feedback">
+                    <div *ngFor="let error of validator.getErrors('companyId')">{{ error | translate}}
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <!-- ------------------------------ -->
+              <div class="col-sm-3 mobile-margin-top-15" *ngIf="isItTeamRole">
+                <div class="my-input-group">
+                  <label class="control-label">{{ 'EDIT_CUSTOMER.LBL_SISTERCOMPANY' | translate}}</label>
+                  <ng-select bindLabel="name" bindValue="id" class="multiple" [multiple]="true" [items]="customerList"
+                    [clearable]="true" [(ngModel)]="model.sisterCompanyIds" [virtualScroll]="true"
+                    (scrollToEnd)="getCustomerData(true)" [typeahead]="customerInput" [minTermLength]="3"
+                    (clear)="clearCustomer()"
+                    placeholder="--- {{ (customerList!=null && customerList.length!=0? 'COMMON.LBL_SELECT':'COMMON.LBL_NO_DATA' ) | translate }} ---"
+                    appendTo="body" [loading]="customerLoading">
+                    <ng-template ng-option-tmp let-item="item">
+                      <div class="text-wrap">{{ item.name }}</div>
+                    </ng-template>
+                  </ng-select>
+                </div>
+              </div>
+
+            </div>
+            <div class="row marginTop15">
+              <div class="col-sm-6 mobile-margin-top-15">
+                <div class="my-input-group">
+                  <label class="control-label">{{ 'EDIT_CUSTOMER.LBL_COMMENTS' | translate }}</label>
+                  <textarea [(ngModel)]="model.comments" placeholder="{{ 'EDIT_CUSTOMER.LBL_COMMENTS' | translate }}"
+                    style="width:98.5%"></textarea>
+                </div>
+              </div>
+              <div class="col-sm-6">
+                <div class="my-input-group">
+                  <label class="control-label">{{ 'EDIT_CUSTOMER.LBL_BOOKING_COMMENTS' | translate
+                    }}</label>
+                  <textarea [(ngModel)]="model.bookingDefaultComments" maxlength="2000"
+                    placeholder="{{ 'EDIT_CUSTOMER.LBL_BOOKING_COMMENTS' | translate }}" style="width:98.5%"></textarea>
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+
+          <div class="tab-container">
+            <ul class="tab-switch-container">
+              <li class="active">{{ 'EDIT_CUSTOMER.TAB_ADDRESS' | translate }}</li>
+            </ul>
+            <div class="tab-content-container">
+              <div class="tab-content active" id="tab1">
+                <div class="table-action mobile-action desktop-hide tablet-hide">
+                  <button class="secondary-cta x-small" (click)="addAddress()">+
+                    {{ 'EDIT_CUSTOMER.LBL_ADD' | translate }}</button>
+                </div>
+                <table class="info-table" cellspacing="0">
+                  <thead>
+                    <tr>
+                      <th class="required">{{ 'EDIT_CUSTOMER.LBL_ADDRESS_TYPE' | translate }}</th>
+                      <th class="required">{{ 'EDIT_CUSTOMER.LBL_OFFICENAME_ADDRESS' | translate }}
+                      </th>
+                      <th>{{ 'EDIT_CUSTOMER.LBL_BOXPOST' | translate }}</th>
+                      <th>{{ 'EDIT_CUSTOMER.LBL_ZIPCODE' | translate }}</th>
+                      <th class="required">{{ 'EDIT_CUSTOMER.LBL_COUNTRY' | translate }}</th>
+                      <th class="required">{{ 'EDIT_CUSTOMER.LBL_CITY' | translate }}</th>
+
+                      <th></th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr *ngFor="let item of addressValidators;  let i = index">
+                      <td>
+                        <div class="my-input-group">
+                          <label for="">{{ 'EDIT_CUSTOMER.LBL_ADDRESS_TYPE' | translate
+                            }}</label>
+
+                          <ng-select [multiple]="false" [closeOnSelect]="true" [searchable]="true" [hideSelected]="true"
+                            bindLabel="name" appendTo="body" bindValue="id" [items]="addresstypeList"
+                            placeholder="--- {{ 'EDIT_CUSTOMER.LBL_SELECT' | translate }}---"
+                            [ngClass]="{ 'is-invalid':!item.validator.isValid('addressType')}"
+                            [(ngModel)]="item.customerAddress.addressType">
+                          </ng-select>
+                          <div *ngIf="!item.validator.isValid('addressType')" class="invalid-feedback">
+                            <div *ngFor="let error of item.validator.getErrors('addressType')">
+                              {{ error | translate }}
+                            </div>
+                          </div>
+                        </div>
+                      </td>
+                      <td>
+                        <div class="my-input-group">
+                          <label for="">{{ 'EDIT_CUSTOMER.LBL_OFFICENAME_ADDRESS' | translate
+                            }}</label>
+                          <textarea type="text" [(ngModel)]="item.customerAddress.address"
+                            [ngClass]="{ 'is-invalid':!item.validator.isValid('address')}" maxlength="300"
+                            class="width-180"
+                            placeholder="{{ 'EDIT_CUSTOMER.LBL_OFFICENAME_ADDRESS' | translate }}"></textarea>
+                          <div *ngIf="!item.validator.isValid('address')" class="invalid-feedback">
+                            <div *ngFor="let error of item.validator.getErrors('address')">
+                              {{ error | translate }}</div>
+                          </div>
+                        </div>
+                      </td>
+                      <td>
+                        <div class="my-input-group">
+                          <label for="">{{ 'EDIT_CUSTOMER.LBL_BOXPOST' | translate }}</label>
+                          <input type="text" [(ngModel)]="item.customerAddress.boxPost" maxlength="300"
+                            class="width-180" placeholder="{{ 'EDIT_CUSTOMER.LBL_BOXPOST' | translate }}">
+                        </div>
+                      </td>
+                      <td>
+                        <div class="my-input-group">
+                          <label for="">{{ 'EDIT_CUSTOMER.LBL_ZIPCODE' | translate }}</label>
+                          <input type="text" [(ngModel)]="item.customerAddress.zipCode" maxlength="300"
+                            class="width-180" placeholder="{{ 'EDIT_CUSTOMER.LBL_ZIPCODE' | translate }}">
+                        </div>
+
+                      </td>
+                      <td>
+                        <div class="my-input-group">
+                          <label for="">{{ 'EDIT_CUSTOMER.LBL_COUNTRY' | translate }}</label>
+                          <ng-select [multiple]="false" [closeOnSelect]="true" [searchable]="true" [hideSelected]="true"
+                            bindLabel="countryName" appendTo="body" bindValue="id" [items]="countryList"
+                            placeholder="--- {{ 'EDIT_CUSTOMER.LBL_SELECT' | translate }}---"
+                            [ngClass]="{ 'is-invalid':!item.validator.isValid('countryId')}" (change)="getCity(item)"
+                            (clear)="clearCity(item)" [(ngModel)]="item.customerAddress.countryId">
+                          </ng-select>
+
+                          <div *ngIf="!item.validator.isValid('countryId')" class="invalid-feedback">
+                            <div *ngFor="let error of item.validator.getErrors('countryId')">
+                              {{ error | translate }}
+                            </div>
+                          </div>
+                        </div>
+                      </td>
+                      <td>
+                        <div class="my-input-group">
+                          <label for="">{{ 'EDIT_CUSTOMER.LBL_CITY' | translate }}</label>
+
+                          <ng-select [multiple]="false" [closeOnSelect]="true" [searchable]="true" [hideSelected]="true"
+                            bindLabel="name" appendTo="body" bindValue="id" [items]="item.customerAddress.cityList"
+                            placeholder="--- {{ 'EDIT_CUSTOMER.LBL_SELECT' | translate }}---"
+                            [ngClass]="{ 'is-invalid':!item.validator.isValid('cityId')}"
+                            [(ngModel)]="item.customerAddress.cityId">
+                          </ng-select>
+                          <div *ngIf="!item.validator.isValid('cityId')" class="invalid-feedback">
+                            <div *ngFor="let error of item.validator.getErrors('cityId')">{{ error | translate }}</div>
+                          </div>
+                        </div>
+                      </td>
+
+
+                      <td>
+                        <div class="my-input-group">
+                          <button *ngIf="i>0" (click)="removeAddress(i)" class="secondary-cta small">
+                            <i class="fa fa-trash"></i>
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+                <div class="table-action mobile-hide">
+                  <span><button class="secondary-cta x-small" (click)="addAddress()">+
+                      {{ 'EDIT_SUPPLIER.LBL_ADD' | translate }}</button> </span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-action-container">
+
+            <button class="primary-cta small" (click)="confirmSaveCustomer()"
+              [disabled]="saveloading || customerContactLoading || initialloading">
+              {{'EDIT_CUSTOMER.LBL_SAVE' | translate}}
+              <span *ngIf="saveloading || customerContactLoading">
+                <i class="fa fa-refresh fa-spin" aria-hidden="true"></i>
+              </span>
+            </button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<ng-template #confirmEntityMapCustomerContact let-modal>
+  <div class="modal-body">
+    <div class="small-model">
+      <p>{{'EDIT_CUSTOMER.LBL_NEW_ENTITY_CONTACT'| translate}}</p>
+      <!-- <button class="secondary-cta" (click)="save()" [disabled]="saveLoading || customerContactLoading">{{
+                'COMMON.LBL_NO' | translate }}
+                <span *ngIf="saveLoading">
+                    <i class="fa fa-refresh fa-spin" aria-hidden="true"></i>
+                </span>
+            </button> -->
+      <button [disabled]="saveloading || customerContactLoading" class="secondary-cta" (click)="save() ">
+        {{'COMMON.LBL_NO' | translate }}
+        <span *ngIf="saveloading || customerContactLoading">
+          <i class="fa fa-refresh fa-spin " aria-hidden="true "></i>
+        </span>
+      </button>
+      <button class="primary-cta" (click)="openContact()" [disabled]="saveloading">{{ 'COMMON.LBL_YES'
+        | translate
+        }}</button>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #mapCustomerContactEntity let-modal>
+
+  <div class="modal-header custom-modal-header">
+    <div>
+      <h4 class="modal-title" id="modal-basic-title">Map the {{customerEntityModel.entitys}} to contacts
+      </h4>
+    </div>
+    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+
+  <div class="modal-body custom-modal-body">
+    <div class="content-container schedule-allocation-container">
+      <div class="formPadding">
+        <div class="row marginTop20" *ngIf="(customerContacts && customerContacts.length>0)">
+          <div class="col mobile-margin-top-15">
+            <div *ngIf="!validator.isValid('mapContactEntityIds')" class="invalid-feedback">
+              <div *ngFor="let error of validator.getErrors('mapContactEntityIds')">{{ error | translate}}
+              </div>
+            </div>
+            <div class="table-container h-scroll table-max-height-300">
+              <table class="pagination-table h-scroll bordered">
+                <thead>
+                  <tr class="sticky-top-row">
+                    <th class="Center_Middle">
+                      <div class="styled-checkbox-container">
+                        <input type="checkbox" class="styled-checkbox" id="checkboxall"
+                          [(ngModel)]="selectedAllCSSummary" (change)="selectAll();" />
+                        <label for="checkboxall"></label>
+                      </div>
+                    </th>
+                    <th>
+                      {{ 'EDIT_CUSTOMER.LBL_CONTACT_NAME' | translate }}
+                    </th>
+                    <th>
+                      {{ 'EDIT_CUSTOMER.LBL_EMAIL' | translate }}</th>
+                    <th>{{ 'EDIT_CUSTOMER.LBL_JOB_TITLE' | translate}}</th>
+                    <th>{{ 'EDIT_CUSTOMER.LBL_TYPE' | translate }}</th>
+                    <th>{{ 'EDIT_CUSTOMER.LBL_MOBILE' | translate }}</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <ng-container *ngFor="let iteminfo of customerContacts">
+                    <tr>
+                      <td class="Center_Middle">
+                        <div class="styled-checkbox-container">
+                          <input type="checkbox" class="styled-checkbox" id="checkbox-{{iteminfo.id}}"
+                            [(ngModel)]="iteminfo.selected" (change)="checkIfAllSelected();" />
+                          <label for="checkbox-{{iteminfo.id}}"></label>
+                        </div>
+                      </td>
+                      <td>{{iteminfo.contactName}}</td>
+                      <td>{{iteminfo.email}}</td>
+                      <td>{{iteminfo.jobTitle}}</td>
+                      <td>{{iteminfo.contactTypeName}}</td>
+                      <td>{{iteminfo.mobile}}</td>
+                    </tr>
+                  </ng-container>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+        <div class="row marginTop20" *ngIf="(customerContacts && customerContacts.length===0)">
+          <div class="error-container">
+            <img src="assets/images/no-result.svg" alt="" class="thumbnail">
+            <h4 class="title">{{ 'COMMON.LBL_NOITEMS' | translate }}</h4>
+            <p class="error-subtitle">{{'COMMON.LBL_NODATA' | translate}}</p>
+          </div>
+        </div>
+        <div class="marginTop20 modal-footer">
+          <button [disabled]="saveloading " class="secondary-cta MarginR-20 " (click)="cancel() ">
+            {{'COMMON.LBL_CONFIRMCANCEL' | translate}}
+          </button>
+          <button [disabled]="saveloading " *ngIf="customerContacts && customerContacts.length>0"
+            class="primary-cta MarginR-20 " (click)="saveMapContact() ">
+            {{'COMMON.LBL_SAVE' | translate}}
+            <span *ngIf="saveloading ">
+              <i class="fa fa-refresh fa-spin " aria-hidden="true "></i>
+            </span>
+          </button>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #deleteCustomerEntity let-modal>
+  <div class="modal-body">
+    <div class="small-model">
+      <h2 class="title">{{ 'EDIT_CUSTOMER.LBL_CONFIRMDELETION' | translate }}</h2>
+      <p>are you sure ? you are about to remove the {{customerEntityModel.entitys}} from customer & contacts .</p>
+      <button class="secondary-cta" (click)="modal.dismiss('Cross click');" [disabled]="saveloading">{{
+        'COMMON.LBL_CONFIRMCANCEL' | translate }}</button>
+      <button [disabled]="saveloading " class="primary-cta" (click)="save() ">
+        {{ 'COMMON.LBL_OK' | translate }}
+        <span *ngIf="saveloading ">
+          <i class="fa fa-refresh fa-spin " aria-hidden="true "></i>
+        </span>
+      </button>
+    </div>
+  </div>
+</ng-template>

@@ -1,0 +1,102 @@
+<div class="main-wrapper">
+  <div class="wrapper dashboard-wrapper">
+    <div class="my-container">
+      <div class="master-body">
+        <div class="title-container">
+          <div class="header-back-button" *ngIf="fromSummary && !templateLoading && !searchloading">
+            <img src="assets/images/back-red.png" alt="back" (click)="this.return('kpi/templates-summary');">
+          </div>
+          <h3 class="main-title">
+            {{ 'VIEW_EXPORT.TITLE' | translate }}  {{ "-" + " " + model.templateName }}
+          </h3>
+        </div>
+        <div class="content-container">
+          <div class="row searchFormPadding">
+            <div class="col-sm-12">
+              <div class="row" *ngFor="let row of rows">
+                <div class="col-sm-3 col-md-3 col-lg-3" *ngFor="let item of row">
+                  <div class="my-input-group">
+                    <label [ngClass]="{ 'required': item.filter.required}" class="required">{{ item.filter.columnName }}</label>
+                    <ng-select *ngIf="item.filter.isMultiple && !item.filter.filterLazy" [items]="item.dataSource" [multiple]="item.filter.selectMultiple" [closeOnSelect]="!item.filter.selectMultiple" [searchable]="true"
+                               [bindLabel]="item.dataSourceFieldName" [loading]="item.loading"
+                               placeholder="--- {{ item.filter.columnName }} ---"
+                               [(ngModel)]="item.value" [ngClass]="{ 'is-invalid': !validator.isValid(item.filter.columnName)}"
+                               class="multiple">
+                    </ng-select>
+                    <ng-select *ngIf="item.filter.isMultiple && item.filter.filterLazy" [items]="item.dataLazy$ | async"
+                               [multiple]="item.filter.selectMultiple" [closeOnSelect]="!item.filter.selectMultiple" [searchable]="true"
+                               [bindLabel]="item.dataSourceFieldName" [loading]="item.loading"
+                               placeholder="--- {{ item.filter.columnName }} ---"
+                               [(ngModel)]="item.value" [ngClass]="{ 'is-invalid': !validator.isValid(item.filter.columnName)}"
+                                [minTermLength]="2"
+                                typeToSearchText="Please enter 2 or more characters"
+                               [typeahead]="item.dataInput$"
+                               class="multiple">
+                    </ng-select>
+                    <div class="calendar-wrapper" *ngIf="!item.filter.isMultiple && (item.filter.type == 4 ||item.filter.type == 3 )">
+                      <input type="text" maxlength="10"
+                             [ngClass]="{ 'is-invalid': !validator.isValid(item.filter.columnName)}"
+                             readonly=readonly [(ngModel)]="item.value" ngbDatepicker #sdf="ngbDatepicker"
+                             (click)="sdf.toggle()">
+                      <img src="assets/images/calendar-icon.svg" alt="" class="calendar-icon" (click)="sdf.toggle()">
+                    </div>
+                    <input *ngIf="!item.filter.isMultiple && item.filter.type == 1" type="text" maxlength="50" [(ngModel)]="item.value" placeholder="{{ item.filter.columnName }}" [ngClass]="{ 'is-invalid': !validator.isValid(item.filter.columnName)}">
+                    <input *ngIf="!item.filter.isMultiple && item.filter.type == 2" type="number" maxlength="6" [(ngModel)]="item.value" placeholder="{{ item.filter.columnName }}">
+                    <div *ngIf="!validator.isValid(item.filter.columnName)" class="invalid-feedback" style="display:block">
+                      <div *ngFor="let error of validator.getErrors(item.filter.columnName)">{{ error | translate }}</div>
+                    </div>
+                  </div>  
+                </div> 
+                </div>                
+            </div>
+          </div>
+          <div class="master-search-cta-container">
+            <div class="column">
+              <button id="btnExport"  class="secondary-cta small" (click)="export()" [disabled]="exportDataLoading || searchloading">
+                {{ 'VIEW_EXPORT.LBL_EXPORT' | translate }}
+                <span *ngIf="exportDataLoading">
+                  <i class="fa fa-refresh fa-spin" aria-hidden="true"></i>
+                </span>
+              </button>
+            </div>
+            <div class="column text-right">
+              <button id="btnSearch" class="primary-cta small" [disabled]="searchloading || exportDataLoading"  (click)="search()">
+                {{ 'VIEW_EXPORT.LBL_SEARCH' | translate }}
+                <span *ngIf="searchloading">
+                  <i class="fa fa-refresh fa-spin" aria-hidden="true"></i>
+                </span>
+              </button>
+            </div>
+          </div>
+          <div class="result-container">
+            <p class="record-count"  *ngIf="items && items.length >0" >
+              {{'CITY_SUMMARY.MSG_SHOWING' | translate}}  {{items.length}} rows
+            </p>
+            <div class="table-container" style="max-height:500px;overflow-y: scroll">
+              <table class="pagination-table">
+                <thead>
+                  <tr>
+                    <th *ngFor="let item of model.columnList">{{ item.columnName }}</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let row of items"  [ngClass]="{ 'rowSum':row.isSum}" >
+                    <ng-container *ngFor="let cell of row.cells">
+                      <td style="border:1px solid rgba(189, 210, 226, 0.8);pointer-events: none" *ngIf="cell.rowSpan" [attr.rowspan]="cell.rowSpan">{{cell.value}}</td>
+                      <td style="border:1px solid rgba(189, 210, 226, 0.8);pointer-events: none" *ngIf="!cell.rowSpan" [attr.colspan]="cell.colSpan" >{{cell.value}}</td>
+                    </ng-container>                    
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <div class="no-result-container" *ngIf="noFound">
+            <img src="assets/images/no-data.png" alt="" class="icon">
+            <h4 class="title">{{ 'TEMPLATE_SUMMARY.LBL_NOITEMS' | translate }}</h4>
+            <p>Oops! No load matching your search were found</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

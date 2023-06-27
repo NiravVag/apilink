@@ -1,0 +1,63 @@
+﻿
+@{
+    ViewData["Title"] = "AdeoInspSumOverall";
+}
+
+@model DTO.Kpi.ExportResult
+
+<xls-sheet name="AdeoMonthInspSumOverall">
+    <table xls-begin="A:1" style="border-style:solid">
+        <tr style="background-color:#f5f5f5;font-weight:bold;text-align:center">
+            <th>Company Name</th>
+            <th>PONo</th>
+            <th>Item Number</th>
+            <th>Item Description</th>
+            <th>Department</th>
+            <th>Supplier Name</th>
+            <th>Factory Name</th>
+            <th>Inspection Office</th>
+            <th>Inspection Qty</th>
+            <th>ServiceRequest</th>
+            <th>Update Insp Date</th>
+            <th>Month</th>
+            <th>Status</th>
+            <th>Inspection ID</th>
+            <th>Result</th>
+            <th>Failed Reason</th>
+            <th>Supplier Code</th>
+            <th>Mandays</th>
+            <th>InspFee</th>
+            <th>ChargeableCost</th>
+            <th>Total Cost</th>
+            <th>Invoice No</th>
+        </tr>
+        @foreach (var item in Model.Data)
+        {
+            <tr>
+                <td width="150px">API</td>
+                <td width="150px">@Html.Raw(@item.PONumber)</td>
+                <td width="250px">@item.ProductName</td>
+                <td width="150px">@Html.Raw(@item.ProductDescription)</td>
+                <td width="150px">@Html.Raw(@item.DeptCode)</td>
+                <td width="150px">@Html.Raw(@item.SupplierName)</td>
+                <td width="150px">@Html.Raw(@item.FactoryName)</td>
+                <td width="150px">@Html.Raw(@item.Office)</td>
+                <td width="150px" xls-type="number">@item.ShipmentQty</td>
+                <td width="150px">@Html.Raw(@item.ServiceTypeName)</td>
+                <td>@item.InspectionReportDate</td>
+                <td>@item.MonthName</td>
+                <td>@item.bookingStatus</td>
+                <td width="150px" xls-type="number">@item.BookingNo</td>
+                <td>@item.ReportStatus</td>
+                <td>@Html.Raw(@item.ReportRemarks)</td>
+                <td width="150px">@item.SupplierCode</td>
+                <td xls-type="number">@item.ManDay</td>
+                <td xls-type="number">@item.InspectionFee</td>
+                <td xls-type="number">@item.TravellingCost</td>
+                <td xls-type="number">@item.TotalInspectionFee</td>
+                <td width="150px">@item.InvoiceNumber</td>
+            </tr>
+        }
+    </table>
+</xls-sheet>
+

@@ -1,0 +1,33 @@
+{
+    "model": "InvoiceSupplierInfo",
+    "fields": {
+        "supplierId": [
+            {
+                "type": "required",
+                "fieldType": "N",
+                "ressource": "INVOICE_GENERATE.MSG_SUPPLIER_REQ"
+            }
+        ],
+        "billedName": [
+            {
+                "type": "required",
+                "fieldType": "T",
+                "ressource": "INVOICE_GENERATE.MSG_BILLING_NAME_REQ"
+            }
+        ],
+        "billingAddress": [
+            {
+                "type": "required",
+                "fieldType": "T",
+                "ressource": "INVOICE_GENERATE.MSG_BILLING_ADDRESS_REQ"
+            }
+        ],
+        "contactPersonIdList": [
+            {
+                "type": "required",
+                "fieldType": "A",
+                "ressource": "INVOICE_GENERATE.MSG_CONTACTS_REQ"
+            }
+        ]
+    }
+}

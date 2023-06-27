@@ -1,0 +1,632 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <Name>DB</Name>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectVersion>4.1</ProjectVersion>
+    <ProjectGuid>{35347bf2-d402-43af-a981-bec8696f1a5b}</ProjectGuid>
+    <DSP>Microsoft.Data.Tools.Schema.Sql.Sql130DatabaseSchemaProvider</DSP>
+    <OutputType>Database</OutputType>
+    <RootPath>
+    </RootPath>
+    <RootNamespace>API_DB</RootNamespace>
+    <AssemblyName>API_DB</AssemblyName>
+    <ModelCollation>1033, CI</ModelCollation>
+    <DefaultFileStructure>BySchemaAndSchemaType</DefaultFileStructure>
+    <DeployToDatabase>True</DeployToDatabase>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <TargetLanguage>CS</TargetLanguage>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <SqlServerVerification>False</SqlServerVerification>
+    <IncludeCompositeObjects>True</IncludeCompositeObjects>
+    <TargetDatabaseSet>True</TargetDatabaseSet>
+    <QueryStoreCaptureMode>None</QueryStoreCaptureMode>
+    <NonTransactedFileStreamAccess>FULL</NonTransactedFileStreamAccess>
+    <FileStreamDirectoryName>ApiFileStream</FileStreamDirectoryName>
+    <Containment>None</Containment>
+    <DatabaseDefaultFulltextLanguage>us_english</DatabaseDefaultFulltextLanguage>
+    <DatabaseDefaultLanguage>us_english</DatabaseDefaultLanguage>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <OutputPath>bin\Release\</OutputPath>
+    <BuildScriptName>$(MSBuildProjectName).sql</BuildScriptName>
+    <TreatWarningsAsErrors>False</TreatWarningsAsErrors>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <DefineDebug>false</DefineDebug>
+    <DefineTrace>true</DefineTrace>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <OutputPath>bin\Debug\</OutputPath>
+    <BuildScriptName>$(MSBuildProjectName).sql</BuildScriptName>
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <DefineDebug>true</DefineDebug>
+    <DefineTrace>true</DefineTrace>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup>
+    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">11.0</VisualStudioVersion>
+    <!-- Default to the v11.0 targets path if the targets file for the current VS version is not found -->
+    <SSDTExists Condition="Exists('$(MSBuildExtensionsPath)\Microsoft\VisualStudio\v$(VisualStudioVersion)\SSDT\Microsoft.Data.Tools.Schema.SqlTasks.targets')">True</SSDTExists>
+    <VisualStudioVersion Condition="'$(SSDTExists)' == ''">11.0</VisualStudioVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'muliServers|AnyCPU' ">
+    <OutputPath>bin\muliServers\</OutputPath>
+  </PropertyGroup>
+  <Import Condition="'$(SQLDBExtensionsRefPath)' != ''" Project="$(SQLDBExtensionsRefPath)\Microsoft.Data.Tools.Schema.SqlTasks.targets" />
+  <Import Condition="'$(SQLDBExtensionsRefPath)' == ''" Project="$(MSBuildExtensionsPath)\Microsoft\VisualStudio\v$(VisualStudioVersion)\SSDT\Microsoft.Data.Tools.Schema.SqlTasks.targets" />
+  <ItemGroup>
+    <Folder Include="Properties" />
+    <Folder Include="Tables" />
+    <Folder Include="Views" />
+    <Folder Include="Programmability" />
+    <Folder Include="Programmability\Store procedures" />
+    <Folder Include="Programmability\Functions" />
+    <Folder Include="PostDeployment" />
+    <Folder Include="Storage" />
+    <Folder Include="Storage\FileGroups" />
+    <Folder Include="Storage\Files" />
+  </ItemGroup>
+  <ItemGroup>
+    <Build Include="Tables\INSP_REP_CUS_Decision.sql" />
+    <Build Include="Tables\REF_INSP_CUS_decision.sql" />
+    <Build Include="Tables\REF_INSP_CUS_Decision_Config.sql" />
+    <Build Include="Tables\IT_UserMaster.sql" />
+    <Build Include="Tables\IT_Right.sql" />
+    <Build Include="Tables\IT_Role_Right.sql" />
+    <Build Include="Tables\IT_UserRole.sql" />
+    <Build Include="Tables\REF_Country.sql" />
+    <Build Include="Tables\REF_Area.sql" />
+    <Build Include="Tables\REF_Province.sql" />
+    <Build Include="Tables\REF_CITY.sql" />
+    <Build Include="Tables\REF_LocationType.sql" />
+    <Build Include="Tables\REF_Currency.sql" />
+    <Build Include="Tables\REF_Location.sql" />
+    <Build Include="Tables\HR_Department.sql" />
+    <Build Include="Tables\HR_Qualification.sql" />
+    <Build Include="Tables\HR_Position.sql" />
+    <Build Include="Tables\HR_Staff.sql" />
+    <Build Include="Storage\FileGroups\ApiFileGroup.sql" />
+    <Build Include="Storage\Files\SqApilFileStream.sql" />
+    <Build Include="Tables\HR_EMployeeType.sql" />
+    <Build Include="Tables\HR_FileType.sql" />
+    <Build Include="Tables\HR_FileAttachment.sql" />
+    <Build Include="Tables\REF_MarketSegment.sql" />
+    <Build Include="Tables\HR_Staff_MarketSegment.sql" />
+    <Build Include="Tables\REF_ProductCategory.sql" />
+    <Build Include="Tables\HR_Staff_ProductCategory.sql" />
+    <Build Include="Tables\REF_Expertise.sql" />
+    <Build Include="Tables\HR_Staff_Expertise.sql" />
+    <Build Include="Tables\HR_Profile.sql" />
+    <Build Include="Tables\HR_Staff_Profile.sql" />
+    <Build Include="Tables\HR_Staff_OpCountry.sql" />
+    <Build Include="Tables\HR_Renew.sql" />
+    <Build Include="Tables\HR_staffHistory.sql" />
+    <Build Include="Tables\HR_StaffTraining.sql" />
+    <Build Include="Tables\AP_Entity.sql" />
+    <Build Include="Tables\HR_Holiday.sql" />
+    <Build Include="Tables\REF_TranslationGroup.sql" />
+    <Build Include="Tables\REF_Translation.sql" />
+    <Build Include="Tables\REF_Zone_1.sql" />
+    <Build Include="Tables\SU_Level.sql" />
+    <Build Include="Tables\SU_Type.sql" />
+    <Build Include="Tables\SU_Supplier.sql" />
+    <Build Include="Tables\SU_OwnlerShip.sql" />
+    <Build Include="Tables\SU_Address.sql" />
+    <Build Include="Tables\CU_Customer.sql" />
+    <Build Include="Tables\SU_Contact.sql" />
+    <Build Include="Tables\SU_Supplier_Customer_Contact.sql" />
+    <Build Include="Tables\SU_Supplier_Customer.sql" />
+    <Build Include="Tables\SU_Supplier_Factory.sql" />
+    <Build Include="Tables\EventLog.sql" />
+    <Build Include="Tables\SU_AddressType.sql" />
+    <Build Include="Tables\HR_OfficeControl.sql" />
+    <Build Include="Tables\IT_UserType.sql" />
+    <Build Include="Tables\EM_ExchangeRateType.sql" />
+    <Build Include="Tables\EM_ExchangeRate.sql" />
+    <Build Include="Tables\REF_CITY_DETAILS.sql" />
+    <Build Include="Tables\CU_Department.sql" />
+    <Build Include="Tables\CU_Brand.sql" />
+    <Build Include="Tables\REF_Unit.sql" />
+    <Build Include="Tables\REF_Season.sql" />
+    <Build Include="Tables\REF_Season_Year.sql" />
+    <Build Include="Tables\CU_Season.sql" />
+    <Build Include="Tables\IT_User_CU_Brand.sql" />
+    <Build Include="Tables\IT_User_CU_Department.sql" />
+    <Build Include="Tables\CU_Contact.sql" />
+    <Build Include="Tables\AUD_EvaluationRound.sql" />
+    <Build Include="Tables\HR_HolidayDayType.sql" />
+    <Build Include="Tables\EC_ExpensesTypes.sql" />
+    <Build Include="Tables\EC_ExpClaimStatus.sql" />
+    <Build Include="Tables\EC_PaymenTypes.sql" />
+    <Build Include="Tables\EC_ExpencesClaims.sql" />
+    <Build Include="Tables\EC_ExpensesClaimDetais.sql" />
+    <Build Include="Tables\REF_Service.sql" />
+    <Build Include="Tables\REF_ServiceType.sql" />
+    <Build Include="Tables\CU_ServiceType.sql" />
+    <Build Include="Tables\CU_Address.sql" />
+    <Build Include="Tables\EC_ReceiptFile.sql" />
+    <Build Include="Tables\CU_CS_Configuration_1.sql" />
+    <Build Include="Tables\EC_FoodAllowance.sql" />
+    <Build Include="Tables\AUD_Transaction.sql" />
+    <Build Include="Tables\AUD_TRAN_CU_Contact.sql" />
+    <Build Include="Tables\AUD_TRAN_SU_Contact.sql" />
+    <Build Include="Tables\AUD_TRAN_FA_Contact.sql" />
+    <Build Include="Tables\AUD_TRAN_ServiceType.sql" />
+    <Build Include="Tables\AUD_TRAN_FA_Profile.sql" />
+    <Build Include="Tables\AUD_TRAN_File_Attachment.sql" />
+    <Build Include="Tables\AUD_Status.sql" />
+    <Build Include="Tables\AUD_TRAN_Status_Log.sql" />
+    <Build Include="Tables\REF_Location_Country.sql" />
+    <Build Include="Tables\CU_ContactType.sql" />
+    <Build Include="Tables\AUD_BookingContact_1.sql" />
+    <Build Include="Tables\AUD_BookingRules_1.sql" />
+    <Build Include="Tables\EC_Status_Role.sql" />
+    <Build Include="Tables\HR_Leave_Status.sql" />
+    <Build Include="Tables\HR_Leave_Type.sql" />
+    <Build Include="Tables\HR_Leave.sql" />
+    <Build Include="Tables\AUD_Cancel_Reschedule_Reasons_1.sql" />
+    <Build Include="Tables\AUD_TRAN_Cancel_Reschedule_1.sql" />
+    <Build Include="Tables\AUD_TRAN_Auditors.sql" />
+    <Build Include="Tables\AUD_TRAN_CS.sql" />
+    <Build Include="Tables\REF_DefectClassification.sql" />
+    <Build Include="Tables\REF_LevelPick1.sql" />
+    <Build Include="Tables\REF_LevelPick2.sql" />
+    <Build Include="Tables\REF_Pick1.sql" />
+    <Build Include="Tables\REF_Pick2.sql" />
+    <Build Include="Tables\REF_PickType.sql" />
+    <Build Include="Tables\REF_ReportUnit.sql" />
+    <Build Include="Tables\REF_ProductCategory_Sub.sql" />
+    <Build Include="Tables\REF_ProductCategory_Sub2.sql" />
+    <Build Include="Tables\CU_Products.sql" />
+    <Build Include="Tables\CU_PurchaseOrder.sql" />
+    <Build Include="Tables\CU_PurchaseOrder_Details.sql" />
+    <Build Include="Tables\CU_PurchaseOrder_Attachment.sql" />
+    <Build Include="Tables\AUD_Type.sql" />
+    <Build Include="Tables\AUD_WorkProcess.sql" />
+    <Build Include="Tables\AUD_TRAN_WorkProcess.sql" />
+    <Build Include="Tables\CU_CustomerGroup.sql" />
+    <Build Include="Tables\REF_Language.sql" />
+    <Build Include="Tables\REF_BusinessType.sql" />
+    <Build Include="Tables\REF_InvoiceType.sql" />
+    <Build Include="Tables\REF_AddressType.sql" />
+    <Build Include="Tables\CU_Product_File_Attachment.sql" />
+    <Build Include="Tables\HR_StaffPhoto.sql" />
+    <Build Include="Tables\INSP_Transaction.sql" />
+    <Build Include="Tables\INSP_Status.sql" />
+    <Build Include="Tables\INSP_TRAN_CU_Contact.sql" />
+    <Build Include="Tables\INSP_TRAN_SU_Contact.sql" />
+    <Build Include="Tables\INSP_TRAN_File_Attachment.sql" />
+    <Build Include="Tables\INSP_TRAN_FA_Contact.sql" />
+    <Build Include="Tables\INSP_TRAN_ServiceType.sql" />
+    <Build Include="Tables\AUD_TRAN_Report_Details.sql" />
+    <Build Include="Tables\AUD_TRAN_Reports.sql" />
+    <Build Include="Tables\CU_CustomerContactTypes.sql" />
+    <Build Include="Tables\CU_CustomerBusinessCountry.sql" />
+    <Build Include="Tables\REF_Country_Location.sql" />
+    <Build Include="Tables\REF_Product_Units.sql" />
+    <Build Include="Tables\MID_TaskType.sql" />
+    <Build Include="Tables\MID_Task.sql" />
+    <Build Include="Tables\IX_MID_Task_ReportTo.sql" />
+    <Build Include="Tables\MID_NotificationType.sql" />
+    <Build Include="Tables\MID_Notification.sql" />
+    <Build Include="Tables\CU_Buyer.sql" />
+    <Build Include="Tables\REF_AQL_Sample_Code.sql" />
+    <Build Include="Tables\REF_AQL_Pick_SampleSize_CodeValue.sql" />
+    <Build Include="Tables\INSP_LAB_Address.sql" />
+    <Build Include="Tables\INSP_LAB_AddressType.sql" />
+    <Build Include="Tables\INSP_LAB_Contact.sql" />
+    <Build Include="Tables\INSP_LAB_Customer.sql" />
+    <Build Include="Tables\INSP_LAB_Customer_Contact.sql" />
+    <Build Include="Tables\INSP_LAB_Details.sql" />
+    <Build Include="Tables\INSP_LAB_Type.sql" />
+    <Build Include="Tables\INSP_TRAN_Picking.sql" />
+    <Build Include="Tables\INSP_TRAN_Picking_Contacts.sql" />
+    <Build Include="Tables\INSP_TRAN_CU_Buyer.sql" />
+    <Build Include="Tables\INSP_TRAN_CU_Brand.sql" />
+    <Build Include="Tables\INSP_TRAN_CU_Department.sql" />
+    <Build Include="Tables\CU_CheckPoints.sql" />
+    <Build Include="Tables\CU_CheckPointType.sql" />
+    <Build Include="Tables\QU_BillMethod.sql" />
+    <Build Include="Tables\QU_PaidBy.sql" />
+    <Build Include="Tables\QU_Quotation.sql" />
+    <Build Include="Tables\QU_Quotation_Contact.sql" />
+    <Build Include="Tables\QU_Quotation_CustomerContact.sql" />
+    <Build Include="Tables\QU_Quotation_SupplierContact.sql" />
+    <Build Include="Tables\QU_Quotation_FactoryContact.sql" />
+    <Build Include="Tables\QU_Status.sql" />
+    <Build Include="Tables\INSP_TRAN_Cancel.sql" />
+    <Build Include="Tables\INSP_Cancel_Reasons.sql" />
+    <Build Include="Tables\INSP_Reschedule_Reasons.sql" />
+    <Build Include="Tables\INSP_TRAN_Reschedule.sql" />
+    <Build Include="Tables\INSP_BookingRule.sql" />
+    <Build Include="Tables\REF_ProspectStatus.sql" />
+    <Build Include="Tables\INSP_TRAN_Status_Log.sql" />
+    <Build Include="Tables\EventBookingLog.sql" />
+    <Build Include="Tables\MID_Email_Modules_1.sql" />
+    <Build Include="Tables\MID_EmailTypes_1.sql" />
+    <Build Include="Tables\MID_Email_Recipients_Configuration_1.sql" />
+    <Build Include="Tables\MID_Email_Recipients_CusBrand_1.sql" />
+    <Build Include="Tables\MID_Email_Recipients_CusBuyer_1.sql" />
+    <Build Include="Tables\MID_Email_Recipients_CusDepartment_1.sql" />
+    <Build Include="Tables\MID_Email_Recipients_Customer_1.sql" />
+    <Build Include="Tables\MID_Email_Recipients_DestinationCountry_1.sql" />
+    <Build Include="Tables\MID_Email_Recipients_Factory_1.sql" />
+    <Build Include="Tables\MID_Email_Recipients_FactoryCountry_1.sql" />
+    <Build Include="Tables\MID_Email_Recipients_Office_1.sql" />
+    <Build Include="Tables\MID_Email_Recipients_ProductCategory_1.sql" />
+    <Build Include="Tables\MID_Email_Recipients_ProductSubCategory_1.sql" />
+    <Build Include="Tables\MID_Email_Recipients_Service_1.sql" />
+    <Build Include="Tables\MID_Email_Recipients_ServiceType_1.sql" />
+    <Build Include="Tables\MID_Email_Recipients_Supplier_1.sql" />
+    <Build Include="Tables\MID_Email_Recipients_CusContacts.sql" />
+    <Build Include="Tables\MID_Email_Recipients_FactContacts.sql" />
+    <Build Include="Tables\MID_Email_Recipients_SupContacts.sql" />
+    <Build Include="Tables\MID_Email_Recipients_Internal.sql" />
+    <Build Include="Tables\MID_Email_Recipients_InternalDefault.sql" />
+    <Build Include="Tables\MID_Email_Recipients_CusContactDefault.sql" />
+    <Build Include="Tables\REF_ReInspectionType.sql" />
+    <Build Include="Tables\REF_County.sql" />
+    <Build Include="Tables\REF_Town.sql" />
+    <Build Include="Tables\Cu_Contact_Service.sql" />
+    <Build Include="Tables\CU_Contact_Department.sql" />
+    <Build Include="Tables\CU_Contact_Brand.sql" />
+    <Build Include="Tables\SU_CreditTerm.sql" />
+    <Build Include="Tables\SU_Status.sql" />
+    <Build Include="Tables\QU_Quotation_Audit.sql" />
+    <Build Include="Tables\QU_PDFVersion.sql" />
+    <Build Include="Tables\SCH_Schedule_CS_1.sql" />
+    <Build Include="Tables\SCH_Schedule_QC_1.sql" />
+    <Build Include="Tables\SCH_QCType_1.sql" />
+    <Build Include="Tables\QU_Quotation_Insp.sql" />
+    <Build Include="Tables\REF_AQL_Pick_SampleSize_Acce_Code.sql" />
+    <Build Include="Tables\QU_Quotation_Insp_Manday.sql" />
+    <Build Include="Tables\QU_Quotation_Aud_Manday.sql" />
+    <Build Include="Tables\DA_UserCustomer.sql" />
+    <Build Include="Tables\FB_Status_Type.sql" />
+    <Build Include="Tables\FB_Status.sql" />
+    <Build Include="Tables\DA_UserRoleNotificationByOffice.sql" />
+    <Build Include="Tables\FB_Report_Details.sql" />
+    <Build Include="Tables\FB_Report_InspSummary_Type.sql" />
+    <Build Include="Tables\FB_Report_InspSummary.sql" />
+    <Build Include="Tables\FB_Report_Quantity_Details.sql" />
+    <Build Include="Tables\EC_ExpenseClaimtype.sql" />
+    <Build Include="Tables\EC_ExpenseClaimsInspection.sql" />
+    <Build Include="Tables\EC_ExpenseClaimsAudit.sql" />
+    <Build Include="Tables\FB_Report_InspSummary_Photo.sql" />
+    <Build Include="Tables\FB_Report_InspDefects.sql" />
+    <Build Include="Tables\FB_Report_QCDetails.sql" />
+    <Build Include="Tables\IT_Right_Type_1.sql" />
+    <Build Include="Tables\INSP_IC_Transaction.sql" />
+    <Build Include="Tables\INSP_IC_TRAN_Products.sql" />
+    <Build Include="Tables\INSP_IC_Status.sql" />
+    <Build Include="Tables\INSP_IC_Title.sql" />
+    <Build Include="Tables\INSP_REP_CUS_Decision.sql" />
+    <Build Include="Tables\REF_INSP_CUS_decision.sql" />
+    <Build Include="Tables\REF_INSP_CUS_Decision_Config.sql" />
+    <Build Include="Tables\FB_Report_Result.sql" />
+    <Build Include="Tables\FB_Report_Additional_Photo.sql" />
+    <Build Include="Tables\DF_ControlTypes.sql" />
+    <Build Include="Tables\REF_Modules.sql" />
+    <Build Include="Tables\DF_DDL_SourceType.sql" />
+    <Build Include="Tables\DF_CU_DDL_SourceType.sql" />
+    <Build Include="Tables\DF_DDL_Source.sql" />
+    <Build Include="Tables\DF_CU_Configuration.sql" />
+    <Build Include="Tables\DF_Control_Attributes.sql" />
+    <Build Include="Tables\INSP_DF_Transaction.sql" />
+    <Build Include="Tables\INSP_DF_DDL_Transaction.sql" />
+    <Build Include="Tables\DF_Attributes.sql" />
+    <Build Include="Tables\DF_ControlType_Attributes.sql" />
+    <Build Include="Tables\CU_CustomerSalesCountries.sql" />
+    <Build Include="Tables\LOG_Email_Queue.sql" />
+    <Build Include="Tables\LOG_Email_Queue_Attachments.sql" />
+    <Build Include="Tables\CU_PR_Details.sql" />
+    <Build Include="Tables\CU_PR_Country.sql" />
+    <Build Include="Tables\CU_PR_Province.sql" />
+    <Build Include="Tables\CU_PR_Supplier.sql" />
+    <Build Include="Tables\CU_PR_ProductCategory.sql" />
+    <Build Include="Tables\CU_PR_ServiceType.sql" />
+    <Build Include="Tables\INSP_TRAN_CU_Merchandiser_1.sql" />
+    <Build Include="Tables\INSP_Product_Transaction.sql" />
+    <Build Include="Tables\INSP_Purchase_Order_Transaction.sql" />
+    <Build Include="Tables\REF_Billing_Entity.sql" />
+    <Build Include="Tables\QU_TRAN_Status_Log.sql" />
+    <Build Include="Tables\QU_INSP_Product.sql" />
+    <Build Include="Tables\REF_KPI_Teamplate.sql" />
+    <Build Include="Tables\INSP_CU_Status.sql" />
+    <Build Include="Tables\INSP_Container_Transaction.sql" />
+    <Build Include="REF_Container_Size.sql" />
+    <Build Include="Tables\CU_Collection.sql" />
+    <Build Include="Tables\CU_PriceCategory.sql" />
+    <Build Include="Tables\FB_Report_Template.sql" />
+    <Build Include="Tables\INV_TM_Type.sql" />
+    <Build Include="Tables\INV_TM_Details.sql" />
+    <Build Include="Tables\REF_DataSourceType.sql" />
+    <Build Include="Tables\AP_Module.sql" />
+    <Build Include="Tables\AP_ModuleRole.sql" />
+    <Build Include="Tables\AP_SubModule.sql" />
+    <Build Include="Tables\AP_SubModuleRole.sql" />
+    <Build Include="Tables\REF_SignEquality.sql" />
+    <Build Include="Tables\KPI_Column.sql" />
+    <Build Include="Views\V_GetStaffs.sql" />
+    <Build Include="Views\V_GetQuotations.sql" />
+    <Build Include="Views\V_Suppliers.sql" />
+    <Build Include="Views\V_InspStatus.sql" />
+    <Build Include="Tables\KPI_Template.sql" />
+    <Build Include="Tables\KPI_TemplateSubModule.sql" />
+    <Build Include="Tables\KPI_TemplateColumn.sql" />
+    <Build Include="Programmability\Store procedures\AddViewInsp.sql" />
+    <Build Include="Tables\TRG_KPI_COLUMNS_Dynamic.sql" />
+    <Build Include="Tables\CU_PR_HolidayInfo.sql" />
+    <Build Include="Tables\CU_PR_Brand.sql" />
+    <Build Include="Tables\CU_PR_Buyer.sql" />
+    <Build Include="Tables\CU_PR_Department.sql" />
+    <Build Include="Tables\CU_PR_PriceCategory.sql" />
+    <Build Include="Tables\CU_PR_HolidayType.sql" />
+    <Build Include="Views\V_GetQuotationDetails.sql" />
+    <Build Include="Views\V_GetCustomerDetails.sql" />
+    <Build Include="Views\V_GetFactoryDetails.sql" />
+    <Build Include="Views\V_GetSupplierDetails.sql" />
+    <Build Include="Views\V_GetInspectionDetails.sql" />
+    <Build Include="Tables\FB_Booking_RequestLog.sql" />
+    <Build Include="Tables\CU_PriceCategory_PCSub2.sql" />
+    <Build Include="Tables\FB_Report_Problematic_Remarks.sql" />
+    <Build Include="Tables\FB_Report_Comments.sql" />
+    <Build Include="Tables\FB_Report_Product_Dimention.sql" />
+    <Build Include="Tables\FB_Report_Product_Weight.sql" />
+    <Build Include="Tables\FB_Report_Packing_Dimention.sql" />
+    <Build Include="Tables\FB_Report_Packing_Weight.sql" />
+    <Build Include="Tables\FB_Report_Packing_BatteryInfo.sql" />
+    <Build Include="Tables\FB_Report_Sample_Pickings.sql" />
+    <Build Include="FB_Report_SampleTypes.sql" />
+    <Build Include="FB_Report_OtherInformation.sql" />
+    <Build Include="FB_Report_Reviewer.sql" />
+    <Build Include="FB_Report_PackingInfo.sql" />
+    <Build Include="Tables\FB_Report_InspSub_Summary.sql" />
+    <Build Include="Tables\ZOHO_RequestLog.sql" />
+    <Build Include="REF_SampleType.sql" />
+    <Build Include="Tables\DA_UserByProductCategory.sql" />
+    <Build Include="Tables\DA_UserByRole.sql" />
+    <Build Include="Tables\DA_UserByService.sql" />
+    <Build Include="Tables\DA_UserByDepartment.sql" />
+    <Build Include="Tables\DA_UserByBrand.sql" />
+    <Build Include="Tables\DA_UserByBuyer.sql" />
+    <Build Include="Tables\REF_API_Services.sql" />
+    <Build Include="Tables\CU_API_Services.sql" />
+    <Build Include="Tables\SU_API_Services.sql" />
+    <Build Include="Tables\CU_Product_API_Services.sql" />
+    <Build Include="Tables\SU_Contact_API_Services.sql" />
+    <Build Include="Tables\CU_Buyer_API_Services.sql" />
+    <Build Include="Tables\INV_REF_Bank.sql" />
+    <Build Include="Tables\INV_TRAN_Bank_Tax.sql" />
+    <Build Include="Tables\INV_REF_Request_Type.sql" />
+    <Build Include="Tables\INV_REF_Fees_From.sql" />
+    <Build Include="Tables\INV_REF_Office.sql" />
+    <Build Include="Tables\INV_TRAN_Invoice_Request.sql" />
+    <Build Include="Tables\INV_TRAN_Invoice_Request_Contact.sql" />
+    <Build Include="Tables\INV_REF_PaymentTerms.sql" />
+    <Build Include="Tables\INV_AUT_TRAN_ContactDetails.sql" />
+    <Build Include="Tables\INV_AUT_TRAN_Details.sql" />
+    <Build Include="Tables\INV_Status.sql" />
+    <Build Include="Tables\INV_Payment_Status.sql" />
+    <Build Include="Tables\INV_AUT_TRAN_Status_Log.sql" />
+    <Build Include="Tables\INV_AUT_TRAN_Tax.sql" />
+    <Build Include="Tables\REF_KPI_Template_Type_1.sql" />
+    <Build Include="Tables\FB_Report_Defect_Photos.sql" />
+    <Build Include="IT_login_Log.sql" />
+    <Build Include="Tables\TCF_Master_DataLog.sql" />
+    <Build Include="Tables\REF_Product_Category_API_Services.sql" />
+    <Build Include="Tables\APIGateway_Log.sql" />
+    <Build Include="Tables\INV_EXF_Status.sql" />
+    <Build Include="Tables\INV_EXF_Type.sql" />
+    <Build Include="Tables\INV_EXF_Transaction.sql" />
+    <Build Include="Tables\INV_EXF_TRAN_Details.sql" />
+    <Build Include="Tables\INV_EXT_TRAN_Tax.sql" />
+    <Build Include="Tables\INV_EXF_TRAN_Status_Log.sql" />
+    <Build Include="Tables\CU_CheckPoints_Brand.sql" />
+    <Build Include="Tables\CU_CheckPoints_Department.sql" />
+    <Build Include="Tables\CU_CheckPoints_ServiceType.sql" />
+    <Build Include="Tables\INV_EXF_ContactDetails.sql" />
+    <Build Include="Tables\QC_BlockList.sql" />
+    <Build Include="Tables\QC_BL_Customer.sql" />
+    <Build Include="Tables\QC_BL_Supplier_Factory.sql" />
+    <Build Include="Tables\QC_BL_ProductCatgeory.sql" />
+    <Build Include="Tables\QC_BL_ProductSubCategory.sql" />
+    <Build Include="Tables\QC_BL_ProductSubCategory2.sql" />
+    <Build Include="Tables\ES_Type.sql" />
+    <Build Include="Tables\ES_Details.sql" />
+    <Build Include="Tables\ES_Office_Config.sql" />
+    <Build Include="Tables\ES_CU_Config.sql" />
+    <Build Include="Tables\ES_ServiceType_Config.sql" />
+    <Build Include="Tables\ES_Product_Category_Config.sql" />
+    <Build Include="Tables\ES_FA_Country_Config.sql" />
+    <Build Include="Tables\ES_Result_Config.sql" />
+    <Build Include="Tables\ES_Sup_Fact_Config.sql" />
+    <Build Include="Tables\ES_CU_Contacts.sql" />
+    <Build Include="Tables\ES_API_Contacts.sql" />
+    <Build Include="Tables\ES_API_Default_Contacts.sql" />
+    <Build Include="Tables\ES_SU_PreDefined_Fields.sql" />
+    <Build Include="Tables\ES_SU_Template_Master.sql" />
+    <Build Include="Tables\ES_SU_Template_Details.sql" />
+    <Build Include="Tables\REF_Budget_Forecast.sql" />
+    <Build Include="Tables\ES_Special_Rule.sql" />
+    <Build Include="Tables\ES_REF_Report_In_Email.sql" />
+    <Build Include="Tables\ES_REF_Email_Size.sql" />
+    <Build Include="Tables\ES_REF_Report_Send_Type.sql" />
+    <Build Include="Tables\ES_REF_Special_Rule.sql" />
+    <Build Include="Tables\Ref_Delimiter.sql" />
+    <Build Include="Tables\ES_SU_Module.sql" />
+    <Build Include="Tables\ES_TRAN_Files.sql" />
+    <Build Include="Tables\ES_REF_File_Type.sql" />
+    <Build Include="Programmability\Store procedures\sp_Defect_KPI_MDM.sql" />
+    <Build Include="Tables\ES_Recipient_Type.sql" />
+    <Build Include="Tables\ES_Send_Log.sql" />
+    <Build Include="Tables\ES_REF_RecipientType.sql" />
+    <Build Include="Tables\ES_SU_DataType.sql" />
+    <Build Include="Tables\REF_DateFormat.sql" />
+    <Build Include="Tables\CU_CS_Onsite_Email.sql" />
+    <Build Include="Tables\UG_UserGuide_Details.sql" />
+    <Build Include="Tables\UG_Role.sql" />
+    <Build Include="Tables\AUD_TRAN_Report.sql" />
+    <Build Include="Tables\EC_ReceiptFileAttachment.sql" />
+    <Build Include="Tables\CU_Product_FileType.sql" />
+    <Build Include="Tables\CU_Product_MSChart.sql" />
+    <Build Include="Tables\INSP_REF_Hold_Reasons.sql" />
+    <Build Include="Tables\INSP_TRAN_Hold_reason.sql" />
+    <Build Include="Tables\CU_ProductCategory.sql" />
+    <Build Include="Tables\CU_Season_Config.sql" />
+    <Build Include="Tables\REF_BUSINESS_LINE.sql" />
+    <Build Include="Tables\INSP_REF_InspectionLocation.sql" />
+    <Build Include="Tables\INSP_REF_ShipmentType.sql" />
+    <Build Include="Tables\INSP_TRAN_ShipmentType.sql" />
+    <Build Include="Tables\FB_Report_Manual_Log.sql" />
+    <Build Include="Tables\HR_REF_Band.sql" />
+    <Build Include="Tables\HR_REF_Social_Insurance_type.sql" />
+    <Build Include="Tables\HR_REF_Status.sql" />
+    <Build Include="Tables\RestApiLog.sql" />
+    <Build Include="Tables\CU_Contact_Entity_Map.sql" />
+    <Build Include="Tables\SU_Contact_Entity_Map.sql" />
+    <Build Include="Tables\HR_Entity_Map.sql" />
+    <Build Include="Tables\HR_Staff_Services.sql" />
+    <Build Include="Tables\HR_Staff_Entity_Service_Map.sql" />
+    <Build Include="Tables\SU_Contact_Entity_Service_Map.sql" />
+    <Build Include="Tables\CU_Contact_Entity_Service_Map.sql" />
+    <Build Include="Tables\FB_Report_ProductBarcodesInfo.sql" />
+    <Build Include="Tables\QU_Quotation_Pdf_Version.sql" />
+    <Build Include="Tables\EC_AUT_TravelTariff.sql" />
+    <Build Include="Tables\EC_AUT_REF_StartPort.sql" />
+    <Build Include="Tables\INSP_PurchaseOrder_Color_Transaction.sql" />
+    <Build Include="Tables\JOB_Schedule_Log.sql" />
+    <Build Include="Tables\ENT_REF_Features.sql" />
+    <Build Include="Tables\EC_AUT_REF_TripType.sql" />
+    <Build Include="Tables\ENT_Feature_Details.sql" />
+    <Build Include="Tables\EC_AUT_QC_Expense.sql" />
+    <Build Include="Tables\REF_ProductCategory_Sub3.sql" />
+    <Build Include="Tables\QU_WorkLoadMatrix.sql" />
+    <Build Include="Tables\OM_REF_Purpose.sql" />
+    <Build Include="Tables\OM_Details.sql" />
+    <Build Include="Tables\CU_REF_AccountingLeader.sql" />
+    <Build Include="Tables\Cu_SalesIncharge.sql" />
+    <Build Include="Tables\CU_KAM.sql" />
+    <Build Include="Tables\CU_REF_ActivitiesLevel.sql" />
+    <Build Include="Tables\CU_REF_RelationshipStatus.sql" />
+    <Build Include="Tables\Cu_REF_BrandPriority.sql" />
+    <Build Include="Tables\CU_Brandpriority.sql" />
+    <Build Include="Tables\CU_PR_InspectionLocation.sql" />
+    <Build Include="Tables\INSP_REF_QuantityType.sql" />
+    <Build Include="Tables\INV_REF_BillingFreequency.sql" />
+    <Build Include="Tables\INV_REF_InterventionType.sql" />
+    <Build Include="Tables\CU_PR_TRAN_Subcategory.sql" />
+    <Build Include="Tables\CU_PR_TRAN_SpecialRule.sql" />
+    <Build Include="Tables\INV_DIS_REF_Type.sql" />
+    <Build Include="Tables\INV_DIS_TRAN_PeriodInfo.sql" />
+    <Build Include="Tables\INV_DIS_TRAN_Details.sql" />
+    <Build Include="Tables\INV_DIS_TRAN_Country.sql" />
+    <Build Include="Tables\EC_AUT_QC_TravelExpense.sql" />
+    <Build Include="Tables\EC_AUT_QC_FoodExpense.sql" />
+    <Build Include="Tables\INV_MAN_Transaction.sql" />
+    <Build Include="Tables\INV_MAN_TRAN_Details.sql" />
+    <Build Include="Tables\INV_REF_PriceCalculationType.sql" />
+    <Build Include="Tables\CU_Entity.sql" />
+    <Build Include="Tables\CU_PR_RefComplexType.sql" />
+    <Build Include="Tables\SU_Entity.sql" />
+    <Build Include="Tables\CU_PR_ProductSubCategory.sql" />
+    <Build Include="Tables\ENT_Pages.sql" />
+    <Build Include="Tables\ENT_Pages_Fields.sql" />
+    <Build Include="Tables\INSP_Transaction_Draft.sql" />
+    <Build Include="Tables\REP_FAST_REF_Status.sql" />
+    <Build Include="Tables\REP_FAST_Transaction.sql" />
+    <Build Include="Tables\REP_FAST_TRAN_Log.sql" />
+    <Build Include="Tables\MID_Notification_Message.sql" />
+    <Build Include="Tables\INV_DA_Transaction.sql" />
+    <Build Include="Tables\INV_DA_Customer.sql" />
+    <Build Include="Tables\INV_DA_InvoiceType.sql" />
+    <Build Include="Tables\INV_DA_office.sql" />
+    <Build Include="Tables\INV_MAN_TRAN_Tax.sql" />
+    <Build Include="Tables\JOB_Schedule_Job_Type.sql" />
+    <Build Include="Tables\JOB_Schedule_Configuration.sql" />
+    <Build Include="Tables\ES_RULE_Recipient_EmailType_Map.sql" />
+    <Build Include="Tables\REF_KPI_Teamplate_Customer.sql" />
+    <Build Include="Tables\ES_AdditionalRecipients.sql" />
+    <Build Include="Tables\ES_REF_Recipient.sql" />
+    <Build Include="Tables\HR_PayrollCompany.sql" />
+    <Build Include="Tables\CU_CheckPoints_Country.sql" />
+    <Build Include="Tables\CU_SisterCompany.sql" />
+    <Build Include="Tables\CU_Contact_SisterCompany.sql" />
+    <Build Include="Tables\INSP_BookingEmailConfiguration.sql" />
+    <Build Include="Tables\INSP_REF_BookingType.sql" />
+    <Build Include="Tables\INSP_REF_PaymentOption.sql" />
+    <Build Include="Tables\SU_Level_Custom.sql" />
+    <Build Include="Tables\SU_Grade.sql" />
+    <Build Include="Tables\FB_Report_FabricDefects.sql" />
+    <Build Include="Tables\FB_Report_FabricControlmadeWith.sql" />
+    <Build Include="Tables\INV_REF_FileType.sql" />
+    <Build Include="Tables\INV_TRAN_Files.sql" />
+    <Build Include="Tables\IT_Right_Map.sql" />
+    <Build Include="Tables\CU_PR_City.sql" />
+    <Build Include="Tables\INV_REF_PaymentMode.sql" />
+    <Build Include="Tables\LOG_Booking_FB_Queue.sql" />
+    <Build Include="Tables\FB_Report_RDNumbers.sql" />
+    <Build Include="Tables\FB_Report_PackingPackagingLabelling_Product.sql" />
+    <Build Include="Tables\FB_Report_PackingPackagingLabelling_Product_Defect.sql" />
+    <Build Include="Tables\FB_Report_QualityPlan.sql" />
+    <Build Include="Tables\FB_Report_QualityPlan_MeasurementDefectsPOM.sql" />
+    <Build Include="Tables\FB_Report_QualityPlan_MeasurementDefectsSize.sql" />
+    <Build Include="Tables\DM_Role.sql" />
+    <Build Include="Tables\DM_Department.sql" />
+    <Build Include="Tables\DM_Brand.sql" />
+    <Build Include="Tables\AUD_FB_Report_Checkpoints.sql" />
+    <Build Include="Tables\CU_Product_MSChart_OCR_MAP.sql" />
+    <Build Include="Tables\AUD_CU_ProductCategory.sql" />
+    <Build Include="Tables\Ref_ServiceType_Xero.sql" />
+    <Build Include="Tables\Hr_Staff_XeroDept.sql" />
+    <Build Include="Tables\CU_Report_CustomerDecisionComment.sql" />
+    <Build Include="Tables\DA_UserByFactoryCountry.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <Build Include="Tables\IT_Role.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <PostDeploy Include="PostDeployment\Script.PostDeployment.sql" />
+    <None Include="PostDeployment\RefArea.Post.sql" />
+    <None Include="PostDeployment\RefCountry.Post.sql" />
+    <None Include="PostDeployment\RefProvince.Post.sql" />
+    <None Include="PostDeployment\RefCity.Post.sql" />
+    <None Include="PostDeployment\HrHoliday.Post.sql" />
+    <None Include="PostDeployment\REFTranslation.Post.sql" />
+    <None Include="PostDeployment\Supplier.Post.sql" />
+    <None Include="PostDeployment\Customer.Post.sql" />
+    <None Include="PostDeployment\KPI.Post.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="API_DB.publish.xml" />
+    <None Include="DB.publish.xml" />
+    <None Include="DB_1.publish.xml" />
+    <None Include="DB_2.publish.xml" />
+    <None Include="DB_3.publish.xml" />
+    <None Include="DB_4.publish.xml" />
+    <None Include="SAYDB.publish.xml" />
+    <None Include="DB_5.publish.xml" />
+    <None Include="production.xml" />
+    <None Include="DB_PROD.xml" />
+    <None Include="LINK.xml" />
+    <None Include="LINKh.xml" />
+    <None Include="DB_6.publish.xml" />
+    <None Include="PostDeployment\Task.sql" />
+    <None Include="Tables\INSP_REF_ReportRequest.sql" />
+    <None Include="Tables\INSP_REF_PackingStatus.sql" />
+    <None Include="Tables\INSP_REF_ProductionStatus.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <RefactorLog Include="DB.refactorlog" />
+  </ItemGroup>
+</Project>

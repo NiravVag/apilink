@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="109.143" height="94.75" viewBox="0 0 109.143 94.75">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: #027372;
+      }
+
+      .cls-2 {
+        fill: #02acab;
+      }
+
+      .cls-3 {
+        fill: #81e3e2;
+      }
+
+      .cls-4 {
+        fill: #42c8c6;
+      }
+    </style>
+  </defs>
+  <g id="send_1_" data-name="send (1)" transform="translate(0 -33.758)">
+    <path id="Path_242" data-name="Path 242" class="cls-1" d="M97.478,76.812l10.577,51.7,77.786-94.75Z" transform="translate(-76.699)"/>
+    <path id="Path_243" data-name="Path 243" class="cls-2" d="M169.424,335.7,147.1,358.084l3.8-32.553,14.248.39Z" transform="translate(-115.74 -229.576)"/>
+    <g id="Group_404" data-name="Group 404" transform="translate(0 33.758)">
+      <path id="Path_244" data-name="Path 244" class="cls-3" d="M109.143,33.758,23.332,89.291,0,76.146Z" transform="translate(0 -33.758)"/>
+      <path id="Path_245" data-name="Path 245" class="cls-3" d="M238.916,33.758l-.113.314-45.027,77.714L164.932,95.955Z" transform="translate(-129.774 -33.758)"/>
+    </g>
+    <path id="Path_246" data-name="Path 246" class="cls-4" d="M300.246,112.946l45.027-77.714-30.685,85.587Z" transform="translate(-236.243 -1.16)"/>
+  </g>
+</svg>

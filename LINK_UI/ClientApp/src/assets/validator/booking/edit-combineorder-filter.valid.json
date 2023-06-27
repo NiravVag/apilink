@@ -1,0 +1,19 @@
+{
+    "model": "bookingcombineorders.model",
+    "fields": {
+        "filterProductIds": [
+            {
+                "type": "required",
+                "fieldType": "N",
+                "ressource": "BOOKING_INSPECTIONPICKING.MSG_PRODUCT_REQ"
+            }
+        ],
+        "filterCombineProductId": [
+            {
+                "type": "required",
+                "fieldType": "N",
+                "ressource": "BOOKING_COMBINEORDERS.MSG_COMBINE_PRODUCT_REQUIRED"
+            }
+        ]
+    }
+}

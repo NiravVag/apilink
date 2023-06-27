@@ -1,0 +1,10 @@
+{
+    "model": "EditSelectedStaffs.model",
+    "fields": {
+        "profile": [{
+            "type": "required",
+            "fieldType": "N",
+            "ressource": "CS_ALLOCATION.MSG_PROFILE_REQ"
+        }]
+    }
+}

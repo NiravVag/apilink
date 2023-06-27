@@ -1,0 +1,65 @@
+{
+    "model": "EditCreditNoteModel",
+    "fields": {
+        "creditNo": [{
+            "type": "required",
+            "fieldType": "T",
+            "ressource": "EDIT_CREDIT_NOTE.MSG_CREDIT_NO_REQ"
+        }],
+        "creditDate": [{
+            "type": "required",
+            "fieldType": "D",
+            "ressource": "EDIT_CREDIT_NOTE.MSG_CREDIT_DATE_REQ"
+        }],
+        "postDate": [{
+            "type": "required",
+            "fieldType": "D",
+            "ressource": "EDIT_CREDIT_NOTE.MSG_POST_DATE_REQ"
+        }],
+        "billedTo": [{
+            "type": "required",
+            "fieldType": "T",
+            "ressource": "EDIT_CREDIT_NOTE.MSG_BILL_TO_REQ"
+        }],
+        "billedAddress": [{
+            "type": "required",
+            "fieldType": "T",
+            "ressource": "EDIT_CREDIT_NOTE.MSG_BILLED_ADDRESS_REQ"
+        }],
+        "currencyId": [{
+            "type": "required",
+            "fieldType": "N",
+            "ressource": "EDIT_CREDIT_NOTE.MSG_CURRENCY_REQ"
+        }],
+        "paymentTerms": [{
+            "type": "required",
+            "fieldType": "T",
+            "ressource": "EDIT_CREDIT_NOTE.MSG_PAYMENT_TERM_REQ"
+        }],
+        "billingEntity": [{
+            "type": "required",
+            "fieldType": "N",
+            "ressource": "EDIT_CREDIT_NOTE.MSG_BILLING_REQ"
+        }],
+        "paymentDuration": [{
+            "type": "required",
+            "fieldType": "N",
+            "ressource": "EDIT_CREDIT_NOTE.MSG_PAYMENT_DURATION_REQ"
+        }],
+        "officeId": [{
+            "type": "required",
+            "fieldType": "N",
+            "ressource": "EDIT_CREDIT_NOTE.MSG_OFFICE_REQ"
+        }],
+        "creditTypeId": [{
+            "type": "required",
+            "fieldType": "N",
+            "ressource": "EDIT_CREDIT_NOTE.MSG_CREDIT_TYPE_REQ"
+        }],
+        "bankId": [{
+            "type": "required",
+            "fieldType": "N",
+            "ressource": "EDIT_CREDIT_NOTE.MSG_BANK_REQ"
+        }]
+    }
+}

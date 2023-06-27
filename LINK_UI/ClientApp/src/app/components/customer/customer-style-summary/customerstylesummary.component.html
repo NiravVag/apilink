@@ -1,0 +1,237 @@
+<div class="main-wrapper">
+  <div class="wrapper dashboard-wrapper">
+    <div class="my-container">
+      <div class="master-body">
+        <div class="title-container">
+
+          <h3 class="main-title"> {{ 'CUSTOMER_PRODUCT_SUMMARY.STYLE_TITLE' | translate }}</h3>
+        </div>
+        <div class="content-container quotation-container">
+          <div [@expandCollapse]="isFilterOpen ? 'open' : 'close'"
+            class="centerContainerPadding common-filter-container">
+            <div class="animated-icon-container" (click)="toggleFilterSection()"
+              *ngIf="(model.items && model.items.length>0)">
+              <img src="assets/images/cta-close-grey.svg" alt="close">
+            </div>
+
+            <div class="row">
+              <div class="col-sm-3 col-md-3 col-lg-3">
+                <div class="my-input-group">
+                  <label class="required">{{ 'CUSTOMER_PRODUCT_SUMMARY.LBL_CUSTOMER_LIST' | translate }}</label>        
+
+                  <ng-select #customer [searchable]="true" [items]="customerList" bindLabel="name"
+                  (clear)="clearCustomer()" [loading]="customerLoading"                 
+                  bindValue="id" [hideSelected]="true" appendTo="body" [virtualScroll]="true"
+                  (scrollToEnd)="getCustomerData(true)" [typeahead]="customerInput" [minTermLength]="3"
+                  placeholder="--- {{(customerList!=null && customerList.length!=0? 'BOOKING_SUMMARY.LBL_SELECT':'BOOKING_SUMMARY.MSG_NO_DATA')  | translate }} ---"
+                  [(ngModel)]="model.customerValue">
+                  <ng-template ng-option-tmp let-item="item">
+                    <div class="text-wrap">{{ item.name }}</div>
+                  </ng-template>
+                </ng-select>
+
+                  <div *ngIf="!validator.isValid('customerValue')" class="invalid-feedback" style="display:block">
+                    <div *ngFor="let error of validator.getErrors('customerValue')">{{ error | translate }}</div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-sm-3 col-md-3 col-lg-3 mobile-margin-top-15">
+                <div class="my-input-group">
+                  <label>{{ 'CUSTOMER_PRODUCT_SUMMARY.LBL_PRODUCTCATEGORY' | translate }}</label>
+                  <ng-select [items]="productCategoryList" [multiple]="false" [closeOnSelect]="true" appendTo="body"
+                    [searchable]="true" bindLabel="name" bindValue="id" [loading]="initialLoading"
+                    placeholder="--- {{ 'CUSTOMER_PRODUCT_SUMMARY.LBL_SELECT' | translate }} ---"
+                    [(ngModel)]="model.productcategoryValue"
+                    [ngClass]="{ 'is-invalid': !validator.isValid('serviceValue')}"
+                    (change)="changeProductCategory(model.productcategoryValue)">
+                    <ng-template ng-option-tmp let-item="item">
+                      <div class="text-wrap">{{ item.name }}</div>
+                    </ng-template>
+                  </ng-select>
+                </div>
+              </div>
+              <div class="col-sm-3 col-md-3 col-lg-3 mobile-margin-top-15">
+                <div class="my-input-group">
+                  <label>{{ 'CUSTOMER_PRODUCT_SUMMARY.LBL_PRODUCTSUBCATEGORY' | translate }}</label>
+                  <ng-select [items]="productSubCategoryList" [multiple]="false" [closeOnSelect]="true" appendTo="body"
+                    [searchable]="true" bindLabel="name" bindValue="id" [loading]="productSubLoading"
+                    [hideSelected]="true" placeholder="--- {{ 'CUSTOMER_PRODUCT_SUMMARY.LBL_SELECT' | translate }} ---"
+                    [ngClass]="{ 'is-invalid': !validator.isValid('serviceValue')}"
+                    [(ngModel)]="model.productSubCategoryValue"
+                    (change)="changeProductSubCategory(model.productSubCategoryValue)">
+                    <ng-template ng-option-tmp let-item="item">
+                      <div class="text-wrap">{{ item.name }}</div>
+                    </ng-template>
+                  </ng-select>
+                </div>
+              </div>
+
+              <div class="col-sm-3 col-md-3 col-lg-3 mobile-margin-top-15">
+                <div class="my-input-group">
+                  <label>{{ 'CUSTOMER_PRODUCT_SUMMARY.LBL_PRODUCTSUBCATEGORY2' | translate }}</label>
+                  <ng-select [items]="customerProductMaster.productCategorySub2List" [multiple]="true" [closeOnSelect]="true" appendTo="body"
+                    [searchable]="true" bindLabel="name" [loading]="customerProductMaster.productCategorySub2Loading"
+                    placeholder="--- {{ 'CUSTOMER_PRODUCT_SUMMARY.LBL_SELECT' | translate }} ---"
+                    [(ngModel)]="model.productCategorySub2s" class="multiple"
+                    [virtualScroll]="true" (scrollToEnd)="getProductSubCategory2Data(true)" (clear)="getProductSubCategory2ListBySearch()"
+                    [typeahead]="customerProductMaster.productCategorySub2Input" [minTermLength]="3"
+                    [ngClass]="{ 'is-invalid': !validator.isValid('productCategorySub2s')}">
+                    <ng-template ng-option-tmp let-item="item">
+                      <div class="text-wrap">{{ item.name }}</div>
+                    </ng-template>
+                  </ng-select>
+                </div>
+              </div>
+
+            </div>
+
+
+            <div class="row marginTop15">
+
+              <div class="col-sm-3 col-md-3 col-lg-3 ">
+                <div class="my-input-group">
+                  <label>{{ 'CUSTOMER_PRODUCT_SUMMARY.STYLE_CODE' | translate }}</label>
+                  <input type="text" maxlength="300" [(ngModel)]="model.productvalue"
+                    placeholder="{{ 'CUSTOMER_PRODUCT_SUMMARY.STYLE_CODE' | translate }}">
+                </div>
+              </div>
+              
+              <div class="col-sm-3 col-md-3 col-lg-3 mobile-margin-top-15">
+                <div class="my-input-group">
+                  <label class="control-label">{{ 'CUSTOMER_PRODUCT_SUMMARY.LBL_STYLEDESCRIPTION' | translate
+                    }}</label>
+                  <input type="text" maxlength="300" [(ngModel)]="model.productDescription"
+                    placeholder="{{ 'CUSTOMER_PRODUCT_SUMMARY.LBL_STYLEDESCRIPTION' | translate }}">
+                </div>
+              </div>
+
+              <div class="col-sm-3 col-md-3 col-lg-3">
+                <label></label>
+                <div class="styled-checkbox-container">
+                  <input class="styled-checkbox" id="checkboxnewproduct" type="checkbox"
+                    [(ngModel)]="model.isNewProduct" [checked]="model.isNewProduct">
+                  <label for="checkboxnewproduct">{{ 'CUSTOMER_PRODUCT_SUMMARY.LBL_IS_NEWSTYLE' | translate }}</label>
+                </div>
+              </div>
+
+            </div>
+
+
+            <div class="row marginTop25">
+
+              <div class="col-12 col-sm-12 text-right mt-3 mt-sm-0">
+                <button id="btnAdd" class="secondary-cta small" [disabled]="initialLoading || exportDataLoading" style="margin-right: 5px;"
+                  (click)="getProductDetail()">
+                  + {{
+                  'CUSTOMER_PRODUCT_SUMMARY.LBL_ADDNEW' | translate
+                  }}</button>
+
+                  <button class="secondary-cta small mr-2" (click)="export()"
+                  [disabled]="searchLoading ||exportDataLoading"
+                  *ngIf="model.items != null && model.items.length != 0">
+                   {{ 'CUSTOMER_PRODUCT_SUMMARY.LBL_EXPORT' | translate }}
+                  <span *ngIf="exportDataLoading">
+                    <i class="fa fa-refresh fa-spin" aria-hidden="true"></i>
+                  </span>
+                </button>
+                &nbsp;
+                <button id="btnSearch" class="primary-cta small" [disabled]="searchLoading ||exportDataLoading|| initialLoading"
+                  style="margin-right: 5px;" (click)="search()">
+                  {{
+                  'CUSTOMER_PRODUCT_SUMMARY.LBL_SEARCH' | translate
+                  }}
+                  <span *ngIf="searchLoading">
+                    <i class="fa fa-refresh fa-spin" aria-hidden="true"></i>
+                  </span>
+                </button>
+              </div>
+            </div>
+          </div>
+          <div class="centerContainerPadding float-left" *ngIf="(model.items && model.items.length>0)">
+
+            <div class="row">
+              <div class="col-6 col-sm-4 col-xl-2 d-flex">
+                <p class="search-trigger-heading" [innerHtml]="showPaginationText()"></p>
+              </div>
+              <div class="col-6 col-sm-8 col-xl-10 text-right">
+                <div class="animated-icon-container" *ngIf="!isFilterOpen" (click)="toggleFilterSection()">
+                  <img src="assets/images/cta-search-grey.svg" alt="search">
+                </div>
+              </div>
+            </div>
+            <div class="quotation-search-container">
+              <div class="table-container h-scroll">
+                <table class="pagination-table simple-table bordered">
+                  <thead>
+                    <tr>
+                      <th class="width-100"></th>
+                      <th style="width:15%">{{ 'CUSTOMER_PRODUCT_SUMMARY.CustomerName' | translate }}</th>
+                      <th style="width:15%">{{ 'CUSTOMER_PRODUCT_SUMMARY.STYLE_CODE' | translate }}</th>
+                      <th style="width:20%">{{ 'CUSTOMER_PRODUCT_SUMMARY.StyleDescription' | translate }}</th>
+                      <th style="width:10%">{{ 'CUSTOMER_PRODUCT_SUMMARY.ProductCategory' | translate }}</th>
+                      <th style="width:10%">{{ 'CUSTOMER_PRODUCT_SUMMARY.ProductSubCategory' | translate }}</th>
+                      <th style="width:10%">{{ 'CUSTOMER_PRODUCT_SUMMARY.ProductCategorySub2' | translate }}</th>
+
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <ng-container *ngFor="let iteminfo of model.items">
+                      <tr>
+                        <td class="Center_Middle">
+                          <span class="table-cta icon-cta common-tooltip" (click)="editDetails(iteminfo.id)"
+                            data-tooltip="Edit">
+                            <img src="assets/images/cta-edit.svg" alt="Edit">
+                          </span>
+                          &nbsp;
+                          <span class="table-cta icon-cta common-tooltip" *ngIf="!iteminfo.isBooked"
+                            (click)="openConfirm(iteminfo.id,iteminfo.name,content)" data-tooltip="Delete">
+                            <img src="assets/images/cta-delete.svg" alt="Delete">
+                          </span>
+                        </td>
+                        <td>{{iteminfo.customerName}}</td>
+                        <td>{{iteminfo.productID}}</td>
+                        <td class="w-25">{{iteminfo.productDescription}}</td>
+                        <td>{{iteminfo.productCategory}}</td>
+                        <td>{{iteminfo.productSubCategory}}</td>
+                        <td>{{iteminfo.productCategorySub2}}</td>
+
+                      </tr>
+                    </ng-container>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+            <div class="pagination-container">
+              <ngb-pagination (pageChange)="onPager($event)" [pageSize]="model.pageSize"
+                [collectionSize]="model.totalCount" [(page)]="model.index" [maxSize]="5">
+              </ngb-pagination>
+            </div>
+          </div>
+          <div class="centerContainerPadding" *ngIf="model.noFound">
+            <div class="error-container">
+              <img src="assets/images/no-result.svg" alt="" class="thumbnail">
+              <h4 class="title">{{ 'CUSTOMER_SUMMARY.LBL_NOITEMS' | translate }}</h4>
+              <p class="error-subtitle">{{'CS_CONFIG_SUMMARY.LBL_NODATA' | translate}}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<ng-template #content let-modal>
+  <div class="modal-body">
+    <div class="small-model new-padding">
+      <h2 class="confirm-title"><img class="mr-2" src="assets/images/caution-red.svg" alt="">{{
+        'CUSTOMER_PRODUCT_SUMMARY.LBL_CONFIRMDELETION' | translate }}</h2>
+      <p class="light">{{ 'EDIT_EMAIL_SEND.MSG_QUESTION_SURE' | translate }} </p>
+      <div class="text-right">
+        <button class="tertiary-cta small" (click)="modal.dismiss('Cross click');getId();">
+          {{ 'COMMON.LBL_CONFIRMCANCEL' | translate }}</button>
+        <button class="primary-cta small"  (click)="deleteCustomerProduct(modelRemove);">{{
+          'COMMON.LBL_OK' | translate }}       
+        </button>
+      </div>
+    </div>
+  </div>
+</ng-template>

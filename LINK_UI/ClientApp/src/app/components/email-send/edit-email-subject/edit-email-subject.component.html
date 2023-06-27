@@ -1,0 +1,309 @@
+<div class="main-wrapper">
+    <div class="wrapper dashboard-wrapper">
+        <div class="my-container">
+            <div class="master-body">
+                <div class="title-container">
+                    <div class="header-back-button" *ngIf="fromSummary">
+                        <img src="assets/images/back-red.png" alt="back" (click)="return('emailsub/summary')">
+                    </div>
+                    <h3 class="main-title">
+                        {{ 'EMAIL_SUBJECT_CONFIG.LBL_TITLE' | translate }}
+                        <span class="audit-id" *ngIf="model.id >0">
+                            #{{model.id}}</span>
+                    </h3>
+                </div>
+                <div class="content-container quotation-container">
+                    <div class="container-head">
+                        <img class="head-icon" src="assets/images/general.png" alt="">
+                        {{ 'EMAIL_SUBJECT_CONFIG.LBL_MAIN_DETAILS' | translate }}
+
+                    </div>
+                    <div class="row formPadding">
+                        <div class="col-sm-12">
+                            <div class="row marginTop15">
+                                <div class="col-sm-4 col-md-4 col-lg-4">
+                                    <div class="my-input-group">
+                                        <label>{{ 'EMAIL_SUBJECT_CONFIG.LBL_CUSTOMER' | translate }}
+                                        </label>
+                                        <ng-select [items]="masterModel.customerList" [virtualScroll]="true"
+                                            [loading]="masterModel.customerLoading" bindLabel="name" bindValue="id"
+                                            placeholder="--- {{ (masterModel.customerList!=null && masterModel.customerList.length!=0? 'COMMON.LBL_SELECT':'COMMON.LBL_NO_DATA' ) | translate }} ---"
+                                            [ngClass]="{ 'is-invalid':  !validator.isValid('customerId')}"
+                                            [typeahead]="masterModel.customerInput" [minTermLength]="3"
+                                            (clear)="clearCustomer()" [disabled]="masterModel.isUseByEmailSend"
+                                            [clearable]="true" [(ngModel)]="model.customerId" [multiple]="false"
+                                            (scrollToEnd)="getCustomerData()" #select appendTo="body">
+                                            <ng-template ng-option-tmp let-item="item">
+                                                <div class="text-wrap"><span>{{item.name}}</span></div>
+                                            </ng-template>
+                                        </ng-select>
+                                    </div>
+                                </div>
+                                <div class="col-sm-4 col-md-4 col-lg-4">
+                                    <div class="my-input-group">
+                                        <label class="required">{{ 'EMAIL_SUBJECT_CONFIG.LBL_TEMPLATE' | translate
+                                            }}</label>
+                                        <input type="text" [(ngModel)]="model.templateName"
+                                            [ngClass]="{ 'is-invalid':  !validator.isValid('templateName')}" />
+                                        <div *ngIf="!validator.isValid('templateName')" class="invalid-feedback">
+                                            <div *ngFor="let error of validator.getErrors('templateName')">
+                                                {{ error | translate }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-4 col-md-4 col-lg-4">
+                                    <div class="my-input-group">
+                                        <label class="required" for="">{{'EMAIL_SUBJECT_CONFIG.LBL_EMAIL_TYPE' |
+                                            translate}}</label>
+                                        <ng-select appendTo="body" [items]="masterModel.emailTypeList"
+                                            [disabled]="masterModel.isUseByEmailSend"
+                                            [loading]="masterModel.emailTypeLoading" bindLabel="name" bindValue="id"
+                                            placeholder="--- {{ (masterModel.emailTypeList && masterModel.emailTypeList.length>0? 'COMMON.LBL_SELECT':'COMMON.LBL_NO_DATA' ) | translate }} ---"
+                                            [(ngModel)]="model.emailTypeId"
+                                            [ngClass]="{ 'is-invalid':  !validator.isValid('emailTypeId')}">
+                                            <ng-template ng-option-tmp let-item="item">
+                                                <div class="text-wrap"><span>{{item.name}}</span></div>
+                                            </ng-template>
+                                        </ng-select>
+                                        <div *ngIf="!validator.isValid('emailTypeId')" class="invalid-feedback">
+                                            <div *ngFor="let error of validator.getErrors('emailTypeId')">
+                                                {{ error | translate }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-12">
+                            <div class="row marginTop15">
+                                <div class="col-sm-4 col-md-4 col-lg-4">
+                                    <div class="my-input-group">
+                                        <label class="required" for="">{{'EMAIL_SUBJECT_CONFIG.LBL_MODULE' |
+                                            translate}}</label>
+                                        <ng-select appendTo="body" [items]="masterModel.moduleList"
+                                            [loading]="masterModel.moduleLoading" bindLabel="name" bindValue="id"
+                                            placeholder="--- {{ (masterModel.moduleList && masterModel.moduleList.length>0? 'COMMON.LBL_SELECT':'COMMON.LBL_NO_DATA' ) | translate }} ---"
+                                            [(ngModel)]="model.moduleId" [disabled]="masterModel.isUseByEmailSend"
+                                            (change)="changeModule($event)"
+                                            [ngClass]="{ 'is-invalid':  !validator.isValid('moduleId')}">
+                                            <ng-template ng-option-tmp let-item="item">
+                                                <div class="text-wrap"><span>{{item.name}}</span></div>
+                                            </ng-template>
+                                        </ng-select>
+                                        <div *ngIf="!validator.isValid('moduleId')" class="invalid-feedback">
+                                            <div *ngFor="let error of validator.getErrors('moduleId')">
+                                                {{ error | translate }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-4 col-md-4 col-lg-4">
+                                    <div class="my-input-group">
+                                        <label class="required" for="">{{'EMAIL_SUBJECT_CONFIG.LBL_DELIMITER' |
+                                            translate}}</label>
+                                        <ng-select appendTo="body" [items]="masterModel.filteredDelimiterList"
+                                            [loading]="masterModel.delimiterLoading" bindLabel="name" bindValue="id"
+                                            placeholder="--- {{ (masterModel.filteredDelimiterList && masterModel.filteredDelimiterList.length>0? 'COMMON.LBL_SELECT':'COMMON.LBL_NO_DATA' ) | translate }} ---"
+                                            [(ngModel)]="model.delimiterId" (change)="changeDelimiter($event)"
+                                            [ngClass]="{ 'is-invalid':  !validator.isValid('delimiterId')}">
+                                            <ng-template ng-option-tmp let-item="item">
+                                                <div class="text-wrap"><span>{{item.name}}</span></div>
+                                            </ng-template>
+                                        </ng-select>
+                                        <div *ngIf="!validator.isValid('delimiterId')" class="invalid-feedback">
+                                            <div *ngFor="let error of validator.getErrors('delimiterId')">
+                                                {{ error | translate }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-12">
+                            <div class="row marginTop15">
+
+                                <!-- <div class="col-sm-4 mobile-margin-top-15">
+                                    <label style="font-size: 12px;font-weight:bold">{{ 'EMAIL_SUBJECT_CONFIG.LBL_FIELDS_COLUMN' | translate }}</label>
+                                        <section class="dropzone h-scroll table-max-height-550"
+                                        style="max-height:500px !important;min-height: 300px !important;border: 1px solid rgba(189, 210, 226, 0.8) !important; margin-top:15px;border-radius:4px;margin-left:10px;padding:16px"
+                                             dndDropzone                                         
+                                             (dndDrop)="onDropLeft($event)">                                             
+                                             <div class="draggable" [dndDraggable]="item" dndEffectAllowed="all"
+                                                  *ngFor="let item of masterModel.fieldColumnList">
+                                               {{item.name}}
+                                             </div>
+                                            </section>
+                                  </div>
+                                  <div class="col-sm-4 mobile-margin-top-15">
+                                    <label style="font-size: 12px;font-weight:bold">{{ 'EMAIL_SUBJECT_CONFIG.LBL_TEMPLATE_COLUMN' | translate }}</label>
+                                    <section class="dropzone h-scroll table-max-height-550"
+                                             dndDropzone                                            
+                                             (dndDrop)="onDrop($event)" style="max-height:500px !important;min-height: 300px !important; border-radius:4px;border-color:rgba(189, 210, 226, 0.8)">
+                                              [ngClass]="{ 'is-invalid':  !validator.isValid('templateColumnList')}"                                                            
+                                        <div class="draggable" [dndDraggable]="item" dndEffectAllowed="move"
+                                        *ngFor="let item of model.templateColumnList">
+                                     {{item.name}}
+                                     <span class="table-cta icon-cta common-tooltip hover"  
+                                     (click)="editTemplateColumn(item, templatePopUp)"
+                                      data-tooltip="View">
+                                     <img src="assets/images/cta-view.svg" alt="View">
+                                     </span>
+                                   </div>
+                                    </section>
+                                  </div> -->
+
+                                <div class="col-sm-4 col-md-4 col-lg-4">
+                                    <div class="my-input-group">
+                                        <div class="column-container">
+                                            <label>{{'EMAIL_SUBJECT_CONFIG.LBL_FIELDS_COLUMN' | translate}}</label>
+                                            <div cdkDropList #fieldList="cdkDropList"
+                                                [cdkDropListData]="masterModel.fieldColumnList"
+                                                class="column-list card-body h-scroll"
+                                                [cdkDropListConnectedTo]="[templateList]"
+                                                (cdkDropListDropped)="drop($event)">
+                                                <div class="column-box" *ngFor="let item of masterModel.fieldColumnList"
+                                                    cdkDrag>
+                                                    {{item.name}}</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-4 col-md-4 col-lg-4">
+                                    <div class="my-input-group">
+                                        <div class="column-container">
+                                            <label>{{'EMAIL_SUBJECT_CONFIG.LBL_TEMPLATE_COLUMN' | translate}}</label>
+                                            <div cdkDropList #templateList="cdkDropList"
+                                                [cdkDropListConnectedTo]="[fieldList]"
+                                                [cdkDropListData]="model.templateColumnList"
+                                                class="column-list card-body h-scroll"
+                                                (cdkDropListDropped)="drop($event)">
+                                                <div class="column-box" *ngFor="let item of model.templateColumnList"
+                                                    cdkDrag>
+                                                    {{item.name}}
+                                                    <span *ngIf="!item.isText"
+                                                        class="table-cta icon-cta common-tooltip hover"
+                                                        (click)="editTemplateColumn(item, templatePopUp)"
+                                                        data-tooltip="View">
+                                                        <img src="assets/images/cta-view.svg" alt="View">
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- <div *ngIf="!validator.isValid('templateColumnList')" class="invalid-feedback">
+                                      <div *ngFor="let error of validator.getErrors('templateColumnList')">{{ error | translate }}</div>
+                                    </div> -->
+                            </div>
+                        </div>
+                        <div class="col-sm-12">
+                            <div class="row form-action-container">
+                                <div class="col-sm-12">
+                                    <button (click)="reset()" class="category-cta MarginR-20">
+                                        <img src="assets/images/reload-new.svg" alt="reload">
+                                    </button>
+
+                                    <button class="primary-cta MarginR-20" [disabled]="masterModel.saveLoading"
+                                        (click)="save()">
+                                        {{'COMMON.LBL_SAVE' | translate}}
+                                        <span *ngIf="masterModel.saveLoading">
+                                            <i class="fa fa-refresh fa-spin" aria-hidden="true"></i>
+                                        </span>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="loader-overlay" *ngIf="masterModel.FieldLoading">
+                            <div class="loader-container">
+                                <img src="assets/images/reload.svg" alt="">
+                                <span>{{'COMMON.LBL_LOADER' | translate}}</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<ng-template #templatePopUp let-modal>
+    <div class="modal-header custom-modal-header">
+        <h4 class="modal-title" id="modal-basic-title">{{masterModel.popupTitle}}
+        </h4>
+        <button type="button" class="close" aria-label="Close" (click)="closeViewPopUp()">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body custom-modal-body">
+
+        <div class="row">
+
+            <div class="col-sm-4" *ngIf="templatePopup.dataType==_preDefinedFieldDataType.Date">
+                <div class="my-input-group">
+                    <label>{{'EMAIL_SUBJECT_CONFIG.LBL_DATE_FORMAT' | translate}} </label>
+                    <ng-select appendTo="body" [items]="masterModel.dateFormats"
+                        [loading]="masterModel.dateFormatLoading" bindLabel="name" bindValue="id"
+                        placeholder="--- {{ (masterModel.dateFormats && masterModel.dateFormats.length>0? 'COMMON.LBL_SELECT':'COMMON.LBL_NO_DATA' ) | translate }} ---"
+                        [(ngModel)]="templatePopup.dateFormat">
+                        <ng-template ng-option-tmp let-item="item">
+                            <div class="text-wrap"><span>{{item.name}}</span></div>
+                        </ng-template>
+                    </ng-select>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-sm-4 marginTop20" *ngIf="templatePopup.dataType==_preDefinedFieldDataType.Date">
+                <div class="styled-checkbox-container">
+                    <input class="styled-checkbox" id="checkboxDateSeperator" type="checkbox"
+                        [(ngModel)]="templatePopup.isDateSeperator" [checked]="templatePopup.isDateSeperator">
+                    <label for="checkboxDateSeperator">{{'EMAIL_SUBJECT_CONFIG.LBL_DATE_SEPERATOR' | translate}}</label>
+                </div>
+            </div>
+
+            <div class="col-sm-4" *ngIf="templatePopup.dataType!=_preDefinedFieldDataType.Date">
+                <div class="my-input-group">
+                    <label>{{'EMAIL_SUBJECT_CONFIG.MSG_MAX_CHAR' | translate}} </label>
+                    <input type="number" [(ngModel)]="templatePopup.maxChar" maxlength="5"
+                        (keypress)="numericValidation($event);">
+                </div>
+            </div>
+
+            <div class="col-sm-4 marginTop20">
+                <div class="styled-checkbox-container">
+                    <input class="styled-checkbox" id="checkboxistitle" type="checkbox"
+                        [(ngModel)]="templatePopup.isTitle" [checked]="templatePopup.isTitle">
+                    <label for="checkboxistitle">{{'EMAIL_SUBJECT_CONFIG.LBL_IS_TITLE' | translate}}</label>
+                </div>
+            </div>
+
+            <div class="col-sm-4" *ngIf="templatePopup.isTitle">
+                <div class="my-input-group">
+                    <label>{{'EMAIL_SUBJECT_CONFIG.LBL_TITLE_CUSTOM_NAME' | translate}} </label>
+                    <input type="text" [(ngModel)]="templatePopup.titleCustomName">
+                </div>
+            </div>
+
+        </div>
+
+        <div class="row marginTop20">
+            <div class="col-sm-4" *ngIf="templatePopup.dataType==_preDefinedFieldDataType.List">
+                <div class="my-input-group">
+                    <label>{{'EMAIL_SUBJECT_CONFIG.LBL_MAX_ITEMS' | translate}} </label>
+                    <input type="number" [(ngModel)]="templatePopup.maxItems" maxlength="5"
+                        (keypress)="numericValidation($event);">
+                </div>
+            </div>
+        </div>
+
+        <!-- (change)="getMaxCharData()" -->
+    </div>
+    <div class="marginTop20 modal-footer">
+        <button class="primary-cta margin10" (click)="popupOk()">
+            {{'COMMON.LBL_OK' | translate}}
+        </button>
+    </div>
+</ng-template>

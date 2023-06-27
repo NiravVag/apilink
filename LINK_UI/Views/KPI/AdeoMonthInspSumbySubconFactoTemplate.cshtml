@@ -1,0 +1,57 @@
+﻿
+@{
+    ViewData["Title"] = "AdeoMonthInspSumbySubconFactoTemplate";
+}
+
+@model DTO.Kpi.ExportResult
+
+<xls-sheet name="MonthInspSumbySubconFacto">
+    <table xls-begin="A:1" style="border-style:solid">
+        <tr style="background-color:#f5f5f5;font-weight:bold;text-align:center">
+            <th>Group</th>
+            <th>Department</th>
+            <th>Supplier Code 1</th>
+            <th>Supplier SSM Code</th>
+            <th>Factory SSM Code</th>
+            <th>Merchandiser</th>
+            <th>Merchandiser2</th>
+            <th>Supplier Name(Adeo)</th>
+            <th>Supplier Name(Compass)</th>
+            <th>Subcontractor</th>
+            <th style="text-align:center">Nb_PSI</th>
+            <th style="text-align:center">Nb PSI Passed</th>
+            <th style="text-align:center">Nb Failed</th>
+            <th style="text-align:center">Nb Pending</th>
+            <th style="text-align:center">Nb Missing</th>
+            <th style="text-align:center">PSI Pass Rate</th>
+            <th>Lab</th>
+            <th>Month</th>
+            <th>Year</th>
+        </tr>
+        @foreach (var item in Model.Data)
+        {
+        <tr>
+            <td width="150px"></td>
+            <td width="150px">@Html.Raw(@item.DeptCode)</td>
+            <td width="250px">@item.SupplierCode</td>
+            <td width="150px"></td>
+            <td width="150px">@item.FactoryCode</td>
+            <td width="150px">@item.Merchandise</td>
+            <td width="150px">@item.Merchandise2</td>
+            <td width="150px"></td>
+            <td width="150px">@item.SupplierName</td>
+            <td width="150px">@Html.Raw(@item.FactoryName)</td>
+            <td width="150px" xls-type="number" style="text-align:center">@item.TotalReports</td>
+            <td width="150px" xls-type="number" style="text-align:center">@item.TotalReportPass</td>
+            <td width="150px" xls-type="number" style="text-align:center">@item.TotalReportFail</td>
+            <td width="150px" xls-type="number" style="text-align:center">@item.TotalReportPending</td>
+            <td width="150px" xls-type="number" style="text-align:center">@item.TotalReportMissing</td>
+            <td>@String.Concat(@item.ReportPassPercentage, "%")</td>
+            <td>API</td>
+            <td xls-type="number">@item.Month</td>
+            <td xls-type="number">@item.Year</td>
+        </tr>
+        }
+    </table>
+</xls-sheet>
+

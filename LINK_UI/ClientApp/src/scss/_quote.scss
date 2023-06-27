@@ -1,0 +1,693 @@
+.quote-rule{
+
+	@media only screen and (min-width: $mobile-min-width) and (max-width: $mobile-max-width){
+		float: right;
+		margin-top: 30px;
+		top: 0 !important;
+		margin-bottom: 10px;
+		position: relative !important;
+	}
+
+	img{
+		width: 23px;
+	}
+
+	p{
+		color: #cd2d2f !important;
+	}
+}
+
+.quotation-container{
+	position: relative;
+	margin-bottom: 12px;
+
+	&:last-of-type{
+		margin-bottom: 0;
+	}
+
+	.flex-display{
+
+		@media only screen and (min-width: $mobile-min-width) and (max-width: $mobile-max-width){
+			display: flex;
+		}
+
+		.order1{
+
+			@media only screen and (min-width: $mobile-min-width) and (max-width: $mobile-max-width){
+				order: 1;
+			}
+		}
+
+		.order2{
+
+			@media only screen and (min-width: $mobile-min-width) and (max-width: $mobile-max-width){
+				order: 2;
+			}
+		}
+
+		.order3{
+
+			@media only screen and (min-width: $mobile-min-width) and (max-width: $mobile-max-width){
+				order: 3;
+			}
+		}
+
+		.order4{
+
+			@media only screen and (min-width: $mobile-min-width) and (max-width: $mobile-max-width){
+				order: 4;
+			}
+		}
+
+		.order5{
+
+			@media only screen and (min-width: $mobile-min-width) and (max-width: $mobile-max-width){
+				order: 5;
+			}
+		}
+
+		.order6{
+
+			@media only screen and (min-width: $mobile-min-width) and (max-width: $mobile-max-width){
+				order: 6;
+			}
+		}
+
+		.order7{
+
+			@media only screen and (min-width: $mobile-min-width) and (max-width: $mobile-max-width){
+				order: 7;
+			}
+		}
+
+		.order8{
+
+			@media only screen and (min-width: $mobile-min-width) and (max-width: $mobile-max-width){
+				order: 8;
+			}
+		}
+
+		.order9{
+
+			@media only screen and (min-width: $mobile-min-width) and (max-width: $mobile-max-width){
+				order: 9;
+			}
+		}
+
+		.order10{
+
+			@media only screen and (min-width: $mobile-min-width) and (max-width: $mobile-max-width){
+				order: 10;
+			}
+		}
+	}
+
+	.head-toggler{
+		top: 15px;
+		right: 20px;
+		font-size: 12px;
+		padding: 5px 10px;
+		border-radius: 5px;
+		position: absolute;
+		background-color: #ddd1cc;
+		color: rgba($primary-color, 0.6) !important;
+	}
+
+	.absolute-button{
+		position: absolute;
+		right: 15px;
+		top: -31px;
+	}
+
+	.quote-form-title{
+		color: #798994;
+		font-style: 16px;
+		margin-bottom: 16px;
+		font-family: $roboto-medium;
+	}
+
+	.add-more{
+		line-height: 1;
+		color: $brand-color;
+		font-size: 12px;
+		cursor: pointer;
+		font-weight: bold;
+		display: inline-block;
+		font-family: $roboto-bold;
+	}
+
+	.form-action-container{
+		padding: 40px 0 0 !important;
+	}
+
+	.labelMode{
+
+		.column{
+			border-right: 2px solid #F4F5F6;
+
+			&:nth-child(3n){
+				border-right: none;
+			}
+
+			.my-input-group{
+				padding-left: 50px;
+
+				@media only screen and (min-width: $mobile-min-width) and (max-width: $mobile-max-width){
+					padding-left: 0;
+				}
+			}
+
+			&:first-child{
+				.my-input-group{
+					padding-left: 0;
+				}
+			}
+		}
+	}
+
+	.stats{
+		margin-right: 30px;
+		display: inline-block;
+
+		@media only screen and (min-width: $mobile-min-width) and (max-width: $mobile-max-width){
+			margin-bottom: 15px;
+			@include span(6 of 12);
+		}
+
+		&:nth-child(2n){
+
+			@media only screen and (min-width: $mobile-min-width) and (max-width: $mobile-max-width){
+				@include span(6 of 12 last);
+			}
+		}
+
+		&:last-child{
+			margin-bottom: 45px;
+		}
+
+		span{
+			font-size: 12px;
+			line-height: 1.33;
+			display: inline-block;
+			vertical-align: middle;
+			color: rgba(#203b4e, 0.6);
+			font-family: $roboto-medium;
+
+			@media only screen and (min-width: $tablet-min-width) and (max-width: $tablet-max-width){
+				display: block;
+			}
+
+			@media only screen and (min-width: $mobile-min-width) and (max-width: $mobile-max-width){
+				margin-left: 20px;
+			}
+
+			&:not(.big){
+
+				@media only screen and (min-width: $mobile-min-width) and (max-width: $mobile-max-width){
+					max-width: 60px;
+				}
+			}
+
+			&.big{
+				color: $primary-color;
+				font-size: 26px;
+				margin-left: 10px;
+				line-height: 0.64;
+				font-family: $roboto-light;
+
+				@media only screen and (min-width: $tablet-min-width) and (max-width: $tablet-max-width){
+					display: block;
+					margin-left: 0;
+					margin-top: 15px;
+				}
+
+				@media only screen and (min-width: $mobile-min-width) and (max-width: $mobile-max-width){
+					margin-left: 0;
+					font-size: 30px;
+				}
+			}
+		}
+	}
+
+	.quotation-table-container{
+		margin-top: 30px;
+		margin-bottom: 30px;
+		@include span(12 of 12);
+		background-color: #f8f9fc;
+
+		.quotation-table-head{
+			padding: 15px;
+			position: relative;
+			background-color: #e7ecf7;
+
+			h5{
+				margin: 0;
+				font-size: 14px;
+				color: rgba(#203b4e, 0.96);
+				font-family: $roboto-medium;
+			}
+
+			.add-more{
+				top: 18px;
+				right: 20px;
+				position: absolute;
+
+				img{
+					margin-right: 5px;
+					vertical-align: top;
+				}
+			}
+		}
+
+		.table-input-container{
+			padding: 26px 16px 16px;
+
+			.col-sm-2{
+				padding: 0 5px;
+
+				&:first-child{
+					padding-left: 15px;
+
+					@media only screen and (min-width: $mobile-min-width) and (max-width: $mobile-max-width){
+						padding-left: 5px;
+					}
+				}
+
+				&:last-child{
+					padding-right: 15px;
+
+					@media only screen and (min-width: $mobile-min-width) and (max-width: $mobile-max-width){
+						padding-right: 5px;
+					}
+				}
+			}
+		}
+
+		.table-toggle-container{
+			padding: 0 15px 15px;
+
+			.add-more{
+				font-weight: 100;
+				font-family: $roboto-regular;
+
+				img{
+					width: 12px;
+					margin-right: 8px;
+					vertical-align: top;
+				}
+			}
+
+			.col-sm-6{
+
+				@media only screen and (min-width: $mobile-min-width) and (max-width: $mobile-max-width){
+					width: 50%;
+				}
+			}
+
+			.table-toggler{
+				font-size: 12px;
+				color: rgba(#203b4e, 0.8);
+				font-family: $roboto-regular;
+
+				img{
+					margin-left: 10px;
+				}
+			}
+		}
+
+		table{
+
+			th{
+				font-family: $roboto-regular;
+			}
+
+			tbody{
+
+				tr{
+
+					&.white{
+						background-color: $white !important;
+					}
+
+					&.grey{
+						background-color: rgba(#F3F6FB, 1) !important;
+					}
+
+					&.merged{
+						border-bottom: 1px dashed rgba(189, 210, 226, 0.6);
+						border-left: 1px solid rgba(189, 210, 226, 0.2);
+						border-right: 1px solid rgba(189, 210, 226, 0.2);
+
+						td{
+							border: 1px dashed rgba(189, 210, 226, 0.6);
+
+							&:first-child{
+								border-left: none;
+							}
+
+							&:last-child{
+								border-right: none;
+							}
+						}
+					}
+				}
+
+				td{
+					border-right: 1px solid rgba(189, 210, 226, 0.2);
+				}
+			}
+
+			.my-input-group{
+				margin: 0;
+
+				input{
+					padding: 10px 12px;
+					font-size: 11px !important;
+				}
+			}
+
+			.row-action{
+				width: 15px;
+				display: inline-block;
+				vertical-align: initial;
+
+				&:first-child{
+					margin-right: 10px;
+				}
+			}
+		}
+	}
+
+	.cost-container{
+		padding: 24px 25px;
+		border-bottom: 2px solid #EFF0F1;
+
+		.col-sm-6{
+
+			@media only screen and (min-width: $mobile-min-width) and (max-width: $mobile-max-width){
+				width: 70%;
+			}
+
+			&:first-child{
+
+				@media only screen and (min-width: $mobile-min-width) and (max-width: $mobile-max-width){
+					width: 30%;
+				}
+			}
+		}
+
+		p{
+			margin: 0;
+		}
+
+		.my-input-group{
+			display: inline-block;
+			border: 1px solid #bdd2e2;
+
+			input{
+				margin: 0;
+				border: none;
+				width: 113px;
+				display: inline-block;
+			}
+
+			span{
+				width: 54px;
+				padding: 12px;
+				color: #7b8d93;
+				font-size: 14px;
+				display: inline-block;
+				border-left: 1px solid #bdd2e2;
+				background-color: rgba(220, 234, 245, 0.3);
+			}
+		}
+	}
+
+	.cost-title{
+		font-size: 22px;
+		margin-right: 80px;
+		display: inline-block;
+
+		@media only screen and (min-width: $mobile-min-width) and (max-width: $mobile-max-width){
+			margin-right: 40px;
+		}
+	}
+
+	.cost-amount{
+		color: #1dbc7d;
+		font-size: 24px;
+		display: inline-block;
+		text-transform: uppercase;
+		font-family: $roboto-medium;
+	}
+
+	.animated-icon-container{
+		padding: 14px;
+	}
+
+	.table-badge-container{
+		display: inline-block;
+
+		span{
+			margin: 0 0 0 4px;
+		}
+	}
+}
+
+
+
+// quotation search
+
+.quotation-placeholder-container{
+	@include span(12 of 12);
+
+	.column{
+		height: 304px;
+		padding: 24px 34px;
+		margin-bottom: 16px;
+		@include span(6 of 12);
+		background-color: $white;
+
+		&:nth-child(2n){
+			@include span(6 of 12 last);
+		}
+
+		&.opac{
+			opacity: 0.5;
+		}
+	}
+}
+
+.quotation-search-container{
+	margin-top: 24px;
+	@include span(12 of 12);
+
+	.quotation-card{
+		padding: 24px 34px;
+		margin-bottom: 16px;
+		@include span(6 of 12);
+		background-color: $white;
+		border: solid 1px #dbe6ea;
+
+		@media only screen and (min-width: $mobile-min-width) and (max-width: $tablet-max-width){
+			@include span(12 of 12);
+		}
+
+		@media only screen and (min-width: $mobile-min-width) and (max-width: $mobile-max-width){
+			padding: 24px;
+		}
+
+		&:nth-child(2n){
+			@include span(6 of 12 last);
+
+			@media only screen and (min-width: $mobile-min-width) and (max-width: $tablet-max-width){
+				@include span(12 of 12);
+			}
+		}
+
+		.quotation-number{
+			color: #ff5626;
+			line-height: 1;
+			font-size: 12px;
+			padding: 8px 14px;
+			border-radius: 2px;
+			display: inline-block;
+			font-family: $roboto-bold;
+			background-color: rgba(#ff5626, 0.1);
+
+			&.disabled{
+				color: #afbbcb;
+				background-color: #f4f6f8;
+			}
+		}
+
+		.timestamp{
+			float: right;
+			color: #a0a1a3;
+			font-size: 10px;
+			text-align: right;
+			margin-top: 9px;
+			font-family: $roboto-regular;
+		}
+
+		.dashed-border{
+			border-left: 2px dashed rgba(#CDD5DF, 0.6);
+
+			@media only screen and (min-width: $mobile-min-width) and (max-width: $mobile-max-width){
+				border: none;
+				padding-top: 24px;
+				border-top: 2px dashed rgba(#CDD5DF, 0.6);
+			}
+		}
+
+		.info-list{
+			line-height: 1;
+			padding-bottom: 10px;
+
+			span{
+				color: #a0a1a3;
+				font-size: 12px;
+				vertical-align: top;
+				display: inline-block;
+				text-transform: capitalize;
+				font-family: $roboto-regular;
+
+				&.dark{
+					color: $primary-color;
+				}
+
+				img{
+					margin-left: 10px;
+				}
+			}
+
+			&.business{
+
+				&:last-of-type{
+					padding-bottom: 24px;
+				}
+
+				span{
+
+					&:first-child{
+						width: 40%;
+					}
+
+					&:last-child{
+						width: 60%;
+						line-height: 1.3;
+						text-transform: capitalize;
+					}
+
+					img{
+						vertical-align: top;
+					}
+				}
+			}
+
+			&.amount{
+				margin-left: 34px;
+				padding-bottom: 14px;
+
+				@media only screen and (min-width: $mobile-min-width) and (max-width: $mobile-max-width){
+					margin-left: 0;
+				}
+
+				&.marginBottom24{
+					margin-bottom: 0;
+					padding-bottom: 24px;
+				}
+
+				&.other-cost{
+					padding-bottom: 8px;
+				}
+
+				&.discount{
+					padding-bottom: 20px;
+					border-bottom: 1px solid #8397AF;
+
+					span{
+						color: $secondary-brand-color;
+					}
+				}
+
+				&.big{
+					margin-top: 18px;
+
+					@media only screen and (min-width: $mobile-min-width) and (max-width: $mobile-max-width){
+						padding-bottom: 24px;
+					}
+
+					span{
+						font-size: 14px;
+						font-family: $roboto-medium;
+					}
+				}
+
+				span{
+
+					&:first-child{
+						width: 50%;
+					}
+
+					&:last-child{
+						width: 50%;
+					}
+				}
+			}
+		}
+	}
+}
+
+.approve-modal-container{
+	position: relative;
+
+	.animated-icon-container{
+		top: 12px;
+		right: 14px;
+		position: absolute;
+	}
+
+	.modal-title{
+		color: $primary-color;
+		font-size: 18px;
+		margin-bottom: 8px;
+		font-family: $roboto-medium;
+	}
+
+	.message{
+		color: #a0a1a3;
+		font-size: 14px;
+		margin-bottom: 24px;
+		font-family: $roboto-regular;
+	}
+
+	.details{
+		line-height: 1;
+		margin-bottom: 10px;
+
+		.label{
+			color: #a0a1a3;
+			font-size: 12px;
+			min-width: 80px;
+			display: inline-block;
+			font-family: $roboto-regular;
+		}
+
+		.value{
+			color: #707275;
+			font-size: 12px;
+			display: inline-block;
+			font-family: $roboto-medium;
+		}
+	}
+
+	.input-group{
+		margin-top: 14px;
+	}
+
+	.cta-container{
+		margin-top: 24px;
+		text-align: right;
+	}
+}

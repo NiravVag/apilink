@@ -1,0 +1,232 @@
+﻿@model (DTO.Inspection.BookingMailRequest, string)
+@using DTO.CommonClass;
+<style>
+    .th-table {
+        color: black;
+        vertical-align: top;
+        font-size: 13px;
+        font-family: tahoma;
+    }
+
+    .td-table {
+        font-size: 13px;
+        font-family: tahoma;
+    }
+
+    .div-style {
+        padding-bottom: 5px;
+        margin-bottom: 5px;
+    }
+
+    #color {
+        color: red;
+    }
+</style>
+
+<table>
+    <tr>
+        <td style="font-size:13px; font-family:tahoma;">
+            Dear Sir / Madam,
+            <br /><br />
+            <div class="div-style">
+                Your Audit booking (<b>AUD</b> - @Model.Item1.BookingId) has been @Model.Item1.StatusName.
+            </div>
+            <div class="div-style">
+                Following are the details for your reference:
+            </div>
+            <br />
+            <table border="0">
+                <tr>
+                    <th class="th-table" align="left" width='24%'>
+                        Customer:
+                    </th>
+                    <td class="td-table">ca
+                        @Model.Item1.CustomerName
+                    </td>
+                </tr>              
+               
+                @if (!String.IsNullOrEmpty(@Model.Item1.ApplyDate))
+                {
+                    <tr>
+                        <th class="th-table" align="left" width='24%'>
+                            Apply Date (DD/MM/YYYY):
+                        </th>
+                        <td class="td-table">
+                            @Model.Item1.ApplyDate <span></span>
+                        </td>
+                    </tr>
+                }               
+                <tr>
+                    <th class="th-table" align="left" width='24%'>
+                        <br />
+                        Supplier:
+                    </th>
+                    <td class="td-table">
+                        <br />
+                        <span>@Model.Item1.SupplierName</span>
+                        <br />
+                        @if (!String.IsNullOrEmpty(@Model.Item1.SupplierAddress))
+                        {
+                            @Model.Item1.SupplierAddress
+                            <br />
+                        }
+                        @if (!String.IsNullOrEmpty(@Model.Item1.SupplierPhone) && !String.IsNullOrEmpty(@Model.Item1.SupplierMail))
+                        {
+                            @Model.Item1.SupplierPhone<span> / </span>@Model.Item1.SupplierMail
+                            <br />
+                        }
+                        else if (!String.IsNullOrEmpty(@Model.Item1.SupplierPhone))
+                        {
+                            @Model.Item1.SupplierPhone
+                            <br />
+                        }
+                        else if (!String.IsNullOrEmpty(@Model.Item1.SupplierMail))
+                        {
+                            @Model.Item1.SupplierMail
+                            <br />
+                        }
+                    </td>
+                </tr>
+                <tr>
+                    <th class="th-table" align="left" width='24%'>
+                        <br />
+                        Factory:
+                    </th>
+                    <td class="td-table">
+                        <br />
+                        <span>@Model.Item1.FactoryName</span>
+                        <br />
+                        @if (!String.IsNullOrEmpty(@Model.Item1.FactoryAddress))
+                        {
+                            @Model.Item1.FactoryAddress
+                            <br />
+                        }
+                        @if (@Model.Item1.IsChinaCountry)
+                        {
+                            @if (!String.IsNullOrEmpty(@Model.Item1.FactoryRegionalAddress))
+                            {
+                                @Model.Item1.FactoryRegionalAddress
+                                <br />
+                            }
+                        }
+                        @if (!String.IsNullOrEmpty(@Model.Item1.FactoryPhone) && !String.IsNullOrEmpty(@Model.Item1.FactoryMail))
+                        {
+                            @Model.Item1.FactoryPhone<span> / </span>@Model.Item1.FactoryMail
+                            <br />
+                        }
+                        else if (!String.IsNullOrEmpty(@Model.Item1.FactoryPhone))
+                        {
+                            @Model.Item1.FactoryPhone
+                            <br />
+                        }
+                        else if (!String.IsNullOrEmpty(@Model.Item1.FactoryMail))
+                        {
+                            @Model.Item1.FactoryMail
+                            <br />
+                        }
+                    </td>
+                </tr>
+                <tr>
+                    <th class="th-table" align="left" width='24%'>
+                        <br />
+                        Service Type:
+                    </th>
+                    <td class="td-table">
+                        <br />
+                        @Model.Item1.ServiceType
+
+                        @if (!string.IsNullOrWhiteSpace(@Model.Item1.ReInspectionTypeName))
+                        {
+                            <span> (</span>
+                            @Model.Item1.ReInspectionTypeName
+                            <span>)</span>
+                        }
+                    </td>
+                </tr>
+                <tr>
+                    <th class="th-table" align="left" width='24%'>
+                        Service Date (DD/MM/YYYY):
+                    </th>
+                    <td class="td-table">
+                        @if (@Model.Item1.ServiceDateFrom == @Model.Item1.ServiceDateTo)
+                        {
+                            @Model.Item1.ServiceDateTo 
+                        }
+                        else
+                        {
+                            @Model.Item1.ServiceDateFrom <label> To </label>@Model.Item1.ServiceDateTo
+                        }
+                    </td>
+                </tr>          
+
+                <tr>
+                    <th class="th-table" align="left" width='24%'>
+                        Cancel By:
+                    </th>
+                    <td style="color:red" class="td-table">
+                        @Model.Item1.CanceledBy
+                    </td>
+                </tr>
+                <tr>
+                    <th class="th-table" align="left" width='24%'>
+                        Cancel Reason:
+                    </th>
+                    <td style="color:red" class="td-table">
+                        @Model.Item1.ReasonType
+                    </td>
+                </tr>
+                <tr>
+                    <th class="th-table" align="left" width='24%'>
+                        Comment:
+                    </th>
+                    <td style="color:red" class="td-table">
+                        @Model.Item1.Comment
+                    </td>
+                </tr>
+
+
+            </table>         
+
+        </td>
+    </tr>
+
+    <tr>
+        <td style="font-size:13px; font-family:tahoma;">
+            <br />
+            <table border="0">
+                <tr>
+                    <th class="th-table" align="left" width='24%'>
+                        @Model.Item1.EntityName Comments:
+                    </th>
+                    <td class="td-table">
+                        @Model.Item1.BookingComment
+                    </td>
+                </tr>
+            </table>
+        </td>
+    </tr>   
+    <tr>
+        <td class="td-table">
+            <br />
+            <div class="div-style">
+                Please login our <a href="@Model.Item2">Link</a> to view the updated status & details.
+            </div>
+            <div class="div-style">
+                If any question, please address to @Model.Item1.ApiUserMail
+            </div>
+        </td>
+    </tr>
+    <tr>
+        <td class="td-table">
+            <br />
+            <div class="div-style">
+                Thanks
+            </div>
+            <div class="div-style">
+                @Model.Item1.EntityName IT-Team
+            </div>
+            <br />
+            <span style="font-style:normal"> Note: - This receipt is auto generated from Link Booking System. Please do not reply to @Model.Item1.SenderEmail.</span>
+        </td>
+    </tr>
+</table>

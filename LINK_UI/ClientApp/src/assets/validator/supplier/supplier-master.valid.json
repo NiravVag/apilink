@@ -1,0 +1,14 @@
+{
+    "model": "suppliersummary.model",
+    "fields": {
+        "typeValues": [{
+            "type": "required",
+            "fieldType": "A",
+            "ressource": "SUPPLIER_SUMMARY.MSG_TYPES_REQ"
+        }],
+        "email": [{
+            "type": "email",
+            "ressource": "SUPPLIER_SUMMARY.MSG_EMAIL_EMAIL"
+        }]
+    }
+}

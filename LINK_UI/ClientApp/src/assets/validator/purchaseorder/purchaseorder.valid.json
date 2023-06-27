@@ -1,0 +1,12 @@
+{
+  "model": "purchaseordersummarymodel.model",
+  "fields": {
+    "customerValues": [
+      {
+        "type": "required",
+        "fieldType": "A",
+        "ressource": "PURCHASEORDER_SUMMARY.MSG_CUSTOMER_REQ"
+      }
+    ]
+  }
+}

@@ -1,0 +1,52 @@
+﻿@{
+    ViewData["Title"] = "SchedulePlanningForCS";
+}
+@model DTO.ScheduleJob.SchedulePlanningForCS
+<style>
+    .th-table {
+        color: black;
+        vertical-align: top;
+        font-size: 13px;
+        font-family: tahoma;
+    }
+
+    .td-table {
+        font-size: 13px;
+        font-family: tahoma;
+    }
+
+    .margintop2 {
+        margin-top: 2%
+    }
+
+    .margintop7 {
+        margin-top: 7%
+    }
+</style>
+<table>
+    <tr>
+        <td style="font-size:13px; font-family:tahoma;">
+            Dear All,
+            <br /><br />
+            <div style="padding-bottom: 5px; margin-bottom:5px;">
+                Date Of Sending:@Model.SendDate.ToString("dd/MM/yyyy")
+            </div>
+            <div style="padding-bottom: 20px;margin-top: 2%;">
+                Please find next @Model.IntervalDay days (@Model.FromDate.ToString("dd/MM/yyyy") To @Model.ToDate.ToString("dd/MM/yyyy")) updated Inspection schedule planning for @Model.JobConfiguration.Name Region.
+            </div>
+        </td>
+    </tr>
+    <tr>
+        <td class="td-table">
+            <br />
+            <div style="padding-bottom: 5px; margin-bottom:5px;">
+                Thanks
+            </div>
+            <div style="padding-bottom: 5px; margin-bottom:5px;">
+                IT-Team
+            </div>
+            <br />
+            <span style="font-style:normal"> Note: - This alert auto generated from Link QMS based on predefined rules set up in System, Please do not reply to this message.</span>
+        </td>
+    </tr>
+</table>

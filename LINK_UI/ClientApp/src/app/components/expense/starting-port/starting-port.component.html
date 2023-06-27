@@ -1,0 +1,225 @@
+<div class="main-wrapper">
+    <div class="wrapper dashboard-wrapper">
+        <div class="my-container">
+            <div class="master-body">
+                <div class="title-container">
+                    <h3 class="main-title">
+                        {{'START_PORT.LBL_TITLE' | translate }}</h3>
+                </div>
+                <div class="content-container quotation-container">
+                    <div [@expandCollapse]="isFilterOpen ? 'open' : 'close'"
+                        class="centerContainerPadding common-filter-container">
+                        <div class="animated-icon-container" (click)="toggleFilterSection()"
+                            *ngIf="(model.items && model.items.length>0)">
+                            <img src="assets/images/cta-close-grey.svg" alt="close">
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-3 mobile-margin-top-15">
+                                <div class="my-input-group">
+                                    <label for="">{{ 'START_PORT.LBL_TITLE' | translate}}</label>
+                                    <ng-select appendTo="body" [items]="summaryModel.startingPortNameList"
+                                        [loading]="summaryModel.startingPortNameListLoading" bindLabel="name"
+                                        bindValue="id"
+                                        placeholder="--- {{ (summaryModel.startingPortNameList && summaryModel.startingPortNameList.length>0? 'COMMON.LBL_SELECT':'COMMON.LBL_NO_DATA' ) | translate }} ---"
+                                        [(ngModel)]="model.startingPortId" #select>
+
+                                        <ng-template ng-option-tmp let-item="item">
+                                            <div class="text-wrap">{{ item.name }}</div>
+                                        </ng-template>
+                                    </ng-select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row marginTop25">
+                            <div class="col-12 col-sm-6">
+
+                            </div>
+                            <div class="col-12 col-sm-6 text-right mt-3 mt-sm-0">
+
+                                <button class="secondary-cta small mr-2" (click)="openNewPopUp(addStartingPort, false)"
+                                    [disabled]="summaryModel.searchloading">
+                                    +{{
+                                    'CUSTOMER_PRODUCT_SUMMARY.LBL_ADDNEW' | translate
+                                    }}
+                                    <span *ngIf="summaryModel.addLoading">
+                                        <i class="fa fa-refresh fa-spin" aria-hidden="true"></i>
+                                    </span>
+                                </button>
+                                <button class="primary-cta small" [disabled]="summaryModel.searchloading"
+                                    (click)="SearchDetails()"> {{ 'COMMON.LBL_SEARCH' | translate }}
+                                    <span *ngIf="summaryModel.searchloading">
+                                        <i class="fa fa-refresh fa-spin" aria-hidden="true"></i>
+                                    </span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="centerContainerPadding float-left" *ngIf="(model.items && model.items.length>0)">
+                        <div class="row">
+                            <div class="col-6 col-sm-3 col-xl-2 d-flex">
+                                <p class="search-trigger-heading" [innerHtml]="showPaginationText()"></p>
+                            </div>
+                            <div class="col-6 col-sm-9 col-xl-10 text-right">
+                                <ul class="table-badge-container mobile-hide tablet-hide">
+                                </ul>
+                                <div class="animated-icon-container" *ngIf="!isFilterOpen"
+                                    (click)="toggleFilterSection()">
+                                    <img src="assets/images/cta-search-grey.svg" alt="search">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row mt-3 desktop-hide">
+                        </div>
+                        <div class="quotation-search-container">
+                            <div class="table-container h-scroll table-max-height-650">
+                                <table class="pagination-table simple-table bordered">
+                                    <thead>
+                                        <tr class="sticky-top-row">
+                                            <th class="Center_Middle width-60"></th>
+                                            <th class="width-120 sticky-left-column">Start Port</th>
+                                            <th class="width-160 sticky-left-column">
+                                                City</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+
+                                        <ng-container *ngFor="let iteminfo of model.items">
+                                            <tr>
+
+                                                <td><span class="table-cta icon-cta common-tooltip"
+                                                        (click)="editStartingPort(iteminfo.startingPortId, addStartingPort)"
+                                                        data-tooltip="Edit">
+                                                        <img src="assets/images/cta-edit.svg" alt="Edit">
+                                                    </span>
+                                                    <span class="table-cta icon-cta common-tooltip"
+                                                        *ngIf="iteminfo.hasItRole"
+                                                        (click)="openDeletePopUp(delete, iteminfo.startingPortId)"
+                                                        data-tooltip="delete">
+                                                        <img src="assets/images/cta-delete.svg" alt="Delete"></span>
+                                                </td>
+
+                                                <td class=" wordbreak width-120 sticky-left-column">
+                                                    {{ iteminfo.startingPortName}}
+                                                </td>
+                                                <td class=" wordbreak width-120 ">
+                                                    {{ iteminfo.cityName}}
+                                                </td>
+                                            </tr>
+
+                                        </ng-container>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <div class="pagination-container">
+                            <select class="small" [(ngModel)]="selectedPageSize"
+                                (change)="SearchDetails()">
+                                <option *ngFor="let item of pagesizeitems" [ngValue]=item>{{item}}</option>
+                            </select>
+                            <ngb-pagination (pageChange)="onPager($event)" [pageSize]="model.pageSize"
+                                [collectionSize]="model.totalCount" [(page)]="model.index" [maxSize]="5">
+                            </ngb-pagination>
+                        </div>
+                    </div>
+                    <div class="centerContainerPadding" *ngIf="model.noFound">
+                        <div class="error-container">
+                            <img src="assets/images/no-result.svg" alt="" class="thumbnail">
+                            <h4 class="error-title">{{'COMMON.LBL_No_ITEM' | translate}}</h4>
+                            <p class="error-subtitle">{{'COMMON.LBL_NODATA' | translate}}</p>
+
+                            <button (click)="reset()" class="category-cta">
+                                <img src="assets/images/reload-new.svg" alt="reload">
+                                <span> {{'COMMON.LBL_CLEAR_SEARCH' | translate}}</span></button>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<ng-template #addStartingPort let-modal>
+    <div class="modal-header custom-modal-header">
+        <h4 class="modal-title" id="modal-basic-title">{{ 'START_PORT.LBL_ADD_TITLE' | translate}}</h4>
+        <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+
+    <div class="modal-body custom-modal-body">
+        <div class="content-container schedule-allocation-container">
+            <div class="formPadding">
+                <div class="row">
+                    <div class="my-input-group col-sm-3 col-md-6 col-lg-4">
+                        <label class="required">{{'START_PORT.LBL_TITLE' | translate }}</label>
+                        <input type="text" maxlength="1000"
+                            placeholder="{{'START_PORT.LBL_TITLE' | translate }}"
+                            [(ngModel)]="editModel.startPortName" (change)="startPortChange($event)"
+                            [ngClass]="{'is-invalid': !validator.isValid('startPortName')}">
+                        <div *ngIf="!validator.isValid('startPortName')" class="invalid-feedback"
+                            style="display:block">
+                            <div *ngFor="let error of validator.getErrors('startPortName')">{{ error | translate }}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-3 mobile-margin-top-15 col-lg-4">
+                        <div class="my-input-group">
+                            <label for="">{{ 'START_PORT.LBL_CITY' | translate}}</label>
+                            <ng-select appendTo="body" [items]="editSummaryModel.cityList" [virtualScroll]="true"
+                            [loading]="editSummaryModel.cityLoading" bindLabel="name" bindValue="id"
+                            placeholder="--- {{ (editSummaryModel.cityList && editSummaryModel.cityList.length>0? 'COMMON.LBL_SELECT':'COMMON.LBL_NO_DATA' ) | translate }} ---"
+                            [typeahead]="editSummaryModel.cityInput" [minTermLength]="3"  (clear)="clearCity()"
+                            [(ngModel)]="editModel.cityId" (scrollToEnd)="getCityData()" 
+                            [ngClass]="{'is-invalid': !validator.isValid('cityId')}" #select>
+
+                            <ng-template ng-option-tmp let-item="item">
+                                <div class="text-wrap">{{ item.name }}</div>
+                            </ng-template>
+                        </ng-select>
+                            <div *ngIf="!validator.isValid('cityId')" class="invalid-feedback" style="display:block">
+                                <div *ngFor="let error of validator.getErrors('cityId')">{{ error | translate }}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="marginTop20 modal-footer">
+                    <button [disabled]="editSummaryModel.saveloading" class="secondary-cta MarginR-20"
+                        (click)="cancel()">
+                        {{'COMMON.LBL_CONFIRMCANCEL' | translate}}
+                    </button>
+                    <button [disabled]="editSummaryModel.saveloading" class="primary-cta MarginR-20" (click)="save()">
+                        {{'COMMON.LBL_SAVE' | translate}}
+                        <span *ngIf="editSummaryModel.saveloading">
+                            <i class="fa fa-refresh fa-spin" aria-hidden="true"></i>
+                        </span>
+                    </button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</ng-template>
+
+<ng-template #delete let-modal>
+    <div class="modal-body">
+        <div class="small-model new-padding">
+            <h2 class="confirm-title"><img class="mr-2" src="assets/images/caution-red.svg" alt="">{{
+                'EMAIL_CONFIGURATION_SUMMARY.LBL_CONFIRMDELETION' | translate }}</h2>
+            <p class="light">{{ 'EMAIL_CONFIGURATION_SUMMARY.MSG_QUESTION_SURE' | translate }} </p>
+            <div class="text-right">
+                <button class="tertiary-cta small" (click)="modal.dismiss('Cross click')"
+                    [disabled]="editSummaryModel.deleteLoading">
+                    Cancel</button>
+                <button class="primary-cta small" [disabled]="editSummaryModel.deleteLoading" (click)="deleteRedirect()">OK
+                    <span *ngIf="editSummaryModel.deleteLoading">
+                        <i class="fa fa-refresh fa-spin" aria-hidden="true"></i>
+                    </span>
+                </button>
+            </div>
+        </div>
+    </div>
+</ng-template>

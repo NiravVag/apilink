@@ -1,0 +1,26 @@
+﻿CREATE TABLE [dbo].[EC_AUT_TravelTariff]
+(
+	[Id] int not null primary key identity(1,1),
+	[StartPort] int not null,
+	[TownId] int not null,	
+	[TravelTariff] float null,
+	[TravelCurrency] int null,
+	[StartDate] datetime,
+	[EndDate] datetime,
+	[Entity_Id] INT , 
+	[Active] bit, 	
+	[CreatedOn] datetime,
+	[UpdatedOn] datetime,
+	[DeletedOn] datetime,
+	[UpdatedBy] int null,
+	[DeletedBy] int null,
+	[CreatedBy] int null,
+	[Status] BIT NULL,
+	CONSTRAINT FK_EC_AUT_TravelTariff_StartPort FOREIGN KEY ([StartPort]) REFERENCES [dbo].[EC_AUT_REF_StartPort](Id),	
+	CONSTRAINT FK_EC_AUT_TravelTariff_CreatedBy FOREIGN KEY ([CreatedBy]) REFERENCES [dbo].[IT_UserMaster](Id),	
+	CONSTRAINT FK_EC_AUT_TravelTariff_DeletedBy FOREIGN KEY ([DeletedBy]) REFERENCES [dbo].[IT_UserMaster](Id),
+	CONSTRAINT FK_EC_AUT_TravelTariff_UpdatedBy FOREIGN KEY ([UpdatedBy]) REFERENCES [dbo].[IT_UserMaster](Id),	
+	CONSTRAINT FK_EC_AUT_TravelTariff_TownId FOREIGN KEY ([TownId]) REFERENCES [dbo].[Ref_Town](Id),
+    CONSTRAINT FK_EC_AUT_TravelTariff_Entity_Id FOREIGN KEY([Entity_Id]) REFERENCES [dbo].[AP_Entity](Id),
+	CONSTRAINT FK_EC_AUT_TravelTariff_TravelCurrency FOREIGN KEY([TravelCurrency]) REFERENCES [dbo].[Ref_Currency](Id)
+)

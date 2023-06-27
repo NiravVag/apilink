@@ -1,0 +1,31 @@
+{
+    "model": "auditcusreportrequest",
+    "fields": {
+        "fromdate": [
+            {
+                "type": "required",
+                "fieldType": "D",
+                "ressource": "AUDIT_CUS_REPORT.MSG_SERVICE_FROMDATE_REQ"
+            },
+            {
+                "type": "isLessOrEqual",
+                "fieldType": "D",
+                "fieldCible": "todate",
+                "ressource": "AUDIT_CUS_REPORT.MSG_SERVICE_FROMDATE_GREATER_REQ"
+            }
+        ],
+        "todate": [
+            {
+                "type": "required",
+                "fieldType": "D",
+                "ressource": "AUDIT_CUS_REPORT.MSG_Service_TODATE_REQ"
+            },
+            {
+                "type": "isGreatOrEqual",
+                "fieldType": "D",
+                "fieldCible": "fromdate",
+                "ressource": "AUDIT_CUS_REPORT.MSG_Service_TODATE_LESS_REQ" 
+            }
+        ]
+    }
+}

@@ -1,0 +1,33 @@
+{
+    "model": "InspectionCertificateRequest",
+    "fields": {
+        "customerId": [
+            {
+                "type": "required",
+                "fieldType": "N",
+                "ressource": "EDIT_INSPECTION_CERTIFICATE.MSG_CUSTOMER_REQ"
+            }
+        ],
+        "supplierId": [
+            {
+                "type": "required",
+                "fieldType": "N",
+                "ressource": "EDIT_INSPECTION_CERTIFICATE.MSG_SUPPLIER_REQ"
+            }
+        ],
+        "icTitleId": [
+            {
+                "type": "required",
+                "fieldType": "N",
+                "ressource": "EDIT_INSPECTION_CERTIFICATE.MSG_IC_TITLE_REQ"
+            }
+        ],
+        "buyerName": [
+            {
+                "type": "required",
+                "fieldType": "N",
+                "ressource": "EDIT_INSPECTION_CERTIFICATE.MSG_BUYER_REQ"
+            }
+        ]
+    }
+}

@@ -1,0 +1,183 @@
+<div class="main-wrapper">
+  <div class="wrapper dashboard-wrapper">
+    <div class="my-container">
+      <div class="master-body">
+        <div class="title-container">
+          <h3 class="main-title">{{ 'CUSTOMER_SUMMARY.TITLE' | translate }}</h3>
+        </div>
+        <div class="content-container quotation-container">
+          <div [@expandCollapse]="isFilterOpen ? 'open' : 'close'"
+            class="centerContainerPadding common-filter-container">
+            <div class="animated-icon-container" (click)="toggleFilterSection()"
+              *ngIf="(model.items && model.items.length>0)">
+              <img src="assets/images/cta-close-grey.svg" alt="close">
+            </div>
+            <div class="row">
+              <div class="col-sm-4 col-lg-4">
+                <div class="my-input-group">
+                  <label class="control-label">{{ 'CUSTOMER_SUMMARY.LBL_GROUP' | translate }}</label>
+                  <ng-select [items]="customergroupList" [multiple]="false" [closeOnSelect]="true" [searchable]="true"
+                    [loading]="Initialloading" bindLabel="name"
+                    placeholder="--- {{ 'CUSTOMER_SUMMARY.LBL_SELECT' | translate }} ---"
+                    [(ngModel)]="model.groupValues" (change)="selectCustomerGroup()" (clear)="clearCustomerGroup()"
+                    [ngClass]="{ 'is-invalid': !validator.isValid('groupValues')}" appendTo="body">
+                  </ng-select>
+                </div>
+              </div>
+              <div class="col-sm-4 col-lg-4">
+                <div class="my-input-group">
+                  <label class="control-label">{{ 'CUSTOMER_SUMMARY.LBL_CUSTOMER' | translate }}</label>
+
+                  <ng-select [items]="data.customerList" appendTo="body" [multiple]="false" [closeOnSelect]="true"
+                    [searchable]="true" [loading]="Initialloading" bindLabel="name"
+                    placeholder="--- {{ 'CUSTOMER_SUMMARY.LBL_SELECT' | translate }} ---"
+                    [(ngModel)]="model.customerValues" (change)="selectCustomer()" (clear)="clearCustomer()"
+                    [ngClass]="{ 'is-invalid': !validator.isValid('customerValues')}">
+                  </ng-select>
+                </div>
+              </div>
+              <div class="col-sm-4 col-lg-4 mobile-margin-top-15" *ngIf="customerMasterData.entityId==customerMasterData.entityAccess.AQF">
+                <div class="my-input-group marginTop25">
+                  <div class="styled-checkbox-container">
+                    <input class="styled-checkbox" id="checkbox-eaqf" (change)="selectEAQF()" type="checkbox" [(ngModel)]="model.isEAQF">
+                    <label for="checkbox-eaqf">{{ 'E-AQF.LBL_EAQF' | translate }}</label>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+
+            <div class="row marginTop25">
+              <div class="col-12 col-sm-12 text-right mt-3 mt-sm-0">
+                <button id="btnAdd" class="secondary-cta small" (click)="getEditDetails(0, 0)">
+                  + {{
+                  'CUSTOMER_PRODUCT_SUMMARY.LBL_ADDNEW' | translate
+                  }}
+                </button>
+                &nbsp;
+                <button id="btnSearch" class="primary-cta small" (click)="search()"
+                  [disabled]="searchloading || Initialloading">
+                  {{ 'CUSTOMER_SUMMARY.LBL_SEARCH' | translate }}
+                  <span *ngIf="searchloading">
+                    <i class="fa fa-refresh fa-spin" aria-hidden="true"></i>
+                  </span>
+                </button>
+
+              </div>
+            </div>
+          </div>
+          <div class="centerContainerPadding float-left" *ngIf="(model.items && model.items.length>0)">
+            <div class="row">
+              <div class="col-6 col-sm-4 col-xl-2 d-flex">
+                <p class="search-trigger-heading" [innerHtml]="showPaginationText()"></p>
+              </div>
+              <div class="col-6 col-sm-8 col-xl-10 text-right">
+                <div class="animated-icon-container" *ngIf="!isFilterOpen" (click)="toggleFilterSection()">
+                  <img src="assets/images/cta-search-grey.svg" alt="search">
+                </div>
+              </div>
+            </div>
+            <div class="quotation-search-container">
+              <div class="table-container h-scroll">
+                <table class="pagination-table simple-table bordered">
+                  <thead>
+                    <tr>
+                      <th>{{ 'CUSTOMER_SUMMARY.LBL_CUSTOMERNAME' | translate }}</th>
+                      <th>{{ 'CUSTOMER_SUMMARY.LBL_GROUP_NAME' | translate }}</th>
+                      <th>{{ 'CUSTOMER_SUMMARY.LBL_MAIN' | translate }}</th>
+                      <th>{{ 'CUSTOMER_SUMMARY.LBL_CONTACTS' | translate }}</th>
+                      <th>{{ 'CUSTOMER_SUMMARY.LBL_BRAND' | translate }}</th>
+                      <th style="display:none">{{ 'CUSTOMER_SUMMARY.LBL_PRODUCT_CATEGORY' | translate }}</th>
+                      <th>{{ 'CUSTOMER_SUMMARY.LBL_DEPARTMENT' | translate }}</th>
+                      <th>{{ 'CUSTOMER_SUMMARY.LBL_SERVICE_LINE' | translate }}</th>
+                      <th>{{ 'CUSTOMER_SUMMARY.LBL_BUYER' | translate }}</th>
+                      <th>{{ 'CUSTOMER_SUMMARY.LBL_CUSTOMER_CHECKPOINTS' | translate }}</th>
+                      <th>{{ 'CUSTOMER_SUMMARY.LBL_CUSTOMER_COLLECTION' | translate }}</th>
+                    </tr>
+
+                  </thead>
+                  <tbody>
+                    <ng-container *ngFor="let iteminfo of model.items">
+                      <tr>
+
+                        <td style="word-break:break-all;min-width:110px">{{iteminfo.name}}</td>
+                        <td style="word-break:break-all;min-width:110px">{{iteminfo.group}}</td>
+                        <td style="text-align:center">
+                          <span class="table-cta icon-cta common-tooltip" (click)="getEditDetails(iteminfo.id, 0)"
+                            data-tooltip="Edit">
+                            <img src="assets/images/cta-edit.svg" alt="Edit">
+                          </span>
+                        </td>
+                        <td style="text-align:center">
+                          <span class="table-cta icon-cta common-tooltip" (click)="getEditDetails(iteminfo.id, 1)"
+                            data-tooltip="Edit">
+                            <img src="assets/images/cta-edit.svg" alt="Edit">
+                          </span>
+                        </td>
+                        <td style="text-align:center">
+                          <span class="table-cta icon-cta common-tooltip" (click)="getEditDetails(iteminfo.id, 2)"
+                            data-tooltip="Edit">
+                            <img src="assets/images/cta-edit.svg" alt="Edit">
+                          </span>
+                        </td>
+
+                        <td style="display:none">
+                          <span class="table-cta icon-cta common-tooltip" (click)="getEditDetails(iteminfo.id, 3)"
+                            data-tooltip="Edit">
+                            <img src="assets/images/cta-edit.svg" alt="Edit">
+                          </span>
+                        </td>
+                        <td style="text-align:center">
+                          <span class="table-cta icon-cta common-tooltip" (click)="getEditDetails(iteminfo.id, 4)"
+                            data-tooltip="Edit">
+                            <img src="assets/images/cta-edit.svg" alt="Edit">
+                          </span>
+                        </td>
+                        <td style="text-align:center">
+                          <span class="table-cta icon-cta common-tooltip" (click)="getEditDetails(iteminfo.id, 5)"
+                            data-tooltip="Edit">
+                            <img src="assets/images/cta-edit.svg" alt="Edit">
+                          </span>
+                        </td>
+                        <td style="text-align:center">
+                          <span class="table-cta icon-cta common-tooltip" (click)="getEditDetails(iteminfo.id, 6)"
+                            data-tooltip="Edit">
+                            <img src="assets/images/cta-edit.svg" alt="Edit">
+                          </span>
+                        </td>
+                        <td style="text-align:center">
+                          <span class="table-cta icon-cta common-tooltip" (click)="getEditDetails(iteminfo.id, 7)"
+                            data-tooltip="Edit">
+                            <img src="assets/images/cta-edit.svg" alt="Edit">
+                          </span>
+                        </td>
+                        <td style="text-align:center">
+                          <span class="table-cta icon-cta common-tooltip" (click)="getEditDetails(iteminfo.id, 8)"
+                            data-tooltip="Edit">
+                            <img src="assets/images/cta-edit.svg" alt="Edit">
+                          </span>
+                        </td>
+                      </tr>
+
+                    </ng-container>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+            <div class="pagination-container">
+              <ngb-pagination (pageChange)="onPager($event)" [pageSize]="model.pageSize"
+                [collectionSize]="model.totalCount" [(page)]="model.index" [maxSize]="5"></ngb-pagination>
+            </div>
+          </div>
+          <div class="centerContainerPadding" *ngIf="model.noFound">
+            <div class="error-container">
+              <img src="assets/images/no-result.svg" alt="" class="thumbnail">
+              <h4 class="title">{{ 'CUSTOMER_SUMMARY.LBL_NOITEMS' | translate }}</h4>
+              <p class="error-subtitle">{{'CS_CONFIG_SUMMARY.LBL_NODATA' | translate}}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

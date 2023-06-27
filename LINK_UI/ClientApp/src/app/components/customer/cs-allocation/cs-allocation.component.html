@@ -1,0 +1,518 @@
+<div class="main-wrapper">
+  <div class="wrapper dashboard-wrapper">
+    <div class="my-container">
+      <div class="master-body">
+        <div class="title-container">
+          <h3 class="main-title"> {{ 'CS_ALLOCATION.TITLE' | translate }}</h3>
+        </div>
+        <div class="content-container">
+          <div class="row searchFormPadding">
+            <div class="col-sm-12">
+              <div class="row marginTop15">
+                <div class="col-sm-3 marginTop15  mobile-margin-top-15">
+                  <div class="my-input-group">
+                    <label for="">{{'CS_ALLOCATION.LBL_CUSTOMER' | translate}}</label>
+                    <ng-select bindLabel="name" bindValue="id" [multiple]="false" [items]="masterModel.customerList"
+                      [clearable]="true" [(ngModel)]="model.customerId" [virtualScroll]="true"
+                      (scrollToEnd)="getCustomerData(true)" [typeahead]="masterModel.customerInput" [minTermLength]="3"
+                      (change)="changeCustomerData($event)" (clear)="clearCustomer()"
+                      placeholder="--- {{ (masterModel.customerList!=null && masterModel.customerList.length!=0? 'COMMON.LBL_SELECT':'COMMON.LBL_NO_DATA' ) | translate }} ---"
+                      appendTo="body" [loading]="masterModel.customerLoading">
+                      <ng-template ng-option-tmp let-item="item">
+                        <div class="text-wrap">{{ item.name }}</div>
+                      </ng-template>
+                    </ng-select>
+                  </div>
+                </div>
+                <div class="col-sm-3 marginTop15  mobile-margin-top-15">
+                  <div class="my-input-group">
+                    <label for="">{{ 'CS_ALLOCATION.LBL_OFFICE' | translate }}</label>
+                    <ng-select [searchable]="true" [loading]="masterModel.officeLoading" [clearable]="true"
+                      [multiple]="false" [items]="masterModel.officeList" appendTo="body" bindLabel="name"
+                      bindValue="id" [hideSelected]="true" class="single"
+                      placeholder="--- {{(masterModel.officeList!=null && masterModel.officeList.length!=0? 'COMMON.LBL_SELECT':'COMMON.MSG_NO_DATA')  | translate }} ---"
+                      [(ngModel)]="model.officeId">
+                    </ng-select>
+                  </div>
+                </div>
+                <div class="col-sm-3 marginTop15 mobile-margin-top-15">
+                  <div class="my-input-group">
+                    <label for="">{{ 'CS_ALLOCATION.LBL_SERVICE' | translate }}</label>
+                    <ng-select [searchable]="true" [loading]="masterModel.serviceLoading" [clearable]="true"
+                      [multiple]="false" [items]="masterModel.serviceList" appendTo="body" bindLabel="name"
+                      bindValue="id" [hideSelected]="true" class="single"
+                      placeholder="--- {{(masterModel.serviceList!=null && masterModel.serviceList.length!=0? 'COMMON.LBL_SELECT':'COMMON.MSG_NO_DATA')  | translate }} ---"
+                      [(ngModel)]="model.serviceId">
+                    </ng-select>
+                  </div>
+                </div>
+                <div class="col-sm-3 mobile-margin-top-15">
+                  <div class="my-input-group">
+                    <div class="styled-radio-container" *ngFor="let item of staffUserTypes;let idx = index">
+                      <input type="radio" class="styled-radio" id="{{item.id}}" name="radio-group1" [value]="item.id"
+                        [checked]="true" [(ngModel)]="model.userType">
+                      <label for="{{item.id}}">{{item.name}}</label>
+                    </div>
+                  </div>
+                  <div class="my-input-group">
+                    <ng-select bindLabel="name" class="multiple" bindValue="id" [multiple]="true"
+                      [(ngModel)]="model.userIds" [items]="masterModel.staffList" [clearable]="true"
+                      [virtualScroll]="true" (scrollToEnd)="getStaffData(true)" [typeahead]="masterModel.staffInput"
+                      placeholder="--- {{ (masterModel.staffList!=null && masterModel.staffList.length!=0? 'COMMON.LBL_SELECT':
+                                            'COMMON.LBL_NO_DATA' ) | translate }} --- " appendTo="body "
+                      [loading]="masterModel.staffLoading ">
+                      <ng-template ng-option-tmp let-item="item ">
+                        <div class="text-wrap ">{{ item.name }}</div>
+                      </ng-template>
+                    </ng-select>
+                  </div>
+                </div>
+              </div>
+
+              <div class="row marginTop15">
+                <div class="col-sm-3 mobile-margin-top-15">
+                  <div class="my-input-group">
+                    <label for="">{{ 'CS_ALLOCATION.LBL_PRODUCT_CATEGORY' | translate}}</label>
+                    <ng-select [items]="masterModel.productCategoryList" bindLabel="name" bindValue="id"
+                      [hideSelected]="false" [clearable]="true" [searchable]="true" appendTo="body" [multiple]="true"
+                      class="multiple" [loading]="masterModel.productCategoryListLoading"
+                      placeholder="--- {{ (masterModel.productCategoryList && masterModel.productCategoryList.length>0? 'COMMON.LBL_SELECT':'COMMON.LBL_NO_DATA') | translate }} ---"
+                      [(ngModel)]="model.productCategoryIds">
+                      <ng-template ng-option-tmp let-item="item">
+                        <div class="text-wrap">{{ item.name }}</div>
+                      </ng-template>
+                    </ng-select>
+                  </div>
+                </div>
+                <div class="col-sm-3 mobile-margin-top-15">
+                  <div class="my-input-group">
+                    <label for="">{{'CS_ALLOCATION.LBL_BRAND' | translate}}</label>
+                    <ng-select appendTo="body" [items]="masterModel.brandList" [loading]="masterModel.brandLoading"
+                      bindLabel="name" bindValue="id" [clearable]="true"
+                      placeholder="--- {{ (masterModel.brandList && masterModel.brandList.length>0? 'COMMON.LBL_SELECT':'COMMON.LBL_NO_DATA' ) | translate }} ---"
+                      [(ngModel)]="model.brandIds" [multiple]="true" class="multiple" #select>
+
+                      <ng-template ng-multi-label-tmp let-items="model.selectedBrandIdList" let-clear="clear">
+                        <div class="ng-value" *ngIf="model.brandIds && model.brandIds.length > 0">
+                          <span class="ng-value-label">{{model.brandIds.length}}
+                            {{'COMMON.LBL_SELECTED' | translate }}</span>
+                        </div>
+                      </ng-template>
+                    </ng-select>
+                  </div>
+                </div>
+                <div class="col-sm-3 mobile-margin-top-15">
+                  <div class="my-input-group">
+                    <label for="">{{'CS_ALLOCATION.LBL_DEPARTMENT' | translate}}</label>
+                    <ng-select appendTo="body" [items]="masterModel.deptList" [loading]="masterModel.deptLoading"
+                      bindLabel="name" bindValue="id"
+                      placeholder="--- {{ (masterModel.deptList && masterModel.deptList.length>0? 'COMMON.LBL_SELECT':'COMMON.LBL_NO_DATA' ) | translate }} ---"
+                      [(ngModel)]="model.departmentIds" [multiple]="true" class="multiple" #select>
+
+                      <ng-template ng-multi-label-tmp let-items="model.departmentIds" let-clear="clear">
+                        <div class="ng-value" *ngIf="model.departmentIds && model.departmentIds.length > 0">
+                          <span class="ng-value-label">{{model.departmentIds.length}}
+                            {{'COMMON.LBL_SELECTED' | translate }}</span>
+                        </div>
+                      </ng-template>
+                    </ng-select>
+                  </div>
+                </div>
+                <div class="col-sm-3 col-md-3 col-lg-3">
+                  <div class="my-input-group">
+                    <label for="">{{ 'BOOKING_SUMMARY.LBL_FACTORY_COUNTRY' | translate}}</label>
+                    <ng-select appendTo="body" [items]="masterModel.countryList" [virtualScroll]="true"
+                      [loading]="masterModel.countryLoading" bindLabel="name" bindValue="id"
+                      placeholder="--- {{ (masterModel.countryList!=null && masterModel.countryList.length!=0? 'COMMON.LBL_SELECT':'COMMON.LBL_NO_DATA' ) | translate }} ---"
+                      [typeahead]="masterModel.countryInput" [minTermLength]="3" [(ngModel)]="model.factoryCountryIds"
+                      [multiple]="true" class="multiple" (scrollToEnd)="getCountryData(true)" #select>
+                      <ng-template ng-option-tmp let-item="item" let-index="index" let-search="searchTerm">
+                        <span>{{item.name}}</span>
+                      </ng-template>
+                    </ng-select>
+                  </div>
+                </div>
+              </div>
+
+              <div class="row marginTop25">
+                <div class="col-12 col-sm-12 text-right mt-3 mt-sm-0">
+                  <button *ngIf="deleteBtnShow" (click)="openConfirm(content)" class="secondary-cta small mr-2">
+                    {{ 'CS_ALLOCATION.LBL_DELETE' | translate }}
+                  </button>
+                  <button id="btnAdd" class="secondary-cta small mr-2" [disabled]="masterModel.searchloading"
+                    (click)="openNewPopUp(saveCSAlllocation, false)">
+                    + {{
+                    'COMMON.LBL_NEW' | translate
+                    }}
+                  </button>
+                  <button class="secondary-cta small mr-2" (click)="export()"
+                    [disabled]="masterModel.exportLoading || masterModel.searchloading"
+                    *ngIf="model.items != null && model.items.length != 0  && !model.noFound">
+                    {{ 'QUOTATION_SUMMARY.LBL_EXPORT' | translate }}
+                    <span *ngIf="masterModel.exportLoading">
+                      <i class="fa fa-refresh fa-spin" aria-hidden="true"></i>
+                    </span>
+                  </button>
+                  <button id="btnSearch" [disabled]="masterModel.searchloading" class="primary-cta small"
+                    (click)="searchDetails()">
+                    {{
+                    'COMMON.LBL_SEARCH' | translate
+                    }}
+                    <span *ngIf="masterModel.searchloading">
+                      <i class="fa fa-refresh fa-spin" aria-hidden="true"></i>
+                    </span>
+                  </button>
+                </div>
+              </div>
+              <div class="result-container">
+                <p class="record-count" *ngIf="(model.items && model.items.length>0)"> {{ 'CS_ALLOCATION.MSG_SHOWING' |
+                  translate }}&nbsp;{{((model.index-1)*(model.pageSize))+1}}&nbsp;{{ 'CS_ALLOCATION.MSG_TO' | translate
+                  }}&nbsp;{{(model.index*model.pageSize)>model.totalcount?model.totalCount:(model.index*model.pageSize)}}&nbsp;{{
+                  'CS_ALLOCATION.MSG_OF' | translate }}&nbsp;{{model.totalCount}}&nbsp;{{ 'CS_ALLOCATION.MSG_RECORDS' |
+                  translate }} </p>
+                <div class="table-container" *ngIf="(model.items && model.items.length>0)">
+                  <table class="pagination-table bordered">
+                    <thead>
+                      <tr>
+                        <th class="Center_Middle">
+                          <div class="styled-checkbox-container">
+                            <input type="checkbox" class="styled-checkbox" id="checkboxall"
+                              [(ngModel)]="selectedAllCSSummary" (change)="selectAllCS();" />
+                            <label for="checkboxall"></label>
+                          </div>
+                        </th>
+                        <th class="Center_Middle"></th>
+                        <th>{{ 'CS_ALLOCATION.LBL_CustomerName' | translate }}</th>
+                        <th>{{ 'CS_ALLOCATION.LBL_STAFF_NAME' | translate }}</th>
+                        <th>{{ 'CS_ALLOCATION.LBL_OFFICE' | translate }}</th>
+                        <th>{{ 'CS_ALLOCATION.LBL_BRAND' | translate }}</th>
+                        <th>{{ 'CS_ALLOCATION.LBL_SERVICE' | translate }}</th>
+                        <th>{{ 'CS_ALLOCATION.LBL_PRIMARY_CS' | translate}}</th>
+                        <th>{{ 'CS_ALLOCATION.LBL_PRIMARY_REPORT_CHECKER' | translate}}</th>
+                        <th>{{ 'CS_ALLOCATION.LBL_PRODUCT_CATEGORY' | translate }}</th>
+                        <th>{{ 'CS_ALLOCATION.LBL_DEPARTMENT' | translate }}</th>
+                        <th>{{ 'BOOKING_SUMMARY.LBL_FACTORY_COUNTRY' | translate }}</th>
+                        <th class="mobile-hide tablet-hide"></th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <ng-container *ngFor="let iteminfo of model.items">
+                        <tr>
+                          <td class="Center_Middle">
+                            <div class="styled-checkbox-container">
+                              <input type="checkbox" class="styled-checkbox" id="checkbox-{{iteminfo.id}}"
+                                [(ngModel)]="iteminfo.selected" (change)="checkIfAllCSSelected();">
+                              <label for="checkbox-{{iteminfo.id}}"></label>
+                            </div>
+                          </td>
+                          <td class="Center_Middle">
+                            <span class="table-cta icon-cta common-tooltip"
+                              (click)="onEditCSAllocation(iteminfo.id,saveCSAlllocation)" data-tooltip="Edit">
+                              <img src="assets/images/cta-edit.svg" alt="Edit">
+                            </span>
+                            <span class="table-cta icon-cta common-tooltip" *ngIf="hasITRole" data-tooltip="delete">
+                              <img src="assets/images/cta-delete.svg" alt="Delete"></span>
+                          </td>
+                          <td>{{iteminfo.customerName}}</td>
+                          <td>{{iteminfo.staffName}}</td>
+                          <td>{{iteminfo.offices}}</td>
+                          <td>{{iteminfo.brands}}</td>
+                          <td>{{iteminfo.services}}</td>
+                          <td class="Center_Middle">
+                            <div class="styled-checkbox-container">
+                              <input class="styled-checkbox" id="primarcs-{{iteminfo.backupCS}}" disabled
+                                type="checkbox" [(ngModel)]="iteminfo.backupCS">
+                              <label for="primarcs-{{iteminfo.id}}"></label>
+                            </div>
+                          </td>
+                          <td class="Center_Middle">
+                            <div class="styled-checkbox-container">
+                              <input class="styled-checkbox" id="primarcs-{{iteminfo.backupReportChecker}}" disabled
+                                type="checkbox" [(ngModel)]="iteminfo.backupReportChecker">
+                              <label for="primarcs-{{iteminfo.id}}"></label>
+                            </div>
+                          </td>
+                          <td>{{iteminfo.productCategory}}</td>
+                          <td>{{iteminfo.departments}}</td>
+                          <td>{{iteminfo.factoryCountries}}</td>
+                        </tr>
+                      </ng-container>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+              <div class="pagination-container" *ngIf="(model && model.items && model.items.length>0)">
+                <select class="small" [(ngModel)]="selectedPageSize" (change)="SearchDetails()">
+                  <option *ngFor="let item of pagesizeitems" [ngValue]=item>{{item}}</option>
+                </select>
+                <ngb-pagination (pageChange)="onPager($event)" [pageSize]="model.pageSize"
+                  [collectionSize]="model.totalCount" [(page)]="model.index" [maxSize]="5">
+                </ngb-pagination>
+              </div>
+              <div class="no-result-container" *ngIf="model.noFound">
+                <img src="assets/images/no-data.png" alt="" class="icon">
+                <h4 class="title">{{ 'CS_ALLOCATION.LBL_NOITEMS' | translate }}</h4>
+                <p>{{ 'CS_ALLOCATION.LBL_NODATA' | translate }}</p>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+<ng-template #saveCSAlllocation let-modal>
+
+  <div class="modal-header custom-modal-header">
+    <h4 class="modal-title" id="modal-basic-title">{{ 'CS_ALLOCATION.LBL_ADD_CUSTOMER_SERVICE' | translate}}
+    </h4>
+    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+
+  <div class="modal-body custom-modal-body">
+    <div class="content-container schedule-allocation-container">
+      <div class="formPadding">
+        <div class="row">
+          <div class="col-sm-3 mobile-margin-top-15 col-lg-4">
+            <div class="my-input-group">
+              <label class="required">{{ 'CS_ALLOCATION.LBL_CUSTOMER' | translate }}</label>
+              <ng-select bindLabel="name" bindValue="id" [multiple]="false" [items]="editMasterModel.customerList"
+                (clear)="clearEditCustomer()" [clearable]="true" [(ngModel)]="editModel.customerId"
+                [virtualScroll]="true" (scrollToEnd)="getEditCustomerData(true)"
+                [typeahead]="editMasterModel.customerInput" [minTermLength]="3"
+                (change)="changeEditCustomerData($event)" [ngClass]="{'is-invalid': !validator.isValid('customerId')}"
+                placeholder="--- {{ (editMasterModel.customerList!=null && editMasterModel.customerList.length!=0? 'COMMON.LBL_SELECT':'COMMON.LBL_NO_DATA' ) | translate }} ---"
+                appendTo="body" [loading]="masterModel.customerLoading">
+                <ng-template ng-option-tmp let-item="item">
+                  <div class="text-wrap">{{ item.name }}</div>
+                </ng-template>
+              </ng-select>
+              <div *ngIf="!validator.isValid('customerId')" class="invalid-feedback" style="display:block">
+                <div *ngFor="let error of validator.getErrors('customerId')">
+                  {{ error | translate }}</div>
+              </div>
+            </div>
+          </div>
+          <div class="col-sm-3 mobile-margin-top-15 col-lg-4">
+            <div class="my-input-group">
+              <label class="required">{{ 'CS_ALLOCATION.LBL_SERVICE' | translate }}</label>
+              <ng-select bindLabel="name" class="multiple" bindValue="id" [multiple]="true"
+                [items]="editMasterModel.serviceList" [clearable]="true" [(ngModel)]="editModel.serviceIds"
+                [ngClass]="{'is-invalid': !validator.isValid('serviceIds')}"
+                placeholder="--- {{ (editMasterModel.serviceList!=null && editMasterModel.serviceList.length!=0? 'COMMON.LBL_SELECT':'COMMON.LBL_NO_DATA' ) | translate }} ---"
+                appendTo="body" [loading]="editMasterModel.serviceLoading">
+                <ng-template ng-option-tmp let-item="item">
+                  <div class="text-wrap">{{ item.name }}</div>
+                </ng-template>
+              </ng-select>
+              <div *ngIf="!validator.isValid('serviceIds')" class="invalid-feedback" style="display:block">
+                <div *ngFor="let error of validator.getErrors('serviceIds')">
+                  {{ error | translate }}</div>
+              </div>
+            </div>
+          </div>
+          <div class="col-sm-3 mobile-margin-top-15 col-lg-4">
+            <div class="my-input-group">
+              <label class="required">{{ 'CS_ALLOCATION.LBL_OFFICE' | translate }}</label>
+              <ng-select bindLabel="name" class="multiple" bindValue="id" [multiple]="true"
+                [items]="editMasterModel.officeList" [clearable]="true" [(ngModel)]="editModel.officeIds"
+                [ngClass]="{'is-invalid': !validator.isValid('officeIds')}"
+                placeholder="--- {{ (editMasterModel.officeList!=null && editMasterModel.officeList.length!=0? 'COMMON.LBL_SELECT':'COMMON.LBL_NO_DATA' ) | translate }} ---"
+                appendTo="body" [loading]="editMasterModel.officeLoading">
+                <ng-template ng-option-tmp let-item="item">
+                  <div class="text-wrap">{{ item.name }}</div>
+                </ng-template>
+              </ng-select>
+              <div *ngIf="!validator.isValid('officeIds')" class="invalid-feedback" style="display:block">
+                <div *ngFor="let error of validator.getErrors('officeIds')">
+                  {{ error | translate }}</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row marginTop20">
+          <div class="col-sm-3 mobile-margin-top-15 col-lg-4">
+            <div class="my-input-group">
+              <label>{{ 'CS_ALLOCATION.LBL_BRAND' | translate }}</label>
+              <ng-select bindLabel="name" class="multiple" bindValue="id" [multiple]="true"
+                [items]="editMasterModel.brandList" [clearable]="false" [(ngModel)]="editModel.brandIds"
+                placeholder="--- {{ (editMasterModel.brandList!=null && editMasterModel.brandList.length!=0? 'COMMON.LBL_SELECT':'COMMON.LBL_NO_DATA' ) | translate }} ---"
+                appendTo="body" [loading]="editMasterModel.brandLoading">
+                <ng-template ng-option-tmp let-item="item">
+                  <div class="text-wrap">{{ item.name }}</div>
+                </ng-template>
+              </ng-select>
+            </div>
+          </div>
+
+          <div class="col-sm-3 mobile-margin-top-15 col-lg-4">
+            <div class="my-input-group">
+              <label>{{ 'CS_ALLOCATION.LBL_DEPARTMENT' | translate }}</label>
+              <ng-select bindLabel="name" class="multiple" bindValue="id" [multiple]="true"
+                [items]="editMasterModel.deptList" [clearable]="false" [(ngModel)]="editModel.departmentIds"
+                placeholder="--- {{ (editMasterModel.deptList!=null && editMasterModel.deptList.length!=0? 'COMMON.LBL_SELECT':'COMMON.LBL_NO_DATA' ) | translate }} ---"
+                appendTo="body" [loading]="editMasterModel.deptLoading">
+                <ng-template ng-option-tmp let-item="item">
+                  <div class="text-wrap">{{ item.name }}</div>
+                </ng-template>
+              </ng-select>
+            </div>
+          </div>
+
+          <div class="col-sm-3 mobile-margin-top-15 col-lg-4">
+            <div class="my-input-group">
+              <label>{{ 'CS_ALLOCATION.LBL_PRODUCT_CATEGORY' | translate }}</label>
+              <ng-select bindLabel="name" class="multiple" bindValue="id" [multiple]="true"
+                [items]="editMasterModel.productCategoryList" [clearable]="false"
+                [(ngModel)]="editModel.productCategoryIds"
+                placeholder="--- {{ (editMasterModel.productCategoryList!=null && editMasterModel.productCategoryList.length!=0? 'COMMON.LBL_SELECT':'COMMON.LBL_NO_DATA' ) | translate }} ---"
+                appendTo="body" [loading]="editMasterModel.productCategoryLoading">
+                <ng-template ng-option-tmp let-item="item">
+                  <div class="text-wrap">{{ item.name }}</div>
+                </ng-template>
+              </ng-select>
+            </div>
+          </div>
+        </div>
+
+        <div class="row marginTop20">
+          <div class="col-sm-3 mobile-margin-top-15 col-lg-4">
+            <div class="my-input-group">
+              <label class="required">{{ 'CS_ALLOCATION.LBL_STAFF' | translate }}</label>
+              <ng-select bindLabel="name" class="multiple" bindValue="id" [multiple]="true"
+                [items]="editMasterModel.staffList" (clear)="clearCountryData()" [disabled]="editModel.isEdit"
+                [(ngModel)]="editModel.userIds" [clearable]="true" [virtualScroll]="true"
+                (scrollToEnd)="getStaffData(true,true)" [typeahead]="editMasterModel.staffInput" placeholder="--- {{ (editMasterModel.staffList!=null && editMasterModel.staffList.length!=0? 'COMMON.LBL_SELECT':
+                                'COMMON.LBL_NO_DATA' ) | translate }} --- " (change)="changeStaffData($event)"
+                appendTo="body " [loading]="editMasterModel.staffLoading ">
+                <ng-template ng-option-tmp let-item="item ">
+                  <div class="text-wrap ">{{ item.name }}</div>
+                </ng-template>
+              </ng-select>
+              <div *ngIf="!validator.isValid('userIds')" class="invalid-feedback" style="display:block">
+                <div *ngFor="let error of validator.getErrors('userIds')">
+                  {{ error | translate }}</div>
+              </div>
+            </div>
+          </div>
+          <div class="col-sm-3 mobile-margin-top-15 col-md-3 col-lg-4">
+            <div class="my-input-group">
+              <label for="">{{ 'BOOKING_SUMMARY.LBL_FACTORY_COUNTRY' | translate}}</label>
+              <ng-select appendTo="body" [items]="editMasterModel.countryList" [virtualScroll]="true"
+                [loading]="editMasterModel.countryLoading" bindLabel="name" bindValue="id"
+                placeholder="--- {{ (editMasterModel.countryList!=null && editMasterModel.countryList.length!=0? 'COMMON.LBL_SELECT':'COMMON.LBL_NO_DATA' ) | translate }} ---"
+                [typeahead]="editMasterModel.countryInput" [minTermLength]="3" [(ngModel)]="editModel.factoryCountryIds"
+                [multiple]="true" class="multiple" (clear)="clearCountryData(true)"
+                (scrollToEnd)="getCountryData(true,true)" #select>
+                <ng-template ng-option-tmp let-item="item" let-index="index" let-search="searchTerm">
+                  <span>{{item.name}}</span>
+                </ng-template>
+              </ng-select>
+            </div>
+          </div>
+        </div>
+        <div class="row marginTop20" *ngIf="(staffValidators && staffValidators.length>0)">
+          <div class="col mobile-margin-top-15">
+            <table class="pagination-table bordered">
+              <thead>
+                <tr>
+                  <th>{{ 'CS_ALLOCATION.LBL_STAFF_NAME' | translate }}</th>
+                  <th>
+                    <lable class="required">{{ 'CS_ALLOCATION.LBL_PROFILE' | translate }}</lable>
+                  </th>
+                  <th class="Center_Middle">{{ 'CS_ALLOCATION.LBL_PRIMARY_CS' | translate }}</th>
+                  <th class="Center_Middle">{{ 'CS_ALLOCATION.LBL_PRIMARY_REPORT_CHECKER' | translate }}
+                  </th>
+                  <th>{{ 'CS_ALLOCATION.LBL_NOTIFICATION' | translate }}</th>
+                </tr>
+              </thead>
+              <tbody>
+                <ng-container *ngFor="let iteminfo of staffValidators">
+                  <tr>
+                    <td>{{iteminfo.staff.name}}</td>
+                    <td>
+                      <ng-select [(ngModel)]="iteminfo.staff.profile" bindLabel="name" bindValue="id" [multiple]="false"
+                        [items]="editMasterModel.profileList"
+                        [ngClass]="{ 'is-invalid': !iteminfo.validator.isValid( 'profile')} " placeholder="--- {{ (editMasterModel.profileList!=null && editMasterModel.profileList.length!=0? 'COMMON.LBL_SELECT':
+                                            'COMMON.LBL_NO_DATA' ) | translate }} --- " appendTo="body"
+                        (change)="changeProfile($event,iteminfo.staff)">
+                        <ng-template ng-option-tmp let-item="item ">
+                          <div class="text-wrap ">{{ item.name }}</div>
+                        </ng-template>
+                      </ng-select>
+                      <div *ngIf="!iteminfo.validator.isValid( 'profile') " class="invalid-feedback "
+                        style="display:block ">
+                        <div *ngFor="let error of iteminfo.validator.getErrors( 'profile') ">
+                          {{ error | translate }}</div>
+                      </div>
+                    </td>
+                    <td class="Center_Middle">
+                      <div class="styled-checkbox-container">
+                        <input class="styled-checkbox"
+                          *ngIf="iteminfo.staff.isprimaryCSHide && iteminfo.staff.profile!=editMasterModel.hRProfileEnum.ReportChecker"
+                          (change)="onChnagePrimaryCS($event,iteminfo.staff.id)"
+                          id="primarycs-checkbookid-{{iteminfo.staff.id}}" type="checkbox"
+                          [(ngModel)]="iteminfo.staff.primaryCS">
+                        <label for="primarycs-checkbookid-{{iteminfo.staff.id}}"></label>
+                      </div>
+                    </td>
+                    <td class="Center_Middle">
+                      <div class="styled-checkbox-container">
+                        <input class="styled-checkbox" id="primaryreportchecker-checkbookid-{{iteminfo.staff.id}}"
+                          *ngIf="iteminfo.staff.isprimaryReportCheckerHide"
+                          (change)="onCngePrimaryReportChecker($event,iteminfo.staff.id)" type="checkbox"
+                          [(ngModel)]="iteminfo.staff.primaryReportChecker">
+                        <label for="primaryreportchecker-checkbookid-{{iteminfo.staff.id}}"></label>
+                      </div>
+                    </td>
+                    <td>
+                      <ng-select bindLabel="name" class="multiple" bindValue="id" [multiple]="true"
+                        [items]="iteminfo.staff.notificationList" placeholder="--- {{ (iteminfo.staff.notificationList!=null && iteminfo.staff.notificationList.length!=0? 'COMMON.LBL_SELECT':
+                                            'COMMON.LBL_NO_DATA' ) | translate }} --- " appendTo="body "
+                        [(ngModel)]="iteminfo.staff.notification">
+                        <ng-template ng-option-tmp let-item="item ">
+                          <div class="text-wrap ">{{ item.name }}</div>
+                        </ng-template>
+                      </ng-select>
+                    </td>
+                  </tr>
+                </ng-container>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <div class="marginTop20 modal-footer">
+          <button [disabled]="saveloading " class="secondary-cta MarginR-20 " (click)="cancel() ">
+            {{'COMMON.LBL_CONFIRMCANCEL' | translate}}
+          </button>
+          <button [disabled]="saveloading " class="primary-cta MarginR-20 " (click)="save() ">
+            {{'COMMON.LBL_SAVE' | translate}}
+            <span *ngIf="saveloading ">
+              <i class="fa fa-refresh fa-spin " aria-hidden="true "></i>
+            </span>
+          </button>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #content let-modal>
+  <div class="modal-body">
+    <div class="small-model">
+      <h2 class="title">{{ 'CS_ALLOCATION.LBL_CONFIRMDELETION' | translate }}</h2>
+      <p>{{ 'CS_ALLOCATION.MSG_CONFRMDELETE' | translate }}</p>
+      <button class="secondary-cta" (click)="modal.dismiss('Cross click');deleteRefresh();">{{
+        'COMMON.LBL_CONFIRMCANCEL' | translate }}</button>
+      <button class="primary-cta" (click)="deleteCSAllocations(this.modelRemove);">{{ 'COMMON.LBL_OK' | translate
+        }}</button>
+    </div>
+  </div>
+</ng-template>

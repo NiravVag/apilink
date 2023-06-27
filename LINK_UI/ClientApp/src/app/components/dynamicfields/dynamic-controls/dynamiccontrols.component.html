@@ -1,0 +1,52 @@
+<div [formGroup]="form">
+  <label [attr.for]="dynamiccontrol.key" [ngClass]="{'required':dynamiccontrol.required}">{{dynamiccontrol.label}}</label>
+
+  <div [ngSwitch]="dynamiccontrol.controlType">
+
+    <input type="text" [formControlName]="dynamiccontrol.key" [id]="dynamiccontrol.key" *ngSwitchCase="'textbox'"
+      [(ngModel)]="dynamiccontrol.value" [placeholder]="getattributeValue(this._controlAttribute.PlaceHolder)"
+      [maxlength]="getattributeValue(this._controlAttribute.MaxLength)"
+      [minlength]="getattributeValue(this._controlAttribute.MinLength)"
+      [ngClass]="{ 'is-invalid':  dynamiccontrol.requiredNotFound || dynamiccontrol.emailNotValid }"
+      [attr.readonly]="getattributeValue(this._controlAttribute.ReadOnly)=='true' ? '' : null"
+      [attr.disabled]="getattributeValue(this._controlAttribute.Disabled)=='true' ? '' : null">
+
+    <input type="text" maxlength="10" *ngSwitchCase="'datetimepicker'" container="body"
+      [(ngModel)]="dynamiccontrol.value" #datetimepicker [formControlName]="dynamiccontrol.key"
+      [id]="dynamiccontrol.key" ngbDatepicker [ngClass]="{ 'is-invalid':  dynamiccontrol.requiredNotFound }"
+      #sdt="ngbDatepicker" (click)="sdt.toggle()">
+
+
+    <ng-select *ngSwitchCase="'dropdown'" [items]="dynamiccontrol.options" [formControlName]="dynamiccontrol.key"
+      class="multiple" [multiple]="getattributeValue(this._controlAttribute.Multiple)=='true'?true:false"
+      (change)="changeDropDown($event, dynamiccontrol)" [ngClass]="{ 'is-invalid':  dynamiccontrol.requiredNotFound }"
+      [closeOnSelect]="true" [searchable]="true" bindLabel="value" bindValue="key" appendTo="body"
+      [(ngModel)]="dynamiccontrol.value" [placeholder]="getattributeValue(this._controlAttribute.PlaceHolder)">
+    </ng-select>
+
+    <ng-select *ngSwitchCase="'multipledropdown'" [items]="dynamiccontrol.options"
+      [formControlName]="dynamiccontrol.key" [multiple]="true" [closeOnSelect]="true" [searchable]="true"
+      bindLabel="value" bindValue="key" [(ngModel)]="dynamiccontrol.value"
+      [placeholder]="dynamiccontrol.controlAttributeList[0].value">
+    </ng-select>
+
+    <textarea [(ngModel)]="dynamiccontrol.value" *ngSwitchCase="'textarea'"
+      [ngClass]="{ 'is-invalid':  dynamiccontrol.requiredNotFound }" [formControlName]="dynamiccontrol.key" #textarea
+      type="text" [placeholder]="getattributeValue(this._controlAttribute.PlaceHolder)"></textarea>
+
+  </div>
+
+  <div class="invalid-feedback" *ngIf="dynamiccontrol.requiredNotFound">
+    <div>
+      {{dynamiccontrol.label}} is required
+    </div>
+  </div>
+
+
+  <div class="invalid-feedback" *ngIf="dynamiccontrol.emailNotValid">
+    <div>
+      {{dynamiccontrol.label}} is not a valid email
+    </div>
+  </div>
+  <!-- <div class="errorMessage" *ngIf="!isValid">{{dynamiccontrol.label}} is required</div> -->
+</div>

@@ -1,0 +1,351 @@
+.file-upload-header-container {
+    padding: 16px 0 24px 0;
+
+    @media only screen and (min-width: $mobile-min-width) and (max-width: $mobile-max-width){
+        padding-left: 14px;
+    }
+
+    .header-arrow {
+        width: 20px;
+        opacity: 0.8;
+        cursor: pointer;
+        margin-right: 24px;
+        padding-bottom: 5px;
+        transition: ease all 0.4s;
+
+        &:hover{
+            opacity: 1;
+            transform: scale(1.1);
+        }
+    }
+
+    .header-text {
+        font-size: 20px;
+        color: $primary-color;
+        font-family: $roboto-medium;
+    }
+}
+
+.stage-container {
+    width: 100%;
+    display: flex;
+    position: relative;
+    text-align: center;
+    justify-content: space-between;
+
+    @media only screen and (min-width: $mobile-min-width) and (max-width: $mobile-max-width){
+        padding: 0 14px;
+    }
+
+    &::after {
+        top: 15px;
+        left: 40px;
+        right: 30px;
+        content: "";
+        position: absolute;
+        border-bottom: 1px dashed #8296af;
+    }
+
+    
+    .level-wrapper{
+        z-index: 1;
+        
+        .level {
+
+            color: #353e45;
+            font-size: 20px;
+            padding: 8px 14px;
+            border-radius: 20px;
+            background-color: $white;
+            font-family: $roboto-medium;
+        }
+
+        .text {
+            color: #353e45;
+            margin-top: 8px;
+            font-size: 14px;
+            margin-bottom: 0;
+            font-family: $roboto-regular;
+        }
+
+        &.finish {
+
+            .level {
+                margin-top: -3px;
+                padding: 10px;
+                content: url('../assets/images/new-set/green-tick.svg');
+            }
+
+            .text {
+                margin-top: -5px;
+                color: #020e16;   
+            }
+
+        }
+
+        &.active {
+
+            .level {
+                color: $white;
+                background-color: $secondary-brand-color;
+                box-shadow: 0 6px 7px 0 rgba(70, 101, 117, 0.31);
+            }
+
+            .text {
+                color: #020e16;   
+            }
+        }
+    }
+
+    
+}
+
+.footer {
+    bottom: 0;
+    // position: sticky;
+}
+
+.upload-container {
+    display: flex;
+    justify-content: center;
+
+    .file-upload-layout-wrapper {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-end;
+    
+        .card-wrapper {
+            width: 675px;
+            box-shadow: 0 2px 10px 0 rgba(18, 20, 26, 0.08);
+
+            @media only screen and (min-width: $mobile-min-width) and (max-width: $mobile-max-width){
+                max-width: 332px;
+            }
+    
+            .card-title{
+                color: #12141a;
+                font-size: 16px;
+                margin-bottom: 16px;
+                font-family: $roboto-medium;
+            }
+    
+            .card-subtitle{
+                color: #12141a;
+                font-size: 14px;
+                margin-bottom: 16px;
+                margin-top: 0;
+                font-family: $roboto-regular;
+
+                @media only screen and (min-width: $mobile-min-width) and (max-width: $mobile-max-width){
+                    width: 90%;
+                }
+            }
+
+            .align-column {
+
+                @media only screen and (min-width: $mobile-min-width) and (max-width: $mobile-max-width){
+                    display: flex;
+                    flex-direction: column;
+                }
+            }
+    
+            .upload-input-wrapper{
+                display: flex;
+
+                @media only screen and (min-width: $mobile-min-width) and (max-width: $mobile-max-width){
+                    display: block;
+                }
+    
+                div{
+                    flex: 1;
+                }
+            }
+    
+            .image-upload-container{
+                display: flex;
+                align-items: center;
+                margin-top: 16px;
+    
+                .uploading-process{
+                    margin-left: 13px;
+                    margin-right: 20px;
+    
+                    .upload-text{
+                        font-size: 12px;
+                        margin-bottom: 0;
+                        color: $primary-color;
+                        font-family: $roboto-regular;
+                    }
+    
+                    .progress-bar{
+                        width: 100%;
+                        height: 6px;
+                        margin-top: 2px;
+                        border-radius: 3px;
+                        background-color: $secondary-brand-light-color;
+    
+                        .complete{
+                            height: 6px;
+                            border-radius: 3px;
+                            background-color: $secondary-brand-color;
+                        }
+                    }
+                }
+            }
+
+            .file-upload-container {
+                
+                @media only screen and (min-width: $mobile-min-width) and (max-width: $mobile-max-width){
+                    padding: 16px 0 16px 10px;
+                }
+
+                .upload-title {
+                    font-size: 14px;
+                }
+            }
+    
+            .file-attachment-container{
+                margin-top: 18px;
+    
+                .file-attached-container{
+    
+                    .attachment{
+                        min-width: 313px;
+                        padding: 6px 12px;
+                        justify-content:flex-start;
+
+                        @media only screen and (min-width: $mobile-min-width) and (max-width: $mobile-max-width){
+                            min-width: 300px;
+                        }
+    
+                        .file-name{
+                            flex: 1;
+                        }
+                    }
+                }
+            }
+    
+            .download-link{
+                margin: 0;
+                color: #2e3f55;
+                font-size: 14px;
+                margin-top: 12px;
+    
+                img{
+                    width: 16px;
+                    margin-right: 8px;
+                    vertical-align: sub;
+                }
+            }
+
+            .styled-radio-container {
+
+                @media only screen and (min-width: $mobile-min-width) and (max-width: $mobile-max-width){
+                    margin-bottom: 15px;
+                }
+            }
+        }
+    }
+}
+
+
+.mapping-container{
+    width: 100%;
+    float: left;
+    margin: 24px 0;
+    border-radius: 4px;
+    padding: 20px 20px 8px;
+    background-color: $white;
+    box-shadow: 0 2px 10px 0 rgba(18, 20, 26, 0.08);
+
+    .section-heading{
+        color: #12141a;
+        font-size: 16px;
+        margin-bottom: 16px;
+        font-family: $roboto-medium;
+    }
+
+    .asterisk {
+        color: #f81538;
+    }
+}
+
+.alert-container {
+    margin-bottom: 4px;
+
+    .my-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    img {
+        margin-right: 8px;
+    }
+
+    &.success{
+		background-color: rgba(36, 193, 30, 0.1);
+
+		p{
+            font-size: 14px;
+            color: #167412;
+            font-family: $roboto-medium;
+		}
+	}
+
+    &.alert{
+		background-color: rgba(248, 21, 56, 0.1);
+
+        p{
+            font-size: 14px;
+            color: #950d22;
+            font-family: $roboto-medium;
+        }
+    }
+
+}
+
+.success-container {
+    display: flex;
+    justify-content: center;
+
+    .card-wrapper {
+        width: 425px;
+        padding: 32px 0;
+        text-align: center;
+
+        @media only screen and (min-width: $mobile-min-width) and (max-width: $mobile-max-width){
+            width: 316px;
+            padding: 24px 0;
+        }
+
+        .card-title {
+            font-size: 20px;
+            color: #020e16;
+            font-family: $roboto-medium;
+            margin-top: 24px;
+
+            @media only screen and (min-width: $mobile-min-width) and (max-width: $mobile-max-width){
+                margin-top: 12px;
+            }
+        }
+
+        .card-subtitle {
+            font-size: 16px;
+            color: #676e73;
+            font-family: $roboto-regular;
+            margin-bottom: 24px;
+
+            @media only screen and (min-width: $mobile-min-width) and (max-width: $mobile-max-width){
+                margin-bottom: 12px;
+            }
+        }
+    }
+}
+
+.marginLeft4 {
+    margin-left: 4px !important;
+}
+
+
+

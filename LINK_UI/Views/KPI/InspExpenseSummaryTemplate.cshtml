@@ -1,0 +1,123 @@
+﻿
+@{
+    ViewData["Title"] = "InspExpenseSummaryTemplate";
+}
+
+@model DTO.Kpi.ExportResult
+
+<xls-sheet name="Insp_Result_summary">
+    <table xls-begin="A:1" style="border-style:solid">
+        <tr style="background-color:#f5f5f5;font-weight:bold;text-align:center">
+            <th>Insp. No.</th>
+            <th>Customer Ref.</th>
+            <th>Customer Name</th>
+            <th>Buyer</th>
+            <th>Department</th>
+            <th>Customer Contact</th>
+            <th>Collection</th>
+            <th>Inspection Office</th>
+            <th>Supplier</th>
+            <th>Factory</th>
+            <th>Factory Address</th>
+            <th>Country</th>
+            <th>Province</th>
+            <th>City</th>
+            <th>PO No</th>
+            <th>Service Type</th>
+            <th>Status</th>
+            <th>Product Category</th>
+            <th>Product Subcat 1</th>
+            <th>Product Subcat 2</th>
+            <th>Service Date From</th>
+            <th>Service Date To</th>
+            <th>Month</th>
+            <th>Year</th>
+            <th>Invoice No.</th>
+            <th>Invoice Date</th>
+            <th>Charge To Cust/Supp</th>
+            <th style="text-align:center">Mandays</th>
+            <th style="text-align:center">Inspection Fee</th>
+            <th style="text-align:center">Travel costs</th>
+            <th style="text-align:center">Other Expense</th>
+            <th style="text-align:center">Extra Fee Total</th>
+            <th style="text-align:center">Discount</th>
+            <th style="text-align:center">Total Fee</th>
+            <th style="text-align:center">Inspection Fee (Invoice)</th>
+            <th style="text-align:center">Travel costs(Invoice)</th>
+            <th style="text-align:center">Hotel costs(Invoice)</th>
+            <th style="text-align:center">Other Expense(Invoice)</th>
+            <th style="text-align:center">Discount(Invoice)</th>
+            <th style="text-align:center">ExtraFees(Invoice)</th>
+            <th style="text-align:center">Total Fee(Invoice)</th>
+            <th style="text-align:center">Currency(Invoice)</th>
+            <th>Inspector Name</th>
+            <th style="text-align:center">Product Count</th>
+            <th style="text-align:center">Report Count</th>
+            <th style="text-align:center">Sample Size Count</th>
+            <th style="text-align:center"># Passed</th>
+            <th style="text-align:center"># Pending</th>
+            <th style="text-align:center"># Failed</th>
+            <th style="text-align:center"># Missing</th>
+        </tr>
+        @foreach (var item in Model.Data)
+        {
+        <tr>
+            <td width="150px" xls-type="number">@item.BookingNo</td>
+            <td width="250px">@Html.Raw(@item.CustomerBookingNo)</td>
+            <td width="250px">@Html.Raw(@item.CustomerName)</td>
+            <td withd="250px">@Html.Raw(@item.BuyerName)</td>
+            <td width="250px">@Html.Raw(@item.DeptCode)</td>
+            <td width="250px">@Html.Raw(@item.CustomerContact)</td>
+            <td width="250px">@Html.Raw(@item.CollectionName)</td>
+            <td width="250px">@Html.Raw(@item.Office)</td>
+            <td width="250px">@Html.Raw(@item.SupplierName)</td>
+            <td width="250px">@Html.Raw(@item.FactoryName)</td>
+            <td width="250px">@Html.Raw(@item.FactoryAddress)</td>
+            <td width="250px">@Html.Raw(@item.FactoryCountry)</td>
+            <td width="250px">@Html.Raw(@item.FactoryState)</td>
+            <td width="250px">@Html.Raw(@item.FactoryCity)</td>
+            <td width="250px">@Html.Raw(@item.PONumber)</td>
+            <td width="250px">@Html.Raw(@item.ServiceTypeName)</td>
+            <td width="250px">@item.bookingStatus</td>
+            <td width="250px">@Html.Raw(@item.ProductCategory)</td>
+            <td width="250px">@Html.Raw(@item.ProductSubCategory)</td>
+            <td width="250px">@Html.Raw(@item.ProductSubCategory2)</td>
+            <td width="250px">@item.InspectionStartDate</td>
+            <td width="250px">@item.InspectionEndDate</td>
+            <td xls-type="number">@item.Month</td>
+            <td xls-type="number">@item.Year</td>
+            <td width="250px">@Html.Raw(@item.InvoiceNumber)</td>
+            <td width="250px">@item.InvoiceDate</td>
+            <td width="250px">@item.PaidBy</td>
+            <td width="150px" xls-type="number" style="text-align:center">@item.ManDay</td>
+            <td width="150px" xls-type="number" style="text-align:center">@item.InspectionFee</td>
+            <td width="150px" xls-type="number" style="text-align:center">@item.TravellingCost</td>
+            <td width="150px" xls-type="number" style="text-align:center">@item.OtherFee</td>
+            <td width="150px" xls-type="number" style="text-align:center">@item.ExtraFee</td>
+            <td width="150px" xls-type="number" style="text-align:center">@item.Discount</td>
+            <td width="150px" xls-type="number" style="text-align:center">@item.TotalInspectionFee</td>
+
+            <td width="150px" xls-type="number" style="text-align:center">@item.Invoice_InspectionFee</td>
+            <td width="150px" xls-type="number" style="text-align:center">@item.Invoice_TravelFee</td>
+            <td width="150px" xls-type="number" style="text-align:center">@item.Invoice_HotelFee</td>
+            <td width="150px" xls-type="number" style="text-align:center">@item.Invoice_OtherFee</td>
+            <td width="150px" xls-type="number" style="text-align:center">@item.Invoice_Discount</td>
+            <td width="150px" xls-type="number" style="text-align:center">@item.Invoice_ExtraFee</td>
+            <td width="150px" xls-type="number" style="text-align:center">@item.Invoice_TotalFee</td>
+            <td width="150px" xls-type="number" style="text-align:center">@item.Invoice_Currency</td>
+
+            <td width="250px">@Html.Raw(@item.QcmName)</td>
+            <td width="150px" xls-type="number" style="text-align:center">@item.ProductCount</td>
+            <td width="150px" xls-type="number" style="text-align:center">@item.TotalReports</td>
+            <td width="150px" xls-type="number" style="text-align:center">@item.SampleSize</td>
+            <td width="150px" xls-type="number" style="text-align:center">@item.TotalReportPass</td>
+            <td width="150px" xls-type="number" style="text-align:center">@item.TotalReportPending</td>
+            <td width="150px" xls-type="number" style="text-align:center">@item.TotalReportFail</td>
+            <td width="150px" xls-type="number" style="text-align:center">@item.TotalReportMissing</td>
+        </tr>
+        }
+    </table>
+</xls-sheet>
+
+
+

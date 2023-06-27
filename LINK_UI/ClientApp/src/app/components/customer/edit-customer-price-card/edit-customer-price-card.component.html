@@ -1,0 +1,2488 @@
+<div class="main-wrapper">
+    <div class="wrapper dashboard-wrapper">
+        <div class="my-container">
+            <div class="master-body">
+                <div class="title-container">
+                    <div class="header-back-button" *ngIf="fromSummary">
+                        <img src="assets/images/back-red.png" alt="back" (click)="returnToSummary()">
+                    </div>
+                    <h3 class="main-title" *ngIf="model &&copyId && model.id && model.id>0  && copyId !=0">
+                        {{ 'COMMON.LBL_EDIT' | translate }}
+                        {{ 'EDIT_CUSTOMER_PRICE_CARD.TITLE' | translate }}
+                    </h3>
+                    <h3 class="main-title" *ngIf="!model || !copyId || model.id==null || !(model.id>0) || copyId ==0">
+                        {{ 'COMMON.LBL_NEW' | translate }}
+                        {{ 'EDIT_CUSTOMER_PRICE_CARD.TITLE' | translate }}
+                    </h3>
+                    <span class="audit-id" *ngIf="model && model.id!=null && model.id>0  && copyId !=0">
+                        #{{model.id}}
+                    </span>
+                </div>
+                <div class="content-container quotation-container">
+                    <div class="container-head">
+                        <img class="head-icon" src="assets/images/general.png" alt="">
+                        {{ 'EDIT_CUSTOMER_PRICE_CARD.LBL_MAIN' | translate }}
+                    </div>
+                    <div class="row formPadding editMode">
+                        <div class="col-sm-12">
+                            <div class="row">
+                                <h6 class="quote-form-title"> {{ 'EDIT_CUSTOMER_PRICE_CARD.LBL_PRICE_MAIN' | translate
+                                    }}</h6>
+                            </div>
+                            <div class="row marginTop15">
+                                <div class="col-sm-4 col-md-4 col-lg-4">
+                                    <div class="my-input-group">
+                                        <label class="required">{{ 'EDIT_CUSTOMER_PRICE_CARD.LBL_CUSTOMER' | translate
+                                            }}</label>
+                                        <ng-select appendTo="body" [multiple]="false" [clearable]="false"
+                                            [closeOnSelect]="true" [searchable]="true"
+                                            [loading]="masterData.customerLoading" bindLabel="name"
+                                            placeholder="--- {{(masterData.customerList && masterData.customerList.length>0? 'COMMON.LBL_SELECT':'COMMON.LBL_NO_DATA')  | translate }} ---"
+                                            [ngClass]="{ 'is-invalid': !validator.isValid('customerId')}"
+                                            [items]="masterData.customerList" (change)="setSupplierCustomerChange()"
+                                            [(ngModel)]="model.customerId" bindValue="id">
+                                            <ng-template ng-option-tmp let-item="item">
+                                                <div class="text-wrap">{{ item.name }}</div>
+                                            </ng-template>
+
+                                        </ng-select>
+                                        <div *ngIf="!validator.isValid('customerId')" class="invalid-feedback">
+                                            <div *ngFor="let error of validator.getErrors('customerId')">
+                                                {{ error | translate }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-4 col-md-4 col-lg-4 mobile-margin-top-15">
+                                    <div class="my-input-group">
+                                        <label>{{ 'EDIT_CUSTOMER_PRICE_CARD.LBL_SUPPLIER' | translate }}</label>
+                                        <ng-select appendTo="body" [multiple]="true" [clearable]="false"
+                                            class="multiple" [closeOnSelect]="true" [searchable]="true"
+                                            placeholder="--- {{(masterData.supplierList && masterData.supplierList.length>0? 'COMMON.LBL_SELECT':'COMMON.LBL_NO_DATA')  | translate }} ---"
+                                            bindLabel="name" [(ngModel)]="model.supplierIdList" bindValue="id"
+                                            [items]="masterData.supplierList" [loading]="masterData.supplierLoading">
+                                            <ng-template ng-option-tmp let-item="item">
+                                                <div class="text-wrap">{{ item.name }}</div>
+                                            </ng-template>
+                                        </ng-select>
+                                    </div>
+                                </div>
+                                <div class="col-sm-4 col-md-4 col-lg-4 mobile-margin-top-15">
+                                    <div class="my-input-group">
+                                        <label class="required">{{ 'EDIT_CUSTOMER_PRICE_CARD.LBL_BILLING_METHOD' |
+                                            translate }}</label>
+
+                                        <ng-select appendTo="body" [multiple]="false" [clearable]="false"
+                                            [closeOnSelect]="true" [searchable]="true"
+                                            placeholder="--- {{(masterData.billingMethodList!=null && masterData.billingMethodList.length>0? 'COMMON.LBL_SELECT':'COMMON.LBL_NO_DATA')  | translate }} ---"
+                                            bindLabel="name" [(ngModel)]="model.billingMethodId" bindValue="id"
+                                            [items]="masterData.billingMethodList"
+                                            [loading]="masterData.billingMethodLoading" (change)="changeBillingMethod()"
+                                            [ngClass]="{ 'is-invalid': !validator.isValid('billingMethodId')}">
+                                            <ng-template ng-option-tmp let-item="item">
+                                                <div class="text-wrap">{{ item.name }}</div>
+                                            </ng-template>
+                                        </ng-select>
+                                        <div *ngIf="!validator.isValid('billingMethodId')" class="invalid-feedback">
+                                            <div *ngFor="let error of validator.getErrors('billingMethodId')">
+                                                {{ error | translate }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-12">
+                            <div class="row marginTop25">
+                                <div class="col-sm-4 col-md-6 col-lg-4">
+                                    <div class="my-input-group">
+                                        <label class="required">{{ 'EDIT_CUSTOMER_PRICE_CARD.LBL_BILLING_TO' | translate
+                                            }}</label>
+                                        <ng-select appendTo="body" [multiple]="false" [clearable]="false"
+                                            [closeOnSelect]="true" [searchable]="true"
+                                            placeholder="--- {{(masterData.billingToList && masterData.billingToList.length>0? 'COMMON.LBL_SELECT':'COMMON.LBL_NO_DATA')  | translate }} ---"
+                                            bindLabel="name" [(ngModel)]="model.billingToId" bindValue="id"
+                                            (change)="onchangeBillingTo($event);"
+                                            [ngClass]="{ 'is-invalid': !validator.isValid('billingToId')}"
+                                            [items]="masterData.billingToList" [loading]="masterData.billingToLoading">
+                                            <ng-template ng-option-tmp let-item="item">
+                                                <div class="text-wrap">{{ item.name }}</div>
+                                            </ng-template>
+                                        </ng-select>
+                                        <div *ngIf="!validator.isValid('billingToId')" class="invalid-feedback">
+                                            <div *ngFor="let error of validator.getErrors('billingToId')">
+                                                {{ error | translate }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-4 col-md-6 col-lg-4 mobile-margin-top-15">
+                                    <div class="my-input-group">
+                                        <label class="required">{{ 'EDIT_CUSTOMER_PRICE_CARD.LBL_SERVICE' | translate
+                                            }}</label>
+                                        <ng-select [items]="masterData.serviceList" [(ngModel)]="model.serviceId"
+                                            [closeOnSelect]="true" [searchable]="true" bindLabel="name" bindValue="id"
+                                            (change)="onchangeServiceType($event);" placeholder="--- {{(masterData.serviceList && masterData.serviceList.length>0?
+                                                 'COMMON.LBL_SELECT':'COMMON.LBL_NO_DATA')  | translate }} ---"
+                                            [loading]="masterData.serviceLoading"
+                                            [ngClass]="{ 'is-invalid': !validator.isValid('serviceId')}">
+                                            <ng-template ng-option-tmp let-item="item">
+                                                <div class="text-wrap">{{ item.name }}</div>
+                                            </ng-template>
+                                        </ng-select>
+                                        <div *ngIf="!validator.isValid('serviceId')" class="invalid-feedback">
+                                            <div *ngFor="let error of validator.getErrors('serviceId')">
+                                                {{ error | translate }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-4 col-md-6 col-lg-4">
+                                    <div class="my-input-group">
+                                        <label>{{ 'EDIT_CUSTOMER_PRICE_CARD.LBL_PRODUCT_CATEGORY' | translate }}</label>
+                                        <ng-select [items]="masterData.productCategoryList" class="multiple"
+                                            [(ngModel)]="model.productCategoryIdList" [multiple]="true"
+                                            (change)="changeProductCategory($event);" [closeOnSelect]="true"
+                                            [searchable]="true" bindLabel="name" bindValue="id"
+                                            placeholder="--- {{(masterData.productCategoryList && masterData.productCategoryList.length>0? 'COMMON.LBL_SELECT':'COMMON.LBL_NO_DATA')  | translate }} ---"
+                                            [loading]="masterData.productCategoryLoading"
+                                            [ngClass]="{ 'is-invalid': !validator.isValidIf('productCategoryIdList',hasComplexAccess())}">
+                                            <ng-template ng-option-tmp let-item="item">
+                                                <div class="text-wrap">{{ item.name }}</div>
+                                            </ng-template>
+                                        </ng-select>
+                                        <div *ngIf="!validator.isValidIf('productCategoryIdList',hasComplexAccess())"
+                                            class="invalid-feedback">
+                                            <div *ngFor="let error of validator.getErrors('productCategoryIdList')">
+                                                {{ error | translate }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-sm-12">
+                            <div class="row marginTop25">
+                                <div class="col-sm-4 col-md-6 col-lg-4">
+                                    <div class="my-input-group">
+                                        <label>{{ 'EDIT_CUSTOMER_PRICE_CARD.LBL_PRODUCT_SUB_CATEGORY' | translate
+                                            }}</label>
+                                        <ng-select [items]="masterData.customerProductSubCategoryList" class="multiple"
+                                            [(ngModel)]="model.productSubCategoryIdList" [multiple]="true"
+                                            (change)="changeProductSubCategory();" [closeOnSelect]="true"
+                                            [searchable]="true" bindLabel="name" bindValue="id"
+                                            placeholder="--- {{(masterData.customerProductSubCategoryList && masterData.customerProductSubCategoryList.length>0? 'COMMON.LBL_SELECT':'COMMON.LBL_NO_DATA')  | translate }} ---"
+                                            [loading]="masterData.productCategoryLoading">
+                                            <ng-template ng-option-tmp let-item="item">
+                                                <div class="text-wrap">{{ item.name }}</div>
+                                            </ng-template>
+                                        </ng-select>
+                                    </div>
+                                </div>
+
+                                <div class="col-sm-4 col-md-6 col-lg-4">
+                                    <div class="my-input-group">
+                                        <label class="required">{{ 'EDIT_CUSTOMER_PRICE_CARD.LBL_SERVICE_TYPE' |
+                                            translate }}</label>
+                                        <ng-select [closeOnSelect]="true" [searchable]="true" class="multiple"
+                                            [items]="masterData.serviceTypeList" [(ngModel)]="model.serviceTypeIdList"
+                                            [multiple]="true" bindLabel="name" bindValue="id"
+                                            placeholder="--- {{(masterData.serviceTypeList && masterData.serviceTypeList.length>0? 'COMMON.LBL_SELECT':'COMMON.LBL_NO_DATA')  | translate }} ---"
+                                            [loading]="masterData.serviceTypeLoading"
+                                            [ngClass]="{ 'is-invalid': !validator.isValid('serviceTypeIdList')}">
+                                            <ng-template ng-option-tmp let-item="item">
+                                                <div class="text-wrap">{{ item.name }}</div>
+                                            </ng-template>
+                                        </ng-select>
+                                        <div *ngIf="!validator.isValid('serviceTypeIdList')" class="invalid-feedback">
+                                            <div *ngFor="let error of validator.getErrors('serviceTypeIdList')">
+                                                {{ error | translate }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-4 col-md-6 col-lg-4">
+                                    <div class="my-input-group">
+                                        <label>{{ 'EDIT_CUSTOMER_PRICE_CARD.LBL_FACTORY_COUNTRY' | translate }}</label>
+                                        <ng-select [closeOnSelect]="true" [searchable]="true" class="multiple"
+                                            [items]="masterData.countryList" [(ngModel)]="model.factoryCountryIdList"
+                                            [multiple]="true" bindLabel="countryName" bindValue="id"
+                                            placeholder="--- {{(masterData.countryList && masterData.countryList.length>0? 'COMMON.LBL_SELECT':'COMMON.LBL_NO_DATA')  | translate }} ---"
+                                            [loading]="masterData.countryLoading" (change)="setProvinceCountryChange()">
+                                            <ng-template ng-option-tmp let-item="item">
+                                                <div class="text-wrap">{{ item.countryName }}</div>
+                                            </ng-template>
+                                        </ng-select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <div class="col-sm-12">
+                            <div class="row marginTop25">
+
+
+                                <div class="col-sm-4 col-md-6 col-lg-4">
+                                    <div class="my-input-group">
+                                        <label for="">{{ 'EDIT_CUSTOMER_PRICE_CARD.LBL_CUS_DEPARTMENT' | translate
+                                            }}</label>
+                                        <ng-select [closeOnSelect]="true" [searchable]="true" [multiple]="true"
+                                            class="multiple" [items]="masterData.customerDepartmentList"
+                                            [(ngModel)]="model.departmentIdList" bindLabel="name" bindValue="id"
+                                            placeholder="--- {{(masterData.customerDepartmentList && masterData.customerDepartmentList.length>0? 'COMMON.LBL_SELECT':'COMMON.LBL_NO_DATA')  | translate }} ---"
+                                            [loading]="masterData.customerDepartmentLoading">
+                                            <ng-template ng-option-tmp let-item="item">
+                                                <div class="text-wrap">{{ item.name }}</div>
+                                            </ng-template>
+                                        </ng-select>
+
+                                    </div>
+                                </div>
+                                <div class="col-sm-4 col-md-6 col-lg-4">
+                                    <div class="my-input-group">
+                                        <label for="">{{ 'EDIT_CUSTOMER_PRICE_CARD.LBL_BRAND' | translate }}</label>
+                                        <ng-select [closeOnSelect]="true" [searchable]="true" [multiple]="true"
+                                            class="multiple" [items]="masterData.customerBrandList"
+                                            [(ngModel)]="model.brandIdList" bindLabel="name" bindValue="id"
+                                            placeholder="--- {{(masterData.customerBrandList && masterData.customerBrandList.length>0? 'COMMON.LBL_SELECT':'COMMON.LBL_NO_DATA')  | translate }} ---"
+                                            [loading]="masterData.customerBrandLoading">
+                                            <ng-template ng-option-tmp let-item="item">
+                                                <div class="text-wrap">{{ item.name }}</div>
+                                            </ng-template>
+                                        </ng-select>
+                                    </div>
+                                </div>
+
+                                <div class="col-sm-4 col-md-6 col-lg-4">
+                                    <div class="my-input-group" *ngIf="masterData.isProvinceShow">
+                                        <label>{{ 'EDIT_CUSTOMER_PRICE_CARD.LBL_FACTORY_PROVINCE' | translate }}</label>
+                                        <ng-select [closeOnSelect]="true" [searchable]="true" class="multiple"
+                                            [items]="masterData.provinceList" [(ngModel)]="model.factoryProvinceIdList"
+                                            [multiple]="true" bindLabel="name" bindValue="id"
+                                            placeholder="--- {{(masterData.provinceList && masterData.provinceList.length>0? 'COMMON.LBL_SELECT':'COMMON.LBL_NO_DATA')  | translate }} ---"
+                                            [loading]="masterData.provinceLoading" (change)="ChangeProvinceData()">
+                                            <ng-template ng-option-tmp let-item="item">
+                                                <div class="text-wrap">{{ item.name }}</div>
+                                            </ng-template>
+                                        </ng-select>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+
+                        <div class="col-sm-12">
+                            <div class="row marginTop25">
+
+                                <div class="col-sm-4 col-md-6 col-lg-4">
+                                    <div class="my-input-group">
+                                        <label for="">{{ 'EDIT_CUSTOMER_PRICE_CARD.LBL_BUYER' | translate }}</label>
+                                        <ng-select [closeOnSelect]="true" [searchable]="true" [multiple]="true"
+                                            class="multiple" [items]="masterData.customerBuyerList"
+                                            [(ngModel)]="model.buyerIdList" bindLabel="name" bindValue="id"
+                                            placeholder="--- {{(masterData.customerBuyerList && masterData.customerBuyerList.length>0? 'COMMON.LBL_SELECT':'COMMON.LBL_NO_DATA')  | translate }} ---"
+                                            [loading]="masterData.customerBuyerLoading">
+                                            <ng-template ng-option-tmp let-item="item">
+                                                <div class="text-wrap">{{ item.name }}</div>
+                                            </ng-template>
+                                        </ng-select>
+                                    </div>
+                                </div>
+
+                                <div class="col-sm-4 col-md-6 col-lg-4">
+                                    <div class="my-input-group">
+                                        <label for="">{{ 'EDIT_CUSTOMER_PRICE_CARD.LBL_PRICE_CATEGORY' | translate
+                                            }}</label>
+                                        <ng-select [closeOnSelect]="true" [searchable]="true" [multiple]="true"
+                                            class="multiple" [items]="masterData.customerPriceCategoryList"
+                                            [(ngModel)]="model.priceCategoryIdList" bindLabel="name" bindValue="id"
+                                            placeholder="--- {{(masterData.customerPriceCategoryList && masterData.customerPriceCategoryList.length>0? 'COMMON.LBL_SELECT':'COMMON.LBL_NO_DATA')  | translate }} ---"
+                                            [loading]="masterData.customerPriceCategoryLoading">
+                                            <ng-template ng-option-tmp let-item="item">
+                                                <div class="text-wrap">{{ item.name }}</div>
+                                            </ng-template>
+                                        </ng-select>
+
+                                    </div>
+                                </div>
+                                <div class="col-sm-4 col-md-6 col-lg-4">
+                                    <div class="my-input-group" *ngIf="masterData.showCityField">
+                                        <label for="">{{ 'EDIT_CUSTOMER_PRICE_CARD.LBL_FACTORY_CITY' | translate
+                                            }}</label>
+                                        <ng-select [closeOnSelect]="true" [searchable]="true" [multiple]="true" class="multiple"
+                                            [items]="masterData.cityList" [(ngModel)]="model.factoryCityIdList" bindLabel="name" bindValue="id"
+                                            placeholder="--- {{(masterData.cityList && masterData.cityList.length>0? 'COMMON.LBL_SELECT':'COMMON.LBL_NO_DATA')  | translate }} ---"
+                                            [loading]="masterData.cityLoading">
+                                            <ng-template ng-option-tmp let-item="item">
+                                                <div class="text-wrap">{{ item.name }}</div>
+                                            </ng-template>
+                                        </ng-select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-sm-12">
+                            <div class="row marginTop25">
+                                <div class="col-sm-4 col-md-6 col-lg-4">
+                                    <div class="my-input-group">
+                                        <label for="">{{ 'EDIT_CUSTOMER_PRICE_CARD.LBL_HOLIDAY_TYPE' | translate
+                                            }}</label>
+                                        <ng-select [closeOnSelect]="true" [searchable]="true" [multiple]="true"
+                                            class="multiple" [items]="masterData.customerPriceHolidayList"
+                                            [(ngModel)]="model.holidayTypeIdList" bindLabel="name" bindValue="id"
+                                            placeholder="--- {{(masterData.customerPriceHolidayList && masterData.customerPriceHolidayList.length>0? 'COMMON.LBL_SELECT':'COMMON.LBL_NO_DATA')  | translate }} ---"
+                                            [loading]="masterData.customerPriceHolidayLoading">
+                                            <ng-template ng-option-tmp let-item="item">
+                                                <div class="text-wrap">{{ item.name }}</div>
+                                            </ng-template>
+                                        </ng-select>
+                                    </div>
+                                </div>
+                                <div class="col-sm-4 col-md-6 col-lg-4" *ngIf="model.holidayTypeIdList.length>0">
+                                    <div class="my-input-group">
+                                        <label for="" class="required">{{ 'EDIT_CUSTOMER_PRICE_CARD.LBL_HOLIDAY_PRICE' |
+                                            translate }}</label>
+                                        <input maxlength="200"
+                                            [ngClass]="{ 'is-invalid': !validator.isValid('holidayPrice')}"
+                                            [(ngModel)]="model.holidayPrice" type="text" />
+                                        <div *ngIf="!validator.isValid('holidayPrice')" class="invalid-feedback">
+                                            <div *ngFor="let error of validator.getErrors('holidayPrice')">
+                                                {{ error | translate }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-4 col-md-4 col-lg-4">
+                                    <div class="my-input-group">
+                                        <label for="">{{ 'EDIT_CUSTOMER_PRICE_CARD.LBL_MIN_BILLING_DAY' | translate
+                                            }}</label>
+                                        <input type="number" (keypress)="numberOnly($event)" (paste)="onPaste($event)"
+                                            [(ngModel)]=model.minBillingDay />
+                                    </div>
+                                </div>                             
+                            </div>
+                        </div>
+                        <div class="col-sm-12">
+                            <div class="row marginTop25">
+                                <div class="col-sm-4 col-md-4 col-lg-4">
+                                    <div class="my-input-group">
+                                        <label for="">{{ 'EDIT_CUSTOMER_PRICE_CARD.LBL_MAXIMUM_PRODUCT_COUNT' |
+                                            translate }}</label>
+                                        <input type="number" (keypress)="avoidDecimal(model.maxProductCount ,$event)" (paste)="onPaste($event)"
+                                            [(ngModel)]=model.maxProductCount />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-12">
+                            <div class="row marginTop25">
+
+                                <div class="col-sm-2 col-md-2 col-lg-2 marginTop25">
+                                    <div class="styled-checkbox-container">
+                                        <input class="styled-checkbox" id="checkbox-ProductPrice" type="checkbox"
+                                            [(ngModel)]="model.priceToEachProduct"
+                                            (change)="changePriceToEachProduct()">
+                                        <label for="checkbox-ProductPrice">{{
+                                            'EDIT_CUSTOMER_PRICE_CARD.LBL_PRICE_TO_EACH_PRODUCT' | translate }}</label>
+                                    </div>
+
+                                </div>
+                                <div class="col-sm-2 col-md-2 col-lg-2">
+                                    <div class="my-input-group" *ngIf="model.priceToEachProduct">
+                                        <label class="required">{{ 'EDIT_CUSTOMER_PRICE_CARD.LBL_PRODUCT_PRICE' |
+                                            translate }}</label>
+                                        <input type="number" (keypress)="numberOnly($event)" (paste)="onPaste($event)"
+                                            [(ngModel)]=model.productPrice
+                                            [ngClass]="{ 'is-invalid':  !validator.isValid('productPrice')}" />
+                                        <div *ngIf="!validator.isValid('productPrice')" class="invalid-feedback">
+                                            <div *ngFor="let error of validator.getErrors('productPrice')">
+                                                {{ error | translate }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!--#region Billed Qty type DropDown-->
+
+                                <div class="col-sm-4 col-md-6 col-lg-4"
+                                    *ngIf="model.billingMethodId!=billingMethod.PerIntervention">
+                                    <div class="my-input-group">
+                                        <label for="">Billed Qty</label>
+                                        <ng-select [items]="masterData.billQuantityTypeList" bindLabel="name"
+                                            bindValue="id" [multiple]="false" [closeOnSelect]="true" [searchable]="true"
+                                            [ngClass]="{ 'is-invalid': !validator.isValidIf('billQuantityType',model.invoiceInspFeeFrom==invFeesFrom.Invoice)}"
+                                            [loading]=masterData.billQuantityTypeLoading [hideSelected]="true"
+                                            [clearable]="false"
+                                            placeholder="--- {{ (masterData.billQuantityTypeList!=null && masterData.billQuantityTypeList.length!=0? 'EDIT_BOOKING.LBL_SELECT':'EDIT_BOOKING.MSG_NO_DATA' ) | translate }} ---"
+                                            [(ngModel)]="model.billQuantityType" appendTo="body">
+                                            <ng-template ng-option-tmp let-item="item">
+                                                <div class="text-wrap">{{ item.name }}</div>
+                                            </ng-template>
+                                        </ng-select>
+                                        <div *ngIf="!validator.isValidIf('billQuantityType',model.invoiceInspFeeFrom==invFeesFrom.Invoice)"
+                                            class="invalid-feedback">
+                                            <div *ngFor="let error of validator.getErrors('billQuantityType')">
+                                                {{ error | translate }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!--#endregion Billed Qty type DropDown-->
+                            </div>
+                        </div>
+
+
+
+                        <div class="col-sm-12" *ngIf="model.billingMethodId==billingMethod.Sampling">
+                            <div class="row marginTop25">
+                                <h6 class="quote-form-title">{{ 'EDIT_CUSTOMER_PRICE_CARD.LBL_SAMPLING_DETAILS' |
+                                    translate }}</h6>
+                            </div>
+                            <div class="row marginTop15">
+
+                                <div class="col-sm-3 col-md-3 col-lg-3">
+                                    <div class="my-input-group">
+                                        <label class="required">{{ 'EDIT_CUSTOMER_PRICE_CARD.LBL_MAX_SAMPLE_SIZE' |
+                                            translate }}</label>
+                                        <input type="number" (keypress)="avoidDecimal(model.maxSampleSize ,$event)" (paste)="onPaste($event)"
+                                            [(ngModel)]=model.maxSampleSize
+                                            [ngClass]="{ 'is-invalid': !validator.isValid('maxSampleSize')}" />
+                                        <div *ngIf="!validator.isValid('maxSampleSize')"
+                                            class="invalid-feedback">
+                                            <div *ngFor="let error of validator.getErrors('maxSampleSize')">
+                                                {{ error | translate }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-3 col-md-3 col-lg-3">
+                                    <div class="my-input-group">
+                                        <label for="">{{ 'EDIT_CUSTOMER_PRICE_CARD.LBL_ADDITIONAL_SAMPLE_PRICE' |
+                                            translate }}</label>
+
+                                        <input type="number" (keypress)="numberOnly($event)" (paste)="onPaste($event)"
+                                            [(ngModel)]=model.additionalSamplePrice
+                                            [ngClass]="{ 'is-invalid': model.additionalSampleSize != null && !validator.isValid('additionalSamplePrice')}" />
+                                        <div *ngIf="model.additionalSampleSize != null && !validator.isValid('additionalSamplePrice')"
+                                            class="invalid-feedback">
+                                            <div *ngFor="let error of validator.getErrors('additionalSamplePrice')">
+                                                {{ error | translate }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-3 col-md-3 col-lg-3">
+                                    <div class="my-input-group">
+                                        <label for="">{{ 'EDIT_CUSTOMER_PRICE_CARD.LBL_ADDITIONAL_SAMPLE_SIZE' |
+                                            translate }}</label>
+                                        <input type="number" (keypress)="avoidDecimal(model.additionalSampleSize ,$event)" (paste)="onPaste($event)"
+                                            [(ngModel)]=model.additionalSampleSize step="0.01" min="1" />
+                                    </div>
+                                </div>
+                                <div class="col-sm-3 col-md-3 col-lg-3 marginTop25">
+                                    <div class="styled-checkbox-container">
+                                        <input class="styled-checkbox" id="checkbox-sampleSizeBySet" type="checkbox"
+                                            [(ngModel)]="model.sampleSizeBySet">
+                                        <label for="checkbox-sampleSizeBySet">{{
+                                            'EDIT_CUSTOMER_PRICE_CARD.LBL_SAMPLE_SIZE_SET' | translate }}</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-sm-12"
+                            *ngIf="model.billingMethodId==billingMethod.Sampling && !masterData.hasSamplingComplexAccess">
+
+
+                            <div class="row marginTop25">
+
+                                <div class="col-sm-3">
+                                    <div class="my-input-group">
+                                        <label for="">{{ 'EDIT_CUSTOMER_PRICE_CARD.LBL_PRICING8' | translate }}</label>
+                                        <input type="number" [(ngModel)]=model.quantity8 (keypress)="numberOnly($event)"
+                                            (paste)="onPaste($event)" />
+                                    </div>
+                                </div>
+                                <div class="col-sm-3">
+                                    <div class="my-input-group">
+                                        <label for="">{{ 'EDIT_CUSTOMER_PRICE_CARD.LBL_PRICING13' | translate }}</label>
+                                        <input type="number" [(ngModel)]=model.quantity13
+                                            (keypress)="numberOnly($event)" (paste)="onPaste($event)" />
+                                    </div>
+                                </div>
+                                <div class="col-sm-3">
+                                    <div class="my-input-group">
+                                        <label for="">{{ 'EDIT_CUSTOMER_PRICE_CARD.LBL_PRICING20' | translate }}</label>
+                                        <input type="number" [(ngModel)]=model.quantity20
+                                            (keypress)="numberOnly($event)" (paste)="onPaste($event)" />
+                                    </div>
+                                </div>
+                                <div class="col-sm-3">
+                                    <div class="my-input-group">
+                                        <label for="">{{ 'EDIT_CUSTOMER_PRICE_CARD.LBL_PRICING32' | translate }}</label>
+                                        <input type="number" [(ngModel)]=model.quantity32
+                                            (keypress)="numberOnly($event)" (paste)="onPaste($event)" />
+                                    </div>
+                                </div>
+
+                            </div>
+
+                            <div class="row marginTop25">
+
+                                <div class="col-sm-3">
+                                    <div class="my-input-group">
+                                        <label for="">{{ 'EDIT_CUSTOMER_PRICE_CARD.LBL_PRICING50' | translate }}</label>
+                                        <input type="number" [(ngModel)]=model.quantity50
+                                            (keypress)="numberOnly($event)" (paste)="onPaste($event)" />
+                                    </div>
+                                </div>
+
+                                <div class="col-sm-3">
+                                    <div class="my-input-group">
+                                        <label for="">{{ 'EDIT_CUSTOMER_PRICE_CARD.LBL_PRICING80' | translate }}</label>
+                                        <input type="number" [(ngModel)]=model.quantity80
+                                            (keypress)="numberOnly($event)" (paste)="onPaste($event)" />
+                                    </div>
+                                </div>
+                                <div class="col-sm-3">
+                                    <div class="my-input-group">
+                                        <label for="">{{ 'EDIT_CUSTOMER_PRICE_CARD.LBL_PRICING125' | translate
+                                            }}</label>
+                                        <input type="number" [(ngModel)]=model.quantity125
+                                            (keypress)="numberOnly($event)" (paste)="onPaste($event)" />
+                                    </div>
+                                </div>
+                                <div class="col-sm-3">
+                                    <div class="my-input-group">
+                                        <label for="">{{ 'EDIT_CUSTOMER_PRICE_CARD.LBL_PRICING200' | translate
+                                            }}</label>
+                                        <input type="number" [(ngModel)]=model.quantity200
+                                            (keypress)="numberOnly($event)" (paste)="onPaste($event)" />
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row marginTop25">
+
+
+                                <div class="col-sm-3">
+                                    <div class="my-input-group">
+                                        <label for="">{{ 'EDIT_CUSTOMER_PRICE_CARD.LBL_PRICING315' | translate
+                                            }}</label>
+                                        <input type="number" [(ngModel)]=model.quantity315
+                                            (keypress)="numberOnly($event)" (paste)="onPaste($event)" />
+                                    </div>
+                                </div>
+                                <div class="col-sm-3">
+                                    <div class="my-input-group">
+                                        <label for="">{{ 'EDIT_CUSTOMER_PRICE_CARD.LBL_PRICING500' | translate
+                                            }}</label>
+                                        <input type="number" [(ngModel)]=model.quantity500
+                                            (keypress)="numberOnly($event)" (paste)="onPaste($event)" />
+                                    </div>
+                                </div>
+                                <div class="col-sm-3">
+                                    <div class="my-input-group">
+                                        <label for="">{{ 'EDIT_CUSTOMER_PRICE_CARD.LBL_PRICING800' | translate
+                                            }}</label>
+                                        <input type="number" [(ngModel)]=model.quantity800
+                                            (keypress)="numberOnly($event)" (paste)="onPaste($event)" />
+                                    </div>
+                                </div>
+                                <div class="col-sm-3">
+                                    <div class="my-input-group">
+                                        <label for="">{{ 'EDIT_CUSTOMER_PRICE_CARD.LBL_PRICING1250' | translate
+                                            }}</label>
+                                        <input type="number" [(ngModel)]=model.quantity1250
+                                            (keypress)="numberOnly($event)" (paste)="onPaste($event)" />
+                                    </div>
+                                </div>
+
+                            </div>
+
+                            <div class="row marginTop15">
+
+                                <div class="col-sm-4 col-md-4 col-lg-4">
+                                    <div class="styled-checkbox-container" style="padding-top: 30px;">
+                                        <input class="styled-checkbox" id="checkbox-subCategorySelectAll"
+                                            type="checkbox" (change)="onChangeCommonSubCategorySelectAll();"
+                                            [(ngModel)]="model.subCategorySelectAll">
+                                        <label for="checkbox-subCategorySelectAll">{{
+                                            'EDIT_CUSTOMER_PRICE_CARD.LBL_INVOICE_CONFIGURE_ALL' | translate }}</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <!-- common button section for bill method - sub category start -->
+
+                        <div class="col-sm-12 marginTop25"
+                            *ngIf="(model.billingMethodId!=undefined && model.billingMethodId!=billingMethod.PerIntervention) &&  subCategoryValidators.length>0 &&
+                           (masterData.hasMandayComplexAccess || masterData.hasSamplingComplexAccess || masterData.hasPieceRateComplexAccess)">
+                            <div class="section-toggle-container" (click)=toggleCommonCategorySection()>
+                                <p>
+                                    <img src="assets/images/expand-circle.png" alt="expand"
+                                        *ngIf="!masterData.toggleCategorySection">
+                                    <img src="assets/images/collapse-circle.png" alt="collapse"
+                                        *ngIf="masterData.toggleCategorySection">
+                                    {{'EDIT_CUSTOMER_PRICE_CARD.LBL_INVOICE_COMMON_FIELDS' | translate}}
+                                </p>
+                            </div>
+                        </div>
+                        <!-- common button section for bill method - sub category end -->
+
+                        <!-- common section for bill method - manday start -->
+
+                        <div class="col-sm-12"
+                            *ngIf="model.billingMethodId==billingMethod.ManDay && masterData.toggleCategorySection && masterData.hasMandayComplexAccess">
+
+                            <div class="row marginTop15">
+
+                                <div class="col-sm-4 col-md-6 col-lg-4">
+                                    <div class="my-input-group">
+                                        <label class="control-label">
+                                            {{'EDIT_CUSTOMER_PRICE_CARD.LBL_PRICE_Productivity' | translate}}</label>
+                                        <input (change)="onProductivityChange()" [(ngModel)]="model.mandayProductivity"
+                                            type="number" (keypress)="numberOnly($event)" (paste)="onPaste($event)"
+                                            min="0" max="999" placeholder="Manday Productivity" />
+                                    </div>
+                                </div>
+
+                                <div class="col-sm-4 col-md-6 col-lg-4">
+                                    <div class="my-input-group">
+                                        <label class="control-label">{{'EDIT_CUSTOMER_PRICE_CARD.LBL_PRICE_Reports' |
+                                            translate}}</label>
+                                        <input (change)="onReportChange()" [(ngModel)]="model.mandayReports"
+                                            type="number" (keypress)="numberOnly($event)" (paste)="onPaste($event)"
+                                            min="0" max="999" placeholder="Manday Reports" />
+                                    </div>
+                                </div>
+
+                                <div class="col-sm-4 col-md-6 col-lg-4">
+                                    <div class="my-input-group">
+                                        <label class="control-label">{{'EDIT_CUSTOMER_PRICE_CARD.LBL_PRICE_MandayBuffer'
+                                            | translate}}</label>
+                                        <input (change)="onBufferChange()" [(ngModel)]="model.mandayBuffer"
+                                            type="number" (keypress)="numberOnly($event)" (paste)="onPaste($event)"
+                                            min="0" max="999" placeholder="Manday Buffer" />
+                                    </div>
+                                </div>
+
+                            </div>
+
+                            <div class="row marginTop15">
+                                <div class="col-sm-4 col-md-6 col-lg-4">
+                                    <div class="my-input-group">
+                                        <label class="control-label">{{ 'EDIT_CUSTOMER_PRICE_CARD.LBL_UNIT_PRICE' |
+                                            translate }}</label>
+                                        <input (change)="onUnitPriceChange()" placeholder="Unit Price" type="number"
+                                            [(ngModel)]="model.unitPrice" />
+
+                                    </div>
+                                </div>
+
+                                <div class="col-sm-4 col-md-4 col-lg-4">
+                                    <div class="styled-checkbox-container" style="padding-top: 30px;">
+                                        <input class="styled-checkbox" id="checkbox-subCategorySelectAll"
+                                            type="checkbox" (change)="onChangeCommonSubCategorySelectAll();"
+                                            [(ngModel)]="model.subCategorySelectAll">
+                                        <label for="checkbox-subCategorySelectAll">{{
+                                            'EDIT_CUSTOMER_PRICE_CARD.LBL_INVOICE_SELECTALL' | translate }}</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- common section for bill method - manday end -->
+
+                        <!-- common section for bill method - sampling start -->
+
+                        <div class="col-sm-12"
+                            *ngIf="model.billingMethodId==billingMethod.Sampling && masterData.toggleCategorySection && masterData.hasSamplingComplexAccess">
+
+
+                            <div class="row marginTop25">
+
+                                <div class="col-sm-3">
+                                    <div class="my-input-group">
+                                        <label for="">{{ 'EDIT_CUSTOMER_PRICE_CARD.LBL_PRICING8' | translate }}</label>
+                                        <input type="number" [(ngModel)]=model.quantity8 (keypress)="numberOnly($event)"
+                                            (paste)="onPaste($event)" />
+                                    </div>
+                                </div>
+                                <div class="col-sm-3">
+                                    <div class="my-input-group">
+                                        <label for="">{{ 'EDIT_CUSTOMER_PRICE_CARD.LBL_PRICING13' | translate }}</label>
+                                        <input type="number" [(ngModel)]=model.quantity13
+                                            (keypress)="numberOnly($event)" (paste)="onPaste($event)" />
+                                    </div>
+                                </div>
+                                <div class="col-sm-3">
+                                    <div class="my-input-group">
+                                        <label for="">{{ 'EDIT_CUSTOMER_PRICE_CARD.LBL_PRICING20' | translate }}</label>
+                                        <input type="number" [(ngModel)]=model.quantity20
+                                            (keypress)="numberOnly($event)" (paste)="onPaste($event)" />
+                                    </div>
+                                </div>
+                                <div class="col-sm-3">
+                                    <div class="my-input-group">
+                                        <label for="">{{ 'EDIT_CUSTOMER_PRICE_CARD.LBL_PRICING32' | translate }}</label>
+                                        <input type="number" [(ngModel)]=model.quantity32
+                                            (keypress)="numberOnly($event)" (paste)="onPaste($event)" />
+                                    </div>
+                                </div>
+
+                            </div>
+
+                            <div class="row marginTop25">
+
+                                <div class="col-sm-3">
+                                    <div class="my-input-group">
+                                        <label for="">{{ 'EDIT_CUSTOMER_PRICE_CARD.LBL_PRICING50' | translate }}</label>
+                                        <input type="number" [(ngModel)]=model.quantity50
+                                            (keypress)="numberOnly($event)" (paste)="onPaste($event)" />
+                                    </div>
+                                </div>
+
+                                <div class="col-sm-3">
+                                    <div class="my-input-group">
+                                        <label for="">{{ 'EDIT_CUSTOMER_PRICE_CARD.LBL_PRICING80' | translate }}</label>
+                                        <input type="number" [(ngModel)]=model.quantity80
+                                            (keypress)="numberOnly($event)" (paste)="onPaste($event)" />
+                                    </div>
+                                </div>
+                                <div class="col-sm-3">
+                                    <div class="my-input-group">
+                                        <label for="">{{ 'EDIT_CUSTOMER_PRICE_CARD.LBL_PRICING125' | translate
+                                            }}</label>
+                                        <input type="number" [(ngModel)]=model.quantity125
+                                            (keypress)="numberOnly($event)" (paste)="onPaste($event)" />
+                                    </div>
+                                </div>
+                                <div class="col-sm-3">
+                                    <div class="my-input-group">
+                                        <label for="">{{ 'EDIT_CUSTOMER_PRICE_CARD.LBL_PRICING200' | translate
+                                            }}</label>
+                                        <input type="number" [(ngModel)]=model.quantity200
+                                            (keypress)="numberOnly($event)" (paste)="onPaste($event)" />
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row marginTop25">
+
+
+                                <div class="col-sm-3">
+                                    <div class="my-input-group">
+                                        <label for="">{{ 'EDIT_CUSTOMER_PRICE_CARD.LBL_PRICING315' | translate
+                                            }}</label>
+                                        <input type="number" [(ngModel)]=model.quantity315
+                                            (keypress)="numberOnly($event)" (paste)="onPaste($event)" />
+                                    </div>
+                                </div>
+                                <div class="col-sm-3">
+                                    <div class="my-input-group">
+                                        <label for="">{{ 'EDIT_CUSTOMER_PRICE_CARD.LBL_PRICING500' | translate
+                                            }}</label>
+                                        <input type="number" [(ngModel)]=model.quantity500
+                                            (keypress)="numberOnly($event)" (paste)="onPaste($event)" />
+                                    </div>
+                                </div>
+                                <div class="col-sm-3">
+                                    <div class="my-input-group">
+                                        <label for="">{{ 'EDIT_CUSTOMER_PRICE_CARD.LBL_PRICING800' | translate
+                                            }}</label>
+                                        <input type="number" [(ngModel)]=model.quantity800
+                                            (keypress)="numberOnly($event)" (paste)="onPaste($event)" />
+                                    </div>
+                                </div>
+                                <div class="col-sm-3">
+                                    <div class="my-input-group">
+                                        <label for="">{{ 'EDIT_CUSTOMER_PRICE_CARD.LBL_PRICING1250' | translate
+                                            }}</label>
+                                        <input type="number" [(ngModel)]=model.quantity1250
+                                            (keypress)="numberOnly($event)" (paste)="onPaste($event)" />
+                                    </div>
+                                </div>
+
+                            </div>
+
+                            <div class="row marginTop15">
+
+                                <div class="col-sm-4 col-md-4 col-lg-4">
+                                    <div class="styled-checkbox-container" style="padding-top: 30px;">
+                                        <input class="styled-checkbox" id="checkbox-subCategorySelectAll"
+                                            type="checkbox" (change)="onChangeCommonSubCategorySelectAll();"
+                                            [(ngModel)]="model.subCategorySelectAll">
+                                        <label for="checkbox-subCategorySelectAll">{{
+                                            'EDIT_CUSTOMER_PRICE_CARD.LBL_INVOICE_SELECTALL' | translate }}</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- common section for bill method - sampling end -->
+
+
+                        <!-- common section for bill method - piece rate start -->
+
+                        <div class="col-sm-12"
+                            *ngIf="model.billingMethodId==billingMethod.PieceRate && masterData.toggleCategorySection && masterData.hasPieceRateComplexAccess">
+
+                            <div class="row marginTop15">
+                                <div class="col-sm-4 col-md-6 col-lg-4">
+                                    <div class="my-input-group">
+                                        <label>{{ 'EDIT_CUSTOMER_PRICE_CARD.LBL_UNIT_PRICE' | translate
+                                            }}</label>
+                                        <input (change)="onUnitPriceChange()" type="number" [(ngModel)]=model.unitPrice
+                                            (keypress)="numberOnly($event)" (paste)="onPaste($event)"/>
+                                    </div>
+                                </div>
+
+                                <div class="col-sm-4 col-md-4 col-lg-4">
+                                    <div class="styled-checkbox-container" style="padding-top: 30px;">
+                                        <input class="styled-checkbox" id="checkbox-subCategorySelectAll"
+                                            type="checkbox" (change)="onChangeCommonSubCategorySelectAll();"
+                                            [(ngModel)]="model.subCategorySelectAll">
+                                        <label for="checkbox-subCategorySelectAll">{{
+                                            'EDIT_CUSTOMER_PRICE_CARD.LBL_INVOICE_SELECTALL' | translate }}</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- common section for bill method - manday end -->
+
+
+                        <!-- common details section for bill method - manday start -->
+
+                        <div class="col-sm-12"
+                            *ngIf="model.billingMethodId==billingMethod.ManDay && masterData.hasMandayComplexAccess && subCategoryValidators.length>0 && !model.subCategorySelectAll">
+                            <div class="row marginTop15">
+                                <div class="col-lg-12">
+                                  <div class="table-container" style="overflow-y: scroll; max-height: 400px;width:100%">
+                                    <table class="pagination-table bordered">
+                                      <thead>
+                                        <tr class="sticky-top-row">
+                                          <th>
+                                            <div class="styled-checkbox-container">
+                                                <input type="checkbox" class="styled-checkbox" id="checkboxall" [(ngModel)]="model.isSelectAllSubCategory"
+                                                (change)="selectAllSubCategory()" />
+                                                <label for="checkboxall"></label>
+                                            </div>
+                                          </th>
+                                          <th>{{ 'EDIT_CUSTOMER_PRICE_CARD.LBL_PRODUCT_NAME' | translate }}</th>
+                                          <th>{{ 'EDIT_CUSTOMER_PRICE_CARD.LBL_PRICE_Productivity' | translate }}</th>
+                                          <th>{{ 'EDIT_CUSTOMER_PRICE_CARD.LBL_PRICE_Reports' | translate }}</th>
+                                          <th>{{ 'EDIT_CUSTOMER_PRICE_CARD.LBL_PRICE_MandayBuffer' | translate }}</th>
+                                          <th>{{ 'EDIT_CUSTOMER_PRICE_CARD.LBL_UNIT_PRICE' | translate }}</th>
+                                          <th></th>
+                                        </tr>
+                                      </thead>
+                                      <tbody>
+                                        <tr *ngFor="let item of subCategoryValidators; let idx=index;">
+                                            <td>
+                                                <div class="styled-checkbox-container">
+                                                    <input type="checkbox" id="checkboxSubCategory-{{idx}}" class="styled-checkbox"
+                                                    (change)="checkIfAllSubcategoryItemSelected()"  [(ngModel)]="item.subCategory.isCommon">
+                                                    <label for="checkboxSubCategory-{{idx}}"></label>
+                                                  </div>
+                                            </td>
+                                            <td>
+                                              {{item.subCategory.subCategory2Name}}
+                                            </td>
+                                            <td>
+                                                <input    [(ngModel)]="item.subCategory.mandayProductivity"
+                                                [ngClass]="{ 'is-invalid':  !item.validator.isValidIf('mandayProductivity',item.subCategory.isCommon)}"
+                                                type="number" (paste)="onPaste($event)"
+                                                min="0" max="999" placeholder="Travel Tariff" />
+
+                                                <div *ngIf="!item.validator.isValidIf('mandayProductivity',item.subCategory.isCommon)" class="invalid-feedback">
+                                                    <div *ngFor="let error of item.validator.getErrors('mandayProductivity')">{{ error | translate }}</div>
+                                                </div>
+
+                                            </td>
+                                            <td>
+                                                <input [(ngModel)]="item.subCategory.mandayReports"   type="number"
+                                                (keypress)="numberOnly($event)"  (paste)="onPaste($event)"
+                                                [ngClass]="{ 'is-invalid':  !item.validator.isValidIf('mandayReports',item.subCategory.isCommon)}"
+                                                min="0" max="999" placeholder="Travel Tariff" />
+
+                                                <div *ngIf="!item.validator.isValidIf('mandayReports',item.subCategory.isCommon)" class="invalid-feedback">
+                                                    <div *ngFor="let error of item.validator.getErrors('mandayReports')">{{ error | translate }}</div>
+                                                </div>
+
+                                            </td>
+                                            <td>
+                                                <input  [(ngModel)]="item.subCategory.mandayBuffer"   type="number"
+                                                (paste)="onPaste($event)"
+
+                                                [ngClass]="{ 'is-invalid':  !item.validator.isValidIf('mandayBuffer',item.subCategory.isCommon)}"
+                                                min="0" max="999" placeholder="Travel Tariff" />
+
+                                                <div *ngIf="!item.validator.isValidIf('mandayBuffer',item.subCategory.isCommon)" class="invalid-feedback">
+                                                    <div *ngFor="let error of item.validator.getErrors('mandayBuffer')">{{ error | translate }}</div>
+                                                </div>
+
+                                                    </td>
+
+                                            <td>
+                                                <input  [(ngModel)]="item.subCategory.unitPrice"   type="number"
+                                                 (keypress)="numberOnly($event)"  (paste)="onPaste($event)"
+                                                 [ngClass]="{ 'is-invalid':  !item.validator.isValidIf('unitPrice',item.subCategory.isCommon)}"
+                                                 min="0" max="999" placeholder="Travel Tariff" />
+
+                                                 <div *ngIf="!item.validator.isValidIf('unitPrice',item.subCategory.isCommon)" class="invalid-feedback">
+                                                    <div *ngFor="let error of item.validator.getErrors('unitPrice')">{{ error | translate }}</div>
+                                                </div>
+
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- common details section for bill method - manday end -->
+
+
+                        <!-- common details section for bill method - sampling start -->
+
+                        <div class="col-sm-12"
+                            *ngIf="model.billingMethodId==billingMethod.Sampling && masterData.hasSamplingComplexAccess && subCategoryValidators.length>0 && !model.subCategorySelectAll">
+                            <div class="row marginTop15">
+                                <div class="col-lg-12">
+                                    <div class="table-container"
+                                        style="overflow-y: scroll; max-height: 400px;width:100%">
+                                        <table class="pagination-table bordered">
+                                            <thead>
+                                                <tr class="sticky-top-row">
+                                                    <th></th>
+                                                    <th>{{ 'EDIT_CUSTOMER_PRICE_CARD.LBL_PRODUCT_NAME' | translate }}
+                                                    </th>
+                                                    <th>{{ 'EDIT_CUSTOMER_PRICE_CARD.LBL_PRICE_Settings' | translate }}
+                                                    </th>
+                                                    <th></th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr *ngFor="let item of subCategoryValidators; let idx=index;">
+                                                    <td>
+                                                        <div class="styled-checkbox-container">
+                                                            <input type="checkbox" id="checkboxSubCategory-{{idx}}"
+                                                                class="styled-checkbox"
+                                                                (change)="checkIfAllSubcategoryItemSelected()"
+                                                                [(ngModel)]="item.subCategory.isCommon">
+                                                            <label for="checkboxSubCategory-{{idx}}"></label>
+                                                        </div>
+                                                    </td>
+                                                    <td>
+                                                        {{item.subCategory.subCategory2Name}}
+                                                    </td>
+                                                    <td>
+
+                                                        <div class="row marginTop25">
+
+                                                            <div class="col-sm-3">
+                                                                <div class="my-input-group">
+                                                                    <label for="">{{
+                                                                        'EDIT_CUSTOMER_PRICE_CARD.LBL_PRICING8' |
+                                                                        translate }}</label>
+                                                                    <input type="number" (keypress)="numberOnly($event)"
+                                                                        [ngClass]="{ 'is-invalid':  !item.validator.isValid('aqL_QTY_8')}  && item.subCategory.isCommon"
+                                                                        (paste)="onPaste($event)"
+                                                                        [(ngModel)]=item.subCategory.aqL_QTY_8 />
+
+                                                                    <div *ngIf="!item.validator.isValid('aqL_QTY_8') && item.subCategory.isCommon"
+                                                                        class="invalid-feedback">
+                                                                        <div
+                                                                            *ngFor="let error of item.validator.getErrors('aqL_QTY_8')">
+                                                                            {{ error | translate }}</div>
+                                                                    </div>
+
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-sm-3">
+                                                                <div class="my-input-group">
+                                                                    <label for="">{{
+                                                                        'EDIT_CUSTOMER_PRICE_CARD.LBL_PRICING13' |
+                                                                        translate }}</label>
+                                                                    <input type="number" (keypress)="numberOnly($event)"
+                                                                        [ngClass]="{ 'is-invalid':  !item.validator.isValid('aqL_QTY_13')} && item.subCategory.isCommon"
+                                                                        (paste)="onPaste($event)"
+                                                                        [(ngModel)]=item.subCategory.aqL_QTY_13 />
+
+                                                                    <div *ngIf="!item.validator.isValid('aqL_QTY_13') && item.subCategory.isCommon"
+                                                                        class="invalid-feedback">
+                                                                        <div
+                                                                            *ngFor="let error of item.validator.getErrors('aqL_QTY_13')">
+                                                                            {{ error | translate }}</div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-sm-3">
+                                                                <div class="my-input-group">
+                                                                    <label for="">{{
+                                                                        'EDIT_CUSTOMER_PRICE_CARD.LBL_PRICING20' |
+                                                                        translate }}</label>
+                                                                    <input type="number" (keypress)="numberOnly($event)"
+                                                                        [ngClass]="{ 'is-invalid':  !item.validator.isValid('aqL_QTY_20')} && item.subCategory.isCommon"
+                                                                        (paste)="onPaste($event)"
+                                                                        [(ngModel)]=item.subCategory.aqL_QTY_20 />
+
+                                                                    <div *ngIf="!item.validator.isValid('aqL_QTY_20') && item.subCategory.isCommon"
+                                                                        class="invalid-feedback">
+                                                                        <div
+                                                                            *ngFor="let error of item.validator.getErrors('aqL_QTY_20')">
+                                                                            {{ error | translate }}</div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-sm-3">
+                                                                <div class="my-input-group">
+                                                                    <label for="">{{
+                                                                        'EDIT_CUSTOMER_PRICE_CARD.LBL_PRICING32' |
+                                                                        translate }}</label>
+                                                                    <input type="number" (keypress)="numberOnly($event)"
+                                                                        [ngClass]="{ 'is-invalid':  !item.validator.isValid('aqL_QTY_32')} && item.subCategory.isCommon"
+                                                                        (paste)="onPaste($event)"
+                                                                        [(ngModel)]=item.subCategory.aqL_QTY_32 />
+
+                                                                    <div *ngIf="!item.validator.isValid('aqL_QTY_32') && item.subCategory.isCommon"
+                                                                        class="invalid-feedback">
+                                                                        <div
+                                                                            *ngFor="let error of item.validator.getErrors('aqL_QTY_32')">
+                                                                            {{ error | translate }}</div>
+                                                                    </div>
+
+                                                                </div>
+                                                            </div>
+
+                                                        </div>
+
+                                                        <div class="row marginTop25">
+
+                                                            <div class="col-sm-3">
+                                                                <div class="my-input-group">
+                                                                    <label for="">{{
+                                                                        'EDIT_CUSTOMER_PRICE_CARD.LBL_PRICING50' |
+                                                                        translate }}</label>
+                                                                    <input type="number" (keypress)="numberOnly($event)"
+                                                                        [ngClass]="{ 'is-invalid':  !item.validator.isValid('aqL_QTY_50')} && item.subCategory.isCommon"
+                                                                        (paste)="onPaste($event)"
+                                                                        [(ngModel)]=item.subCategory.aqL_QTY_50 />
+
+                                                                    <div *ngIf="!item.validator.isValid('aqL_QTY_50') && item.subCategory.isCommon"
+                                                                        class="invalid-feedback">
+                                                                        <div
+                                                                            *ngFor="let error of item.validator.getErrors('aqL_QTY_50')">
+                                                                            {{ error | translate }}</div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+
+                                                            <div class="col-sm-3">
+                                                                <div class="my-input-group">
+                                                                    <label for="">{{
+                                                                        'EDIT_CUSTOMER_PRICE_CARD.LBL_PRICING80' |
+                                                                        translate }}</label>
+                                                                    <input type="number" (keypress)="numberOnly($event)"
+                                                                        [ngClass]="{ 'is-invalid':  !item.validator.isValid('aqL_QTY_80')} && item.subCategory.isCommon"
+                                                                        (paste)="onPaste($event)"
+                                                                        [(ngModel)]=item.subCategory.aqL_QTY_80 />
+
+                                                                    <div *ngIf="!item.validator.isValid('aqL_QTY_80') && item.subCategory.isCommon"
+                                                                        class="invalid-feedback">
+                                                                        <div
+                                                                            *ngFor="let error of item.validator.getErrors('aqL_QTY_80')">
+                                                                            {{ error | translate }}</div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-sm-3">
+                                                                <div class="my-input-group">
+                                                                    <label for="">{{
+                                                                        'EDIT_CUSTOMER_PRICE_CARD.LBL_PRICING125' |
+                                                                        translate }}</label>
+                                                                    <input type="number" (keypress)="numberOnly($event)"
+                                                                        [ngClass]="{ 'is-invalid':  !item.validator.isValid('aqL_QTY_125')} && item.subCategory.isCommon"
+                                                                        (paste)="onPaste($event)"
+                                                                        [(ngModel)]=item.subCategory.aqL_QTY_125 />
+
+                                                                    <div *ngIf="!item.validator.isValid('aqL_QTY_125') && item.subCategory.isCommon"
+                                                                        class="invalid-feedback">
+                                                                        <div
+                                                                            *ngFor="let error of item.validator.getErrors('aqL_QTY_125')">
+                                                                            {{ error | translate }}</div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-sm-3">
+                                                                <div class="my-input-group">
+                                                                    <label for="">{{
+                                                                        'EDIT_CUSTOMER_PRICE_CARD.LBL_PRICING200' |
+                                                                        translate }}</label>
+                                                                    <input type="number" (keypress)="numberOnly($event)"
+                                                                        [ngClass]="{ 'is-invalid':  !item.validator.isValid('aqL_QTY_200')} && item.subCategory.isCommon"
+                                                                        (paste)="onPaste($event)"
+                                                                        [(ngModel)]=item.subCategory.aqL_QTY_200 />
+
+                                                                    <div *ngIf="!item.validator.isValid('aqL_QTY_200') && item.subCategory.isCommon"
+                                                                        class="invalid-feedback">
+                                                                        <div
+                                                                            *ngFor="let error of item.validator.getErrors('aqL_QTY_200')">
+                                                                            {{ error | translate }}</div>
+                                                                    </div>
+
+                                                                </div>
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="row marginTop25">
+
+                                                            <div class="col-sm-3">
+                                                                <div class="my-input-group">
+                                                                    <label for="">{{
+                                                                        'EDIT_CUSTOMER_PRICE_CARD.LBL_PRICING315' |
+                                                                        translate }}</label>
+                                                                    <input type="number" (keypress)="numberOnly($event)"
+                                                                        [ngClass]="{ 'is-invalid':  !item.validator.isValid('aqL_QTY_315')} && item.subCategory.isCommon"
+                                                                        (paste)="onPaste($event)"
+                                                                        [(ngModel)]=item.subCategory.aqL_QTY_315 />
+
+                                                                    <div *ngIf="!item.validator.isValid('aqL_QTY_315') && item.subCategory.isCommon"
+                                                                        class="invalid-feedback">
+                                                                        <div
+                                                                            *ngFor="let error of item.validator.getErrors('aqL_QTY_315')">
+                                                                            {{ error | translate }}</div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-sm-3">
+                                                                <div class="my-input-group">
+                                                                    <label for="">{{
+                                                                        'EDIT_CUSTOMER_PRICE_CARD.LBL_PRICING500' |
+                                                                        translate }}</label>
+
+                                                                    <input type="number" (keypress)="numberOnly($event)"
+                                                                        [ngClass]="{ 'is-invalid':  !item.validator.isValid('aqL_QTY_500')} && item.subCategory.isCommon"
+                                                                        (paste)="onPaste($event)"
+                                                                        [(ngModel)]=item.subCategory.aqL_QTY_500 />
+
+                                                                    <div *ngIf="!item.validator.isValid('aqL_QTY_500') && item.subCategory.isCommon"
+                                                                        class="invalid-feedback">
+                                                                        <div
+                                                                            *ngFor="let error of item.validator.getErrors('aqL_QTY_500')">
+                                                                            {{ error | translate }}</div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-sm-3">
+                                                                <div class="my-input-group">
+                                                                    <label for="">{{
+                                                                        'EDIT_CUSTOMER_PRICE_CARD.LBL_PRICING800' |
+                                                                        translate }}</label>
+                                                                    <input type="number" (keypress)="numberOnly($event)"
+                                                                        [ngClass]="{ 'is-invalid':  !item.validator.isValid('aqL_QTY_800')} && item.subCategory.isCommon"
+                                                                        (paste)="onPaste($event)"
+                                                                        [(ngModel)]=item.subCategory.aqL_QTY_800 />
+
+                                                                    <div *ngIf="!item.validator.isValid('aqL_QTY_800') && item.subCategory.isCommon"
+                                                                        class="invalid-feedback">
+                                                                        <div
+                                                                            *ngFor="let error of item.validator.getErrors('aqL_QTY_800')">
+                                                                            {{ error | translate }}</div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-sm-3">
+                                                                <div class="my-input-group">
+                                                                    <label for="">{{
+                                                                        'EDIT_CUSTOMER_PRICE_CARD.LBL_PRICING1250' |
+                                                                        translate }}</label>
+                                                                    <input type="number" (keypress)="numberOnly($event)"
+                                                                        [ngClass]="{ 'is-invalid':  !item.validator.isValid('aqL_QTY_1250')} && item.subCategory.isCommon"
+                                                                        (paste)="onPaste($event)"
+                                                                        [(ngModel)]=item.subCategory.aqL_QTY_1250 />
+                                                                    <div *ngIf="!item.validator.isValid('aqL_QTY_800') && item.subCategory.isCommon"
+                                                                        class="invalid-feedback">
+                                                                        <div
+                                                                            *ngFor="let error of item.validator.getErrors('aqL_QTY_800')">
+                                                                            {{ error | translate }}</div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+
+                                                        </div>
+
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- common details section for bill method - manday end -->
+
+                        <!-- common details section for bill method - piece rate start -->
+
+                        <div class="col-sm-12"
+                            *ngIf="model.billingMethodId==billingMethod.PieceRate && masterData.hasPieceRateComplexAccess && subCategoryValidators.length>0 && !model.subCategorySelectAll">
+                            <div class="row marginTop15">
+                                <div class="col-lg-12">
+                                    <div class="table-container"
+                                        style="overflow-y: scroll; max-height: 400px;width:100%">
+                                        <table class="pagination-table bordered">
+                                            <thead>
+                                                <tr class="sticky-top-row">
+                                                    <th></th>
+                                                    <th>{{ 'EDIT_CUSTOMER_PRICE_CARD.LBL_PRODUCT_NAME' | translate }}
+                                                    </th>
+                                                    <th>{{ 'EDIT_CUSTOMER_PRICE_CARD.LBL_UNIT_PRICE' | translate }}</th>
+                                                    <th></th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr *ngFor="let item of subCategoryValidators; let idx=index;">
+                                                    <td>
+                                                        <div class="styled-checkbox-container">
+                                                            <input type="checkbox" id="checkboxSubCategory-{{idx}}"
+                                                                class="styled-checkbox"
+                                                                (change)="checkIfAllSubcategoryItemSelected()"
+                                                                [(ngModel)]="item.subCategory.isCommon">
+                                                            <label for="checkboxSubCategory-{{idx}}"></label>
+                                                        </div>
+                                                    </td>
+                                                    <td>
+                                                        {{item.subCategory.subCategory2Name}}
+                                                    </td>
+
+                                                    <td>
+                                                        <input [(ngModel)]="item.subCategory.unitPrice" type="number"
+                                                            (keypress)="numberOnly($event)" (paste)="onPaste($event)"
+                                                            [ngClass]="{ 'is-invalid':  !item.validator.isValid('unitPrice')}"
+                                                            min="0" max="999" placeholder="Travel Tariff" />
+
+                                                        <div *ngIf="!item.validator.isValid('unitPrice')"
+                                                            class="invalid-feedback">
+                                                            <div
+                                                                *ngFor="let error of item.validator.getErrors('unitPrice')">
+                                                                {{ error | translate }}</div>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- common details section for bill method - piece rate end -->
+
+
+                        <!-- special rule for billing method - man day start  -->
+
+                        <div class="content-container"
+                            *ngIf="model.billingMethodId==billingMethod.ManDay && masterData.hasMandayComplexAccess">
+                            <div class="row searchFormPadding">
+                                <div class="col-sm-12">
+                                    <div class="row">
+                                        <div class="col-sm-4 col-md-4 col-lg-4">
+                                            <div class="styled-checkbox-container">
+                                                <input type="checkbox" id="checkboxSpecialRule" class="styled-checkbox"
+                                                    [(ngModel)]="model.isSpecial">
+                                                <label for="checkboxSpecialRule">{{
+                                                    'EDIT_CUSTOMER_PRICE_CARD.LBL_PRICE_Special_Rule' | translate
+                                                    }}</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="master-search-cta-container" *ngIf="model.isSpecial">
+                                <div class="column">
+                                    <button class="secondary-cta small" (click)="addSpecialRule()">
+                                        <i class="fa fa-plus"></i>&nbsp;&nbsp;{{ 'CUSTOMER_BUYER.LBL_ADD' | translate }}
+                                    </button>
+                                </div>
+                                <div class="column text-right">
+                                </div>
+                            </div>
+                            <!--Table-->
+                            <div class="content-container" *ngIf="model.isSpecial && ruleValidators.length>0">
+                                <div class="formPadding">
+                                    <div class="table-container"
+                                        style="overflow-y: scroll; max-height: 400px;width:100%">
+                                        <table class="pagination-table bordered">
+                                            <thead>
+                                                <tr class="sticky-top-row">
+                                                    <th>{{ 'EDIT_CUSTOMER_PRICE_CARD.LBL_PRICE_Productivity' | translate
+                                                        }}</th>
+                                                    <th>{{ 'EDIT_CUSTOMER_PRICE_CARD.LBL_PRICE_Reports' | translate }}
+                                                    </th>
+                                                    <th>{{ 'EDIT_CUSTOMER_PRICE_CARD.LBL_UNIT_PRICE' | translate }}</th>
+                                                    <th></th>
+                                                </tr>
+                                            </thead>
+
+                                            <tbody>
+                                                <ng-container *ngFor="let item of ruleValidators; let i = index">
+                                                    <tr>
+                                                        <td>
+                                                            <input maxlength="100" (keypress)="numberOnly($event)"
+                                                                (paste)="onPaste($event)"
+                                                                [ngClass]="{ 'is-invalid':!item.validator.isValid('mandayProductivity')}"
+                                                                [(ngModel)]="item.rule.mandayProductivity"
+                                                                type="number" />
+
+                                                            <div *ngIf="!item.validator.isValid('mandayProductivity')"
+                                                                class="invalid-feedback">
+                                                                <div
+                                                                    *ngFor="let error of item.validator.getErrors('mandayProductivity')">
+                                                                    {{ error | translate }}</div>
+                                                            </div>
+
+                                                        </td>
+                                                        <td>
+                                                            <input maxlength="100" (keypress)="numberOnly($event)"
+                                                                (paste)="onPaste($event)"
+                                                                [ngClass]="{ 'is-invalid':!item.validator.isValid('mandayReports')}"
+                                                                [(ngModel)]="item.rule.mandayReports" type="number" />
+
+                                                            <div *ngIf="!item.validator.isValid('mandayReports')"
+                                                                class="invalid-feedback">
+                                                                <div
+                                                                    *ngFor="let error of item.validator.getErrors('mandayReports')">
+                                                                    {{ error | translate }}</div>
+                                                            </div>
+
+                                                        </td>
+                                                        <td>
+                                                            <input maxlength="100" (keypress)="numberOnly($event)"
+                                                                (paste)="onPaste($event)"
+                                                                [ngClass]="{ 'is-invalid':!item.validator.isValid('unitPrice')}"
+                                                                [(ngModel)]="item.rule.unitPrice" type="number" />
+
+                                                            <div *ngIf="!item.validator.isValid('unitPrice')"
+                                                                class="invalid-feedback">
+                                                                <div
+                                                                    *ngFor="let error of item.validator.getErrors('unitPrice')">
+                                                                    {{ error | translate }}</div>
+                                                            </div>
+
+                                                        </td>
+                                                        <td>
+                                                            <button class="secondary-cta x-small"
+                                                                (click)="deleteSpecialRule(i)">
+                                                                <i class="fa fa-trash"></i>
+                                                            </button>
+                                                        </td>
+                                                    </tr>
+                                                </ng-container>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- special rule for billing method - man day end  -->
+
+                        <!-- special rule for billing method - piece rate start  -->
+
+                        <div class="content-container"
+                            *ngIf="model.billingMethodId==billingMethod.PieceRate && masterData.hasPieceRateComplexAccess">
+                            <div class="row searchFormPadding">
+                                <div class="col-sm-12">
+                                    <div class="row">
+                                        <div class="col-sm-4 col-md-4 col-lg-4">
+                                            <div class="styled-checkbox-container">
+                                                <input type="checkbox" id="checkboxSpecialRule" class="styled-checkbox"
+                                                    [(ngModel)]="model.isSpecial">
+                                                <label for="checkboxSpecialRule">{{
+                                                    'EDIT_CUSTOMER_PRICE_CARD.LBL_PRICE_Special_Rule' | translate
+                                                    }}</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="master-search-cta-container" *ngIf="model.isSpecial">
+                                <div class="column">
+                                    <button class="secondary-cta small" (click)="addSpecialRule()">
+                                        <i class="fa fa-plus"></i>&nbsp;&nbsp;{{ 'CUSTOMER_BUYER.LBL_ADD' | translate }}
+                                    </button>
+                                </div>
+                                <div class="column text-right">
+                                </div>
+                            </div>
+                            <!--Table-->
+                            <div class="content-container" *ngIf="model.isSpecial && ruleValidators.length>0">
+                                <div class="formPadding">
+                                    <div class="table-container"
+                                        style="overflow-y: scroll; max-height: 400px;width:100%">
+                                        <table class="pagination-table bordered">
+                                            <thead>
+                                                <tr class="sticky-top-row">
+                                                    <th>{{ 'EDIT_CUSTOMER_PRICE_CARD.LBL_PRICE_BilledQty_Start' |
+                                                        translate }}</th>
+                                                    <th>{{ 'EDIT_CUSTOMER_PRICE_CARD.LBL_PRICE_BilledQty_End' |
+                                                        translate }} </th>
+                                                    <th>{{ 'EDIT_CUSTOMER_PRICE_CARD.LBL_PRICE_Min_Billing_PerDay' |
+                                                        translate }} </th>
+                                                    <th>{{ 'EDIT_CUSTOMER_PRICE_CARD.LBL_PRICE_Additional_Fee' |
+                                                        translate }} </th>
+                                                    <th>{{ 'EDIT_CUSTOMER_PRICE_CARD.LBL_UNIT_PRICE' | translate }}
+                                                    </th>
+                                                    <th></th>
+                                                </tr>
+                                            </thead>
+
+                                            <tbody>
+                                                <ng-container *ngFor="let item of ruleValidators; let i = index">
+                                                    <tr>
+                                                        <td>
+                                                            <input maxlength="100" (keypress)="numberOnly($event)"
+                                                                [ngClass]="{ 'is-invalid':!item.validator.isValid('pieceRate_Billing_Q_Start')}"
+                                                                [(ngModel)]="item.rule.pieceRate_Billing_Q_Start"
+                                                                type="number" />
+
+                                                            <div *ngIf="!item.validator.isValid('pieceRate_Billing_Q_Start')"
+                                                                class="invalid-feedback">
+                                                                <div
+                                                                    *ngFor="let error of item.validator.getErrors('pieceRate_Billing_Q_Start')">
+                                                                    {{ error | translate }}</div>
+                                                            </div>
+
+                                                        </td>
+                                                        <td>
+                                                            <input maxlength="100" (keypress)="numberOnly($event)"
+                                                                [ngClass]="{ 'is-invalid':!item.validator.isValid('piecerate_Billing_Q_End')}"
+                                                                [(ngModel)]="item.rule.piecerate_Billing_Q_End"
+                                                                type="number" />
+
+                                                            <div *ngIf="!item.validator.isValid('piecerate_Billing_Q_End')"
+                                                                class="invalid-feedback">
+                                                                <div
+                                                                    *ngFor="let error of item.validator.getErrors('piecerate_Billing_Q_End')">
+                                                                    {{ error | translate }}</div>
+                                                            </div>
+                                                        </td>
+                                                        <td>
+                                                            <input maxlength="100" (keypress)="numberOnly($event)"
+                                                                [ngClass]="{ 'is-invalid':!item.validator.isValid('piecerate_MinBilling')}"
+                                                                [(ngModel)]="item.rule.piecerate_MinBilling"
+                                                                type="number" />
+
+                                                            <div *ngIf="!item.validator.isValid('piecerate_MinBilling')"
+                                                                class="invalid-feedback">
+                                                                <div
+                                                                    *ngFor="let error of item.validator.getErrors('piecerate_MinBilling')">
+                                                                    {{ error | translate }}</div>
+                                                            </div>
+                                                        </td>
+                                                        <td>
+                                                            <input maxlength="100" (keypress)="numberOnly($event)"
+                                                                [ngClass]="{ 'is-invalid':!item.validator.isValid('additionalFee')}"
+                                                                [(ngModel)]="item.rule.additionalFee" type="number" />
+
+                                                            <div *ngIf="!item.validator.isValid('additionalFee')"
+                                                                class="invalid-feedback">
+                                                                <div
+                                                                    *ngFor="let error of item.validator.getErrors('additionalFee')">
+                                                                    {{ error | translate }}</div>
+                                                            </div>
+                                                        </td>
+                                                        <td>
+                                                            <input maxlength="100" (keypress)="numberOnly($event)"
+                                                                [ngClass]="{ 'is-invalid':!item.validator.isValid('unitPrice')}"
+                                                                [(ngModel)]="item.rule.unitPrice" type="number" />
+
+                                                            <div *ngIf="!item.validator.isValid('unitPrice')"
+                                                                class="invalid-feedback">
+                                                                <div
+                                                                    *ngFor="let error of item.validator.getErrors('unitPrice')">
+                                                                    {{ error | translate }}</div>
+                                                            </div>
+                                                        </td>
+                                                        <td>
+                                                            <button class="secondary-cta x-small"
+                                                                (click)="deleteSpecialRule(i)">
+                                                                <i class="fa fa-trash"></i>
+                                                            </button>
+                                                        </td>
+                                                    </tr>
+                                                </ng-container>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- special rule for billing method - piece rate end  -->
+
+                        <div class="col-sm-12">
+                            <div class="row marginTop25">
+                                <div class="col-sm-4 col-md-6 col-lg-4">
+                                    <div class="my-input-group">
+                                        <label class="required">{{ 'EDIT_CUSTOMER_PRICE_CARD.LBL_CURRENCY' | translate
+                                            }}</label>
+                                        <ng-select [closeOnSelect]="true" [searchable]="true"
+                                            [items]="masterData.currencyList" [(ngModel)]="model.currencyId"
+                                            bindLabel="currencyName" bindValue="id"
+                                            placeholder="--- {{(masterData.currencyList && masterData.currencyList.length>0? 'COMMON.LBL_SELECT':'COMMON.LBL_NO_DATA')  | translate }} ---"
+                                            [ngClass]="{ 'is-invalid':  !validator.isValid('currencyId')}"
+                                            [loading]="masterData.currencyLoading">
+                                            <ng-template ng-option-tmp let-item="item">
+                                                <div class="text-wrap">{{ item.currencyName }}</div>
+                                            </ng-template>
+                                        </ng-select>
+                                        <div *ngIf="!validator.isValid('currencyId')" class="invalid-feedback">
+                                            <div *ngFor="let error of validator.getErrors('currencyId')">
+                                                {{ error | translate }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-4 col-md-6 col-lg-4"
+                                    *ngIf="model.billingMethodId==billingMethod.ManDay && !masterData.hasMandayComplexAccess">
+                                    <div class="my-input-group">
+                                        <label class="required">{{ 'EDIT_CUSTOMER_PRICE_CARD.LBL_UNIT_PRICE' | translate
+                                            }}</label>
+                                        <input type="number" min="0" [(ngModel)]=model.unitPrice
+                                            (keypress)="numberOnly($event)" (paste)="onPaste($event)"
+                                            [ngClass]="{ 'is-invalid':  !validator.isValid('unitPrice')}" />
+                                        <div *ngIf="!validator.isValid('unitPrice')" class="invalid-feedback">
+                                            <div *ngFor="let error of validator.getErrors('unitPrice')">
+                                                {{ error | translate }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-2 col-md-4 col-lg-2">
+                                    <div class="my-input-group">
+                                        <label>{{ 'EDIT_CUSTOMER_PRICE_CARD.LBL_TAX_INCLUDE' | translate }}</label>
+                                        <div class="my-input-group">
+                                            <div class="styled-radio-container">
+                                                <input type="radio" class="styled-radio" id="isYes" name="taxinclude"
+                                                    [value]="true" [(ngModel)]="model.taxIncluded">
+
+                                                <label for="isYes">{{ 'COMMON.LBL_YES' | translate }}</label>
+                                            </div>
+                                            <div class="styled-radio-container">
+                                                <input type="radio" class="styled-radio" id="isNo" name="taxinclude"
+                                                    [(ngModel)]="model.taxIncluded" [value]="false">
+                                                <label for="isNo">{{ 'COMMON.LBL_NO' | translate }}</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-2 col-md-6 col-lg-2">
+                                    <div class="my-input-group">
+                                        <label>{{ 'EDIT_CUSTOMER_PRICE_CARD.LBL_TRAVEL_INCLUDE' | translate }}</label>
+                                        <div class="my-input-group">
+                                            <div class="styled-radio-container">
+                                                <input type="radio" class="styled-radio" id="isTravelIncludeYes"
+                                                    name="travelInclude" [value]="true"
+                                                    [(ngModel)]="model.travelIncluded">
+                                                <label for="isTravelIncludeYes">{{ 'COMMON.LBL_YES' | translate
+                                                    }}</label>
+                                            </div>
+                                            <div class="styled-radio-container">
+                                                <input type="radio" class="styled-radio" id="isTravelIncludeNo"
+                                                    name="travelInclude" [value]="false"
+                                                    [(ngModel)]="model.travelIncluded">
+                                                <label for="isTravelIncludeNo">{{ 'COMMON.LBL_NO' | translate }}</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+
+                        <div class="col-sm-12">
+                            <div class="row marginTop25 borderline">
+
+                                <!--#region Inspection Location DropDown-->
+                                <div class="col-sm-4 col-md-6 col-lg-4">
+                                    <div class="my-input-group">
+                                        <label for="">{{ 'EDIT_BOOKING.LBL_INSP_LOCATION' | translate }}</label>
+
+                                        <ng-select [closeOnSelect]="true" [searchable]="true" [multiple]="true"
+                                            class="multiple" [items]="masterData.inspectionLocationList"
+                                            [(ngModel)]="model.inspectionLocationList" bindLabel="name" bindValue="id"
+                                            placeholder="--- {{(masterData.inspectionLocationList && masterData.inspectionLocationList.length>0? 'COMMON.LBL_SELECT':'COMMON.LBL_NO_DATA')  | translate }} ---"
+                                            [loading]="masterData.inspectionLocationLoading">
+                                            <ng-template ng-option-tmp let-item="item">
+                                                <div class="text-wrap">{{ item.name }}</div>
+                                            </ng-template>
+                                        </ng-select>
+
+                                    </div>
+                                </div>
+                                <!--#endregion Inspection Location DropDown-->
+
+
+
+                                <!--#region Intervention type DropDown-->
+
+                                <div class="col-sm-4 col-md-6 col-lg-4"
+                                    *ngIf="model.billingMethodId==billingMethod.PerIntervention && masterData.hasInterventionComplexAccess">
+                                    <div class="my-input-group">
+                                        <label for="">Intervention Type</label>
+                                        <ng-select [items]="masterData.interventionTypeList" bindLabel="name"
+                                            bindValue="id" [multiple]="false" [closeOnSelect]="true" [searchable]="true"
+                                            (change)="changeInterventionType();"
+                                            [loading]=masterData.interventionTypeLoading [hideSelected]="true"
+                                            [clearable]="false"
+                                            placeholder="--- {{ (masterData.interventionTypeList!=null && masterData.interventionTypeList.length!=0? 'EDIT_BOOKING.LBL_SELECT':'EDIT_BOOKING.MSG_NO_DATA' ) | translate }} ---"
+                                            [(ngModel)]="model.interventionType" appendTo="body">
+                                            <ng-template ng-option-tmp let-item="item">
+                                                <div class="text-wrap">{{ item.name }}</div>
+                                            </ng-template>
+                                        </ng-select>
+                                    </div>
+                                </div>
+                                <!--#endregion Intervention type DropDown-->
+
+                            </div>
+
+                            <div class="row marginTop25">
+
+                                <!-- special rule for billing method - per intervention - range start  -->
+
+                                <div class="content-container"
+                                    *ngIf="model.billingMethodId==billingMethod.PerIntervention && masterData.hasInterventionComplexAccess && model.interventionType==interventionType.Range">
+
+                                    <div class="master-search-cta-container">
+                                        <div class="column">
+                                            <button class="secondary-cta small" (click)="addSpecialRule()">
+                                                <i class="fa fa-plus"></i>&nbsp;&nbsp;{{ 'CUSTOMER_BUYER.LBL_ADD' |
+                                                translate }}
+                                            </button>
+                                        </div>
+                                        <div class="column text-right">
+                                        </div>
+                                    </div>
+                                    <!--Table-->
+                                    <div class="content-container" *ngIf="ruleValidators.length>0">
+                                        <div class="formPadding">
+                                            <div class="table-container"
+                                                style="overflow-y: scroll; max-height: 400px;width:100%">
+                                                <table class="pagination-table bordered">
+                                                    <thead>
+                                                        <tr class="sticky-top-row">
+                                                            <th>{{ 'EDIT_CUSTOMER_PRICE_CARD.LBL_PRICE_Range1' |
+                                                                translate }}</th>
+                                                            <th>{{ 'EDIT_CUSTOMER_PRICE_CARD.LBL_PRICE_Range2' |
+                                                                translate }}</th>
+                                                            <th>{{ 'EDIT_CUSTOMER_PRICE_CARD.LBL_UNIT_PRICE' | translate
+                                                                }}</th>
+                                                            <th></th>
+                                                        </tr>
+                                                    </thead>
+
+                                                    <tbody>
+                                                        <ng-container
+                                                            *ngFor="let item of ruleValidators; let i = index">
+                                                            <tr>
+                                                                <td>
+                                                                    <input maxlength="100"
+                                                                        [ngClass]="{ 'is-invalid':!item.validator.isValid('perInterventionRange1')}"
+                                                                        (keypress)="numberOnly($event)"
+                                                                        (paste)="onPaste($event)"
+                                                                        [(ngModel)]="item.rule.perInterventionRange1"
+                                                                        type="number" />
+
+                                                                    <div *ngIf="!item.validator.isValid('perInterventionRange1')"
+                                                                        class="invalid-feedback">
+                                                                        <div
+                                                                            *ngFor="let error of item.validator.getErrors('perInterventionRange1')">
+                                                                            {{ error | translate }}</div>
+                                                                    </div>
+
+                                                                </td>
+                                                                <td>
+                                                                    <input maxlength="100"
+                                                                        (keypress)="numberOnly($event)"
+                                                                        (paste)="onPaste($event)"
+                                                                        [ngClass]="{ 'is-invalid':!item.validator.isValid('perInterventionRange2')}"
+                                                                        [(ngModel)]="item.rule.perInterventionRange2"
+                                                                        type="number" />
+
+                                                                    <div *ngIf="!item.validator.isValid('perInterventionRange2')"
+                                                                        class="invalid-feedback">
+                                                                        <div
+                                                                            *ngFor="let error of item.validator.getErrors('perInterventionRange2')">
+                                                                            {{ error | translate }}</div>
+                                                                    </div>
+
+                                                                </td>
+                                                                <td>
+                                                                    <input maxlength="100"
+                                                                        (keypress)="numberOnly($event)"
+                                                                        [ngClass]="{ 'is-invalid':!item.validator.isValid('unitPrice')}"
+                                                                        (paste)="onPaste($event)"
+                                                                        [(ngModel)]="item.rule.unitPrice"
+                                                                        type="number" />
+
+                                                                    <div *ngIf="!item.validator.isValid('unitPrice')"
+                                                                        class="invalid-feedback">
+                                                                        <div
+                                                                            *ngFor="let error of item.validator.getErrors('unitPrice')">
+                                                                            {{ error | translate }}</div>
+                                                                    </div>
+
+                                                                </td>
+                                                                <td>
+                                                                    <button class="secondary-cta x-small"
+                                                                        (click)="deleteSpecialRule(i)">
+                                                                        <i class="fa fa-trash"></i>
+                                                                    </button>
+                                                                </td>
+                                                            </tr>
+                                                        </ng-container>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- special rule for billing method - per intervention - range  end  -->
+
+                                <!-- special rule for billing method - per intervention - style start  -->
+
+                                <div class="content-container"
+                                    *ngIf="model.billingMethodId==billingMethod.PerIntervention && masterData.hasInterventionComplexAccess && model.interventionType==interventionType.PerStyle">
+
+                                    <div class="row col-md-12">
+                                        <div class="col-sm-4 col-md-6 col-lg-4">
+                                            <div class="my-input-group">
+                                                <label class="required">{{ 'EDIT_CUSTOMER_PRICE_CARD.LBL_UNIT_PRICE' |
+                                                    translate }}</label>
+                                                <input (change)="onUnitPriceChange()" type="number"
+                                                    [(ngModel)]=model.unitPrice
+                                                    [ngClass]="{ 'is-invalid':  !validator.isValid('unitPrice')}" />
+                                                <div *ngIf="!validator.isValid('unitPrice')" class="invalid-feedback">
+                                                    <div *ngFor="let error of validator.getErrors('unitPrice')">
+                                                        {{ error | translate }}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-4 col-md-4 col-lg-4">
+                                            <div class="styled-checkbox-container" style="padding-top: 30px;">
+                                                <input type="checkbox" id="checkboxSpecialRule" class="styled-checkbox"
+                                                    [(ngModel)]="model.isSpecial">
+                                                <label for="checkboxSpecialRule">Special Rule</label>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="row col-md-12" *ngIf="model.isSpecial && model.ruleList.length>0">
+                                        <div class="col-sm-4 col-md-6 col-lg-4">
+                                            <div class="my-input-group">
+                                                <label for="">MaxStyle/Day</label>
+                                                <input (input)="onChangePerDay()" type="number"
+                                                    [(ngModel)]="model.ruleList[0].max_Style_Per_Day" />
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-4 col-md-4 col-lg-4">
+
+                                            <div class="my-input-group">
+                                                <label for="">MaxStyle/Week</label>
+                                                <input type="number" (input)="onChangePerWeek()"
+                                                    [(ngModel)]="model.ruleList[0].max_Style_Per_Week" />
+                                            </div>
+
+
+                                        </div>
+                                        <div class="col-sm-4 col-md-6 col-lg-4">
+                                            <div class="my-input-group">
+                                                <label for="">MaxStyle/Month</label>
+                                                <input type="number" (input)="onChangePerMonth()"
+                                                    [(ngModel)]="model.ruleList[0].max_Style_per_Month" />
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="row col-md-12" *ngIf="model.isSpecial && model.ruleList.length>0">
+                                        <div class="col-sm-4 col-md-6 col-lg-4"
+                                            *ngIf="model.isSpecial && model.ruleList.length>0">
+                                            <div class="my-input-group">
+                                                <label for="">Max Style/UnitPrice</label>
+                                                <input type="number" (keypress)="numberOnly($event)"
+                                                    (paste)="onPaste($event)"
+                                                    [(ngModel)]="model.ruleList[0].unitPrice" />
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+
+                                <!-- special rule for billing method - per intervention - style  end  -->
+                            </div>
+                        </div>
+
+
+
+                        <div class="col-sm-12">
+                            <div class="row">
+                                <div class="styled-checkbox-container">
+                                    <input class="styled-checkbox"
+                                        *ngIf="model.id==0 || !masterData.isInvoiceConfigured"
+                                        id="checkbox-invoiceConfigure" type="checkbox"
+                                        (change)="isCheckInvoiceConfigure();" [(ngModel)]="model.isInvoiceConfigured">
+                                    <label class="quote-form-title" for="checkbox-invoiceConfigure"> {{
+                                        'EDIT_CUSTOMER_PRICE_CARD.LBL_INVOICE_DETAILS' | translate }}</label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-sm-12" *ngIf="model.isInvoiceConfigured">
+
+                            <div class="row marginTop15">
+                                <div class="col-sm-4 col-md-6 col-lg-4">
+                                    <div class="my-input-group">
+                                        <label for="">Customer Country</label>
+                                        <input [disabled]="true" [(ngModel)]="model.customerCountry" type="text" />
+                                    </div>
+                                </div>
+
+                                <div class="col-sm-4 col-md-6 col-lg-4">
+                                    <div class="my-input-group">
+                                        <label for="">Customer Segment</label>
+                                        <input [disabled]="true" [(ngModel)]="model.customerSegment" type="text" />
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row marginTop15">
+                                <div class="col-sm-4 col-md-6 col-lg-4">
+
+                                    <div class="my-input-group">
+                                        <label for="">Max.Fee</label>
+                                        <input type="number" (keypress)="numberOnly($event)" (paste)="onPaste($event)"
+                                            [(ngModel)]="model.maxFeeStyle" />
+                                    </div>
+                                </div>
+                                <div class="col-sm-4 col-md-6 col-lg-4">
+                                    <div class="my-input-group">
+                                        <label for="">Subject</label>
+                                        <input [(ngModel)]="model.invoiceSubject" type="text" />
+                                    </div>
+                                </div>
+
+                                <div class="col-sm-4 col-md-6 col-lg-4">
+                                    <div class="my-input-group">
+                                        <label for="">Billing Frequency</label>
+                                        <ng-select [items]="masterData.billFrequencyList" bindLabel="name"
+                                            bindValue="id" [multiple]="false" [closeOnSelect]="true" [searchable]="true"
+                                            [loading]=masterData.billFrequancyLoading [hideSelected]="true"
+                                            [clearable]="false"
+                                            placeholder="--- {{ (masterData.billFrequencyList!=null && masterData.billFrequencyList.length!=0? 'EDIT_BOOKING.LBL_SELECT':'EDIT_BOOKING.MSG_NO_DATA' ) | translate }} ---"
+                                            [(ngModel)]="model.billFrequency" appendTo="body">
+                                            <ng-template ng-option-tmp let-item="item">
+                                                <div class="text-wrap">{{ item.name }}</div>
+                                            </ng-template>
+                                        </ng-select>
+                                    </div>
+                                </div>
+
+
+                            </div>
+
+
+                            <div class="row marginTop15">
+                                <div class="col-sm-4 col-md-6 col-lg-4">
+                                    <div class="my-input-group">
+                                        <label class="required">{{ 'EDIT_CUSTOMER_PRICE_CARD.LBL_INVOICE_REQUEST_TYPE' |
+                                            translate }}</label>
+                                        <ng-select [items]="masterData.invoiceRequestList"
+                                            [(ngModel)]="model.invoiceRequestType" bindLabel="name" bindValue="id"
+                                            [disabled]="!(model.billingToId==billingTo.Customer||model.billingToId==billingTo.SGTCustomer)"
+                                            [clearable]="false" (change)="onChangeInvRequestType($event);"
+                                            placeholder="--- {{(masterData.invoiceRequestList && masterData.invoiceRequestList.length>0? 'COMMON.LBL_SELECT':'COMMON.LBL_NO_DATA')  | translate }} ---"
+                                            [ngClass]="{ 'is-invalid':  !validator.isValid('invoiceRequestType')}"
+                                            [loading]="masterData.invoiceRequestLoading">
+                                            <ng-template ng-option-tmp let-item="item">
+                                                <div class="text-wrap">{{ item.name }}</div>
+                                            </ng-template>
+                                        </ng-select>
+                                        <!---->
+                                        <div *ngIf="!validator.isValid('invoiceRequestType')" class="invalid-feedback">
+                                            <div *ngFor="let error of validator.getErrors('invoiceRequestType')">
+                                                {{ error | translate }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-sm-4 col-md-6 col-lg-4">
+                                    <div class="my-input-group">
+                                        <label class="required">{{ 'EDIT_CUSTOMER_PRICE_CARD.LBL_INVOICE_BILLING' |
+                                            translate }}</label>
+                                        <ng-select [closeOnSelect]="true" [searchable]="true"
+                                            [items]="masterData.billingEntityList" [(ngModel)]="model.billingEntity"
+                                            bindLabel="name" bindValue="id" (change)="onChangeBillingEntity($event);"
+                                            (clear)="onClearBillingEntity();"
+                                            placeholder="--- {{(masterData.billingEntityList && masterData.billingEntityList.length>0? 'COMMON.LBL_SELECT':'COMMON.LBL_NO_DATA')  | translate }} ---"
+                                            [ngClass]="{ 'is-invalid':  !validator.isValid('billingEntity')}"
+                                            [loading]="masterData.billingEntityLoading">
+                                            <ng-template ng-option-tmp let-item="item">
+                                                <div class="text-wrap">{{ item.name }}</div>
+                                            </ng-template>
+                                        </ng-select>
+                                        <div *ngIf="!validator.isValid('billingEntity')" class="invalid-feedback">
+                                            <div *ngFor="let error of validator.getErrors('billingEntity')">
+                                                {{ error | translate }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-sm-4 col-md-6 col-lg-4">
+                                    <div class="my-input-group">
+                                        <label class="required">{{ 'EDIT_CUSTOMER_PRICE_CARD.LBL_INVOICE_BANK' |
+                                            translate }}</label>
+                                        <ng-select [closeOnSelect]="true" [searchable]="true"
+                                            [items]="masterData.invoiceBankList" [(ngModel)]="model.bankAccount"
+                                            bindLabel="name" bindValue="id"
+                                            placeholder="--- {{(masterData.invoiceBankList && masterData.invoiceBankList.length>0? 'COMMON.LBL_SELECT':'COMMON.LBL_NO_DATA')  | translate }} ---"
+                                            [ngClass]="{ 'is-invalid':  !validator.isValid('bankAccount')}"
+                                            [loading]="masterData.invoiceBankLoading">
+                                            <ng-template ng-option-tmp let-item="item">
+                                                <div class="text-wrap">{{item.name }}</div>
+                                            </ng-template>
+                                        </ng-select>
+                                        <div *ngIf="!validator.isValid('bankAccount')" class="invalid-feedback">
+                                            <div *ngFor="let error of validator.getErrors('bankAccount')">
+                                                {{ error | translate }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <div class="col-sm-12 marginTop25"
+                            *ngIf="model.isInvoiceConfigured && model.invoiceRequestType>0 && model.invoiceRequestType!=invRequestType.NotApplicable">
+                            <div class="section-toggle-container" (click)=toggleCommonInvoiceSection()>
+                                <p>
+                                    <img src="assets/images/expand-circle.png" alt="expand"
+                                        *ngIf="!masterData.toggleInvoiceSection">
+                                    <img src="assets/images/collapse-circle.png" alt="collapse"
+                                        *ngIf="masterData.toggleInvoiceSection">
+                                    {{'EDIT_CUSTOMER_PRICE_CARD.LBL_INVOICE_COMMON_FIELDS' | translate}}
+                                </p>
+                            </div>
+                        </div>
+
+                        <div class="col-sm-12"
+                            *ngIf="model.isInvoiceConfigured && masterData.toggleInvoiceSection ||  model.isInvoiceConfigured && model.invoiceRequestType==invRequestType.NotApplicable">
+
+                            <div class="row marginTop15">
+                                <div class="col-sm-4 col-md-6 col-lg-4">
+                                    <div class="my-input-group">
+                                        <label for="" class="required">{{
+                                            'EDIT_CUSTOMER_PRICE_CARD.LBL_INVOICE_BILLEDNAME' | translate }}</label>
+                                        <input maxlength="200" (change)="onChangeBilledName();"
+                                            [ngClass]="{ 'is-invalid':!validator.isValidIf('invoiceRequestBilledName',validateBillDetails())}"
+                                            [(ngModel)]="model.invoiceRequestBilledName" type="text" />
+                                        <div *ngIf="!validator.isValidIf('invoiceRequestBilledName',validateBillDetails())"
+                                            class="invalid-feedback">
+                                            <div *ngFor="let error of validator.getErrors('invoiceRequestBilledName')">
+                                                {{ error | translate }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-sm-4 col-md-6 col-lg-4">
+                                    <div class="my-input-group">
+                                        <label>{{'EDIT_CUSTOMER_PRICE_CARD.LBL_INVOICE_ADDRESS' | translate }}</label>
+                                        <ng-select [closeOnSelect]="true" [searchable]="true"
+                                            [items]="masterData.customerAddressList"
+                                            [(ngModel)]="model.customerAddressId" bindLabel="name" bindValue="id"
+                                            (change)="onChangeCommonAddress($event);"
+                                            placeholder="--- {{(masterData.customerAddressList && masterData.customerAddressList.length>0? 'COMMON.LBL_SELECT':'COMMON.LBL_NO_DATA')  | translate }} ---"
+                                            [loading]="masterData.customerAddressLoading">
+                                            <ng-template ng-option-tmp let-item="item">
+                                                <div class="text-wrap">{{ item.name }}</div>
+                                            </ng-template>
+                                        </ng-select>
+
+                                    </div>
+                                </div>
+                                <div class="col-sm-4 col-md-6 col-lg-4">
+                                    <div class="my-input-group">
+
+                                        <a (click)="AddCustomerContact()" class="right-link">
+                                            +{{'EDIT_BOOKING.LBL_ADD_CONTACT' | translate }}
+                                        </a>
+
+                                        <label class="required">{{ 'EDIT_CUSTOMER_PRICE_CARD.LBL_INVOICE_CONTACT' |
+                                            translate }}</label>
+                                        <ng-select [items]="masterData.customerContactList"
+                                            [(ngModel)]="model.invoiceRequestContact" [closeOnSelect]="true"
+                                            [searchable]="true" bindLabel="name" bindValue="id" [multiple]="true"
+                                            class="multiple" (change)="onChangeCommonContacts();"
+                                            placeholder="--- {{(masterData.customerContactList && masterData.customerContactList.length>0? 'COMMON.LBL_SELECT':'COMMON.LBL_NO_DATA')  | translate }} ---"
+                                            [ngClass]="{ 'is-invalid':  !validator.isValidIf('invoiceRequestContact',validateBillDetails())}"
+                                            [loading]="masterData.customerContactsLoading">
+                                            <ng-template ng-option-tmp let-item="item">
+                                                <div class="text-wrap">{{ item.name }}</div>
+                                            </ng-template>
+                                        </ng-select>
+                                        <div *ngIf="!validator.isValidIf('invoiceRequestContact',validateBillDetails())"
+                                            class="invalid-feedback">
+                                            <div *ngFor="let error of validator.getErrors('invoiceRequestContact')">
+                                                {{ error | translate }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+
+                            <div class="row marginTop15">
+                                <div class="col-sm-8 col-md-8 col-lg-8">
+                                    <div class="my-input-group">
+
+                                        <label>{{ 'EDIT_CUSTOMER_PRICE_CARD.LBL_INVOICE_BILLED_ADDRESS' | translate
+                                            }}</label>
+
+                                        <textarea (change)="onChangeCommonAddressBox()"
+                                            [ngClass]="{ 'is-invalid': !validator.isValidIf('invoiceRequestAddress',validateBillDetails())}"
+                                            [(ngModel)]=model.invoiceRequestAddress></textarea>
+
+                                        <div *ngIf="!validator.isValidIf('invoiceRequestAddress',validateBillDetails())"
+                                            class="invalid-feedback">
+                                            <div *ngFor="let error of validator.getErrors('invoiceRequestAddress')">
+                                                {{ error | translate }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div *ngIf="model.invoiceRequestType!=invRequestType.NotApplicable"
+                                    class="col-sm-4 col-md-4 col-lg-4">
+                                    <div class="styled-checkbox-container" style="padding-top: 30px;">
+                                        <input class="styled-checkbox" id="checkbox-invoiceSelectAll" type="checkbox"
+                                            (change)="onChangeCommonInvoiceSelectAll();"
+                                            [(ngModel)]="model.invoiceRequestSelectAll">
+                                        <label for="checkbox-invoiceSelectAll">{{
+                                            'EDIT_CUSTOMER_PRICE_CARD.LBL_INVOICE_SELECTALL' | translate }}</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-sm-12" *ngIf="model.isInvoiceConfigured && model.invoiceRequestList.length>0">
+                            <div class="row marginTop15">
+                                <div class="col-lg-12">
+                                    <div class="table-container"
+                                        style="overflow-y: scroll; max-height: 400px;width:100%">
+                                        <table class="pagination-table bordered">
+                                            <thead>
+                                                <tr class="sticky-top-row">
+                                                    <th></th>
+                                                    <th>{{ 'EDIT_CUSTOMER_PRICE_CARD.LBL_INV_REQ_NAME' | translate }}
+                                                    </th>
+                                                    <th>{{ 'EDIT_CUSTOMER_PRICE_CARD.LBL_INVOICE_BILLEDNAME' | translate
+                                                        }}</th>
+                                                    <th>{{ 'EDIT_CUSTOMER_PRICE_CARD.LBL_INVOICE_BILLED_ADDRESS' |
+                                                        translate }}</th>
+                                                    <th>{{ 'EDIT_CUSTOMER_PRICE_CARD.LBL_INVOICE_BILLED_CONTACT' |
+                                                        translate }}</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr *ngFor="let item of model.invoiceRequestList; let idx=index;">
+                                                    <td>
+                                                        <div class="styled-checkbox-container">
+                                                            <input type="checkbox" id="checkbox-{{idx}}"
+                                                                class="styled-checkbox"
+                                                                (change)="checkIfAllItemSelected()"
+                                                                [(ngModel)]="item.isCommon">
+                                                            <label for="checkbox-{{idx}}"></label>
+                                                        </div>
+                                                    </td>
+                                                    <td>{{item.invRequestName}}</td>
+                                                    <td>
+                                                        <input maxlength="200" [(ngModel)]="item.billedName"
+                                                            type="text" />
+                                                    </td>
+                                                    <td class="width-180 medium">
+                                                        <ng-select [closeOnSelect]="true" [searchable]="true"
+                                                            [items]="masterData.customerAddressList"
+                                                            [(ngModel)]="item.billedAddressId" bindLabel="name"
+                                                            bindValue="id" (change)="setAddress($event,item)"
+                                                            placeholder="--- {{(masterData.customerAddressList && masterData.customerAddressList.length>0? 'COMMON.LBL_SELECT':'COMMON.LBL_NO_DATA')  | translate }} ---"
+                                                            [loading]="masterData.customerAddressLoading">
+                                                            <ng-template ng-option-tmp let-item="item">
+                                                                <div class="text-wrap">{{ item.name }}</div>
+                                                            </ng-template>
+                                                        </ng-select>
+                                                        <textarea [(ngModel)]="item.billedAddress"></textarea>
+
+
+
+                                                    </td>
+
+                                                    <td class="wordbreak whitespacenormal width-180 medium">
+                                                        <ng-select [closeOnSelect]="true" [searchable]="true"
+                                                            [items]="masterData.customerContactList"
+                                                            [(ngModel)]="item.invoiceRequestContactList"
+                                                            bindLabel="name" class="width-300" bindValue="id"
+                                                            [multiple]="true" class="multiple"
+                                                            placeholder="--- {{(masterData.customerContactList && masterData.customerContactList.length>0? 'COMMON.LBL_SELECT':'COMMON.LBL_NO_DATA')  | translate }} ---"
+                                                            [loading]="masterData.customerContactsLoading">
+                                                            <ng-template ng-option-tmp let-item="item">
+                                                                <div class="text-wrap">{{ item.name }}</div>
+                                                            </ng-template>
+                                                        </ng-select>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-sm-12" *ngIf="model.isInvoiceConfigured">
+                            <div class="row marginTop15">
+                                <div class="col-sm-4 col-md-6 col-lg-4">
+                                    <div class="my-input-group">
+                                        <label for="" class="required">{{ 'EDIT_CUSTOMER_PRICE_CARD.LBL_INVOICE_DIGITNO'
+                                            | translate }}</label>
+                                        <input maxlength="200"
+                                            [ngClass]="{ 'is-invalid': model.billingToId==billingTo.Customer && !validator.isValid('invoiceNoDigit')}"
+                                            (keypress)="numberOnly($event)" (paste)="onPaste($event)"
+                                            [(ngModel)]="model.invoiceNoDigit" type="number" />
+                                        <div *ngIf="model.billingToId==billingTo.Customer && !validator.isValid('invoiceNoDigit')"
+                                            class="invalid-feedback">
+                                            <div *ngFor="let error of validator.getErrors('invoiceNoDigit')">
+                                                {{ error | translate }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-sm-4 col-md-6 col-lg-4">
+                                    <div class="my-input-group">
+                                        <label for="" class="required">{{
+                                            'EDIT_CUSTOMER_PRICE_CARD.LBL_INVOICE_PREFIX_NO' | translate }}</label>
+                                        <input maxlength="200"
+                                            [ngClass]="{ 'is-invalid': model.billingToId==billingTo.Customer && !validator.isValid('invoiceNoPrefix')}"
+                                            [(ngModel)]="model.invoiceNoPrefix" type="text" />
+                                        <div *ngIf="model.billingToId==billingTo.Customer && !validator.isValid('invoiceNoPrefix')"
+                                            class="invalid-feedback">
+                                            <div *ngFor="let error of validator.getErrors('invoiceNoPrefix')">
+                                                {{ error | translate }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-sm-4 col-md-6 col-lg-4">
+                                    <div class="my-input-group">
+                                        <label>{{ 'EDIT_CUSTOMER_PRICE_CARD.LBL_INVOICE_OFFICE' | translate }}</label>
+                                        <ng-select [items]="masterData.invoiceOfficeList"
+                                            [(ngModel)]="model.invoiceOffice" [closeOnSelect]="true" [searchable]="true"
+                                            bindLabel="name" bindValue="id"
+                                            placeholder="--- {{(masterData.invoiceOfficeList && masterData.invoiceOfficeList.length>0? 'COMMON.LBL_SELECT':'COMMON.LBL_NO_DATA')  | translate }} ---"
+                                            [loading]="masterData.invoiceOfficeLoading">
+                                            <ng-template ng-option-tmp let-item="item">
+                                                <div class="text-wrap">{{ item.name }}</div>
+                                            </ng-template>
+                                        </ng-select>
+
+                                    </div>
+                                </div>
+
+
+                            </div>
+
+                        </div>
+
+                        <div class="col-sm-12" *ngIf="model.isInvoiceConfigured">
+                            <div class="row marginTop15">
+
+                                <div class="col-sm-4 col-md-6 col-lg-4">
+                                    <div class="my-input-group">
+                                        <label>{{ 'EDIT_CUSTOMER_PRICE_CARD.LBL_INVOICE_PAYMENT_TERM' | translate
+                                            }}</label>
+                                        <ng-select [items]="masterData.invoicePaymentTypeList"
+                                            [(ngModel)]="model.paymentTypeId" [closeOnSelect]="true" [searchable]="true"
+                                            bindLabel="name" bindValue="id" (change)="onChangePaymentType($event);"
+                                            placeholder="--- {{(masterData.invoicePaymentTypeList && masterData.invoicePaymentTypeList.length>0? 'COMMON.LBL_SELECT':'COMMON.LBL_NO_DATA')  | translate }} ---"
+                                            [loading]="masterData.invoicePaymentLaoding">
+                                            <ng-template ng-option-tmp let-item="item">
+                                                <div class="text-wrap">{{ item.name }}</div>
+                                            </ng-template>
+                                        </ng-select>
+
+                                    </div>
+                                </div>
+                                <div class="col-sm-4 col-md-6 col-lg-4">
+                                    <div class="my-input-group">
+                                        <label>{{ 'EDIT_CUSTOMER_PRICE_CARD.LBL_INVOICE_PAYMENT_TERM_VALUE' | translate}}</label>
+                                        <input [(ngModel)]="model.paymentTerms" type="text" />
+
+                                    </div>
+                                </div>
+
+                                <div class="col-sm-4 col-md-6 col-lg-4">
+                                    <div class="my-input-group">
+                                        <label>{{ 'EDIT_CUSTOMER_PRICE_CARD.LBL_PAYMENT_TERMS_Count' | translate
+                                            }}</label>
+                                        <input maxlength="200" (keypress)="numberOnly($event)" (paste)="onPaste($event)"
+                                            [(ngModel)]="model.paymentDuration" type="number" />
+
+                                    </div>
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                        <div class="col-sm-12" *ngIf="model.isInvoiceConfigured">
+                            <div class="row marginTop15">
+
+                                <div class="col-sm-4 col-md-6 col-lg-4">
+                                    <div class="my-input-group">
+                                        <label class="required">{{ 'EDIT_CUSTOMER_PRICE_CARD.LBL_INVOICE_INSPECTION_FEE'
+                                            | translate }}</label>
+                                        <ng-select [items]="masterData.invoiceFeesTypeList"
+                                            [(ngModel)]="model.invoiceInspFeeFrom" [closeOnSelect]="true"
+                                            [searchable]="true" bindLabel="name" bindValue="id"
+                                            placeholder="--- {{(masterData.invoiceFeesTypeList && masterData.invoiceFeesTypeList.length>0? 'COMMON.LBL_SELECT':'COMMON.LBL_NO_DATA')  | translate }} ---"
+                                            [ngClass]="{ 'is-invalid':  !validator.isValid('invoiceInspFeeFrom')}"
+                                            [loading]="masterData.invoiceFeesLoading">
+                                            <ng-template ng-option-tmp let-item="item">
+                                                <div class="text-wrap">{{ item.name }}</div>
+                                            </ng-template>
+                                        </ng-select>
+                                        <div *ngIf="!validator.isValid('invoiceInspFeeFrom')" class="invalid-feedback">
+                                            <div *ngFor="let error of validator.getErrors('invoiceInspFeeFrom')">
+                                                {{ error | translate }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-sm-4 col-md-6 col-lg-4">
+                                    <div class="my-input-group">
+                                        <label class="required">Travel Expense</label>
+                                        <ng-select [items]="masterData.travelExpenseFeesList"
+                                            [(ngModel)]="model.invoiceTravelExpense" [closeOnSelect]="true"
+                                            [searchable]="true" bindLabel="name" bindValue="id"
+                                            placeholder="--- {{(masterData.travelExpenseFeesList && masterData.travelExpenseFeesList.length>0? 'COMMON.LBL_SELECT':'COMMON.LBL_NO_DATA')  | translate }} ---"
+                                            [ngClass]="{ 'is-invalid':  !validator.isValid('invoiceTravelExpense')}"
+                                            [loading]="masterData.invoiceFeesLoading">
+                                            <ng-template ng-option-tmp let-item="item">
+                                                <div class="text-wrap">{{ item.name }}</div>
+                                            </ng-template>
+                                        </ng-select>
+                                        <div *ngIf="!validator.isValid('invoiceTravelExpense')"
+                                            class="invalid-feedback">
+                                            <div *ngFor="let error of validator.getErrors('invoiceTravelExpense')">
+                                                {{ error | translate }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-sm-4 col-md-6 col-lg-4" *ngIf="masterData.hotelfeeVisible">
+                                    <div class="my-input-group">
+                                        <label class="required">{{ 'EDIT_CUSTOMER_PRICE_CARD.LBL_INVOICE_HOTEL_FEE' |
+                                            translate }}</label>
+                                        <ng-select [closeOnSelect]="true" [searchable]="true"
+                                            [items]="masterData.hotelFeesList" [(ngModel)]="model.invoiceHotelFeeFrom"
+                                            bindLabel="name" bindValue="id"
+                                            placeholder="--- {{(masterData.hotelFeesList && masterData.hotelFeesList.length>0? 'COMMON.LBL_SELECT':'COMMON.LBL_NO_DATA')  | translate }} ---"
+                                            [ngClass]="{ 'is-invalid':  !validator.isValid('invoiceHotelFeeFrom')}"
+                                            [loading]="masterData.invoiceFeesLoading">
+                                            <ng-template ng-option-tmp let-item="item">
+                                                <div class="text-wrap">{{ item.name }}</div>
+                                            </ng-template>
+                                        </ng-select>
+                                        <div *ngIf="!validator.isValid('invoiceHotelFeeFrom')" class="invalid-feedback">
+                                            <div *ngFor="let error of validator.getErrors('invoiceHotelFeeFrom')">
+                                                {{ error | translate }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+
+                            </div>
+
+                        </div>
+
+                        <div class="col-sm-12 borderline" *ngIf="model.isInvoiceConfigured">
+                            <div class="row marginTop25">
+
+                                <div class="col-sm-4 col-md-6 col-lg-4">
+                                    <div class="my-input-group">
+                                        <label class="required">{{ 'EDIT_CUSTOMER_PRICE_CARD.LBL_INVOICE_DISCOUNT_FEE' |
+                                            translate }}</label>
+                                        <ng-select [closeOnSelect]="true" [searchable]="true"
+                                            [items]="masterData.discountFeesList"
+                                            [(ngModel)]="model.invoiceDiscountFeeFrom" bindLabel="name" bindValue="id"
+                                            placeholder="--- {{(masterData.discountFeesList && masterData.discountFeesList.length>0? 'COMMON.LBL_SELECT':'COMMON.LBL_NO_DATA')  | translate }} ---"
+                                            [ngClass]="{ 'is-invalid':  !validator.isValid('invoiceDiscountFeeFrom')}"
+                                            [loading]="masterData.invoiceFeesLoading">
+                                            <ng-template ng-option-tmp let-item="item">
+                                                <div class="text-wrap">{{ item.name }}</div>
+                                            </ng-template>
+                                        </ng-select>
+                                        <div *ngIf="!validator.isValid('invoiceDiscountFeeFrom')"
+                                            class="invalid-feedback">
+                                            <div *ngFor="let error of validator.getErrors('invoiceDiscountFeeFrom')">
+                                                {{ error | translate }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-sm-4 col-md-6 col-lg-4">
+                                    <div class="my-input-group">
+                                        <label class="required">{{ 'EDIT_CUSTOMER_PRICE_CARD.LBL_INVOICE_OTHER_FEE' |
+                                            translate }}</label>
+                                        <ng-select [closeOnSelect]="true" [searchable]="true"
+                                            [items]="masterData.otherFeesList" [(ngModel)]="model.invoiceOtherFeeFrom"
+                                            bindLabel="name" bindValue="id"
+                                            placeholder="--- {{(masterData.otherFeesList && masterData.otherFeesList.length>0? 'COMMON.LBL_SELECT':'COMMON.LBL_NO_DATA')  | translate }} ---"
+                                            [ngClass]="{ 'is-invalid':  !validator.isValid('invoiceOtherFeeFrom')}"
+                                            [loading]="masterData.invoiceFeesLoading">
+                                            <ng-template ng-option-tmp let-item="item">
+                                                <div class="text-wrap">{{ item.name }}</div>
+                                            </ng-template>
+                                        </ng-select>
+                                        <div *ngIf="!validator.isValid('invoiceOtherFeeFrom')" class="invalid-feedback">
+                                            <div *ngFor="let error of validator.getErrors('invoiceOtherFeeFrom')">
+                                                {{ error | translate }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+
+                        </div>
+                        <div class="col-sm-12">
+                            <div class="row marginTop25">
+                                <div class="col-sm-4 col-md-6 col-lg-4">
+                                    <div class="my-input-group">
+                                        <label class="required">{{ 'EDIT_CUSTOMER_PRICE_CARD.LBL_PERIOD_DATE_FROM' |
+                                            translate }}</label>
+                                        <div class="calendar-wrapper">
+                                            <input type="text" maxlength="10"
+                                                [ngClass]="{ 'is-invalid':  !validator.isValid('periodFrom')}"
+                                                placeholder="{{ 'EDIT_CUSTOMER_PRICE_CARD.LBL_PERIOD_DATE_FROM' | translate }}"
+                                                ngbDatepicker #ad="ngbDatepicker" (click)="ad.toggle()"
+                                                [(ngModel)]="model.periodFrom">
+                                            <img src="assets/images/calendar-icon.svg" alt="" class="calendar-icon"
+                                                (click)="ad.toggle()">
+                                        </div>
+                                        <div *ngIf="!validator.isValid('periodFrom')" class="invalid-feedback">
+                                            <div *ngFor="let error of validator.getErrors('periodFrom')">
+                                                {{ error | translate }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-4 col-md-6 col-lg-4">
+                                    <div class="my-input-group">
+                                        <label class="required">{{ 'EDIT_CUSTOMER_PRICE_CARD.LBL_PERIOD_DATE_TO' |
+                                            translate }}</label>
+                                        <div class="calendar-wrapper">
+                                            <input type="text" maxlength="10"
+                                                [ngClass]="{ 'is-invalid':  !validator.isValid('periodTo')}"
+                                                readonly=readonly
+                                                placeholder="{{ 'EDIT_CUSTOMER_PRICE_CARD.LBL_PERIOD_DATE_TO' | translate }}"
+                                                ngbDatepicker #td="ngbDatepicker" (click)="td.toggle()"
+                                                [(ngModel)]="model.periodTo">
+                                            <img src="assets/images/calendar-icon.svg" alt="" class="calendar-icon"
+                                                (click)="ad.toggle()">
+                                        </div>
+                                        <div *ngIf="!validator.isValid('periodTo')" class="invalid-feedback">
+                                            <div *ngFor="let error of validator.getErrors('periodTo')">
+                                                {{ error | translate }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-sm-4 col-md-4 col-lg-4">
+                                    <div class="my-input-group">
+                                        <label for="">{{ 'TRAVEL_MATRIX.LBL_TARIFF_TYPE' | translate }}</label>
+                                        <ng-select [searchable]="true" [hideSelected]="true" [clearable]="true"
+                                            [items]="masterData.tariffTypeList" bindLabel="name"
+                                            [loading]="masterData.tariffTypeLoading" bindValue="id"
+                                            placeholder="--- {{(masterData.tariffTypeList && masterData.tariffTypeList.length>0? 'COMMON.LBL_SELECT':'COMMON.LBL_NO_DATA')  | translate }} ---"
+                                            [(ngModel)]="model.tariffTypeId">
+                                            <ng-template ng-option-tmp let-item="item">
+                                                <div class="text-wrap">{{ item.name }}</div>
+                                            </ng-template>
+                                        </ng-select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-sm-12">
+                            <div class="row marginTop25">
+                                <div class="col-sm-4 col-md-6 col-lg-4">
+                                    <div class="my-input-group">
+                                        <label>{{ 'EDIT_CUSTOMER_PRICE_CARD.LBL_FREE_TRAVEL_KM' | translate }}</label>
+                                        <input type="number" min="1" (keypress)="numberOnly($event)"
+                                            (paste)="onPaste($event)" [(ngModel)]=model.freeTravelKM />
+                                    </div>
+                                </div>
+                                <div class="col-sm-8 col-md-8 col-lg-8">
+                                    <div class="my-input-group">
+                                        <label>{{ 'EDIT_CUSTOMER_PRICE_CARD.LBL_REMARKS' | translate }}</label>
+                                        <textarea [(ngModel)]=model.remarks>   </textarea>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-12">
+                            <div class="row form-action-container">
+                                <div class="col-sm-12">
+                                    <button [disabled]="buttonDisable()" class="primary-cta MarginR-20"
+                                        (click)="save()">
+                                        {{'COMMON.LBL_SAVE' | translate}}
+                                        <span *ngIf="masterData.saveLoading">
+                                            <i class="fa fa-refresh fa-spin" aria-hidden="true"></i>
+                                        </span>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="loader-overlay" *ngIf="masterData.productSubCategory2Loading">
+                        <div class="loader-container">
+                            <img src="assets/images/reload.svg" alt="">
+                            <span>{{'COMMON.LBL_LOADER' | translate}}</span>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>

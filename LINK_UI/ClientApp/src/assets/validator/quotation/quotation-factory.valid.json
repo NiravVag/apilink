@@ -1,0 +1,26 @@
+{
+  "model": "quotation-contact.component",
+  "fields": {
+    "id": [
+      {
+        "type": "required",
+        "fieldType": "A",
+        "ressource": "QUOTATION.MSG_FACT_REQ"
+      }
+    ],
+    "legalName": [
+      {
+        "type": "required",
+        "fieldType": "T",
+        "ressource": "QUOTATION.MSG_FACTLEAGL_REQ"
+      }
+    ],
+    "address": [
+      {
+        "type": "required",
+        "fieldType": "T",
+        "ressource": "QUOTATION.MSG_ADDRESS_REQ"
+      }
+    ]
+  }
+}

@@ -1,0 +1,112 @@
+﻿@{
+    ViewData["Title"] = "DefectCategoryExport";
+}
+
+
+@model DTO.DefectDashboard.DefectPerformanceExportResponse
+
+<xls-sheet name="Defect-Category">
+    <table xls-begin="A:1" style="border-style:solid">
+        <tr>
+            <td width="130px" style="font-weight:bold">Service Date From :</td>
+            <td width="100px">@Model.RequestFilters.FromDate</td>
+
+            <td width="120px" style="font-weight:bold">Service Date To :</td>
+            <td width="100px">@Model.RequestFilters.ToDate</td>
+
+            @if (!string.IsNullOrEmpty(@Model.RequestFilters.CustomerName))
+            {
+                <td style="font-weight: bold">Customer :</td>
+                <td width="100px">@Html.Raw(@Model.RequestFilters.CustomerName)</td>
+            }
+            @if (!string.IsNullOrEmpty(@Model.RequestFilters.SupplierName))
+            {
+                <td style="font-weight: bold">Supplier :</td>
+                <td width="100px">@Model.RequestFilters.SupplierName</td>
+            }
+            @if (!string.IsNullOrEmpty(@Model.RequestFilters.FactoryName))
+            {
+                <td width="100px" style="font-weight: bold">Factory :</td>
+                <td width="100px">@Html.Raw(@Model.RequestFilters.FactoryName)</td>
+            }
+            @if (!string.IsNullOrEmpty(@Model.RequestFilters.FactoryCountryName))
+            {
+                <td width="100px" style="font-weight: bold">Country :</td>
+                <td width="100px">@Model.RequestFilters.FactoryCountryName</td>
+            }
+
+            @if (!string.IsNullOrEmpty(@Model.RequestSubFilters.DefectSelectName))
+            {
+                <td width="100px" style="font-weight: bold"> Defect Selected :</td>
+                <td width="100px">@Model.RequestSubFilters.DefectSelectName</td>
+            }
+
+            @if (!string.IsNullOrEmpty(@Model.RequestSubFilters.SubDefectName))
+            {
+                <td width="100px" style="font-weight: bold"> Defect Name:</td>
+                <td width="100px">@Model.RequestSubFilters.SubDefectName</td>
+            }
+
+            @if (!string.IsNullOrEmpty(@Model.RequestSubFilters.SubSupOrFact))
+            {
+                <td width="100px" style="font-weight: bold"> Name:</td>
+                <td width="100px">@Model.RequestSubFilters.SubSupOrFact</td>
+            }
+            @if (!string.IsNullOrEmpty(@Model.RequestFilters?.ProductCategory))
+            {
+                <td width="100px" style="font-weight: bold">Product Category :</td>
+                <td width="100px">@Html.Raw(@Model.RequestFilters?.ProductCategory)</td>
+            }
+            @if (!string.IsNullOrEmpty(@Model.RequestFilters?.Product))
+            {
+                <td width="100px" style="font-weight: bold">Product :</td>
+                <td width="100px">@Html.Raw(@Model.RequestFilters?.Product)</td>
+            }
+        </tr>
+        <tr>
+            <td></td>
+        </tr>
+
+        <tr>
+            <th width="250px">Name</th>
+            @if (@Model.PerformanceDefectList.Any(x => x.IsCriticalShow))
+            {
+                <th width="250px">Critical</th>
+            }
+            @if (@Model.PerformanceDefectList.Any(x => x.IsMajorShow))
+            {
+                <th width="250px">Major</th>
+            }
+            @if (@Model.PerformanceDefectList.Any(x => x.IsMinorShow))
+            {
+                <th width="250px">Minor</th>
+            }
+            <th width="250px">Total Defects</th>
+            <th width="250px">Total Reports</th>
+        </tr>
+        @foreach (var item in Model.PerformanceDefectList)
+        {
+        <tr>
+            <td width="100px">@item.SupOrFactName</td>
+           
+            @if (@item.IsCriticalShow)
+            {
+                <td width="100px">@item.Critical</td>
+            }
+            @if (@item.IsMajorShow)
+            {
+                <td width="100px">@item.Major</td>
+            }
+            @if (@item.IsMinorShow)
+            {
+                <td width="100px">@item.Minor</td>
+            }
+
+            <td width="100px">@item.TotalDefect</td>
+            <td width="100px">@item.TotalReports</td>
+        </tr>
+        }
+    </table>
+</xls-sheet>
+
+

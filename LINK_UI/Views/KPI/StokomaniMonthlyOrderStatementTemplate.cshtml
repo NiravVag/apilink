@@ -1,0 +1,75 @@
+﻿@using DTO.Common; 
+@{
+    ViewData["Title"] = "StokomaniMonthlyOrderStatementTemplate";
+}
+
+@model DTO.Kpi.ExportResult
+
+<xls-sheet name="Monthly Order Statement">
+    <table xls-begin="A:1" style="border-style:solid">
+        <tr style="background-color:#f5f5f5;font-weight:bold;text-align:center">
+            <th>Inspection Date From</th>
+            <th>Inspection Date to</th>
+            <th>SUPPLIER CODE</th>
+            <th>PO</th>
+            <th style="text-align:center">ITEM QTY</th>
+            <th>PRODUCT NAME</th>
+            <th>CATALOGUE</th>
+            <th>TOTAL CTN</th>
+            <th>TOTAL UNITS</th>
+            <th>SAMPLING LEVEL.</th>
+            <th>Sample Size</th>
+            <th>Service Type</th>
+            <th>Inspection Result</th>
+            <th style="text-align:center">Report No.</th>
+            <th style="text-align:center">Man-days</th>
+            <th style="text-align:center">Service fee (USD)</th>
+            <th style="text-align:center">Traveling fee(USD)</th>
+            <th>Payment status</th>
+            <th>Supplier</th>
+            <th>Supplier Contact person</th>
+            <th>Email</th>
+            <th>Factory</th>
+            <th>Factory Contact person</th>
+            <th>Contact tel./phone</th>
+            <th>Locationn (City, Province)</th>
+            <th>Paid by</th>
+        </tr>
+
+        @foreach (var item in Model.Data)
+        {
+            var totalTravelCost = @item.TravellingCost + @item.HotelFee;
+        <tr>
+            <td width="150px" xls-type="date" xls-format="@ApiCommonData.StandardDateFormat">@item.InspectionStartDate</td>
+            <td width="250px" xls-type="date" xls-format="@ApiCommonData.StandardDateFormat">@item.InspectionEndDate</td>
+            <td width="150px">@item.SupplierCode</td>
+            <td width="250px">@Html.Raw(@item.PONumber)</td>
+            <td width="150px" xls-type="number" style="text-align:center">@item.ProductCount</td>
+            <td width="150px">@Html.Raw(@item.ProductDescription)</td>
+            <td width="150px">@Html.Raw(@item.ProductCategory)</td>
+            <td width="150px">@item.CartonQty</td>
+            <td width="150px">@item.TotalQty</td>
+            <td width="150px">@Html.Raw(@item.AQLLevelName)</td>
+            <td width="150px">@item.SampleSize</td>
+            <td width="150px">@Html.Raw(@item.ServiceTypeName)</td>
+            <td width="150px">@item.ReportResult</td>
+            <td width="150px" xls-type="number" style="text-align:center">@item.BookingNo</td>
+            <td width="150px" xls-type="number" style="text-align:center">@item.ManDay</td>
+            <td width="150px" xls-type="number" style="text-align:center">@item.InspectionFee</td>
+            <td width="150px" xls-type="number" style="text-align:center">@totalTravelCost</td>
+            <td></td>
+            <td width="150px">@Html.Raw(@item.SupplierName)</td>
+            <td width="150px">@Html.Raw(@item.SupContact)</td>
+            <td width="150px">@Html.Raw(@item.Email)</td>
+            <td width="150px">@Html.Raw(@item.FactoryName)</td>
+            <td width="150px">@Html.Raw(@item.FactoryContact)</td>
+            <td width="150px">@Html.Raw(@item.Phone)</td>
+            <td width="150px">@Html.Raw(@item.FactoryCity) ,@Html.Raw(@item.FactoryState)</td>
+            <td width="250px">@item.PaidBy</td>
+        </tr>
+        }
+    </table>
+</xls-sheet>
+
+
+

@@ -1,0 +1,85 @@
+﻿
+@{
+    ViewData["Title"] = "CarrefourEcoPackTemplate";
+}
+
+@model DTO.Kpi.ExportResult
+
+<xls-sheet name="CarrefourEcoPack">
+    <table xls-begin="A:1" style="border-style:solid">
+        <col>
+        <colgroup span="2"></colgroup>
+        <colgroup span="2"></colgroup>
+        <tr style="background-color:#f5f5f5;font-weight:bold;text-align:center">
+            <th rowspan="2" style="text-align:center; vertical-align : middle">Booking No</th>
+            <th rowspan="2" style="vertical-align : middle">Customer Booking No</th>
+            <th rowspan="2" style="vertical-align : middle">Department</th>
+            <th rowspan="2" style="vertical-align : middle">Supplier</th>
+            <th rowspan="2" style="vertical-align : middle">Factory</th>
+            <th rowspan="2" style="vertical-align : middle">API Confirm Service Date From</th>
+            <th rowspan="2" style="vertical-align : middle">API Confirm Service Date To</th>
+            <th rowspan="2" style="vertical-align : middle">Service Type</th>
+            <th rowspan="2" style="vertical-align : middle">Status</th>
+            <th rowspan="2" style="vertical-align : middle">Product Description</th>
+            <th rowspan="2" style="vertical-align : middle">ProductID</th>
+            <th colspan="6" scope="colgroup"  style="text-align:center">PRODUCT PACKAGING INFORMATION COLLECTION</th>
+
+            <th colspan="4" scope="colgroup"  style="text-align:center">PRODUCT BATTERIES INFORMATION COLLECTION</th>
+
+            <th rowspan="2" style="vertical-align : middle">PO Number</th>
+            <th rowspan="2" style="text-align:center; vertical-align : middle">Order Quantity</th>
+            <th rowspan="2" style="vertical-align : middle">Product Category</th>
+            <th rowspan="2" style="vertical-align : middle">Product Sub Category</th>
+            <th rowspan="2" style="vertical-align : middle">Product Sub Category 2</th>
+            <th rowspan="2" style="vertical-align : middle">Report Result</th>
+            <th rowspan="2" style="vertical-align : middle">Office</th>
+
+        </tr>
+        <tr style="background-color:#f5f5f5;font-weight:bold;text-align:center">
+            <th scope="col" style="text-align:center">Piece Number</th>
+            <th scope="col">Material Group</th>
+            <th scope="col">Material Code</th>
+            <th scope="col">Location</th>
+            <th scope="col" style="text-align:center">Quantity</th>
+            <th scope="col">Net Weight (g) per Quantity</th>
+            <th scope="col">Battery Type</th>
+            <th scope="col">Battery Model</th>
+            <th scope="col" style="text-align:center">Quantity</th>
+            <th scope="col">Net Weight (g) per Quantity</th>
+        </tr>
+        @foreach (var item in Model.Data)
+        {
+            <tr>
+                <td width="150px" xls-type="number" style="text-align:center">@item.BookingNo</td>
+                <td width="250px">@item.CustomerBookingNo</td>
+                <td width="250px">@Html.Raw(@item.DeptCode)</td>
+                <td width="250px">@Html.Raw(@item.SupplierName)</td>
+                <td width="150px">@Html.Raw(@item.FactoryName)</td>
+                <td width="250px">@item.InspectionStartDate</td>
+                <td width="250px">@item.InspectionEndDate</td>
+                <td width="250px">@Html.Raw(@item.ServiceTypeName)</td>
+                <td width="250px">@item.bookingStatus</td>
+                <td width="250px">@Html.Raw(@item.ProductDescription)</td>
+                <td width="250px">@Html.Raw(@item.ProductName)</td>
+                <td width="250px" xls-type="number" style="text-align:center">@Html.Raw(@item.PieceNo)</td>
+                <td width="250px">@Html.Raw(@item.MaterialGroup)</td>
+                <td width="250px">@Html.Raw(@item.MaterialCode)</td>
+                <td width="250px">@Html.Raw(@item.PackingLocation)</td>
+                <td width="250px" xls-type="number" style="text-align:center">@Html.Raw(@item.PackingQuantity)</td>
+                <td width="250px" xls-type="number" style="text-align:center">@Html.Raw(@item.PackingNetWeight)</td>
+                <td width="250px">@Html.Raw(@item.BatteryType)</td>
+                <td width="250px">@Html.Raw(@item.BatteryModel)</td>
+                <td width="250px" xls-type="number" style="text-align:center">@Html.Raw(@item.BatteryQuantity)</td>
+                <td width="250px" xls-type="number" style="text-align:center">@Html.Raw(@item.BatteryNetWeight)</td>
+                <td width="250px">@Html.Raw(@item.PONumber)</td>
+                <td width="250px" xls-type="number" style="text-align:center">@item.ShipmentQty</td>
+                <td width="250px">@Html.Raw(@item.ProductCategory)</td>
+                <td width="250px">@Html.Raw(@item.ProductSubCategory)</td>
+                <td width="250px">@Html.Raw(@item.ProductSubCategory2)</td>
+                <td width="250px">@Html.Raw(@item.ReportResult)</td>
+                <td width="250px">@Html.Raw(@item.Office)</td>
+            </tr>
+        }
+    </table>
+</xls-sheet>
+

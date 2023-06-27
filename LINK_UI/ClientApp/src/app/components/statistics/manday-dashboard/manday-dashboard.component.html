@@ -1,0 +1,905 @@
+<div class="main-wrapper">
+  <div class="wrapper dashboard-wrapper mandays-dashboard-wrapper">
+    <div class="filter-container style-2" [@expandCollapse]="filterOpen ? 'open' : 'close'" [@.disabled]="isMobile">
+      <div class="my-dashboard-container">
+        <div class="row">
+          <div class="col-sm-3 mobile-margin-top-15">
+            <div class="my-input-group">
+              <label for="">Term</label>
+              <ng-select [items]="masterModel.mandayTermList" bindLabel="name" bindValue="id" appendTo="body"
+                [searchable]="true" (change)="changeMandayTerm($event)" [clearable]="false" [hideSelected]="false"
+                [loading]="masterModel.mandayTermLoading"
+                placeholder="--- {{ (masterModel.mandayTermList && masterModel.mandayTermList.length>0? 'COMMON.LBL_SELECT':'COMMON.LBL_NO_DATA') | translate }} ---"
+                [(ngModel)]="masterModel.mandayTermId">
+                <ng-template ng-option-tmp let-item="item">
+                  <div class="text-wrap">{{ item.name }}</div>
+                </ng-template>
+              </ng-select>
+            </div>
+          </div>
+          <div class="col-sm-3 col-md-6 col-lg-3 mobile-margin-top-15" *ngIf="masterModel.isDateShow">
+            <div class="my-input-group">
+              <label for="">Date Period</label>
+              <div class="d-flex my-input-group">
+                <div class="calendar-wrapper inline mr-2">
+                  <input type="text" maxlength="10" readonly=readonly container="body"
+                    [(ngModel)]="model.serviceDateFrom" ngbDatepicker #sdf="ngbDatepicker" (click)="sdf.toggle()"
+                    [ngClass]="{ 'is-invalid':  !validator.isValid('serviceDateFrom')}"
+                    (ngModelChange)="fromDateChange($event)">
+                  <img src="assets/images/cta-close-grey.svg" alt="" class="close-icon"
+                    (click)="clearDateInput('Fromdate')" *ngIf="model.serviceDateFrom">
+                  <img src="assets/images/cta-calendar-grey.svg" alt="" class="calendar-icon" (click)="sdf.toggle()">
+                </div>
+                <div class="calendar-wrapper inline">
+                  <input type="text" maxlength="10" readonly=readonly container="body"
+                    [ngClass]="{ 'is-invalid':  !validator.isValid('serviceDateTo')}" [(ngModel)]="model.serviceDateTo"
+                    ngbDatepicker #sdt="ngbDatepicker" (click)="sdt.toggle()" (ngModelChange)="toDateChange($event)">
+                  <img src="assets/images/cta-close-grey.svg" alt="" class="close-icon"
+                    (click)="clearDateInput('Todate')" *ngIf="model.serviceDateTo">
+                  <img src="assets/images/cta-calendar-grey.svg" alt="" class="calendar-icon" (click)="sdt.toggle()">
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-sm-3 mobile-margin-top-15">
+            <div class="my-input-group">
+              <label for="">{{'MANDAY_DASHBOARD.LBL_OFFICE' | translate }}</label>
+              <ng-select [items]="masterModel.officeList" bindLabel="name" bindValue="id" [hideSelected]="false"
+                appendTo="body" [loading]="masterModel.officeLoading" [clearable]="true" [searchable]="true"
+                [multiple]="true" class="multiple"
+                placeholder="--- {{ (masterModel.officeList && masterModel.officeList.length>0? 'MANDAY_DASHBOARD.LBL_OFFICE':'COMMON.LBL_NO_DATA') | translate }} ---"
+                [(ngModel)]="model.officeIdList">
+                <ng-template ng-option-tmp let-item="item">
+                  <div class="text-wrap">{{ item.name }}</div>
+                </ng-template>
+                <ng-template ng-multi-label-tmp let-items="model.officeIdList" let-clear="clear">
+                  <div class="ng-value" *ngIf="model.officeIdList && model.officeIdList.length > 0">
+                    <span class="ng-value-label">{{model.officeIdList.length}}
+                      selected</span>
+                  </div>
+                </ng-template>
+              </ng-select>
+            </div>
+          </div>
+          <div class="col-sm-3 mobile-margin-top-15">
+            <div class="my-input-group">
+              <label for="">{{ 'MANDAY_DASHBOARD.LBL_MANDAY_TYPE' | translate }}</label>
+              <ng-select class="multiple" [items]="masterModel.mandayTypeList" [clearable]="false" bindLabel="name"
+                bindValue="id"
+                placeholder="--- {{ 'MANDAY_DASHBOARD.LBL_MANDAY' | translate }} ---"
+                [(ngModel)]="model.mandayType" [multiple]="false">
+                <ng-template ng-option-tmp let-item="item">
+                  <div class="text-wrap">{{ item.name }}</div>
+                </ng-template>
+              </ng-select>
+            </div>
+          </div>
+          <!-- <div class="col-sm-3 mobile-margin-top-15">
+                          <div class="my-input-group">
+                              <label for="">{{'MANDAY_DASHBOARD.LBL_COMPARE_BY' | translate}}</label>
+                              <ng-select [items]="masterModel.mandayCompanyByList" bindLabel="name" bindValue="id"
+                                  appendTo="body" [searchable]="true" [clearable]="false"
+                                  placeholder="--- {{ (masterModel.mandayCompanyByList && masterModel.mandayCompanyByList.length>0? 'COMMON.LBL_SELECT':'COMMON.LBL_NO_DATA') | translate }} ---"
+                                  [(ngModel)]="masterModel.compareBy">
+                                  <ng-template ng-option-tmp let-item="item">
+                                      <div class="text-wrap">{{ item.name }}</div>
+                                  </ng-template>
+                              </ng-select>
+                          </div>
+                      </div> -->
+
+          <div class="col-12 filter-cta-container">
+            <button class="primary-cta small float-right" [disabled]="isButtonDisable()"
+              (click)="search();toggleFilter()">{{ 'COMMON.LBL_APPLY' | translate }}</button>
+            <button class="tertiary-cta small float-right mr-2" (click)="reset();toggleFilter()">{{
+              'COMMON.LBL_CONFIRMCANCEL' | translate }}</button>
+          </div>
+        </div>
+        <div *ngIf="masterModel.toggleFormSection">
+          <div class="row marginTop15">
+            <div class="col-sm-3 mobile-margin-top-15">
+              <div class="my-input-group">
+                <label for="">{{'MANDAY_DASHBOARD.LBL_SERVICE' | translate }}</label>
+                <ng-select [items]="masterModel.serviceList" bindLabel="name" bindValue="id" [clearable]="false"
+                  placeholder="--- {{ (masterModel.serviceList && masterModel.serviceList.length>0? 'COMMON.LBL_SELECT':'COMMON.LBL_NO_DATA') | translate }} ---"
+                  [loading]="masterModel.serviceLoading" appendTo="body" [(ngModel)]="model.serviceId"
+                  (change)="changeServiceId()" [searchable]="false"
+                  typeToSearchText="{{ 'MANDAY_DASHBOARD.LBL_COUNTRY' | translate }}">
+                  <ng-template ng-option-tmp let-item="item">
+                    <div class="text-wrap">{{ item.name }}</div>
+                  </ng-template>
+                </ng-select>
+              </div>
+            </div>
+            <div class="col-sm-3 mobile-margin-top-15">
+              <div class="my-input-group">
+                <label for="">{{ 'MANDAY_DASHBOARD.LBL_COUNTRY' | translate }}</label>
+                <ng-select [items]="masterModel.factoryCountryList | async" bindLabel="name" bindValue="id"
+                  [clearable]="true" placeholder="--- {{ 'MANDAY_DASHBOARD.LBL_COUNTRY' | translate }} ---"
+                  [minTermLength]="4" [loading]="masterModel.countryLoading" [typeahead]="masterModel.countryInput"
+                  appendTo="body" [(ngModel)]="model.countryIdList" [multiple]="true" class="multiple"
+                  typeToSearchText="{{ 'MANDAY_DASHBOARD.LBL_COUNTRY' | translate }}" (change)="changeCountry($event)">
+                  <ng-template ng-multi-label-tmp let-items="model.countryIdList" let-clear="clear">
+                    <div class="ng-value" *ngIf="model.countryIdList && model.countryIdList.length > 0">
+                      <span class="ng-value-label">{{model.countryIdList.length}}
+                        selected</span>
+                    </div>
+                  </ng-template>
+                </ng-select>
+              </div>
+            </div>
+            <div class="col-sm-3 mobile-margin-top-15">
+              <div class="my-input-group">
+                <label for="">{{ 'MANDAY_DASHBOARD.LBL_CUSTOMER' | translate }}</label>
+                <ng-select [items]="masterModel.customerList | async" bindLabel="name" bindValue="id" [clearable]="true"
+                  appendTo="body" placeholder="--- {{ 'MANDAY_DASHBOARD.LBL_CUSTOMER' | translate }} ---"
+                  [minTermLength]="4" [loading]="masterModel.customerLoading" [typeahead]="masterModel.customerInput"
+                  [(ngModel)]="model.customerIdList" [multiple]="true" class="multiple"
+                  (change)="changeCustomer($event)"
+                  typeToSearchText="{{ 'MANDAY_DASHBOARD.LBL_CUSTOMER' | translate }}">
+                </ng-select>
+              </div>
+            </div>
+            <div class="col-sm-3 col-md-3 col-lg-2 mobile-margin-top-15">
+              <div class="my-input-group marginTop25">
+                <div class="styled-checkbox-container">
+                  <input class="styled-checkbox" id="checkboxa-2" type="checkbox" [(ngModel)]="model.isCompareData"
+                    (change)="isfilterData($event.target.checked)">
+                  <label for="checkboxa-2">Compare Data</label>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row marginTop15" *ngIf="model.isCompareData">
+            <div class="col-sm-3 col-md-6 col-lg-3">
+              <div class="my-input-group">
+                <label for="">Compare Date Period</label>
+                <div class="d-flex my-input-group">
+                  <div class="calendar-wrapper inline mr-2">
+                    <input type="text" maxlength="10" readonly=readonly container="body"
+                      [(ngModel)]="model.comparedServiceDateFrom" ngbDatepicker #sdf1="ngbDatepicker"
+                      (click)="sdf1.toggle()"
+                      [ngClass]="{ 'is-invalid':  !validator.isValid('comparedServiceDateFrom')}">
+                    <img src="assets/images/cta-close-grey.svg" alt="" class="close-icon"
+                      (click)="clearDateInput('comparedServiceDateFrom')" *ngIf="model.comparedServiceDateFrom">
+                    <img src="assets/images/cta-calendar-grey.svg" alt="" class="calendar-icon" (click)="sdf1.toggle()">
+                  </div>
+                  <div class="calendar-wrapper inline">
+                    <input type="text" maxlength="10" readonly=readonly container="body"
+                      [ngClass]="{ 'is-invalid':  !validator.isValid('comparedServiceDateTo')}"
+                      [(ngModel)]="model.comparedServiceDateTo" ngbDatepicker #sdt1="ngbDatepicker"
+                      (click)="sdt1.toggle()">
+                    <img src="assets/images/cta-close-grey.svg" alt="" class="close-icon"
+                      (click)="clearDateInput('Todate')" *ngIf="model.comparedServiceDateTo">
+                    <img src="assets/images/cta-calendar-grey.svg" alt="" class="calendar-icon" (click)="sdt1.toggle()">
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="row marginTop15 align-items-center">
+          <div class="col-6">
+            <div class="advanced-search" (click)="toggleAdvanceSearchSection()">
+              <img class="icon" src="assets/images/expand-new.svg" alt="" *ngIf="!masterModel.toggleFormSection">
+              <img class="icon" src="assets/images/collapse-new.svg" alt="" *ngIf="masterModel.toggleFormSection">
+              {{'MANDAY_DASHBOARD.LBL_ADVANCE_SEARCH' | translate}}
+            </div>
+          </div>
+          <div class="col-6 text-right">
+            <div class="mobile-hide">
+              <button class="category-cta small mr-2 common-tooltip common-tooltip-top-2" data-tooltip="Reset"
+                (click)="reset()">
+                <img src="assets/images/reload-new.svg" alt="Reset">
+                <span>{{'COMMON.LBL_RESET'| translate}}</span>
+              </button>
+              <button class="primary-cta small float-right" [disabled]="isButtonDisable()" (click)="search()">
+                {{'COMMON.LBL_SEARCH' | translate }}</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="filter-bar-container" *ngIf="!masterModel.countLoading && !filterOpen">
+      <!-- *ngIf="!isMobile" -->
+      <div class="my-dashboard-container mobile-hide">
+        <p class="heading">{{'MANDAY_DASHBOARD.LBL_DATA_SHOWING' | translate}}</p>
+        <ul class="applied-filter-list">
+          <li>From: {{filterModel.fromDate}} <span class="ml-2">To: {{filterModel.toDate}}</span></li>
+          <li>Compared From: {{filterModel.comparedFrom}} <span class="ml-2">Compared To:
+              {{filterModel.comparedTo}}</span></li>
+          <li *ngFor="let item of filterModel.OtherFilter">{{item}}</li>
+          <li *ngFor="let item of filterModel.OtherFilter.mandayType">Manday Type: {{item.name}}</li> <!--Manday Type-->
+        </ul>
+
+        <div class="filter-reset-cta" (click)="reset()">
+          <img src="assets/images/reset-white.svg" alt=""> {{'COMMON.LBL_RESET' | translate}}
+        </div>
+      </div>
+      <!-- *ngIf="isMobile" -->
+      <div class="my-dashboard-container desktop-hide tablet-hide">
+        <p class="heading">{{filterModel.OtherFilter.length+1}} filter applied</p>
+        <div class="filter-reset-cta" (click)="reset()">
+          <img src="assets/images/reset-white.svg" alt=""> {{'COMMON.LBL_RESET' | translate}}
+        </div>
+      </div>
+    </div>
+    <div class="my-dashboard-container">
+      <div class="dashboard-body">
+        <div class="title-container row">
+          <div class="col-8">
+            <h3 class="main-title mt-2">{{'MANDAY_DASHBOARD.LBL_TITLE' | translate }}</h3>
+          </div>
+
+          <div class="col-4 text-right">
+
+            <div class="filter-cta style-2 common-tooltip" *ngIf="!filterOpen" (click)="toggleFilter()"
+              data-tooltip="Filter">
+              <img src="assets/images/cta-filter-grey.svg" alt="">
+            </div>
+            <div class="filter-cta filter-active" *ngIf="filterOpen" (click)="toggleFilter()" data-tooltip="Cancel">
+              <img src="assets/images/cta-close-white.svg" alt="">
+            </div>
+          </div>
+          <!-- <div class="col-4 text-right">
+                          <div class="filter-input-group for-title">
+                              <button class="secondary-cta x-small">Print</button>
+                          </div>
+                      </div> -->
+        </div>
+
+
+        <div class="dashboard-body dashbaord-placeholder-container maydays-dashboard-placeholder-container"
+          *ngIf="masterModel.countLoading">
+          <div class="row mandays-dashboard-container">
+            <div class="col-sm-12">
+              <div class="dashboard-stats-card">
+                <img src="assets/images/donut-placeholder.png" alt="graph">
+                <div class="content-container">
+                  <div class="rect animate"></div>
+                </div>
+              </div>
+              <div class="dashboard-stats-card">
+                <img src="assets/images/donut-placeholder.png" alt="graph">
+                <div class="content-container">
+                  <div class="rect animate"></div>
+                </div>
+              </div>
+              <div class="dashboard-stats-card">
+                <img src="assets/images/donut-placeholder.png" alt="graph">
+                <div class="content-container">
+                  <div class="rect animate"></div>
+                </div>
+              </div>
+              <div class="dashboard-stats-card">
+                <img src="assets/images/donut-placeholder.png" alt="graph">
+                <div class="content-container">
+                  <div class="rect animate"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="row mandays-dashboard-container" *ngIf="!masterModel.countLoading">
+          <div class="col-sm-12" *ngIf="!masterModel.isAuditShow">
+            <div class="dashboard-stats-card">
+              <img src="assets/images/dashboard-mandays.svg" alt="icon">
+              <div class="info">
+                <p class="card-title">{{'MANDAY_DASHBOARD.LBL_MAN_DAYS' | translate}}</p>
+                <p class="card-number"
+                  [ngClass]="(mandayCountByService.totalManday-mandayCountByService.comparedTotalManday) > 0 ? 'percent high':'percent low'">
+                  {{mandayCountByService.totalManday}}</p>
+              </div>
+            </div>
+            <div class="dashboard-stats-card">
+              <img src="assets/images/dashboard-inspection.svg" alt="icon">
+              <div class="info">
+                <p class="card-title">
+                  {{'MANDAY_DASHBOARD.LBL_INSPECTION' | translate}}</p>
+                <p class="card-number percent"
+                  [ngClass]="(mandayCountByService.totalCount-mandayCountByService.comparedTotalCount) > 0 ? 'percent high':'low'">
+                  {{mandayCountByService.totalCount}}</p>
+              </div>
+            </div>
+            <div class="dashboard-stats-card">
+              <img src="assets/images/dashboard-report.svg" alt="icon">
+              <div class="info">
+                <p class="card-title">{{'MANDAY_DASHBOARD.LBL_REPORTS' | translate}}</p>
+                <p class="card-number percent"
+                  [ngClass]="(mandayCountByService.totalReportCount-mandayCountByService.comparedTotalReportCount) > 0 ? 'percent high':'low'">
+                  {{mandayCountByService.totalReportCount}}</p>
+              </div>
+            </div>
+            <div class="dashboard-stats-card">
+              <img src="assets/images/dashboard-audit.svg" alt="icon">
+              <div class="info">
+                <p class="card-title">
+                  {{'MANDAY_DASHBOARD.LBL_AUDIT' | translate}}</p>
+                <p class="card-number">0</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-sm-12" *ngIf="masterModel.isAuditShow">
+            <div class="dashboard-stats-card">
+              <img src="assets/images/dashboard-mandays.svg" alt="icon">
+              <div class="info">
+                <p class="card-title">{{'MANDAY_DASHBOARD.LBL_MAN_DAYS' | translate}}</p>
+                <p class="card-number percent"
+                  [ngClass]="(mandayCountByService.totalManday-mandayCountByService.comparedTotalManday) > 0 ? 'high':'low'">
+                  {{mandayCountByService.totalManday}}</p>
+              </div>
+            </div>
+            <div class="dashboard-stats-card">
+              <img src="assets/images/dashboard-audit.svg" alt="icon">
+              <div class="info">
+                <p class="card-title">
+                  {{'MANDAY_DASHBOARD.LBL_AUDIT' | translate}}</p>
+                <p class="card-number percent"
+                  [ngClass]="(mandayCountByService.totalCount-mandayCountByService.comparedTotalCount) > 0 ? 'high':'low'">
+                  {{mandayCountByService.totalCount}}</p>
+              </div>
+            </div>
+            <div class="dashboard-stats-card">
+              <img src="assets/images/dashboard-inspection.svg" alt="icon">
+              <div class="info">
+                <p class="card-title">
+                  {{'MANDAY_DASHBOARD.LBL_INSPECTION' | translate}}</p>
+                <p class="card-number">0</p>
+              </div>
+            </div>
+            <div class="dashboard-stats-card">
+              <img src="assets/images/dashboard-report.svg" alt="icon">
+              <div class="info">
+                <p class="card-title">{{'MANDAY_DASHBOARD.LBL_REPORTS' | translate}}</p>
+                <p class="card-number"
+                  [ngClass]="(mandayCountByService.totalReportCount-mandayCountByService.comparedTotalReportCount) > 0 ? 'percent high':' percent low'">
+                  {{mandayCountByService.totalReportCount}}</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="dashboard-body dashbaord-placeholder-container maydays-dashboard-placeholder-container">
+          <div class="row mandays-dashboard-graph-wrapper">
+            <div class="customer-dashboard-graph-wrapper col-lg-7 grid-column col-md-12 mt-0">
+              <div class="dashboard-graph-container" *ngIf="masterModel.mandayYearLoading">
+                <!--
+                                  [ngStyle]="{'display': masterModel.mandayYearLoading ? 'block':'none'}"
+                              -->
+                <div class="row graph-body">
+                  <div class="col-sm-4">
+                    <img class="graph-icon" src="assets/images/donut-placeholder.png" alt="graph">
+                  </div>
+                  <div class="col-sm-8">
+                    <div class="legend-wrapper">
+                      <div class="content-container">
+                        <div class="rect width250 animate"></div>
+                        <div class="rect width80 animate"></div>
+                      </div>
+                      <div class="legend-item  content-container">
+                        <div class="label">
+                          <span class="tile"></span><span class="text rect width100 animate"></span>
+                        </div>
+                        <span class="count rect width60 animate"></span>
+                      </div>
+                      <div class="legend-item  content-container">
+                        <div class="label">
+                          <span class="tile"></span><span class="text rect width100 animate"></span>
+                        </div>
+                        <span class="count rect width60 animate"></span>
+                      </div>
+                      <div class="legend-item  content-container">
+                        <div class="label">
+                          <span class="tile"></span><span class="text rect width100 animate"></span>
+                        </div>
+                        <span class="count rect width60 animate"></span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="dashboard-graph-container" *ngIf="!masterModel.mandayYearLoading">
+                <!-- [ngStyle]="{'display': !masterModel.mandayYearLoading ? 'block':'none'}" -->
+                <div class="new-graph-head text-center text-sm-left align-items-center">
+                  <div class="graph-title-container">
+                    <h3 class="title">{{'MANDAY_DASHBOARD.MSG_MAN_DAYS_BY_YEAR' | translate}}</h3>
+                  </div>
+                  <div class="graph-filter filter-input-group text-center text-sm-right">
+                    <div class="my-input-group" *ngIf="isshowCountry()">
+                      <ng-select class="small" [items]="masterModel.mandayYearSubCountryList | async" bindLabel="name"
+                        bindValue="id" [clearable]="true" (focus)="model.mandayYearSubCountryId=null"
+                        placeholder="--- {{ 'MANDAY_DASHBOARD.LBL_COUNTRY' | translate }} ---" [minTermLength]="4"
+                        [loading]="masterModel.mandayYearSubCountryLoading"
+                        [typeahead]="masterModel.mandayYearSubCountryInput" [(ngModel)]="model.mandayYearSubCountryId"
+                        [multiple]="false" (change)="mandayYearSubCountryChange($event)"
+                        typeToSearchText="{{ 'MANDAY_DASHBOARD.LBL_COUNTRY' | translate }}">
+                        <ng-template ng-option-tmp let-item="item">
+                          <div class="text-wrap">{{ item.name }}</div>
+                        </ng-template>
+                      </ng-select>
+                    </div>
+                    <button class="secondary-cta small mt-2 mt-sm-0 mb-2 mb-sm-0"
+                      [disabled]="masterModel.mandayByYearExportLoading || (mandayYearChart && mandayYearChart.length==0)"
+                      (click)="getMandayByYearExport()">
+                      {{'COMMON.LBL_EXPORT' | translate }}</button>
+                  </div>
+                </div>
+                <div class="row graph-body" *ngIf="mandayYearChart && mandayYearChart.length==0">
+                  <div class="col-md-6 col-lg-6 col-xl-6 mb-3 mb-xl-0">
+                    <img src="assets/images/graph-nodata.svg" alt="no data" class="ml-xl-4">
+                  </div>
+                  <div class="col-md-6 col-lg-6 col-xl-6 vertical-center">
+                    <div class="no-data-wrapper">
+                      <img src="assets/images/empty-bucket.svg" alt="no data" class="icon">
+                      <h4 class="no-data-title">
+                        {{'MANDAY_DASHBOARD.LBL_NO_DATA_FOUND' | translate}}</h4>
+                      <p class="no-data-text"> {{'MANDAY_DASHBOARD.LBL_NO_DATA'| translate}}</p>
+                    </div>
+                  </div>
+                </div>
+                <div class="row graph-body" *ngIf="mandayYearChart && mandayYearChart.length>0">
+                  <!-- [ngStyle]="{'display': mandayYearChart && mandayYearChart.length>0 ? 'block':'none'}" -->
+                  <!-- <div class="col-sm-12" [ngStyle]="{'display': masterModel.mandayYearNoDataFound ? 'block':'none'}">
+                                  </div>
+                              <ng-container
+                                  [ngStyle]="{'display': !masterModel.mandayYearNoDataFound ? 'block':'none'}">
+                              </ng-container>-->
+
+                  <div class="col-sm-7">
+                    <ng-container *ngIf="masterModel.mandayYearChartLoading">
+                      <div class="loadingChart"></div>
+                    </ng-container>
+                    <div id="chartdiv" style="width: 100%; height: 200px"></div>
+                  </div>
+                  <div class="col-sm-5">
+                    <div class="legend-wrapper">
+                      <div class="legend-item" *ngFor="let manDayYearItem of mandayYearChart">
+                        <div class="label">
+                          <span class="tile" [ngStyle]='{"background-color": manDayYearItem.color}'>
+                          </span><span class="text percent">
+                            {{manDayYearItem.year}}
+                          </span>
+                        </div>
+                        <span class="count percent">{{manDayYearItem.mandayCount}}</span>
+                        <!-- <span class="percent low">21%</span> -->
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="dashboard-graph-container" *ngIf="masterModel.mandayCountryLoading">
+                <!-- [ngStyle]="{'display': masterModel.mandayCountryLoading ? 'block':'none'}" -->
+                <div class="row graph-body">
+                  <div class="col-sm-4">
+                    <img class="graph-icon" src="assets/images/donut-placeholder.png" alt="graph">
+                  </div>
+                  <div class="col-sm-8">
+                    <div class="legend-wrapper">
+                      <div class="content-container">
+                        <div class="rect width250 animate"></div>
+                        <div class="rect width80 animate"></div>
+                      </div>
+                      <div class="legend-item content-container">
+                        <div class="label">
+                          <span class="tile"></span><span class="text rect width100 animate"></span>
+                        </div>
+                        <span class="count rect width60 animate"></span>
+                      </div>
+                      <div class="legend-item content-container">
+                        <div class="label">
+                          <span class="tile"></span><span class="text rect width100 animate"></span>
+                        </div>
+                        <span class="count rect width60 animate"></span>
+                      </div>
+                      <div class="legend-item content-container">
+                        <div class="label">
+                          <span class="tile"></span><span class="text rect width100 animate"></span>
+                        </div>
+                        <span class="count rect width60 animate"></span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="dashboard-graph-container" *ngIf="!masterModel.mandayCountryLoading">
+                <!-- [ngStyle]="{'display': !masterModel.mandayCountryLoading ? 'block':'none'}"> -->
+                <div class="new-graph-head text-center text-sm-left align-items-center">
+                  <div class="graph-title-container">
+                    <h3 class="title">{{ 'MANDAY_DASHBOARD.LBL_MAN_DAYS_BY_COUNTRY' | translate}}
+                    </h3>
+                  </div>
+                  <div class="graph-filter filter-input-group text-center text-sm-right">
+                    <div class="my-input-group mr-2">
+                      <ng-select class="small" [items]="masterModel.mandayCountrySubCountryList | async"
+                        bindLabel="name" bindValue="id" [clearable]="true"
+                        (change)="mandayCountrySubCountryChange($event)"
+                        placeholder="--- {{ 'MANDAY_DASHBOARD.LBL_COUNTRY' | translate }} ---" [minTermLength]="4"
+                        [loading]="masterModel.mandayCountrySubCountryLoading"
+                        [typeahead]="masterModel.mandayCountrySubCountryInput"
+                        [(ngModel)]="model.mandayCountrySubCountryId" [multiple]="false"
+                        (focus)="model.mandayCountrySubCountryId=null"
+                        typeToSearchText="{{ 'MANDAY_DASHBOARD.LBL_COUNTRY' | translate }}">
+                        <ng-template ng-option-tmp let-item="item">
+                          <div class="text-wrap">{{ item.name }}</div>
+                        </ng-template>
+                      </ng-select>
+                    </div>
+                    <div class="my-input-group" *ngIf="masterModel.isMandayCountrySubProvinceShow">
+                      <ng-select class="small" [items]="masterModel.mandayCountrySubProvinceList" bindLabel="name"
+                        bindValue="id" [hideSelected]="false" [loading]="masterModel.mandayCountrySubProvinceLoading"
+                        [clearable]="false" [searchable]="true" (change)="mandayCountrySubProvinceChange($event)"
+                        placeholder="--- {{ (masterModel.mandayCountrySubProvinceList && masterModel.mandayCountrySubProvinceList.length>0? 'COMMON.LBL_SELECT':'COMMON.LBL_NO_DATA') | translate }} ---"
+                        [(ngModel)]="model.mandayCountrySubProvinceId">
+                        <ng-template ng-option-tmp let-item="item">
+                          <div class="text-wrap">{{ item.name }}</div>
+                        </ng-template>
+                      </ng-select>
+                    </div>
+                    <button class="secondary-cta small mt-2 mt-sm-0 mb-2 mb-sm-0"
+                      [disabled]="masterModel.mandayByCountryExportLoading || (mandayCountryChartResponse.data && mandayCountryChartResponse.data.length==0)"
+                      (click)="getMandayByCountryExport()">
+                      {{'COMMON.LBL_EXPORT' | translate }}</button>
+                  </div>
+                </div>
+                <div class="row graph-body" *ngIf="mandayCountryChartResponse.data && mandayCountryChartResponse.data.length==0">
+                  <div class="col-md-6 col-lg-6 col-xl-6 mb-3 mb-xl-0">
+                    <img src="assets/images/graph-nodata.svg" alt="no data" class="ml-xl-4">
+                  </div>
+                  <div class="col-md-6 col-lg-6 col-xl-6 vertical-center">
+                    <div class="no-data-wrapper">
+                      <img src="assets/images/empty-bucket.svg" alt="no data" class="icon">
+                      <h4 class="no-data-title">
+                        {{'MANDAY_DASHBOARD.LBL_NO_DATA_FOUND' | translate}}</h4>
+                      <p class="no-data-text"> {{'MANDAY_DASHBOARD.LBL_NO_DATA'| translate}}</p>
+                    </div>
+                  </div>
+                </div>
+                <div class="row graph-body nogutter" *ngIf="mandayCountryChartResponse.data && mandayCountryChartResponse.data.length > 0">
+                  <!-- [ngStyle]="{'display': radarChart?.data && radarChart?.data.length>0 ? 'block':'none'}" -->
+                  <div class="col-sm-4">
+                    <ng-container *ngIf="masterModel.mandayCountryChartLoading">
+                      <div class="loadingChart"></div>
+                    </ng-container>
+                    <div id="radarchartdiv" style="width: 100%; height: 240px; margin-top: -10px">
+                    </div>
+                  </div>
+                  <div class="col-sm-8">
+                    <div class="legend-title">
+                      <span
+                        *ngIf="mandayCountryChartResponse.data.length>12">{{'MANDAY_DASHBOARD.LBL_MAN_DAY_BY_MOST_TOP_COUNT'
+                        | translate}}
+                        12
+                        {{'MANDAY_DASHBOARD.LBL_MAN_DAY_BY_TOP_COUNT' | translate}}
+                      </span>
+                    </div>
+                    <div class="row">
+                      <div class="col-sm-6">
+                        <div class="legend-wrapper two-column">
+                          <ng-container *ngFor="let item of radarChart?.data; let i = index">
+
+                            <ng-container *ngIf="i <= 5">
+                              <div class="legend-item">
+                                <div class="label" style="width: 50%;">
+                                  <span class="tile"
+                                    [ngStyle]="{'background-color': radarChart.colors.getIndex(i)}"></span><span
+                                    class="text">{{item.country}}</span>
+                                </div>
+                                <span class="count big">{{item.visits}}</span>
+                                <span *ngIf="item.comparedPercentage"
+                                  [ngClass]="item.comparedPercentage > 0 ? 'percent high' : 'percent low'">{{changetoAbs(item.comparedPercentage)}}%</span>
+                              </div>
+                            </ng-container>
+                          </ng-container>
+                        </div>
+                      </div>
+                      <div class="col-sm-6">
+                        <div class="legend-wrapper">
+                          <ng-container *ngFor="let item of radarChart?.data; let i = index">
+
+                            <ng-container *ngIf="i >= 6 && i<=11">
+                              <div class="legend-item">
+                                <div class="label">
+                                  <span class="tile"
+                                    [ngStyle]="{'background-color': radarChart.colors.getIndex(i)}"></span><span
+                                    class="text">{{item.country}}</span>
+                                </div>
+                                <span class="count big percent" style="width: 25%;">{{item.visits}}</span>
+                                <span *ngIf="item.comparedPercentage"
+                                  [ngClass]="item.comparedPercentage > 0 ? 'percent high' : 'percent low'">{{changetoAbs(item.comparedPercentage)}}%</span>
+                              </div>
+                            </ng-container>
+                          </ng-container>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="dashboard-graph-container" *ngIf="masterModel.mandayEmployeeTypeLoading">
+                <!-- [ngStyle]="{'display': masterModel.mandayEmployeeTypeLoading ? 'block':'none'}"> -->
+                <div class="row graph-body">
+                  <div class="col-sm-4">
+                    <img class="graph-icon" src="assets/images/donut-placeholder.png" alt="graph">
+                  </div>
+                  <div class="col-sm-8">
+                    <div class="legend-wrapper">
+                      <div class="content-container">
+                        <div class="rect width250 animate"></div>
+                        <div class="rect width80 animate"></div>
+                      </div>
+                      <div class="legend-item content-container">
+                        <div class="label">
+                          <span class="tile"></span><span class="text rect width100 animate"></span>
+                        </div>
+                        <span class="count rect width60 animate"></span>
+                      </div>
+                      <div class="legend-item content-container">
+                        <div class="label">
+                          <span class="tile"></span><span class="text rect width100 animate"></span>
+                        </div>
+                        <span class="count rect width60 animate"></span>
+                      </div>
+                      <div class="legend-item content-container">
+                        <div class="label">
+                          <span class="tile"></span><span class="text rect width100 animate"></span>
+                        </div>
+                        <span class="count rect width60 animate"></span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="dashboard-graph-container" *ngIf="!masterModel.mandayEmployeeTypeLoading">
+                <!-- [ngStyle]="{'display': !masterModel.mandayEmployeeTypeLoading ? 'block':'none'}"> -->
+                <div class="new-graph-head text-center text-sm-left align-items-center">
+                  <div class="graph-title-container">
+                    <h3 class="title">
+                      {{'MANDAY_DASHBOARD.LBL_MAN_DAYS_BY_EMPLOYEE_TYPE' | translate}}
+                    </h3>
+                  </div>
+                  <div class="graph-filter filter-input-group text-center text-sm-right">
+                    <div class="my-input-group"
+                      *ngIf="!this.model.customerIdList || this.model.customerIdList.length <= 0">
+
+                      <ng-select class="small" [items]="masterModel.mandayEmployeeTypeSubCustomerList | async"
+                        bindLabel="name" bindValue="id" (focus)="model.mandayEmployeeTypeSubCustomerId=null"
+                        [clearable]="true" placeholder="--- {{ 'MANDAY_DASHBOARD.LBL_CUSTOMER' | translate }} ---"
+                        [minTermLength]="4" [loading]="masterModel.mandayEmployeeTypeSubCustomerLoading"
+                        [typeahead]="masterModel.mandayEmployeeTypeSubCustomerInput"
+                        [(ngModel)]="model.mandayEmployeeTypeSubCustomerId" [multiple]="false"
+                        (change)="mandayEmployeeTypeSubCustomerChange($event)"
+                        typeToSearchText="{{ 'MANDAY_DASHBOARD.LBL_CUSTOMER' | translate }}">
+                        <ng-template ng-option-tmp let-item="item">
+                          <div class="text-wrap">{{ item.name }}</div>
+                        </ng-template>
+                      </ng-select>
+                    </div>
+
+                    <div class="my-input-group" *ngIf="this.masterModel.mandayEmployeeTypeSubYearList &&
+                                      this.masterModel.mandayEmployeeTypeSubYearList.length > 1">
+                      <!-- <ng-select [items]="masterModel.mandayEmployeeTypeSubYearList"  bindLabel="name" bindValue="id"
+                                              (change)="mandayEmployeeTypeSubYearChange($event)" [clearable]="false" [multiple]="false"
+                                              ([ngModel])="model.mandayEmployeeTypeSubYear"
+                                              placeholder="{{ 'MANDAY_DASHBOARD.LBL_YEAR' | translate }}"
+                                              >
+                                              <ng-template ng-option-tmp let-item="item">
+                                                  <div class="text-wrap">{{ item.name }}</div>
+                                              </ng-template>
+                                          </ng-select> -->
+                      <ng-select class="small" [items]="masterModel.mandayEmployeeTypeSubYearList" bindLabel="name"
+                        bindValue="id" [searchable]="true" (change)="mandayEmployeeTypeSubYearChange($event)"
+                        [clearable]="false" [hideSelected]="false"
+                        placeholder="--- {{ (masterModel.mandayEmployeeTypeSubYearList && masterModel.mandayEmployeeTypeSubYearList.length>0? 'COMMON.LBL_SELECT':'COMMON.LBL_NO_DATA') | translate }} ---"
+                        [(ngModel)]="model.mandayEmployeeTypeSubYear">
+                        <ng-template ng-option-tmp let-item="item">
+                          <div class="text-wrap">{{ item.name }}</div>
+                        </ng-template>
+                      </ng-select>
+                    </div>
+                    <button class="secondary-cta small mt-2 mt-sm-0 mb-2 mb-sm-0"
+                      [disabled]="masterModel.mandayByEmployeeTypeExportLoading || (mandayEmployeeTypeChart && mandayEmployeeTypeChart.length==0)"
+                      (click)="getMandayByEmployeeTypeExport()">{{'COMMON.LBL_EXPORT' | translate
+                      }}</button>
+                  </div>
+                </div>
+                <div class="row graph-body" *ngIf="mandayEmployeeTypeChart && mandayEmployeeTypeChart.length==0">
+                  <div class="col-md-6 col-lg-6 col-xl-6 mb-3 mb-xl-0">
+                    <img src="assets/images/graph-nodata.svg" alt="no data" class="ml-xl-4">
+                  </div>
+                  <div class="col-md-6 col-lg-6 col-xl-6 vertical-center">
+                    <div class="no-data-wrapper">
+                      <img src="assets/images/empty-bucket.svg" alt="no data" class="icon">
+                      <h4 class="no-data-title">
+                        {{'MANDAY_DASHBOARD.LBL_NO_DATA_FOUND' | translate}}</h4>
+                      <p class="no-data-text"> {{'MANDAY_DASHBOARD.LBL_NO_DATA'| translate}}</p>
+                    </div>
+                  </div>
+                </div>
+                <div class="row graph-body" *ngIf="mandayEmployeeTypeChart && mandayEmployeeTypeChart.length >0">
+                  <!-- [ngStyle]="{'display': mandayEmployeeTypeChart && mandayEmployeeTypeChart.length>0 ? 'block':'none'}" -->
+                  <div class="col-sm-7">
+                    <ng-container *ngIf="masterModel.mandayEmployeeTypeChartLoading">
+                      <div class="loadingChart"></div>
+                    </ng-container>
+                    <div id="ganttchartdiv" style="width: 100%; height: 200px"></div>
+                  </div>
+                  <div class="col-sm-5">
+                    <div class="legend-wrapper">
+                      <div class="legend-item" *ngFor="let manDayEmployeeTypeItem of mandayEmployeeTypeChart">
+                        <div class="label">
+                          <span class="tile" [ngStyle]="{'background-color': manDayEmployeeTypeItem.color}">
+                          </span>
+                          <span class="text">{{manDayEmployeeTypeItem.employeeType}}
+                            {{mandayCustomerChartItem}}</span>
+                        </div>
+                        <span class="count">{{manDayEmployeeTypeItem.mandayCount}}%</span>
+                        <!-- <span class="percent">{{manDayEmployeeTypeItem.percentage}}</span> -->
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="customer-dashboard-graph-wrapper col-lg-5 grid-column col-md-12 mt-0"
+              *ngIf="masterModel.mandayCustomerLoading">
+              <!-- [ngStyle]="{'display': masterModel.mandayCustomerLoading ? 'block':'none'}" -->
+              <div class="dashboard-graph-container single-big">
+                <div class="new-graph-head text-center text-sm-left">
+                  <div class="graph-title-container">
+                    <div class="content-container">
+                      <div class="rect width80 animate"></div>
+                    </div>
+                  </div>
+                  <div class="graph-filter filter-input-group text-right">
+                    <div class="content-container">
+                      <div class="rect width80 animate"></div>
+                    </div>
+                  </div>
+                </div>
+                <div class="row graph-body">
+                  <div class="col-sm-12 text-center mb-4">
+                    <img class="graph-icon" src="assets/images/donut-placeholder.png" alt="graph">
+                  </div>
+                  <div class="col-sm-12">
+                    <div class="legend-wrapper no-left-spacing">
+                      <div class="legend-item content-container">
+                        <div class="label">
+                          <span class="tile"></span><span class="text rect width100 animate"></span>
+                        </div>
+                        <span class="count rect width60 animate"></span>
+                        <span class="percent">
+                          <span class="rect width60 animate"></span>
+                        </span>
+                      </div>
+                      <div class="legend-item content-container">
+                        <div class="label">
+                          <span class="tile"></span><span class="text rect width100 animate"></span>
+                        </div>
+                        <span class="count rect width60 animate"></span>
+                        <span class="percent">
+                          <span class="rect width60 animate"></span>
+                        </span>
+                      </div>
+                      <div class="legend-item content-container">
+                        <div class="label">
+                          <span class="tile"></span><span class="text rect width100 animate"></span>
+                        </div>
+                        <span class="count rect width60 animate"></span>
+                        <span class="percent">
+                          <span class="rect width60 animate"></span>
+                        </span>
+                      </div>
+                      <div class="legend-item content-container">
+                        <div class="label">
+                          <span class="tile"></span><span class="text rect width100 animate"></span>
+                        </div>
+                        <span class="count rect width60 animate"></span>
+                        <span class="percent">
+                          <span class="rect width60 animate"></span>
+                        </span>
+                      </div>
+                      <div class="legend-item content-container">
+                        <div class="label">
+                          <span class="tile"></span><span class="text rect width100 animate"></span>
+                        </div>
+                        <span class="count rect width60 animate"></span>
+                        <span class="percent">
+                          <span class="rect width60 animate"></span>
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="customer-dashboard-graph-wrapper col-lg-5 grid-column col-md-12 mt-0">
+              <div class="dashboard-graph-container single-big" *ngIf="!masterModel.mandayCustomerLoading">
+                <!-- [ngStyle]="{'display': !masterModel.mandayCustomerLoading ? 'block':'none'}" -->
+                <div class="new-graph-head text-center text-sm-left align-items-center">
+                  <div class="graph-title-container">
+                    <h3 class="title">{{ 'MANDAY_DASHBOARD.LBL_MAN_DAYS_BY_CUSTOMER' | translate}}
+                    </h3>
+                  </div>
+                  <div class="graph-filter filter-input-group text-center text-sm-right">
+                    <div class="my-input-group" *ngIf="isshowCountry()">
+                      <ng-select class="small" [items]="masterModel.mandayCustomerSubCountryList | async"
+                        bindLabel="name" bindValue="id" [clearable]="true"
+                        (focus)="model.mandayCustomerSubCountryId=null"
+                        placeholder="--- {{ 'MANDAY_DASHBOARD.LBL_COUNTRY' | translate }} ---" [minTermLength]="4"
+                        [loading]="masterModel.mandayCustomerSubCountryLoading"
+                        [typeahead]="masterModel.mandayCustomerSubCountryInput"
+                        [(ngModel)]="model.mandayCustomerSubCountryId" [multiple]="false"
+                        (change)="mandayCustomerSubCountryChange($event)"
+                        typeToSearchText="{{ 'MANDAY_DASHBOARD.LBL_COUNTRY' | translate }}">
+                        <ng-template ng-option-tmp let-item="item">
+                          <div class="text-wrap">{{ item.name }}</div>
+                        </ng-template>
+                      </ng-select>
+                    </div>
+                    <button class="secondary-cta small mt-2 mt-sm-0 mb-2 mb-sm-0"
+                      [disabled]="masterModel.mandayByCustomerExportLoading || (mandayCustomerChart && mandayCustomerChart.length==0)"
+                      (click)="getMandayByCustomerExport()">{{'COMMON.LBL_EXPORT' | translate }}
+                      <!-- <span *ngIf="masterModel.mandayByCustomerExportLoading">
+                                              <i class="fa fa-refresh fa-spin" aria-hidden="true"></i>
+                                            </span> -->
+                    </button>
+                  </div>
+                </div>
+
+                <div class="row graph-body" *ngIf="mandayCustomerChart && mandayCustomerChart.length==0">
+                  <div class="col-md-6 col-lg-6 col-xl-6 mb-3 mb-xl-0">
+                    <img src="assets/images/graph-nodata.svg" alt="no data" class="ml-xl-4">
+                  </div>
+                  <div class="col-md-6 col-lg-6 col-xl-6 vertical-center">
+                    <div class="no-data-wrapper">
+                      <img src="assets/images/empty-bucket.svg" alt="no data" class="icon">
+                      <h4 class="no-data-title">
+                        {{'MANDAY_DASHBOARD.LBL_NO_DATA_FOUND' | translate}}</h4>
+                      <p class="no-data-text"> {{'MANDAY_DASHBOARD.LBL_NO_DATA'| translate}}</p>
+                    </div>
+                  </div>
+                </div>
+                <div class="row graph-body" *ngIf="mandayCustomerChart && mandayCustomerChart.length > 0">
+                  <!-- [ngStyle]="{'display': pieChart?.data && pieChart?.data.length>0 ? 'block':'none'}" -->
+                  <div class="col-sm-12">
+                    <ng-container *ngIf="masterModel.mandayCustomerChartLoading">
+                      <div class="loadingChart"></div>
+                    </ng-container>
+                    <div id="piechartdiv" style="width: 100%; height: 200px"></div>
+                  </div>
+                  <div class="col-sm-12">
+                    <div class="legend-title">
+                      <span *ngIf="mandayCustomerChart.length>17">{{'MANDAY_DASHBOARD.LBL_MAN_DAY_BY_MOST_TOP_COUNT'
+                        | translate}}
+                        18
+                        {{'MANDAY_DASHBOARD.LBL_MAN_DAY_BY_TOP_COUNT' | translate}}
+                      </span>
+                    </div>
+                    <div class="legend-wrapper no-left-spacing"
+                      *ngFor="let mandayCustomerChartItem of pieChart?.data; let i = index">
+                      <div *ngIf="i <=17" class="legend-item">
+                        <div class="label">
+                          <span class="tile" [ngStyle]="{'background-color': pieChart.colors.getIndex(i)}"></span>
+                          <span class="text">{{mandayCustomerChartItem.country}}</span>
+                        </div>
+                        <span class="percent">{{mandayCustomerChartItem.value}}</span>
+                        <span *ngIf="mandayCustomerChartItem.comparedPercentage"
+                          [ngClass]="mandayCustomerChartItem.comparedPercentage > 0 ? 'percent high' : 'percent low'">{{changetoAbs(mandayCustomerChartItem.comparedPercentage)}}%</span>
+                        <!-- <span ></span> -->
+                      </div>
+                      <!-- <a *ngIf="i ==14" class="primary-text" (click)="getMandayByCustomerExport()">
+                                              {{'MANDAY_DASHBOARD.LBL_SEE_ALL_CUSTOMERS' | translate}}</a>-->
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

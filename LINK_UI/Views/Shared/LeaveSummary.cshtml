@@ -1,0 +1,50 @@
+﻿
+@model LINK_UI.FileModels.LeaveSummaryModel
+@using DTO.Common
+<xls-sheet name="Leave Summary">
+    <table xls-begin="A:1" style="border-style:solid">
+        <tr style="background-color:#f5f5f5;font-weight:bold">
+            <th>Staff Name</th>
+            <th>Leave Status</th>
+            <th>Leave Type</th>
+            <th>Start date</th>
+            <th>End date</th>
+        </tr>
+        <tr style="background-color:#f5f5f5;font-weight:bold">
+            <td>@Model.Request.StaffName</td>
+            <td>@(Model.Request.StatusValues == null ? "" : string.Join(", ", Model.Request.StatusValues.Select(x => x.Label)))</td>
+            <td>@(Model.Request.TypeValues == null ? "" : string.Join(", ", Model.Request.TypeValues.Select(x => x.Label)))</td>
+            <td>@Model.Request.StartDate.ToDateTime().ToString("dd/MM/yyyy")</td>
+            <td>@Model.Request.EndDate.ToDateTime().ToString("dd/MM/yyyy")</td>
+        </tr>
+    </table>
+    <table xls-begin="A:5" style="border-style:solid">
+        <tr style="background-color:#f5f5f5;font-weight:bold;text-align:center">
+            <th>Staff Name</th>
+            <th>Position</th>
+            <th>Application Date</th>
+            <th>Leave Type</th>
+            <th>Start Date</th>
+            <th>End Date</th>
+            <th>Days</th>
+            <th>Status</th>
+            <th>Reason</th>
+            <th>Approver's Comments</th>
+        </tr>
+        @foreach (var item in Model.Data)
+        {
+            <tr>
+                <td height="200px" width="250px">@item.staffName</td>
+                <td width="150px">@item.PositionName</td>
+                <td width="300px">@item.ApplicationDate</td>
+                <td width="250px">@item.LeaveType?.Label</td>
+                <td width="100px">@item.StartDate</td>
+                <td width="150px">@item.EndDate</td>
+                <td width="150px">@item.Days</td>
+                <td width="150px">@item.Status?.Label</td>
+                <td width="250px">@Html.Raw(@item.Reason)</td>
+                <td width="250px">@item.Comment</td>
+            </tr>
+        }
+    </table>
+</xls-sheet>

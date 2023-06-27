@@ -1,0 +1,313 @@
+<div class="main-wrapper">
+  <div class="wrapper dashboard-wrapper">
+    <div class="my-container">
+      <div class="master-body">
+        <div class="title-container">
+          <div class="header-back-button">
+            <img src="assets/images/back-red.png" alt="back"
+              (click)="this.return('invoicebanksummary/invoice-bank-summary');">
+          </div>
+          <h3 class="main-title">
+            {{'EDIT_INV_BANK.TITLE' | translate }}
+          </h3>
+        </div>
+        <div class="content-container">
+          <h4 class="container-head">{{ 'EDIT_INV_BANK.LBL_MAIN' | translate }}</h4>
+          <div class="formPadding">
+            <div class="row marginTop15">
+              <div class="col-sm-4">
+                <div class="my-input-group">
+                  <label class="control-label required">{{ 'EDIT_INV_BANK.LBL_ACC_NAME' | translate }}</label>
+                  <input [(ngModel)]="model.accountName" [ngClass]="{ 'is-invalid':  !validator.isValid('accountName')}"
+                    type="text" maxlength="300" placeholder="{{ 'EDIT_INV_BANK.LBL_ACC_NAME' | translate }}" />
+                  <div *ngIf="!validator.isValid('accountName')" class="invalid-feedback">
+                    <div *ngFor="let error of validator.getErrors('accountName')">{{ error | translate }}</div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-sm-4 mobile-margin-top-15">
+                <div class="my-input-group">
+                  <label class="control-label required">{{ 'EDIT_INV_BANK.LBL_ACC_NUMBER' | translate }}</label>
+                  <input [(ngModel)]="model.accountNumber"
+                    [ngClass]="{ 'is-invalid':  !validator.isValid('accountNumber')}" type="text" maxlength="300"
+                    placeholder="{{ 'EDIT_INV_BANK.LBL_ACC_NUMBER' | translate }}" />
+                  <div *ngIf="!validator.isValid('accountNumber')" class="invalid-feedback">
+                    <div *ngFor="let error of validator.getErrors('accountNumber')">{{ error | translate }}</div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-sm-4 mobile-margin-top-15">
+                <div class="my-input-group">
+                  <label class="control-label required">{{ 'EDIT_INV_BANK.LBL_BANK_NAME' | translate }}</label>
+                  <input [(ngModel)]="model.bankName" [ngClass]="{ 'is-invalid':  !validator.isValid('bankName')}"
+                    type="text" maxlength="300" placeholder="{{ 'EDIT_INV_BANK.LBL_BANK_NAME' | translate }}" />
+                  <div *ngIf="!validator.isValid('bankName')" class="invalid-feedback">
+                    <div *ngFor="let error of validator.getErrors('bankName')">{{ error | translate }}</div>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+
+            <div class="row marginTop15">
+
+              <div class="col-sm-4">
+                <div class="my-input-group">
+                  <label class="control-label required">{{ 'EDIT_INV_BANK.LBL_SWIFT_CODE' | translate }}</label>
+                  <input [(ngModel)]="model.swiftCode" [ngClass]="{ 'is-invalid':  !validator.isValid('swiftCode')}"
+                    type="text" maxlength="300" placeholder="{{ 'EDIT_INV_BANK.LBL_SWIFT_CODE' | translate }}" />
+                  <div *ngIf="!validator.isValid('swiftCode')" class="invalid-feedback">
+                    <div *ngFor="let error of validator.getErrors('swiftCode')">{{ error | translate }}</div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-sm-4 mobile-margin-top-15">
+                <div class="my-input-group">
+                  <label class="control-label required">{{ 'EDIT_INV_BANK.LBL_ACC_CURRENCY' | translate }}</label>
+
+                  <ng-select [searchable]="true" appendTo="body" [items]="accountCurrencyList" bindLabel="name"
+                    bindValue="id"
+                    placeholder="--- {{(accountCurrencyList.length>0? 'COMMON.LBL_SELECT':'COMMON.LBL_NO_DATA')  | translate }} ---"
+                    [(ngModel)]="model.accountCurrency"
+                    [ngClass]="{ 'is-invalid':  !validator.isValid('accountCurrency')}">
+                    <ng-template ng-option-tmp let-item="item">
+                      <div class="text-wrap">
+                        {{ item.name }}</div>
+                    </ng-template>
+                  </ng-select>
+
+
+                  <div *ngIf="!validator.isValid('accountCurrency')" class="invalid-feedback">
+                    <div *ngFor="let error of validator.getErrors('accountCurrency')">{{ error | translate }}</div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-sm-4 mobile-margin-top-15">
+                <div class="my-input-group">
+                  <label class="control-label required">{{ 'EDIT_INV_BANK.LBL_BILLING' | translate }}</label>
+                  <ng-select [searchable]="true" appendTo="body" [items]="billingEntityList" bindLabel="name"
+                    bindValue="id"
+                    placeholder="--- {{(billingEntityList.length>0? 'COMMON.LBL_SELECT':'COMMON.LBL_NO_DATA')  | translate }} ---"
+                    [(ngModel)]="model.billingEntity" [ngClass]="{ 'is-invalid':  !validator.isValid('billingEntity')}">
+                    <ng-template ng-option-tmp let-item="item">
+                      <div class="text-wrap">
+                        {{ item.name }}</div>
+                    </ng-template>
+                  </ng-select>
+
+                  <div *ngIf="!validator.isValid('billingEntity')" class="invalid-feedback">
+                    <div *ngFor="let error of validator.getErrors('billingEntity')">{{ error | translate }}</div>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+
+            <div class="row marginTop15">
+
+              <div class="col-sm-6">
+                <div class="my-input-group">
+                  <label class="control-label required">{{ 'EDIT_INV_BANK.LBL_BANK_ADDRESS' | translate }}</label>
+
+                  <textarea [(ngModel)]="model.bankAddress" maxlength="2000"
+                    [ngClass]="{ 'is-invalid':  !validator.isValid('bankAddress')}"
+                    placeholder="{{ 'EDIT_INV_BANK.LBL_BANK_ADDRESS' | translate }}" style="width:98.5%"></textarea>
+                  <div *ngIf="!validator.isValid('bankAddress')" class="invalid-feedback">
+                    <div *ngFor="let error of validator.getErrors('bankAddress')">{{ error | translate }}</div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-sm-6 mobile-margin-top-15">
+                <div class="my-input-group">
+                  <label class="control-label">{{ 'EDIT_INV_BANK.LBL_ACC_REMARKS' | translate }}</label>
+                  <textarea [(ngModel)]="model.remarks" maxlength="2000"
+                    placeholder="{{ 'EDIT_INV_BANK.LBL_ACC_REMARKS' | translate }}" style="width:98.5%"></textarea>
+                </div>
+              </div>
+            </div>
+
+            <div class="row marginTop15">
+              <ng-container *ngIf="model.signatureFileUrl && model.signatureFileUrl!=''">
+                <div class="col-sm-3">
+                  <div class="drag-drop-files-container">
+                    <div class="file">
+                      <a (click)="getFile(model.signatureFileUniqueId,model.signatureFileName)">
+                        <img src="assets/images/uploaded-files-2.svg" class="icon" alt="">
+                      </a>
+                      <div class="info">
+                        <h4 class="file-title">{{model.signatureFileName}}</h4>
+                      </div>
+                      <img src="assets/images/red-close.svg" alt="" (click)="removeSignatureFile()" class="close">
+                    </div>
+                  </div>
+                </div>
+              </ng-container>
+
+              <div class="col-sm-3">
+                <div class="my-input-group">
+                  <label class="control-label"></label>
+                  <app-drag-drop [fileLimit]="uploadLimit" [fileSizeLimit]="fileSize" [Bigupload]="false"
+                    [SmallUploadImage]="uploadfileimage" [SmallUploadTitle]="smallSignatureTitle"
+                    [SmallUploadButtonText]="smallUploadButtonText" [fileExtension]="uploadFileExtensions"
+                    (fileUpload)="selectSignatureFile($event)"></app-drag-drop>
+                </div>
+              </div>
+              <ng-container *ngIf="model.chopFileUrl && model.chopFileUrl!=''">
+                <div class="col-sm-3">
+                  <div class="drag-drop-files-container">
+                    <div class="file">
+                      <a (click)="getFile(model.chopFileUniqueId,model.chopFileName)">
+                        <img src="assets/images/uploaded-files-2.svg" class="icon" alt="">
+                      </a>
+                      <div class="info">
+                        <h4 class="file-title">{{model.chopFileName}}</h4>
+                      </div>
+                      <img src="assets/images/red-close.svg" alt="" (click)="removeChopFile()" class="close">
+                    </div>
+                  </div>
+                </div>
+              </ng-container>
+
+              <div class="col-sm-3">
+                <div class="my-input-group">
+                  <label class="control-label"></label>
+                  <app-drag-drop [fileLimit]="uploadLimit" [fileSizeLimit]="fileSize" [Bigupload]="false"
+                    [SmallUploadImage]="uploadfileimage" [SmallUploadTitle]="smallChopeTitle"
+                    [SmallUploadButtonText]="smallUploadButtonText" [fileExtension]="uploadFileExtensions"
+                    (fileUpload)="selectChopFile($event)"></app-drag-drop>
+                </div>
+              </div>
+
+            </div>
+          </div>
+
+
+          <div class="tab-container">
+            <ul class="tab-switch-container">
+              <li class="active">{{ 'EDIT_INV_BANK.TAB_BANK_TAX' | translate }}</li>
+            </ul>
+            <div class="tab-content-container">
+              <div class="tab-content active" id="tab1">
+                <div class="table-action mobile-action desktop-hide tablet-hide">
+                  <button class="secondary-cta x-small" (click)="addBankTax()">+
+                    {{ 'EDIT_INV_BANK.LBL_ADD' | translate }}</button>
+                </div>
+                <table class="info-table" cellspacing="0">
+                  <thead>
+                    <tr *ngIf="bankTaxValidators.length>0">
+                      <th class="required">{{ 'EDIT_INV_BANK.LBL_NAME' | translate }}</th>
+                      <th class="required">{{ 'EDIT_INV_BANK.LBL_VALUE' | translate }}</th>
+                      <th class="required">{{ 'EDIT_INV_BANK.LBL_FROM_DATE' | translate }}</th>
+                      <th class="required">{{ 'EDIT_INV_BANK.LBL_TO_DATE' | translate }}</th>
+                      <th></th>
+                    </tr>
+                  </thead>
+                  <tbody>
+
+                    <tr *ngFor="let item of bankTaxValidators;  let i = index">
+
+                      <td>
+                        <div class="my-input-group">
+                          <label for="">{{ 'EDIT_INV_BANK.LBL_NAME' | translate }}</label>
+                          <input type="text" [disabled]="item.bankTax.isDisable"
+                            [ngClass]="{ 'is-invalid':  !item.validator.isValid('taxName')}"
+                            [(ngModel)]="item.bankTax.taxName" maxlength="300"
+                            placeholder="{{ 'EDIT_INV_BANK.LBL_NAME' | translate }}">
+                        </div>
+                        <div *ngIf="!item.validator.isValid('taxName')" class="invalid-feedback">
+                          <div *ngFor="let error of item.validator.getErrors('taxName')">{{ error | translate }}</div>
+                        </div>
+                      </td>
+
+                      <td>
+                        <div class="my-input-group">
+                          <label for="">{{ 'EDIT_INV_BANK.LBL_VALUE' | translate }}</label>
+                          <input type="number" [disabled]="item.bankTax.isDisable"
+                            [ngClass]="{ 'is-invalid':  !item.validator.isValid('taxValue')}"
+                            [(ngModel)]="item.bankTax.taxValue" maxlength="300"
+                            placeholder="{{ 'EDIT_INV_BANK.LBL_VALUE' | translate }}">
+                        </div>
+                        <div *ngIf="!item.validator.isValid('taxValue')" class="invalid-feedback">
+                          <div *ngFor="let error of item.validator.getErrors('taxValue')">{{ error | translate }}</div>
+                        </div>
+                      </td>
+
+                      <td>
+                        <div class="my-input-group">
+
+                          <label class="control-label required">{{ 'EDIT_INV_BANK.LBL_FROM_DATE' | translate }}</label>
+                          <div class="calendar-wrapper">
+                            <input container="body" [disabled]="item.bankTax.isDisable"
+                              [(ngModel)]="item.bankTax.fromDate"
+                              [ngClass]="{ 'is-invalid':  !item.validator.isValid('fromDate')}" type="text"
+                              maxlength="10" placeholder="{{ 'EDIT_INV_BANK.LBL_FROM_DATE' | translate }}"
+                              (click)="ld1.toggle()" ngbDatepicker #ld1="ngbDatepicker">
+                            <img src="assets/images/calendar-icon.svg" alt="" class="calendar-icon"
+                              (click)="ld1.toggle()">
+                          </div>
+                          <div *ngIf="!item.validator.isValid('fromDate')" class="invalid-feedback">
+                            <div *ngFor="let error of item.validator.getErrors('fromDate')">{{ error | translate }}
+                            </div>
+                          </div>
+                        </div>
+
+                      </td>
+
+                      <td>
+                        <div class="my-input-group">
+                          <label class="control-label required">{{ 'EDIT_INV_BANK.LBL_TO_DATE' | translate }}</label>
+                          <div class="calendar-wrapper">
+                            <input container="body" [disabled]="item.bankTax.isDisable"
+                              [(ngModel)]="item.bankTax.toDate"
+                              [ngClass]="{ 'is-invalid':  !item.validator.isValid('toDate')}" type="text" maxlength="10"
+                              placeholder="{{ 'EDIT_INV_BANK.LBL_TO_DATE' | translate }}" (click)="ld2.toggle()"
+                              ngbDatepicker #ld2="ngbDatepicker">
+                            <img src="assets/images/calendar-icon.svg" alt="" class="calendar-icon"
+                              (click)="ld2.toggle()">
+                          </div>
+                          <div *ngIf="!item.validator.isValid('toDate')" class="invalid-feedback">
+                            <div *ngFor="let error of item.validator.getErrors('toDate')">{{ error | translate }}</div>
+                          </div>
+                        </div>
+                      </td>
+                      <td>
+                        <div class="my-input-group">
+                          <button *ngIf="!item.bankTax.isDisable" (click)="removeBankTax(i)"
+                            class="secondary-cta small">
+                            <i class="fa fa-trash"></i>
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+                <div class="table-action mobile-hide">
+                  <span><button class="secondary-cta x-small" (click)="addBankTax()">+
+                      {{ 'EDIT_SUPPLIER.LBL_ADD' | translate }}</button> </span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="form-action-container">
+            <button class="primary-cta small" (click)="save()" [disabled]="saveloading">
+              {{'EDIT_CUSTOMER.LBL_SAVE' | translate}}
+              <span *ngIf="saveloading">
+                <i class="fa fa-refresh fa-spin" aria-hidden="true"></i>
+              </span>
+            </button>
+          </div>
+        </div>
+      </div>
+      <div class="loader-overlay" *ngIf="pageLoader">
+        <div class="loader-container">
+          <img src="assets/images/reload.svg" alt="">
+          <span>{{'COMMON.LBL_LOADER' | translate}}</span>
+        </div>
+      </div>
+    </div>
+  </div>

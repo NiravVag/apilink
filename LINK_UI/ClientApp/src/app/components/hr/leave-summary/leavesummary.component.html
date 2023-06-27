@@ -1,0 +1,243 @@
+<div class="main-wrapper">
+  <div class="wrapper dashboard-wrapper">
+    <div class="my-container">
+      <div class="master-body">
+        <div class="title-container">
+          <h3 class="main-title">{{model.isApproveSummary ? 'Leave To Approve': 'LEAVE_SUMMARY.TITLE' | translate }}</h3> 
+        </div>
+        <div class="content-container quotation-container">
+          <div  [@expandCollapse]="isFilterOpen ? 'open' : 'close'" class="centerContainerPadding common-filter-container">
+            <div class="animated-icon-container" (click)="toggleFilterSection()" *ngIf="!model.noFound && items != null && items.length != 0">
+              <img src="assets/images/cta-close-grey.svg" alt="close">
+            </div>
+            <div class="row">
+              <div class="col-sm-4 col-md-4 col-lg-4">
+                <div class="my-input-group">
+                  <label>{{ 'LEAVE_SUMMARY.LBL_STAFFNAME' | translate }}</label>
+                  <input type="text" maxlength="100" placeholder="{{ 'LEAVE_SUMMARY.LBL_STAFFNAME' | translate }}"
+                    [(ngModel)]="model.staffName" />
+                </div>
+              </div>
+              <div class="col-sm-2 col-md-3 col-lg-2">
+                <div class="my-input-group">
+                  <label class="required">{{ 'LEAVE_SUMMARY.LBL_STARTDATE' | translate }}</label>
+                  <div class="calendar-wrapper">
+                    <input type="text" maxlength="10" [ngClass]="{ 'is-invalid':  !validator.isValid('startDate')}"
+                      readonly=readonly placeholder="{{ 'LEAVE_REQUEST.LBL_FROMDATE' | translate }}" container="body"
+                      [(ngModel)]="model.startDate" ngbDatepicker #fd="ngbDatepicker" (click)="fd.toggle()">
+                      <img src="assets/images/cta-close-grey.svg" alt="" class="close-icon" (click)="clearDateInput('StartDate')" *ngIf="model.startDate!=null||model.startDate!=undefined">
+                      <img src="assets/images/calendar-icon.svg" alt="" class="calendar-icon" (click)="fd.toggle()">
+                  </div>
+                  <div *ngIf="!validator.isValid('startDate')" class="invalid-feedback">
+                    <div *ngFor="let error of validator.getErrors('startDate')">{{ error | translate }}</div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-sm-2 col-md-3 col-lg-2 mobile-margin-top-15">
+                <div class="my-input-group">
+                  <label class=" required">{{ 'LEAVE_SUMMARY.LBL_ENDDATE' | translate }}</label>
+                  <div class="calendar-wrapper">
+                    <input type="text" maxlength="10" [ngClass]="{ 'is-invalid':  !validator.isValid('endDate')}"
+                      readonly=readonly placeholder="{{ 'LEAVE_REQUEST.LBL_TODATE' | translate }}" container="body"
+                      [(ngModel)]="model.endDate" ngbDatepicker #td="ngbDatepicker" (click)="td.toggle()">
+                      <img src="assets/images/cta-close-grey.svg" alt="" class="close-icon" (click)="clearDateInput('EndDate')" *ngIf="model.endDate!=null||model.endDate!=undefined">
+                      <img src="assets/images/calendar-icon.svg" alt="" class="calendar-icon" (click)="td.toggle()">
+                  </div>
+                  <div *ngIf="!validator.isValid('endDate')" class="invalid-feedback">
+                    <div *ngFor="let error of validator.getErrors('endDate')">{{ error | translate }}</div>
+                  </div>
+
+                </div>
+              </div>
+
+            </div>
+            <div class="row marginTop15">
+
+              <div class="col-sm-4 col-md-4 col-lg-4 mobile-margin-top-15">
+                <div class="my-input-group">
+                  <label>{{ 'LEAVE_SUMMARY.LBL_STATUS' | translate }}</label>
+                  <ng-select [items]="data.leaveStatusList" [multiple]="true" [closeOnSelect]="false"
+                    [searchable]="true" [loading]="loading" bindLabel="label" class="multiple"
+                    [disabled]="model.isApproveSummary" appendTo="body"
+                    placeholder="--- {{ 'LEAVE_SUMMARY.LBL_SELECT' | translate }} ---" [(ngModel)]="model.statusValues">
+                  </ng-select>
+                </div>
+              </div>
+              <div class="col-sm-4 col-md-4 col-lg-4mobile-margin-top-15">
+                <div class="my-input-group">
+                  <label>{{ 'LEAVE_SUMMARY.LBL_TYPES' | translate }}</label>
+                  <ng-select [items]="data.leaveTypeList" [multiple]="true" [closeOnSelect]="false" [searchable]="true"
+                    bindLabel="label" class="multiple" [loading]="loading" appendTo="body"
+                    placeholder="--- {{ 'LEAVE_SUMMARY.LBL_SELECT' | translate }} ---" [(ngModel)]="model.typeValues">
+                  </ng-select>
+                </div>
+              </div>
+            </div>
+         
+          <div class="row marginTop25">
+            <div class="col-12 col-sm-12 text-right mt-3 mt-sm-0"> 
+              <button [disabled]="model.noFound || items == null || items.length == 0 || _searchloader ||exportDataLoading" (click)="export()"
+                class="secondary-cta small">{{ 'LEAVE_SUMMARY.LBL_EXPORT' | translate }} 
+                <span *ngIf="exportDataLoading">
+                  <i class="fa fa-refresh fa-spin" aria-hidden="true"></i>
+                </span>
+              </button>
+              &nbsp;
+              <button id="btnSearch" class="primary-cta small" [disabled]="_searchloader || loading"
+                (click)="search()">{{ 'LEAVE_SUMMARY.LBL_SEARCH' | translate }}
+                <span *ngIf="_searchloader">
+                  <i class="fa fa-refresh fa-spin" aria-hidden="true"></i>
+                </span></button>
+            </div>
+          </div>
+        </div>
+          <div class="centerContainerPadding float-left"  *ngIf="!model.noFound && items != null && items.length != 0">
+
+            <div class="row">
+              <div class="col-6 col-sm-3 col-xl-2 d-flex">
+                  <p  class="search-trigger-heading" [innerHtml]="showPaginationText()"></p>
+              </div>
+              <div class="col-6 col-sm-9 col-xl-10 text-right">
+                <ul class="table-badge-container mobile-hide tablet-hide">
+                  <li (click)="searchByStatus(status)" [ngStyle]="{'background-color': searchcolor(status.id)}" 
+                  *ngFor="let status of statusList| slice:0:4">
+                    <span>{{status.totalCount}}</span> <span>{{status.label}}</span>
+                  </li>
+                  <ng-container *ngIf="statusList.length>4">
+                    <li class="more has-dropdown">
+                      <img src="assets/images/cta-menu-grey.svg" alt="">
+                      <ul class="cta-dropdown bottom-left">
+                        <li (click)="searchByStatus(status)" [ngStyle]="{'color': searchcolor(status.id)}"
+                          *ngFor="let status of statusList | slice:4:statusList.length">
+                          <span>{{status.totalCount}}</span> <span>{{status.label}}</span>
+                        </li>
+                      </ul>
+                    </li>
+                  </ng-container>
+                </ul>
+                 
+                  <div class="animated-icon-container" *ngIf="!isFilterOpen" (click)="toggleFilterSection()">
+                  <img src="assets/images/cta-search-grey.svg" alt="search">
+                  </div>
+              </div>
+              </div>
+              <div class="row mt-3 desktop-hide">
+                <div class="col-sm-12">
+                  <ul class="table-badge-container">
+                    <li (click)="searchByStatus(status)" [ngStyle]="{'background-color': searchcolor(status.id)}" 
+                      *ngFor="let status of statusList">
+                      <span>{{status.totalCount}}</span> <span>{{status.label}}</span>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+              <div class="quotation-search-container">
+                <div  class="table-container h-scroll">
+                    <table class="pagination-table simple-table bordered">
+                <thead>
+                  <tr>
+                    <th class="width-20"></th>
+                    <th class="width-20"></th>
+                    <th class="width-20"></th>
+                    <th>{{ 'LEAVE_SUMMARY.LBL_STAFFNAME' | translate }}</th>
+                    <th>{{ 'LEAVE_SUMMARY.LBL_POSITION' | translate }}</th>
+                    <th>{{ 'LEAVE_SUMMARY.LBL_APPLICATIONDATE' | translate }}</th>
+                    <th>{{ 'LEAVE_SUMMARY.LBL_LEAVETYPE' | translate }}</th>
+                    <th>{{ 'LEAVE_SUMMARY.LBL_STARTDATE' | translate }}</th>
+                    <th>{{ 'LEAVE_SUMMARY.LBL_ENDDATE' | translate }}</th>
+                    <th>{{ 'LEAVE_SUMMARY.LBL_DAYS' | translate }}</th>
+                    <th>{{ 'LEAVE_SUMMARY.LBL_STATUSS' | translate }}</th>
+                    <th>{{ 'LEAVE_SUMMARY.LBL_REASON' | translate }}</th>
+                    <th>{{ 'LEAVE_SUMMARY.LBL_APPRCOMMENT' | translate }}</th>
+                    
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let iteminfo of items" style="border-left: 5px solid #fff;" [ngStyle]="{'border-left-color': searchcolor(iteminfo.status.id)}">
+                    <td class="Center_Middle">
+                      <span class="table-cta icon-cta common-tooltip"
+                      (click)="getDetails(iteminfo.id)" data-tooltip="View">
+                      <img src="assets/images/cta-view.svg" alt="View">
+                    </span>
+                    </td>
+                    <td class="Center_Middle">
+                     
+                      <span class="table-cta icon-cta common-tooltip"
+                      *ngIf="iteminfo.status.id == 1 && iteminfo.canApprove" (click)="setStatus(iteminfo.id, 3)" data-tooltip="Approved">
+                      <img src="assets/images/cta-tick-green.svg" alt="Approved">
+                    </span>
+                    </td>
+                    <td class="Center_Middle">
+                    
+
+                      <span class="table-cta icon-cta common-tooltip"
+                      *ngIf="(iteminfo.status.id == 1 && iteminfo.canApprove)" (click)="openConfirm(content, iteminfo.id)"  data-tooltip="Rejected">
+                      <img src="assets/images/cta-close.svg" alt="Rejected">
+                    </span>
+                    </td>
+                    <td style="word-break:break-all;min-width:110px">{{iteminfo.staffName}}</td>
+                    <td style="word-break:break-all;min-width:110px">{{iteminfo.positionName}}</td>
+                    <td style="word-break:break-all;min-width:110px">{{iteminfo.applicationDate}}</td>
+                    <td>{{iteminfo.leaveType.label}}</td>
+                    <td>{{iteminfo.startDate}}</td>
+                    <td style="word-break:break-all;min-width:110px">{{iteminfo.endDate}}</td>
+                    <td>{{iteminfo.days}}</td>
+                    <td>{{iteminfo.status.label}}</td>
+                    <td>{{iteminfo.reason}}</td>
+                    <td>{{iteminfo.comment}}</td>
+                  </tr>
+                </tbody>
+              </table>
+              </div>
+            </div>
+           
+            <div class="pagination-container">
+              <ngb-pagination (pageChange)="onPager($event)" [pageSize]="model.pageSize"
+                  [collectionSize]="model.totalCount" [(page)]="model.index" [maxSize]="5">
+              </ngb-pagination>
+          </div>
+          </div>
+         
+          <div class="centerContainerPadding" *ngIf="model.noFound">
+            <div class="error-container">
+              <img src="assets/images/no-result.svg" alt="" class="thumbnail">
+              <h4 class="title">{{'COMMON.LBL_No_ITEM' | translate}}</h4>
+              <p class="error-subtitle">{{'CS_CONFIG_SUMMARY.LBL_NODATA' | translate}}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+    <ng-template #content let-modal>
+    <div class="modal-header custom-modal-header">
+      <h4 class="modal-title" id="modal-basic-title">{{ 'EXPENSE_SUMMARY.LBL_COMMENTREJECT' | translate }}</h4>
+      <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body custom-modal-body">
+      <div class="row">
+        <div class="col-sm-10 mobile-margin-top-15">
+          <div class="my-input-group">
+            <label class="required">{{ 'EXPENSE_SUMMARY.LBL_COMMENT' | translate }}</label>
+            <textarea [ngClass]="{ 'is-invalid': !isRejectValid}" rows="3" [(ngModel)]="rejectComment" maxlength="600"
+              placeholder="{{ 'EXPENSE_SUMMARY.LBL_COMMENT' | translate }}"></textarea>
+            <div *ngIf="!isRejectValid" class="invalid-feedback">
+              <div>{{ 'EXPENSE_SUMMARY.MSG_COMMENT_REQ' | translate }}</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer custom-modal-footer">
+      <button type="button" class="secondary-cta" (click)="modal.close('cancel click')">
+        {{ 'EXPENSE_SUMMARY.LBL_CONFIRMCANCEL' | translate }}
+      </button>
+      <button type="button" class="primary-cta" (click)="reject();">
+        {{ 'EXPENSE_SUMMARY.LBL_CONFIRMOK' | translate }}
+      </button>
+    </div>
+  </ng-template>
+ 
+</div>

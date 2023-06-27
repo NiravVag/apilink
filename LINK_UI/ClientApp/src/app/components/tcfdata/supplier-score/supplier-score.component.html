@@ -1,0 +1,813 @@
+<div class="main-wrapper">
+    <div class="wrapper dashboard-wrapper mandays-dashboard-wrapper dashbaord-placeholder-container">
+        <div class="page-head-container whiteBackground">
+            <div class="my-container">
+                <div class="column">
+                    <h2 class="page-title">{{ 'SUPPLIER_SCORE.LBL_SUPPLIER_SCORE_CARD' | translate}}</h2>
+                </div>
+                <div class="column text-right d-flex align-items-start justify-content-end">
+                    <div class="filter-cta style-4 common-tooltip" *ngIf="!isFilterOpen" (click)="toggleFilter()"
+                        data-tooltip="filter">
+                        <img src="assets/images/cta-filter-grey.svg" alt="">
+                    </div>
+                    <div class="filter-cta style-4 active" *ngIf="isFilterOpen" (click)="toggleFilter()">
+                        <img src="assets/images/cta-filter-grey.svg" alt="">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="filter-container style-3" [@expandCollapse]="isFilterOpen ? 'open' : 'close'"
+            [@.disabled]="isMobile">
+            <div class="my-container">
+                <div class="row">
+                    <div class="col-sm-3 col-md-3 col-lg-3 mobile-margin-top-15">
+                        <div class="my-input-group">
+                            <label>{{ 'TCF_DASHBOARD.LBL_TERM' | translate }}</label>
+                            <ng-select [items]="supplierScoreMaster.supplierScoreTermList" bindLabel="name" bindValue="id"
+                                appendTo="body" [searchable]="true" (change)="changeTerm($event)" [clearable]="false" 
+                                [hideSelected]="false" [(ngModel)]="model.globalDateTypeId"
+                                placeholder="--- {{ (supplierScoreMaster.supplierScoreTermList && supplierScoreMaster.supplierScoreTermList.length>0? 'COMMON.LBL_SELECT':'COMMON.LBL_NO_DATA') | translate }} ---"></ng-select>
+                        </div>
+                    </div>
+                    <div class="col-sm-2 mobile-margin-top-15" *ngIf="supplierScoreMaster.isDateShow">
+                        <div class="my-input-group">
+                            <label>{{ 'COMMON.LBL_FROMDATE' | translate }}</label>
+                            <div class="calendar-wrapper">
+                                <input type="text" maxlength="10" container="body"
+                                    [ngClass]="{ 'is-invalid':  !validator.isValidIf('fromdate',IsDateValidationRequired())}"
+                                    readonly=readonly [(ngModel)]="model.fromdate" ngbDatepicker #sdf="ngbDatepicker"
+                                    (click)="sdf.toggle()">
+                                <img src="assets/images/cta-close-grey.svg" alt="" class="close-icon"
+                                    (click)="clearDateInput('Fromdate')" *ngIf="model.fromdate">
+                                <img src="assets/images/calendar-icon.svg" alt="" class="calendar-icon"
+                                    (click)="sdf.toggle()">
+                            </div>
+                            <div *ngIf="!validator.isValidIf('fromdate',IsDateValidationRequired())"
+                                class="invalid-feedback">
+                                <div *ngFor="let error of validator.getErrors('fromdate')">{{ error |
+                                    translate }}</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-2 mobile-margin-top-15" *ngIf="supplierScoreMaster.isDateShow">
+                        <div class="my-input-group">
+                            <label>{{ 'COMMON.LBL_TODATE' | translate }}</label>
+                            <div class="calendar-wrapper">
+                                <input type="text" maxlength="10" container="body" readonly=readonly
+                                    [ngClass]="{ 'is-invalid':  !validator.isValidIf('todate',IsDateValidationRequired())}"
+                                    [(ngModel)]="model.todate" ngbDatepicker #sdt="ngbDatepicker"
+                                    (click)="sdt.toggle()">
+                                <img src="assets/images/cta-close-grey.svg" alt="" class="close-icon"
+                                    (click)="clearDateInput('Todate')" *ngIf="model.todate">
+                                <img src="assets/images/calendar-icon.svg" alt="" class="calendar-icon"
+                                    (click)="sdt.toggle()">
+                            </div>
+                            <div *ngIf="!validator.isValidIf('todate',IsDateValidationRequired())"
+                                class="invalid-feedback">
+                                <div *ngFor="let error of validator.getErrors('todate')">{{ error |
+                                    translate }}</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-5 mobile-margin-top-15 dashboard-supplier-margin">
+                        <div class="my-input-group">
+                            <div class="scroll-xradiolist mb-2">
+                                <div class="styled-radio-container" *ngFor="let item of tcfSearchtypelst">
+                                    <input type="radio" class="styled-radio" id="{{item.id}}" name="radio-group"
+                                        [value]="item.id" [checked]="true" (change)="SetSearchTypemodel(item.id)"
+                                        [(ngModel)]="model.searchTypeId">
+                                    <label for="{{item.id}}">{{item.name}}</label>
+                                </div>
+                            </div>
+                            <input maxlength="200" [(ngModel)]="model.searchTypeText" type="text" />
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-3 col-md-3 col-lg-3">
+                        <div class="my-input-group">
+                            <label>{{ 'TCF_LIST.LBL_STAGE' | translate }}</label>
+                            <ng-select [items]="supplierScoreMaster.statusList" class="multiple" appendTo="body"
+                                multiple="true" bindLabel="name" [loading]="supplierScoreMaster.statusLoading"
+                                bindValue="id" [(ngModel)]="model.statusIds" [clearable]="true"
+                                placeholder="--- {{ (supplierScoreMaster.statusList !=null && supplierScoreMaster.statusList.length!=0? 'BOOKING_SUMMARY.LBL_SELECT':'BOOKING_SUMMARY.MSG_NO_DATA' ) | translate }} ---">
+                            </ng-select>
+                        </div>
+                    </div>
+                    <div class="col-sm-3 col-md-3 col-lg-3 mobile-margin-top-15">
+                        <div class="my-input-group">
+                            <label>{{ 'TCF_LIST.LBL_CUSTOMER' | translate }}</label>
+                            <ng-select [items]="supplierScoreMaster.customerList" [virtualScroll]="true"
+                                [loading]="supplierScoreMaster.customerLoading" bindLabel="name" bindValue="glCode"
+                                appendTo="body" [typeahead]="supplierScoreMaster.customerInput" #select
+                                [minTermLength]="3" [clearable]="true" (clear)="clearCustomerSelection()"
+                                (change)="changeCustomerData()" [(ngModel)]="model.customerGLCodes" [multiple]="true"
+                                class="multiple" (scrollToEnd)="getCustomerData(true)"
+                                placeholder="--- {{ (supplierScoreMaster.customerList !=null && supplierScoreMaster.customerList.length!=0? 'BOOKING_SUMMARY.LBL_SELECT':'BOOKING_SUMMARY.MSG_NO_DATA' ) | translate }} ---">
+                                <ng-template ng-option-tmp let-item="item">
+                                    <div class="text-wrap"><span>{{item.name}}</span></div>
+                                </ng-template>
+                            </ng-select>
+                        </div>
+                    </div>
+                    <div class="col-sm-3 col-md-3 col-lg-3 mobile-margin-top-15">
+                        <div class="my-input-group">
+                            <label>{{ 'TCF_LIST.LBL_SUPPLIER' | translate }}</label>
+                            <ng-select [items]="supplierScoreMaster.supplierList" [virtualScroll]="true" appendTo="body"
+                                [loading]="supplierScoreMaster.supplierLoading" bindLabel="name" bindValue="id"
+                                [minTermLength]="4"
+                                placeholder="--- {{ (supplierScoreMaster.supplierList !=null && supplierScoreMaster.supplierList.length!=0? 'BOOKING_SUMMARY.LBL_SELECT':'BOOKING_SUMMARY.MSG_NO_DATA' ) | translate }} ---"
+                                [typeahead]="supplierScoreMaster.supplierInput" [clearable]="true"
+                                (clear)="clearSupplierSelection()" [(ngModel)]="model.supplierIds" [multiple]="true"
+                                class="multiple" (scrollToEnd)="getSupplierData(true)" #select>
+                                <ng-template ng-option-tmp let-item="item">
+                                    <div class="text-wrap"><span>{{item.name}}</span></div>
+                                </ng-template>
+                            </ng-select>
+                        </div>
+                    </div>
+                    <div class="col-sm-3 col-md-3 col-lg-3 mobile-margin-top-15">
+                        <div class="my-input-group">
+                            <label>{{ 'TCF_LIST.LBL_BUYER' | translate }}</label>
+                            <ng-select [items]="supplierScoreMaster.buyerList" [virtualScroll]="true" appendTo="body"
+                                [loading]="supplierScoreMaster.buyerLoading" bindLabel="name" bindValue="id"
+                                placeholder="--- {{ (supplierScoreMaster.buyerList != null && supplierScoreMaster.buyerList.length!=0? 'BOOKING_SUMMARY.LBL_SELECT':'BOOKING_SUMMARY.MSG_NO_DATA' ) | translate }} ---"
+                                [typeahead]="supplierScoreMaster.buyerInput" [minTermLength]="4" [clearable]="true"
+                                (clear)="clearBuyerSelection()" [(ngModel)]="model.buyerIds" [multiple]="true"
+                                class="multiple" (scrollToEnd)="getBuyerData(true)" #select>
+                                <ng-template ng-option-tmp let-item="item">
+                                    <div class="text-wrap"><span>{{item.name}}</span></div>
+                                </ng-template>
+                            </ng-select>
+                        </div>
+                    </div>
+                </div>
+                <div [hidden]="!toggleFormSection" class="row">
+                    <div class="col-sm-12">
+                        <div class="row marginTop25">
+                            <div class="col-sm-3 col-md-3 col-lg-3">
+                                <div class="my-input-group">
+                                    <label>{{ 'TCF_LIST.LBL_CUSTOMER_CONTACTS' | translate }}</label>
+                                    <ng-select [items]="supplierScoreMaster.customerContactList" appendTo="body"
+                                        [virtualScroll]="true" [loading]="supplierScoreMaster.customerContactLoading"
+                                        bindLabel="name" bindValue="id"
+                                        placeholder="--- {{ (supplierScoreMaster.customerContactList !=null && supplierScoreMaster.customerContactList.length!=0? 'BOOKING_SUMMARY.LBL_SELECT':'BOOKING_SUMMARY.MSG_NO_DATA' ) | translate }} ---"
+                                        [typeahead]="supplierScoreMaster.customerContactInput" [minTermLength]="4"
+                                        [clearable]="true" (clear)="clearCustomerContactSelection()"
+                                        [(ngModel)]="model.customerContactIds" [multiple]="true" class="multiple"
+                                        (scrollToEnd)="getCustomerContactData(true)" #select>
+                                        <ng-template ng-option-tmp let-item="item">
+                                            <div class="text-wrap"><span>{{item.name}}</span></div>
+                                        </ng-template>
+                                    </ng-select>
+                                </div>
+                            </div>
+                            <div class="col-sm-3 col-md-3 col-lg-3">
+                                <div class="my-input-group">
+                                    <label>{{ 'TCF_LIST.LBL_PRODUCT_CATEGORY' | translate }}</label>
+                                    <ng-select [items]="supplierScoreMaster.productCategoryList" appendTo="body"
+                                        [virtualScroll]="true" [loading]="supplierScoreMaster.productCategoryLoading"
+                                        bindLabel="name" bindValue="id"
+                                        placeholder="--- {{ (supplierScoreMaster.productCategoryList !=null && supplierScoreMaster.productCategoryList.length !=0 ? 'BOOKING_SUMMARY.LBL_SELECT':'BOOKING_SUMMARY.MSG_NO_DATA' ) | translate }} ---"
+                                        [typeahead]="supplierScoreMaster.productCategoryInput" [minTermLength]="4"
+                                        [clearable]="true" (clear)="clearProductCategorySelection()"
+                                        (change)="changeProductCategoryData()" [(ngModel)]="model.productCategoryIds"
+                                        [multiple]="true" class="multiple" (scrollToEnd)="getProductCategoryData(true)"
+                                        #select>
+                                        <ng-template ng-option-tmp let-item="item">
+                                            <div class="text-wrap"><span>{{item.name}}</span></div>
+                                        </ng-template>
+                                    </ng-select>
+                                </div>
+                            </div>
+                            <div class="col-sm-3 col-md-3 col-lg-3">
+                                <div class="my-input-group">
+                                    <label>{{ 'TCF_LIST.LBL_PRODUCT_SUB_CATEGORY' | translate
+                                        }}</label>
+                                    <ng-select [items]="supplierScoreMaster.productSubCategoryList" appendTo="body"
+                                        [virtualScroll]="true" [loading]="supplierScoreMaster.productSubCategoryLoading"
+                                        bindLabel="name" bindValue="id"
+                                        placeholder="--- {{ (supplierScoreMaster.productSubCategoryList!=null && supplierScoreMaster.productSubCategoryList.length!=0? 'BOOKING_SUMMARY.LBL_SELECT':'BOOKING_SUMMARY.MSG_NO_DATA' ) | translate }} ---"
+                                        [typeahead]="supplierScoreMaster.productSubCategoryInput" [minTermLength]="4"
+                                        [clearable]="true" (clear)="clearProductSubCategorySelection()"
+                                        [(ngModel)]="model.productSubCategoryIds" [multiple]="true" class="multiple"
+                                        (scrollToEnd)="getProductSubCategoryData(true)" #select>
+                                        <ng-template ng-option-tmp let-item="item">
+                                            <div class="text-wrap"><span>{{item.name}}</span></div>
+                                        </ng-template>
+                                    </ng-select>
+                                </div>
+                            </div>
+                            <div class="col-sm-3 col-md-3 col-lg-3">
+                                <div class="my-input-group">
+                                    <label>{{ 'TCF_LIST.LBL_COUNTRY_ORIGIN' | translate }}</label>
+                                    <ng-select [items]="supplierScoreMaster.countryOriginList" [virtualScroll]="true"
+                                        appendTo="body" [loading]="supplierScoreMaster.countryOriginLoading"
+                                        bindLabel="name" bindValue="id"
+                                        placeholder="--- {{ (supplierScoreMaster.countryOriginList!=null && supplierScoreMaster.countryOriginList.length!=0? 'BOOKING_SUMMARY.LBL_SELECT':'BOOKING_SUMMARY.MSG_NO_DATA' ) | translate }} ---"
+                                        [typeahead]="supplierScoreMaster.countryOriginInput" [minTermLength]="4"
+                                        [clearable]="true" (clear)="clearCountryOriginSelection()"
+                                        [(ngModel)]="model.countryOriginIds" [multiple]="true" class="multiple"
+                                        (scrollToEnd)="getCountryOriginData(true)" #select>
+                                        <ng-template ng-option-tmp let-item="item">
+                                            <div class="text-wrap"><span>{{item.name}}</span></div>
+                                        </ng-template>
+                                    </ng-select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row marginTop25">
+                            <div class="col-sm-3 col-md-3 col-lg-3">
+                                <div class="my-input-group">
+                                    <label for="">{{ 'TCF_LIST.LBL_COUNTRY_DESTINATION' | translate }}</label>
+                                    <ng-select [items]="supplierScoreMaster.countryDestinationList" appendTo="body"
+                                        [virtualScroll]="true" [loading]="supplierScoreMaster.countryDestinationLoading"
+                                        bindLabel="name" bindValue="id"
+                                        placeholder="--- {{ (supplierScoreMaster.countryDestinationList!=null && supplierScoreMaster.countryDestinationList.length!=0? 'BOOKING_SUMMARY.LBL_SELECT':'BOOKING_SUMMARY.MSG_NO_DATA' ) | translate }} ---"
+                                        [typeahead]="supplierScoreMaster.countryDestinationInput" [minTermLength]="4"
+                                        [clearable]="true" (clear)="clearCountryDestinationSelection()"
+                                        [(ngModel)]="model.countryDestinationIds" [multiple]="true" class="multiple"
+                                        (scrollToEnd)="getCountryDestinationData(true)" #select>
+                                        <ng-template ng-option-tmp let-item="item">
+                                            <div class="text-wrap"><span>{{item.name}}</span></div>
+                                        </ng-template>
+                                    </ng-select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row marginTop25">
+                    <div class="col-12 col-sm-6">
+                        <button class="tertiary-cta small" (click)="toggleSection()">
+                            <span class="icon" *ngIf="!toggleFormSection">+</span>
+                            <span class="icon" *ngIf="toggleFormSection">-</span>
+                            {{'COMMON.LBL_ADVANCED_SEARCH' | translate}}
+                        </button>
+                    </div>
+                    <div class="col-12 col-sm-6 text-right mt-3 mt-sm-0">
+                        <button class="category-cta small mr-2 common-tooltip common-tooltip-top-2" data-tooltip="Reset"
+                            (click)="reset()">
+                            <img src="assets/images/reload-new.svg" alt="Reset">
+                            <span>{{ 'COMMON.LBL_RESET' | translate}}</span>
+                        </button>
+                        <button class="primary-cta small"
+                            [disabled]="supplierScoreMaster.tokenLoading ||
+                            supplierScoreMaster.supplierScoreDocReceivedLoading || supplierScoreMaster.supplierScoreDocReviewedLoading ||
+                            supplierScoreMaster.supplierScoreDocProvideLoading || supplierScoreMaster.supplierScoreListLoading"
+                            (click)="SearchDetails()">
+                            {{ 'COMMON.LBL_SEARCH' | translate }}
+                            <span
+                                *ngIf="supplierScoreMaster.tokenLoading ||
+                            supplierScoreMaster.supplierScoreDocReceivedLoading || supplierScoreMaster.supplierScoreDocReviewedLoading ||
+                            supplierScoreMaster.supplierScoreDocProvideLoading || supplierScoreMaster.supplierScoreListLoading">
+                                <i class="fa fa-refresh fa-spin" aria-hidden="true"></i>
+                            </span>
+                        </button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        <div class="my-container">
+            <div class="master-body">
+                <div class="content-container tracking-container transparent-bg">
+                    <div class="row mandays-dashboard-graph-wrapper">
+                        <div class="col-lg-7 grid-column col-md-12">
+                            <div class="dashboard-graph-container border-radius">
+                                <div class="new-graph-head text-center text-sm-left two-column">
+                                    <div class="graph-title-container">
+                                        <h3 class="title">{{'SUPPLIER_SCORE.LBL_TOP_SUPPLIER_RECEIVED_DOC'| translate}}
+                                        </h3>
+                                    </div>
+                                </div>
+                                <ng-container
+                                    *ngIf="supplierScoreMaster.supplierScoreDocReceivedLoading || supplierScoreMaster.tokenLoading; else DocReceivedData">
+                                    <div class="common-graph-placeholder">
+                                        <img src="assets/images/donut-placeholder.png" alt="graph">
+                                        <div class="content-container">
+                                            <div class="rect animate"></div>
+                                            <div class="rect animate width80"></div>
+                                            <div class="rect animate width50"></div>
+                                        </div>
+                                    </div>
+                                </ng-container>
+                                <ng-template #DocReceivedData>
+                                    <div class="row graph-body"
+                                        *ngIf="!supplierScoreMaster.supplierScoreDocReviewedDataNotFound; else ReceviedDataNotFound">
+                                        <div class="col-sm-12 col-md-8 col-xl-8">
+                                            <div id="documentchartdiv"
+                                                style="width: 100%; height: 280px; margin-top: -10px">
+                                            </div>
+
+                                        </div>
+                                        <div class="col-sm-12 col-md-4 col-xl-4">
+                                            <div class="legend-wrapper two-column" *ngIf="suppName">
+                                                <div class="legend-item"
+                                                    *ngFor="let item of suppName.series; let i = index">
+
+                                                    <div class="label w-100" *ngIf="i < dataLengthTrim">
+                                                        <span class="tile"
+                                                            [ngStyle]="{'background-color': suppName.colors.getIndex(i)}"></span><span
+                                                            class="text common-tooltip"
+                                                            [attr.data-tooltip]="suppName.series.getIndex(i).dataFields.valueY">{{suppName.series.getIndex(i).name}}</span>
+                                                    </div>
+                                                </div>
+                                                <div class="legend-item" *ngIf="suppName?.series.length > dataLengthTrim">
+                                                    <div class="label has-dropdown w-100">
+                                                        <span class="link">{{ 'COMMON.LBL_SHOW' | translate }}
+                                                            {{suppName?.series?.length - dataLengthTrim }}
+                                                            {{ 'COMMON.LBL_MORE' | translate }}</span>
+                                                        <div class="cta-dropdown top-right">
+                                                            <div class="legend-wrapper one-column m-0">
+                                                                <div class="legend-item"
+                                                                    *ngFor="let item of suppName.series; let i = index">
+                                                                    <div class="label w-100" *ngIf="i >= dataLengthTrim">
+                                                                        <span class="tile"
+                                                                            [ngStyle]="{'background-color': suppName.colors.getIndex(i)}"></span><span
+                                                                            class="text common-tooltip"
+                                                                            [attr.data-tooltip]="suppName.series.getIndex(i).dataFields.valueY">{{suppName.series.getIndex(i).name}}</span>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </ng-template>
+                                <ng-template #ReceviedDataNotFound>
+                                    <div class="col-sm-12 col-md-12 col-xl-12">
+                                        <div class="error-container">
+                                            <img src="assets/images/no-data.svg" alt="" class="thumbnail">
+                                            <h4 class="error-title">{{ 'COMMON.LBL_No_ITEM' | translate }}
+                                            </h4>
+                                            <p class="error-subtitle">{{'COMMON.LBL_NO_DATA_EMPTY' | translate}}</p>
+                                        </div>
+                                    </div>
+
+                                </ng-template>
+                            </div>
+
+                            <div class="dashboard-graph-container border-radius" >
+                                <div class="new-graph-head text-center text-sm-left two-column">
+                                    <div class="graph-title-container">
+                                        <h3 class="title">{{'SUPPLIER_SCORE.LBL_TOP_SUPPLIER_REVIEWE_DOC' | translate}}
+                                        </h3>
+                                    </div>
+                                </div>
+                                <ng-container
+                                    *ngIf="supplierScoreMaster.supplierScoreDocReviewedLoading || supplierScoreMaster.tokenLoading; else DocReviewedData">
+                                    <div class="common-graph-placeholder">
+                                        <img src="assets/images/donut-placeholder.png" alt="graph">
+                                        <div class="content-container">
+                                            <div class="rect animate"></div>
+                                            <div class="rect animate width80"></div>
+                                            <div class="rect animate width50"></div>
+                                        </div>
+                                    </div>
+                                </ng-container>
+                                <ng-template #DocReviewedData>
+                                    <div class="row graph-body"
+                                        *ngIf="!supplierScoreMaster.supplierScoreDocReviewedDataNotFound; else ReviewedDataNotFound">
+                                        <div class="col-sm-12 col-md-12 col-xl-9">
+                                            <div id="multiLineChart" style="width: 100%; height: 210px;"></div>
+                                        </div>
+                                        <div class="col-sm-12 col-md-12 col-xl-3 vertical-center">
+                                            <div class="legend-wrapper one-column"
+                                                [ngClass]="{'inline-label-container': isTablet}">
+                                                <div class="legend-item">
+                                                    <div class="label">
+                                                        <span class="tile" style="background-color: #ffc500"></span><span
+                                                            class="text">{{'TCF_DASHBOARD.LBL_PENDING' | translate}}</span>
+                                                    </div>
+                                                </div>
+                                                <div class="legend-item">
+                                                    <div class="label">
+                                                        <span class="tile" style="background-color: #f81538"></span><span
+                                                            class="text">{{'TCF_DASHBOARD.LBL_REJECTED' | translate}}</span>
+                                                    </div>
+                                                </div>
+                                                <div class="legend-item">
+                                                    <div class="label">
+                                                        <span class="tile" style="background-color: #24c11e"></span><span
+                                                            class="text">{{'TCF_DASHBOARD.LBL_VALIDATED' |
+                                                            translate}}</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </ng-template>
+                                <ng-template #ReviewedDataNotFound>
+                                    <div class="col-sm-12 col-md-12 col-xl-12">
+                                        <div class="error-container">
+                                            <img src="assets/images/no-data.svg" alt="" class="thumbnail">
+                                            <h4 class="error-title">{{ 'COMMON.LBL_No_ITEM' | translate }}
+                                            </h4>
+                                            <p class="error-subtitle">{{'COMMON.LBL_NO_DATA_EMPTY' | translate}}</p>
+                                        </div>
+                                    </div>
+
+                                </ng-template>
+                            </div>
+
+                        </div>
+                        <div class="col-lg-5 grid-column col-md-12">
+                            <div class="dashboard-graph-container border-radius single-big">
+                                <div class="new-graph-head text-center text-sm-left two-column">
+                                    <div class="graph-title-container">
+                                        <h3 class="title">{{'SUPPLIER_SCORE.LBL_TOP_SUPPLIER_PROVIDING_DOC'|
+                                            translate}}
+                                        </h3>
+                                    </div>
+                                </div>
+                                <ng-container
+                                    *ngIf="supplierScoreMaster.supplierScoreDocProvideLoading || supplierScoreMaster.tokenLoading; else ScoreDocProvideData">
+                                    <div class="common-graph-placeholder">
+                                        <img src="assets/images/donut-placeholder.png" alt="graph">
+                                        <div class="content-container">
+                                            <div class="rect animate"></div>
+                                            <div class="rect animate width80"></div>
+                                            <div class="rect animate width50"></div>
+                                        </div>
+                                    </div>
+                                </ng-container>
+                                <ng-template #ScoreDocProvideData>
+                                    <div class="row graph-body"
+                                        *ngIf="!supplierScoreMaster.supplierScoreDocProvideDataNotFound; else DocProvideDataNotFound">
+                                        <div class="col-12">
+                                            <ng-container *ngIf="supplierScoreMaster.supplierScoreDocProvideLoading">
+                                                <div class="loadingChart"></div>
+                                            </ng-container>
+                                            <div id="horizontalBar-chart" style="width: 100%; height: 550px"></div>
+                                        </div>
+                                        <div class="legend-wrapper one-column inline-label-container">
+                                            <div class="row">
+                                                <div class="col-4">
+                                                    <div class="legend-item">
+                                                        <div class="label">
+                                                            <span class="tile"
+                                                                style="background-color: #ffc500"></span><span
+                                                             class="text">{{'TCF_DASHBOARD.LBL_PENDING' |
+                                                                translate}}</span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-4">
+
+                                                    <div class="legend-item">
+                                                        <div class="label">
+                                                            <span class="tile"
+                                                                style="background-color: #f81538"></span><span
+                                                                 class="text">{{'TCF_DASHBOARD.LBL_REJECTED' |
+                                                                translate}}</span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-4">
+                                                    <div class="legend-item">
+                                                        <div class="label">
+                                                            <span class="tile"
+                                                                style="background-color: #24c11e"></span><span
+                                                                 class="text">{{'TCF_DASHBOARD.LBL_VALIDATED' |
+                                                                translate}}</span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </ng-template>
+                                <ng-template #DocProvideDataNotFound>
+                                    <div class="col-sm-12 col-md-12 col-xl-12">
+                                        <div class="error-container">
+                                            <img src="assets/images/no-data.svg" alt="" class="thumbnail">
+                                            <h4 class="error-title">{{ 'COMMON.LBL_No_ITEM' | translate }}
+                                            </h4>
+                                            <p class="error-subtitle">{{'COMMON.LBL_NO_DATA_EMPTY' | translate}}</p>
+                                        </div>
+                                    </div>
+
+                                </ng-template>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <p class="heading-title ml-3">{{ 'SUPPLIER_SCORE.LBL_SUPPLIER_SCORE_CARD' | translate}}</p>
+                        <ng-container *ngIf="supplierScoreMaster.supplierScoreListLoading || supplierScoreMaster.tokenLoading; else ScoreListData">
+                            <div class="col-sm-12 col-md-12 col-xl-12">
+                                <div class="content-container tracking-container transparent-bg">
+                                    <div class="record-count pl-0 pr-0">
+                                        <div class="column ml-0"></div>
+                                    </div>
+                                    <div class="table-container">
+                                        <table class="pagination-table">
+                                            <thead>
+                                                <tr>
+                                                    <th class="width-120 whitespacenormal wordbreak">
+                                                    </th>
+                                                    <th class="width-100 whitespacenormal wordbreak">
+                                                    </th>
+                                                    <th class="width-100 whitespacenormal wordbreak">
+                                                    </th>
+                                                    <th class="width-100 whitespacenormal wordbreak">
+                                                    </th>
+                                                    <th class="width-100 whitespacenormal wordbreak">
+                                                    </th>
+                                                    <th class="width-100 whitespacenormal wordbreak">
+                                                    </th>
+                                                    <th class="width-100 whitespacenormal wordbreak">
+                                                    </th>
+                                                    <th class="width-180 whitespacenormal wordbreak">
+                                                    </th>
+                                                    <th class="width-160 whitespacenormal wordbreak">
+                                                    </th>
+                                                    <th class="width-160 whitespacenormal wordbreak">
+                                                    </th>
+                                                    <th class="width-160 whitespacenormal wordbreak">
+                                                    </th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr>
+                                                    <td>
+                                                        <div class="rect-common animate width30"></div>
+                                                    </td>
+                                                    <td>
+                                                        <div class="rect-common animate width20"></div>
+                                                    </td>
+                                                    <td>
+                                                        <div class="rect-common animate width20"></div>
+                                                    </td>
+                                                    <td>
+                                                        <div class="rect-common animate width20"></div>
+                                                    </td>
+                                                    <td>
+                                                        <div class="rect-common animate width20"></div>
+                                                    </td>
+                                                    <td>
+                                                        <div class="rect-common animate width20"></div>
+                                                    </td>
+                                                    <td>
+                                                        <div class="rect-common animate width20"></div>
+                                                    </td>
+                                                    <td>
+                                                        <div class="rect-common animate width50"></div>
+                                                    </td>
+                                                    <td>
+                                                        <div class="rect-common animate width30"></div>
+                                                    </td>
+                                                    <td>
+                                                        <div class="rect-common animate width30"></div>
+                                                    </td>
+                                                    <td>
+                                                        <div class="rect-common animate width30"></div>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td>
+                                                        <div class="rect-common animate width30"></div>
+                                                    </td>
+                                                    <td>
+                                                        <div class="rect-common animate width20"></div>
+                                                    </td>
+                                                    <td>
+                                                        <div class="rect-common animate width20"></div>
+                                                    </td>
+                                                    <td>
+                                                        <div class="rect-common animate width20"></div>
+                                                    </td>
+                                                    <td>
+                                                        <div class="rect-common animate width20"></div>
+                                                    </td>
+                                                    <td>
+                                                        <div class="rect-common animate width20"></div>
+                                                    </td>
+                                                    <td>
+                                                        <div class="rect-common animate width20"></div>
+                                                    </td>
+                                                    <td>
+                                                        <div class="rect-common animate width50"></div>
+                                                    </td>
+                                                    <td>
+                                                        <div class="rect-common animate width30"></div>
+                                                    </td>
+                                                    <td>
+                                                        <div class="rect-common animate width30"></div>
+                                                    </td>
+                                                    <td>
+                                                        <div class="rect-common animate width30"></div>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td>
+                                                        <div class="rect-common animate width30"></div>
+                                                    </td>
+                                                    <td>
+                                                        <div class="rect-common animate width20"></div>
+                                                    </td>
+                                                    <td>
+                                                        <div class="rect-common animate width20"></div>
+                                                    </td>
+                                                    <td>
+                                                        <div class="rect-common animate width20"></div>
+                                                    </td>
+                                                    <td>
+                                                        <div class="rect-common animate width20"></div>
+                                                    </td>
+                                                    <td>
+                                                        <div class="rect-common animate width20"></div>
+                                                    </td>
+                                                    <td>
+                                                        <div class="rect-common animate width20"></div>
+                                                    </td>
+                                                    <td>
+                                                        <div class="rect-common animate width50"></div>
+                                                    </td>
+                                                    <td>
+                                                        <div class="rect-common animate width30"></div>
+                                                    </td>
+                                                    <td>
+                                                        <div class="rect-common animate width30"></div>
+                                                    </td>
+                                                    <td>
+                                                        <div class="rect-common animate width30"></div>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </ng-container>
+                        <ng-template #ScoreListData>
+                            <div class="col-sm-12 col-md-12 col-xl-12"
+                                *ngIf="!model.noFound; else ScoreListDataNotFound">
+                                <div class="content-container tracking-container transparent-bg">
+                                    <div class="record-count pl-0 pr-0">
+                                        <div class="column ml-0">
+                                            <p class="count" [innerHtml]="showPaginationText()"></p>
+                                        </div>
+                                    </div>
+                                    <div class="table-container">
+                                        <table class="pagination-table">
+                                            <thead>
+                                                <tr>
+                                                    <th class="width-120 whitespacenormal wordbreak">
+                                                        {{ 'SUPPLIER_SCORE.LBL_SUPPLIER' | translate}}
+                                                    </th>
+                                                    <th class="width-100 whitespacenormal wordbreak">
+                                                        {{ 'SUPPLIER_SCORE.LBL_TCF_COMPLETED' | translate}}
+                                                    </th>
+                                                    <th class="width-100 whitespacenormal wordbreak">
+                                                        {{ 'SUPPLIER_SCORE.LBL_TCF_TO_BE_FINALIZED' | translate}}
+                                                    </th>
+                                                    <th class="width-100 whitespacenormal wordbreak">
+                                                        {{ 'SUPPLIER_SCORE.LBL_TCF_INPROGRESS' | translate}}
+                                                    </th>
+                                                    <th class="width-100 whitespacenormal wordbreak">
+                                                        {{ 'SUPPLIER_SCORE.LBL_TCF_NEW' | translate}}
+                                                    </th>
+                                                    <th class="width-100 whitespacenormal wordbreak">
+                                                        {{ 'SUPPLIER_SCORE.LBL_DOCS_SUBMITTED' | translate}}
+                                                    </th>
+                                                    <th class="width-100 whitespacenormal wordbreak">
+                                                        {{ 'SUPPLIER_SCORE.LBL_DOCS_WAITING' | translate}}
+                                                    </th>
+                                                    <th class="width-180 whitespacenormal wordbreak">
+                                                        {{ 'SUPPLIER_SCORE.LBL_PERCENTAGE_COMPLETION' | translate}}
+                                                    </th>
+                                                    <th class="width-160 whitespacenormal wordbreak">
+                                                        {{ 'SUPPLIER_SCORE.LBL_PERCENTAGE_REJECT' | translate}}
+                                                    </th>
+                                                    <th class="width-160 whitespacenormal wordbreak">
+                                                        {{ 'SUPPLIER_SCORE.LBL_AVG_FIRST_DOC_SUB' | translate}}
+                                                    </th>
+                                                    <th class="width-160 whitespacenormal wordbreak">
+                                                        {{ 'SUPPLIER_SCORE.LBL_AVG_DOC_COMPLETED' | translate}}
+                                                    </th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <ng-template ngFor let-iteminfo
+                                                    [ngForOf]="supplierScoreMaster.supplierScoreList" let-i="index">
+                                                    <tr [ngClass]="(((i+1) % 2)== 0)?'even':'odd'">
+                                                        <td class="widtd-140 whitespacenormal wordbreak">
+                                                            {{iteminfo.name}}
+                                                        </td>
+                                                        <td class="widtd-100 whitespacenormal wordbreak">
+                                                            <span class="highlight-badge"
+                                                                *ngIf="iteminfo.completed != null">{{iteminfo.completed}}</span>
+                                                        </td>
+                                                        <td class="widtd-100 whitespacenormal wordbreak">
+                                                            <span class="highlight-badge"
+                                                                *ngIf="iteminfo.finalized != null">{{iteminfo.finalized}}</span>
+                                                        </td>
+                                                        <td class="widtd-100 whitespacenormal wordbreak">
+                                                            <span class="highlight-badge"
+                                                                *ngIf="iteminfo.inprogress != null">{{iteminfo.inprogress}}</span>
+                                                        </td>
+                                                        <td class="widtd-100 whitespacenormal wordbreak">
+                                                            <span class="highlight-badge"
+                                                                *ngIf="iteminfo.new != null">{{iteminfo.new}}</span>
+                                                        </td>
+                                                        <td class="widtd-100 whitespacenormal wordbreak">
+                                                            <span class="highlight-badge"
+                                                                *ngIf="iteminfo.doc_submited != null">{{iteminfo.doc_submited}}</span>
+                                                        </td>
+                                                        <td class="widtd-100 whitespacenormal wordbreak">
+                                                            <span class="highlight-badge"
+                                                                *ngIf="iteminfo.doc_waiting != null">{{iteminfo.doc_waiting}}</span>
+                                                        </td>
+                                                        <td class="widtd-180 whitespacenormal wordbreak">
+                                                            <span class="highlight-badge"
+                                                                *ngIf="iteminfo.percentageCompletion">{{iteminfo.percentageCompletion}}</span>
+                                                        </td>
+                                                        <td class="widtd-160 whitespacenormal wordbreak">
+                                                            <span class="highlight-badge"
+                                                                *ngIf="iteminfo.percentageReject">{{iteminfo.percentageReject}}</span>
+                                                        </td>
+                                                        <td class="widtd-160 whitespacenormal wordbreak">
+                                                            <span
+                                                                *ngIf="iteminfo.avgFirstDocSub">{{iteminfo.avgFirstDocSub}}
+                                                                Days</span>
+                                                        </td>
+                                                        <td class="widtd-160 whitespacenormal wordbreak">
+                                                            <span
+                                                                *ngIf="iteminfo.avgDocCompleted">{{iteminfo.avgDocCompleted}}
+                                                                Days</span>
+                                                        </td>
+                                                    </tr>
+                                                </ng-template>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                    <div class="pagination-container">
+                                        <div class="page-count-list">
+                                            <select class="small" [(ngModel)]="selectedPageSize" (change)="SearchList()">
+                                                <option *ngFor="let item of pagesizeitems" [ngValue]=item>{{item}}</option>
+                                            </select>
+                                            <span> Records per page</span>
+                                        </div>
+                                        <div class="pagination-action-container text-right">
+                                            <ngb-pagination [pageSize]="model.pageSize" [collectionSize]="model.totalCount"
+                                                [boundaryLinks]="true" [(page)]="model.index" [maxSize]="5"
+                                                (pageChange)="onPager($event)">
+                                                <ng-template ngbPaginationFirst>
+                                                    <img src="assets/images/new-set/double-arrow.svg" alt="">
+                                                </ng-template>
+                                                <ng-template ngbPaginationPrevious>
+                                                    <img src="assets/images/new-set/single-arrow.svg" alt=""
+                                                        class="left-arrow">
+                                                </ng-template>
+                                                <ng-template ngbPaginationNext>
+                                                    <img src="assets/images/new-set/single-arrow.svg" alt=""
+                                                        class="right-arrow">
+                                                </ng-template>
+                                                <ng-template ngbPaginationLast>
+                                                    <img src="assets/images/new-set/double-arrow.svg" alt=""
+                                                        class="right-most-arrow">
+                                                </ng-template>
+                                            </ngb-pagination>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </ng-template>
+                        <ng-template #ScoreListDataNotFound>
+                            <div class="col-sm-12 col-md-12 col-xl-12">
+                                <div class="error-container bg-transparent">
+                                    <img src="assets/images/no-data.svg" alt="" class="thumbnail">
+                                    <h4 class="error-title">{{ 'COMMON.LBL_No_ITEM' | translate }}
+                                    </h4>
+                                    <p class="error-subtitle">{{'COMMON.LBL_NO_DATA_EMPTY' | translate}}</p>
+                                </div>
+                            </div>
+                        </ng-template>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="footer landing-footer">
+            <div class="my-container">
+                <div class="column">
+                    <p class="text">{{'COMMON.LBL_RIGHTS_RESERVED' | translate}}</p>
+                </div>
+                <div class="column">
+                    <img src="../assets/images/footer-logo.png" alt="logo" class="footer-logo">
+                </div>
+                <div class="column">
+                    <ul class="footer-item">
+                        <li><a href="">{{'COMMON.LBL_USER_GUIDE' | translate}}</a></li>
+                        <li><a href="">{{'COMMON.LBL_CONTACT' | translate}}</a></li>
+                        <li><a href="">{{'COMMON.LBL_HELP' | translate}}</a></li>
+                        <li><a href="">{{'COMMON.LBL_TERMS' | translate}}</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

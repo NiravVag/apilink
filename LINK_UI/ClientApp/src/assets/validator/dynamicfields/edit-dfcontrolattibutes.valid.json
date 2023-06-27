@@ -1,0 +1,54 @@
+{
+  "model": "editdfcustomerconfiguration.model",
+  "fields": {
+    "customerId": [
+      {
+        "type": "required",
+        "fieldType": "N",
+        "ressource": "EDIT_DF_CONFIG.MSG_CUSTOMER_REQ"
+      }
+    ],
+    "moduleId": [
+      {
+        "type": "required",
+        "fieldType": "N",
+        "ressource": "EDIT_DF_CONFIG.MSG_MODULE_REQ"
+      }
+    ],
+    "controlTypeId": [
+      {
+        "type": "required",
+        "fieldType": "N",
+        "ressource": "EDIT_DF_CONFIG.MSG_CONTROLTYPE_REQ"
+      }
+    ],
+    "label": [
+      {
+        "type": "required",
+        "fieldType": "N",
+        "ressource": "EDIT_DF_CONFIG.MSG_LABEL_REQ"
+      }
+    ],
+    "displayOrder": [
+      {
+        "type": "required",
+        "fieldType": "N",
+        "ressource": "EDIT_DF_CONFIG.MSG_DISPLAYORDER_REQ"
+      }
+    ],
+    "dataSourceType": [
+      {
+        "type": "required",
+        "fieldType": "N",
+        "ressource": "Data Source Type is required"
+      }
+    ],
+    "fbReference": [
+      {
+        "type": "required",
+        "fieldType": "N",
+        "ressource": "FB Reference is required"
+      }
+    ]
+  }
+}

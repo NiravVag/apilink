@@ -1,0 +1,55 @@
+{
+ "model": "currencyrate.model",
+  "fields": {
+    "currency": [
+      {
+        "type": "required", 
+        "fieldType": "N",
+        "ressource": "EXCHANGE_RATE.MSG_CURRENCY_REQ"
+      }
+    ],
+    "exchangeType": [
+      {
+        "type": "required",
+        "fieldType": "N",
+        "ressource": "EXCHANGE_RATE.MSG_TYPE_REQ"
+      }
+    ],
+    "fromDate": [
+      {
+        "type": "required",
+        "fieldType": "D",
+        "ressource": "EXCHANGE_RATE.MSG_FROMDATE_REQ"
+      },
+      {
+        "type": "date",
+        "ressource": "EXCHANGE_RATE.MSG_FROMDATE_DATE"
+      },
+      {
+        "type": "isLessOrEqual",
+        "ressource": "EXCHANGE_RATE.MSG_STARTDATE_GERAT_ENDDATE",
+        "fieldType": "D",
+        "fieldCible": "toDate"
+      }
+    ],
+    "toDate": [
+      {
+        "type": "required",
+        "fieldType": "D",
+        "ressource": "EXCHANGE_RATE.MSG_TODATE_REQ"
+      },
+      {
+        "type": "date",
+        "ressource": "EXCHANGE_RATE.MSG_TODATE_DATE"
+      },
+      {
+        "type": "isGreatOrEqual",
+        "ressource": "EXCHANGE_RATE.MSG_ENDDATE_LESS_STARTDATE",
+        "fieldType": "D",
+        "fieldCible": "fromDate"
+      }
+    ]
+
+  }
+
+}

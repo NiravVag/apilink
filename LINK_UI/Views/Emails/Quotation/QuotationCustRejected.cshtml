@@ -1,0 +1,20 @@
+﻿@model (DTO.Quotation.QuotationDetails,string, string)
+<span style="font-size: 13px; font-family: tahoma;">
+    Dear@(string.IsNullOrEmpty(Model.Item2) ? "s" : $" {Model.Item2}"), <br /><br />
+    The @(Model.Item1.Service.Id == (int)Entities.Enums.Service.InspectionId ? "Inspection" : "Audit") quotation  #@Model.Item1.Id has been Rejected by customer for booking  @string.Join(", ", @Model.Item1.OrderList.Select(x => x.Id.ToString()).ToArray()).
+    <br /> <br />
+    Comments: - @Model.Item1.CustomerRemark
+    <br /><br />
+    Customer : @Model.Item1.Customer.Name
+    <br /><br />
+    Supplier : @Model.Item1.Supplier.Name
+    <br /><br />
+    Factory : @Model.Item1.Factory.Name
+    <br /><br />
+    Please click <a href="@Model.Item3">here</a> to view the quotation details.
+    <br /><br />
+    Thanks<br />
+    IT-Team
+    <br /><br />
+    <span style="font-style:italic"> Note: - This receipt is auto generated from Link. Please do not reply to this message.</span>
+</span>

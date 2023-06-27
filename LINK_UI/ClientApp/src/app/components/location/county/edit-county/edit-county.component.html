@@ -1,0 +1,122 @@
+<div class="main-wrapper">
+  <div class="wrapper dashboard-wrapper">
+    <div class="my-container">
+      <div class="master-body">
+        <div class="title-container">
+            <div class="header-back-button" *ngIf="fromSummary && !searchloading && !loading">
+                <img src="assets/images/back-red.png" alt="back" (click)="this.return('county/county-summary');">
+                </div>
+          <h3 class="main-title">
+            {{model.id==null?('EDIT_COUNTY.LBL_ADD' | translate):('EDIT_COUNTY.LBL_EDIT' | translate)}}&nbsp;{{ 'EDIT_COUNTY.TITLE' | translate }}
+          </h3>
+        </div>
+        <div class="content-container">
+          <h4 class="container-head">{{ 'EDIT_COUNTY.LBL_DETAILS' | translate }}</h4>
+          <div class="formPadding">
+            <div class="row">
+              <div class="col-sm-3">
+                <div class="my-input-group">
+                  <label class="required">{{ 'EDIT_COUNTY.LBL_COUNTRY' | translate }}</label>
+                  <ng-select placeholder="--- {{ 'EDIT_COUNTY.LBL_SELECT' | translate }} ---" [searchable]="true"
+                    [items]="data.countryvalues" [(ngModel)]="model.countryId" bindLabel="countryName" bindValue="id"
+                    (clear)="resetCountryDetails()" class="multiple" (ngModelChange)="refreshprovince($event)"
+                    [multiple]="false" [searchable]="true">
+                  </ng-select>
+                </div>
+              </div>
+              <div class="col-sm-3 mobile-margin-top-15">
+                <div class="my-input-group">
+                  <label for="ddlprovince" class="required">{{ 'EDIT_COUNTY.LBL_PROVINCE' | translate }}</label>
+                  <ng-select [items]="data.provincevalues" [hideSelected]="true" [loading]="provinceLoading"
+                    [multiple]="false" (ngModelChange)="refreshcity($event)" [searchable]="true" bindLabel="name"
+                    [(ngModel)]="model.provinceId" bindValue="id"
+                    placeholder="--- {{ 'CITY_SUMMARY.LBL_SELECT' | translate }} ---">
+                  </ng-select>
+                </div>
+              </div>
+              <div class="col-sm-3 mobile-margin-top-15">
+                <div class="my-input-group">
+                  <label class="required">{{ 'EDIT_COUNTY.LBL_CITY' | translate }}</label>
+                  <ng-select [loading]="cityLoading" placeholder="--- {{ 'EDIT_COUNTY.LBL_SELECT' | translate }} ---"
+                    [searchable]="true" [items]="data.cityvalues" [(ngModel)]="model.cityId" bindLabel="name"
+                    bindValue="id" class="multiple" [ngClass]="{'is-invalid': !validator.isValid('cityId')}"
+                    [closeOnSelect]="true" [multiple]="false"></ng-select>
+                  <div *ngIf="!validator.isValid('cityId')" class="invalid-feedback" style="display:block">
+                    <div *ngFor="let error of validator.getErrors('cityId')">{{ error | translate }}</div>
+                  </div>
+                </div>
+              </div>
+
+
+
+              <div class="col-sm-3 mobile-margin-top-15">
+                <div class="my-input-group">
+                  <label class="required">{{ 'EDIT_COUNTY.LBL_ZONE' | translate }}</label>
+                  <ng-select [items]="zoneList" [virtualScroll]="true"
+                  [loading]="zoneLoading" bindLabel="name" bindValue="id"
+                  placeholder="--- {{ (zoneList!=null && zoneList.length!=0? 'EDIT_COUNTY.LBL_SELECT':'BOOKING_SUMMARY.MSG_NO_DATA' ) | translate }} ---"
+                  [ngClass]="{ 'is-invalid':  !validator.isValid('zoneId')}"
+                  [typeahead]="zoneInput" 
+                  (clear)="clearZoneSelection()" [clearable]="true"
+                  [(ngModel)]="model.zoneId" [multiple]="false"
+                  (scrollToEnd)="getZoneData(true)"
+                    #select>
+                  <ng-template ng-option-tmp let-item="item">
+                      <!-- <b>{{index}} </b><span>{{item.name}}</span> -->
+                      <div class="text-wrap"><span>{{item.name}}</span></div>
+                  </ng-template>
+              </ng-select>
+                  <div *ngIf="!validator.isValid('zoneId')" class="invalid-feedback" style="display:block">
+                    <div *ngFor="let error of validator.getErrors('zoneId')">{{ error | translate }}</div>
+                  </div>
+                </div>
+              </div>
+
+
+
+
+
+
+
+
+              <div class="col-sm-3 marginTop15">
+                <div class="my-input-group">
+                  <label class="required">{{ 'EDIT_COUNTY.LBL_COUNTY' | translate }}</label>
+                  <input [(ngModel)]="model.countyName" maxlength="500"
+                    placeholder="{{ 'EDIT_COUNTY.PH_COUNTY_NAME' | translate }}" type="text"
+                    [ngClass]="{'is-invalid': !validator.isValid('countyName')}" />
+                  <div *ngIf="!validator.isValid('countyName')" class="invalid-feedback" style="display:block">
+                    <div *ngFor="let error of validator.getErrors('countyName')">{{ error | translate }}</div>
+                  </div>
+                </div>
+              </div>
+              <div class=" marginTop15 col-sm-3">
+                <div class="my-input-group">
+                  <label>{{ 'EDIT_COUNTY.LBL_COUNTY_CODE' | translate }}</label>
+                  <input [(ngModel)]="model.countyCode" maxlength="500"
+                    placeholder="{{ 'EDIT_COUNTY.PH_COUNTY_CODE' | translate }}" type="text" />
+
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="form-action-container">
+            <button class="category-cta small mr-2 common-tooltip common-tooltip-top-2" data-tooltip="Reset"
+            [disabled]="searchloading || loading" (click)="Reset()">
+              <img src="assets/images/reload-new.svg" alt="Reset">
+              <span>{{'COMMON.LBL_RESET'| translate}}</span>
+            </button>
+            <button class="primary-cta small" [disabled]="searchloading || loading" (click)="save()">
+              {{
+                    'EDIT_COUNTY.LBL_SAVE' | translate
+                    }}
+              <span *ngIf="searchloading">
+                <i class="fa fa-refresh fa-spin" aria-hidden="true"></i>
+              </span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

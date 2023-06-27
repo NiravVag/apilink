@@ -1,0 +1,74 @@
+{
+ "model": "expenseclaim.model",
+  "fields": {
+    "expenseDate": [
+      {
+        "type": "required",
+        "fieldType": "D",
+        "ressource": "EXPENSE.MSG_EXDATE_REQ"
+      },
+      {
+        "type": "date",
+        "ressource": "EXPENSE.MSG_EXDATE_DATE"
+      }
+    ],
+    "expenseTypeId": [
+      {
+        "type": "required",
+        "fieldType": "N",
+        "ressource": "EXPENSE.MSG_EXTYPE_REQ"
+      }
+    ],
+    "currencyId": [
+      {
+        "type": "required",
+        "fieldType": "N",
+        "ressource": "EXPENSE.MSG_CURRENCY_REQ"
+      }
+    ],
+    "actualAmount": [
+      {
+        "type": "required",
+        "fieldType": "N",
+        "ressource": "EXPENSE.MSG_ACTAMOUNT_REQ"
+      }
+    ],
+    "startCity": [
+      {
+        "type": "required",
+        "fieldType": "N",
+        "ressource": "EXPENSE.MSG_startCity_REQ"
+      }
+    ],
+    "destCity": [
+      {
+        "type": "required",
+        "fieldType": "N",
+        "ressource": "EXPENSE.MSG_destCity_REQ"
+      }
+    ],
+    "tripMode": [
+      {
+        "type": "required",
+        "fieldType": "N",
+        "ressource": "EXPENSE.MSG_TripType_REQ"
+      }
+    ],
+    
+    "bookingNo": [
+      {
+        "type": "required",
+        "fieldType": "N",
+        "ressource": "EXPENSE.MSG_BOOKINGNO_REQ"
+      }
+    ],
+    "manDay": [
+      {
+        "type": "required",
+        "fieldType": "N",
+        "ressource": "Man Day is required"
+      }
+    ]
+  }
+
+}

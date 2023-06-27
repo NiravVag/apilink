@@ -1,0 +1,41 @@
+{
+  "model": "edit-customer-brand.model",
+  "fields": {
+    "id": [
+      {
+        "type": "required",
+        "fieldType": "N",
+        "ressource": "CUSTOMER_BRAND.MSG_ID_REQ"
+      }
+    ],
+    "brand": [
+      {
+        "type": "required",
+        "fieldType": "A",
+        "ressource": "CUSTOMER_BRAND.MSG_NAME_REQ"
+      }
+    ],
+    "brandCode": [
+      {
+        "type": "required",
+        "fieldType": "N",
+        "ressource": "CUSTOMER_BRAND.MSG_BRANDCODE_REQ"
+      }],
+      "name": [
+        {
+          "type": "required",
+          "fieldType": "N",
+          "ressource": "CUSTOMER_BRAND.MSG_NAME_REQ"
+        }
+    ],
+    "apiServiceList": [
+      {
+        "type": "required",
+        "fieldType": "N",
+        "ressource": "API_SERVICE.MSG_API_SERVICE_REQ"
+      }
+    ] 
+
+  }
+
+}

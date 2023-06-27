@@ -1,0 +1,624 @@
+<div class="main-wrapper">
+  <div class="wrapper dashboard-wrapper">
+    <div class="my-container">
+      <div class="master-body">
+        <div class="title-container">
+          <div class="header-back-button" (click)="returnToSummary()">
+            <img src="assets/images/back-red.png" alt="back" />
+          </div>
+          <h3 class="main-title">
+            {{ masterModel.header | translate }}
+          </h3>
+        </div>
+        <div class="content-container quotation-container">
+          <div class="row formPadding">
+            <div class="col-sm-12">
+              <div class="row marginTop15">
+                <div class="col-lg-4 col-sm-4 col-md-4">
+                  <div class="my-input-group">
+                    <label for="">{{
+                      "MANUAL_INVOICE_REGISTER.LBL_SERVICE" | translate
+                      }}</label>
+                    <ng-select [items]="masterModel.serviceList" [virtualScroll]="true"
+                      [loading]="masterModel.serviceLoading" bindLabel="name" bindValue="id"
+                      [ngClass]="{'is-invalid':!validator.isValid('serviceId')}" [disabled]="masterModel.entityId == masterModel.entityAccess.AQF && model.invoiceNo != null"
+                      placeholder="--- {{ (masterModel.serviceList!=null && masterModel.serviceList.length!=0? 'BOOKING_SUMMARY.LBL_SELECT':'BOOKING_SUMMARY.MSG_NO_DATA' ) | translate }} ---"
+                      appendTo="body" [(ngModel)]="model.serviceId" (change)="changeServiceSelection($event)"
+                      [searchable]="true" [multiple]="false" #select>
+                      <ng-template ng-option-tmp let-item="item">
+                        <div class="text-wrap"><span>{{item.name}}</span></div>
+                      </ng-template>
+                    </ng-select>
+                    <div *ngIf="!validator.isValid('serviceId')" class="invalid-feedback">
+                      <div *ngFor="let error of validator.getErrors('serviceId')">
+                        {{ error | translate }}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="col-sm-4 col-md-4 col-lg-4">
+                  <div class="my-input-group">
+                    <span *ngIf="masterModel.entityId == masterModel.entityAccess.AQF">
+                      <label class="required">{{ 'EXTRA_FEE.LBL_BOOKING_NUMBER' | translate }}</label>
+                      <ng-select [closeOnSelect]="true" [searchable]="true" [virtualScroll]="true"
+                        [items]="masterModel.bookingNumberList" [(ngModel)]="model.bookingNo" bindLabel="name"
+                        bindValue="id" [multiple]="false" [disabled]="model.bookingNo > 0"
+                        placeholder="--- {{(masterModel.bookingNumberList && masterModel.bookingNumberList.length>0? 'COMMON.LBL_SELECT':'COMMON.LBL_NO_DATA')  | translate }} ---"
+                        [ngClass]="{ 'is-invalid':  !validator.isValid('bookingNo')}"
+                        [loading]="masterModel.bookingNumberLoading" (change)="changeBookingSelection($event)"
+                        [typeahead]="masterModel.bookingInput" [minTermLength]="3" [clearable]="true"
+                        (clear)="clearBookingSelection()" appendTo="body" (scrollToEnd)="getBookingNoData(true)"
+                        #select>
+                        <ng-template ng-option-tmp let-item="item">
+                          <div class="text-wrap"><span>{{item.name}}</span></div>
+                        </ng-template>
+                      </ng-select>
+                    </span>
+                    <div *ngIf="!validator.isValid('bookingNo')" class="invalid-feedback">
+                      <div *ngFor="let error of validator.getErrors('bookingNo')">
+                        {{ error | translate }}
+                      </div>
+                    </div>
+
+                  </div>
+                </div>
+              </div>
+              <div class="row marginTop15">
+                <div class="col-sm-4 col-md-4 col-lg-4">
+                  <div class="my-input-group">
+                    <label class="required" for="">{{
+                      "MANUAL_INVOICE_REGISTER.LBL_CUSTOMER" | translate
+                      }}</label>
+                    <ng-select bindLabel="name" bindValue="id" [multiple]="false" [clearable]="true"
+                      (clear)="clearCustomer()" [items]="masterModel.customerList" [(ngModel)]="model.customerId"
+                      [virtualScroll]="true" (change)="changeCustomerData($event)" (scrollToEnd)="getCustomerData(true)"
+                      [ngClass]="{ 'is-invalid':!validator.isValid('customerId')}"
+                      [typeahead]="masterModel.customerInput" [minTermLength]="3" placeholder="--- {{
+                                            (masterModel.customerList && masterModel.customerList.length > 0 ? 'COMMON.LBL_SELECT': 'COMMON.LBL_NO_DATA'
+                                            ) | translate
+                                            }} ---" appendTo="body" [loading]="masterModel.customerLoading">
+                      <ng-template ng-option-tmp let-item="item">
+                        <div class="text-wrap">{{ item.name }}</div>
+                      </ng-template>
+                    </ng-select>
+                    <div *ngIf="!validator.isValid('customerId')" class="invalid-feedback">
+                      <div *ngFor="let error of validator.getErrors('customerId')">{{ error | translate }}</div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-sm-4 col-md-4 col-lg-4">
+                  <div class="my-input-group">
+                    <label class="required">{{
+                      "MANUAL_INVOICE_REGISTER.LBL_BILLING_TO" | translate
+                      }}</label>
+                    <ng-select [items]="masterModel.billingToList" [closeOnSelect]="true" [searchable]="true"
+                      bindLabel="name" bindValue="id" appendTo="body" placeholder="--- {{
+                        (masterModel.billingToList &&
+                        masterModel.billingToList.length > 0
+                          ? 'COMMON.LBL_SELECT'
+                          : 'COMMON.LBL_NO_DATA'
+                        ) | translate
+                      }} ---" [loading]="masterModel.billingToLoading" [(ngModel)]="model.invoiceTo"
+                      (change)="changeBillingTo()" [ngClass]="{
+                        'is-invalid': !validator.isValid('invoiceTo')
+                      }">
+                      <ng-template ng-option-tmp let-item="item">
+                        <div class="text-wrap">{{ item.name }}</div>
+                      </ng-template>
+                    </ng-select>
+                    <div *ngIf="!validator.isValid('invoiceTo')" class="invalid-feedback">
+                      <div *ngFor="let error of validator.getErrors('invoiceTo')">
+                        {{ error | translate }}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-sm-4 col-md-4 col-lg-4"
+                  *ngIf="model.invoiceTo && model.customerId && model.invoiceTo!==masterModel.billPaidBy.Customer">
+                  <div class="my-input-group select-for-filter">
+                    <label class="required">{{ masterModel.supplierHeader}}</label>
+                    <ng-select [items]="masterModel.supplierfactoryList" [virtualScroll]="true"
+                      [loading]="masterModel.supplierfactoryLoading" bindLabel="name" bindValue="id"
+                      placeholder="--- {{ (masterModel.supplierfactoryList!=null && masterModel.supplierfactoryList.length!=0? 'BOOKING_SUMMARY.LBL_SELECT':'BOOKING_SUMMARY.MSG_NO_DATA' ) | translate }} ---"
+                      [typeahead]="masterModel.supplierfactoryInput" [minTermLength]="3" appendTo="body"
+                      (clear)="resetSupplierInfo()" (change)="changeSupplier($event)" [(ngModel)]="model.supplierId"
+                      [searchable]="true" [multiple]="false" (scrollToEnd)="getSupplierFactoryData(true)" #select>
+                      <ng-template ng-option-tmp let-item="item">
+                        <div class="text-wrap"><span>{{item.name}}</span></div>
+                      </ng-template>
+                    </ng-select>
+                    <div *ngIf="!validator.isValid('supplierId',isSupplierIsRequird())" class="invalid-feedback">
+                      <div *ngFor="let error of validator.getErrors('supplierId')">
+                        {{ error | translate }}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="row marginTop25">
+                <div class="col-sm-4 mobile-margin-top-15">
+                  <div class="my-input-group">
+                    <a (click)="checkInvoiceExists()" *ngIf="masterModel.oldInvoiceNo!==model.invoiceNo"
+                      class="right-link">
+                      <img src="assets/images/red-question.png" style="width: 13px;" alt=""> {{
+                      'MANUAL_INVOICE_REGISTER.LBL_CHECK' | translate }}
+                    </a>
+                    <label class="required">{{ 'MANUAL_INVOICE_REGISTER.LBL_INVOICE_NO' | translate
+                      }}</label>
+                    <input maxlength="200" [(ngModel)]="model.invoiceNo"
+                      placeholder="{{ 'MANUAL_INVOICE_REGISTER.LBL_INVOICE_NO' | translate }}"
+                      [ngClass]="{ 'is-invalid':  !validator.isValid('invoiceNo')}" type="text" />
+                    <div *ngIf="!validator.isValid('invoiceNo')" class="invalid-feedback">
+                      <div *ngFor="let error of validator.getErrors('invoiceNo')">
+                        {{ error | translate }}
+                      </div>
+                    </div>
+
+                  </div>
+                </div>
+                <div class="col-sm-4 col-md-4 col-lg-4">
+                  <div class="my-input-group">
+                    <label class="required">{{'MANUAL_INVOICE_REGISTER.LBL_INVOICE_DATE' | translate
+                      }}</label>
+                    <div class="calendar-wrapper">
+                      <input type="text" maxlength="10" container="body" readonly=readonly
+                        placeholder="{{ 'MANUAL_INVOICE_REGISTER.LBL_INVOICE_DATE' | translate }}"
+                        [ngClass]="{'is-invalid': !validator.isValid('invoiceDate')}" [(ngModel)]="model.invoiceDate"
+                        ngbDatepicker #invoiceDate="ngbDatepicker" (click)="invoiceDate.toggle()">
+                      <img src="assets/images/cta-close-grey.svg" alt="" class="close-icon"
+                        (click)="clearDateInput('invoiceDate')" *ngIf="model.invoiceDate">
+                      <img src="assets/images/calendar-icon.svg" alt="" class="calendar-icon"
+                        (click)="invoiceDate.toggle()">
+                    </div>
+                    <div *ngIf="!validator.isValid('invoiceDate')" class="invalid-feedback">
+                      <div *ngFor="let error of validator.getErrors('invoiceDate')">
+                        {{ error | translate }}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-sm-4 col-md-4 col-lg-4 mobile-margin-top-15">
+                  <div class="my-input-group">
+                    <label>{{ 'MANUAL_INVOICE_REGISTER.LBL_ATTN' | translate }}</label>
+                    <input maxlength="1000" [(ngModel)]="model.attn"
+                      [ngClass]="{'is-invalid':!validator.isValid('attn')}" type="text"
+                      placeholder="{{ 'MANUAL_INVOICE_REGISTER.LBL_ATTN' | translate }}" />
+                    <div *ngIf="!validator.isValid('attn')" class="invalid-feedback">
+                      <div *ngFor="let error of validator.getErrors('attn')">
+                        {{ error | translate }}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="row marginTop25">
+                <div class="col-sm-4 col-md-4 col-lg-4 mobile-margin-top-15">
+                  <div class="my-input-group">
+                    <label class="required">{{ 'MANUAL_INVOICE_REGISTER.LBL_BILLED_NAME' | translate
+                      }}</label>
+                    <input maxlength="200" [(ngModel)]="model.billedName"
+                      placeholder="{{ 'MANUAL_INVOICE_REGISTER.LBL_BILLED_NAME' | translate }}"
+                      [ngClass]="{'is-invalid':!validator.isValid('billedName')}" type="text" />
+                    <div *ngIf="!validator.isValid('billedName')" class="invalid-feedback">
+                      <div *ngFor="let error of validator.getErrors('billedName')">
+                        {{ error | translate }}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-sm-4 col-md-4 col-lg-4 mobile-margin-top-15">
+                  <div class="my-input-group">
+                    <label class="required">{{ 'MANUAL_INVOICE_REGISTER.LBL_BILLED_ADDRESS' |
+                      translate }}</label>
+                    <input maxlength="200" [(ngModel)]="model.billedAddress"
+                      placeholder="{{ 'MANUAL_INVOICE_REGISTER.LBL_BILLED_ADDRESS' | translate }}"
+                      [ngClass]="{'is-invalid':!validator.isValid('billedAddress')}" type="text" />
+                    <div *ngIf="!validator.isValid('billedAddress')" class="invalid-feedback">
+                      <div *ngFor="let error of validator.getErrors('billedAddress')">
+                        {{ error | translate }}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-sm-4 col-md-4 col-lg-4 mobile-margin-top-15">
+                  <div class="my-input-group">
+                    <label>{{ 'MANUAL_INVOICE_REGISTER.LBL_EMAIL' | translate }}</label>
+                    <input maxlength="200" [(ngModel)]="model.email"
+                      placeholder="{{ 'MANUAL_INVOICE_REGISTER.LBL_EMAIL' | translate }}"
+                      [ngClass]="{'is-invalid':!validator.isValid('email')}" type="text" />
+                    <div *ngIf="!validator.isValid('email')" class="invalid-feedback">
+                      <div *ngFor="let error of validator.getErrors('email')">
+                        {{ error | translate }}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="row marginTop25">
+                <!-- <div class="col-lg-4 col-sm-4 col-md-4">
+                                    <div class="my-input-group">
+                                        <label for="">{{
+                                            "MANUAL_INVOICE_REGISTER.LBL_SERVICE" | translate
+                                            }}</label>
+                                        <ng-select [items]="masterModel.serviceList" [virtualScroll]="true" [loading]="masterModel.serviceLoading" bindLabel="name" bindValue="id" [ngClass]="{'is-invalid':!validator.isValid('serviceId')}" placeholder="--- {{ (masterModel.serviceList!=null && masterModel.serviceList.length!=0? 'BOOKING_SUMMARY.LBL_SELECT':'BOOKING_SUMMARY.MSG_NO_DATA' ) | translate }} ---"
+                                            appendTo="body" [(ngModel)]="model.serviceId" (change)="changeService($event)" [searchable]="true" [multiple]="false" #select>
+                                            <ng-template ng-option-tmp let-item="item">
+                                                <div class="text-wrap"><span>{{item.name}}</span></div>
+                                            </ng-template>
+                                        </ng-select>
+                                        <div *ngIf="!validator.isValid('serviceId')" class="invalid-feedback">
+                                            <div *ngFor="let error of validator.getErrors('serviceId')">
+                                                {{ error | translate }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div> -->
+                <div class="col-lg-4 col-sm-4 col-md-4">
+                  <div class="my-input-group">
+                    <label for="">{{
+                      "MANUAL_INVOICE_REGISTER.LBL_SERVICE_TYPE" | translate
+                      }}</label>
+                    <ng-select [items]="masterModel.serviceTypeList" [virtualScroll]="true"
+                      [loading]="masterModel.serviceTypeLoading" bindLabel="name" bindValue="id"
+                      [ngClass]="{'is-invalid':!validator.isValid('serviceType')}"
+                      placeholder="--- {{ (masterModel.serviceTypeList!=null && masterModel.serviceTypeList.length!=0? 'BOOKING_SUMMARY.LBL_SELECT':'BOOKING_SUMMARY.MSG_NO_DATA' ) | translate }} ---"
+                      appendTo="body" [(ngModel)]="model.serviceType" [searchable]="true" [multiple]="false" #select>
+                      <ng-template ng-option-tmp let-item="item">
+                        <div class="text-wrap"><span>{{item.name}}</span></div>
+                      </ng-template>
+                    </ng-select>
+                    <div *ngIf="!validator.isValid('serviceType')" class="invalid-feedback">
+                      <div *ngFor="let error of validator.getErrors('serviceType')">
+                        {{ error | translate }}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-sm-4 col-md-4 col-lg-4 mobile-margin-top-15">
+                  <div class="my-input-group">
+                    <label class="required" for="">{{
+                      "MANUAL_INVOICE_REGISTER.LBL_CURRENCY" | translate
+                      }}</label>
+                    <ng-select [items]="masterModel.currencyList" [virtualScroll]="true"
+                      [loading]="masterModel.currencyLoading" bindLabel="name" bindValue="id"
+                      [ngClass]="{'is-invalid':!validator.isValid('currencyId')}"
+                      placeholder="--- {{ (masterModel.currencyList!=null && masterModel.currencyList.length!=0? 'BOOKING_SUMMARY.LBL_SELECT':'BOOKING_SUMMARY.MSG_NO_DATA' ) | translate }} ---"
+                      appendTo="body" [(ngModel)]="model.currencyId" [searchable]="true" [multiple]="false" #select>
+                      <ng-template ng-option-tmp let-item="item">
+                        <div class="text-wrap"><span>{{item.name}}</span></div>
+                      </ng-template>
+                    </ng-select>
+                    <div *ngIf="!validator.isValid('currencyId')" class="invalid-feedback">
+                      <div *ngFor="let error of validator.getErrors('currencyId')">
+                        {{ error | translate }}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="row marginTop25">
+                <div class="col-sm-4 col-md-4 col-lg-4 mobile-margin-top-15">
+                  <div class="my-input-group">
+                    <label>{{ 'MANUAL_INVOICE_REGISTER.LBL_PAYMENT_TERM' | translate }}</label>
+                    <ng-select [items]="masterModel.invoicePaymentTypeList" [(ngModel)]="model.paymentTerms"
+                      [closeOnSelect]="true" [searchable]="true" bindLabel="name" bindValue="name"
+                      (change)="onChangePaymentType($event);"
+                      [ngClass]="{'is-invalid':!validator.isValid('paymentTerms')}"
+                      placeholder="--- {{(masterModel.invoicePaymentTypeList && masterModel.invoicePaymentTypeList.length>0? 'COMMON.LBL_SELECT':'COMMON.LBL_NO_DATA')  | translate }} ---"
+                      [loading]="masterModel.invoicePaymentTypeLoading">
+                      <ng-template ng-option-tmp let-item="item">
+                        <div class="text-wrap">{{ item.name }}</div>
+                      </ng-template>
+                    </ng-select>
+                    <div *ngIf="!validator.isValid('paymentTerms')" class="invalid-feedback">
+                      <div *ngFor="let error of validator.getErrors('paymentTerms')">
+                        {{ error | translate }}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-sm-4 col-md-6 col-lg-4">
+                  <div class="my-input-group">
+                    <label class="required">{{ 'EDIT_CUSTOMER_PRICE_CARD.LBL_INVOICE_BILLING' |
+                      translate }}</label>
+                    <ng-select [closeOnSelect]="true" [searchable]="true" [items]="masterModel.billingEntityList"
+                      [(ngModel)]="model.billingEntity" bindLabel="name" bindValue="id"
+                      (change)="onChangeBillingEntity($event);" (clear)="onClearBillingEntity();"
+                      [ngClass]="{'is-invalid':!validator.isValid('billingEntity')}"
+                      placeholder="--- {{(masterModel.billingEntityList && masterModel.billingEntityList.length>0? 'COMMON.LBL_SELECT':'COMMON.LBL_NO_DATA')  | translate }} ---"
+                      [loading]="masterModel.billingEntityLoading">
+                      <ng-template ng-option-tmp let-item="item">
+                        <div class="text-wrap">{{ item.name }}</div>
+                      </ng-template>
+                    </ng-select>
+                    <div *ngIf="!validator.isValid('billingEntity')" class="invalid-feedback">
+                      <div *ngFor="let error of validator.getErrors('billingEntity')">
+                        {{ error | translate }}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="col-sm-4 col-md-6 col-lg-4">
+                  <div class="my-input-group">
+                    <label class="required">{{ 'EDIT_CUSTOMER_PRICE_CARD.LBL_INVOICE_BANK' |
+                      translate}}</label>
+                    <ng-select [closeOnSelect]="true" [searchable]="true" [items]="masterModel.invoiceBankList"
+                      [(ngModel)]="model.bankId" bindLabel="name" bindValue="id" (change)="changeBank()"
+                      [ngClass]="{'is-invalid':!validator.isValid('bankId')}"
+                      placeholder="--- {{(masterModel.invoiceBankList && masterModel.invoiceBankList.length>0? 'COMMON.LBL_SELECT':'COMMON.LBL_NO_DATA')  | translate }} ---"
+                      [loading]="masterModel.invoiceBankLoading">
+                      <ng-template ng-option-tmp let-item="item">
+                        <div class="text-wrap">{{item.name }}</div>
+                      </ng-template>
+                    </ng-select>
+                    <div *ngIf="!validator.isValid('bankId')" class="invalid-feedback">
+                      <div *ngFor="let error of validator.getErrors('bankId')">
+                        {{ error | translate }}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="row marginTop25">
+                <div class="col-sm-4 col-md-4 col-lg-4 mobile-margin-top-15">
+
+                  <div class="my-input-group">
+                    <label>{{ 'MANUAL_INVOICE_REGISTER.LBL_PAYMENT_DURATION' | translate }}</label>
+                    <input maxlength="200" [ngClass]="{'is-invalid':!validator.isValid('paymentDuration')}"
+                      placeholder="{{ 'MANUAL_INVOICE_REGISTER.LBL_PAYMENT_DURATION' | translate }}"
+                      [(ngModel)]="model.paymentDuration" type="text" />
+                    <div *ngIf="!validator.isValid('paymentDuration')" class="invalid-feedback">
+                      <div *ngFor="let error of validator.getErrors('paymentDuration')">
+                        {{ error | translate }}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-sm-4 col-md-4 col-lg-4 mobile-margin-top-15">
+                  <div class="my-input-group">
+                    <label class="required" for="">{{
+                      "MANUAL_INVOICE_REGISTER.LBL_OFFICE" | translate
+                      }}</label>
+                    <ng-select [items]="masterModel.officeList" [virtualScroll]="true"
+                      [loading]="masterModel.officeLoading" bindLabel="name" bindValue="id"
+                      [ngClass]="{'is-invalid':!validator.isValid('officeId')}"
+                      placeholder="--- {{ (masterModel.officeList!=null && masterModel.officeList.length!=0? 'BOOKING_SUMMARY.LBL_SELECT':'BOOKING_SUMMARY.MSG_NO_DATA' ) | translate }} ---"
+                      appendTo="body" [(ngModel)]="model.officeId" [searchable]="true" [multiple]="false" #select>
+                      <ng-template ng-option-tmp let-item="item">
+                        <div class="text-wrap"><span>{{item.name}}</span></div>
+                      </ng-template>
+                    </ng-select>
+                    <div *ngIf="!validator.isValid('officeId')" class="invalid-feedback">
+                      <div *ngFor="let error of validator.getErrors('officeId')">
+                        {{ error | translate }}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-sm-4 col-md-4 col-lg-4 mobile-margin-top-15">
+                  <div class="my-input-group">
+                    <label for="">{{
+                      "MANUAL_INVOICE_REGISTER.LBL_COUNTRY" | translate
+                      }}</label>
+                    <ng-select [items]="masterModel.countryList" [virtualScroll]="true"
+                      [loading]="masterModel.countryLoading" bindLabel="countryName" bindValue="id"
+                      [ngClass]="{'is-invalid':!validator.isValid('countryId')}"
+                      placeholder="--- {{ (masterModel.countryList!=null && masterModel.countryList.length!=0? 'BOOKING_SUMMARY.LBL_SELECT':'BOOKING_SUMMARY.MSG_NO_DATA' ) | translate }} ---"
+                      appendTo="body" [(ngModel)]="model.countryId" [searchable]="true" [multiple]="false" #select>
+                    </ng-select>
+                    <div *ngIf="!validator.isValid('countryId')" class="invalid-feedback">
+                      <div *ngFor="let error of validator.getErrors('countryId')">
+                        {{ error | translate }}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="row marginTop25">
+                <div class="col-sm-4 col-md-4 col-lg-4 mobile-margin-top-15">
+                  <div class="my-input-group">
+                    <label class="required" for="">{{'MANUAL_INVOICE_REGISTER.LBL_FROM_DATE' | translate}}</label>
+                    <div class="calendar-wrapper">
+                      <input type="text" autocomplete="off"
+                        placeholder="{{'MANUAL_INVOICE_REGISTER.LBL_FROM_DATE' | translate}}" name="fromDate"
+                        ngbDatepicker [ngClass]="{'is-invalid':!validator.isValid('fromDate')}"
+                        #fromDate="ngbDatepicker" (click)="fromDate.toggle()" [(ngModel)]="model.fromDate">
+                      <img src="assets/images/cta-calendar-grey.svg" alt="" class="calendar-icon"
+                        (click)="fromDate.toggle()">
+                    </div>
+                    <div *ngIf="!validator.isValid('fromDate')" class="invalid-feedback">
+                      <div *ngFor="let error of validator.getErrors('fromDate')">
+                        {{ error | translate }}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-sm-4 col-md-4 col-lg-4 mobile-margin-top-15">
+                  <div class="my-input-group">
+                    <label class="required" for="">{{'MANUAL_INVOICE_REGISTER.LBL_TO_DATE' | translate}}</label>
+                    <div class="calendar-wrapper">
+                      <input type="text" autocomplete="off"
+                        placeholder="{{'MANUAL_INVOICE_REGISTER.LBL_TO_DATE' | translate}}" name="toDate"
+                        (dateSelect)="onChangeServiceToDate()" ngbDatepicker
+                        [ngClass]="{'is-invalid':!validator.isValid('toDate')}" #toDate="ngbDatepicker"
+                        (click)="toDate.toggle()" [(ngModel)]="model.toDate">
+                      <img src="assets/images/cta-calendar-grey.svg" alt="" class="calendar-icon"
+                        (click)="toDate.toggle()">
+                    </div>
+                    <div *ngIf="!validator.isValid('toDate')" class="invalid-feedback">
+                      <div *ngFor="let error of validator.getErrors('toDate')">
+                        {{ error | translate }}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="row marginTop25">
+                <div class="col-12 col-sm-12">
+                  <div class="table-container" style="overflow-x: scroll;">
+                    <table class="pagination-table bordered">
+                      <thead>
+                        <tr>
+                          <th width="5%" class="Center_Middle">
+                            {{'MANUAL_INVOICE_REGISTER.LBL_ITEM_NO' | translate}}
+                          </th>
+                          <th class="required">{{'MANUAL_INVOICE_REGISTER.LBL_DESCRIPTION' | translate}}</th>
+                          <th *ngIf="masterModel.entityId === masterModel.entityAccess.AQF" class="required">{{'MANUAL_INVOICE_REGISTER.LBL_MANDAY' | translate}}</th>
+                          <th  *ngIf="masterModel.entityId === masterModel.entityAccess.AQF" class="required">{{'MANUAL_INVOICE_REGISTER.LBL_UNITPRICE' | translate}}</th>
+                          <th class="required">{{'MANUAL_INVOICE_REGISTER.LBL_SERVICE_FEE' | translate}}</th>
+                          <th>{{'MANUAL_INVOICE_REGISTER.LBL_EXP_CHARGEBACK' | translate}}</th>
+                          <th>{{'MANUAL_INVOICE_REGISTER.LBL_OTHER_COST' | translate}}</th>
+                          <th>{{'MANUAL_INVOICE_REGISTER.LBL_REMARK' | translate}}</th>
+                          <th>{{'MANUAL_INVOICE_REGISTER.LBL_DISCOUNT' | translate}}</th>
+                          <th></th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <ng-container *ngFor="let item of manualInvoiceItemValidator;let i=index">
+                          <tr>
+                            <td class="Center_Middle">{{i+1}}</td>
+                            <td>
+                              <input type="text" [(ngModel)]="item.invoiceItem.description"
+                                [ngClass]="{'is-invalid':!item.validator.isValid('description')}"
+                                placeholder="{{ 'MANUAL_INVOICE_REGISTER.LBL_DESCRIPTION' | translate }}">
+                              <div *ngIf="!item.validator.isValid('description')" class="invalid-feedback">
+                                <div *ngFor="let error of item.validator.getErrors('description')">
+                                  {{ error | translate }}
+                                </div>
+                              </div>
+                            </td>
+                            <td *ngIf="masterModel.entityId === masterModel.entityAccess.AQF">
+                              <input [(ngModel)]="item.invoiceItem.manday" (change)="calculateServiceFee(item.invoiceItem)"
+                                [ngClass]="{'is-invalid':!item.validator.isValid('manday')}" type="text"
+                                placeholder="{{ 'MANUAL_INVOICE_REGISTER.LBL_MANDAY' | translate }}">
+                                <div *ngIf="!item.validator.isValid('serviceFee')" class="invalid-feedback">
+                                  <div *ngFor="let error of item.validator.getErrors('serviceFee')">
+                                    {{ error | translate }}
+                                  </div>
+                                </div>
+                            </td>
+                            <td *ngIf="masterModel.entityId === masterModel.entityAccess.AQF">
+                              <input [(ngModel)]="item.invoiceItem.unitPrice" (change)="calculateServiceFee(item.invoiceItem)"
+                                [ngClass]="{'is-invalid':!item.validator.isValid('unitPrice')}" type="text"
+                                placeholder="{{ 'MANUAL_INVOICE_REGISTER.LBL_UNITPRICE' | translate }}">
+                                <div *ngIf="!item.validator.isValid('serviceFee')" class="invalid-feedback">
+                                  <div *ngFor="let error of item.validator.getErrors('serviceFee')">
+                                    {{ error | translate }}
+                                  </div>
+                                </div>
+                            </td>
+                            <td>
+                              <input min="1" [(ngModel)]="item.invoiceItem.serviceFee" (change)="calculateTotalFees()"
+                                (input)="validateDecimal(item.invoiceItem,'serviceFee')" min="1" max="9999999999"
+                                (keypress)="numericValidation($event)" (paste)="onPaste($event,10)"
+                                [ngClass]="{'is-invalid':!item.validator.isValid('serviceFee')}" type="number"
+                                [disabled]="masterModel.entityId == masterModel.entityAccess.AQF"
+                                placeholder="{{ 'MANUAL_INVOICE_REGISTER.LBL_SERVICE_FEE' | translate }}">
+                                <div *ngIf="!item.validator.isValid('serviceFee')" class="invalid-feedback">
+                                  <div *ngFor="let error of item.validator.getErrors('serviceFee')">
+                                    {{ error | translate }}
+                                  </div>
+                                </div>
+                            </td>
+                            <td>
+                              <input min="1" [(ngModel)]="item.invoiceItem.expChargeBack"
+                                (change)="calculateTotalFees()"
+                                (input)="validateDecimal(item.invoiceItem,'expChargeBack')" min="1" max="9999999999"
+                                (keypress)="numericValidation($event)" (paste)="onPaste($event,10)"
+                                [ngClass]="{'is-invalid':!item.validator.isValid('expChargeBack')}" type="number"
+                                placeholder="{{ 'MANUAL_INVOICE_REGISTER.LBL_EXP_CHARGEBACK' | translate }}">
+                            </td>
+                            <td>
+                              <input min="1" [(ngModel)]="item.invoiceItem.otherCost" (change)="calculateTotalFees()"
+                                (input)="validateDecimal(item.invoiceItem,'otherCost')" min="1" max="9999999999"
+                                (keypress)="numericValidation($event)" (paste)="onPaste($event,10)"
+                                [ngClass]="{'is-invalid':!item.validator.isValid('otherCost')}" type="number"
+                                placeholder="{{ 'MANUAL_INVOICE_REGISTER.LBL_OTHER_COST' | translate }}">
+                            </td>
+                            <td>
+                              <input [(ngModel)]="item.invoiceItem.remarks"
+                                [ngClass]="{'is-invalid':!item.validator.isValid('remarks')}" type="text"
+                                placeholder="{{ 'MANUAL_INVOICE_REGISTER.LBL_REMARK' | translate }}">
+                            </td>
+                            <td>
+                              <input [(ngModel)]="item.invoiceItem.discount"
+                                [ngClass]="{'is-invalid':!item.validator.isValid('discount')}" type="text"
+                                placeholder="{{ 'MANUAL_INVOICE_REGISTER.LBL_DISCOUNT' | translate }}">
+                            </td>
+                            <td>
+                              <button *ngIf="i>0" (click)="removeInoviceItem(i)" class="secondary-cta x-small"
+                                style="margin-left:10px">
+                                <i class="fa fa-trash"></i>
+                              </button>
+                            </td>
+                          </tr>
+                        </ng-container>
+                        <ng-container>
+                          <tr style="text-align: right">
+                            <td colspan="2 "><b>{{'MANUAL_INVOICE_REGISTER.LBL_SUB_TOTAL'
+                                |translate}}</b>
+                            </td>
+                            <td><b>{{masterModel.serviceFeeTotal}}</b></td>
+                            <td><b>{{masterModel.expChargeBackTotal}}</b></td>
+                            <td><b>{{masterModel.otherCostTotal}}</b></td>
+                          </tr>
+                          <tr style="text-align: right" *ngFor="let tax of masterModel.bankTaxes">
+                            <td colspan="2"><b>{{tax.taxName}} ({{tax.taxValue * 100
+                                }}%)</b></td>
+                            <td><b>{{tax.taxServiceFeeTotal}}</b></td>
+                            <td><b>{{tax.taxExpChargeBackTotal}}</b></td>
+                            <td><b>{{tax.taxOtherCostTotal}}</b></td>
+                          </tr>
+                          <tr style="text-align: right">
+                            <td colspan="2"><b>{{'MANUAL_INVOICE_REGISTER.LBL_INVOICE_TOTAL'
+                                |translate}}</b>
+                            </td>
+                            <td colspan="3" class="Center_Middle">
+                              <b>{{masterModel.invoiceTotal}}</b>
+                            </td>
+                          </tr>
+                        </ng-container>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+              <div class="row marginTop25">
+                <div class="col-12 col-sm-12 text-left mt-3 mt-sm-0">
+                  <button id="btnAdd" class="secondary-cta small" (click)="addItem()">
+                    + {{
+                    'COMMON.LBL_ADD' | translate
+                    }}
+                  </button>
+                </div>
+              </div>
+              <div class="form-action-container marginTop15">
+                <button *ngIf="model.id > 0" [disabled]="masterModel.previewLoading" class="secondary-cta MarginR-20"
+                  (click)="openTemplatePopUp()">
+                  {{'COMMON.LBL_PREVIEW' | translate}}
+                  <span *ngIf="masterModel.previewLoading">
+                    <i class="fa fa-refresh fa-spin" aria-hidden="true"></i>
+                  </span>
+                </button>
+                <button class="primary-cta" (click)="save()" [disabled]="masterModel.saveloading">
+                  {{ 'CUSTOMER_BRAND.LBL_SAVE' | translate }}
+                  <span *ngIf="masterModel.saveloading">
+                    <i class="fa fa-refresh fa-spin" aria-hidden="true"></i>
+                  </span>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<ng-template #invoicePreviewTemplate let-modal>
+  <app-invoice-preview (closeInvoicePreview)="closeInvoicePreview()" [invoicePreviewModel]="invoicePreviewRequest">
+  </app-invoice-preview>
+</ng-template>

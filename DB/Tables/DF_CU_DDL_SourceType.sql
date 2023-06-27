@@ -1,0 +1,9 @@
+﻿CREATE TABLE [dbo].[DF_CU_DDL_SourceType]
+(
+	[Id] INT NOT NULL PRIMARY KEY IDENTITY(1,1),
+	[CustomerId] INT NOT NULL,
+	[TypeId] INT NOT NULL,
+	[Active] BIT NOT NULL,
+	FOREIGN KEY(CustomerId) REFERENCES [CU_Customer](Id), 
+	FOREIGN KEY(TypeId) REFERENCES [DF_DDL_SourceType](Id)
+)

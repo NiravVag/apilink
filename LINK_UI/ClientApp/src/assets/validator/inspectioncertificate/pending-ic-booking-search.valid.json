@@ -1,0 +1,31 @@
+{
+    "model": "InspectionCertificateBookingSearchRequest",
+    "fields": {
+        "serviceFromDate": [
+            {
+                "type": "required",
+                "fieldType": "D",
+                "ressource": "EDIT_INSPECTION_CERTIFICATE.MSG_SERVICE_FROMDATE_REQ"
+            },
+            {
+                "type": "isLessOrEqual",
+                "fieldType": "D",
+                "fieldCible": "serviceToDate",
+                "ressource": "EDIT_INSPECTION_CERTIFICATE.MSG_SERVICE_FROMDATE_GREATER_REQ"
+            }
+        ],
+        "serviceToDate": [
+            {
+                "type": "required",
+                "fieldType": "D",
+                "ressource": "EDIT_INSPECTION_CERTIFICATE.MSG_SERVICE_TODATE_REQ"
+            },
+            {
+                "type": "isGreatOrEqual",
+                "fieldType": "D",
+                "fieldCible": "serviceFromDate",
+                "ressource": "EDIT_INSPECTION_CERTIFICATE.MSG_SERVICE_TODATE_LESS_REQ" 
+            }
+        ]
+    }
+}

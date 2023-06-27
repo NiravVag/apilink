@@ -1,0 +1,82 @@
+﻿@{
+    ViewData["Title"] = "InspDefectSummaryTemplate";
+}
+
+@model DTO.Kpi.DefectExportResult
+
+<xls-sheet name="Insp_Defects_summary">
+    <table xls-begin="A:1" style="border-style:solid">
+        <tr style="background-color:#f5f5f5;font-weight:bold;text-align:center">
+            <th>Insp. No.</th>
+            <th>Customer Ref.</th>
+            <th>Customer Name</th>
+            <th>Buyer</th>
+            <th>Department</th>
+            <th>Customer Contact</th>
+            <th>Collection</th>
+            <th>Inspection Office</th>
+            <th>Supplier</th>
+            <th>Factory</th>
+            <th>Country</th>
+            <th>Service Type</th>
+            <th>Status</th>
+            <th>Service Date From</th>
+            <th>Service Date To</th>
+            <th>Month</th>
+            <th>Year</th>
+            <th>PO No</th>
+            <th>Product Ref.</th>
+            <th>ProductDescription</th>
+            <th>Factory Ref.</th>
+            <th>Overall result</th>
+            <th style="text-align:center">Defect No.</th>
+            <th>Defect Description</th>
+            <th>Critical</th>
+            <th>Major</th>
+            <th>Minor</th>
+            <th>Defect code</th>
+            <th>Defect Cat</th>
+            <th>Product Category</th>
+            <th>Product Subcat 1</th>
+            <th>Product Subcat 2</th>
+        </tr>
+        @foreach (var item in Model.Data)
+        {
+            <tr>
+                <td width="150px" xls-type="number">@item.BookingNo</td>
+                <td width="250px">@Html.Raw(@item.CustomerBookingNo)</td>
+                <td width="250px">@Html.Raw(@item.CustomerName)</td>
+                <td withd="250px">@Html.Raw(@String.Join(", ", Model.BookingBuyer.Where(x => x.BookingId == item.BookingNo).Select(p => p.BuyerName).Distinct().ToArray()))</td>
+                <td width="250px">@Html.Raw(@String.Join(", ", Model.BookingDepartments.Where(x => x.BookingId == item.BookingNo).Select(p => p.DepartmentName).Distinct().ToArray()))</td>
+                <td width="250px">@Html.Raw(Model.BookingCustomerContacts.Where(x => x.BookingId == item.BookingNo).FirstOrDefault().ContactName)</td>
+                <td width="250px">@Html.Raw(@item.CollectionName)</td>
+                <td width="250px">@Html.Raw(@item.Office)</td>
+                <td width="250px">@Html.Raw(@item.SupplierName)</td>
+                <td width="250px">@Html.Raw(@item.FactoryName)</td>
+                <td width="250px">@Html.Raw(@item.FactoryCountry)</td>
+                <td width="250px">@Html.Raw(@item.ServiceTypeName)</td>
+                <td width="250px">@item.BookingStatus</td>
+                <td width="250px">@item.InspectionStartDate</td>
+                <td width="250px">@item.InspectionEndDate</td>
+                <td xls-type="number">@item.Month</td>
+                <td xls-type="number">@item.Year</td>
+                <td width="250px">@Html.Raw(@item.PONumber)</td>
+                <td width="250px">@Html.Raw(@item.ProductName)</td>
+                <td width="250px">@Html.Raw(@item.ProductDescription)</td>
+                <td width="250px">@Html.Raw(@item.FactoryRef)</td>
+                <td width="250px">@item.ReportResult</td>
+                @*<td width="250px" xls-type="number" style="text-align:center">@item.SerialNo</td>*@
+                <td width="250px">@Html.Raw(@item.DefectDesc)</td>
+                <td width="150px" xls-type="number">@item.CriticalDefect</td>
+                <td width="150px" xls-type="number">@item.MajorDefect</td>
+                <td width="150px" xls-type="number">@item.MinorDefect</td>
+                <td></td>
+                <td width="250px">@Html.Raw(@item.DefectCategory)</td>
+                <td width="250px">@Html.Raw(@item.ProductCategory)</td>
+                <td width="250px">@Html.Raw(@item.ProductSubCategory)</td>
+                <td width="250px">@Html.Raw(@item.ProductSubCategory2)</td>
+            </tr>
+        }
+    </table>
+</xls-sheet>
+

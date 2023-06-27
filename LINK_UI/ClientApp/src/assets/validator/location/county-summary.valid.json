@@ -1,0 +1,20 @@
+{
+    "model":"Countysummarymodel",
+    "fields":{
+        "CityValues":[
+            {
+                "type":"required",
+                "fieldType":"N",
+                "ressource":"COUNTY_SUMMARY.MSG_FIELDS_REQ"
+            }
+        ],
+        "CountyValues":[
+            {
+                "type":"required",
+                "fieldType":"N",
+                "ressource":"COUNTY_SUMMARY.MSG_FIELDS_REQ"
+            }
+        ]
+        
+    }
+}

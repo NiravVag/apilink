@@ -1,0 +1,19 @@
+﻿CREATE TABLE MID_Task (
+ Id UNIQUEIDENTIFIER  NOT NULL PRIMARY KEY, 
+ TaskTypeId INT NOT NULL,
+ UserId INT NOT NULL, 
+ ReportTo INT NOT NULL, 
+ LinkId INT NOT NULL,
+ IsDone BIT NOT NULL DEFAULT(0),
+ EmailState INT NULL,
+ [CreatedBy] INT NULL, 
+ [UpdatedBy] INT NULL, 
+ [CreatedOn] DATETIME NOT NULL DEFAULT GETDATE(), 
+ [UpdatedOn] DATETIME NULL,
+ [EntityId] INT NULL,
+ FOREIGN KEY (TaskTypeId)  REFERENCES  [dbo].[MID_TaskType](Id),
+ FOREIGN KEY (UserId)  REFERENCES  [dbo].[IT_UserMaster](Id),
+  CONSTRAINT FK_MID_Task_EntityId FOREIGN KEY(EntityId) REFERENCES [dbo].[AP_Entity](Id)
+)
+
+

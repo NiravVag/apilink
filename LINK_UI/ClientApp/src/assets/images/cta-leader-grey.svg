@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" id="Component_35_8" width="16" height="16" viewBox="0 0 16 16">
+    <defs>
+        <style>
+            .cls-2{fill:#4c698d}
+        </style>
+    </defs>
+    <path id="Rectangle_1137" fill="none" d="M0 0H16V16H0z"/>
+    <g id="noun_leader_2389765" transform="translate(-.945 -3.139)">
+        <g id="Group_10091" transform="translate(.946 3.73)">
+            <g id="Group_10089">
+                <path id="Path_2841" d="M12.386 33.216a.334.334 0 0 1-.333.333H1.279a.334.334 0 0 1-.333-.333A13.752 13.752 0 0 1 1 31.251a4.774 4.774 0 0 1 4.712-4.041H7.62a4.774 4.774 0 0 1 4.709 4.041 13.766 13.766 0 0 1 .057 1.965z" class="cls-2" transform="translate(-.946 -18.14)"/>
+                <path id="Path_2842" d="M8.626 6.946a3.166 3.166 0 1 1 6.332 0c0 1.822-1.463 4.054-3.166 4.054S8.626 8.768 8.626 6.946z" class="cls-2" transform="translate(-6.072 -2.73)"/>
+            </g>
+            <g id="Group_10090" transform="translate(9.633 .278)">
+                <path id="Path_2843" d="M38.193 9.684a.309.309 0 0 1 .011.346.373.373 0 0 1-.323.176h-5.253v3.811a5.466 5.466 0 0 0-.742-.718V5.4a.372.372 0 0 1 .742 0v.515h5.254a.373.373 0 0 1 .323.176.309.309 0 0 1-.011.346l-1.128 1.621z" class="cls-2" transform="translate(-31.886 -5.06)"/>
+            </g>
+        </g>
+    </g>
+</svg>

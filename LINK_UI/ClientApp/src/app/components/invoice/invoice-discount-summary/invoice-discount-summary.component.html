@@ -1,0 +1,201 @@
+<div class="main-wrapper">
+    <div class="wrapper dashboard-wrapper">
+        <div class="my-container">
+            <div class="master-body">
+                <div class="title-container">
+                    <h3 class="main-title"> {{ 'INV_DIS_SUMMARY.TITLE' | translate }}</h3>
+                </div>
+                <div class="content-container">
+                    <div class="centerContainerPadding common-filter-container">
+                        <div class="row">
+                            <div class="col-sm-3 col-md-3 col-lg-3">
+                                <div class="my-input-group">
+                                    <label>{{ 'INV_DIS_SUMMARY.LBL_PERIOD_FROM' | translate }}</label>
+                                    <div class="calendar-wrapper flex-fill">
+                                        <input type="text" maxlength="10" readonly=readonly container="body" [(ngModel)]="model.periodFrom" ngbDatepicker placeholder="{{  'QC_DASHBOARD.LBL_SERVICE_DATE_FROM'  | translate }}" [ngClass]="{ 'is-invalid':  !validator.isValidIf('periodFrom',IsDateValidationRequired())}"
+                                            #from="ngbDatepicker" (click)="from.toggle()">
+                                        <img src="assets/images/cta-close-grey.svg" alt="" class="close-icon" (click)="clearDateInput('periodFrom');" *ngIf="model.periodFrom">
+                                        <img src="assets/images/calendar-icon.svg" alt="" class="calendar-icon" (click)="from.toggle()">
+                                    </div>
+                                    <div *ngIf="!validator.isValidIf('periodFrom',IsDateValidationRequired())" class="invalid-feedback">
+                                        <div *ngFor="let error of validator.getErrors('periodFrom')">{{ error | translate }}</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-3 col-md-3 col-lg-3">
+                                <div class="my-input-group">
+                                    <label>{{ 'INV_DIS_SUMMARY.LBL_PERIOD_TO' | translate }}</label>
+                                    <div class="calendar-wrapper  flex-fill">
+                                        <input type="text" maxlength="10" readonly=readonly container="body" [ngClass]="{ 'is-invalid':  !validator.isValidIf('periodTo',IsDateValidationRequired())}" placeholder="{{  'QC_DASHBOARD.LBL_SERVICE_DATE_To'  | translate }}" [(ngModel)]="model.periodTo"
+                                            ngbDatepicker #to="ngbDatepicker" (click)="to.toggle()">
+                                        <img src="assets/images/cta-close-grey.svg" alt="" class="close-icon" (click)="clearDateInput('periodTo');" *ngIf="model.periodTo">
+                                        <img src="assets/images/calendar-icon.svg" alt="" class="calendar-icon" (click)="to.toggle()">
+                                    </div>
+                                    <div *ngIf="!validator.isValidIf('periodTo',IsDateValidationRequired())" class="invalid-feedback">
+                                        <div *ngFor="let error of validator.getErrors('periodTo')">{{ error | translate }}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-3 col-md-3 col-lg-3">
+                                <div class="my-input-group">
+                                    <label>{{ 'INV_DIS_SUMMARY.LBL_Customer' | translate }}</label>
+                                    <ng-select bindLabel="name" bindValue="id" [multiple]="false" (clear)="clearCustomer()" (change)="changeCustomerData($event)" [items]="customerList" [clearable]="true" [(ngModel)]="model.customerId" [virtualScroll]="true" (scrollToEnd)="getCustomerData(true)" [typeahead]="customerInput"
+                                        [minTermLength]="3" placeholder="--- {{ (customerList!=null && customerList.length!=0? 'COMMON.LBL_SELECT':'COMMON.LBL_NO_DATA' ) | translate }} ---" appendTo="body" [loading]="customerLoading">
+                                        <ng-template ng-option-tmp let-item="item">
+                                            <div class="text-wrap">{{ item.name }}</div>
+                                        </ng-template>
+                                    </ng-select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row marginTop25">
+                            <div class="col-sm-3 col-md-3 col-lg-3">
+                                <div class="my-input-group">
+                                    <label>{{ 'INV_DIS_SUMMARY.LBL_DISCOUNT_TYPE' | translate }}</label>
+                                    <ng-select bindLabel="name" bindValue="id" [multiple]="false" [items]="invDisTypeList" [clearable]="true" [(ngModel)]="model.discountType" placeholder="--- {{ (invDisTypeList!=null && invDisTypeList.length!=0? 'COMMON.LBL_SELECT':'COMMON.LBL_NO_DATA' ) | translate }} ---"
+                                        appendTo="body" [loading]="invDisTypeLoading">
+                                        <ng-template ng-option-tmp let-item="item">
+                                            <div class="text-wrap">{{ item.name }}</div>
+                                        </ng-template>
+                                    </ng-select>
+                                </div>
+                            </div>
+                            <div class="col-sm-3 col-md-3 col-lg-3">
+                                <div class="my-input-group">
+                                    <label class="control-label">{{
+                                        'INV_DIS_SUMMARY.LBL_COUNTRY' | translate }}</label>
+                                    <ng-select [items]="countryList" appendTo="body" [multiple]="false" [closeOnSelect]="false" [searchable]="true" bindLabel="name" bindValue="id" [loading]="countryLoading" class="multiple" placeholder="--- {{ (countryList!=null && countryList.length!=0? 'COMMON.LBL_SELECT':'COMMON.LBL_NO_DATA' ) | translate }} ---"
+                                        [(ngModel)]="model.countryId">
+                                    </ng-select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row marginTop25">
+                            <div class="col-12 col-sm-12 text-right mt-3 mt-sm-0">
+                                <button id="btnAdd" class="secondary-cta small" style="margin-right: 5px;" (click)="this.NavigatenewPath('invoicediscountedit');">
+                                    + {{ 'INV_DIS_SUMMARY.LBL_ADDNEW' | translate }}</button> &nbsp;
+                                <button id="btnSearch" class="primary-cta small" [disabled]="searchLoading" style="margin-right: 5px;" (click)="SearchDetails()">
+                                    {{ 'COMMON.LBL_SEARCH' | translate }}
+                                    <span *ngIf="searchLoading">
+                                        <i class="fa fa-refresh fa-spin" aria-hidden="true"></i>
+                                    </span>
+                                </button>
+
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="centerContainerPadding float-left" *ngIf="(model.items && model.items.length>0)">
+                    <div class="row">
+                        <div class="col-6 col-sm-4 col-xl-2 d-flex">
+                            <p class="search-trigger-heading" [innerHtml]="showPaginationText()"></p>
+                        </div>
+                        <div class="col-6 col-sm-8 col-xl-10 text-right">
+                            <!-- <div class="animated-icon-container" *ngIf="!isFilterOpen" (click)="toggleFilterSection()">
+                                    <img src="assets/images/cta-search-grey.svg" alt="search">
+                                </div> -->
+                        </div>
+                    </div>
+                    <div class="result-container">
+                        <div class="table-container">
+                            <table class="pagination-table simple-table bordered">
+                                <thead>
+                                    <tr>
+                                        <th class="width-20"></th>
+                                        <th class="width-20"></th>
+                                        <th>{{ 'INV_DIS_SUMMARY.LBL_CustomerName' | translate }}</th>
+                                        <th>{{ 'INV_DIS_SUMMARY.LBL_DISCOUNT_TYPE' | translate }}</th>
+                                        <th>{{ 'INV_DIS_SUMMARY.LBL_PERIOD_FROM' | translate }}</th>
+                                        <th>{{ 'INV_DIS_SUMMARY.LBL_PERIOD_TO' | translate }}</th>
+                                        <th>{{ 'INV_DIS_SUMMARY.LBL_COUNTRY' | translate }}</th>
+                                        <th>{{ 'INV_DIS_SUMMARY.LBL_CREATEDON' | translate }}</th>
+                                        <th>{{ 'INV_DIS_SUMMARY.LBL_CREATEDBY' | translate }}</th>
+                                        <th>{{ 'INV_DIS_SUMMARY.LBL_UPDATEDON' | translate }}</th>
+                                        <th>{{ 'INV_DIS_SUMMARY.LBL_UPDATEDBY' | translate }}</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <ng-container *ngFor="let iteminfo of model.items">
+                                        <tr>
+                                            <td class="Center_Middle">
+
+                                                <span class="table-cta icon-cta common-tooltip" (click)="getDetails(iteminfo.id)" data-tooltip="Edit">
+                                                    <img src="assets/images/cta-edit.svg" alt="Edit">
+                                                </span>
+                                            </td>
+                                            <td class="Center_Middle">
+                                                <span class="table-cta icon-cta common-tooltip" (click)="openConfirm(iteminfo.id,content)" data-tooltip="Delete">
+                                                    <img src="assets/images/cta-delete.svg" alt="Delete">
+                                                </span>
+                                            </td>
+                                            <td>{{iteminfo.customer}}</td>
+                                            <td>{{iteminfo.discountType}}</td>
+                                            <td>{{iteminfo.periodFrom}}</td>
+                                            <td>{{iteminfo.periodTo}}</td>
+                                            <td>{{iteminfo.country}}</td>
+                                            <td>{{iteminfo.createdOn}}</td>
+                                            <td>{{iteminfo.createdBy}}</td>
+                                            <td>{{iteminfo.updatedOn}}</td>
+                                            <td>{{iteminfo.updatedBy}}</td>
+                                        </tr>
+                                    </ng-container>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="pagination-container" *ngIf="(model.items && model.items.length>0)">
+                            <div class="page-count-list">
+                                <select class="small" [(ngModel)]="selectedPageSize" (change)="SearchDetails()">
+                                    <option *ngFor="let item of pagesizeitems" [ngValue]=item>{{item}}</option>
+                                </select>
+                                <span> Records per page</span>
+                            </div>
+                            <div class="pagination-action-container text-right">
+                                <ngb-pagination [pageSize]="model.pageSize" [collectionSize]="model.totalCount" [boundaryLinks]="true" [(page)]="model.index" [maxSize]="5" (pageChange)="onPager($event)">
+                                    <ng-template ngbPaginationFirst>
+                                        <img src="assets/images/new-set/double-arrow.svg" alt="">
+                                    </ng-template>
+                                    <ng-template ngbPaginationPrevious>
+                                        <img src="assets/images/new-set/single-arrow.svg" alt="" class="left-arrow">
+                                    </ng-template>
+                                    <ng-template ngbPaginationNext>
+                                        <img src="assets/images/new-set/single-arrow.svg" alt="" class="right-arrow">
+                                    </ng-template>
+                                    <ng-template ngbPaginationLast>
+                                        <img src="assets/images/new-set/double-arrow.svg" alt="" class="right-most-arrow">
+                                    </ng-template>
+                                </ngb-pagination>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="no-result-container" *ngIf="model.noFound">
+                        <img src="assets/images/no-data.png" alt="" class="icon">
+                        <h4 class="title">{{ 'INV_DIS_SUMMARY.LBL_NOITEMS' | translate }}</h4>
+                        <p>{{ 'INV_DIS_SUMMARY.LBL_NODATA' | translate }}</p>
+                    </div>
+                </div>
+                <div class="centerContainerPadding" *ngIf="model.noFound">
+                    <div class="error-container">
+                        <img src="assets/images/no-result.svg" alt="" class="thumbnail">
+                        <h4 class="title">{{ 'CUSTOMER_SUMMARY.LBL_NOITEMS' | translate }}</h4>
+                        <p class="error-subtitle">{{'CS_CONFIG_SUMMARY.LBL_NODATA' | translate}}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<ng-template #content let-modal>
+    <div class="modal-body">
+        <div class="small-model">
+            <h2 class="title">{{ 'INV_DIS_SUMMARY.LBL_CONFIRMDELETION' | translate }}</h2>
+            <p>{{ 'INV_DIS_SUMMARY.MSG_CONFRMDELETE' | translate }}</p>
+            <button class="secondary-cta" (click)="modal.dismiss('Cross click');deleteRefresh();">{{
+                'COMMON.LBL_CONFIRMCANCEL' | translate }}</button>
+            <button class="primary-cta" (click)="delete();">{{ 'COMMON.LBL_OK' |
+                translate}}</button>
+        </div>
+    </div>
+</ng-template>

@@ -1,0 +1,19 @@
+{
+  "model": "EditManualInvoiceItem",
+  "fields": {
+    "description": [
+      {
+        "type": "required",
+        "fieldType": "T",
+        "ressource": "MANUAL_INVOICE_REGISTER.MSG_DESCRIPTION_REQ"
+      }
+    ],
+    "serviceFee": [
+      {
+        "type": "required",
+        "fieldType": "N",
+        "ressource": "MANUAL_INVOICE_REGISTER.MSG_SERVICE_FEE_REQ"
+      }
+    ]
+  }
+}

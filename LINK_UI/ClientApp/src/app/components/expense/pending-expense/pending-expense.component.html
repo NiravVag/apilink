@@ -1,0 +1,326 @@
+<div class="main-wrapper">
+	<div class="wrapper dashboard-wrapper">
+		<div class="my-container">
+			<div class="master-body">
+				<div class="title-container">
+					<h3 class="main-title">Pending Auto Qc Expense</h3>
+				</div>
+				<div class="content-container quotation-container">
+					<div [@expandCollapse]="isFilterOpen ? 'open' : 'close'"
+						class="centerContainerPadding common-filter-container">
+
+						<div class="row">
+							<div class="col-sm-6 col-md-4 col-lg-3">
+								<div class="my-input-group">
+									<div class="styled-radio-container"
+										*ngFor="let item of invoiceSearchTypeList;let idx = index">
+										<input type="radio" class="styled-radio" id="{{item.id}}" name="radio-group"
+											[value]="item.id" [checked]="idx === 0" [(ngModel)]="model.searchTypeId"
+											(change)="SetSearchTypemodel(item.id)">
+										<label for="{{item.id}}">{{item.name}}</label>
+									</div>
+									<input maxlength="200" (ngModelChange)="BookingNoValidation()"
+										[(ngModel)]="model.searchTypeText" type="text"
+										[ngClass]="{ 'is-invalid': model.searchTypeText!='' && _customValidationForInvoiceNo}" />
+									<div *ngIf="model.searchTypeText!='' && _customValidationForInvoiceNo"
+										class="invalid-feedback">
+										<div>{{ 'INVOICE_SUMMARY.MSG_BOOKINGNO_ERROR' | translate }}</div>
+									</div>
+								</div>
+							</div>
+							<div class="col-sm-6 col-md-8 col-lg-9">
+								<div class="my-input-group">
+									<div class="styled-radio-container"
+										*ngFor="let item of invoiceDateTypeList;let idx = index">
+										<input type="radio" class="styled-radio" id="{{item.id}}" name="radio-group1"
+											[value]="item.id" [checked]="idx === 0" [(ngModel)]="model.datetypeid"
+											(change)="SetSearchDatetype(item.id)">
+										<label for="{{item.id}}">{{item.name}}</label>
+									</div>
+								</div>
+								<div class="row">
+									<div class="my-input-group col-sm-3 col-md-5 col-lg-3">
+										<div class="my-input-group">
+											<div class="calendar-wrapper">
+												<input type="text" maxlength="10" container="body"
+													[ngClass]="{ 'is-invalid':  !validator.isValidIf('startDate',IsDateValidationRequired())}"
+													readonly=readonly [(ngModel)]="model.startDate"  ngbDatepicker
+													#sdf="ngbDatepicker" (click)="sdf.toggle()">
+												<img src="assets/images/cta-close-grey.svg" alt="" class="close-icon"
+													(click)="clearDateInput('startDate')" *ngIf="model.startDate">
+												<img src="assets/images/calendar-icon.svg" alt="" class="calendar-icon"
+													(click)="sdf.toggle()">
+
+												<div *ngIf="!validator.isValidIf('startDate',IsDateValidationRequired())" class="invalid-feedback">
+													<div *ngFor="let error of validator.getErrors('startDate')">
+														{{ error | translate }}</div>
+												</div>
+											</div>
+										</div>
+									</div>
+									<div class="my-input-group col-sm-3 col-md-5 col-lg-3">
+										<div class="my-input-group">
+											<div class="calendar-wrapper">
+												<input type="text" maxlength="10" readonly=readonly [ngClass]="{ 'is-invalid':  !validator.isValidIf('endDate',IsDateValidationRequired())}"
+													[(ngModel)]="model.endDate" ngbDatepicker #sdt="ngbDatepicker" container="body"
+													(click)="sdt.toggle()">
+												<img src="assets/images/cta-close-grey.svg" alt="" class="close-icon"
+													(click)="clearDateInput('endDate')" *ngIf="model.endDate">
+												<img src="assets/images/calendar-icon.svg" alt="" class="calendar-icon"
+													(click)="sdt.toggle()">
+
+												<div *ngIf="!validator.isValidIf('endDate',IsDateValidationRequired())"
+													class="invalid-feedback">
+													<div *ngFor="let error of validator.getErrors('endDate')">
+														{{ error | translate }}</div>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+
+							<!---->
+						</div>
+
+
+
+
+						<div class="row marginTop25">
+
+							<div class="col-sm-3 col-md-4 col-lg-3">
+								<div class="my-input-group">
+									<label>{{ 'QC_BLOCK_SUMMARY.LBL_OFFICE' | translate }}</label>
+									<ng-select [items]="officeList" [virtualScroll]="true" [loading]="officeLoading"
+										bindLabel="name" bindValue="id"
+										placeholder="--- {{ (officeList!=null && officeList.length!=0? 'COMMON.LBL_SELECT':'COMMON.LBL_NO_DATA') | translate }} ---"
+										[typeahead]="officeInput" [minTermLength]="3" appendTo="body" [clearable]="true"
+										class="multiple" [(ngModel)]="model.officeIdList"
+										(change)="changeOffice($event)" [multiple]="true"
+										(scrollToEnd)="getOfficeData()" #select>
+										<ng-template ng-multi-label-tmp let-items="model.officeIdList"
+											let-clear="clear">
+											<div class="ng-value"
+												*ngIf="model.officeIdList && model.officeIdList.length > 0">
+												<span class="ng-value-label">{{model.officeIdList.length}}
+													{{'COMMON.LBL_SELECTED' | translate }}</span>
+											</div>
+										</ng-template>
+									</ng-select>
+								</div>
+							</div>
+
+
+							<div class="col-sm-3 col-md-4 col-lg-3">
+								<div class="my-input-group">
+									<label for="">{{ 'SCHEDULE_SUMMARY.LBL_QC' | translate }}</label>
+									<ng-select [items]="qcList" [virtualScroll]="true" appendTo="body"
+										[loading]="qcLoading" bindLabel="name" bindValue="id"
+										placeholder="--- {{ (qcList!=null && qcList.length!=0? 'BOOKING_SUMMARY.LBL_SELECT':'BOOKING_SUMMARY.MSG_NO_DATA' ) | translate }} ---"
+										[typeahead]="qcInput" [minTermLength]="3" [(ngModel)]="model.qcIdList"
+										[multiple]="true" class="multiple" (scrollToEnd)="getQcData(true)" #select>
+										<ng-template ng-option-tmp let-item="item" let-index="index"
+											let-search="searchTerm">
+											<span>{{item.name}}</span>
+										</ng-template>
+										<ng-template ng-multi-label-tmp let-items="model.qcIdList" let-clear="clear">
+											<div class="ng-value" *ngIf="model.qcIdList && model.qcIdList.length > 0">
+												<span class="ng-value-label">{{model.qcIdList.length}}
+													{{'MANDAY_UTILIZATION_DASHBOARD.LBL_SELECTED' | translate }}</span>
+											</div>
+										</ng-template>
+									</ng-select>
+								</div>
+							</div>
+
+
+							<div class="col-sm-3 col-md-4 col-lg-3">
+								<div class="my-input-group  select-for-filter">
+									<label>
+										Status
+									</label>
+									<ng-select [searchable]="true" [(ngModel)]="model.statusId" bindLabel="name"
+										appendTo="body" [items]="statusList" bindValue="id" [hideSelected]="true"
+										placeholder="---{{(statusList!=null && statusList.length!=0 ? 'BOOKING_SUMMARY.LBL_SELECT':'QUOTATION_SUMMARY.MSG_NO_DATA')  | translate }} ---">
+										<ng-template ng-option-tmp let-item="item">
+											<div class="text-wrap">{{ item.name }}</div>
+										</ng-template>
+									</ng-select>
+								</div>
+							</div>
+
+
+							<div class="col-sm-3 col-md-4 col-lg-3">
+								<div class="my-input-group  select-for-filter">
+									<label>
+										Expense Type
+									</label>
+									<ng-select [searchable]="true" [(ngModel)]="model.expenseTypeId" bindLabel="name"
+										appendTo="body" [items]="expenseTypeList" bindValue="id" [hideSelected]="true"
+										placeholder="---{{(expenseTypeList!=null && expenseTypeList.length!=0 ? 'BOOKING_SUMMARY.LBL_SELECT':'QUOTATION_SUMMARY.MSG_NO_DATA')  | translate }} ---">
+										<ng-template ng-option-tmp let-item="item">
+											<div class="text-wrap">{{ item.name }}</div>
+										</ng-template>
+									</ng-select>
+								</div>
+							</div>
+
+						</div>
+
+						<div class="row marginTop25">
+
+
+
+							<div class="col-12 col-sm-12 text-right mt-3 mt-sm-0">
+
+								<button class="secondary-cta small mr-2"
+									*ngIf="(model.items && model.items.length>0 && isExpenseVisible)"
+									(click)="savePendingExpense()">
+									Pending Expense
+								</button>
+
+								<button id="btnSearch" [disabled]="searchLoading" class="primary-cta small"
+									(click)="SearchDetails()">
+									{{
+									'COUNTY_SUMMARY.LBL_SEARCH' | translate
+									}}
+									<span *ngIf="searchLoading">
+										<i class="fa fa-refresh fa-spin" aria-hidden="true"></i>
+									</span>
+								</button>
+
+							</div>
+						</div>
+					</div>
+
+					<div class="centerContainerPadding float-left" *ngIf="(model.items && model.items.length>0)">
+						<div class="row">
+							<div class="col-6 col-sm-3 col-xl-2 d-flex">
+								<p class="search-trigger-heading" [innerHtml]="showPaginationText()"></p>
+							</div>
+						</div>
+
+						<div class="quotation-search-container">
+							<div class="table-container h-scroll table-max-height-400">
+
+								<table class="pagination-table simple-table bordered">
+									<thead>
+										<tr class="sticky-top-row">
+											<th class="Center_Middle width-60">
+												<div class="styled-checkbox-container">
+													<input class="styled-checkbox" id="checkbookid-all" type="checkbox"
+														[(ngModel)]="selectAllCheckbox"
+														(ngModelChange)="changeCheckBoxSelectAll()">
+													<label for="checkbookid-all"></label>
+												</div>
+											</th>
+											<th class="width-120 sticky-left-column">QcName</th>
+											<th class="width-160 sticky-left-column">Inspection #</th>
+											<th class="width-180 sticky-left-column">StartPort</th>
+											<th class="width-180 sticky-left-column">FactoryTown (Province/City/County)
+											</th>
+											<th class="width-180 sticky-left-column">Factory Country</th>
+											<th class="width-180 sticky-left-column">Expense Type</th>
+											<th class="width-180 sticky-left-column">Travel Allowance</th>
+											<th class="width-180 sticky-left-column">Food Allowance</th>
+											<th class="width-180 sticky-left-column">TripType</th>
+											<th class="width-100 sticky-left-column">Customer</th>
+											<th class="width-100 sticky-left-column">Supplier</th>
+											<th class="width-100 sticky-left-column">Status</th>
+										</tr>
+									</thead>
+									<tbody>
+
+										<ng-template ngFor let-iteminfo [ngForOf]="model.items" let-i="index">
+											<tr [ngClass]="(((i+1) % 2)== 0)?'even':'odd'"
+												style="border-left: 5px solid #fff;">
+
+												<td class="Center_Middle">
+													<div class="styled-checkbox-container" *ngIf="iteminfo.status">
+														<input class="styled-checkbox" id="checkbookid-{{i}}"
+															type="checkbox" [(ngModel)]="iteminfo.isExpenseSelected"
+															(ngModelChange)="changeCheckBoxModel()">
+														<label for="checkbookid-{{i}}"></label>
+													</div>
+												</td>
+
+												<td class=" wordbreak width-120 sticky-left-column">
+													{{ iteminfo.qcName}}
+												</td>
+												<td class=" wordbreak width-120 ">
+													{{ iteminfo.bookingId}}
+												</td>
+												<td class=" wordbreak width-120 ">
+													{{ iteminfo.startPort}}
+												</td>
+												<td *ngIf="iteminfo.expenseTypeId==1" class="wordbreak width-120 ">
+													{{ iteminfo.factoryTown}} ({{ iteminfo.factoryProvince}} / {{
+													iteminfo.factoryCity}} / {{ iteminfo.factoryCounty}})
+												</td>
+												<td *ngIf="iteminfo.expenseTypeId==2" class="wordbreak width-120 ">
+												</td>
+												<td class=" wordbreak width-120 ">
+													{{ iteminfo.factoryCountry}}
+												</td>
+												<td *ngIf="iteminfo.expenseTypeId==1" class="wordbreak width-120 ">
+													Travel Expense
+												</td>
+												<td *ngIf="iteminfo.expenseTypeId==2" class="wordbreak width-120 ">
+													Food Expense
+												</td>
+												<td class=" wordbreak width-120 ">
+													{{ iteminfo.travelAllowance}}
+												</td>
+												<td class=" wordbreak width-120 ">
+													{{ iteminfo.foodAllowance}}
+												</td>
+												<td class=" wordbreak width-120 ">
+													{{ iteminfo.tripType}}
+												</td>
+												<td class=" wordbreak width-120 ">
+													{{ iteminfo.customerName}}
+												</td>
+												<td class=" wordbreak width-120 ">
+													{{ iteminfo.supplierName}}
+												</td>
+
+												<td *ngIf="iteminfo.status">Configured</td>
+												<td *ngIf="!iteminfo.status">Not Configured</td>
+											</tr>
+
+										</ng-template>
+									</tbody>
+								</table>
+
+
+							</div>
+						</div>
+						<div class="pagination-container">
+							<select class="small" [(ngModel)]="selectedPageSize" (change)="SearchDetails()">
+								<option *ngFor="let item of pagesizeitems" [ngValue]=item>{{item}}</option>
+							</select>
+							<ngb-pagination (pageChange)="onPager($event)" [pageSize]="model.pageSize"
+								[collectionSize]="model.totalCount" [(page)]="model.index" [maxSize]="5">
+							</ngb-pagination>
+						</div>
+					</div>
+
+					<div class="centerContainerPadding" *ngIf="model.noFound">
+						<div class="error-container">
+							<img src="assets/images/no-result.svg" alt="" class="thumbnail">
+							<h4 class="title">No Items Found</h4>
+							<p class="error-subtitle">{{'CS_CONFIG_SUMMARY.LBL_NODATA' | translate}}</p>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<div class="loader-overlay" *ngIf="searchLoading">
+				<div class="loader-container">
+					<img src="assets/images/reload.svg" alt="">
+					<span>{{'COMMON.LBL_LOADER' | translate}}</span>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

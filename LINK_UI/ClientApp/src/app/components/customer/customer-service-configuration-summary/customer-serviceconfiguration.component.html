@@ -1,0 +1,161 @@
+<div class="main-wrapper">
+    <div class="wrapper dashboard-wrapper">
+      <div class="my-container">
+        <div class="master-body">
+          <div class="title-container">
+            
+            <h3 class="main-title">{{ 'CUSTOMER_SERVICECONFIG.TITLE' | translate }}</h3>
+          </div>
+          <div class="content-container quotation-container">
+            <div  [@expandCollapse]="isFilterOpen ? 'open' : 'close'" class="centerContainerPadding common-filter-container">
+              <div class="animated-icon-container" (click)="toggleFilterSection()" *ngIf="(model.items && model.items.length>0)">
+                <img src="assets/images/cta-close-grey.svg" alt="close">
+              </div>
+              
+                <div class="row">
+                  <div class="col-sm-4 col-md-4 col-lg-4">
+                    <div class="my-input-group">
+                        <label class="control-label required"> {{ 'CUSTOMER_SERVICECONFIG.LBL_CUSTOMER_LIST' | translate }}</label>
+                        <ng-select [items]="customerList" appendTo="body"
+                                   [multiple]="false"
+                                   [closeOnSelect]="true"
+                                   [searchable]="true"
+                                   [loading]="initialloading"
+                                   bindLabel="name"
+                                   bindValue="id"
+                                   placeholder="--- {{ 'CUSTOMER_SUMMARY.LBL_SELECT' | translate }} ---"
+                                   [(ngModel)]="model.customerValue"
+                                   [ngClass]="{ 'is-invalid': !validator.isValid('customerValue')}">
+                        </ng-select>
+      
+                        <div *ngIf="!validator.isValid('customerValue')" class="invalid-feedback" style="display:block">
+                          <div *ngFor="let error of validator.getErrors('customerValue')">{{ error | translate }}</div>
+                        </div>
+                    </div>
+                  </div>
+                  <div class="col-sm-4 col-md-4 col-lg-4 mobile-margin-top-15">
+                    <div class="my-input-group">
+                        <label class="control-label"> {{ 'CUSTOMER_SERVICECONFIG.LBL_SERVICE_LIST' | translate }}</label>
+                        <ng-select [items]="serviceList" appendTo="body"
+                                   [multiple]="false"
+                                   [closeOnSelect]="true"
+                                   [searchable]="true"
+                                   [loading]="initialloading"
+                                   bindLabel="name"
+                                   bindValue="id"
+                                   placeholder="--- {{ 'CUSTOMER_SUMMARY.LBL_SELECT' | translate }} ---"
+                                   [(ngModel)]="model.serviceValue"
+                                   [ngClass]="{ 'is-invalid': !validator.isValid('serviceValue')}">
+                        </ng-select>
+                    </div>
+                  </div>
+                </div>
+  
+  
+               
+           
+
+                <div class="row marginTop25">
+                  <div class="col-12 col-sm-12 text-right mt-3 mt-sm-0"> 
+                    <button id="btnAddNew" class="secondary-cta small" [disabled]="initialloading"
+                    (click)="NavigateDetailPage(0)">+{{ 'COMMON.LBL_NEW' | translate }}</button>
+                    &nbsp;  
+                  <button id="btnSearch" class="primary-cta small" [disabled]="initialloading || Searchloading"
+                    (click)="search()">{{ 'CUSTOMER_SERVICECONFIG.LBL_SEARCH' | translate }}
+                    <span *ngIf="Searchloading">
+                      <i class="fa fa-refresh fa-spin" aria-hidden="true"></i>
+                    </span>
+                  </button>               
+                               
+  
+                </div>
+              </div>
+            </div>
+            <div class="centerContainerPadding float-left" *ngIf="(model.items && model.items.length>0)">
+              <div class="row">
+                <div class="col-6 col-sm-4 col-xl-2 d-flex">
+                  <p  class="search-trigger-heading" [innerHtml]="showPaginationText()"></p>
+                </div>
+                <div class="col-6 col-sm-8 col-xl-10 text-right">
+                  <div class="animated-icon-container" *ngIf="!isFilterOpen" (click)="toggleFilterSection()">
+                    <img src="assets/images/cta-search-grey.svg" alt="search">
+                  </div>
+                </div>
+              </div>
+              <div class="quotation-search-container">
+                <div class="table-container h-scroll table-max-height-400">
+                  <table class="pagination-table simple-table bordered">
+                  <thead>
+                    <tr class="sticky-top-row">
+                      <th class="width-100"></th>
+                      <th>{{ 'CUSTOMER_SERVICECONFIG.Service' | translate }}</th>
+                      <th>{{ 'CUSTOMER_SERVICECONFIG.ServiceType' | translate }}</th>
+                      <th>{{ 'CUSTOMER_SERVICECONFIG.CustomerName' | translate }}</th>
+                      <th>{{ 'CUSTOMER_SERVICECONFIG.SamplingMethod' | translate }}</th>                     
+                      
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <ng-container *ngFor="let iteminfo of model.items">
+                      <tr> 
+                        <td class="Center_Middle">
+                              
+                              <span class="table-cta icon-cta common-tooltip" 
+                              (click)="NavigateDetailPage(iteminfo.id)" data-tooltip="Edit">
+                              <img src="assets/images/cta-edit.svg" alt="Edit">
+                            </span>
+                            &nbsp;
+                              <span class="table-cta icon-cta common-tooltip" 
+                              (click)="openConfirm(iteminfo.id,iteminfo.name,content)"  data-tooltip="Delete">
+                              <img src="assets/images/cta-delete.svg" alt="Delete">
+                            </span>
+                            </td>                         
+                          <td style="word-break:break-all">{{iteminfo.service}}</td>
+                          <td style="word-break:break-all">{{iteminfo.serviceType}}</td>
+                          <td style="word-break:break-all">{{iteminfo.customerName}}</td>
+                          <td style="word-break:break-all">{{iteminfo.samplingMethod}}</td>
+                      </tr>
+                    </ng-container>
+                  </tbody>
+                </table>
+                </div>
+              </div>
+              
+
+              <div class="pagination-container">
+                <ngb-pagination (pageChange)="onPager($event)" [pageSize]="model.pageSize"
+                [collectionSize]="model.totalCount" [(page)]="model.index" [maxSize]="5"></ngb-pagination>
+              </div>
+            </div>
+ 
+
+            <div class="centerContainerPadding"  *ngIf="model.noFound">
+              <div class="error-container">
+                <img src="assets/images/no-result.svg" alt="" class="thumbnail">
+                <h4 class="title">{{ 'CUSTOMER_SUMMARY.LBL_NOITEMS' | translate }}</h4>
+                <p class="error-subtitle">{{'CS_CONFIG_SUMMARY.LBL_NODATA' | translate}}</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <ng-template #content let-modal>
+    <div class="modal-body">
+        <div class="small-model">
+            <h2 class="title">{{ 'CUSTOMER_SERVICECONFIG.LBL_CONFIRMDELETION' | translate }} </h2>
+          <p>{{ 'CUSTOMER_SERVICECONFIG.MSG_CONFRMDELETE' | translate }} <strong>{{modelRemove.name}} ?</strong></p>
+            <button class="secondary-cta" (click)="modal.dismiss('Cross click')">{{ 'COMMON.LBL_CONFIRMCANCEL' | translate }}</button>
+           <button class="primary-cta" (click)="deleteCustomerService(modelRemove);">{{ 'COMMON.LBL_OK' | translate }}</button>        
+     </div>
+    </div>
+  </ng-template>  
+  
+  
+  
+  
+  
+
+
+

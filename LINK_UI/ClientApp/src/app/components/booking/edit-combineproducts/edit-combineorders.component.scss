@@ -1,0 +1,33 @@
+.title-container-search{
+    margin: 2px;
+    color: #143743;
+    font-size: 16px;
+    font-weight: 500;
+    line-height: 1.44;
+    padding: 1px 10px 10px 10px;
+    font-family: roboto-medium;
+    background-color: rgba(237, 228, 225, 0.6);
+
+}
+
+.stats-container {
+    padding: 10px;
+    padding-right: 20px;
+}
+.stats-container span {
+  font-size: 12px;
+  line-height: 1.33;
+  margin-left: 40px;
+  display: inline-block;
+  color: rgba(32, 59, 78, 0.6);
+  font-family: roboto-medium;
+}
+.stats-container span.big {
+  color: #24424d;
+  font-size: 36px;
+  margin-left: 20px;
+  line-height: 0.64;
+  font-family: roboto-light;
+}
+
+.PreviewTable{ border:  1px solid rgba(189, 210, 226, 0.4) !important}

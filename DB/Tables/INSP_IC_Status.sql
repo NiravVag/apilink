@@ -1,0 +1,6 @@
+﻿CREATE TABLE [dbo].[INSP_IC_Status]
+(
+	[Id] INT NOT NULL PRIMARY KEY IDENTITY(1,1),
+	[StatusName] NVARCHAR(200) NULL,
+	[Active] BIT NULL
+)

@@ -1,0 +1,77 @@
+﻿
+@{
+    ViewData["Title"] = "TravelMatrixExport";
+}
+
+@model IEnumerable<DTO.Invoice.TravelMatrixExportSummary>
+
+<xls-sheet name="Travel Matrix Summary">
+    <table xls-begin="A:1" style="border-style:solid">
+        <tr style="background-color:#f5f5f5;font-weight:bold;text-align:center">
+            <th>Country Name</th>
+            <th>CountryId</th>
+            <th>Province Name</th>
+            <th>ProvinceId</th>
+            <th>City Name</th>
+            <th>CityId</th>
+            <th>County Name</th>
+            <th>CoutryId</th>
+            <th>Inspection Port Name County</th>
+            <th>InspPortCountyId</th>
+            <th>Inspection Port Name City</th>
+            <th>InspPortCity</th>
+            <th>Customer Name</th>
+            <th>Tariff Type Name</th>
+            <th>Distance KM</th>
+            <th>Travel Time</th>
+            <th>Bus Cost</th>
+            <th>Train Cost</th>
+            <th>Taxi Cost</th>
+            <th>Hotel Cost</th>
+            <th>Other Cost</th>
+            <th>Mark Up Cost</th>
+            <th>Air Cost</th>
+            <th>Mark Up Air Cost</th>
+            <th>Travel Currency</th>
+            <th>Source Currency</th>
+            <th>Fixed Exchange Rate</th>
+            <th>Remarks</th>
+            @*<th></th>*@
+
+        </tr>
+        @foreach (var item in Model)
+        {
+    <tr>
+        <td width="150px">@Html.Raw(@item.CountryName)</td>
+        <td width="150px">@Html.Raw(@item.CountryId)</td>
+        <td width="150px">@Html.Raw(@item.ProvinceName)</td>
+        <td width="150px">@Html.Raw(@item.ProvinceId)</td>
+        <td width="150px">@Html.Raw(@item.CityName)</td>
+        <td width="150px">@Html.Raw(@item.CityId)</td>
+        <td width="150px">@Html.Raw(@item.CountyName)</td>
+        <td width="150px">@Html.Raw(@item.CountyId)</td>
+        <td width="150px">@Html.Raw(@item.InspPortNameCounty)</td>
+        <td width="150px">@Html.Raw(@item.InspPortCountyId)</td>
+        <td width="150px">@Html.Raw(@item.InspPortNameCity)</td>
+        <td width="150px">@Html.Raw(@item.InspPortCityId)</td>
+        <td width="150px">@item.CustomerName</td>
+        <td width="150px">@item.TariffTypeName</td>
+        <td width="150px">@item.DistanceKM</td>
+        <td width="150px">@item.TravelTime</td>
+        <td width="150px">@item.BusCost</td>
+        <td width="150px">@item.TrainCost</td>
+        <td width="150px">@item.TaxiCost</td>
+        <td width="150px">@item.HotelCost</td>
+        <td width="150px">@item.OtherCost</td>
+        <td width="150px">@item.MarkUpCost</td>
+        <td width="150px">@item.AirCost</td>
+        <td width="150px">@item.MarkUpCostAir</td>
+        <td width="150px">@item.TravelCurrencyName</td>
+        <td width="150px">@item.SourceCurrencyName</td>
+        <td width="150px">@item.FixExchangeRate</td>
+        <td width="150px">@item.Remarks</td>
+    </tr>
+
+        }
+    </table>
+</xls-sheet>

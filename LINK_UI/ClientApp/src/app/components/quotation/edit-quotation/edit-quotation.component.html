@@ -1,0 +1,2254 @@
+<div class="main-wrapper">
+    <div class="wrapper dashboard-wrapper">
+        <div class="my-container">
+            <div class="master-body">
+                <div class="title-container">
+                    <div class="header-back-button" *ngIf="fromSummary && !loading">
+                        <img src="assets/images/back-red.png" alt="back" (click)="returntosummary()">
+                    </div>
+                    <h3 class="main-title" *ngIf="model && model.id!=null && model.id>0">
+                        {{ 'QUOTATION.LBL_EDIT' | translate }}
+                        {{ 'QUOTATION.TITLE' | translate }}
+                    </h3>
+                    <h3 class="main-title" *ngIf="!model || model.id==null || !(model.id>0)">
+                        {{ 'QUOTATION.TITLE' | translate }}
+                        {{ 'QUOTATION.LBL_REGISTER' | translate }}
+                    </h3>
+                    <span class="audit-id" *ngIf="model && model.id!=null && model.id>0">
+                        #{{model.id}}
+                        {{model.statusLabel}}
+                    </span>
+                    <div class="audit-rule-container quote-rule"
+                        *ngIf="model.quotationPDFList && model.quotationPDFList.length >0"
+                        (click)="openQuotationHistory(QuoHistory)">
+                        <img src="assets/images/quote-history.png" alt="rules">
+                        <p>{{ 'QUOTATION.TITLE' | translate }}<br>{{ 'QUOTATION.LBL_HISTORY' | translate }}</p>
+                    </div>
+                </div>
+                <div class="content-container quotation-container">
+                    <div class="container-head">
+                        <img class="head-icon" src="assets/images/general.png" alt="">
+                        {{ 'QUOTATION.LBL_MAIN' | translate }}
+                        <div class="section-toggle-container head-toggler">
+                            <img (click)="editTab1 = !editTab1" src="assets/images/expand-circle.png" class="width20"
+                                alt="expand" *ngIf="!editTab1">
+                            <img (click)="Edittab1()" src="assets/images/collapse-circle.png" class="width20"
+                                alt="collapse" *ngIf="editTab1">
+                        </div>
+                    </div>
+                    <div class="formPadding editMode" [ngStyle]="{'display': editTab1 ? 'block':'none'}">
+                        <div class="row">
+                            <div class=" col-sm-12">
+                                <h6 class="quote-form-title"></h6>
+                            </div>
+                            <div class="col-sm-3">
+                                <div class="my-input-group">
+                                    <label class="required">{{ 'QUOTATION.LBL_COUNTRY' | translate }}</label>
+                                    <ng-select appendTo="body" [items]="data.countryList" [multiple]="false"
+                                        [clearable]="false"
+                                        [disabled]="!IsInternalUser || model.id > 0 || _isfrombookingsummary"
+                                        [closeOnSelect]="true" [searchable]="true" bindLabel="countryName"
+                                        [loading]="loading"
+                                        placeholder="--- {{ 'QUOTATION.LBL_SELECT' | translate }} ---"
+                                        [(ngModel)]="model.country" (change)="setCustomerList($event, model.service)"
+                                        [ngClass]="{ 'is-invalid': !validator.isValid('country')}">
+                                        <ng-template ng-option-tmp let-item="item">
+                                            <div class="text-wrap">{{ item.countryName }}</div>
+                                        </ng-template>
+                                    </ng-select>
+                                    <div *ngIf="!validator.isValid('country')" class="invalid-feedback">
+                                        <div *ngFor="let error of validator.getErrors('country')">
+                                            {{ error | translate }}</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-3 mobile-margin-top-15">
+                                <div class="my-input-group">
+                                    <label class="required">{{ 'QUOTATION.LBL_SERVICE' | translate }}</label>
+                                    <ng-select appendTo="body" [items]="data.serviceList" [multiple]="false"
+                                        [clearable]="false"
+                                        [disabled]="!IsInternalUser || model.id > 0 || _isfrombookingsummary"
+                                        [closeOnSelect]="true" [searchable]="true" bindLabel="name" [loading]="loading"
+                                        placeholder="--- {{ 'QUOTATION.LBL_SELECT' | translate }} ---"
+                                        [(ngModel)]="model.service" class="multiple"
+                                        (change)="setCustomerList(model.country, $event)"
+                                        [ngClass]="{ 'is-invalid': !validator.isValid('service')}">
+                                        <ng-template ng-option-tmp let-item="item">
+                                            <div class="text-wrap">{{ item.name }}</div>
+                                        </ng-template>
+                                    </ng-select>
+                                    <div *ngIf="!validator.isValid('service')" class="invalid-feedback">
+                                        <div *ngFor="let error of validator.getErrors('service')">
+                                            {{ error | translate }}</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-3 mobile-margin-top-15">
+                                <div class="my-input-group">
+                                    <label class="required">{{ 'QUOTATION.LBL_BILLMETHOD' | translate }}</label>
+                                    <ng-select appendTo="body" [items]="data.billingMethodList" [multiple]="false"
+                                        [clearable]="false" [disabled]="!IsInternalUser" [closeOnSelect]="true"
+                                        [searchable]="true" bindLabel="label" [loading]="loading"
+                                        placeholder="--- {{ 'QUOTATION.LBL_SELECT' | translate }} ---"
+                                        [(ngModel)]="model.billingMethod" class="multiple"
+                                        [ngClass]="{ 'is-invalid': !validator.isValid('billingMethod')}"
+                                        (change)="changeBillingMethod(unitpricechange,$event)">
+                                        <ng-template ng-option-tmp let-item="item">
+                                            <div class="text-wrap">{{ item.label }}</div>
+                                        </ng-template>
+                                    </ng-select>
+                                    <div *ngIf="!validator.isValid('billingMethod')" class="invalid-feedback">
+                                        <div *ngFor="let error of validator.getErrors('billingMethod')">
+                                            {{ error | translate }}</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-3 mobile-margin-top-15">
+                                <div class="my-input-group">
+                                    <label class="required">{{ 'QUOTATION.LBL_BILLPAIDBY' | translate }}</label>
+                                    <ng-select appendTo="body" [items]="data.billPaidByList" [multiple]="false"
+                                        [clearable]="false" [disabled]="!IsInternalUser" [closeOnSelect]="true"
+                                        [searchable]="true" bindLabel="name" [loading]="loading"
+                                        (change)="changePaidBySetBillingEntity(unitpricechange,$event)"
+                                        placeholder="--- {{ 'QUOTATION.LBL_SELECT' | translate }} ---"
+                                        [(ngModel)]="model.billingPaidBy" class="multiple"
+                                        [ngClass]="{ 'is-invalid': !validator.isValid('billingPaidBy')}">
+                                        <ng-template ng-option-tmp let-item="item">
+                                            <div class="text-wrap">{{ item.name }}</div>
+                                        </ng-template>
+                                    </ng-select>
+                                    <div *ngIf="!validator.isValid('billingPaidBy')" class="invalid-feedback">
+                                        <div *ngFor="let error of validator.getErrors('billingPaidBy')">
+                                            {{ error | translate }}</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-3 mobile-margin-top-15 marginTop15">
+                                <div class="my-input-group">
+                                    <label class="required">{{ 'QUOTATION.LBL_BILLENTITY' | translate }}</label>
+                                    <ng-select appendTo="body" [items]="data.billingEntities" [multiple]="false"
+                                        [clearable]="false" [disabled]="!IsInternalUser" [closeOnSelect]="true"
+                                        [searchable]="true" bindLabel="name" [loading]="loading" bindValue="id"
+                                        placeholder="--- {{ 'QUOTATION.LBL_SELECT' | translate }} ---"
+                                        [(ngModel)]="model.billingEntity" class="multiple">
+                                        <ng-template ng-option-tmp let-item="item">
+                                            <div class="text-wrap">{{ item.name }}</div>
+                                        </ng-template>
+                                    </ng-select>
+                                </div>
+                            </div>
+
+                            <div class="col-sm-3 mobile-margin-top-15 marginTop15">
+                                <div class="my-input-group">
+                                    <label>{{ 'QUOTATION.LBL_PAYMENT_TYPE' | translate }}</label>
+                                    <ng-select appendTo="body" [items]="data.paymentTermList" [multiple]="false"
+                                        [clearable]="false" [disabled]="!IsInternalUser" [closeOnSelect]="true"
+                                        [searchable]="true" bindLabel="name" [loading]="loading" bindValue="id"
+                                        placeholder="--- {{ 'QUOTATION.LBL_SELECT' | translate }} ---"
+                                        [(ngModel)]="model.paymentTerm">
+                                        <ng-template ng-option-tmp let-item="item">
+                                            <div class="text-wrap">{{ item.name }}</div>
+                                        </ng-template>
+                                    </ng-select>
+                                </div>
+                            </div>
+
+                            <div class="col-sm-3 mobile-margin-top-15 marginTop15">
+                                <div class="my-input-group">
+                                    <label>{{ 'QUOTATION.LBL_CURRENCY' | translate }}</label>
+                                    <ng-select appendTo="body" [items]="data.currencyList" [disabled]="!IsInternalUser"
+                                        [multiple]="false" [clearable]="false" [closeOnSelect]="true"
+                                        [searchable]="true" bindLabel="currencyName" [loading]="loading"
+                                        placeholder="--- {{ 'QUOTATION.LBL_SELECT' | translate }} ---"
+                                        [(ngModel)]="model.currency" class="multiple"
+                                        (change)="changeCurrency(unitpricechange,$event)"
+                                        [ngClass]="{ 'is-invalid': !validator.isValid('currency')}">
+                                        <ng-template ng-option-tmp let-item="item">
+                                            <div class="text-wrap">{{ item.currencyName }}</div>
+                                        </ng-template>
+                                    </ng-select>
+                                    <div *ngIf="!validator.isValid('currency')" class="invalid-feedback">
+                                        <div *ngFor="let error of validator.getErrors('currency')">
+                                            {{ error | translate }}</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-3 mobile-margin-top-15 marginTop15">
+                                <div class="my-input-group">
+                                    <label>{{ 'QUOTATION.LBL_PAYMENT_TERMS' | translate }}</label>
+                                        <ng-select [items]="data.paymentTermsValueList"
+                                            [(ngModel)]="model.paymentTermId" [closeOnSelect]="true" [searchable]="true"
+                                            bindLabel="name" bindValue="id" (change)="onChangePaymentType($event);"
+                                            placeholder="--- {{ 'QUOTATION.LBL_SELECT' | translate }} ---"
+                                            [loading]="loading">
+                                        <ng-template ng-option-tmp let-item="item">
+                                            <div class="text-wrap">{{ item.name }}</div>
+                                        </ng-template>
+                                    </ng-select>
+                                </div>
+                            </div>
+                            <div class="col-sm-3 mobile-margin-top-15 marginTop15">
+                                <div class="my-input-group">
+                                    <label>Payment Terms Value</label>
+                                    <input [(ngModel)]="model.paymentTermsValue" type="text" (paste)="onPaste($event)"/>
+                                </div>
+                            </div>
+                            <div class="col-sm-3 mobile-margin-top-15 marginTop15">
+                                <div class="my-input-group">
+                                    <label>{{ 'QUOTATION.LBL_PAYMENT_TERMS_Count' | translate
+                                    }}</label>
+                                <input maxlength="200" (keypress)="numberOnly($event)" (paste)="onPaste($event)"
+                                    [(ngModel)]="model.paymentTermsCount" type="number" />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row marginTop25">
+                            <div class=" col-sm-12">
+                                <h6 class="quote-form-title">{{ 'QUOTATION.LBL_CUSTOMER_DETAILS' | translate }}</h6>
+                            </div>
+                            <div class="col-sm-12 marginleft10">
+                                <app-quotationContact [type]="quotationEntityType.Customer"
+                                    [dataSource]="data.customerList" [isInternaluser]="IsInternalUser"
+                                    label="{{ 'QUOTATION.LBL_CUSTOMER' | translate }}" [id]="model.customer"
+                                    [dropdownloading]="loader.customerLoading" [legalName]="model.customerLegalName"
+                                    (selectItem)="setSupplierList($event)" [model]="model.customerContactList" [billPaidBy]="model.billingPaidBy?.id"
+                                    [isFromBookingSummary]="_isfrombookingsummary"
+                                    jsonPathValidation="quotation/quotation-customer.valid.json" fieldtype="Customer"
+                                    [quotationId]="model.id" [paymentTerm]="model.paymentTerm">
+                                </app-quotationContact>
+                            </div>
+                        </div>
+                        <div class="row marginTop25">
+                            <div class=" col-sm-12">
+                                <h6 class="quote-form-title">{{ 'QUOTATION.LBL_SUPPLIER_DETAILS' | translate }}</h6>
+                            </div>
+                            <div class="col-sm-12 marginleft10">
+                                <app-quotationContact [type]="quotationEntityType.Supplier"
+                                    [dataSource]="data.supplierList" [isInternaluser]="IsInternalUser"
+                                    [dropdownloading]="loader.supplierLoading" (onchange)="quotationEntityType.Customer"
+                                    label="{{ 'QUOTATION.LBL_SUPPLIER' | translate }}" [id]="model.supplier"
+                                    [parentId]="model.customer ? model.customer.id :0"
+                                    [legalName]="model.supplierLegalName" (selectItem)="setFactoryList($event)"
+                                    [model]="model.supplierContactList" [grade]="supplierGrade"
+                                    [isFromBookingSummary]="_isfrombookingsummary"  [billPaidBy]="model.billingPaidBy?.id"
+                                    jsonPathValidation="quotation/quotation-supplier.valid.json" fieldtype="Supplier"
+                                    [quotationId]="model.id"  [paymentTerm]="model.paymentTerm">
+                                </app-quotationContact>
+                            </div>
+                        </div>
+                        <div class="row marginTop25">
+                            <div class=" col-sm-12">
+                                <h6 class="quote-form-title">{{ 'QUOTATION.LBL_FACTORY_DETAILS' | translate }}</h6>
+                            </div>
+                            <div class="col-sm-12 marginleft10">
+                                <app-quotationContact [type]="quotationEntityType.Factory"
+                                    [dataSource]="data.factoryList" [dropdownloading]="loader.factoryLoading"
+                                    [isInternaluser]="IsInternalUser" label="{{ 'QUOTATION.LBL_FACTORY' | translate }}"
+                                    [id]="model.factory" [parentId]="model.customer ? model.customer.id :0"
+                                    [legalName]="model.legalFactoryName" (selectItem)="setFactoryId($event)"
+                                    [address]="model.factoryAddress" [isFromBookingSummary]="_isfrombookingsummary"  [billPaidBy]="model.billingPaidBy?.id"
+                                    [model]="model.factoryContactList" [grade]="factoryGrade"
+                                    jsonPathValidation="quotation/quotation-factory.valid.json" [quotationId]="model.id"
+                                    fieldtype="Factory" [paymentTerm]="model.paymentTerm"></app-quotationContact>
+                            </div>
+                        </div>
+                        <div class="row marginTop25">
+                            <div class=" col-sm-12">
+                                <h6 class="quote-form-title">{{ 'QUOTATION.LBL_CONTACT_DETAILS' | translate }}</h6>
+                            </div>
+                            <div class="col-sm-12 marginleft10">
+                                <app-quotationContact [type]="quotationEntityType.Internal"
+                                    [dataSource]="data.officeList" [isInternaluser]="IsInternalUser"
+                                    label="{{ 'QUOTATION.LBL_OFFICE' | translate }}" [id]="model.office" legalName=""
+                                    (selectItem)="setOfficeId($event)" [model]="model.internalContactList"  [billPaidBy]="model.billingPaidBy?.id"
+                                    [quotationId]="model.id" jsonPathValidation="quotation/quotation-contact.valid.json"
+                                    fieldtype="Internal" [parentId]="model.customer ? model.customer.id :0" [paymentTerm]="model.paymentTerm">
+                                </app-quotationContact>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row formPadding labelMode" [ngStyle]="{'display': !editTab1 ? 'flex':'none'}">
+                        <div class="col-sm-4 column">
+                            <div class="my-input-group">
+                                <label class="light" for="">{{ 'QUOTATION.LBL_CUSTOMER' | translate }}</label>
+                                <p class="input-value dark" *ngIf="previewMainDetails">{{previewMainDetails.customer}}
+                                </p>
+                            </div>
+                            <div class="my-input-group marginTop15" *ngIf="previewMainDetails.customerContactList">
+                                <label for="" *ngFor="let item of previewMainDetails.customerContactList">
+                                    {{item.contactName}}({{item.contactEmail}}
+                                    / {{item.contactPhone}})
+                                </label>
+
+                            </div>
+                        </div>
+                        <div class="col-sm-4 column mobile-margin-top-15">
+                            <div class="my-input-group">
+                                <label class="light" for="">{{ 'QUOTATION.LBL_SUPPLIER' | translate }}</label>
+                                <p class="input-value dark" *ngIf="previewMainDetails">{{previewMainDetails.supplier}}
+                                </p>
+                            </div>
+                            <div class="my-input-group marginTop15" *ngIf="previewMainDetails.supplierContactList">
+                                <label for="" *ngFor="let item of previewMainDetails.supplierContactList">
+                                    {{item.contactName}}({{item.contactEmail}}
+                                    / {{item.contactPhone}})
+                                </label>
+
+                            </div>
+                        </div>
+                        <div class="col-sm-4 column mobile-margin-top-15">
+                            <div class="my-input-group">
+                                <label class="light" for="">{{ 'QUOTATION.LBL_FACTORY_DETAILS' | translate }}</label>
+                                <p class="input-value dark" *ngIf="previewMainDetails">{{previewMainDetails.factory}}
+                                </p>
+                            </div>
+                            <div class="my-input-group marginTop15">
+                                <!-- <label class="light" for="">Customer</label> -->
+                                <p class="input-value normal" *ngIf="previewMainDetails">
+                                    {{previewMainDetails.factoryAddress}}
+                                </p>
+                            </div>
+                        </div>
+                        <div class="col-sm-12 marginTop50 mobile-margin-top-15">
+                            <div class="row">
+                                <div class="col-sm-3 col-md-2 mobile-margin-top-15">
+                                    <div class="my-input-group">
+                                        <label class="light" for="">{{ 'QUOTATION.LBL_COUNTRY' | translate }}</label>
+                                        <p class="input-value dark" *ngIf="previewMainDetails">
+                                            {{previewMainDetails.country}}</p>
+                                    </div>
+                                </div>
+                                <div class="col-sm-3 col-md-2 mobile-margin-top-15">
+                                    <div class="my-input-group">
+                                        <label class="light" for="">{{ 'QUOTATION.LBL_SERVICE' | translate }}</label>
+                                        <p class="input-value dark" *ngIf="previewMainDetails">
+                                            {{previewMainDetails.service}}</p>
+                                    </div>
+                                </div>
+                                <div class="col-sm-3 col-md-2 mobile-margin-top-15">
+                                    <div class="my-input-group">
+                                        <label class="light" for="">{{ 'QUOTATION.LBL_BILLMETHOD' | translate }}</label>
+                                        <p class="input-value dark" *ngIf="previewMainDetails">
+                                            {{previewMainDetails.billingMethod}}</p>
+                                    </div>
+                                </div>
+                                <div class="col-sm-3 col-md-2 mobile-margin-top-15">
+                                    <div class="my-input-group">
+                                        <label class="light" for="">{{ 'QUOTATION.LBL_BILLPAIDBY' | translate }}</label>
+                                        <p class="input-value dark" *ngIf="previewMainDetails">
+                                            {{previewMainDetails.billPaidBy}}</p>
+                                    </div>
+                                </div>
+                                <div class="col-sm-3 col-md-2 mobile-margin-top-15">
+                                    <div class="my-input-group">
+                                        <label class="light" for="">{{ 'QUOTATION.LBL_OFFICE' | translate }}</label>
+                                        <p class="input-value dark" *ngIf="previewMainDetails">
+                                            {{previewMainDetails.office}}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="content-container quotation-container">
+                    <div class="container-head">
+                        <img class="head-icon" src="assets/images/booking.png" alt="">
+                        {{ 'QUOTATION.LBL_BOOKING_INFO' | translate }}
+                        <div class="section-toggle-container head-toggler">
+                            <img (click)="editTab2 = !editTab2" src="assets/images/expand-circle.png" class="width20"
+                                alt="expand" *ngIf="!editTab2">
+                            <img (click)="editTab2 = !editTab2" src="assets/images/collapse-circle.png" class="width20"
+                                alt="collapse" *ngIf="editTab2">
+                        </div>
+                    </div>
+                    <div class="row formPadding editMode">
+                        <div class="col-sm-12 position-relative"
+                            *ngIf="model && model.service && model.service.id == apiService.Inspection">
+                            <div class="stats">
+                                <span>
+                                    {{'QUOTATION.LBL_TOTAL' | translate }}
+
+                                    {{'QUOTATION.LBL_BOOKING' | translate }}
+                                </span>
+                                <span class="big" *ngIf="previewbookInfo"> {{previewbookInfo.totalBooking}}</span>
+                            </div>
+                            <div class="stats">
+                                <span>
+                                    {{'QUOTATION.LBL_TOTAL' | translate }}
+
+                                    {{'QUOTATION.LBL_COMBINE' | translate }}
+                                </span>
+                                <span class="big" *ngIf="previewbookInfo"> {{previewbookInfo.totalCombine}}</span>
+                            </div>
+                            <div class="stats">
+                                <span>
+                                    {{'QUOTATION.LBL_TOTAL' | translate }}
+                                    {{'QUOTATION.LBL_REPORTS' | translate }}
+                                </span>
+                                <span class="big" *ngIf="previewbookInfo"> {{previewbookInfo.totalReports}}</span>
+                            </div>
+                            <div class="stats">
+                                <span>
+                                    {{'QUOTATION.LBL_TOTAL' | translate }}
+                                    {{'QUOTATION.LBL_CONTAINERS' | translate }}
+                                </span>
+                                <span class="big" *ngIf="previewbookInfo"> {{previewbookInfo.totalContainers}}</span>
+                            </div>
+                            <div class="stats">
+                                <span>
+                                    {{'QUOTATION.LBL_TOTAL' | translate }}
+
+                                    {{'QUOTATION.LBL_AQL' | translate }}
+                                </span>
+                                <span class="big" *ngIf="previewbookInfo"> {{previewbookInfo.totalSampling}}</span>
+                            </div>
+                            <div class="stats">
+                                <span>
+                                    {{'QUOTATION.LBL_TOTAL' | translate }}
+
+                                    {{'QUOTATION.LBL_NOOFPRODUCTS' | translate }}</span>
+                                <span class="big" *ngIf="previewbookInfo"> {{previewbookInfo.totalProducts}}</span>
+                            </div>
+                            <div class="stats quotationlastcolumnmargin">
+                                <span>
+                                    {{'QUOTATION.LBL_TOTAL' | translate }}
+
+                                    {{'QUOTATION.LBL_PICKING' | translate }}</span>
+                                <span class="big" *ngIf="previewbookInfo"> {{previewbookInfo.totalPicking}}</span>
+                            </div>
+                        </div>
+                        <div class="col-sm-12">
+                            <div class="row">
+                                <div class="col-sm-8">
+                                    <div *ngIf="isTravelWarningShow && isHideMessage"
+                                        class="alert alert-warning alert-dismissible fade show fontStyleTravel"
+                                        role="alert">
+                                        <strong> {{ 'QUOTATION.MSG_PLEASE_NOTE' |
+                                            translate }}</strong>
+                                        {{ 'QUOTATION.MSG_TRAVEL_AMOUNT' |
+                                        translate }}
+                                        <strong class="fontColor"> {{travelTextMessage}}</strong>
+                                        {{ 'QUOTATION.MSG_IN_THE_UNIT_PRICE' |
+                                        translate }}
+                                        <button type="button" class="close" (click)="closeMessage()" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="col-sm-4">
+                                    <button *ngIf="IsInternalUser" class="secondary-cta small button-float"
+                                        [ngStyle]="{'margin-top': !model || !model.service || model.service.id != apiService.Inspection ? '20px':'0px'}"
+                                        [disabled]="notSelected()" (click)="addOrder(contentd)">+
+                                        {{ 'QUOTATION.LBL_ADDORDER' | translate }}</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-12" *ngIf="editTab2">
+                            <div *ngIf="model.orderList && model.orderList.length >0">
+                                <ng-container *ngFor="let item of model.orderList">
+                                    <div class="quotation-table-container quotationtablemargin">
+                                        <div class="quotation-table-head">
+                                            <h5>{{ 'QUOTATION.LBL_Booking' | translate }} #{{item.id}} <span
+                                                    [ngStyle]="{'font-weight': 'normal'}">({{item.statusName}})</span>
+                                            </h5>
+                                            <span class="add-more" *ngIf="IsInternalUser" (click)="deleteOrder(item)"
+                                                [ngStyle]="{'display': loading || loader.saveLoading || loader.bookingSearchLoading ? 'none':'inline-display'}">
+                                                <img src="assets/images/red-bin.svg" alt="">
+                                                {{ 'QUOTATION.LBL_DELETE' | translate }}
+                                            </span>
+                                        </div>
+                                        <div class="row table-input-container"
+                                            *ngIf="model.billingMethod && model.billingMethod.id==BillingMethod.PieceRate">
+                                            <div class="col-sm-2">
+                                                <div class="my-input-group">
+                                                    <label for="">{{ 'QUOTATION.LBL_Billed_QTY_TYPE' | translate
+                                                        }}</label>
+                                                    <ng-select [items]="data.billQuantityTypeList" bindLabel="name"
+                                                        bindValue="id" [multiple]="false" [closeOnSelect]="true"
+                                                        [searchable]="true" (blur)="GetTotalInspFeesByBooking(item)"
+                                                        [ngClass]="{ 'is-invalid':  item.ordervalidator != null ? !item.ordervalidator.validator.isValid('billedQtyType') : false }"
+                                                        [hideSelected]="true" [clearable]="false"
+                                                        (change)="changeBillQuantityType(unitpricechange,item.id,$event)"
+                                                        placeholder="--- {{ (data.billQuantityTypeList!=null && data.billQuantityTypeList.length!=0? 'COMMON.LBL_SELECT':'COMMON.LBL_No_ITEM' ) | translate }} ---"
+                                                        [(ngModel)]="item.orderCost.billedQtyType" appendTo="body">
+                                                        <ng-template ng-option-tmp let-item="item">
+                                                            <div class="text-wrap">{{ item.name }}</div>
+                                                        </ng-template>
+                                                    </ng-select>
+                                                    <div *ngIf="item.ordervalidator != null && !item.ordervalidator.validator.isValid('billedQtyType')"
+                                                        class="invalid-feedback">
+                                                        <div
+                                                            *ngFor="let error of item.ordervalidator.validator.getErrors('billedQtyType')">
+                                                            {{ error | translate }}</div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-2 mobile-margin-top-15">
+                                                <div class="my-input-group">
+                                                    <label for="">{{ 'QUOTATION.LBL_QUANTITY' | translate }}</label>
+                                                    <input type="number" min="0"
+                                                        [ngClass]="{ 'is-invalid': item.ordervalidator != null ? !item.ordervalidator.validator.isValid('quantity') : false }"
+                                                        [(ngModel)]="item.orderCost.quantity"
+                                                        (blur)="GetTotalInspFeesByBooking(item)">
+                                                    <div *ngIf=" item.ordervalidator != null && !item.ordervalidator.validator.isValid('quantity')"
+                                                        class="invalid-feedback">
+                                                        <div
+                                                            *ngFor="let error of item.ordervalidator.validator.getErrors('quantity')">
+                                                            {{ error | translate }}</div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row table-input-container">
+                                            <div class="col-sm-2">
+                                                <div class="my-input-group">
+                                                    <a *ngIf="model.service.id == apiService.Inspection && IsInternalUser &&
+                                                        (item.orderCost.unitPrice > 0 || model.id > 0)"
+                                                        (click)="getCustomerPriceCardInfo(customerpricecardinfo, item.id)"
+                                                        class="right-link">{{ 'QUOTATION.LBL_PRICE_CARD_INFO' |
+                                                        translate }}</a>
+                                                    <label for="">{{ 'QUOTATION.LBL_UNITPRICE' | translate }}</label>
+                                                    <input type="number" maxlength="100" min="0"
+                                                        (blur)="GetTotalInspFeesByBooking(item)"
+                                                        (keypress)="numericValidation($event)"
+                                                        (paste)="onPaste($event,10)"
+                                                        (input)="validateDecimal(item.orderCost,'unitPrice')"
+                                                        [disabled]="!IsInternalUser"
+                                                        [ngClass]="{ 'is-invalid': item.ordervalidator != null ? !item.ordervalidator.validator.isValid('unitPrice'): false }"
+                                                        [(ngModel)]="item.orderCost.unitPrice">
+                                                    <div *ngIf="item.ordervalidator != null && !item.ordervalidator.validator.isValid('unitPrice')"
+                                                        class="invalid-feedback">
+                                                        <div
+                                                            *ngFor="let error of item.ordervalidator.validator.getErrors('unitPrice')">
+                                                            {{ error | translate }}</div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-2 mobile-margin-top-15">
+                                                <div class="my-input-group">
+                                                    <label for="">{{ 'QUOTATION.LBL_NO_MAN_DAY' | translate }}</label>
+                                                    <input type="number" maxlength="100" min="0"
+                                                        (blur)="GetTotalInspFeesByBooking(item)"
+                                                        (input)="validateDecimal(item.orderCost,'noOfManday')"
+                                                        (keypress)="numericValidation($event)"
+                                                        (paste)="onPaste($event,10)" [disabled]="!IsInternalUser"
+                                                        [ngClass]="{ 'is-invalid':  item.ordervalidator != null ? !item.ordervalidator.validator.isValid('noOfManday') : false }"
+                                                        [(ngModel)]="item.orderCost.noOfManday">
+                                                    <div *ngIf=" item.ordervalidator != null && !item.ordervalidator.validator.isValid('noOfManday')"
+                                                        class="invalid-feedback">
+                                                        <div
+                                                            *ngFor="let error of item.ordervalidator.validator.getErrors('noOfManday')">
+                                                            {{ error | translate }}</div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-2 mobile-margin-top-15">
+                                                <div class="my-input-group">
+                                                    <label for="">{{ 'QUOTATION.LBL_TOTAL_SERVICE_FEES' | translate
+                                                        }}</label>
+                                                    <input type="number" disabled="disabled" maxlength="100" min="0"
+                                                        [ngClass]="{ 'is-invalid': item.ordervalidator != null ? !item.ordervalidator.validator.isValid('inspFees') : false }"
+                                                        [(ngModel)]="item.orderCost.inspFees">
+                                                    <div *ngIf=" item.ordervalidator != null && !item.ordervalidator.validator.isValid('inspFees')"
+                                                        class="invalid-feedback">
+                                                        <div
+                                                            *ngFor="let error of item.ordervalidator.validator.getErrors('inspFees')">
+                                                            {{ error | translate }}</div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-2 mobile-margin-top-15">
+                                                <div class="my-input-group">
+                                                    <a *ngIf="model.service.id == apiService.Inspection && IsInternalUser &&
+                                     (item.orderCost.unitPrice > 0 || model.id > 0)"
+                                                        (click)="getTravelMatrixInfo(travelmatrixinfo, item.id)"
+                                                        class="right-link">{{ 'QUOTATION.LBL_TRAVEL_MATRIX_INFO' |
+                                                        translate }}
+                                                    </a>
+                                                    <label for="">{{ 'QUOTATION.LBL_TRAVEL_AIR' | translate }}</label>
+                                                    <input type="number" maxlength="100"
+                                                        (blur)="GetTotalInspFeesByBooking(item)" min="0"
+                                                        (keypress)="numericValidation($event)"
+                                                        (paste)="onPaste($event,10)"
+                                                        (input)="validateDecimal(item.orderCost,'travelAir')"
+                                                        [disabled]="!IsInternalUser"
+                                                        [(ngModel)]="item.orderCost.travelAir">
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-2 mobile-margin-top-15">
+                                                <div class="my-input-group">
+                                                    <label for="">{{ 'QUOTATION.LBL_TRAVEL_LAND' | translate }}</label>
+                                                    <input type="number" maxlength="100" min="0"
+                                                        (blur)="GetTotalInspFeesByBooking(item)"
+                                                        (keypress)="numericValidation($event)"
+                                                        (paste)="onPaste($event,10)"
+                                                        (input)="validateDecimal(item.orderCost,'travelLand')"
+                                                        [disabled]="!IsInternalUser"
+                                                        [(ngModel)]="item.orderCost.travelLand">
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-2 mobile-margin-top-15">
+                                                <div class="my-input-group">
+                                                    <label for="">{{ 'QUOTATION.LBL_HOTEL' | translate }}</label>
+                                                    <input type="number" maxlength="100" min="0"
+                                                        (blur)="GetTotalInspFeesByBooking(item)"
+                                                        (keypress)="numericValidation($event)"
+                                                        (paste)="onPaste($event,10)"
+                                                        (input)="validateDecimal(item.orderCost,'travelHotel')"
+                                                        [disabled]="!IsInternalUser"
+                                                        [(ngModel)]="item.orderCost.travelHotel">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row col-xs-6">
+                                            <div class="col-sm-6">
+                                                <table class="pagination-table bordered">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>{{ 'QUOTATION.LBL_SERVICEDATE' | translate }}</th>
+                                                            <th>{{ 'QUOTATION.LBL_MANDAY' | translate }}</th>
+                                                            <th>{{ 'QUOTATION.LBL_REMARKS' | translate }}</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <tr
+                                                            *ngFor="let manday of item.orderMandayvalidatorList;let i = index">
+                                                            <td class="Center_Middle">{{manday.ordermanday.serviceDate}}
+                                                            </td>
+                                                            <td> <input min="0" type="number"
+                                                                    (input)="validateDecimal(manday.ordermanday,'manDay')"
+                                                                    (keypress)="numericValidation($event)"
+                                                                    (paste)="onPaste($event,10)"
+                                                                    [(ngModel)]="manday.ordermanday.manDay"
+                                                                    [disabled]="!IsInternalUser"
+                                                                    [ngClass]="{ 'is-invalid': manday.validator != null ? !manday.validator.isValid('manDay'): false }" />
+                                                                <div *ngIf="manday.validator != null && !manday.validator.isValid('manDay')"
+                                                                    class="invalid-feedback">
+                                                                    <div
+                                                                        *ngFor="let error of manday.validator.getErrors('manDay')">
+                                                                        {{ error | translate }}
+                                                                    </div>
+                                                                </div>
+                                                            </td>
+                                                            <td> <textarea rows="1" [disabled]="!IsInternalUser"
+                                                                    [(ngModel)]="manday.ordermanday.remarks"></textarea>
+                                                            </td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                            <div class="col-sm-2 mobile-margin-top-15">
+                                                <div class="my-input-group">
+                                                    <label for="">{{ 'QUOTATION.LBL_TRAVEL_MANDAY' | translate
+                                                        }}</label>
+                                                    <input type="number" maxlength="100" min="0"
+                                                        [disabled]="!IsInternalUser"
+                                                        (input)="validateDecimal(item.orderCost,'travelManday')"
+                                                        (keypress)="numericValidation($event)"
+                                                        (paste)="onPaste($event,10)"
+                                                        [(ngModel)]="item.orderCost.travelManday">
+                                                </div>
+                                                <div class="my-input-group marginTop10"
+                                                    *ngIf="model.service.id == apiService.Inspection">
+                                                    <label for="">Calculated Working hours</label>
+                                                    <input type="number" maxlength="100" min="0" [disabled]="true"
+                                                        [(ngModel)]="item.orderCost.calculatedWorkingHours">
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-2 mobile-margin-top-15">
+                                                <div class="my-input-group">
+                                                    <label for="">{{ 'QUOTATION.LBL_TRAVEL_DISTANCE' | translate
+                                                        }}</label>
+                                                    <input type="number" maxlength="100" min="0"
+                                                        [disabled]="!IsInternalUser"
+                                                        [(ngModel)]="item.orderCost.travelDistance">
+                                                </div>
+                                                <div class="my-input-group marginTop10"
+                                                    *ngIf="model.service.id == apiService.Inspection">
+                                                    <label for="">Calculated Working Man Day</label>
+                                                    <input type="number" maxlength="100" min="0" [disabled]="true"
+                                                        [(ngModel)]="item.orderCost.calculatedManday">
+                                                    <label
+                                                        class="invalid-feedback">{{calculatedWorkingHourMessage}}</label>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-2 mobile-margin-top-15">
+                                                <div class="my-input-group">
+                                                    <label for="">{{ 'QUOTATION.LBL_TRAVEL_TIME' | translate }}</label>
+                                                    <input type="number" maxlength="100" min="0"
+                                                        [disabled]="!IsInternalUser"
+                                                        [(ngModel)]="item.orderCost.travelTime">
+                                                </div>
+                                                <div class="my-input-group marginTop25"
+                                                    *ngIf="model.service.id == apiService.Inspection && model.id>0">
+                                                    <button class="secondary-cta small" [disabled]="refreshLoadng"><span
+                                                            (click)="calculateModelOpen(calculateworkinghour,item.id)">
+                                                            Refresh
+                                                        </span>
+                                                        <span *ngIf="refreshLoadng">
+                                                            <i class="fa fa-refresh fa-spin" aria-hidden="true"></i>
+                                                        </span></button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row table-toggle-container">
+                                            <div class="col-xs-3 col-sm-6">
+                                                <span (click)="SetBookInfoDetails(item,bookinfopopup)" class="add-more"
+                                                    *ngIf="model.service != null && model.service.id == 1">
+                                                    <img src="assets/images/red-question.png" alt="">
+                                                    {{ 'QUOTATION.LBL_MORE_INFO' | translate }}
+                                                </span>
+
+
+                                            </div>
+                                            <div class="col-xs-6 col-sm-6" *ngIf="false">
+                                                <span class="float-right table-toggler">Product details
+                                                    <img src="assets/images/grey-arrow.svg" alt="">
+                                                </span>
+                                            </div>
+                                        </div>
+                                        <div class="table-container"
+                                            style="overflow-x: scroll;overflow-y: scroll; max-height: 500px;">
+                                            <table class="pagination-table simple-table bordered">
+                                                <thead>
+                                                    <tr class="sticky-top-row odd">
+                                                        <th *ngIf="model.service != null && model.service.id == 2">
+                                                            {{ 'QUOTATION.LBL_BOOKNO' | translate }}</th>
+                                                        <th *ngIf="model.service != null && model.service.id == 2">
+                                                            {{ 'QUOTATION.LBL_SERVICETYPE' | translate }}</th>
+                                                        <th *ngIf="model.service != null && model.service.id == 2">
+                                                            {{ 'QUOTATION.LBL_INSPFROMDATE' | translate }}</th>
+                                                        <th *ngIf="model.service != null && model.service.id == 2">
+                                                            {{ 'QUOTATION.LBL_INSPTODATE' | translate }}</th>
+                                                        <th *ngIf="model.service != null && model.service.id == 2">
+                                                            {{ 'QUOTATION.LBL_OFFICE' | translate }}</th>
+                                                        <th *ngIf="model.service != null && model.service.id == 1"></th>
+                                                        <!-- <th *ngIf="model.service != null && model.service.id == 1">
+                              {{ 'QUOTATION.LBL_PONO' | translate }}
+                            </th> -->
+
+
+                                                        <ng-container *ngIf="!item.isContainerServiceType">
+                                                            <th></th>
+                                                            <th *ngIf="model.service != null && model.service.id == 1">
+                                                                {{ 'QUOTATION.LBL_PRODUCTID' | translate }}
+                                                            </th>
+                                                            <th *ngIf="model.service != null && model.service.id == 1">
+                                                                {{ 'QUOTATION.LBL_PRODDESCRIPTION' | translate }}
+                                                            </th>
+
+                                                            <th *ngIf="model.service != null && model.service.id == 1">
+                                                                {{ 'QUOTATION.LBL_FACTREFERENCE' | translate }}
+                                                            </th>
+                                                            <th *ngIf="model.service != null && model.service.id == 1">
+                                                                {{ 'QUOTATION.LBL_QTY' | translate }}
+                                                            </th>
+                                                            <!-- <th *ngIf="model.service != null && model.service.id == 1">
+                                                              {{ 'QUOTATION.LBL_PICKING' | translate }}
+                                                            </th> -->
+                                                            <th *ngIf="model.service != null && model.service.id == 1">
+                                                                {{ 'QUOTATION.LBL_UNIT' | translate }}
+                                                            </th>
+                                                            <th *ngIf="model.service != null && model.service.id == 1">
+                                                                {{ 'QUOTATION.LBL_AQLLEVEL' | translate }}
+                                                            </th>
+                                                            <th *ngIf="model.service != null && model.service.id == 1">
+                                                                {{ 'QUOTATION.LBL_PRODUCTCATEGORY' | translate }}
+                                                            </th>
+                                                            <th *ngIf="model.service != null && model.service.id == 1">
+                                                                {{ 'QUOTATION.LBL_PRODUCTCATEGORYSUB' | translate }}
+                                                            </th>
+                                                            <th *ngIf="model.service != null && model.service.id == 1">
+                                                                {{ 'QUOTATION.LBL_PRODUCTCATEGORYSUB2' | translate }}
+                                                            </th>
+                                                            <th *ngIf="model.service != null && model.service.id == 1">
+                                                                {{ 'EDIT_BOOKING.LBL_ProductCategorySub3' | translate }}
+                                                            </th>
+                                                            <th *ngIf="model.service != null && model.service.id == 1">
+                                                                {{ 'QUOTATION.LBL_SAMPLEQTY' | translate }}
+                                                            </th>
+                                                            <th
+                                                                *ngIf="model.service != null && model.service.id == 1 && item.isPicking">
+                                                                {{ 'QUOTATION.LBL_PICKING_QTY' | translate }}
+                                                            </th>
+                                                            <th *ngIf="model.service != null && model.service.id == 1">
+                                                                {{ 'QUOTATION.LBL_AQLLEVELDESC' | translate }}
+                                                            </th>
+                                                        </ng-container>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <ng-container
+                                                        *ngIf="model.service != null && model.service.id == 1 && !item.isContainerServiceType">
+                                                        <ng-container
+                                                            *ngFor="let product of item.productValidatorList;let i = index">
+                                                            <ng-template [ngTemplateOutlet]="sample"
+                                                                [ngTemplateOutletContext]="{ productv: product, item:item, i:i , child:false}">
+                                                            </ng-template>
+                                                        </ng-container>
+                                                    </ng-container>
+                                                    <ng-container
+                                                        *ngIf="model.service != null && model.service.id == 1 && item.isContainerServiceType">
+                                                        <ng-template [ngTemplateOutlet]="containerListTemplate"
+                                                            [ngTemplateOutletContext]="{ iteminfo: item, i:i}">
+                                                        </ng-template>
+                                                    </ng-container>
+                                                    <ng-container
+                                                        *ngIf="model.service != null && model.service.id == 2">
+                                                        <tr>
+                                                            <td class="width-100">{{item.id}}</td>
+                                                            <td class="width-100">{{item.serviceTypeStr}}</td>
+                                                            <td class="width-100">{{item.inspectionFrom}}</td>
+                                                            <td class="width-100">{{item.inspectionTo}}</td>
+                                                            <td class="width-100">{{item.office}}</td>
+                                                        </tr>
+                                                    </ng-container>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </ng-container>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="content-container quotation-container"
+                    *ngIf="model.factoryBookingInfoList && model.factoryBookingInfoList.length > 0">
+                    <div class="container-head">
+                        <img class="head-icon" src="assets/images/booking.png" alt="">
+                        {{ 'QUOTATION.LBL_BOOKING_INFO' | translate }} ({{
+                        'QUOTATION.LBL_SAME_FACTORY_ON_SAME_DAY_INSPECTION' | translate }})
+                        <div class="section-toggle-container head-toggler">
+                            <img (click)="editTab4 = !editTab4" src="assets/images/expand-circle.png" class="width20"
+                                alt="expand" *ngIf="!editTab4">
+                            <img (click)="editTab4 = !editTab4" src="assets/images/collapse-circle.png" class="width20"
+                                alt="collapse" *ngIf="editTab4">
+                        </div>
+                    </div>
+                    <div class="row formPadding editMode">
+                        <div class="table-container"
+                            style="overflow-x: scroll;overflow-y: scroll; max-height: 500px;width:100%">
+                            <table class="pagination-table bordered">
+                                <thead>
+                                    <tr class="sticky-top-row">
+                                        <th>{{ 'QUOTATION.LBL_CLIENT' | translate }}</th>
+                                        <th>{{ 'QUOTATION.LBL_BOOKING_NO' | translate }}</th>
+                                        <th>{{ 'QUOTATION.LBL_INSPECTION_DATE' | translate }}</th>
+                                        <th>{{ 'COMMON.LBL_SERVICETYPE' | translate }}</th>
+                                        <th>{{ 'QUOTATION.LBL_NO_OF_ITEM' | translate }}</th>
+                                        <th>{{ 'QUOTATION.LBL_NO_OF_REPORT' | translate }}</th>
+                                        <th>{{ 'QUOTATION.LBL_TOTAL_SAMPLESIZE' | translate }}</th>
+                                        <th>{{ 'QUOTATION.LBL_MD' | translate }}</th>
+                                        <th>{{ 'QUOTATION.LBL_INSPFEE' | translate }}</th>
+                                        <th>{{ 'QUOTATION.LBL_TRAVEL_FEE' | translate }}</th>
+                                        <th>{{ 'QUOTATION.LBL_OTHERS' | translate }}</th>
+                                        <th>{{ 'QUOTATION.LBL_TOTAL' | translate }}</th>
+                                        <th>{{ 'QUOTATION.LBL_AVERAGE_MD_FEE' | translate }}</th>
+                                        <th class="width-120">{{ 'QUOTATION.LBL_SUGGESTED_MD' | translate }}</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr *ngFor="let item of model.factoryBookingInfoList">
+                                        <td>{{item.customerName}}</td>
+                                        <td>{{item.bookingId}}</td>
+                                        <td>{{item.serviceDate}}</td>
+                                        <td>{{item.serviceTypeName}}</td>
+                                        <td>{{item.productCount}}</td>
+                                        <td>{{item.reportCount}}</td>
+                                        <td>{{item.sampleSize}}</td>
+                                        <td>{{item.manday}}</td>
+                                        <td>{{item.inspectionFee}}</td>
+                                        <td>{{item.travelCost}}</td>
+                                        <td>{{item.otherCost}}</td>
+                                        <td>{{item.total}}</td>
+                                        <td>{{item.averageManday | number}}</td>
+                                        <td class="width-120">
+                                            <input [disabled]="!item.isQuotation" (blur)="GetTotalSuggestedMD()"
+                                                [(ngModel)]="item.suggestedManday" type="number" min="0"
+                                                maxlength="100">
+                                        </td>
+                                    </tr>
+                                    <tr class="grey textfont-bold">
+                                        <td></td>
+                                        <td>{{data.factoryBookingDetail.totalBooking}}</td>
+                                        <td></td>
+                                        <td></td>
+                                        <td>{{data.factoryBookingDetail.totalItem}}</td>
+                                        <td>{{data.factoryBookingDetail.totalReport}}</td>
+                                        <td>{{data.factoryBookingDetail.totalSampleSize}}</td>
+                                        <td>{{data.factoryBookingDetail.totalManday}}</td>
+                                        <td>{{data.factoryBookingDetail.totalInspectionFee}}</td>
+                                        <td>{{data.factoryBookingDetail.totalTravelCost}}</td>
+                                        <td>{{data.factoryBookingDetail.totalOtherCost}}</td>
+                                        <td>{{data.factoryBookingDetail.totalFee}}</td>
+                                        <td>{{data.factoryBookingDetail.totalAverageManday | number}}</td>
+                                        <td class="width-120">{{data.factoryBookingDetail.totalSuggestedManday}}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <div class="content-container quotation-container">
+                    <div class="container-head">
+                        <img class="head-icon" src="assets/images/general.png" alt="">
+                        {{ 'QUOTATION.LBL_COST_DETAILS' | translate }}
+                        <div class="section-toggle-container head-toggler">
+                            <img (click)="editTab3 = !editTab3" src="assets/images/expand-circle.png" class="width20"
+                                alt="expand" *ngIf="!editTab3">
+                            <img (click)="editTab3 = !editTab3" src="assets/images/collapse-circle.png" class="width20"
+                                alt="collapse" *ngIf="editTab3">
+                        </div>
+                    </div>
+                    <div class="row formPadding labelMode" *ngIf="!editTab3">
+                        <!-- <div class="col-sm-12">
+                          <p class="light-paragraph">Complete your booking information</p>
+                        </div> -->
+                    </div>
+                    <div class="row formPadding editMode" *ngIf="editTab3">
+                        <div class="table-container">
+                            <table class="pagination-table simple-table cost-table bordered">
+                                <thead>
+                                    <tr>
+                                        <th width="35%">{{ 'QUOTATION.LBL_Booking' | translate }}</th>
+                                        <th class="text-right">{{ 'QUOTATION.LBL_NO_MAN_DAY' | translate }}</th>
+                                        <th class="text-right">{{ 'QUOTATION.LBL_UNITPRICE' | translate }}</th>
+                                        <th class="text-right">{{ 'QUOTATION.LBL_TOTAL_SERVICE_FEES' | translate }}</th>
+                                        <th class="text-right">{{ 'QUOTATION.LBL_TRAVEL_AIR' | translate }}</th>
+                                        <th class="text-right">{{ 'QUOTATION.LBL_TRAVEL_LAND' | translate }}</th>
+                                        <th class="text-right">{{ 'QUOTATION.LBL_HOTEL' | translate }}</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr *ngFor="let item of model.orderList">
+                                        <td> #{{item.id}}</td>
+                                        <td class="light-text text-right">{{item.orderCost.noOfManday}}</td>
+                                        <td class="light-text text-right">{{item.orderCost.unitPrice}}</td>
+                                        <td class="light-text text-right">{{item.orderCost.inspFees}}</td>
+                                        <td class="light-text text-right">{{item.orderCost.travelAir}}</td>
+                                        <td class="light-text text-right">{{item.orderCost.travelLand}}</td>
+                                        <td class="light-text text-right">{{item.orderCost.travelHotel}}</td>
+                                    </tr>
+                                    <tr>
+                                        <td></td>
+                                        <td class=" text-right">{{model.estimatedManday}}</td>
+                                        <td class=" text-right"></td>
+                                        <td class=" text-right">{{model.inspectionFees}}</td>
+                                        <td class=" text-right">{{model.travelCostsAir}}</td>
+                                        <td class=" text-right">{{model.travelCostsLand}}</td>
+                                        <td class=" text-right">{{model.travelCostsHotel}}</td>
+                                    </tr>
+                                    <tr class="grey">
+                                        <td colspan="6" class="fontSize14">{{ 'QUOTATION.LBL_GRAND_TOTAL' | translate }}
+                                        </td>
+                                        <td class="text-right fontSize14">{{getSubTotal()}}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="col-sm-12 cost-container">
+                            <div class="row">
+                                <div class="col-sm-6">
+                                    <p class="fontSize14">{{ 'QUOTATION.LBL_TRVLOTHERCOSTS' | translate }}</p>
+                                </div>
+                                <div class="col-sm-6 text-right">
+                                    <div class="my-input-group">
+                                        <input [(ngModel)]="model.otherCosts" type="number" maxlength="10"
+                                            [disabled]="!IsInternalUser"
+                                            placeholder="{{ 'QUOTATION.LBL_TRVLOTHERCOSTS' | translate }}">
+                                        <div *ngIf="!validator.isValid('otherCosts')" class="invalid-feedback">
+                                            <div *ngFor="let error of validator.getErrors('otherCosts')">
+                                                {{ error | translate }}</div>
+                                        </div>
+                                        <span class="input-after">{{getCurrency()}}</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-12 cost-container">
+                            <div class="row">
+                                <div class="col-sm-6">
+                                    <p class="fontSize14 colorBlue">{{ 'QUOTATION.LBL_DISCOUNT' | translate }}</p>
+                                </div>
+                                <div class="col-sm-6 text-right">
+                                    <div class="my-input-group">
+                                        <input [(ngModel)]="model.discount" type="number" maxlength="10"
+                                            placeholder="{{ 'QUOTATION.LBL_DISCOUNT' | translate }}">
+                                        <div *ngIf="!validator.isValid('discount')" class="invalid-feedback">
+                                            <div *ngFor="let error of validator.getErrors('discount')">
+                                                {{ error | translate }}</div>
+                                        </div>
+                                        <span class="input-after">{{getCurrency()}}</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-12 text-right marginTop25">
+                            <h4 class="cost-title">{{ 'QUOTATION.LBL_GRAND_TOTAL' | translate }}</h4>
+                            <h4 class="cost-amount">{{GetTotalnumberWithCommas()}} {{getCurrency()}}</h4>
+                        </div>
+                        <div class="col-sm-6 marginTop25">
+                            <div class="my-input-group">
+                                <label *ngIf="IsInternalUser || (!IsInternalUser && model.apiRemark)">{{
+                                    'QUOTATION.LBL_APIREMARK' | translate }}</label>
+                                <textarea [(ngModel)]="model.apiRemark" type="text" maxlength="600" cols="30" rows="2"
+                                    *ngIf="IsInternalUser" [disabled]="!IsInternalUser"
+                                    placeholder="{{ 'QUOTATION.LBL_APIREMARK' | translate }}"></textarea>
+                            </div>
+                            <p class="fontSize14" *ngIf="!IsInternalUser">{{model.apiRemark}}</p>
+                        </div>
+                        <div class="col-sm-6 marginTop25" *ngIf="IsInternalUser">
+                            <div class="my-input-group">
+                                <label>{{ 'QUOTATION.LBL_API_INTERNAL_REMARK' | translate }}</label>
+                                <textarea [(ngModel)]="model.apiInternalRemark" type="text" maxlength="2000"
+                                    placeholder="{{ 'QUOTATION.LBL_API_INTERNAL_REMARK' | translate }}"></textarea>
+                            </div>
+                        </div>
+                        <div class="col-sm-12 marginTop25"
+                            *ngIf="(IsInternalUser && model.statusId == status.CustomerValidated )|| !IsInternalUser">
+                            <div class="my-input-group">
+                                <label>{{ 'QUOTATION.LBLCUSTREMARK' | translate }}</label>
+                                <textarea [(ngModel)]="model.customerRemark" type="text" maxlength="600"
+                                    [disabled]="(data.abilities && data.abilities.indexOf(ability.CanCustConfirm) < 0)"
+                                    placeholder="{{ 'QUOTATION.LBLCUSTREMARK' | translate }}"></textarea>
+                            </div>
+                        </div>
+
+                        <div class="col-sm-12">
+                            <div class="row form-action-container">
+                                <div class="col-sm-2">
+                                    <div class="styled-checkbox-container float-left"
+                                        *ngIf="!model.id ||  (model.statusId == status.QuotationVerified && data.abilities && data.abilities.indexOf(ability.CanSend) <= 0) || model.statusId == status.ManagerRejected || model.statusId == status.AERejected">
+                                        <input [(ngModel)]="model.isToForward" class="styled-checkbox" id="checkbox-2"
+                                            (change)="UpdateCheckboxValue('isForwardToManager')" type="checkbox">
+                                        <label for="checkbox-2">{{ 'QUOTATION.LBL_ISTOFORWARD' | translate }}</label>
+                                    </div>
+                                </div>
+                                <div class="col-sm-2">
+                                    <div class="styled-checkbox-container float-left"
+                                        *ngIf="(data.abilities && data.abilities.indexOf(ability.CanSend) >= 0) && (model.statusId == status.QuotationVerified || model.statusId == status.ManagerApproved)">
+                                        <input [(ngModel)]="model.skipclientconfirmation" class="styled-checkbox"
+                                            id="checkbox-3" type="checkbox">
+                                        <label for="checkbox-3">{{ 'QUOTATION.LBL_SKIP_CLIENT_CONFIRMATION' | translate
+                                            }}</label>
+                                    </div>
+                                    <div class="styled-checkbox-container float-left"
+                                        *ngIf="quotationSkipCheckpointExists && (model.id == 0 || model.id==undefined)">
+                                        <input [(ngModel)]="model.skipQuotationSentToClient" class="styled-checkbox"
+                                            (change)="UpdateCheckboxValue('skipSentToClient')" id="checkbox-3"
+                                            type="checkbox">
+                                        <label for="checkbox-3">{{ 'QUOTATION.LBL_SKIP_SEND_TO_CLIENT' | translate
+                                            }}</label>
+                                    </div>
+                                </div>
+                                <div class="col-sm-8" *ngIf="!HideAllbutton">
+                                    <button class="primary-cta  margin10"
+                                            *ngIf="data.abilities && data.abilities.indexOf(ability.CanSave) >= 0 && (!model.isBookingInvoiced)"
+                                        (click)="checkProductAqlOrCombineQuantityChange(productquantity)"
+                                        [disabled]="loading || loader.saveLoading || loader.bookingSearchLoading || ispreview">
+                                        {{'QUOTATION.LBL_SAVE' | translate}}
+                                        <span *ngIf="loader.saveLoading">
+                                            <i class="fa fa-refresh fa-spin" aria-hidden="true"></i>
+                                        </span>
+                                    </button>
+                                    <button class="secondary-cta  margin10" *ngIf="model!=null && model.id>0"
+                                        [disabled]="loading || loader.saveLoading || loader.bookingSearchLoading || ispreview"
+                                        (click)="preview()">
+                                        {{'QUOTATION.LBL_PREVIEW' | translate}}
+                                        <span *ngIf="ispreview">
+                                            <i class="fa fa-refresh fa-spin" aria-hidden="true"></i>
+                                        </span>
+                                    </button>
+                                    <button class="primary-cta  margin10"
+                                        *ngIf="data.abilities && data.abilities.indexOf(ability.CanApprove) >= 0"
+                                        [disabled]="loading || loader.saveLoading || loader.bookingSearchLoading || ispreview"
+                                        (click)="openModalPopup(quotationstatus,status.ManagerApproved)">
+                                        {{'QUOTATION.LBL_APPROVE' | translate}}
+                                    </button>
+                                    <button class="primary-cta  margin10"
+                                        *ngIf="data.abilities && (data.abilities.indexOf(ability.CanApprove) >= 0)"
+                                        [disabled]="loading || loader.saveLoading || loader.bookingSearchLoading || ispreview"
+                                        (click)="openModalPopup(quotationstatus,status.ManagerRejected)">
+                                        {{'QUOTATION.LBL_REJECT' | translate}}
+                                    </button>
+                                    <button class="primary-cta  margin10"
+                                        *ngIf="data.abilities && (data.abilities.indexOf(ability.CanSend) >= 0 &&  model.statusId != status.SentToClient)"
+                                        [disabled]="loading || loader.saveLoading || loader.bookingSearchLoading || ispreview || model.skipclientconfirmation"
+                                        (click)="openModalPopup(quotationstatus,status.AERejected)">
+                                        {{'QUOTATION.LBL_REJECT' | translate}}
+                                    </button>
+                                    <button class="primary-cta  margin10"
+                                        *ngIf="data.abilities && data.abilities.indexOf(ability.CanCustConfirm) >= 0"
+                                        [disabled]="loading || loader.saveLoading || loader.bookingSearchLoading || ispreview"
+                                        (click)="openModalPopup(quotationstatus,status.CustomerValidated)">
+                                        {{'QUOTATION.LBL_VALIDATE' | translate}}
+                                    </button>
+                                    <button class="primary-cta  margin10"
+                                        *ngIf="data.abilities && data.abilities.indexOf(ability.CanCustConfirm) >= 0"
+                                        [disabled]="loading || loader.saveLoading || loader.bookingSearchLoading || ispreview"
+                                        (click)="openModalPopup(quotationstatus,status.CustomerRejected)">
+                                        {{'QUOTATION.LBL_REJECT' | translate}}
+                                    </button>
+                                    <button class="secondary-cta  margin10"
+                                        *ngIf="data.abilities && data.abilities.indexOf(ability.CanCancel) >= 0 && (!model.isBookingInvoiced)"
+                                        [disabled]="loading || loader.saveLoading || loader.bookingSearchLoading || ispreview"
+                                        (click)="openModalPopup(quotationstatus,status.Canceled)">
+                                        {{'QUOTATION.LBL_CANCEL' | translate}}
+                                    </button>
+                                    <button class="primary-cta "
+                                        *ngIf="data.abilities && data.abilities.indexOf(ability.CanSend) >= 0"
+                                        [disabled]="loading || loader.saveLoading || loader.bookingSearchLoading || ispreview || model.skipclientconfirmation"
+                                        (click)="openModalPopup(quotationstatus,status.SentToClient)">
+                                        {{'QUOTATION.LBL_SEND' | translate}}
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<ng-template #contentd let-modal>
+    <div class="modal-header custom-modal-header">
+        <h4 class="modal-title" id="modal-title">{{ 'QUOTATION.LBL_ORDERDETAILS' | translate }}</h4>
+        <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body custom-modal-body">
+        <div class="table-container">
+            <div class="row">
+                <div class="col-sm-3 col-md-3 col-lg-3">
+                    <div class="my-input-group">
+                        <label>{{ 'QUOTATION.LBL_BOOKNO' | translate }}</label>
+                        <input [(ngModel)]="request.bookingNo" type="number" maxlength="10"
+                            placeholder="{{ 'QUOTATION.LBL_BOOKNO' | translate }}">
+                    </div>
+                </div>
+                <div class="col-sm-3 col-md-3 col-lg-3">
+                    <div class="my-input-group">
+                        <label class="required">{{ 'QUOTATION.LBL_STARTDATE' | translate }}</label>
+                        <div class="calendar-wrapper">
+                            <input type="text" maxlength="10"
+                                [ngClass]="{ 'is-invalid':  !validator.isValid('startDate')}" readonly=readonly
+                                placeholder="{{ 'QUOTATION.LBL_STARTDATE' | translate }}"
+                                [(ngModel)]="request.startDate" ngbDatepicker #fd="ngbDatepicker" (click)="fd.toggle()">
+                            <img src="assets/images/calendar-icon.svg" alt="" class="calendar-icon"
+                                (click)="fd.toggle()">
+                        </div>
+                        <div *ngIf="!validator.isValid('startDate')" class="invalid-feedback">
+                            <div *ngFor="let error of validator.getErrors('startDate')">{{ error | translate }}</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-3 col-md-3 col-lg-3">
+                    <div class="my-input-group">
+                        <label class="required">{{ 'QUOTATION.LBL_TODATE' | translate }}</label>
+                        <div class="calendar-wrapper">
+                            <input type="text" maxlength="10"
+                                [ngClass]="{ 'is-invalid':  !validator.isValid('startDate')}" readonly=readonly
+                                placeholder="{{ 'QUOTATION.LBL_TODATE' | translate }}" [(ngModel)]="request.endDate"
+                                ngbDatepicker #td="ngbDatepicker" (click)="td.toggle()">
+                            <img src="assets/images/calendar-icon.svg" alt="" class="calendar-icon"
+                                (click)="td.toggle()">
+                        </div>
+                        <div *ngIf="!validator.isValid('endDate')" class="invalid-feedback">
+                            <div *ngFor="let error of validator.getErrors('endDate')">{{ error | translate }}</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-3 col-md-3 col-lg-3 marginTop25">
+                    <button id="btnSearch" class="primary-cta small"
+                        [disabled]="loading || loader.bookingSearchLoading ||loader.saveLoading" (click)="search()">
+                        {{ 'SUPPLIER_SUMMARY.LBL_SEARCH' | translate }}
+                        <span *ngIf="loader.bookingSearchLoading">
+                            <i class="fa fa-refresh fa-spin" aria-hidden="true"></i>
+                        </span>
+                    </button>
+                </div>
+            </div>
+            <div class="table-container marginTop25 scroll-x" #scrollableTablepopup
+                *ngIf="orderDetails && orderDetails.length > 0">
+                <table class="pagination-table">
+                    <thead>
+                        <tr>
+                        <tr>
+                            <th></th>
+                            <th>{{ 'QUOTATION.LBL_BOOKNO' | translate }}</th>
+                            <th>{{ 'QUOTATION.LBL_SERVICETYPE' | translate }}</th>
+                            <th>{{ 'QUOTATION.LBL_INSPFROMDATE' | translate }}</th>
+                            <th>{{ 'QUOTATION.LBL_INSPTODATE' | translate }}</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let item of orderDetails">
+                            <td class="Center_Middle">
+                                <div class="styled-checkbox-container">
+                                    <input type="checkbox" class="styled-checkbox" id="checkboxorder-{{item.id}}"
+                                        [(ngModel)]="item.isChecked">
+                                    <label for="checkboxorder-{{item.id}}"></label>
+                                </div>
+                            </td>
+                            <td>{{item.id}}</td>
+                            <td>{{item.serviceTypeStr}}</td>
+                            <td>{{item.inspectionFrom}}</td>
+                            <td>{{item.inspectionTo}}</td>
+                    </tbody>
+                </table>
+            </div>
+            <div class="no-result-table" *ngIf="noBookingData">
+                <img src="assets/images/no-data.png" alt="" class="icon">
+                <h4 class="title">
+                    {{'QUOTATION.LBL_NO' | translate}}
+                    {{model.service.name}} {{'QUOTATION.MSG_NO_ITEM_FOUND' | translate}}
+                </h4>
+                <p>{{'COMMON.LBL_NODATA' | translate}} </p>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button type="button"
+            [disabled]="loading || loader.selectOrderLoading || loader.bookingSearchLoading || !orderDetails || orderDetails.length <=0"
+            class="primary-cta small" (click)="selectOrders()">
+            {{ 'QUOTATION.LBL_SELECT' | translate }}
+            <span *ngIf="loader.selectOrderLoading">
+                <i class="fa fa-refresh fa-spin" aria-hidden="true"></i>
+            </span>
+        </button>
+        <button type="button" class="secondary-cta small" [disabled]="loader.bookingSearchLoading"
+            (click)="modal.dismiss('cancel click')">
+            {{ 'QUOTATION.LBL_CONFIRMCANCEL' | translate }}
+        </button>
+    </div>
+</ng-template>
+<ng-template #sample let-productv="productv" let-item="item" let-i="i" let-child="child">
+    <tr [ngClass]="{'white': productv.product.combineProductId==0 ,'grey merged':productv.product.combineProductId!=0}">
+        <td>
+            <img *ngIf="productv.product.pictList && productv.product.pictList.length > 0"
+                (click)="getImagesProduct(productv.product.pictList,productImage)" class="row-action"
+                src="assets/images/img.png" alt="">
+            <img *ngIf="productv.product.productRemarks && productv.product.productRemarks.length > 0"
+                (click)="SetBookProductDescDetails(productv.product.productRemarks,bookproductdescpopup)"
+                class="row-action" src="assets/images/chat.png" alt="">
+        </td>
+
+        <td class="width40 text-center">
+            <span class="expandable-trigger"
+                (click)=toggleExpandRowProduct($event,productv.product.id,productv.product,null,item.isContainerServiceType,item.id)>+</span>
+        </td>
+        <!-- <td class="width-100" *ngIf="productv.product.isParentProduct"
+          [attr.rowspan]="productv.product.combineProductCount">
+          {{ productv.product.poNo }}</td> -->
+
+        <td class="wordbreak width-100">
+            {{ productv.product.productId }}
+        </td>
+        <td class="wordbreak width-140">
+            {{ productv.product.productDescription }}
+        </td>
+        <td class="wordbreak width-140">
+            {{ productv.product.factoryReference }}
+        </td>
+        <td class="width-80">
+            {{ productv.product.bookingQty }}
+        </td>
+        <!-- <td class="width-60">
+          {{ productv.product.pickingQty }}
+        </td> -->
+        <td class="width-60">
+            {{ productv.product.unitAndUnitCount }}
+        </td>
+        <td class="width-60">
+            {{ productv.product.aqlLevelAndSampleType }}
+        </td>
+        <td class="wordbreak width-120">
+            {{ productv.product.productCategory }}
+        </td>
+        <td class="wordbreak width-120">
+            {{ productv.product.productSubCategory }}
+        </td>
+        <td class="wordbreak width-140">
+            {{ productv.product.productSubCategory2 }}
+        </td>
+        <td class="wordbreak width-140">
+            {{ productv.product.productSubCategory3 }}
+        </td>
+        <td class="width-120" *ngIf="productv.product.isParentProduct"
+            [attr.rowspan]="productv.product.combineProductCount">
+            <input [ngClass]="{ 'is-invalid':  !productv.validator.isValid('sampleQty')}" [disabled]="!IsInternalUser"
+                (blur)="GetTotalReport_AQL_Products(true)" [(ngModel)]="productv.product.sampleQty" type="number"
+                maxlength="10">
+            <span
+                *ngIf="(productv.product.combineProductId!=null && productv.product.combineProductId!=0) && productv.product.isParentProduct">
+                {{ 'QUOTATION.LBL_TOTAL_COMPO_BOOK_QTY' | translate }}:
+                {{GetTotalCompositionQty(productv.product,item)}}
+            </span>
+            <div *ngIf="!productv.validator.isValid('sampleQty')" class="invalid-feedback">
+                <div *ngFor="let error of productv.validator.getErrors('sampleQty')">{{ error | translate }}</div>
+            </div>
+        </td>
+        <td class="width-60" *ngIf="item.isPicking">
+            {{ productv.product.pickingQty }}
+        </td>
+        <td class="width-100" *ngIf="productv.product.isParentProduct"
+            [attr.rowspan]=" productv.product.combineProductCount">
+            <input [(ngModel)]="productv.product.aqlLevelDescription" type="text" maxlength="400"
+                [disabled]="!IsInternalUser">
+        </td>
+
+    </tr>
+
+
+    <tr class="expandable-row" [attr.data-expand-id]="'product' + productv.product.id">
+        <td colspan="9">
+            <div class="content-container padding10">
+                <div class="table-container child-table" style="overflow-y: scroll;max-height:500px;overflow-x:hidden">
+                    <table class="pagination-table simple-table bordered">
+                        <thead>
+                            <tr>
+                                <th> {{'BOOKING_SUMMARY.LBL_PO_NUMBER' | translate }} </th>
+                                <th>{{'BOOKING_COMBINEORDERS.LBL_ORDERQTY' | translate}}</th>
+                                <th>{{'PURCHASEORDER_SUMMARY.LBL_ETD' | translate }}</th>
+                                <th>{{'EDIT_BOOKING.LBL_DESTINATION_COUNTRY' | translate }}</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+
+                            <ng-template ngFor let-po [ngForOf]="productv.product.poList" let-q="index">
+                                <tr [ngClass]="q%2 !== 0?'even':'odd' ">
+                                    <td>{{po.poNumber}}</td>
+                                    <td>{{po.bookingQuantity}}</td>
+                                    <td>{{po.etd}}</td>
+                                    <td>{{po.destinationCountry}}</td>
+                                </tr>
+                            </ng-template>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+        </td>
+    </tr>
+
+</ng-template>
+<ng-template #productImage let-modal>
+    <div class="modal-header custom-modal-header">
+        <h4 class="modal-title" id="modal-basic-title">{{'QUOTATION.VIEW_PRODUCT_TITLE' | translate}}</h4>
+        <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body custom-modal-body">
+        <ngx-gallery [options]="productGalleryOptions" [images]="productGalleryImages"></ngx-gallery>
+    </div>
+</ng-template>
+<ng-template #quotationstatus let-modal>
+    <div class="modal-body">
+        <div class="small-model">
+            <h2 class="title">{{ 'QUOTATION.LBL_CONFIRMSTATUSTITLE' | translate }}</h2>
+            <p class="marginTop15">{{ MessagePopup }} !!!</p>
+            <div *ngIf="showConfirmDate" class="my-input-group">
+                <label class="required float-left">{{ 'QUOTATION.LBL_CONFIRMDATE' | translate }}</label>
+                <div class="calendar-wrapper">
+                    <input type="text" maxlength="10" [ngClass]="{ 'is-invalid':  !validator.isValid('startDate')}"
+                        readonly=readonly placeholder="{{ 'QUOTATION.LBL_STARTDATE' | translate }}"
+                        [(ngModel)]="model.confirmDate" ngbDatepicker #fd="ngbDatepicker" (click)="fd.toggle()">
+                    <img src="assets/images/calendar-icon.svg" alt="" class="calendar-icon" (click)="fd.toggle()">
+                </div>
+            </div>
+            <div class="marginTop15">
+                <button class="secondary-cta" [disabled]=popuploading (click)="modal.dismiss('Cross click');">
+                    {{ 'COMMON.LBL_CONFIRMCANCEL' | translate }}
+                </button>
+                <button class="primary-cta" [disabled]=popuploading (click)="setStatus();">
+                    {{ 'COMMON.LBL_OK' | translate }}
+                    <span *ngIf="popuploading">
+                        <i class="fa fa-refresh fa-spin" aria-hidden="true"></i>
+                    </span>
+                </button>
+            </div>
+        </div>
+    </div>
+</ng-template>
+
+<ng-template #quotationdatechange let-modal>
+    <div class="modal-body">
+        <div class="small-model">
+            <h2 class="title">{{ 'QUOTATION.LBL_SERVICE_DATE_CHANGE' | translate }}</h2>
+            <p>{{ ServicedatechangePopup }}<br> {{ 'QUOTATION.MSG_CONTACT_QUO_TEAM' | translate }}</p>
+            <button class="secondary-cta" [disabled]=popuploading (click)="modal.dismiss('Cross click');">
+                {{ 'COMMON.LBL_CONFIRMCANCEL' | translate }}
+            </button>
+        </div>
+    </div>
+</ng-template>
+
+<div class="loader-overlay" *ngIf="isBookingQuotationLoader">
+    <div class="loader-container">
+        <img src="assets/images/reload.svg" alt="">
+        <span>{{'COMMON.LBL_LOADER' | translate}}</span>
+    </div>
+</div>
+
+<ng-template #bookinfopopup let-modal>
+    <div class="modal-header custom-modal-header">
+        <h4 class="modal-title" id="modal-basic-title">{{ 'QUOTATION.LBL_BOOKING_DETAILS' | translate }}</h4>
+        <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body custom-modal-body">
+        <div class="content-container schedule-allocation-container">
+            <div class="formPadding">
+                <div class="row">
+                    <div class="col-sm-12 marginTop20 detail-column-container" style="margin-left:0px">
+                        <div class="my-input-group col-lg-4">
+                            <label class="light" for="">{{ 'QUOTATION.LBL_INSPFROMDATE' | translate }}</label>
+                            <p class="input-value">{{ bokinfopopupmodel.inspectionFrom}}</p>
+                        </div>
+                        <div class="my-input-group col-lg-4">
+                            <label class="light" for="">{{ 'QUOTATION.LBL_INSPTODATE' | translate }}</label>
+                            <p class="input-value">{{ bokinfopopupmodel.inspectionTo}}</p>
+                        </div>
+                        <div class="my-input-group col-lg-4">
+                            <label class="light" for="">{{ 'QUOTATION.LBL_SERVICETYPE' | translate }}</label>
+                            <p class="input-value">{{ bokinfopopupmodel.serviceTypeStr}}</p>
+                        </div>
+                    </div>
+                    <div class="col-sm-12 marginTop20 detail-column-container" style="margin-left:0px">
+                        <div class="my-input-group col-lg-4">
+                            <label class="light" for="">{{ 'QUOTATION.LBL_OFFICE' | translate }}</label>
+                            <p class="input-value">{{ bokinfopopupmodel.office}}</p>
+                        </div>
+                        <div class="my-input-group col-lg-4 padding-left tablet-padding-left"
+                            *ngIf="model.service && model.service.id == apiService.Inspection">
+                            <label class="light" for="">{{ 'EDIT_CUSTOMER_PRICE_CARD.LBL_PRICE_CATEGORY' | translate
+                                }}</label>
+                            <p class="input-value">{{ bokinfopopupmodel.priceCategoryName}}</p>
+                        </div>
+                        <div class="my-input-group col-lg-4 padding-left tablet-padding-left"
+                            *ngIf="model.service && model.service.id == apiService.Inspection">
+                            <label class="light" for="">{{ 'EDIT_BOOKING.LBL_PREVBOOKINGNO' | translate }}</label>
+                            <span *ngFor="let prevNo of bokinfopopupmodel.prevBookingNo; let isLast=last"><a
+                                    triggers="mouseenter:mouseleave" style="display: inline;"><span
+                                        (click)="RedirectToEdit(prevNo)" style="color: blue;"
+                                        class="input-value wordbreak">#{{prevNo}}</span></a>{{isLast ? '' : ',
+                                '}}</span>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-12 marginTop20 detail-column-container" style="margin-left:0px">
+                        <div class="my-input-group col-lg-4">
+                            <label class="light" for="">{{ 'EDIT_BOOKING.LBL_PAYMENT_OPTIONS' | translate }}</label>
+                            <p class="input-value">{{ bokinfopopupmodel.paymentOption}}</p>
+                        </div>
+                        <div class="my-input-group col-lg-4" *ngFor="let item of bokinfopopupmodel.dynamicFieldDatas">
+                            <label class="light">{{item.dynamicFieldName}}</label>
+                            <p class="input-value">
+                                {{item.dynamicFieldValue}}
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-12 marginTop20 detail-column-container quotation-booking-file"
+                        style="margin-left:0px">
+                        <div class="my-input-group col-lg-4">
+                            <div *ngIf="bokinfopopupmodel.bookingAttachmentUrl" class="cursorPointer"
+                                (click)="downloadBookingFileAttachment(bokinfopopupmodel.bookingAttachmentUrl)">
+                                <span style="color: red;"> <u> {{ 'QUOTATION.LBL_DOWNLOAD_BOOKING_ATTACH' | translate }}
+
+                                    </u></span>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div class="col-sm-12 marginTop20 detail-column-container" style="margin-left:0px"
+                        *ngIf="model.service && model.service.id == apiService.Inspection">
+                        <div class="my-input-group col-lg-12 padding-left tablet-padding-left">
+                            <label class="light" for="">{{ 'QUOTATION.LBL_BOOKING_REMARKS' | translate }}</label>
+                            <textarea disabled="disabled"
+                                value="{{ bokinfopopupmodel.internalBookingRemarks}}"></textarea>
+                        </div>
+                    </div>
+                    <div class="col-sm-12 marginTop20 detail-column-container" style="margin-left:0px"
+                        *ngIf="model.service && model.service.id == apiService.Inspection">
+                        <div class="my-input-group col-lg-12">
+                            <label class="light" for="">{{ 'QUOTATION.LBL_QC_BOOKING_COMMENTS' | translate }}</label>
+                            <textarea disabled="disabled" value="{{ bokinfopopupmodel.qcBookingRemarks}}"></textarea>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</ng-template>
+<ng-template #bookproductdescpopup let-modal>
+    <div class="modal-header custom-modal-header">
+        <h4 class="modal-title" id="modal-basic-title">{{ 'QUOTATION.LBL_PRODUCT_REAMRK' | translate }}</h4>
+        <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body custom-modal-body">
+        <div class="row marginTop25">
+            <div class="col-sm-12" *ngIf="model.service && model.service.id == 1">
+                <div class="my-input-group">
+                    <label>{{ 'QUOTATION.LBL_PRODUCT_DESC' | translate }}</label>
+                    <textarea disabled="disabled" value="{{ bookproductdesc}}"></textarea>
+                </div>
+            </div>
+        </div>
+    </div>
+</ng-template>
+<ng-template #QuoHistory let-modal>
+    <div class="modal-header custom-modal-header">
+        <h4 class="modal-title" id="modal-basic-title">{{ 'QUOTATION.LBL_SENTHISTORY' | translate }}</h4>
+        <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body custom-modal-body noPadding">
+        <div class="table-container">
+            <table class="pagination-table simple-table cost-table">
+                <thead>
+                    <tr>
+                        <th class="th-text-center ">{{ 'QUOTATION.LBL_FILENAME' | translate }}</th>
+                        <th class="th-text-center ">{{ 'QUOTATION.LBL_VERSIONDATE' | translate }}</th>
+                        <th class="th-text-center ">{{ 'QUOTATION.LBL_LAST_SENT' | translate }}</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let version of model.quotationPDFList; let i = index">
+                        <td class=" colorRed Center-Middle-Table">
+                            <a class="expand-table-icon" (click)="downloadVersion(version.fileLink)">
+                                {{version.fileName}}
+                            </a>
+                        </td>
+                        <td class="Center-Middle-Table">{{version.sendDate}}</td>
+                        <td class="Center-Middle-Table">
+                            <img *ngIf="i ==  model.quotationPDFList.length - 1" src="assets/images/green-tick.png"
+                                width="20" alt="">
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</ng-template>
+<ng-template #productquantity let-modal>
+    <div class="modal-body">
+        <div class="small-model">
+            <h2 class="title">{{ 'QUOTATION.LBL_PRODUCT_SAMPLE_QTY_NOT_EQUAL' | translate }}</h2>
+            <p>{{ 'QUOTATION.MSG_SAVE_QUESTION' | translate }}</p>
+            <button class="primary-cta" (click)="modal.dismiss('Cross click');save();">
+                {{ 'COMMON.LBL_OK' | translate }}
+            </button>
+            <button class="secondary-cta" (click)="modal.dismiss('Cross click');">
+                {{ 'COMMON.LBL_CONFIRMCANCEL' | translate }}
+            </button>
+        </div>
+    </div>
+</ng-template>
+<ng-template #customerpricecardinfo let-modal>
+    <div class="modal-header custom-modal-header">
+        <h4 class="modal-title" id="modal-basic-title">{{ 'EDIT_CUSTOMER_PRICE_CARD.TITLE' | translate }}</h4>
+        <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body custom-modal-body">
+        <div class="content-container schedule-allocation-container">
+            <div class="formPadding">
+                <div class="row">
+                    <div class="col-sm-12 marginTop20 detail-column-container">
+                        <div class="my-input-group col-lg-4">
+                            <label class="light" for="">{{ 'EDIT_CUSTOMER_PRICE_CARD.LBL_CUSTOMER' | translate
+                                }}</label>
+                            <p class="input-value">{{quotationCustomerPriceCard.customerName}}</p>
+                        </div>
+                        <div class="my-input-group col-lg-4">
+                            <label class="light" for="">{{ 'EDIT_CUSTOMER_PRICE_CARD.LBL_BILLING_METHOD' | translate
+                                }}</label>
+                            <p class="input-value">{{quotationCustomerPriceCard.billingMethodName}}</p>
+                        </div>
+                        <div class="my-input-group col-lg-4">
+                            <label class="light" for="">{{ 'EDIT_CUSTOMER_PRICE_CARD.LBL_SERVICE_TYPE' | translate
+                                }}</label>
+                            <p class="input-value">{{quotationCustomerPriceCard.serviceTypeNames}}</p>
+                        </div>
+                    </div>
+                    <div class="col-sm-12 marginTop20 detail-column-container">
+                        <div class="my-input-group col-lg-4">
+                            <label class="light" for="">{{ 'EDIT_CUSTOMER_PRICE_CARD.LBL_PRODUCT_CATEGORY' | translate
+                                }}</label>
+                            <p class="input-value">{{quotationCustomerPriceCard.productCategoryNames}}</p>
+                        </div>
+                        <div class="my-input-group col-lg-4 padding-left tablet-padding-left">
+                            <label class="light" for="">{{ 'EDIT_CUSTOMER_PRICE_CARD.LBL_UNIT_PRICE' | translate
+                                }}</label>
+                            <p class="input-value">{{quotationCustomerPriceCard.unitPrice}}</p>
+                        </div>
+                        <div class="my-input-group col-lg-4">
+                            <label class="light" for="">{{ 'EDIT_CUSTOMER_PRICE_CARD.LBL_TAX_INCLUDE' | translate
+                                }}</label>
+                            <p class="input-value">{{quotationCustomerPriceCard.taxIncluded}}</p>
+                        </div>
+                    </div>
+                    <div class="col-sm-12 marginTop20 detail-column-container">
+                        <div class="my-input-group col-lg-4"
+                            *ngIf="quotationCustomerPriceCard.brandNames!=null && quotationCustomerPriceCard.brandNames!=''">
+                            <label class="light" for="">{{ 'EDIT_CUSTOMER_PRICE_CARD.LBL_BRAND' | translate }}</label>
+                            <p class="input-value">{{quotationCustomerPriceCard.brandNames}}</p>
+                        </div>
+                        <div class="my-input-group col-lg-4 padding-left tablet-padding-left"
+                            *ngIf="quotationCustomerPriceCard.buyerNames!=null && quotationCustomerPriceCard.buyerNames!=''">
+                            <label class="light" for="">{{ 'EDIT_CUSTOMER_PRICE_CARD.LBL_BUYER' | translate }}</label>
+                            <p class="input-value">{{quotationCustomerPriceCard.buyerNames}}</p>
+                        </div>
+                        <div class="my-input-group col-lg-4"
+                            *ngIf="quotationCustomerPriceCard.departmentNames!=null && quotationCustomerPriceCard.departmentNames!=''">
+                            <label class="light" for="">{{ 'EDIT_CUSTOMER_PRICE_CARD.LBL_CUS_DEPARTMENT' | translate
+                                }}</label>
+                            <p class="input-value">{{quotationCustomerPriceCard.departmentNames}}</p>
+                        </div>
+
+                    </div>
+                    <div class="col-sm-12 marginTop20 detail-column-container">
+
+                        <div class="my-input-group col-lg-4">
+                            <label class="light" for="">{{ 'EDIT_CUSTOMER_PRICE_CARD.LBL_TRAVEL_INCLUDE' | translate
+                                }}</label>
+                            <p class="input-value">{{quotationCustomerPriceCard.travelIncluded}}</p>
+                        </div>
+                        <div class="my-input-group col-lg-4 padding-left tablet-padding-left">
+                            <label class="light" for="">{{ 'EDIT_CUSTOMER_PRICE_CARD.LBL_FREE_TRAVEL_KM' | translate
+                                }}</label>
+                            <p class="input-value">{{quotationCustomerPriceCard.freeTravelKM}}</p>
+                        </div>
+                        <div class="my-input-group col-lg-4">
+                            <label class="light" for="">{{ 'EDIT_CUSTOMER_PRICE_CARD.LBL_FACTORY_COUNTRY' | translate
+                                }}</label>
+                            <p class="input-value">{{quotationCustomerPriceCard.factoryCountryNames}}</p>
+                        </div>
+                    </div>
+                    <div class="col-sm-12 marginTop20 detail-column-container">
+                        <div class="my-input-group col-lg-4"
+                            *ngIf="quotationCustomerPriceCard.priceCategoryNames!=null && quotationCustomerPriceCard.priceCategoryNames!=''">
+                            <label class="light" for="">{{ 'EDIT_CUSTOMER_PRICE_CARD.LBL_PRICE_CATEGORY' | translate
+                                }}</label>
+                            <p class="input-value">{{quotationCustomerPriceCard.priceCategoryNames}}</p>
+                        </div>
+                        <div class="my-input-group col-lg-4">
+                            <label class="light" for="">{{ 'EDIT_CUSTOMER_PRICE_CARD.LBL_PERIOD_DATE_FROM' | translate
+                                }}</label>
+                            <p class="input-value">{{quotationCustomerPriceCard.periodFrom}}</p>
+                        </div>
+                        <div class="my-input-group col-lg-4">
+                            <label class="light" for="">{{ 'EDIT_CUSTOMER_PRICE_CARD.LBL_PERIOD_DATE_TO' | translate
+                                }}</label>
+                            <p class="input-value">{{quotationCustomerPriceCard.periodTo}}</p>
+                        </div>
+                        <div class="my-input-group col-lg-4">
+                            <label class="light" for="">{{ 'CUSTOMER_PRICE_CARD_SUMMARY.LBL_CURRENCY_NAME' | translate
+                                }}</label>
+                            <p class="input-value">{{quotationCustomerPriceCard.currencyName}}</p>
+                        </div>
+                    </div>
+                    <div class="col-sm-12 marginTop20 detail-column-container">
+
+                        <div class="my-input-group col-lg-12">
+                            <label class="light" for="">{{ 'EDIT_CUSTOMER_PRICE_CARD.LBL_REMARKS' | translate }}</label>
+                            <textarea disabled="disabled" value="{{quotationCustomerPriceCard.remarks}}"></textarea>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</ng-template>
+<ng-template #unitpricechange let-modal>
+    <div class="modal-header custom-modal-header">
+        <h4 class="modal-title" id="modal-basic-title">{{ 'QUOTATION.LBL_UNIT_PRICE_CHANGED' | translate }}</h4>
+        <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body custom-modal-body">
+        <div class="table-container">
+            <table class="pagination-table simple-table cost-table">
+                <thead>
+                    <tr>
+                        <th class="th-text-center "></th>
+                        <th class="th-text-center ">{{ 'QUOTATION.LBL_BOOKNO' | translate }}</th>
+                        <th class="th-text-center ">{{ 'QUOTATION.LBL_OLDUNITPRICE' | translate }}</th>
+                        <th class="th-text-center ">{{ 'QUOTATION.LBL_NEWUNITPRICE' | translate }}</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let unitPriceItem of unitPriceDetailModel; let i = index">
+                        <td class="Center-Middle-Table">
+                            <div class="styled-checkbox-container">
+                                <input *ngIf="unitPriceItem.newUnitPrice > 0" [(ngModel)]="unitPriceItem.isSelect"
+                                    class="styled-checkbox" id="checkboxUnitPrice-{{unitPriceItem.bookingId}}"
+                                    type="checkbox">
+                                <label for="checkboxUnitPrice-{{unitPriceItem.bookingId}}"></label>
+                            </div>
+                        </td>
+                        <td class="Center-Middle-Table">{{unitPriceItem.bookingId}}</td>
+                        <td class="Center-Middle-Table">
+                            {{unitPriceItem.oldUnitPrice}}
+                        </td>
+                        <td class="Center-Middle-Table">
+                            {{unitPriceItem.newUnitPrice}}
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="modal-footer">
+            <button type="button" *ngIf="isDisableSubmit()" class="primary-cta small"
+                (click)="clickNewUnitPriceChanged()">
+                {{ 'COMMON.LBL_SUBMIT' | translate }}
+            </button>
+            <button type="button" class="secondary-cta small" (click)="modal.dismiss('cancel click')">
+                {{ 'QUOTATION.LBL_CONFIRMCANCEL' | translate }}
+            </button>
+        </div>
+
+    </div>
+</ng-template>
+
+
+<ng-template #containerListTemplate let-iteminfo="iteminfo" let-i="i">
+
+
+    <div class="content-container">
+        <div class="table-container child-table" style="overflow-y: scroll;max-height:500px;">
+            <table class="pagination-table simple-table bordered">
+                <thead>
+                    <tr>
+                        <th></th>
+                        <th>{{'EDIT_BOOKING.LBL_PRODUCT_SERIAL' | translate }}</th>
+                        <th>{{'QUOTATION.LBL_CONTAINER_NAME' | translate }}</th>
+                        <th>{{'EDIT_BOOKING.LBL_CONTAINER_SIZE' | translate }}</th>
+                        <th>{{'QUOTATION.LBL_CONTAINER_TOTAL_BOOKING_QTY' | translate }}</th>
+                        <th>
+                            {{'BOOKING_SUMMARY.LBL_INSPECTED_QUANTITY' | translate }}
+                        </th>
+                        <th>{{'BOOKING_SUMMARY.LBL_REPORT_INSPECTION_DATE' | translate }}</th>
+                    </tr>
+                </thead>
+                <tbody>
+
+                    <tr *ngIf="iteminfo.isPlaceHolderVisible">
+                        <td>
+                            <div class="table-placeholder-block animate"></div>
+                        </td>
+                        <td>
+                            <div class="table-placeholder-block animate"></div>
+                        </td>
+                        <td>
+                            <div class="table-placeholder-block animate"></div>
+                        </td>
+                        <td>
+                            <div class="table-placeholder-block animate"></div>
+                        </td>
+                        <td>
+                            <div class="table-placeholder-block animate"></div>
+                        </td>
+                        <td>
+                            <div class="table-placeholder-block animate"></div>
+                        </td>
+                    </tr>
+
+                    <ng-template ngFor let-container [ngForOf]="iteminfo.containerList" let-c="index">
+
+                        <tr>
+
+                            <td class="width40 text-center">
+                                <span class="expandable-trigger"
+                                    (click)=toggleExpandRowContainer($event,container.id,container)>+</span>
+                            </td>
+
+                            <td class="Center_Middle">{{c+1}}</td>
+
+                            <td class="width-140">
+                                {{getContainerName(container.containerId)}}
+                            </td>
+
+                            <td class="Center_Middle width-60">
+                                {{container.containerSize}}
+                            </td>
+
+                            <td class="Center_Middle width-60">
+                                {{container.totalBookingQuantity}}
+                            </td>
+
+                            <td class="Center_Middle width-60">
+                                <span *ngIf="container.reportStatus=='Validated'">{{container.inspectedQuantity}}</span>
+                            </td>
+
+                            <td class="width-60">
+                                {{container.inspectionDate}}
+                            </td>
+
+                        </tr>
+
+
+                        <tr class="expandable-row" [attr.data-expand-id]="'container' + container.id">
+                            <td colspan="10">
+                                <div class="content-container">
+                                    <!-- <div class="container-head">
+                                          {{ 'BOOKING_SUMMARY.LBL_PRODUCT_HEADER' | translate }}
+                                        </div> -->
+                                    <div class="table-container child-table">
+                                        <table class="pagination-table simple-table bordered">
+                                            <thead>
+                                                <tr>
+                                                    <th></th>
+                                                    <th class="desktop-hide"></th>
+                                                    <th> {{'BOOKING_SUMMARY.LBL_PRODUCT_ID' | translate }} </th>
+                                                    <th>{{'BOOKING_SUMMARY.LBL_PRODUCT_DESC' | translate }}</th>
+                                                    <th *ngIf="!isQuotationPending">
+                                                        {{'PRODUCT_CATEGORY.TITLE' | translate}}</th>
+                                                    <th>{{'PRODUCT_SUB_CATEGORY.TITLE' | translate}}</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+
+                                                <tr *ngIf="container.isPlaceHolderVisible">
+                                                    <td>
+                                                        <div class="table-placeholder-block animate"></div>
+                                                    </td>
+                                                    <td>
+                                                        <div class="table-placeholder-block animate"></div>
+                                                    </td>
+                                                    <td>
+                                                        <div class="table-placeholder-block animate"></div>
+                                                    </td>
+                                                    <td>
+                                                        <div class="table-placeholder-block animate"></div>
+                                                    </td>
+                                                </tr>
+
+
+                                                <ng-template ngFor let-product [ngForOf]="container.productList"
+                                                    let-p="index">
+
+                                                    <tr>
+
+                                                        <td class="width40 text-center">
+                                                            <span class="expandable-trigger"
+                                                                (click)=toggleExpandRowProduct($event,product.id,product,container.id,iteminfo.isContainerServiceType,iteminfo.id)>+</span>
+                                                        </td>
+
+
+                                                        <td class="width-140">
+                                                            {{product.productName}}
+                                                        </td>
+
+                                                        <td class="width-140">
+                                                            {{product.productDescription}}
+                                                        </td>
+
+                                                        <td class="width-140" *ngIf="!isQuotationPending">
+                                                            {{product.productCategory}}
+                                                        </td>
+                                                        <td class="width-140">
+                                                            {{product.productSubCategory}}
+                                                        </td>
+
+                                                    </tr>
+
+                                                    <tr class="expandable-row"
+                                                        [attr.data-expand-id]="'product' + product.id + 'container'+ container.id">
+                                                        <td colspan="6" style="padding-left: 45px;">
+                                                            <div class="content-container">
+                                                                <div class="table-container child-table">
+                                                                    <table
+                                                                        class="pagination-table simple-table bordered">
+                                                                        <thead>
+                                                                            <tr>
+
+                                                                                <th> {{'BOOKING_SUMMARY.LBL_PO_NUMBER' |
+                                                                                    translate }}
+                                                                                </th>
+                                                                                <th>{{'BOOKING_COMBINEORDERS.LBL_ORDERQTY'
+                                                                                    | translate}}
+                                                                                </th>
+                                                                                <th>
+                                                                                    {{'BOOKING_SUMMARY.LBL_INSPECTED_QUANTITY'
+                                                                                    | translate }}
+                                                                                </th>
+                                                                                <th>{{'PURCHASEORDER_SUMMARY.LBL_ETD' |
+                                                                                    translate }}
+                                                                                </th>
+                                                                                <th>{{'EDIT_BOOKING.LBL_DESTINATION_COUNTRY'
+                                                                                    | translate }}
+                                                                                </th>
+
+                                                                            </tr>
+                                                                        </thead>
+                                                                        <tbody>
+
+                                                                            <tr *ngIf="product.isPlaceHolderVisible">
+
+                                                                                <td>
+                                                                                    <div
+                                                                                        class="table-placeholder-block animate">
+                                                                                    </div>
+                                                                                </td>
+                                                                                <td>
+                                                                                    <div
+                                                                                        class="table-placeholder-block animate">
+                                                                                    </div>
+                                                                                </td>
+                                                                                <td>
+                                                                                    <div
+                                                                                        class="table-placeholder-block animate">
+                                                                                    </div>
+                                                                                </td>
+                                                                                <td>
+                                                                                    <div
+                                                                                        class="table-placeholder-block animate">
+                                                                                    </div>
+                                                                                </td>
+                                                                                <td>
+                                                                                    <div
+                                                                                        class="table-placeholder-block animate">
+                                                                                    </div>
+                                                                                </td>
+
+                                                                            </tr>
+
+                                                                            <ng-template ngFor let-po
+                                                                                [ngForOf]="product.poList"
+                                                                                let-q="index">
+
+                                                                                <tr>
+
+                                                                                    <td>{{po.poNumber}}</td>
+                                                                                    <td>{{po.bookingQuantity}}</td>
+                                                                                    <td class="Center_Middle width-60">
+                                                                                        <span
+                                                                                            *ngIf="product.reportStatus=='Validated'">{{po.inspectedQuantity}}</span>
+                                                                                    </td>
+                                                                                    <td>{{po.etd}}</td>
+                                                                                    <td>{{po.destinationCountry}}</td>
+                                                                                </tr>
+                                                                            </ng-template>
+                                                                        </tbody>
+                                                                    </table>
+                                                                </div>
+                                                            </div>
+
+                                                        </td>
+                                                    </tr>
+
+                                                </ng-template>
+
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+
+                    </ng-template>
+
+
+
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+</ng-template>
+
+
+<ng-template #multiplecustomerpricecard let-modal>
+    <div class="modal-header custom-modal-header">
+        <h4 class="modal-title" id="modal-basic-title">Select Customer Price Card </h4>
+        <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body custom-modal-body" style="max-height:600px;overflow-x: scroll;"
+        *ngIf="multipleRulePriceCardList && multipleRulePriceCardList.length > 0">
+
+        <ng-container *ngFor="let price of multipleRulePriceCardList">
+            <ng-container *ngIf="price.customerPriceCardDetails.length>1">
+                <div class="marginTop15">
+                    <h6>Booking No-{{price.bookingId}}</h6>
+                </div>
+                <div class="table-container marginTop25 scroll-x" #scrollableTablepopup>
+
+                    <table class="pagination-table bordered">
+                        <thead>
+                            <tr>
+                                <th></th>
+                                <th>{{ 'EDIT_CUSTOMER_PRICE_CARD.LBL_BILLING_METHOD' | translate }}</th>
+                                <th>{{ 'EDIT_CUSTOMER_PRICE_CARD.LBL_BILLING_TO' | translate }}</th>
+                                <th>{{ 'CUSTOMER_PRICE_CARD_SUMMARY.LBL_CURRENCY_NAME' | translate }}</th>
+                                <th>{{ 'EDIT_CUSTOMER_PRICE_CARD.LBL_PRODUCT_CATEGORY' | translate }}</th>
+                                <th>{{ 'EDIT_CUSTOMER_PRICE_CARD.LBL_SERVICE_TYPE' | translate }}</th>
+                                <th>{{ 'EDIT_CUSTOMER_PRICE_CARD.LBL_FACTORY_COUNTRY' | translate }}</th>
+                                <th>{{ 'EDIT_CUSTOMER_PRICE_CARD.LBL_FACTORY_PROVINCE' | translate }}</th>
+                                <th>{{ 'EDIT_CUSTOMER_PRICE_CARD.LBL_CUS_DEPARTMENT' | translate }}</th>
+                                <th>{{ 'EDIT_CUSTOMER_PRICE_CARD.LBL_BRAND' | translate }}</th>
+                                <th>{{ 'EDIT_CUSTOMER_PRICE_CARD.LBL_BUYER' | translate }}</th>
+                                <th>{{ 'EDIT_CUSTOMER_PRICE_CARD.LBL_PRICE_CATEGORY' | translate }}</th>
+                                <th>{{ 'EDIT_CUSTOMER_PRICE_CARD.LBL_TAX_INCLUDE' | translate }}</th>
+                                <th>{{ 'EDIT_CUSTOMER_PRICE_CARD.LBL_TRAVEL_INCLUDE' | translate }}</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let item of price.customerPriceCardDetails;let idx = index">
+                                <td class="Center_Middle">
+                                    <div class="styled-checkbox-container">
+
+                                        <input type="radio" class="styled-radio" id="radPriceCard-{{item.id}}"
+                                            value="item.id" [checked]="idx === 0" name="radio-group-{{price.bookingId}}"
+                                            (click)="setPriceCardItem(item,price.customerPriceCardDetails)">
+
+                                    </div>
+                                </td>
+                                <td class="width-100">{{item.billingMethodName}}</td>
+                                <td class="width-100">{{item.billingPaidBy}}</td>
+                                <td class="width-100">{{item.currencyName}}</td>
+                                <td class="width-180">{{item.productCategoryNames}}</td>
+                                <td class="width-180">{{item.serviceTypeNames}}</td>
+                                <td class="width-180">{{item.factoryCountryNames}}</td>
+                                <td class="width-180">{{item.provinceNames}}</td>
+                                <td class="width-260">{{item.departmentNames}}</td>
+                                <td class="width-260">{{item.brandNames}}</td>
+                                <td class="width-260">{{item.buyerNames}}</td>
+                                <td class="width-180">{{item.priceCategoryNames}}</td>
+                                <td class="width-180">{{item.taxIncluded}}</td>
+                                <td class="width-180">{{item.travelIncluded}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </ng-container>
+        </ng-container>
+
+        <div class="modal-footer">
+            <button type="button" class="primary-cta small" (click)="applyCustomerPriceCardUnitPrice(unitpricechange)">
+                {{ 'COMMON.LBL_SUBMIT' | translate }}
+            </button>
+            <button type="button" class="secondary-cta small" (click)="modal.dismiss('cancel click')">
+                {{ 'QUOTATION.LBL_CONFIRMCANCEL' | translate }}
+            </button>
+        </div>
+
+    </div>
+</ng-template>
+
+
+<ng-template #travelmatrixinfo let-modal>
+    <div class="modal-header custom-modal-header">
+        <h4 class="modal-title" id="modal-basic-title">{{ 'TRAVEL_MATRIX.LBL_TITLE' | translate }}</h4>
+        <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body custom-modal-body">
+        <div class="content-container schedule-allocation-container">
+            <div class="formPadding">
+                <div class="row">
+                    <div class="col-sm-12 marginTop20 detail-column-container" style="margin-left:0px!important;">
+                        <div class="my-input-group col-lg-3">
+                            <label class="light" for="">{{ 'TRAVEL_MATRIX.LBL_TARIFF_TYPE' | translate }}</label>
+                            <p class="input-value">{{quotationTravelMatrix.tariffTypeName}}</p>
+                        </div>
+                        <div class="my-input-group col-lg-3">
+                            <label class="light" for="">{{ 'TRAVEL_MATRIX.LBL_FACTORY_LOCATION' | translate }}</label>
+                            <p class="input-value">{{quotationTravelMatrix.countryName}}/
+                                {{quotationTravelMatrix.provinceName}}/
+                                {{quotationTravelMatrix.cityName}}/
+                                {{quotationTravelMatrix.countyName}}
+                            </p>
+                        </div>
+                        <div class="my-input-group col-lg-3">
+                            <label class="light" for="">{{ 'TRAVEL_MATRIX.LBL_INSPECTION_PORT' | translate }}</label>
+                            <p *ngIf="quotationTravelMatrix.inspPortName" class="input-value">
+                                {{quotationTravelMatrix.inspPortName}}</p>
+                            <p *ngIf="quotationTravelMatrix.inspPortCityName" class="input-value">
+                                {{quotationTravelMatrix.inspPortCityName}}</p>
+                        </div>
+                        <div class="my-input-group col-lg-3">
+                            <label class="light" for="">{{ 'TRAVEL_MATRIX.LBL_TRAVEL_TIME' | translate }}</label>
+                            <p class="input-value">{{quotationTravelMatrix.travelTime}}</p>
+                        </div>
+                    </div>
+                    <div class="col-sm-12 marginTop20 detail-column-container" style="margin-left:0px!important;">
+                        <div class="my-input-group col-lg-3">
+                            <label class="light" for="">{{ 'TRAVEL_MATRIX.LBL_EXCHANGE_RATE' | translate }}</label>
+                            <p class="input-value">{{quotationTravelMatrix.fixExchangeRate}}</p>
+                        </div>
+                        <div class="my-input-group col-lg-3">
+                            <label class="light" for="">{{ 'TRAVEL_MATRIX.LBL_MARKUP1' | translate }}</label>
+                            <p class="input-value">{{quotationTravelMatrix.markUpCost}}
+                            </p>
+                        </div>
+                        <div class="my-input-group col-lg-3">
+                            <label class="light" for="">{{ 'TRAVEL_MATRIX.LBL_MARKUP2' | translate }}</label>
+                            <p class="input-value">{{quotationTravelMatrix.markUpCostAir}}</p>
+                        </div>
+                        <div class="my-input-group col-lg-3">
+                            <label class="light" for="">{{ 'TRAVEL_MATRIX.LBL_DISTANCE' | translate }}</label>
+                            <p class="input-value">{{quotationTravelMatrix.distanceKM}}</p>
+                        </div>
+                    </div>
+                    <div class="col-sm-12 marginTop20">
+                        <div class="table-container">
+                            <table class="pagination-table bordered">
+                                <thead>
+                                    <tr>
+                                        <th class="th-text-center">{{ 'TRAVEL_MATRIX.LBL_COST_TYPE' | translate }}</th>
+                                        <th class="th-text-center">{{ 'TRAVEL_MATRIX.LBL_TRANSPORTATION' | translate }}
+                                        </th>
+                                        <th class="th-text-center">{{ 'TRAVEL_MATRIX.LBL_TRAVEL_PRICE' | translate }}
+                                            ({{quotationTravelMatrix.travelCurrencyName}})</th>
+                                        <th class="th-text-center">{{ 'TRAVEL_MATRIX.LBL_MARKUP_TOTAL' | translate }}
+                                        </th>
+                                        <th class="th-text-center">{{ 'TRAVEL_MATRIX.LBL_TOTAL' | translate }}
+                                            ({{quotationTravelMatrix.sourceCurrencyName}})
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td></td>
+                                        <td class="Center-Middle-Table">{{'TRAVEL_MATRIX.LBL_BUS' | translate}}</td>
+                                        <td class="Center-Middle-Table">
+                                            {{quotationTravelMatrix.busCost}}
+                                        </td>
+                                        <td class="Center-Middle-Table">
+                                            {{quotationTravelMatrix.busMarkUp}}
+                                        </td>
+                                        <td class="Center-Middle-Table">
+                                            {{quotationTravelMatrix.busTotal}}
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td></td>
+                                        <td class="Center-Middle-Table">{{'TRAVEL_MATRIX.LBL_TRAIN' | translate}}</td>
+                                        <td class="Center-Middle-Table">
+                                            {{quotationTravelMatrix.trainCost}}
+                                        </td>
+                                        <td class="Center-Middle-Table">
+                                            {{quotationTravelMatrix.trainMarkUp}}
+                                        </td>
+                                        <td class="Center-Middle-Table">
+                                            {{quotationTravelMatrix.trainTotal}}
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td></td>
+                                        <td class="Center-Middle-Table">{{'TRAVEL_MATRIX.LBL_TAXI' | translate}}</td>
+                                        <td class="Center-Middle-Table">
+                                            {{quotationTravelMatrix.taxiCost}}
+                                        </td>
+                                        <td class="Center-Middle-Table">
+                                            {{quotationTravelMatrix.taxiMarkUp}}
+                                        </td>
+                                        <td class="Center-Middle-Table">
+                                            {{quotationTravelMatrix.taxiTotal}}
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="input-value">
+                                            {{'TRAVEL_MATRIX.LBL_LAND_COST_TOTAL' | translate}}</td>
+                                        <td></td>
+                                        <td class=" input-value Center-Middle-Table">
+                                            {{quotationTravelMatrix.landTravelCurrencyTotal}}
+                                        </td>
+                                        <td>
+                                        </td>
+                                        <td class=" input-value Center-Middle-Table">
+                                            {{quotationTravelMatrix.landSourceCurrencyTotal}}
+                                        </td>
+
+                                    </tr>
+                                    <tr>
+                                        <td class="input-value">
+                                            {{'TRAVEL_MATRIX.LBL_AIR_COST_TOTAL' | translate}}</td>
+                                        <td></td>
+                                        <td class="Center-Middle-Table">
+                                            {{quotationTravelMatrix.airCost}}
+                                        </td>
+                                        <td class="Center-Middle-Table">
+                                            {{quotationTravelMatrix.airMarkUp}}
+                                        </td>
+                                        <td class="Center-Middle-Table">
+                                            {{quotationTravelMatrix.airTotal}}
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="input-value">{{'TRAVEL_MATRIX.LBL_HOTEL' | translate}}</td>
+                                        <td></td>
+                                        <td class="Center-Middle-Table">
+                                            {{quotationTravelMatrix.hotelCost}}
+                                        </td>
+                                        <td class="Center-Middle-Table">
+                                            {{quotationTravelMatrix.hotelMarkUp}}
+                                        </td>
+                                        <td class="Center-Middle-Table">
+                                            {{quotationTravelMatrix.hotelTotal}}
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="input-value">{{'TRAVEL_MATRIX.LBL_OTHERS' | translate}}</td>
+                                        <td></td>
+                                        <td class="Center-Middle-Table">
+                                            {{quotationTravelMatrix.otherCost}}
+                                        </td>
+                                        <td class="Center-Middle-Table">
+                                            {{quotationTravelMatrix.otherMarkUp}}
+                                        </td>
+                                        <td class="Center-Middle-Table">
+                                            {{quotationTravelMatrix.otherTotal}}
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="Center-Middle-Table input-value" colspan="4">
+                                            {{'TRAVEL_MATRIX.LBL_GRAND_TOTAL' | translate}}</td>
+                                        <td class="Center-Middle-Table input-value">
+                                            {{quotationTravelMatrix.grandTotal}}
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="col-sm-12 marginTop20 detail-column-container" style="margin-left:0px!important;">
+                        <div class="my-input-group col-lg-4">
+                            <label class="light" for="">{{ 'TRAVEL_MATRIX.LBL_REMARKS' | translate }}</label>
+                            <p class="input-value">{{quotationTravelMatrix.remarks}}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</ng-template>
+
+<ng-template #calculateworkinghour let-modal>
+    <div class="modal-body">
+        <div class="small-model">
+            <h2 class="title">{{ 'QUOTATION.LBL_CONFIRMSTATUSTITLE' | translate }}</h2>
+            <p>{{ 'QUOTATION.LBL_ABOUT_WORKING_MAN_DAY_INFORMATION' | translate }}</p>
+            <button class="primary-cta" (click)="modal.dismiss('Cross click');refreshCalculatedWorkingHours();">
+                {{ 'COMMON.LBL_OK' | translate }}
+            </button>
+            <button class="secondary-cta" (click)="modal.dismiss('Cross click');">
+                {{ 'COMMON.LBL_CONFIRMCANCEL' | translate }}
+            </button>
+        </div>
+    </div>
+</ng-template>

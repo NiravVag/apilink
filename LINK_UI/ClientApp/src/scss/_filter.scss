@@ -1,0 +1,169 @@
+.side-filter-wrapper{
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	z-index: 21;
+	position: fixed;
+	background-color: rgba(#001821, 0.8);
+
+	.side-filter-container{
+		top: 0;
+		right: 0;
+		bottom: 0;
+		width: 392px;
+		overflow-y: scroll;
+		position: absolute;
+		background-color: $white;
+
+		@media only screen and (min-width: $mobile-min-width) and (max-width: $mobile-max-width){
+			width: 100%;
+		}
+
+		.head{
+			padding: 30px 40px;
+
+			@media only screen and (min-width: $mobile-min-width) and (max-width: $mobile-max-width){
+				padding: 30px 40px 30px 53px;
+			}
+
+			.icon{
+				margin-right: 24px;
+				display: inline-block;
+				vertical-align: super;
+
+				@media only screen and (min-width: $mobile-min-width) and (max-width: $mobile-max-width){
+					display: none;
+				}
+			}
+
+			.head-info{
+				display: inline-block;
+
+				.title{
+					font-size: 18px;
+					font-weight: 500;
+					line-height: 1.28;
+					color: $primary-color;
+					font-family: $roboto-medium;
+				}
+
+				.subtitle{
+					font-size: 12px;
+					line-height: 1.92;
+					font-style: italic;
+					font-family: $roboto-light;
+					color: rgba($primary-color, 0.4);
+				}
+			}
+		}
+
+		.clear-filter{
+			padding: 12px 0 12px 88px;
+			background-color: rgba(#9eb9ce, 0.1);
+
+			@media only screen and (min-width: $mobile-min-width) and (max-width: $mobile-max-width){
+				padding: 12px 0 12px 53px;
+			}
+
+			p{
+				margin: 10px 0;
+				font-size: 12px;
+				font-weight: 500;
+				line-height: 1.92;
+				font-style: italic;
+				display: inline-block;
+				font-family: $roboto-medium;
+			}
+
+			.text{
+				color: rgba($primary-color, 0.4);
+			}
+
+			.reset{
+				font-style: normal;
+				padding-left: 15px;
+				color: rgba(#cd2d2f, 0.8);
+				font-family: $roboto-light;
+
+				.close{
+					margin-right: 5px;
+				}
+			}
+		}
+
+		.body{
+			padding: 30px 46px 30px 90px;
+
+			@media only screen and (min-width: $mobile-min-width) and (max-width: $mobile-max-width){
+				padding: 30px 46px 30px 53px;
+			}
+
+			.filter-control{
+				width: 100%;
+				margin-bottom: 38px;
+
+				@media only screen and (min-width: $mobile-min-width) and (max-width: $mobile-max-width){
+					margin-bottom: 30px;
+				}
+
+				label{
+					display: block;
+					font-size: 14px;
+					font-weight: 500;
+					line-height: 1.64;
+					margin-bottom: 10px;
+					color: rgba(#203b4e, 1);
+					font-family: $roboto-medium;
+				}
+
+				.checkbox-container{
+					width: 100%;
+					margin-top: 10px;
+
+					label{
+						font-weight: normal;
+						font-family: $roboto-regular;
+
+						&:after{
+							top: 9px;
+						}
+					}
+
+					.styled-checkbox-container{
+						width: 49%;
+						display: inline-block;
+						margin-bottom: 10px;
+					}
+				}
+
+				&.mobile-fixed-bar{
+					right: 0;
+					bottom: 0;
+					margin: 0;
+					width: 392px;
+					position: fixed;
+
+					@media only screen and (min-width: $mobile-min-width) and (max-width: $mobile-max-width){
+						left: 0;
+						bottom: 0;
+						margin: 0;
+						width: 100%;
+						position: fixed;
+					}
+
+					button{
+						margin: 0;
+						width: 50%;
+						padding: 19px 28px;
+
+						&.secondary-cta{
+							border: none;
+							background-color: #fff8f8;
+						}
+					}
+				}
+			}
+		}
+	}
+}

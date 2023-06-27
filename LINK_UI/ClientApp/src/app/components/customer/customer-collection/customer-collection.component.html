@@ -1,0 +1,117 @@
+
+<div class="main-wrapper">
+    <div class="wrapper dashboard-wrapper">
+      <div class="my-container">
+        <div class="master-body">
+          <div class="title-container">
+            <!-- fromSummary && -->
+              <div class="header-back-button"  *ngIf="!Initialloading">
+                  <img src="assets/images/back-red.png" alt="back" (click)="returnBack('cussearch/customer-summary');">
+                  </div>
+            <h3 class="main-title">{{ 'CUSTOMER_COLLECTION.TITLE' | translate }}</h3>
+          </div>
+          <div class="content-container">
+            <div class="row searchFormPadding">
+              <div class="col-sm-12">
+                <div class="row">
+                  <div class="col-sm-4 col-md-4 col-lg-4">
+                    <div class="my-input-group">                 
+                        <label class="control-label required">{{ 'CUSTOMER_COLLECTION.LBL_CUSTOMER' | translate }}</label>
+                        <ng-select [items]="customerList"
+                                 [loading]="Initialloading"
+                                 [multiple]="false"
+                                 [closeOnSelect]="true"
+                                 [searchable]="true"
+                                 bindLabel="name"
+                                 bindValue="id"
+                                 placeholder="--- {{ 'COMMON.LBL_SELECT' | translate }} ---"
+                                 [(ngModel)]="model.id"
+                                 [ngClass]="{ 'is-invalid': !validator.isValid('id')}"
+                                 (change)="selectCollection()">
+                      </ng-select> 
+                      <div *ngIf="!validator.isValid('id')" class="invalid-feedback" style="display:block">
+                        <div *ngFor="let error of validator.getErrors('id')">{{ error | translate }}</div>
+                      </div>
+                     
+                    </div>
+                  </div>
+                           
+                </div>
+              </div>
+            </div>
+            <div class="master-search-cta-container">
+              <div class="column">
+                  <button class="secondary-cta small" (click)="addCollection()" [disabled]="Initialloading">
+                      <i class="fa fa-plus"></i>&nbsp;&nbsp;{{ 'CUSTOMER_COLLECTION.LBL_ADD' | translate }}
+                    </button> 
+              </div>
+              <div class="column text-right">                               
+              </div>
+            </div>
+  
+            <div class="result-container" *ngIf="(collectionValidators && collectionValidators.length>0)">   
+                  <div class="record-count" *ngIf = "isPagingShow">
+                    <div class="column">
+                        <p class="count">{{
+                            'COMMON.MSG_SHOWING' |
+                                      translate
+                                      }}&nbsp;{{((model.index-1)*(model.pageSize))+1}}&nbsp;{{
+                            'COMMON.MSG_TO' |
+                                      translate
+                                      }}&nbsp;{{(model.index*model.pageSize)>model.totalcount?model.totalCount:(model.index*model.pageSize)}}&nbsp;{{ 'COMMON.MSG_OF' | translate }}&nbsp;{{model.totalCount}}&nbsp;{{
+                                      'COMMON.MSG_RECORDS' | translate
+                                      }} </p>
+                    </div>
+                    <div class="column text-right">
+                  </div>
+                </div>      
+                <div class="table-container">
+                  <table class="pagination-table bordered">
+                    <thead>
+                        <tr>
+                            <th class="required">{{ 'CUSTOMER_COLLECTION.LBL_COLLECTION_NAME' | translate }}</th>
+                            <th></th>              
+                          </tr>              
+                    </thead>
+                    <tbody>                     
+                      <ng-container *ngFor="let item of collectionValidators;  let i = index">
+                        <tr>    
+                                <td>                 
+                                    <input type="text" [(ngModel)]="item.collection.name" [ngClass]="{ 'is-invalid':!item.validator.isValid('name')}" 
+                                     maxlength="300"  placeholder="{{ 'CUSTOMER_COLLECTION.LBL_COLLECTION_NAME' | translate }}">
+                                    <div *ngIf="!item.validator.isValid('name')" class="invalid-feedback">
+                                      <div *ngFor="let error of item.validator.getErrors('name')">{{ error | translate }}</div>
+                                    </div>
+                                </td>
+                                <td>
+                                  <button *ngIf="i > 0 || model.customerCollectionList.length > 1" (click)="removeCollection(i)" class="secondary-cta x-small" style="margin-left:10px">
+                                    <i class="fa fa-trash"></i>
+                                  </button>
+                                </td>                                                    
+                        </tr>
+                      </ng-container>
+                    </tbody>
+                  </table>
+                </div>
+                  <div class="pagination-container" *ngIf = "isPagingShow">
+                    <select class="small" [(ngModel)]="selectedPageSize" (change)="SearchDetails()">
+                        <option *ngFor="let item of pagesizeitems" [ngValue]=item>{{item}}</option>
+                    </select>
+                    <ngb-pagination (pageChange)="onPager($event)" [pageSize]="model.pageSize"
+                        [collectionSize]="model.totalCount" [(page)]="model.index" [maxSize]="5">
+                    </ngb-pagination>
+                </div>
+                <div class="form-action-container marginTop15">
+                    <button class="primary-cta small" (click)="save()" [disabled]="Saveloading || Initialloading">                     
+                        {{ 'CUSTOMER_COLLECTION.LBL_SAVE' | translate }}    
+                        <span *ngIf="Saveloading">
+                          <i class="fa fa-refresh fa-spin" aria-hidden="true"></i>
+                        </span>                    
+                    </button>
+                  </div>  
+              </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>

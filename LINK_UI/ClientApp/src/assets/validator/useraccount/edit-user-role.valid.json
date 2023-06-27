@@ -1,0 +1,14 @@
+{
+    "model": "UserAccountModel",
+    "fields": {      
+          
+        
+          "roleEntity": [
+            {
+              "type": "required",
+              "fieldType": "N",
+              "ressource": "EDIT_USER_ACCOUNT.API_ENTITY_REQUIRED"
+            }
+          ]
+    }
+  }

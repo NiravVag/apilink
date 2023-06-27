@@ -1,0 +1,31 @@
+{
+ "model": "edit-staff.model",
+  "fields": {
+
+    "startDate": [
+      {
+        "type": "date",
+        "ressource": "EDIT_STAFF.MSG_RENEW_STARTDATE_DATE"
+      }, 
+      {
+        "type": "isLessOrEqual",
+        "ressource": "EDIT_STAFF.MSG_RENEW_STARTDATE_GERAT_ENDDATE",
+        "fieldType": "D",
+        "fieldCible": "endDate"
+      }
+    ],
+    "endDate": [
+      {
+        "type": "date",
+        "ressource": "EDIT_STAFF.MSG_RENEW_ENDDATE_DATE"
+      },
+      {
+        "type": "isGreatOrEqual",
+        "ressource": "EDIT_STAFF.MSG_RENEW_ENDDATE_LESS_STARTDATE",
+        "fieldType": "D",
+        "fieldCible": "startDate"
+      }
+    ]
+  }
+
+}

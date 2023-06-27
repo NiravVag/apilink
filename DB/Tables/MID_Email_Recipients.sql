@@ -1,0 +1,26 @@
+﻿CREATE TABLE [dbo].[MID_Email_Recipients]
+(
+	[Id] INT NOT NULL IDENTITY(1,1) PRIMARY KEY,
+	[EmailConfigId] INT NOT NULL,
+	[Cus_ContactId] INT NULL,
+	[Sup_ContactId] INT NULL,
+	[Fact_ContactId] INT NULL,
+	[Internal_ContactId] INT NULL,
+	[Internal_Accounting_ContactId] INT NULL,
+	[Active] BIT NOT NULL,
+	[CreatedBy] INT NULL, 
+    [CreatedOn] DATETIME NULL, 
+    [ModifiedBy] INT NULL, 
+    [ModifiedOn] DATETIME NULL, 
+    [DeletedBy] INT NULL, 
+    [DeletedOn] DATETIME NULL, 
+	FOREIGN KEY([EmailConfigId]) REFERENCES [MID_Email_Recipients_Configuration](Id), 
+	FOREIGN KEY([Cus_ContactId]) REFERENCES [CU_Contact](Id), 
+	FOREIGN KEY([Sup_ContactId]) REFERENCES [SU_Supplier](Id),
+	FOREIGN KEY([Fact_ContactId]) REFERENCES [SU_Supplier](Id),
+	FOREIGN KEY([Internal_ContactId]) REFERENCES [HR_Staff](Id),
+	FOREIGN KEY([Internal_Accounting_ContactId]) REFERENCES [HR_Staff](Id),
+	FOREIGN KEY(CreatedBy) REFERENCES [IT_UserMaster](Id),
+	FOREIGN KEY(ModifiedBy) REFERENCES [IT_UserMaster](Id),
+	FOREIGN KEY(DeletedBy) REFERENCES [IT_UserMaster](Id)
+)

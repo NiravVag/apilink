@@ -1,0 +1,136 @@
+﻿@model (DTO.Claim.ClaimEmailRequest, string)
+
+<style>
+    .th-table {
+        color: black;
+        vertical-align: top;
+        font-size: 13px;
+        font-family: tahoma;
+    }
+
+    .td-table {
+        font-size: 13px;
+        font-family: tahoma;
+    }
+
+    .div-style {
+        padding-bottom: 5px;
+        margin-bottom: 5px;
+    }
+
+    #color {
+        color: red;
+    }
+</style>
+
+<table>
+    <tr>
+        <td style="font-size:13px; font-family:tahoma;">
+            Dear Sir / Madam,
+            <br /><br />
+                  <div class="div-style">
+                      @Model.Item1.ClaimNo has been <span style="background-color:yellow;">Validated.</span> please take the appropriate action.
+                  </div>
+            <br />
+            <table border="1" style="border-collapse: collapse">
+                <tr>
+                    <th class="th-table" align="left" width='24%'>
+                        Claim#:
+                    </th>
+                    <td class="td-table">
+                        <a href="@Model.Item2">@Model.Item1.ClaimNo</a>
+                    </td>
+                </tr>
+
+                <tr>
+                    <th class="th-table" align="left" width='24%'>
+                        Claim Date:
+                    </th>
+                    <td class="td-table">
+                        @Model.Item1.ClaimDate.ToString("dd/MM/yyyy")
+                    </td>
+                </tr>
+
+                <tr>
+                    <th class="th-table" align="left" width='24%'>
+                        Inspection#:
+                    </th>
+                    <td class="td-table">
+                        <a href="@Model.Item1.InspectionURL">@Model.Item1.InspectionNo</a>
+                    </td>
+                </tr>
+
+                <tr>
+                    <th class="th-table" align="left" width='24%'>
+                        Inspection Date:
+                    </th>
+                    <td class="td-table">
+                        @Model.Item1.InspectionDate
+                    </td>
+                </tr>
+                <tr>
+                    <th class="th-table" align="left" width='24%'>
+                        Customer:
+                    </th>
+                    <td class="td-table">
+                        @Model.Item1.CustomerName
+                    </td>
+                </tr>
+                <tr>
+                    <th class="th-table" align="left" width='24%'>
+                        Supplier:
+                    </th>
+                    <td class="td-table">
+                        <span>@Model.Item1.SupplierName</span>
+                    </td>
+                </tr>
+                <tr>
+                    <th class="th-table" align="left" width='24%'>
+                        Factory:
+                    </th>
+                    <td class="td-table">
+                        <span>@Model.Item1.FactoryName</span>
+                    </td>
+                </tr>
+                <tr>
+                    <th class="th-table" align="left" width='24%'>
+                        Product Ref:
+                    </th>
+                    <td class="td-table">
+                        <span>@Model.Item1.ProductRef</span>
+                    </td>
+                </tr>
+                <tr>
+                    <th class="th-table" align="left" width='24%'>
+                        Product Name:
+                    </th>
+                    <td class="td-table">
+                        <span>@Model.Item1.ProductName</span>
+                    </td>
+                </tr>
+            </table>
+            <br />
+        </td>
+    </tr>
+    <tr>
+        <td class="td-table">
+            <br />
+            <div class="div-style">
+                Please login our <a href="@Model.Item2">Link</a> to view the details.
+            </div>
+        </td>
+    </tr>
+    <tr>
+        <td class="td-table">
+            <br />
+            <div class="div-style">
+                Thanks
+            </div>
+            <div class="div-style">
+                IT-Team
+            </div>
+            <br />
+            <span style="font-style:normal"> Note: - This receipt is auto generated from Link. Please do not reply to this message.</span>
+        </td>
+    </tr>
+</table>

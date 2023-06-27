@@ -1,0 +1,54 @@
+{
+    "model": "OtherMandayEditModel",
+    "fields": {
+      "manday": [
+        {
+          "fieldType": "A",
+          "type": "required",
+          "ressource": "OTHER_MANDAY.MSG_MANDAY_REQ"
+        }
+      ],
+      "officeCountryId": [
+        {
+          "type": "required",
+          "fieldType": "N",
+          "ressource": "OTHER_MANDAY.MSG_OFFICE_COUNTRY_REQ"
+        }
+      ],
+      "qcId": 
+      [
+        {
+          "type": "required",
+          "fieldType": "N",
+          "ressource": "OTHER_MANDAY.MSG_QC_REQ"
+        }
+      ],
+      "operationalCountryId": 
+      [
+        {
+          "type": "required",
+          "fieldType": "N",
+          "ressource": "OTHER_MANDAY.MSG_OPERATIONAL_COUNTRY_REQ"
+        }
+      ],
+      "purposeId": 
+      [
+        {
+          "type": "required",
+          "fieldType": "N",
+          "ressource": "OTHER_MANDAY.MSG_PURPOSE_REQ"
+        }
+      ],
+      "serviceDate": [
+        {
+          "type": "required",
+          "fieldType": "D",
+          "ressource": "OTHER_MANDAY.MSG_SERVICEDATE_REQ"
+        },
+        {
+          "type": "date",
+          "ressource": "OTHER_MANDAY.MSG_EXDATE_DATE"
+        }
+      ]
+    }
+}

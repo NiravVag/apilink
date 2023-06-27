@@ -1,0 +1,116 @@
+﻿@{
+    ViewData["Title"] = "ScheduleEmailCS";
+    int counter = 0;
+}
+@model DTO.Inspection.ScheduleJobCsEmail
+
+
+<style>
+    .th-table {
+        color: black;
+        vertical-align: top;
+        font-size: 13px;
+        font-family: tahoma;
+    }
+
+    .td-table {
+        font-size: 13px;
+        font-family: tahoma;
+    }
+
+    .margintop2 {
+        margin-top: 2%
+    }
+
+    .margintop7 {
+        margin-top: 7%
+    }
+</style>
+<table>
+    <tr>
+        <td style="font-size:13px; font-family:tahoma;">
+
+            Dear @Model.CSName,
+            <br /><br />
+            Following are the report order details which you need to process today.
+            <br /><br />
+
+
+            <div style="padding-bottom: 20px;margin-bottom: 20px;">
+                <table id='TblList' style="border:solid 1px #d4d0c8;border-collapse:collapse;font-size:12px; font-family:tahoma;margin-bottom:40px" cellspacing='0' cellpadding='5' rules='all' align='left' border='1' width='100%'>
+                    <tr>
+                        <th bgcolor=#f8f4f3 style="color: black; font-size:13px;" align=center width='5%' height=35>Report#</th>
+                        <th bgcolor=#f8f4f3 style="color: black; font-size:13px;" align=center width='5%' height=35>Inspection#</th>
+                        <th bgcolor=#f8f4f3 style="color: black; font-size:13px;" align=center width='5%' height=35>Customer Name</th>
+                        <th bgcolor=#f8f4f3 style="color: black; font-size:13px;" align=center width='5%' height=35>Supplier Name</th>
+                        <th bgcolor=#f8f4f3 style="color: black; font-size:13px;" align=center width='5%' height=35>Factory Name</th>
+                        <th bgcolor=#f8f4f3 style="color: black; font-size:13px;" align=center width='5%' height=35>Product Ref</th>
+                        <th bgcolor=#f8f4f3 style="color: black; font-size:13px;" align=center width='5%' height=35>Po</th>
+                        <th bgcolor=#f8f4f3 style="color: black; font-size:13px;" align=center width='5%' height=35>ProductName</th>
+                        <th bgcolor=#f8f4f3 style="color: black; font-size:13px;" align=center width='5%' height=35>Color Name</th>
+                        <th bgcolor=#f8f4f3 style="color: black; font-size:13px;" align=center width='5%' height=35>Color Code</th>
+                        <th bgcolor=#f8f4f3 style="color: black; font-size:13px;" align=center width='5%' height=35>Service Type</th>
+                        <th bgcolor=#f8f4f3 style="color: black; font-size:13px;" align=center width='5%' height=35>QC Name</th>
+                        <th bgcolor=#f8f4f3 style="color: black; font-size:13px;" align=center width='5%' height=35>Schedule Date</th>
+                        <th bgcolor=#f8f4f3 style="color: black; font-size:13px;" align=center width='5%' height=35>Filling Status</th>
+                        <th bgcolor=#f8f4f3 style="color: black; font-size:13px;" align=center width='5%' height=35>Review Status</th>
+                    </tr>
+                    @{
+                        string productRef = "";
+                        foreach (var item in Model.Inspections)
+                        {
+                            int rowLength = @Model.Inspections.Count(x => x.ReportNo == item.ReportNo);
+                            <tr>
+                                @if (productRef != item.ReportNo)
+                                {
+                                    <td align=center rowspan="@rowLength" style="font-size: 12px;" height=30>@item.ReportNo</td>
+                                }
+                                <td align=center style="font-size: 12px;" height=30>@item.InspectionId</td>
+                                <td align=center style="font-size: 12px;" height=30>@item.CustomerName</td>
+                                <td align=center style="font-size: 12px;" height=30>@item.SupplierName</td>
+                                <td align=center style="font-size: 12px;" height=30>@item.FactoryName</td>
+                                <td align=center style="font-size: 12px;" height=30>@item.ProductRef</td>
+                                <td align=center style="font-size: 12px;" height=30>@item.PoNumber</td>
+                                <td align=center style="font-size: 12px;" height=30>@item.ProductName</td>
+                                <td align=center style="font-size: 12px;" height=30>@item.ColorName</td>
+                                <td align=center style="font-size: 12px;" height=30>@item.ColorCode</td>
+                                <td align=center style="font-size: 12px;" height=30>@item.ServiceType</td>
+                                <td align=center style="font-size: 12px;" height=30>@item.QcNames</td>
+                                <td align=center style="font-size: 12px;" height=30>@item.ScheduleDate</td>
+                                @if (productRef != item.ReportNo)
+                                {
+                                    <td align=center rowspan="@rowLength" style="font-size: 12px;" height=30>@item.FillingStatus</td>
+                                }
+                                @if (productRef != item.ReportNo)
+                                {
+                                    <td align=center rowspan="@rowLength" style="font-size: 12px;" height=30>@item.ReviewStatus</td>
+                                }
+                            </tr>
+                            productRef = item.ReportNo;
+                        }
+                    }
+                </table>
+            </div>
+        </td>
+    </tr>
+    <tr>
+        <td class="td-table">
+            <div style="padding-bottom: 5px; margin-bottom:5px;">
+                Please ensure that all the above reports are sent to respective customers by today.
+            </div>
+            <br />
+            <div style="padding-bottom: 5px; margin-bottom:5px;">
+                Thanks
+            </div>
+            <div style="padding-bottom: 5px; margin-bottom:5px;">
+                IT-Team
+            </div>
+            <br />
+            <span style="font-style:normal"> Note: - This receipt is auto generated from Link Booking System. Please do not reply to this message.</span>
+        </td>
+    </tr>
+</table>
+
+
+
+

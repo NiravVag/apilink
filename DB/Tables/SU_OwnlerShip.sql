@@ -1,0 +1,7 @@
+﻿CREATE TABLE [dbo].[SU_OwnlerShip](
+	[Id] [int] IDENTITY(1,1) NOT FOR REPLICATION NOT NULL PRIMARY KEY,
+	[Name] NVARCHAR(100) NOT NULL,
+	[Name_TranId] INT NULL,
+	[EntityId] INT NULL, 
+	FOREIGN KEY([EntityId]) REFERENCES [AP_Entity](Id)
+)

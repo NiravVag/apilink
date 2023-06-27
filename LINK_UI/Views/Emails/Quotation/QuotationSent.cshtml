@@ -1,0 +1,39 @@
+﻿@model (DTO.Quotation.QuotationDetails, string, string)
+<span style="font-size: 13px; font-family: tahoma;">
+    Dear@(string.IsNullOrEmpty(Model.Item2) ? "s" : $" {Model.Item2}"), <br /><br />
+
+    @if (Model.Item1.Service.Id == (int)Entities.Enums.Service.InspectionId)
+    {
+        <span>
+            Please find the attached quotation for Inspection booking
+            <b>INS</b>#@string.Join(", ", @Model.Item1.OrderList.Select(x => x.Id.ToString()).ToArray()).
+            <b>PO</b># @string.Join(",", string.Join(",", @Model.Item1.OrderList.SelectMany(x => x.ProductList).Select(x => x.PoNo).Distinct()).Split(',').Distinct().ToList()).
+        </span>
+    }
+    else
+    {
+        <span>
+            Please find the attached quotation for Audit booking
+            <b>AUD</b>#@string.Join(", ", @Model.Item1.OrderList.Select(x => x.Id.ToString()).ToArray()).
+        </span>
+    }
+    <br />
+    Please check and confirm to @Model.Item1.EntityName team(in copy of this email).We will be proceeding once receiving your approval.
+    <br /><br />
+    Customer : @Model.Item1.Customer.Name
+    <br /><br />
+    Supplier : @Model.Item1.Supplier.Name
+    <br /><br />
+    Factory : @Model.Item1.Factory.Name
+    <br /><br />
+    Comments: -@Model.Item1.ApiRemark
+    <br /><br />
+    You can also click <a href="@Model.Item3">here</a> to view the quotation details.
+    <br /><br />
+    We remain at your disposal for any further information or support needed.
+    <br /><br />
+    Thanks<br />
+    IT-Team
+    <br /><br />
+          <span style="font-style:italic"> Note: - This receipt is auto generated from Link. Please do not reply to @Model.Item1.SenderEmail.</span>
+</span>

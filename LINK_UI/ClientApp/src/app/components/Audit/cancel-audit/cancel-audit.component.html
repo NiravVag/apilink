@@ -1,0 +1,195 @@
+<div class="main-wrapper">
+  <div class="wrapper dashboard-wrapper">
+    <div class="my-container">
+      <div class="master-body">
+        <div class="title-container">
+            <div class="header-back-button" *ngIf="fromSummary && !Initialloading && !_saveloading">
+                <img src="assets/images/back-red.png" alt="back" (click)="return('auditsummary/audit-summary')">
+                </div>
+          <h3 class="main-title">
+            {{ IsCancel ? ('AUDIT_CANCEL.TITLE_CANCEL' | translate) : ('AUDIT_CANCEL.TITLE_RESCHEDULE' | translate) }} -
+            {{model.auditid}}
+          </h3>
+        </div>
+        <div class="content-container">
+          <h4 class="container-head">{{ 'AUDIT_CANCEL.LBL_MAIN_DETAILS' | translate }}</h4>
+          <div class="formPadding">
+            <div class="row">
+              <div class="col-sm-3">
+                <div class="my-input-group">
+                  <label>{{ 'AUDIT_CANCEL.LBL_PO' | translate }}</label>
+                  <input disabled [(ngModel)]="data.poNumber" type="text" />
+                </div>
+              </div>
+              <div class="col-sm-3 mobile-margin-top-15">
+                <div class="my-input-group">
+                  <label>{{ 'AUDIT_CANCEL.LBL_REPORTNO' | translate }}</label>
+                  <input disabled [(ngModel)]="data.reportNo"  type="text" />
+                </div>
+              </div>
+              <div class="col-sm-3 mobile-margin-top-15">
+                <div class="my-input-group">
+                  <label>{{ 'AUDIT_CANCEL.LBL_CUSTOMER' | translate }}</label>
+                  <input disabled [(ngModel)]="data.customerName"  type="text" />
+                </div>
+              </div>
+              <div class="col-sm-3 mobile-margin-top-15">
+                <div class="my-input-group">
+                  <label>{{ 'AUDIT_CANCEL.LBL_SUPPLIER' | translate }}</label>
+                  <input disabled [(ngModel)]="data.supplierName"  type="text" />
+                </div>
+              </div>
+            </div>
+            <div class="row marginTop15">
+              <div class="col-sm-3 mobile-margin-top-15">
+                <div class="my-input-group">
+                  <label>{{ 'AUDIT_CANCEL.LBL_FACTORY' | translate }}</label>
+                  <input disabled [(ngModel)]="data.factoryName"  type="text" />
+                </div>
+              </div>
+              <div class="col-sm-3 mobile-margin-top-15">
+                <div class="my-input-group">
+                  <label>{{ 'AUDIT_CANCEL.LBL_SERVICEDATE_FROM' | translate }}</label>
+                  <input disabled [(ngModel)]="data.serviceDateFrom"  type="text" />
+                </div>
+              </div>
+              <div class="col-sm-3 mobile-margin-top-15">
+                <div class="my-input-group">
+                  <label>{{ 'AUDIT_CANCEL.LBL_SERVICEDATE_TO' | translate }}</label>
+                  <input disabled [(ngModel)]="data.serviceDateTo"  type="text" />
+                </div>
+              </div>
+              <div class="col-sm-3 mobile-margin-top-15">
+                <div class="my-input-group">
+                  <label>{{ 'AUDIT_CANCEL.LBL_SERVICETYPE' | translate }}</label>
+                  <input disabled [(ngModel)]="data.serviceType"  type="text" />
+                </div>
+              </div>
+            </div>
+          </div>
+          <h4 class="container-head"> {{ IsCancel ? ('AUDIT_CANCEL.TITLE_CANCEL' | translate) : ('AUDIT_CANCEL.TITLE_RESCHEDULE' | translate) }} 
+             &nbsp;{{ 'AUDIT_CANCEL.LBL_INFORMATION' | translate }}</h4>
+          <div class="formPadding">
+            <div class="row">
+              <div class="col-sm-3">
+                <div class="my-input-group">
+                  <label class="required">{{ 'AUDIT_CANCEL.LBL_REASON' | translate }}</label>
+                  <ng-select #customer [multiple]="false" [closeOnSelect]="true" [searchable]="true"
+                    [loading]="Initialloading" [items]="data.reasonTypes" bindLabel="reason" bindValue="id"
+                    [ngClass]="{ 'is-invalid': !validator.isValid('reasontypeid')}" [hideSelected]="true"
+                    placeholder="--- {{(data.reasonTypes!=null && data.reasonTypes.length!=0? 'AUDIT_CANCEL.LBL_SELECT':'AUDIT_CANCEL.MSG_NO_DATA')  | translate }} ---"
+                    [(ngModel)]="model.reasontypeid">
+                  </ng-select>
+                  <div *ngIf="!validator.isValid('reasontypeid')" class="invalid-feedback" style="display:block">
+                    <div *ngFor="let error of validator.getErrors('reasontypeid')">{{ error | translate }}</div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-sm-3 mobile-margin-top-15" *ngIf="IsReSchedule">
+                <div class="my-input-group">
+                  <label class="required">{{ 'AUDIT_CANCEL.LBL_SERVICE_FROMDATE' | translate }}</label>
+                  <div class="calendar-wrapper">
+                  <input type="text" maxlength="10"
+                    [ngClass]="{ 'is-invalid':  !validator.isValid('servicedatefrom')}"
+                    (dateSelect)="onDateSelection($event)" [(ngModel)]="model.servicedatefrom"
+                    [markDisabled]="isDisabled" ngbDatepicker #sdf="ngbDatepicker" (click)="sdf.toggle()">
+                  <img src="assets/images/calendar-icon.svg" alt="" class="calendar-icon" (click)="sdf.toggle()">
+                  </div>
+                  <div *ngIf="!validator.isValid('servicedatefrom')" class="invalid-feedback">
+                    <div *ngFor="let error of validator.getErrors('servicedatefrom')">{{ error | translate }}</div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-sm-3 mobile-margin-top-15" *ngIf="IsReSchedule">
+                <div class="my-input-group">
+                  <label class="required">{{ 'AUDIT_CANCEL.LBL_Service_TODATE' | translate }}</label>
+                  <div class="calendar-wrapper">
+                  <input type="text" maxlength="10"
+                  [ngClass]="{ 'is-invalid':  !validator.isValid('servicedateto')}"
+                    [(ngModel)]="model.servicedateto" [markDisabled]="isDisabled" ngbDatepicker #sdt="ngbDatepicker" (click)="sdt.toggle()">
+                  <img src="assets/images/calendar-icon.svg" alt="" class="calendar-icon" (click)="sdt.toggle()"></div>
+                  <div *ngIf="!validator.isValid('servicedateto')" class="invalid-feedback">
+                    <div *ngFor="let error of validator.getErrors('servicedateto')">{{ error | translate }}</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="row marginTop15" *ngIf="_IsInternalUser">
+              <div class="col-sm-3">
+                <div class="my-input-group">
+                  <label>{{ 'AUDIT_CANCEL.LBL_CANCEL_RESCHEDULE_TIME' | translate }}</label>
+                  <select [(ngModel)]="model.cancelrescheduletimetype"  >
+                    <option value="0">---{{ 'AUDIT_CANCEL.LBL_SELECT' | translate }}---</option>
+                    <option *ngFor="let item of _cancelrescheduletimetype" [ngValue]="item.id">{{item.name}}</option>
+                  </select>
+                </div>
+              </div>
+              <div class="col-sm-3 mobile-margin-top-15">
+                <div class="my-input-group">
+                  <label>{{ 'AUDIT_CANCEL.LBL_TRAVELLING_EXPENSE' | translate }}</label>
+                  <input maxlength="10" [(ngModel)]="model.travelexpense" type="number" />
+                </div>
+              </div>
+              <div class="col-sm-3 mobile-margin-top-15">
+                <div class="my-input-group">
+                  <label>{{ 'AUDIT_CANCEL.LBL_CURRENCY' | translate }}</label>
+                  <ng-select #customer [multiple]="false" [closeOnSelect]="true" [searchable]="true"
+                  [loading]="Initialloading" [items]="data.currencyLst" bindLabel="currencyName" bindValue="id"
+                  [ngClass]="{ 'is-invalid': !validator.isValidIf('currencyId',IscurrencyRequired())}"
+                  [hideSelected]="true"
+                  placeholder="--- {{(data.currencyLst!=null && data.currencyLst.length!=0? 'AUDIT_CANCEL.LBL_SELECT':'AUDIT_CANCEL.MSG_NO_DATA')  | translate }} ---"
+                  [(ngModel)]="model.currencyId">
+                </ng-select>
+                <div *ngIf="!validator.isValidIf('currencyId',IscurrencyRequired())" class="invalid-feedback"
+                  style="display:block">
+                  <div *ngFor="let error of validator.getErrors('currencyId')">{{ error | translate }}</div>
+                </div>
+                </div>
+              </div>
+            </div>
+            <div class="row marginTop15">
+              <div class="col-sm-3">
+                <div class="my-input-group">
+                  <label>{{ 'AUDIT_CANCEL.LBL_COMMENT' | translate }}</label>
+                  <textarea maxlength="300" [(ngModel)]="model.comment"  type="text"></textarea>
+                </div>
+              </div>
+              <div class="col-sm-3 mobile-margin-top-15" *ngIf="_IsInternalUser">
+                <div class="my-input-group">
+                  <label>{{ 'AUDIT_CANCEL.LBL_API_COMMENT' | translate }}</label>
+                  <textarea maxlength="300" [(ngModel)]="model.internalcomment"
+                  type="text"></textarea>
+                </div>
+              </div>
+            </div>
+            <div class="row marginTop15">
+              <div class="col-sm-3" *ngIf="_IsInternalUser">
+                <div class="my-input-group">
+                  <div class="styled-checkbox-container">
+                    <input class="styled-checkbox" id="checkbox-1" type="checkbox"
+                    [(ngModel)]="model.isemailtoaccounting">
+                    <label for="checkbox-1">{{ 'AUDIT_CANCEL.LBL_EMAIL_TO_ACCOUNTING' | translate }}</label>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="form-action-container">
+            <!-- <button *ngIf="fromSummary" [disabled]="Initialloading || _saveloading" type="button" class="secondary-cta small"
+            (click)="return('auditsummary/audit-summary')">
+            {{'AUDIT_CANCEL.LBL_RETURN' | translate}}
+            </button> -->
+            <button class="secondary-cta small" [disabled]="Initialloading || _saveloading" (click)="Reset()">
+              {{'AUDIT_CANCEL.LBL_RESET' | translate }}
+            </button>
+            <button class="primary-cta small"  *ngIf="IsCancelVisible()" [disabled]="Initialloading || _saveloading" (click)="Save()">
+              {{ 'AUDIT_CANCEL.LBL_SAVE' | translate }}
+              <span *ngIf="_saveloading">
+                <i class="fa fa-refresh fa-spin" aria-hidden="true"></i>
+              </span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>

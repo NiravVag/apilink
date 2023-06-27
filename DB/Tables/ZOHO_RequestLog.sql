@@ -1,0 +1,9 @@
+﻿CREATE TABLE [dbo].ZOHO_RequestLog
+(
+ID INT IDENTITY(1,1) PRIMARY KEY,
+CustomerID BIGINT,
+RequestUrl NVARCHAR(500),
+LogInformation NVARCHAR(MAX),
+CreatedBy INT,
+CreatedOn DATETIME
+)

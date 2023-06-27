@@ -1,0 +1,656 @@
+<div class="main-wrapper">
+    <div class="wrapper dashboard-wrapper">
+        <div class="my-container">
+            <div class="master-body">
+                <div class="title-container">
+                    <div class="header-back-button" *ngIf="fromSummary">
+                        <img src="assets/images/back-red.png" alt="back" (click)="returnToSummary()">
+                    </div>
+                    <h3 class="main-title">
+                        {{ 'INVOICE_GENERATE.LBL_TITLE' | translate }}
+                    </h3>
+                </div>
+                <div class="content-container quotation-container">
+                    <div class="container-head">
+                        <img class="head-icon" src="assets/images/general.png" alt=""> {{
+                        'INVOICE_MODIFY.LBL_MAIN_DETAILS' | translate }}
+
+                    </div>
+                    <div class="row formPadding">
+                        <div class="col-sm-12">
+                            <div class="row marginTop15">
+                                <div class="col-sm-3 col-md-3 col-lg-3">
+                                    <div class="my-input-group select-for-filter">
+                                        <label class="required">{{ 'BOOKING_SUMMARY.LBL_CUSTOMER' | translate }}</label>
+                                        <ng-select [items]="masterData.customerList" [virtualScroll]="true"
+                                            [loading]="masterData.customerLoading" bindLabel="name" bindValue="id"
+                                            placeholder="--- {{ (masterData.customerList!=null && masterData.customerList.length!=0? 'BOOKING_SUMMARY.LBL_SELECT':'BOOKING_SUMMARY.MSG_NO_DATA' ) | translate }} ---"
+                                            [ngClass]="{ 'is-invalid':  !validator.isValid('customerId')}"
+                                            [typeahead]="masterData.customerInput" [minTermLength]="3"
+                                            (clear)="clearCustomerSelection()" [clearable]="true"
+                                            (change)="changeCustomerData()"
+                                            [(ngModel)]="invoiceGenerateModel.customerId" [multiple]="false"
+                                            (scrollToEnd)="getCustomerData(true)" #select>
+                                            <ng-template ng-option-tmp let-item="item">
+                                                <!-- <b>{{index}} </b><span>{{item.name}}</span> -->
+                                                <div class="text-wrap"><span>{{item.name}}</span></div>
+                                            </ng-template>
+                                        </ng-select>
+                                        <div *ngIf="!validator.isValid('customerId')" class="invalid-feedback">
+                                            <div *ngFor="let error of validator.getErrors('customerId')">
+                                                {{ error | translate }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-sm-3 col-md-3 col-lg-3 mobile-margin-top-15">
+                                    <div class="my-input-group">
+                                        <label class="required">{{ 'EDIT_CUSTOMER_PRICE_CARD.LBL_INVOICE_REQUEST_TYPE' |
+                                            translate }}</label>
+                                        <ng-select [items]="masterData.invoiceRequestList"
+                                            [(ngModel)]="invoiceGenerateModel.invoicingRequest" bindLabel="name"
+                                            bindValue="id" [clearable]="false"
+                                            placeholder="--- {{(masterData.invoiceRequestList && masterData.invoiceRequestList.length>0? 'COMMON.LBL_SELECT':'COMMON.LBL_NO_DATA')  | translate }} ---"
+                                            [ngClass]="{ 'is-invalid':  !validator.isValid('invoicingRequest')}"
+                                            [loading]="masterData.invoiceRequestLoading">
+                                            <ng-template ng-option-tmp let-item="item">
+                                                <div class="text-wrap">{{ item.name }}</div>
+                                            </ng-template>
+                                        </ng-select>
+                                        <div *ngIf="!validator.isValid('invoicingRequest')" class="invalid-feedback">
+                                            <div *ngFor="let error of validator.getErrors('invoicingRequest')">
+                                                {{ error | translate }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-sm-3 col-md-3 col-lg-3 mobile-margin-top-15">
+                                    <div class="my-input-group">
+                                        <div class="my-input-group">
+                                            <label for="" class="required">{{ 'INVOICE_GENERATE.LBL_INSP_FROM_DATE' |
+                                                translate }}</label>
+                                            <div class="calendar-wrapper">
+                                                <input type="text" container="body"
+                                                    [ngClass]="{ 'is-invalid':  !validator.isValid('realInspectionFromDate')}"
+                                                    readonly=readonly
+                                                    [(ngModel)]="invoiceGenerateModel.realInspectionFromDate"
+                                                    ngbDatepicker #sdt1="ngbDatepicker" (click)="sdt1.toggle()">
+                                                <img src="assets/images/calendar-icon.svg" alt="" class="calendar-icon"
+                                                    (click)="sdt1.toggle()">
+                                            </div>
+                                            <div *ngIf="!validator.isValid('realInspectionFromDate')"
+                                                class="invalid-feedback">
+                                                <div
+                                                    *ngFor="let error of validator.getErrors('realInspectionFromDate')">
+                                                    {{ error | translate }}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-sm-3 col-md-3 col-lg-3 mobile-margin-top-15">
+                                    <div class="my-input-group">
+                                        <div class="my-input-group">
+                                            <label for="" class="required">{{ 'INVOICE_GENERATE.LBL_INSP_TO_DATE' |
+                                                translate }}</label>
+                                            <div class="calendar-wrapper">
+                                                <input type="text" container="body"
+                                                    [ngClass]="{ 'is-invalid':  !validator.isValid('realInspectionToDate')}"
+                                                    readonly=readonly
+                                                    [(ngModel)]="invoiceGenerateModel.realInspectionToDate"
+                                                    ngbDatepicker #sdt2="ngbDatepicker" (click)="sdt2.toggle()">
+                                                <img src="assets/images/calendar-icon.svg" alt="" class="calendar-icon"
+                                                    (click)="sdt2.toggle()">
+                                            </div>
+                                            <div *ngIf="!validator.isValid('realInspectionToDate')"
+                                                class="invalid-feedback">
+                                                <div *ngFor="let error of validator.getErrors('realInspectionToDate')">
+                                                    {{ error | translate }}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-sm-12">
+                            <div class="row marginTop25">
+                                <div class="col-sm-3 col-md-3 col-lg-3">
+                                    <div class="my-input-group">
+                                        <label class="required">{{ 'INVOICE_MODIFY.LBL_BILLING_TO' | translate
+                                            }}</label>
+                                        <ng-select [items]="masterData.billingToList" [closeOnSelect]="true"
+                                            [searchable]="true" bindLabel="name" bindValue="id"
+                                            (change)="resetSupplierInfo()" (clear)="resetSupplierInfo()"
+                                            placeholder="--- {{(masterData.billingToList && masterData.billingToList.length>0? 'COMMON.LBL_SELECT':'COMMON.LBL_NO_DATA')  | translate }} ---"
+                                            [loading]="masterData.billingToLoading"
+                                            [(ngModel)]="invoiceGenerateModel.invoiceTo"
+                                            [ngClass]="{ 'is-invalid': !validator.isValid('invoiceTo')}">
+                                            <ng-template ng-option-tmp let-item="item">
+                                                <div class="text-wrap">{{ item.name }}</div>
+                                            </ng-template>
+                                        </ng-select>
+                                        <div *ngIf="!validator.isValid('invoiceTo')" class="invalid-feedback">
+                                            <div *ngFor="let error of validator.getErrors('invoiceTo')">
+                                                {{ error | translate }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-sm-3 col-md-4 col-lg-3 mobile-margin-top-15">
+                                    <div class="my-input-group">
+                                        <label class="required">{{'CUSTOMER_SERVICECONFIG.Service' | translate}}</label>
+                                        <ng-select [items]="masterData.serviceList" bindLabel="name" bindValue="id"
+                                            [clearable]="true" appendTo="body"
+                                            [(ngModel)]="invoiceGenerateModel.service" (change)="changeService($event)"
+                                            [loading]="masterData.serviceLoading"
+                                            [ngClass]="{ 'is-invalid':  !validator.isValid('service')}"
+                                            placeholder=" ---{{ (masterData.serviceList!=null && masterData.serviceList.length!=0? 'QUOTATION_SUMMARY.LBL_SELECT':'QUOTATION_SUMMARY.MSG_NO_DATA' ) | translate }}---">
+                                            <ng-template ng-option-tmp let-item="item">
+                                                <div class="text-wrap">{{ item.name }}</div>
+                                            </ng-template>
+                                        </ng-select>
+                                        <div *ngIf="!validator.isValid('service')" class="invalid-feedback">
+                                            <div *ngFor="let error of validator.getErrors('service')">
+                                                {{ error | translate }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+
+
+                                <div class="col-sm-3 col-md-3 col-lg-3 mobile-margin-top-15">
+                                    <div class="styled-checkbox-container marginTop25">
+                                        <input [disabled]="true" class="styled-checkbox" id="checkbox-InspectionFees" type="checkbox"
+                                            [(ngModel)]="invoiceGenerateModel.isInspection">
+                                        <label for="checkbox-InspectionFees">{{ 'INVOICE_GENERATE.LBL_IS_INSPECTION' |
+                                            translate }}</label>
+                                    </div>
+                                </div>
+
+                                <div class="col-sm-3 col-md-3 col-lg-3 mobile-margin-top-15">
+                                    <div class="styled-checkbox-container marginTop25">
+                                        <input [disabled]="true" class="styled-checkbox" id="checkbox-TravelExpense" type="checkbox"
+                                            [(ngModel)]="invoiceGenerateModel.isTravelExpense">
+                                        <label for="checkbox-TravelExpense">{{ 'INVOICE_GENERATE.LBL_IS_TRAVEL_EXPENSE'
+                                            | translate }}</label>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row marginTop25">
+                                <div class="col-sm-3 col-md-3 col-lg-3 mobile-margin-top-15">
+                                    <div class="my-input-group">
+                                        <label class="control-label required">{{ 'EDIT_CUSTOMER.LBL_INVOICE_TYPE' |
+                                            translate }}</label>
+
+                                        <ng-select [multiple]="false" [closeOnSelect]="true" [searchable]="true"
+                                            [hideSelected]="true" bindLabel="name" bindValue="id"
+                                            [items]="invoicetypeList"
+                                            placeholder="--- {{ 'EDIT_CUSTOMER.LBL_SELECT' | translate }}---"
+                                            [ngClass]="{ 'is-invalid':!validator.isValid('invoiceType')}"
+                                            [(ngModel)]="invoiceGenerateModel.invoiceType">
+                                        </ng-select>
+
+                                        <div *ngIf="!validator.isValid('invoiceType')" class="invalid-feedback">
+                                            <div *ngFor="let error of validator.getErrors('invoiceType')">{{ error |
+                                                translate }}</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <div class="col-sm-12"
+                            *ngIf="(invoiceGenerateModel.invoiceTo == _billPaidBy.Factory || invoiceGenerateModel.invoiceTo == _billPaidBy.Supplier)">
+
+                            <div class="row marginTop25">
+
+                                <div class="col-sm-3 col-md-3 col-lg-3">
+                                    <div class="my-input-group select-for-filter">
+                                        <label class="required">{{ masterData.supplierHeader}}</label>
+                                        <ng-select [items]="masterData.supplierfactoryList" [virtualScroll]="true"
+                                            [loading]="masterData.supplierfactoryLoading" bindLabel="name"
+                                            bindValue="id"
+                                            placeholder="--- {{ (masterData.supplierfactoryList!=null && masterData.supplierfactoryList.length!=0? 'BOOKING_SUMMARY.LBL_SELECT':'BOOKING_SUMMARY.MSG_NO_DATA' ) | translate }} ---"
+                                            [typeahead]="masterData.supplierfactoryInput" [minTermLength]="3"
+                                            appendTo="body" (clear)="resetSupplierInfo()" [clearable]="true"
+                                            (change)="changeSupplier($event)" [searchable]="true"
+                                            [(ngModel)]="masterData.supplierInfoValidator.supplierInfo.supplierId"
+                                            [ngClass]="{ 'is-invalid': !masterData.supplierInfoValidator.validator.isValid('supplierId')}"
+                                            [multiple]="false" (scrollToEnd)="getSupplierFactoryData(true)" #select>
+                                            <ng-template ng-option-tmp let-item="item">
+                                                <div class="text-wrap"><span>{{item.name}}</span></div>
+                                            </ng-template>
+                                        </ng-select>
+                                        <div *ngIf="!masterData.supplierInfoValidator.validator.isValid('supplierId')"
+                                            class="invalid-feedback" style="display:block">
+                                            <div
+                                                *ngFor="let error of masterData.supplierInfoValidator.validator.getErrors('supplierId')">
+                                                {{ error | translate }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+
+                                <div class="col-sm-3 col-md-3 col-lg-3 mobile-margin-top-15">
+                                    <div class="my-input-group">
+                                        <label class="required">{{ 'INVOICE_GENERATE.LBL_BILLED_NAME' | translate
+                                            }}</label>
+                                        <input maxlength="200"
+                                            [ngClass]="{ 'is-invalid': !masterData.supplierInfoValidator.validator.isValid('billedName')}"
+                                            [(ngModel)]="masterData.supplierInfoValidator.supplierInfo.billedName"
+                                            type="text" />
+                                        <div *ngIf="!masterData.supplierInfoValidator.validator.isValid('billedName')"
+                                            class="invalid-feedback" style="display:block">
+                                            <div
+                                                *ngFor="let error of masterData.supplierInfoValidator.validator.getErrors('billedName')">
+                                                {{ error | translate }}
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+
+                                <div class="col-sm-3 col-md-3 col-lg-3 mobile-margin-top-15">
+                                    <div class="my-input-group">
+                                        <label>{{ 'INVOICE_GENERATE.LBL_BILLED_ADDRESS' | translate }}</label>
+                                        <ng-select [items]="masterData.billingAddressList" [closeOnSelect]="true"
+                                            [searchable]="true" bindLabel="name" bindValue="id"
+                                            (change)="changeBillingAddress($event)"
+                                            [(ngModel)]="masterData.billingAddressData"
+                                            placeholder="--- {{(masterData.billingAddressList && masterData.billingAddressList.length>0? 'COMMON.LBL_SELECT':'COMMON.LBL_NO_DATA')  | translate }} ---"
+                                            [loading]="masterData.invoiceBilledAddressLoading">
+                                            <ng-template ng-option-tmp let-item="item">
+                                                <div class="text-wrap">{{ item.name }}</div>
+                                            </ng-template>
+                                        </ng-select>
+                                    </div>
+                                </div>
+
+                                <div class="col-sm-3 col-md-3 col-lg-3 mobile-margin-top-15">
+                                    <div class="my-input-group">
+                                        <label class="required">{{ 'INVOICE_GENERATE.LBL_BILLED_ADDRESS_VALUE' |
+                                            translate }}</label>
+                                        <textarea style="height: 45px;" maxlength="500"
+                                            [(ngModel)]="masterData.supplierInfoValidator.supplierInfo.billingAddress"
+                                            [ngClass]="{ 'is-invalid': !masterData.supplierInfoValidator.validator.isValid('billingAddress')}"
+                                            type="text"></textarea>
+
+                                    </div>
+                                    <div *ngIf="!masterData.supplierInfoValidator.validator.isValid('billingAddress')"
+                                        class="invalid-feedback" style="display:block">
+                                        <div
+                                            *ngFor="let error of masterData.supplierInfoValidator.validator.getErrors('billingAddress')">
+                                            {{ error | translate }}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-sm-12"
+                            *ngIf="(invoiceGenerateModel.invoiceTo == _billPaidBy.Factory || invoiceGenerateModel.invoiceTo == _billPaidBy.Supplier)">
+                            <div class="row marginTop25">
+                                <div class="col-sm-3 col-md-3 col-lg-3">
+                                    <div class="my-input-group">
+                                        <label for="" class="required">{{ 'INVOICE_GENERATE.LBL_CONTACTS' | translate
+                                            }}</label>
+                                        <ng-select [items]="masterData.contactsList" bindLabel="name" class="multiple"
+                                            bindValue="id" [multiple]="true" [closeOnSelect]="true" [searchable]="true"
+                                            [loading]=masterData.invoiceContactsLoading [hideSelected]="true"
+                                            [ngClass]="{ 'is-invalid':  !masterData.supplierInfoValidator.validator.isValid('contactPersonIdList')}"
+                                            placeholder="--- {{ (masterData.contactsList!=null && masterData.contactsList.length!=0? 'EDIT_BOOKING.LBL_SELECT':'EDIT_BOOKING.MSG_NO_DATA' ) | translate }} ---"
+                                            [(ngModel)]="masterData.supplierInfoValidator.supplierInfo.contactPersonIdList"
+                                            appendTo="body">
+                                            <ng-template ng-option-tmp let-item="item">
+                                                <div class="text-wrap">{{ item.name }}</div>
+                                            </ng-template>
+                                        </ng-select>
+                                        <div *ngIf="!masterData.supplierInfoValidator.validator.isValid('contactPersonIdList')"
+                                            class="invalid-feedback" style="display:block">
+                                            <div
+                                                *ngFor="let error of masterData.supplierInfoValidator.validator.getErrors('contactPersonIdList')">
+                                                {{ error | translate }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!--   <div class="col-sm-3 col-md-3 col-lg-3"
+                                    *ngIf="(invoiceGenerateModel.invoiceTo == _billPaidBy.Factory || invoiceGenerateModel.invoiceTo == _billPaidBy.Supplier)">
+                                    <div class="my-input-group">
+                                        <label class="required">Contacts</label>
+                                        <ng-select [items]="masterData.contactsList" [closeOnSelect]="true"
+                                            [searchable]="true" bindLabel="name" bindValue="id"
+                                            (change)="changeBillingAddress($event)"
+                                            [(ngModel)]="invoiceGenerateModel.supplierInfo.contactPersonIdList"
+                                            placeholder="--- {{(masterData.contactsList && masterData.contactsList.length>0? 'COMMON.LBL_SELECT':'COMMON.LBL_NO_DATA')  | translate }} ---"
+                                            [loading]="masterData.invoiceContactsLoading">
+                                            <ng-template ng-option-tmp let-item="item">
+                                                <div class="text-wrap">{{ item.name }}</div>
+                                            </ng-template>
+                                        </ng-select>
+                                    </div>
+                                </div> -->
+                            </div>
+                        </div>
+
+                        <div class="col-sm-12" *ngIf="toggleFormSection">
+                            <div class="row marginTop20">
+
+                                <div class="col-sm-4 col-md-4 col-lg-3">
+                                    <div class="my-input-group">
+                                        <label for="" id="lbl_servicetype">{{'BOOKING_SUMMARY.LBL_SERVICETYPE' |
+                                            translate}}</label>
+                                        <ng-select [items]="masterData.serviceTypeList" class="multiple" multiple="true"
+                                            bindLabel="name" bindValue="id" [clearable]="false"
+                                            [(ngModel)]="invoiceGenerateModel.serviceTypes"
+                                            placeholder=" ---{{ (masterData.serviceTypeList!=null && masterData.serviceTypeList.length!=0? 'QUOTATION_SUMMARY.LBL_SELECT':'QUOTATION_SUMMARY.MSG_NO_DATA' ) | translate }}---">
+                                            <ng-template ng-option-tmp let-item="item">
+                                                <div class="text-wrap">{{ item.name }}</div>
+                                            </ng-template>
+                                        </ng-select>
+                                    </div>
+                                </div>
+
+                                <div class="col-sm-4 col-md-4 col-lg-3 mobile-margin-top-15">
+                                    <div class="my-input-group">
+                                        <label>{{ 'EDIT_CUSTOMER_PRICE_CARD.LBL_FACTORY_COUNTRY' | translate }}</label>
+                                        <ng-select [closeOnSelect]="true" [searchable]="true" class="multiple"
+                                            [items]="masterData.countryList"
+                                            [(ngModel)]="invoiceGenerateModel.factoryCountryList" [multiple]="true"
+                                            bindLabel="countryName" bindValue="id"
+                                            placeholder="--- {{(masterData.countryList && masterData.countryList.length>0? 'COMMON.LBL_SELECT':'COMMON.LBL_NO_DATA')  | translate }} ---"
+                                            [loading]="masterData.countryLoading">
+                                            <ng-template ng-option-tmp let-item="item">
+                                                <div class="text-wrap">{{ item.countryName }}</div>
+                                            </ng-template>
+                                        </ng-select>
+                                    </div>
+                                </div>
+
+                                <div class="col-sm-4 col-md-4 col-lg-3 mobile-margin-top-15">
+                                    <div class="my-input-group">
+                                        <label for="">{{ 'EDIT_CUSTOMER_PRICE_CARD.LBL_BRAND' | translate }}</label>
+                                        <ng-select [closeOnSelect]="true" [searchable]="true" [multiple]="true"
+                                            class="multiple" [items]="masterData.customerBrandList"
+                                            [(ngModel)]="invoiceGenerateModel.brandIdList" bindLabel="name"
+                                            bindValue="id"
+                                            placeholder="--- {{(masterData.customerBrandList && masterData.customerBrandList.length>0? 'COMMON.LBL_SELECT':'COMMON.LBL_NO_DATA')  | translate }} ---"
+                                            [loading]="masterData.customerBrandLoading">
+                                            <ng-template ng-option-tmp let-item="item">
+                                                <div class="text-wrap">{{ item.name }}</div>
+                                            </ng-template>
+                                        </ng-select>
+                                    </div>
+                                </div>
+
+                                <div class="col-sm-4 col-md-4 col-lg-3 mobile-margin-top-15">
+                                    <div class="my-input-group">
+                                        <label for="">{{ 'EDIT_CUSTOMER_PRICE_CARD.LBL_CUS_DEPARTMENT' | translate
+                                            }}</label>
+                                        <ng-select [closeOnSelect]="true" [searchable]="true" [multiple]="true"
+                                            class="multiple" [items]="masterData.customerDepartmentList"
+                                            [(ngModel)]="invoiceGenerateModel.departmentIdList" bindLabel="name"
+                                            bindValue="id"
+                                            placeholder="--- {{(masterData.customerDepartmentList && masterData.customerDepartmentList.length>0? 'COMMON.LBL_SELECT':'COMMON.LBL_NO_DATA')  | translate }} ---"
+                                            [loading]="masterData.customerDepartmentLoading">
+                                            <ng-template ng-option-tmp let-item="item">
+                                                <div class="text-wrap">{{ item.name }}</div>
+                                            </ng-template>
+                                        </ng-select>
+
+                                    </div>
+                                </div>
+
+                            </div>
+                            <div class="row marginTop25">
+
+
+
+                                <div class="col-sm-4 col-md-4 col-lg-3">
+                                    <div class="my-input-group">
+                                        <label for="">{{ 'EDIT_CUSTOMER_PRICE_CARD.LBL_BUYER' | translate }}</label>
+                                        <ng-select [closeOnSelect]="true" [searchable]="true" [multiple]="true"
+                                            class="multiple" [items]="masterData.customerBuyerList"
+                                            [(ngModel)]="invoiceGenerateModel.buyerIdList" bindLabel="name"
+                                            bindValue="id"
+                                            placeholder="--- {{(masterData.customerBuyerList && masterData.customerBuyerList.length>0? 'COMMON.LBL_SELECT':'COMMON.LBL_NO_DATA')  | translate }} ---"
+                                            [loading]="masterData.customerBuyerLoading">
+                                            <ng-template ng-option-tmp let-item="item">
+                                                <div class="text-wrap">{{ item.name }}</div>
+                                            </ng-template>
+                                        </ng-select>
+                                    </div>
+                                </div>
+
+                                <div class="col-sm-4 col-md-4 col-lg-3 mobile-margin-top-15">
+                                    <div class="my-input-group">
+                                        <label>{{ 'EDIT_CUSTOMER_PRICE_CARD.LBL_INVOICE_CONTACT' | translate }}</label>
+                                        <ng-select [items]="masterData.customerContactList"
+                                            [(ngModel)]="invoiceGenerateModel.customerContacts" [closeOnSelect]="true"
+                                            [searchable]="true" bindLabel="name" bindValue="id" [multiple]="true"
+                                            class="multiple"
+                                            placeholder="--- {{(masterData.customerContactList && masterData.customerContactList.length>0? 'COMMON.LBL_SELECT':'COMMON.LBL_NO_DATA')  | translate }} ---"
+                                            [loading]="masterData.customerContactsLoading">
+                                            <ng-template ng-option-tmp let-item="item">
+                                                <div class="text-wrap">{{ item.name }}</div>
+                                            </ng-template>
+                                        </ng-select>
+                                    </div>
+                                </div>
+
+                                <div class="col-sm-3 col-md-3 col-lg-3 mobile-margin-top-15"
+                                    *ngIf="(invoiceGenerateModel.invoiceTo != _billPaidBy.Supplier)">
+                                    <div class="my-input-group select-for-filter">
+                                        <label>{{ 'INVOICE_GENERATE.LBL_SUPPLIER' | translate }}</label>
+
+                                        <ng-select [items]="masterData.supplierList" [virtualScroll]="true"
+                                            [multiple]="true" class="multiple" [loading]="masterData.supplierLoading"
+                                            (clear)="clearBaseSupplierDetails()"
+                                            [(ngModel)]="invoiceGenerateModel.supplierList" [closeOnSelect]="true"
+                                            [searchable]="true" bindLabel="name" bindValue="id" [multiple]="true"
+                                            [typeahead]="masterData.supplierInput" [minTermLength]="3" appendTo="body"
+                                            placeholder="--- {{(masterData.customerContactList && masterData.customerContactList.length>0? 'COMMON.LBL_SELECT':'COMMON.LBL_NO_DATA')  | translate }} ---"
+                                            (scrollToEnd)="getSupplierData(true)" #select>
+                                            <ng-template ng-option-tmp let-item="item">
+                                                <div class="text-wrap">{{ item.name }}</div>
+                                            </ng-template>
+                                        </ng-select>
+
+                                    </div>
+                                </div>
+
+                                <div class="col-sm-3 col-md-3 col-lg-3 mobile-margin-top-15">
+                                    <div class="my-input-group">
+                                        <label>Booking No</label>
+                                        <input maxlength="200" [(ngModel)]="invoiceGenerateModel.bookingNo"
+                                            type="text" />
+                                    </div>
+                                </div>
+
+                            </div>
+
+                            <div class="row marginTop25">
+                                <div class="col-sm-4 col-md-4 col-lg-3">
+                                    <div class="my-input-group">
+                                        <label for="">{{ 'EDIT_CUSTOMER_PRICE_CARD.LBL_PRODUCT_CATEGORY' | translate
+                                            }}</label>
+                                        <ng-select [closeOnSelect]="true" [searchable]="true" [multiple]="true"
+                                            class="multiple" [items]="masterData.productCategoryList"
+                                            [(ngModel)]="invoiceGenerateModel.productCategoryIdList" bindLabel="name"
+                                            bindValue="id" (change)="changeProductCategory($event)"
+                                            placeholder="--- {{(masterData.productCategoryList && masterData.productCategoryList.length>0? 'COMMON.LBL_SELECT':'COMMON.LBL_NO_DATA')  | translate }} ---"
+                                            [loading]="masterData.productCategoryLoading">
+                                            <ng-template ng-option-tmp let-item="item">
+                                                <div class="text-wrap">{{ item.name }}</div>
+                                            </ng-template>
+                                        </ng-select>
+                                    </div>
+                                </div>
+
+                                <div class="col-sm-4 col-md-4 col-lg-3">
+                                    <div class="my-input-group">
+                                        <label for="">{{ 'EDIT_CUSTOMER_PRICE_CARD.LBL_PRODUCT_SUB_CATEGORY' | translate
+                                            }}</label>
+                                        <ng-select [closeOnSelect]="true" [searchable]="true" [multiple]="true"
+                                            class="multiple" [items]="masterData.productSubCategoryList"
+                                            [(ngModel)]="invoiceGenerateModel.productSubCategoryIdList" bindLabel="name"
+                                            bindValue="id"
+                                            placeholder="--- {{(masterData.productSubCategoryList && masterData.productSubCategoryList.length>0? 'COMMON.LBL_SELECT':'COMMON.LBL_NO_DATA')  | translate }} ---"
+                                            [loading]="masterData.customerBuyerLoading">
+                                            <ng-template ng-option-tmp let-item="item">
+                                                <div class="text-wrap">{{ item.name }}</div>
+                                            </ng-template>
+                                        </ng-select>
+                                    </div>
+                                </div>
+
+                                <div class="col-sm-4 col-md-4 col-lg-3">
+                                    <div class="my-input-group">
+                                        <label>{{ 'EDIT_CUSTOMER_PRICE_CARD.LBL_INVOICE_BILLING' | translate }}</label>
+                                        <ng-select [closeOnSelect]="true" [searchable]="true"
+                                            [items]="masterData.billingEntityList"
+                                            [(ngModel)]="invoiceGenerateModel.billingEntity" bindLabel="name"
+                                            bindValue="id" (change)="onChangeBillingEntity($event);"
+                                            (clear)="onClearBillingEntity();"
+                                            placeholder="--- {{(masterData.billingEntityList && masterData.billingEntityList.length>0? 'COMMON.LBL_SELECT':'COMMON.LBL_NO_DATA')  | translate }} ---"
+                                            [loading]="masterData.billingEntityLoading">
+                                            <ng-template ng-option-tmp let-item="item">
+                                                <div class="text-wrap">{{ item.name }}</div>
+                                            </ng-template>
+                                        </ng-select>
+
+                                    </div>
+                                </div>
+
+                            </div>
+
+                            <div class="row marginTop15">
+
+                                <div class="col-sm-4 col-md-4 col-lg-3 mobile-margin-top-15">
+                                    <div class="my-input-group">
+                                        <label>{{ 'EDIT_CUSTOMER_PRICE_CARD.LBL_INVOICE_BANK' | translate }}</label>
+                                        <ng-select [closeOnSelect]="true" [searchable]="true"
+                                            [items]="masterData.invoiceBankList"
+                                            [(ngModel)]="invoiceGenerateModel.bankAccount" bindLabel="name"
+                                            bindValue="id"
+                                            placeholder="--- {{(masterData.invoiceBankList && masterData.invoiceBankList.length>0? 'COMMON.LBL_SELECT':'COMMON.LBL_NO_DATA')  | translate }} ---"
+                                            [ngClass]="{ 'is-invalid':  (invoiceGenerateModel.billingEntity>0 && !validator.isValid('bankAccount')) }"
+                                            [loading]="masterData.invoiceBankLoading">
+                                            <ng-template ng-option-tmp let-item="item">
+                                                <div class="text-wrap">{{item.name }}</div>
+                                            </ng-template>
+                                        </ng-select>
+                                        <div *ngIf="invoiceGenerateModel.billingEntity>0 && !validator.isValid('bankAccount')"
+                                            class="invalid-feedback">
+                                            <div *ngFor="let error of validator.getErrors('bankAccount')">
+                                                {{ error | translate }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                        <div class="col-sm-12">
+                            <div class="row marginTop25">
+                                <button style="float: left;" class="tertiary-cta small" (click)="toggleSection()">
+                                    <span class="icon" *ngIf="!toggleFormSection">+</span>
+                                    <span class="icon" *ngIf="toggleFormSection">-</span>
+                                    {{'QUOTATION_SUMMARY.LBL_ADVANCED_SEARCH' | translate}}
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="col-sm-12">
+                            <div class="row marginTop25">
+
+                                <div class="col-sm-4 col-md-4 col-lg-3">
+                                    <div class="my-input-group">
+                                        <label>{{ 'INVOICE_GENERATE.LBL_SPLIT_INVOICE' | translate }}</label>
+                                        <ng-select [items]="masterData.splitInvoiceList" bindLabel="name" bindValue="id"
+                                            [clearable]="true" appendTo="body"
+                                            [(ngModel)]="invoiceGenerateModel.splitInvoice" class="multiple"
+                                            [multiple]="true" [loading]="masterData.splitInvoiceLoading"
+                                            placeholder=" ---{{ (masterData.splitInvoiceList!=null && masterData.splitInvoiceList.length!=0? 'QUOTATION_SUMMARY.LBL_SELECT':'QUOTATION_SUMMARY.MSG_NO_DATA' ) | translate }}---">
+                                            <ng-template ng-option-tmp let-item="item">
+                                                <div class="text-wrap">{{ item.name }}</div>
+                                            </ng-template>
+                                        </ng-select>
+                                    </div>
+                                </div>
+                                <div class="col-sm-3 col-md-3 col-lg-3">
+                                    <div class="my-input-group">
+                                        <label>{{'INVOICE_GENERATE.LBL_CURRENCY' | translate}}</label>
+                                        <ng-select [closeOnSelect]="true" [searchable]="true"
+                                            [items]="masterData.currencyList"
+                                            [(ngModel)]="invoiceGenerateModel.currencyId" bindLabel="currencyName"
+                                            bindValue="id"
+                                            placeholder="--- {{(masterData.currencyList && masterData.currencyList.length>0? 'COMMON.LBL_SELECT':'COMMON.LBL_NO_DATA')  | translate }} ---"
+                                            [loading]="masterData.currencyLoading">
+                                            <ng-template ng-option-tmp let-item="item">
+                                                <div class="text-wrap">{{ item.currencyName }}</div>
+                                            </ng-template>
+                                        </ng-select>
+                                    </div>
+                                </div>
+
+                                <div class="col-sm-3 col-md-3 col-lg-3 mobile-margin-top-15">
+                                    <div class="my-input-group">
+                                        <label>{{'INVOICE_GENERATE.LBL_EXCHANGE_RATE' | translate}}</label>
+                                        <input maxlength="200" [(ngModel)]="invoiceGenerateModel.exchangeRate"
+                                            type="number" />
+                                    </div>
+                                </div>
+
+
+                            </div>
+                        </div>
+
+                        <div class="col-sm-12">
+                            <div class="row form-action-container">
+                                <div class="col-sm-12">
+                                    <button *ngIf="masterData.hasInvoiceAccess" [disabled]="masterData.saveDataLoading"
+                                        class="primary-cta MarginR-20" (click)="generateInvoice()">
+                                        {{'INVOICE_GENERATE.LBL_GENERATE' | translate}}
+                                        <span *ngIf="masterData.saveDataLoading">
+                                            <i class="fa fa-refresh fa-spin" aria-hidden="true"></i>
+                                        </span>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="loader-overlay" *ngIf="isInvoiceDataLoading">
+    <div class="loader-container">
+        <img src="assets/images/reload.svg" alt="">
+        <span>{{'COMMON.LBL_LOADER' | translate}}</span>
+    </div>
+</div>
+
+<ng-template #invoicePreviewTemplate let-modal>
+    <app-invoice-preview (closeInvoicePreview)="closeInvoicePreview()" [invoicePreviewModel]="invoicePreviewRequest">
+    </app-invoice-preview>
+</ng-template>

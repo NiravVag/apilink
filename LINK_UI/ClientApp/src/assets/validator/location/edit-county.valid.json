@@ -1,0 +1,42 @@
+{
+    "model":"EditCountymodel",
+    "fields": {
+        "cityId": [
+            {
+                "type": "required",
+                "ressource": "EDIT_COUNTY.MSG_CITY_NAME_REQ"
+            }
+        ],
+        "provinceId": [
+            {
+                "type": "required",
+                "ressource": "EDIT_COUNTY.MSG_PROVINCE_NAME_REQ"
+            }
+        ],
+        "countyName": [
+            {
+                "type": "required",
+                "ressource": "EDIT_COUNTY.MSG_REGION_NAME_REQ"
+            }
+        ],
+        "countyCode": [
+            {
+                "type": "required",
+                "ressource": "EDIT_COUNTY.MSG_COUNTY_CODE"
+            }
+        ],
+        "zoneId": [
+            {
+                "type": "required",
+                "ressource": "EDIT_COUNTY.MSG_ZONE_REQ"
+            }
+        ],
+        "countryId": [
+            {
+              "type": "required",
+              "fieldType": "N",
+              "ressource": "EDIT_COUNTY.MSG_COUNTRY_NAME_REQ"
+            }
+          ]
+    }
+}

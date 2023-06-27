@@ -1,0 +1,45 @@
+﻿@model DTO.DataManagement.DataManagmentEmailItem
+<span style="font-size: 13px; font-family: tahoma;">
+    Dear All, <br /><br />
+
+    New file uploaded under @(!String.IsNullOrEmpty(Model.Customer)? Model.Customer + " / " : "") @Model.FileHierarchyName in data management.
+    <br /><br />
+    Please get the updated version from <a href="@Model.BaseUrl">Link</a> or click below to download the file.
+    <br /><br />
+
+    <table id='TblList' style="border:solid 1px #d4d0c8;border-collapse:collapse;font-size:12px; font-family:tahoma;" cellspacing='0' cellpadding='1' rules='all' align='left' border='1' cellspacing=0 cellpadding=0 width='100%'>
+        <tr>
+            <th bgcolor=#f8f4f3 style="color: black; font-size:13px;" align=center width='10%' height=35>File Name</th>
+            <th bgcolor=#f8f4f3 style="color: black; font-size:13px;" align=center width='10%' height=35>File Size</th>
+            <th bgcolor=#f8f4f3 style="color: black; font-size:13px;" align=center width='35%' height=35>File</th>
+        </tr>
+        @if(Model.FileAttachments!=null && Model.FileAttachments.Any())
+        {
+
+                foreach (var fileData in Model.FileAttachments)
+                {
+                    <tr>
+                        <td align=center style="font-size: 12px;" height=30>
+                            @fileData.FileName
+                        </td>
+                        <td align=center style="font-size: 12px;" height=30>
+
+                            @String.Format("{0:0.00}", fileData.FileSize) MB
+
+                        </td>
+                        <td align=center style="font-size: 12px;" height=30>
+                            <a href="@fileData.FileUrl">@fileData.FileName</a>
+                        </td>
+                    </tr>
+                }
+
+        }
+
+
+    </table>
+    <br />
+    Thanks<br />
+    IT-Team
+    <br /><br />
+    <span style="font-style:italic"> Note: - This receipt is auto generated from Link. Please do not reply to this message.</span>
+</span>

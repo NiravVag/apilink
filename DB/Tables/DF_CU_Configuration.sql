@@ -1,0 +1,26 @@
+﻿CREATE TABLE [dbo].[DF_CU_Configuration]
+(
+	[Id] INT NOT NULL PRIMARY KEY IDENTITY(1,1),
+	[CustomerId] INT NOT NULL,
+	[ModuleId] INT NOT NULL,
+	[ControlTypeId] INT NOT NULL,
+	[Label] NVARCHAR(100) NOT NULL,
+	[Type] NVARCHAR(100),
+	[DataSourceType] INT,
+	[DisplayOrder] INT NOT NULL,
+	[FBReference] NVARCHAR(200) NULL,
+	[Active] BIT NOT NULL, 
+    [CreatedBy] INT NOT NULL, 
+    [CreatedOn] DATETIME NOT NULL, 
+    [UpdatedBy] INT NULL, 
+    [UpdatedOn] DATETIME NULL, 
+    [DeletedBy] INT NULL, 
+    [DeletedOn] DATETIME NULL, 
+    FOREIGN KEY(CustomerId) REFERENCES CU_Customer(Id),
+	FOREIGN KEY(ModuleId) REFERENCES REF_Modules(Id),
+	FOREIGN KEY(ControlTypeId) REFERENCES DF_ControlTypes(Id),
+	FOREIGN KEY(DataSourceType) REFERENCES DF_DDL_SourceType(Id),
+	FOREIGN KEY(CreatedBy) REFERENCES IT_UserMaster(Id),
+	FOREIGN KEY(UpdatedBy) REFERENCES IT_UserMaster(Id),
+	FOREIGN KEY(DeletedBy) REFERENCES IT_UserMaster(Id)
+)

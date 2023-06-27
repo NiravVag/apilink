@@ -1,0 +1,144 @@
+<div class="main-wrapper">
+  <div class="wrapper dashboard-wrapper">
+    <div class="my-container">
+      <div class="master-body">
+        <div class="title-container">
+            <div class="header-back-button" *ngIf="fromSummary && !loading">
+                <img src="assets/images/back-red.png" alt="back" (click)="return()">
+                </div>
+          <h3 class="main-title">{{ 'RATE_MATRIX.TITLE' | translate }}</h3>
+        </div>
+        <div class="content-container quotation-container"> 
+          <div  [@expandCollapse]="isFilterOpen ? 'open' : 'close'" class="centerContainerPadding common-filter-container">
+            <div class="animated-icon-container" (click)="toggleFilterSection()" *ngIf="(dataItems && dataItems.length>0)&&!model.noFound">
+              <img src="assets/images/cta-close-grey.svg" alt="close">
+            </div>
+          <div class="row">
+            <div class="col-sm-3 col-md-3 col-lg-3">
+              <div class="my-input-group">
+                <label class="control-label required">{{ 'EXCHANGE_RATE.LBL_TARGETCURRENCY' | translate }}</label>
+                <ng-select [items]="data.currencyList" [multiple]="false" [closeOnSelect]="true" appendTo="body" [searchable]="true"
+                  bindLabel="currencyName" class="multiple"
+                  [ngClass]="{ 'is-invalid': !validator.isValid('currency')}"
+                  placeholder="--- {{ 'EXCHANGE_RATE.LBL_SELECT' | translate }} ---" [(ngModel)]="model.currency">
+
+                </ng-select>
+                <div *ngIf="!validator.isValid('currency')" class="invalid-feedback" style="display:block">
+                  <div *ngFor="let error of validator.getErrors('currency')">{{ error | translate }}</div>
+                </div>
+              </div>
+            </div>
+            <div class="col-sm-2 col-md-2 col-lg-2 mobile-margin-top-15">
+              <div class="my-input-group">
+                <label class="control-label required">{{ 'EXCHANGE_RATE.LBL_FROMDATE' | translate }}</label>
+                <div class="calendar-wrapper">
+                  <input type="text" maxlength="10" [ngClass]="{ 'is-invalid':  !validator.isValid('fromDate')}"
+                    (click)="fd.toggle()" placeholder="{{ 'EXCHANGE_RATE.LBL_FROMDATE' | translate }}" container="body"
+                    [(ngModel)]="model.fromDate" ngbDatepicker #fd="ngbDatepicker" readonly>
+                    <img src="assets/images/cta-close-grey.svg" alt="" class="close-icon" (click)="clearDateInput('FromDate')" *ngIf="model.fromDate">
+                  <img src="assets/images/calendar-icon.svg" alt="" class="calendar-icon" (click)="fd.toggle()">
+                </div>
+                <div *ngIf="!validator.isValid('fromDate')" class="invalid-feedback">
+                  <div *ngFor="let error of validator.getErrors('fromDate')">{{ error | translate }}</div>
+                </div>
+              </div>
+            </div>
+            <div class="col-sm-2 col-md-2 col-lg-2 mobile-margin-top-15">
+              <div class="my-input-group">
+                <label class="control-label required">{{ 'EXCHANGE_RATE.LBL_TODATE' | translate }}</label>
+                <div class="calendar-wrapper">
+                  <input type="text" maxlength="10" [ngClass]="{ 'is-invalid':  !validator.isValid('toDate')}" container="body"
+                    (click)="td.toggle()" placeholder="{{ 'EXCHANGE_RATE.LBL_TODATE' | translate }}"
+                    [(ngModel)]="model.toDate" ngbDatepicker #td="ngbDatepicker" readonly>
+                    <img src="assets/images/cta-close-grey.svg" alt="" class="close-icon" (click)="clearDateInput('ToDate')" *ngIf="model.toDate">
+                  <img src="assets/images/calendar-icon.svg" alt="" class="calendar-icon" (click)="td.toggle()">
+                </div>
+                <div *ngIf="!validator.isValid('toDate')" class="invalid-feedback">
+                  <div *ngFor="let error of validator.getErrors('toDate')">{{ error | translate }}</div>
+                </div>
+              </div>
+            </div>
+            <div class="col-sm-3 col-md-3 col-lg-3 mobile-margin-top-15">
+              <div class="my-input-group">
+                <label class="control-label required">{{ 'EXCHANGE_RATE.LBL_TYPE' | translate }}</label>
+                <ng-select [items]="data.rateTypeList" [multiple]="false" [closeOnSelect]="true"  appendTo="body" [searchable]="false"
+                  bindLabel="label" [ngClass]="{ 'is-invalid': !validator.isValid('exchangeType')}"
+                  placeholder="--- {{ 'EXCHANGE_RATE.LBL_SELECT' | translate }} ---" [(ngModel)]="model.exchangeType">
+                </ng-select>
+                <div *ngIf="!validator.isValid('exchangeType')" class="invalid-feedback" style="display:block">
+                  <div *ngFor="let error of validator.getErrors('exchangeType')">{{ error | translate }}</div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row marginTop25">
+            <div class="col-12 col-sm-12 text-right mt-3 mt-sm-0"> 
+              <button class="secondary-cta small" (click)="export()"
+              [disabled]="!isSearch || model.noFound || exportDataLoading">
+              <i class="fa fa-sign-in"></i>&nbsp;&nbsp;{{ 'RATE_MATRIX.LBL_EXPORT' | translate }}
+              <span *ngIf="exportDataLoading">
+                <i class="fa fa-refresh fa-spin" aria-hidden="true"></i>
+              </span>
+            </button>
+            &nbsp;
+              <button class="primary-cta small" (click)="search()" [disabled]="!validator.isFormValid() || loading || _searchloader">
+                {{ 'EXCHANGE_RATE.LBL_SEARCH' | translate }}
+                <span *ngIf="_searchloader">
+                    <i class="fa fa-refresh fa-spin" aria-hidden="true"></i>
+                  </span>
+              </button>
+            </div>
+          </div>
+          </div>
+          <div class="centerContainerPadding float-left"  *ngIf="!model.noFound">
+            <div class="row">
+              
+              <div class="col-12 col-sm-8 col-xl-12 text-right">
+                <div class="animated-icon-container" *ngIf="!isFilterOpen" (click)="toggleFilterSection()">
+                  <img src="assets/images/cta-search-grey.svg" alt="search">
+                </div>
+              </div>
+            </div>
+           <div class="quotation-search-container">
+            <div style="overflow-y:hidden" class="table-container scroll-x">
+                <table class="pagination-table simple-table bordered">
+                <thead>
+                  <tr>
+                    <th></th>
+                    <ng-container *ngIf="dataItems != null">
+                      <th *ngFor="let item of dataItems">{{ item.currency.currencyCode  }}</th>
+                    </ng-container>
+                  </tr>
+                </thead>
+                <tbody>
+                  <ng-container *ngIf="dataItems != null">
+                    <tr *ngFor="let item of dataItems">
+                      <td>{{ item.currency.currencyName }}</td>
+                      <td [style.border-width]="getBorderwidth(item.currency,itemValue.currency)"
+                        [style.background-color]="getBackgroundColor(item.currency,itemValue.currency)"
+                        *ngFor="let itemValue of item.currencyValueList">{{ itemValue.value }} </td>
+                    </tr>
+                  </ng-container>
+                </tbody>
+              </table>
+            </div>
+            <div *ngIf="(model.items && model.items.length>0)" class="pagination-container">
+              <div class="pagination">
+                <ngb-pagination (pageChange)="onPager($event)" [pageSize]="model.pageSize"
+                  [collectionSize]="model.totalCount" [(page)]="model.index" [maxSize]="5"></ngb-pagination>
+              </div>
+            </div>
+          </div>
+        </div>
+         
+          <div class="centerContainerPadding" *ngIf="model.noFound">
+            <div class="error-container">
+              <img src="assets/images/no-result.svg" alt="" class="thumbnail">
+              <h4 class="title">No Data Found</h4>
+              <p class="error-subtitle">{{'CS_CONFIG_SUMMARY.LBL_NODATA' | translate}}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>

@@ -1,0 +1,13 @@
+{
+    "model": "quotation.model",
+    "fields": {
+      "manDay": [
+        {
+          "type": "required",
+          "fieldType": "NU",
+          "ressource": "QUOTATION.MSG_BOOK_MAN_DAY"
+        }
+      ]
+      
+    }
+  }

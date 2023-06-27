@@ -1,0 +1,167 @@
+<div class="main-wrapper">
+  <div class="wrapper dashboard-wrapper">
+    <div class="my-container">
+      <div class="master-body">
+        <div class="title-container">
+            <div class="header-back-button" *ngIf="fromSummary">
+                <img src="assets/images/back-red.png" alt="back" (click)="return('leavesearch/leave-summary')">
+                </div>
+          <h3 class="main-title">
+            {{ 'LEAVE_REQUEST.TITLE' | translate }}
+          </h3>
+        </div>
+        <div class="content-container">
+          <h4 class="container-head">{{ 'LEAVE_REQUEST.LBL_MAIN' | translate }} <span
+              style="float:right">{{model == null ? "Request" : model.statusName }}</span></h4>
+          <div class="formPadding">
+            <div class="row">
+              <div class=" col-sm-3">
+                <div class="my-input-group">
+                  <label class="required">{{ 'LEAVE_REQUEST.LBL_FROMDATE' | translate }}</label>
+                  <div class="calendar-wrapper">
+                    <input type="text" maxlength="10" (ngModelChange)="getDays($event, 'startDate')"
+                      [ngClass]="{ 'is-invalid':  !validator.isValid('startDate')}" readonly=readonly
+                      placeholder="{{ 'LEAVE_REQUEST.LBL_FROMDATE' | translate }}" [(ngModel)]="model.startDate"
+                      ngbDatepicker #fd="ngbDatepicker" (click)="fd.toggle()">
+                    <img src="assets/images/calendar-icon.svg" alt="" class="calendar-icon" (click)="fd.toggle()">
+                  </div>
+                  <div *ngIf="!validator.isValid('startDate')" class="invalid-feedback">
+                    <div *ngFor="let error of validator.getErrors('startDate')">{{ error | translate }}</div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-sm-3 mobile-margin-top-15">
+                <div class="my-input-group">
+                  <label class="required">{{ 'LEAVE_REQUEST.LBL_STARTDAYTYPE' | translate }}</label>
+                  <select (ngModelChange)="getDays($event, 'startDayType')" [(ngModel)]="model.startDayType">
+                    <option *ngFor="let item of data.dayTypeList" [ngValue]="item.id">{{item.label}}</option>
+                  </select>
+                </div>
+              </div>
+              <div class=" col-sm-3 mobile-margin-top-15">
+                <div class="my-input-group">
+                  <label class="required">{{ 'LEAVE_REQUEST.LBL_TODATE' | translate }}</label>
+                  <div class="calendar-wrapper">
+                    <input type="text" (ngModelChange)="getDays($event, 'endDate')"
+                      [ngClass]="{ 'is-invalid':  !validator.isValid('endDate')}" readonly=readonly
+                      placeholder="{{ 'LEAVE_REQUEST.LBL_TODATE' | translate }}" [(ngModel)]="model.endDate"
+                      ngbDatepicker #td="ngbDatepicker" (click)="td.toggle()">
+                    <img src="assets/images/calendar-icon.svg" alt="" class="calendar-icon" (click)="td.toggle()">
+                  </div>
+                  <div *ngIf="!validator.isValid('endDate')" class="invalid-feedback">
+                    <div *ngFor="let error of validator.getErrors('endDate')">{{ error | translate }}</div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-sm-3 mobile-margin-top-15">
+                <div class="my-input-group">
+                  <label class="required">{{ 'LEAVE_REQUEST.LBL_ENDDAYTYPE' | translate }}</label>
+                  <select (ngModelChange)="getDays($event, 'endDayType')" [(ngModel)]="model.endDayType">
+                    <option *ngFor="let item of data.dayTypeList" [ngValue]="item.id">{{item.label}}</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+            <div class="row marginTop15">
+              <div class="col-sm-3 mobile-margin-top-15">
+                <div class="my-input-group">
+                  <label class="required">{{ 'LEAVE_REQUEST.LBL_LEAVETYPE' | translate }}</label>
+                  <select [ngClass]="{ 'is-invalid': !validator.isValid('leaveTypeId')}"
+                    [(ngModel)]="model.leaveTypeId">
+                    <option value="0">--- {{ 'EXPENSE.LBL_SELECT' | translate }}---</option>
+                    <option *ngFor="let item of data.leaveTypeList" [ngValue]="item.id">{{item.label}}</option>
+                  </select>
+                  <div *ngIf="!validator.isValid('leaveTypeId')" class="invalid-feedback">
+                    <div *ngFor="let error of validator.getErrors('leaveTypeId')">{{ error | translate }}</div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-sm-3 mobile-margin-top-15">
+                <div class="my-input-group">
+                  <label class="required">{{ 'LEAVE_REQUEST.LBL_LEAVEDAYS' | translate }}</label>
+                  <input [ngClass]="{ 'is-invalid': !validator.isValid('leaveDays')}" type="number"
+                    placeholder="{{ 'LEAVE_REQUEST.LBL_LEAVEDAYS' | translate }}" [(ngModel)]="model.leaveDays" />
+                  <div *ngIf="!validator.isValid('leaveDays')" class="invalid-feedback">
+                    <div *ngFor="let error of validator.getErrors('leaveDays')">{{ error | translate }}</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="row marginTop15">
+              <div class=" col-sm-12">
+                <div class="my-input-group">
+                  <label>{{ 'LEAVE_REQUEST.LBL_REASON' | translate }}</label>
+                  <textarea [(ngModel)]="model.reason" type="text" maxlength="600"
+                    placeholder="{{ 'LEAVE_REQUEST.LBL_REASON' | translate }}"></textarea>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="form-action-container">
+           <!--  <button *ngIf="fromSummary" type="button" class="secondary-cta small" (click)="return('leavesearch/leave-summary')">
+                {{ 'LEAVE_REQUEST.LBL_RETURN' | translate }}
+            </button> -->
+            <button type="button" *ngIf="canEdit" class="primary-cta small" (click)="save()"
+              [disabled]="loading || _saveloader || _approveloader || _rejectloader || _cancelloader">
+              {{ 'LEAVE_REQUEST.LBL_SAVE' | translate }}
+              <span *ngIf="_saveloader">
+                <i class="fa fa-refresh fa-spin" aria-hidden="true"></i>
+              </span>
+            </button>
+            <button type="button" *ngIf="canApprove" class="primary-cta small" (click)="approve()"
+              [disabled]="loading || _saveloader || _approveloader || _rejectloader || _cancelloader">
+              {{ 'LEAVE_REQUEST.LBL_APPROVE' | translate }}
+              <span *ngIf="_approveloader">
+                <i class="fa fa-refresh fa-spin" aria-hidden="true"></i>
+              </span>
+            </button>
+            <button style="margin-left:10px" type="button" *ngIf="canApprove" class="primary-cta small"
+              (click)="openConfirm(content)" [disabled]="loading || _saveloader || _approveloader || _rejectloader || _cancelloader">
+              {{ 'LEAVE_REQUEST.LBL_REJECT' | translate }}
+              <span *ngIf="_rejectloader">
+                <i class="fa fa-refresh fa-spin" aria-hidden="true"></i>
+              </span>
+            </button>
+            <button *ngIf="canCancel" style="margin-left:10px"
+              type="button" class="primary-cta small" (click)="cancel()" [disabled]="loading || _saveloader || _approveloader || _cancelloader">
+              {{ 'LEAVE_REQUEST.LBL_CANCEL' | translate }}
+              <span *ngIf="_cancelloader">
+                <i class="fa fa-refresh fa-spin" aria-hidden="true"></i>
+              </span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+    <ng-template #content let-modal>
+    <div class="modal-header custom-modal-header">
+      <h4 class="modal-title" id="modal-basic-title">{{ 'EXPENSE_SUMMARY.LBL_COMMENTREJECT' | translate }}</h4>
+      <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body custom-modal-body">
+      <div class="row">
+        <div class="col-sm-10 mobile-margin-top-15">
+          <div class="my-input-group">
+            <label class="required">{{ 'EXPENSE_SUMMARY.LBL_COMMENT' | translate }}</label>
+            <textarea [ngClass]="{ 'is-invalid': !isRejectValid}" rows="3" [(ngModel)]="rejectComment" maxlength="600"
+              placeholder="{{ 'EXPENSE_SUMMARY.LBL_COMMENT' | translate }}"></textarea>
+            <div *ngIf="!isRejectValid" class="invalid-feedback">
+              <div>{{ 'EXPENSE_SUMMARY.MSG_COMMENT_REQ' | translate }}</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer custom-modal-footer">
+      <button type="button" class="secondary-cta" (click)="modal.close('cancel click')">
+        {{ 'EXPENSE_SUMMARY.LBL_CONFIRMCANCEL' | translate }}
+      </button>
+      <button type="button" class="primary-cta" (click)="reject();">
+        {{ 'EXPENSE_SUMMARY.LBL_CONFIRMOK' | translate }}
+      </button>
+    </div>
+  </ng-template>
+</div>

@@ -1,0 +1,61 @@
+{
+    "model": "eidt-complaint.model",
+    "fields": {
+      "complaintTypeId": [
+        {
+          "type": "required",
+          "fieldType": "N",
+          "ressource": "EDIT_COMPLAINT.MSG_COMPLAINTTYPE_REQ"
+        }
+      ],
+      "serviceId": [
+        {
+          "type": "required",
+          "fieldType": "N",
+          "ressource": "EDIT_COMPLAINT.MSG_SERVICETYPE_REQ"
+        }
+      ] ,
+      "bookingNo": [
+        {
+          "type": "required",
+          "fieldType": "A",
+          "ressource": "EDIT_COMPLAINT.MSG_BOOKINGNO_REQ"
+        }
+      ],
+      "complaintDate": [
+        {
+          "type": "required",
+          "fieldType": "D",
+          "ressource": "EDIT_COMPLAINT.MSG_COMPLAINTDATE_REQ"
+        }
+      ],
+      "recipientTypeId": [
+        {
+          "type": "required",
+          "fieldType": "N",
+          "ressource": "EDIT_COMPLAINT.MSG_RECIPIENTTYPE_REQ"
+        }
+      ] ,
+      "departmentId": [
+        {
+          "type": "required",
+          "fieldType": "N",
+          "ressource": "EDIT_COMPLAINT.MSG_DEPARTMENT_REQ"
+        }
+      ],
+      "userIds": [
+        {
+          "type": "required",
+          "fieldType": "N",
+          "ressource": "EDIT_COMPLAINT.MSG_USER_REQ"
+        }
+      ],
+      "customerId": [
+        {
+          "type": "required",
+          "fieldType": "N",
+          "ressource": "EDIT_COMPLAINT.MSG_CUSTOMER_REQ"
+        }
+      ]       
+    }    
+  }

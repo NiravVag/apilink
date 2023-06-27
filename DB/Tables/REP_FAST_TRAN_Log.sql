@@ -1,0 +1,11 @@
+﻿Create Table REP_FAST_TRAN_Log(
+Id int NOT NULL PRIMARY KEY IDENTITY(1,1),
+FastTranId int,
+ReportId int,
+Status int,
+ErrorLog nvarchar(4000),
+CreatedOn datetime NOT NULL DEFAULT GETDATE(),
+CONSTRAINT FK_REP_FAST_TRAN_Log_ReportId FOREIGN KEY (ReportId) REFERENCES FB_Report_Details(Id),
+CONSTRAINT FK_REP_FAST_TRAN_Log_FastTranId FOREIGN KEY (FastTranId) REFERENCES REP_FAST_Transaction(Id),
+CONSTRAINT FK_REP_FAST_TRAN_Log_Status FOREIGN KEY (Status) REFERENCES REP_FAST_REF_Status(Id)
+)

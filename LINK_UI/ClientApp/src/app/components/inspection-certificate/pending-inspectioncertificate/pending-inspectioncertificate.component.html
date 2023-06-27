@@ -1,0 +1,260 @@
+<div class="main-wrapper">
+  <div class="wrapper dashboard-wrapper">
+    <div class="my-container">
+      <div class="master-body">
+        <div class="title-container">
+          <h3 class="main-title"> {{ 'PENDING_INSPECTION_CERTIFICATE.LBL_MAIN_TITLE' | translate }}</h3>
+        </div>
+        <div class="content-container quotation-container">
+          <div  [@expandCollapse]="isFilterOpen ? 'open' : 'close'" class="centerContainerPadding common-filter-container">
+            <div class="animated-icon-container" (click)="toggleFilterSection()" *ngIf="(ICMasterModel.bookingSearchList && ICMasterModel.bookingSearchList.length>0)">
+              <img src="assets/images/cta-close-grey.svg" alt="close">
+            </div>
+              <div class="row">
+                <div class="col-sm-8 col-md-3 col-lg-4">
+                  <div class="my-input-group">
+                    <div class="styled-radio-container">
+                      <input type="radio" class="styled-radio" id="bookingNo" name="radio-group"
+                             value="bookingNo" [checked]="true">
+                      <label for="bookingNo">{{ 'PENDING_INSPECTION_CERTIFICATE.LBL_BOOKINGNO' | translate }}</label>
+                    </div>
+                    <input maxlength="40" [(ngModel)]="model.bookingId" type="number" />
+                  </div>
+                </div>
+                <div class="col-sm-2 col-md-4 col-lg-2">
+                  <div class="my-input-group">
+                    <div class="styled-radio-container">
+                      <input type="radio" class="styled-radio" id="serviceDate"
+                             name="radio-group1" value="serviceDate" [checked]="true">
+                      <label for="serviceDate">{{ 'PENDING_INSPECTION_CERTIFICATE.LBL_SERVICEDATE' | translate }}</label>
+                    </div>
+                    <div class="calendar-wrapper">
+                      <input type="text" maxlength="10" container="body"                             
+                      [ngClass]="{ 'is-invalid':  !validator.isValidIf('serviceFromDate',IsDateValidationRequired())}"
+                             readonly=readonly [(ngModel)]="model.serviceFromDate" ngbDatepicker
+                             #sdf="ngbDatepicker" (click)="sdf.toggle()">
+                             <img src="assets/images/cta-close-grey.svg" alt="" class="close-icon" (click)="clearDateInput('Fromdate')" *ngIf="model.serviceFromDate">
+                      <img src="assets/images/calendar-icon.svg" alt="" class="calendar-icon"
+                           (click)="sdf.toggle()">
+                    </div>
+                    <div *ngIf="!validator.isValidIf('serviceFromDate',IsDateValidationRequired())"
+                         class="invalid-feedback">
+                      <div *ngFor="let error of validator.getErrors('serviceFromDate')">
+                        {{ error | translate }}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-sm-2 col-md-4 col-lg-2">
+                  <div class="styled-radio-container"></div>
+                  <div class="my-input-group">
+                    <label for=""></label>
+                    <div class="calendar-wrapper">
+                      <input type="text" maxlength="10" container="body"
+                      [ngClass]="{ 'is-invalid':  !validator.isValidIf('serviceToDate',IsDateValidationRequired())}"
+                             readonly=readonly [(ngModel)]="model.serviceToDate" ngbDatepicker
+                             #sdt="ngbDatepicker" (click)="sdt.toggle()">
+                             <img src="assets/images/cta-close-grey.svg" alt="" class="close-icon" (click)="clearDateInput('Todate')" *ngIf="model.serviceToDate">
+                      <img src="assets/images/calendar-icon.svg" alt="" class="calendar-icon"
+                           (click)="sdt.toggle()">
+                    </div>
+                    <div *ngIf="!validator.isValidIf('serviceToDate',IsDateValidationRequired())" class="invalid-feedback">
+                      <div *ngFor="let error of validator.getErrors('serviceToDate')">
+                        {{ error | translate }}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+             
+            
+              <div class="row marginTop15">
+                <div class="col-sm-3 col-md-3 col-lg-3">
+                  <div class="my-input-group">
+                    <label for="">{{ 'PENDING_INSPECTION_CERTIFICATE.LBL_CUSTOMER' | translate }}</label>
+                    <ng-select #customer [searchable]="true" [items]="ICMasterModel.customerList" appendTo="body"
+                               bindLabel="name" [loading]="ICMasterModel.customerLoading"
+                               [clearable]="true"
+                               bindValue="id" [hideSelected]="true"
+                               placeholder="--- {{(ICMasterModel.customerList && ICMasterModel.customerList.length>0? 'COMMON.LBL_SELECT':'COMMON.LBL_NO_DATA')  | translate }} ---"
+                               [(ngModel)]="model.customerId">
+                      <ng-template ng-option-tmp let-item="item">
+                        <div class="text-wrap">{{ item.name }}</div>
+                      </ng-template>
+                    </ng-select>
+                  </div>
+                </div>
+              </div>
+            
+          
+          <div class="row marginTop25">
+            <div class="col-12 col-sm-12 text-right mt-3 mt-sm-0"> 
+            
+              <button class="category-cta small mr-2 common-tooltip common-tooltip-top-2" data-tooltip="Reset"
+              [disabled]="ICMasterModel.searchloading || ICMasterModel.customerLoading"
+                      (click)="Reset()">
+                <img src="assets/images/reload-new.svg" alt="Reset">  
+                <span>{{'COMMON.LBL_RESET'| translate}}</span>
+              </button>
+              <button class="secondary-cta small" *ngIf="ICMasterModel.isICSelected"
+                      [disabled]="ICMasterModel.searchloading || ICMasterModel.customerLoading"
+                      (click)="redirectToIC()">
+                {{ 'PENDING_INSPECTION_CERTIFICATE.GENERATE_IC' | translate}}
+              </button>
+           
+              <button class="primary-cta small"
+                      [disabled]="ICMasterModel.searchloading || ICMasterModel.customerLoading"
+                      (click)="SearchDetails()">
+                {{ 'COMMON.LBL_SEARCH' | translate }}
+                <span *ngIf="ICMasterModel.searchloading">
+                  <i class="fa fa-refresh fa-spin" aria-hidden="true"></i>
+                </span>
+              </button>
+            </div>
+          </div>
+        </div>
+        <div class="centerContainerPadding float-left"
+               *ngIf="(ICMasterModel.bookingSearchList && ICMasterModel.bookingSearchList.length>0)">
+            
+            <div class="row">
+              <div class="col-6 col-sm-4 col-xl-2 d-flex">
+                <p  class="search-trigger-heading" [innerHtml]="showPaginationText()"></p>
+              </div>
+              <div class="col-6 col-sm-8 col-xl-10 text-right">
+                <div class="animated-icon-container" *ngIf="!isFilterOpen" (click)="toggleFilterSection()">
+                  <img src="assets/images/cta-search-grey.svg" alt="search">
+                </div>
+              </div>
+            </div>
+            <div class="quotation-search-container">
+              <div class="table-container h-scroll table-max-height-400">
+                <table class="pagination-table simple-table bordered">
+                <thead>
+                  <tr class="sticky-top-row">
+                    <th></th>
+                    <th *ngIf="ICMasterModel.isICRoleAccess">
+                    </th>
+                    <th class="width-60">{{ 'EDIT_INSPECTION_CERTIFICATE.LBL_BOOKING_NO' | translate }}</th>
+                    <th class="width-100">
+                      {{ 'EDIT_INSPECTION_CERTIFICATE.LBL_SERVICE_DATE_FROM' | translate }}
+                    </th>
+                    <th class="width-100">{{ 'EDIT_INSPECTION_CERTIFICATE.LBL_SERVICE_DATE_TO' | translate }}</th>
+                    <th class="width-140">{{ 'EDIT_INSPECTION_CERTIFICATE.LBL_CUSTOMER' | translate }}</th>
+                    <th class="width-140">{{ 'EDIT_INSPECTION_CERTIFICATE.LBL_SUPPLIER' | translate }}</th>
+                    <th class="width-140">{{ 'EDIT_INSPECTION_CERTIFICATE.LBL_FACTORY' | translate }}</th>
+                    <th class="width-100">{{ 'EDIT_INSPECTION_CERTIFICATE.LBL_BOOKING_STAUS' | translate }}</th>
+                    <th class="width-100">{{ 'EDIT_INSPECTION_CERTIFICATE.LBL_SERVICE_TYPE' | translate }}</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <ng-container *ngFor="let bookingItem of ICMasterModel.bookingSearchList;let idx = index">
+                    <tr>
+                      <td>
+                        <a *ngIf="!bookingItem.isExpand" style="cursor:pointer"
+                           (click)="expand(bookingItem.bookingNumber)">
+                          <i class="fa fa-plus-circle"></i>
+                        </a>
+
+                        <a *ngIf="bookingItem.productList != null && bookingItem.productList.length > 0
+                                            && bookingItem.isExpand" style="cursor:pointer"
+                           (click)="collapse(bookingItem.bookingNumber)">
+                          <i class="fa fa-minus-circle"></i>
+                        </a>
+                      </td>
+                      <td *ngIf="ICMasterModel.isICRoleAccess" class="Center_Middle">
+                        <div class="styled-checkbox-container">
+                          <input type="checkbox" class="styled-checkbox"
+                                 id="checkboxorder-{{bookingItem.bookingNumber}}"
+                                 [(ngModel)]="bookingItem.checked"
+                                 *ngIf="bookingItem.enableCheckbox"
+                                 (change)="bookingDataSelect(bookingItem);">
+                          <label for="checkboxorder-{{bookingItem.bookingNumber}}"></label>
+                        </div>
+                      </td>
+                      <td class="width-60">{{bookingItem.bookingNumber}}</td>
+                      <td class="width-100">{{bookingItem.serviceFromDate}}</td>
+                      <td class="width-100">{{bookingItem.serviceToDate}}</td>
+                      <td class="wordbreak width-140">{{bookingItem.customerName}}</td>
+                      <td class="wordbreak width-140">{{bookingItem.supplierName}}</td>
+                      <td class="wordbreak width-140">{{bookingItem.factoryName}}</td>
+                      <td class="wordbreak width-100">{{bookingItem.bookingStatus}}</td>
+                      <td class="wordbreak width-100">{{bookingItem.serviceType}}</td>
+                    </tr>
+
+                    <ng-container *ngIf="bookingItem.productList != null &&
+                                  bookingItem.productList.length> 0 && bookingItem.isExpand">
+                      <tr>
+                        <td></td>
+                        <td *ngIf="ICMasterModel.isICRoleAccess" class="Center_Middle"></td>
+                        <td class="width-100 table-td-header" colspan="ICMasterModel.isICRoleAccess ? 3 : 2">
+                          {{ 'EDIT_INSPECTION_CERTIFICATE.LBL_PO_NO' | translate }}</td>
+                        <td class="width-100 table-td-header">
+                          {{ 'EDIT_INSPECTION_CERTIFICATE.LBL_PRODUCT_CODE' | translate }}
+                        </td>
+                        <td class="width-150 table-td-header">
+                          {{ 'EDIT_INSPECTION_CERTIFICATE.LBL_PRODUCT_DESC' | translate }}
+                        </td>
+                        <td class="width-60 table-td-header">
+                          {{ 'EDIT_INSPECTION_CERTIFICATE.LBL_PRESENTED_QTY' | translate }}
+                        </td>
+                        <td class="width-60 table-td-header">
+                          {{ 'EDIT_INSPECTION_CERTIFICATE.LBL_REMAINING_QTY' | translate }}
+                        </td>
+                        <td class="width-100 table-td-header" colspan="3">
+                          {{ 'EDIT_INSPECTION_CERTIFICATE.LBL_DESTINATION_COUNTRY' | translate }}
+                        </td>
+                      </tr>
+                      <tr *ngFor="let bookingProductItem of bookingItem.productList;let i = index">
+                        <td></td>
+                        <td *ngIf="ICMasterModel.isICRoleAccess" class="Center_Middle">
+                          <div class="styled-checkbox-container">
+                            <input type="checkbox" class="styled-checkbox"
+                                   *ngIf="bookingProductItem.enableCheckbox"
+                                   (change)="PODataSelect(bookingItem)"
+                                   id="checkboxorder-{{bookingProductItem.inspPOTransactionId}}-{{i}}"
+                                   [(ngModel)]="bookingProductItem.checked">
+                            <label for="checkboxorder-{{bookingProductItem.inspPOTransactionId}}-{{i}}"></label>
+                          </div>
+                        </td>
+                        <td class="width-100 wordbreak" colspan="ICMasterModel.isICRoleAccess ? 3 : 2"> {{bookingProductItem.poNo}}</td>
+                        <td class="width-100 wordbreak"> {{bookingProductItem.productCode}}</td>
+                        <td class=" width-150 wordbreak"> {{bookingProductItem.productDescription}}</td>
+                        <td class="width-60 wordbreak Center_Middle"> {{bookingProductItem.presentedQty}}</td>
+                        <td class="width-60 Center_Middle"> {{bookingProductItem.remainingQty}}</td>
+                        <td class="width-100 wordbreak"  colspan="3"> {{bookingProductItem.destinationCountry}}</td>
+                      </tr>
+                    </ng-container>
+                  </ng-container>
+                </tbody>
+              </table>
+              </div>
+            </div>
+            
+            <div class="pagination-container">
+              <select class="small" [(ngModel)]="ICMasterModel.selectedPageSize"
+              (change)="SearchDetails()">
+              <option *ngFor="let item of ICMasterModel.pageSizeItems" [ngValue]=item>
+                {{item}}
+              </option>
+            </select>
+            <ngb-pagination (pageChange)="onPager($event)" [pageSize]="model.pageSize"
+                            [collectionSize]="model.totalCount" [(page)]="model.index" [maxSize]="5">
+            </ngb-pagination>
+            </div>
+          </div>
+          <div class="centerContainerPadding" *ngIf="model.noFound">
+            <div class="error-container">
+              <img src="assets/images/no-result.svg" alt="" class="thumbnail">
+              <h4 class="title">{{'COMMON.LBL_NOITEMS' | translate}}</h4>
+              <p class="error-subtitle">{{'CS_CONFIG_SUMMARY.LBL_NODATA' | translate}}</p>
+                    <button (click)="Reset()"
+                    class="category-cta">
+              {{'COMMON.LBL_CLEAR_SEARCH' | translate}}
+            </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

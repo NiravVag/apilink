@@ -1,0 +1,140 @@
+{
+    "model": "EditAuditmodel",
+    "fields": {
+        "customerid": [
+            {
+                "type": "required",
+                "fieldType": "N",
+                "ressource": "EDIT_AUDIT.MSG_CUS_REQ"
+            }
+        ],
+        "customercontactlistitems": [
+            {
+                "type": "required",
+                "fieldType": "A",
+                "ressource": "EDIT_AUDIT.MSG_CUS_CONTACT_REQ"
+            }
+        ],
+        "supplierid": [
+            {
+                "type": "required",
+                "fieldType": "N",
+                "ressource": "EDIT_AUDIT.MSG_SUP_REQ"
+            }
+        ],
+        "suppliercontactlistitems": [
+            {
+                "type": "required",
+                "fieldType": "A",
+                "ressource": "EDIT_AUDIT.MSG_SUP_CONTACT_REQ"
+            }
+        ],
+        "factoryid": [
+            {
+                "type": "required",
+                "fieldType": "N",
+                "ressource": "EDIT_AUDIT.MSG_FACT_REQ"
+            }
+        ],
+        "factorycontactlistitems": [
+            {
+                "type": "required",
+                "fieldType": "A",
+                "ressource": "EDIT_AUDIT.MSG_FACT_CONTACT_REQ"
+            }
+        ],
+        "servicedatefrom": [
+            {
+                "type": "required",
+                "fieldType": "D",
+                "ressource": "EDIT_AUDIT.MSG_SERVICE_FROMDATE_REQ"
+            },
+            {
+                "type": "isLessOrEqual",
+                "fieldType": "D",
+                "fieldCible": "servicedateto",
+                "ressource": "EDIT_AUDIT.MSG_SERVICE_FROMDATE_GREATER_REQ"
+            }
+        ],
+        "servicedateto": [
+            {
+                "type": "required",
+                "fieldType": "D",
+                "ressource": "EDIT_AUDIT.MSG_Service_TODATE_REQ"
+            },
+            {
+                "type": "isGreatOrEqual",
+                "fieldType": "D",
+                "fieldCible": "servicedatefrom",
+                "ressource": "EDIT_AUDIT.MSG_Service_TODATE_LESS_REQ"
+            }
+        ],
+        "servicetypeid": [
+            {
+                "type": "required",
+                "fieldType": "N",
+                "ressource": "EDIT_AUDIT.MSG_CUS_SERVICETYPE_REQ"
+            }
+        ],
+        "evaluationroundid": [
+            {
+                "type": "required",
+                "fieldType": "N",
+                "ressource": "EDIT_AUDIT.MSG_EVALUATION_REQ"
+            }
+        ],
+        "officeid": [
+            {
+                "type": "required",
+                "fieldType": "N",
+                "ressource": "EDIT_AUDIT.MSG_OFFICE_REQ"
+            }
+        ],
+        "applicantname": [
+            {
+                "type": "required",
+                "fieldType": "T",
+                "ressource": "EDIT_AUDIT.MSG_REQ_APPLICANT_NAME"
+            }
+        ],
+        "applicantemail": [
+            {
+                "type": "required",
+                "fieldType": "T",
+                "ressource": "EDIT_AUDIT.MSG_REQ_APPLICANT_EMAIL"
+            },
+            {
+                "type": "email",
+                "ressource": "EDIT_AUDIT.MSG_REQ_APPLICANT_EMAIL_FORMAT"
+            }
+        ],
+        "applicantphno": [
+            {
+                "type": "required",
+                "fieldType": "T",
+                "ressource": "EDIT_AUDIT.MSG_REQ_APPLICANT_PH"
+            }
+        ],
+        "totalstaff": [
+            {
+                "type": "required",
+                "fieldType": "T",
+                "ressource": "EDIT_AUDIT.LBL_STAFF_TOTAL"
+            }
+        ],
+        "audittypeid": [
+            {
+                "type": "required",
+                "fieldType": "N",
+                "ressource": "EDIT_AUDIT.MSG_REQ_AUDIT_TYPE"
+            }
+        ],
+        "auditProductCategoryId": [
+            {
+                "type": "required",
+                "fieldType": "N",
+                "ressource": "EDIT_AUDIT.MSG_PORDUCT_CATEGORY"
+            }
+        ]
+    }
+}

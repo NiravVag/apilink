@@ -1,0 +1,76 @@
+{
+    "model": "BookingCancelModel",
+    "fields": {
+        "serviceFromDate": [
+          {
+            "type": "required",
+            "fieldType": "D",
+            "ressource": "INSPECTION_CANCEL.MSG_SERVICE_FROMDATE_REQ"
+          },
+          {
+            "type": "isLessOrEqual",
+            "fieldType": "D",
+            "fieldCible": "serviceToDate",
+            "ressource": "INSPECTION_CANCEL.MSG_SERVICE_FROMDATE_GREATER_REQ"
+          }
+        ],
+        "serviceToDate": [
+          {
+            "type": "required",
+            "fieldType": "D",
+            "ressource": "INSPECTION_CANCEL.MSG_Service_TODATE_REQ"
+          },
+          {
+            "type": "isGreatOrEqual",
+            "fieldType": "D",
+            "fieldCible": "serviceFromDate",
+            "ressource": "INSPECTION_CANCEL.MSG_Service_TODATE_LESS_REQ"
+          }
+        ],"firstServiceDateFrom": [
+          {
+            "type": "required",
+            "fieldType": "D",
+            "ressource": "INSPECTION_CANCEL.MSG_SERVICE_FROMDATE_REQ"
+          },
+          {
+            "type": "isLessOrEqual",
+            "fieldType": "D",
+            "fieldCible": "serviceFromDate",
+            "ressource": "INSPECTION_CANCEL.MSG_FirstService_FROMDATE_LESS_REQ"
+          }
+        ],
+        "firstServiceDateTo": [
+          {
+            "type": "required",
+            "fieldType": "D",
+            "ressource": "INSPECTION_CANCEL.MSG_Service_TODATE_REQ"
+          },
+          {
+            "type": "isLessOrEqual",
+            "fieldType": "D",
+            "fieldCible": "serviceToDate",
+            "ressource": "INSPECTION_CANCEL.MSG_FirstService_TODATE_LESS_REQ"
+          },
+          {
+            "type": "isGreatOrEqual",
+            "fieldType": "D",
+            "fieldCible": "firstServiceDateFrom",
+            "ressource": "INSPECTION_CANCEL.MSG_FirstService_LESS_REQ"
+          }
+        ],
+        "reasonTypeId": [
+          {
+            "type": "required",
+            "fieldType": "N",
+            "ressource": "INSPECTION_CANCEL.MSG_REASON_TYPE"
+          }
+        ],
+        "currencyId": [
+          {
+            "type": "required",
+            "fieldType": "N",
+            "ressource": "INSPECTION_CANCEL.MSG_CURRENCY_REQ"
+          }
+        ]
+    }
+}

@@ -1,0 +1,26 @@
+﻿CREATE TABLE [dbo].[INSP_IC_Transaction]
+(
+	[Id] INT NOT NULL PRIMARY KEY IDENTITY(1,1),
+	[ICNO] NVARCHAR(2000),
+	[CustomerId] INT,
+	[SupplierId] INT,
+	[BeneficiaryName] NVARCHAR(500),
+	[SupplierAddress] NVARCHAR(2000),	
+	[ICTitleId] INT NOT NULL,
+	[ApprovalDate] DATETIME,
+	[ICStatus] INT NOT NULL,
+	[CreatedOn] DATETIME DEFAULT GETDATE() NOT NULL,
+	[CreatedBy] INT,
+	[UpdatedOn] DATETIME,
+	[UpdatedBy] INT,
+	[DeletedOn] DATETIME,
+	[DeletedBy] INT,
+	[Comment] NVARCHAR(2000),
+	CONSTRAINT FK_INSP_IC_Transaction_ICTitle FOREIGN KEY ([ICTitleId]) REFERENCES [dbo].[INSP_IC_Title](Id),
+	CONSTRAINT FK_INSP_IC_Transaction_ICStatus FOREIGN KEY ([ICStatus]) REFERENCES [dbo].[INSP_IC_Status](Id),
+	CONSTRAINT FK_INSP_IC_Transaction_SupplierId FOREIGN KEY ([SupplierId]) REFERENCES [dbo].[SU_Supplier](Id),
+	CONSTRAINT FK_INSP_IC_Transaction_CustomerId FOREIGN KEY ([CustomerId]) REFERENCES [dbo].[CU_Customer](Id),
+	CONSTRAINT FK_INSP_IC_Transaction_CreatedBy FOREIGN KEY ([CreatedBy]) REFERENCES [dbo].[IT_UserMaster](Id),
+	CONSTRAINT FK_INSP_IC_Transaction_UpdatedBy FOREIGN KEY ([UpdatedBy]) REFERENCES [dbo].[IT_UserMaster](Id),
+	CONSTRAINT FK_INSP_IC_Transaction_DeletedBy FOREIGN KEY ([DeletedBy]) REFERENCES [dbo].[IT_UserMaster](Id)
+)

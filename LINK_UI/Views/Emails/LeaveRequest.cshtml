@@ -1,0 +1,43 @@
+﻿@model DTO.HumanResource.LeaveEmailModel
+
+<table>
+    <tr>
+        <td style="font-size:13px; font-family:tahoma;">
+            Dear @Model.RecepientName,
+            <br /><br />
+            This is to notify you that your staff " @Model.SenderName " has applied leave in the Link. Click <a href="@Model.WebSite">here</a> to view leave details.
+            <br /><br />
+            <table id='TblList' style="border:solid 1px #d4d0c8;border-collapse:collapse;font-size:12px; font-family:tahoma;" cellspacing='0' cellpadding='1' rules='all' align='left' border='1' cellspacing=0 cellpadding=0 width='100%'>
+                <tr>
+                    <td bgcolor=#BD0031 style="color: #ffffff; font-size:13px;" align=center width='16%' height=35>Staff Name</td>
+                    <td bgcolor=#BD0031 style="color: #ffffff; font-size:13px;" align=center width='16%' height=35>Date</td>
+                    <td bgcolor=#BD0031 style="color: #ffffff; font-size:13px;" align=center width='16%'>Apply Date</td>
+                    <td bgcolor=#BD0031 style="color: #ffffff; font-size:13px;" align=center width='16%'>Leave Type</td>
+                    <td bgcolor=#BD0031 style="color: #ffffff; font-size:13px;" align=center width='16%'>Total Days</td>
+                    <td bgcolor=#BD0031 style="color: #ffffff; font-size:13px;" align=center width='16%'>Reason</td>
+                </tr>
+                <tr>
+                    <td align=center style="font-size: 12px;" height=30>@Model.SenderName</td>
+                    <td align=center style="font-size: 12px;" height=30>@Model.StartDate To @Model.EndDate</td>
+                    <td align=center style="font-size: 12px;">@Model.ApplyDate</td>
+                    <td align=center style="font-size: 12px;">@Model.LeaveType</td>
+                    <td align=center style="font-size: 12px;">@Model.Days</td>
+                    <td align=center style="font-size: 12px;">@Model.Reason</td>
+                </tr>
+            </table>
+        </td>
+    </tr>
+    <tr>
+        <td style="font-size:13px; font-family:tahoma;">
+            <br /> An e-mail message will be sent to your staff after your approval.
+        </td>
+    </tr>
+</table>
+<br />
+<br />
+    Thanks
+<br />
+    IT-Team
+<br />
+<br />
+<span style="font-style:italic"> Note: - This receipt is auto generated from Link. Please do not reply to this message.</span>

@@ -1,0 +1,63 @@
+{
+    "model": "editcustomerproduct.model",
+    "fields": {
+      "productID": [
+        {
+          "type": "required",
+          "fieldType": "N",
+          "ressource": "EDIT_CUSTOMER_PRODUCT.MSG_STYLE_ID_REQ"
+        }
+      ],
+     
+  
+      "productDescription": [
+        {
+          "type": "required",
+          "fieldType": "N",
+          "ressource": "EDIT_CUSTOMER_PRODUCT.MSG_STYLEDESC_REQ"
+        }
+      ],
+      
+  
+      "customerID": [
+        {
+          "type": "required",
+          "fieldType": "N",
+          "ressource": "EDIT_CUSTOMER_PRODUCT.MSG_CUSTOMER_REQ"
+        }
+      ],
+      "productCategory": [
+        {
+          "type": "required",
+          "fieldType": "N",
+          "ressource": "EDIT_CUSTOMER_PRODUCT.MSG_PRODUCTCATEGORY_REQ"
+        }
+      ],
+      "productSubCategory": [
+        {
+          "type": "required",
+          "fieldType": "N",
+          "ressource": "EDIT_CUSTOMER_PRODUCT.MSG_PRODUCTSUBCATEGORY_REQ"
+        }
+      ],
+      "productCategorySub2": [
+        {
+          "type": "required",
+          "fieldType": "N",
+          "ressource": "EDIT_CUSTOMER_PRODUCT.MSG_PRODUCTCATEGORYSUB2_REQ"
+        }
+      ],
+      "apiServiceIds": [
+        {
+          "type": "required",
+          "fieldType": "N",
+          "ressource": "API_SERVICE.MSG_API_SERVICE_REQ"
+        }
+      ]
+
+      
+      
+    }
+  
+  }
+  

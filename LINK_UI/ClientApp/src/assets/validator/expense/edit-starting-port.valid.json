@@ -1,0 +1,21 @@
+{
+    "model": "StartingPortEditModel",
+     "fields": {
+       "startPortName": [
+         {
+           "type": "required",
+           "fieldType": "N",
+           "ressource": "START_PORT.MSG_STARTING_PORT"
+         }
+       ],
+       "cityId": [
+        {
+          "type": "required",
+          "fieldType": "N",
+          "ressource": "START_PORT.MSG_CITY_REQUIRED"
+        }
+       ]
+     }
+   
+   }
+   

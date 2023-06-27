@@ -1,0 +1,60 @@
+{
+  "model": "edit-claim.model",
+  "fields": {
+    "bookingId": [
+      {
+        "type": "required",
+        "ressource": "EDIT_CLAIM.MSG_INSPECTIONNO_REQ"
+      }
+    ],
+    "claimDate": [
+      {
+        "type": "required",
+        "ressource": "EDIT_CLAIM.MSG_CLAIMDATE_REQ"
+      }
+    ],
+    "receivedFromId": [
+      {
+        "type": "required",
+        "fieldType": "N",
+        "ressource": "EDIT_CLAIM.MSG_RECEIVEDFROM_REQ"
+      }
+    ],
+    "claimSourceId": [
+      {
+        "type": "required",
+        "ressource": "EDIT_CLAIM.MSG_CLAIMSOURCE_REQ"
+      }
+    ],
+    "amount": [
+      {
+        "type": "required",
+        "ressource": "EDIT_CLAIM.MSG_AMOUNT_REQ"
+      }
+    ],
+    "claimResultId": [
+      {
+        "type": "required",
+        "ressource": "EDIT_CLAIM.MSG_CLAIM_RESULT_REQ"
+      }
+    ],
+    "finalCurrencyId": [
+      {
+        "type": "required",
+        "ressource": "EDIT_CLAIM.MSG_FINAL_CURRENCY_REQ"
+      }
+    ],
+    "currencyId": [
+      {
+        "type": "required",
+        "ressource": "EDIT_CLAIM.MSG_CURRENCY_REQ"
+      }
+    ],
+    "finalDecisionIdList": [
+      {
+        "type": "required",
+        "ressource": "EDIT_CLAIM.MSG_CLAIM_FINAL_DECISION"
+      }
+    ]
+  }
+}

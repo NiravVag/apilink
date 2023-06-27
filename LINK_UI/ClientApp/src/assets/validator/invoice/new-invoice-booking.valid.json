@@ -1,0 +1,31 @@
+{
+    "model": "NewInvoiceBookingSearchRequest",
+    "fields": {     
+      "bookingStartDate": [
+        {
+            "type": "required",
+            "fieldType": "D",
+            "ressource": "EDIT_BOOKING.MSG_SERVICE_FROMDATE_REQ"
+        },
+        {
+            "type": "isLessOrEqual",
+            "fieldType": "D",
+            "fieldCible": "bookingEndDate",
+            "ressource": "EDIT_BOOKING.MSG_SERVICE_FROMDATE_GREATER_REQ"
+        }
+    ],
+    "bookingEndDate": [
+        {
+            "type": "required",
+            "fieldType": "D",
+            "ressource": "EDIT_BOOKING.MSG_Service_TODATE_REQ"
+        },
+        {
+            "type": "isGreatOrEqual",
+            "fieldType": "D",
+            "fieldCible": "bookingStartDate",
+            "ressource": "EDIT_BOOKING.MSG_Service_TODATE_LESS_REQ"
+        }
+    ]   
+    }
+  }

@@ -1,0 +1,276 @@
+<div class="main-wrapper">
+    <div class="wrapper dashboard-wrapper">
+        <div class="my-container">
+            <div class="master-body">
+                <div class="title-container">
+                    <div class="header-back-button" *ngIf="!initialloading">
+                        <img src="assets/images/back-red.png" alt="back" (click)="this.return('dfcustomerconfigsummary/dfcustomerconfig-summary');">
+                        </div>
+                    <h3 class="main-title">
+                        Dynamic Field Configuration
+                    </h3>
+                </div>
+                <div class="content-container">
+                    <h4 class="container-head">{{ 'EDIT_CUSTOMER.LBL_MAIN' | translate }}</h4>
+                    <div class="formPadding">
+                        <div class="row marginTop15">
+
+                            <div class="col-sm-3">
+                                <div class="my-input-group">
+                                    <label class="required">Modules</label>
+
+                                    <ng-select [multiple]="false" [closeOnSelect]="true" [searchable]="true"
+                                        [hideSelected]="true" bindLabel="name" appendTo="body" bindValue="id"
+                                        [items]="dfCustomerConfigurationMaster.moduleList"
+                                        [disabled]="dfCustomerConfigurationModel.id!=0"
+                                        [(ngModel)]="dfCustomerConfigurationModel.moduleId"
+                                        [ngClass]="{ 'is-invalid':!validator.isValid('moduleId')}"
+                                        placeholder="--- {{ 'EDIT_CUSTOMER.LBL_SELECT' | translate }}---">
+                                    </ng-select>
+
+                                    <div *ngIf="!validator.isValid('moduleId')" class="invalid-feedback">
+                                        <div *ngFor="let error of validator.getErrors('moduleId')">
+                                            {{ error | translate }}
+                                        </div>
+                                    </div>
+
+
+                                </div>
+                            </div>
+                            <div class="col-sm-3 mobile-margin-top-15">
+                                <div class="my-input-group">
+                                    <label class="required">Customer</label>
+                                    <ng-select [multiple]="false" [closeOnSelect]="true" [searchable]="true"
+                                        [hideSelected]="true" bindLabel="name" appendTo="body" bindValue="id"
+                                        [items]="dfCustomerConfigurationMaster.customerList"
+                                        [disabled]="dfCustomerConfigurationModel.id!=0"
+                                        [(ngModel)]="dfCustomerConfigurationModel.customerId"
+                                        placeholder="--- {{ 'EDIT_CUSTOMER.LBL_SELECT' | translate }}---"
+                                        [ngClass]="{ 'is-invalid':!validator.isValid('customerId')}"
+                                        (change)="changeCustomer()">
+                                    </ng-select>
+                                    <div *ngIf="!validator.isValid('customerId')" class="invalid-feedback">
+                                        <div *ngFor="let error of validator.getErrors('customerId')">
+                                            {{ error | translate }}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-3 mobile-margin-top-15">
+                                <div class="my-input-group">
+                                    <label class="required">Controls</label>
+                                    <ng-select [multiple]="false" [closeOnSelect]="true" [searchable]="true"
+                                        [hideSelected]="true" bindLabel="name" appendTo="body" bindValue="id"
+                                        [disabled]="dfCustomerConfigurationModel.id!=0"
+                                        [items]="dfCustomerConfigurationMaster.controlTypeList"
+                                        [(ngModel)]="dfCustomerConfigurationModel.controlTypeId"
+                                        (change)="changeControlTypes()" (clear)="clearControlTypes()"
+                                        [ngClass]="{ 'is-invalid':!validator.isValid('controlTypeId')}"
+                                        placeholder="--- {{ 'EDIT_CUSTOMER.LBL_SELECT' | translate }}---">
+                                    </ng-select>
+                                    <div *ngIf="!validator.isValid('controlTypeId')" class="invalid-feedback">
+                                        <div *ngFor="let error of validator.getErrors('controlTypeId')">
+                                            {{ error | translate }}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-3">
+                                <div class="my-input-group">
+                                    <label class="required">Label</label>
+                                    <input type="text" maxlength="300" placeholder="Label"
+                                        [ngClass]="{ 'is-invalid':!validator.isValid('label')}"
+                                        [(ngModel)]="dfCustomerConfigurationModel.label" />
+                                    <div *ngIf="!validator.isValid('label')" class="invalid-feedback">
+                                        <div *ngFor="let error of validator.getErrors('label')">
+                                            {{ error | translate }}
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+
+
+                        </div>
+
+                        <div class="row marginTop15">
+
+                           <!--  <div class="col-sm-3 mobile-margin-top-15">
+                                <div class="my-input-group">
+                                    <label class="required">Data Type</label>
+                                    <ng-select [multiple]="false" [closeOnSelect]="true" [searchable]="true"
+                                        [hideSelected]="true" bindLabel="name" appendTo="body" bindValue="id"
+                                        [items]="dfCustomerConfigurationMaster.dataTypeList"
+                                        [(ngModel)]="dfCustomerConfigurationModel.dataType"
+                                        [ngClass]="{ 'is-invalid':!validator.isValid('dataType')}"
+                                        placeholder="--- {{ 'EDIT_CUSTOMER.LBL_SELECT' | translate }}---">
+                                    </ng-select>
+                                    <div *ngIf="!validator.isValid('dataType')" class="invalid-feedback">
+                                        <div *ngFor="let error of validator.getErrors('dataType')">
+                                            {{ error | translate }}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div> -->
+
+                            <div class="col-sm-3 mobile-margin-top-15" *ngIf="dfCustomerConfigurationModel.controlTypeId == _dfControlType.DropDown">
+                                <div class="my-input-group">
+                                    <label class="required">DataSource Type</label>
+                                    <ng-select [multiple]="false" [closeOnSelect]="true" [searchable]="true"
+                                        [hideSelected]="true" bindLabel="name" appendTo="body" bindValue="id"
+                                        [items]="dfCustomerConfigurationMaster.dataSourceTypeList"
+                                        [(ngModel)]="dfCustomerConfigurationModel.dataSourceType"
+                                        [ngClass]="{ 'is-invalid':!validator.isValid('dataSourceType')}"
+                                        placeholder="--- {{ 'EDIT_CUSTOMER.LBL_SELECT' | translate }}---"
+                                        (change)="changeDataSourceType()">
+                                    </ng-select>
+                                    <div *ngIf="!validator.isValid('dataSourceType')" class="invalid-feedback">
+                                        <div *ngFor="let error of validator.getErrors('dataSourceType')">
+                                            {{ error | translate }}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-sm-3">
+                                <div class="my-input-group">
+                                    <label class="required">Display Order</label>
+                                    <input type="text" maxlength="300" placeholder="Order"
+                                        [ngClass]="{ 'is-invalid':!validator.isValid('displayOrder')}"
+                                        [(ngModel)]="dfCustomerConfigurationModel.displayOrder" />
+                                    <div *ngIf="!validator.isValid('displayOrder')" class="invalid-feedback">
+                                        <div *ngFor="let error of validator.getErrors('displayOrder')">
+                                            {{ error | translate }}
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+
+                            <div class="col-sm-3">
+                                <div class="styled-checkbox-container marginTop15">
+                                    <input type="checkbox" class="styled-checkbox" id="checkboxFBSync"
+                                      [(ngModel)]="selectedFBSync" (change)="selectFBSync();" />
+                                    <label for="checkboxFBSync">FB SYNC</label>
+                                  </div>
+                            </div>
+
+                            <div class="col-sm-3" *ngIf="showFBReference">
+                                <div class="my-input-group">
+                                    <label class="required">FB Reference</label>
+                                    <input type="text" maxlength="300" placeholder="Fb Reference"
+                                        [ngClass]="{ 'is-invalid':!validator.isValid('fbReference')}"
+                                        [(ngModel)]="dfCustomerConfigurationModel.fbReference" />
+                                    <div *ngIf="!validator.isValid('fbReference')" class="invalid-feedback">
+                                        <div *ngFor="let error of validator.getErrors('fbReference')">
+                                            {{ error | translate }}
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="tab-container" *ngIf="dfCustomerConfigurationModel.controlAttributeList.length>0">
+                        <ul class="tab-switch-container">
+                            <li class="active">Attributes</li>
+                        </ul>
+                        <div class="tab-content-container">
+                            <div class="tab-content active" id="tab1">
+                                <div class="table-action mobile-action desktop-hide tablet-hide">
+                                    <button class="secondary-cta x-small" (click)="addAddress()">+
+                                        {{ 'EDIT_CUSTOMER.LBL_ADD' | translate }}</button>
+                                </div>
+                                <table class="info-table" cellspacing="0">
+                                    <thead>
+                                        <tr>
+                                            <th>Key</th>
+                                            <th>
+                                                Value</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr
+                                            *ngFor="let item of dfCustomerConfigurationModel.controlAttributeList;  let i = index">
+
+                                            <td>
+                                                <div class="my-input-group">
+                                                    <span>{{ item.name }}</span>
+                                                </div>
+                                            </td>
+                                            <td>
+
+                                                <div class="styled-checkbox-container" *ngIf="item.dataType=='B'">
+                                                    <input class="styled-checkbox" id="{{item.name}}" type="checkbox"
+                                                        [checked]="(item.value === 'true')" (change)="changeCheckBox(item)">
+                                                    <label for="{{item.name}}">{{item.name}}</label>
+                                                </div>
+
+                                                <div class="my-input-group" *ngIf="item.dataType=='T'">
+                                                    <label for="">Value</label>
+                                                    <input type="text" [(ngModel)]="item.value" maxlength="300"
+                                                        class="width-180" placeholder="Value">
+                                                </div>
+
+                                                <div class="my-input-group" *ngIf="item.dataType=='D'">
+                                                    <label for="">Value</label>
+                                                    <ng-select [items]="dfCustomerConfigurationMaster.parentDropdownTypeList"
+                                                        [multiple]="false" [closeOnSelect]="true" [searchable]="true"
+                                                        bindLabel="name" bindValue="id" [loading]="initialLoading"
+                                                        appendTo="body"
+                                                        placeholder="--Select--"
+                                                        [(ngModel)]="item.value">
+                                                        <ng-template ng-option-tmp let-item="item">
+                                                            <div class="text-wrap">{{ item.name }}</div>
+                                                        </ng-template>
+                                                    </ng-select>
+                                                </div>
+
+                                                <!-- <div *ngIf="!item.validator.isValid('value')"
+
+                                                        class="invalid-feedback">
+                                                        <div *ngFor="let error of item.validator.getErrors('value')">
+                                                            {{ error | translate }}</div>
+                                                    </div> -->
+                                            </td>
+
+
+
+                                            <!--  <td>
+                                                <div class="my-input-group">
+                                                    <button *ngIf="i>0" (click)="removeAddress(i)"
+                                                        class="secondary-cta small">
+                                                        <i class="fa fa-trash"></i>
+                                                    </button>
+                                                </div>
+                                            </td> -->
+                                        </tr>
+                                    </tbody>
+                                </table>
+                                <!-- <div class="table-action mobile-hide">
+                                    <span><button class="secondary-cta x-small" (click)="addControlAttributes()">+
+                                            {{ 'EDIT_SUPPLIER.LBL_ADD' | translate }}</button> </span>
+                                </div> -->
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-action-container">
+                        <!-- *ngIf="!dfCustomerConfigurationModel.isBooking" -->
+                        <button  class="primary-cta small" (click)="save()" [disabled]="saveloading || initialloading">
+                            {{'EDIT_CUSTOMER.LBL_SAVE' | translate}}
+                            <span *ngIf="saveloading">
+                                <i class="fa fa-refresh fa-spin" aria-hidden="true"></i>
+                            </span>
+                        </button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+    </div>

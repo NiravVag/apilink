@@ -1,0 +1,236 @@
+<div class="main-wrapper">
+    <div class="wrapper dashboard-wrapper">
+      <div class="my-container">
+        <div class="master-body">
+          <div class="title-container">
+            <div class="header-back-button">
+                <img src="assets/images/back-red.png" alt="back" (click)="redirectBack()">
+              </div>
+            <h3 class="main-title">{{ 'USER_CONFIG.TITLE' | translate }} </h3>
+          </div>
+          <div class="content-container">
+            <h4 class="container-head">{{ 'USER_CONFIG.SUB_TITLE' | translate }}</h4>
+            <div  class="formPadding">
+              <div class="row">
+                <div class="col-sm-4 col-md-4 col-lg-4 mobile-margin-top-15">
+                  <div class="my-input-group">
+                    <label class="required">{{ 'USER_CONFIG.LBL_NAME' | translate }}</label>
+                                 <input type="text" disabled  
+                                  [(ngModel)]="masterUserDataAccess.userName"/>
+                  </div>
+                </div>
+  
+                <div class="col-sm-4 col-md-4 col-lg-4">
+                  <div class="my-input-group">
+                    <label class="required">{{ 'USER_CONFIG.LBL_PROFILE' | translate }}</label>
+                    <ng-select [items]="masterUserDataAccess.profileList"
+                    [(ngModel)]="userDataAccess.profileId"
+                    [ngClass]="{ 'is-invalid':!validator.isValid('profileId')}"
+                     [multiple]="false" 
+                     [closeOnSelect]="true"
+                     [searchable]="true"
+                      bindLabel="name" bindValue="id" [loading]="masterUserDataAccess.profileLoading"
+                      placeholder="--- {{ 'COMMON.LBL_SELECT' | translate }} ---"
+                      >
+                    </ng-select>
+                      <div *ngIf="!validator.isValid('profileId')" class="invalid-feedback">
+                              <div *ngFor="let error of validator.getErrors('profileId')">{{ error | translate }}</div>
+                            </div>
+                  </div>
+                </div>
+  
+                <div class="col-sm-4 col-md-4 col-lg-4">
+                    <div class="my-input-group">
+                        <div class="styled-checkbox-container" style="margin-top: 40px;">
+                          <input class="styled-checkbox" id="checkbox-1" type="checkbox"
+                          [(ngModel)]="userDataAccess.emailAccess"
+                          >
+                          <label for="checkbox-1">{{'USER_CONFIG.LBL_EMAIL' | translate }}</label>
+                        </div>
+                      </div>
+                </div>
+              </div>
+            </div>
+  
+            <h4 class="container-head">{{'USER_CONFIG.LBL_CUS_ACCESS' | translate }}</h4>
+            <div class="formPadding">       
+              <div class="row">
+          <!-- <div class="col-lg-12 table-container marginTop15 scroll-x"> -->
+            <div class="table-container h-scroll table-max-height-400">
+              <table class="pagination-table simple-table bordered">
+              <thead>
+                <tr class="sticky-top-row">
+                      <th>
+                        {{ 'USER_CONFIG.LBL_CUSTOMER' | translate }}</th>
+                      <th>{{ 'USER_CONFIG.LBL_CUS_OFFICE' | translate }}</th>
+                      <th>{{ 'USER_CONFIG.LBL_CUS_SERVICE' | translate }}</th>
+                      <th>{{ 'USER_CONFIG.LBL_CUS_CATEGORY' | translate }}</th>
+                      <th class="required">{{ 'USER_CONFIG.LBL_CUS_ROLE' | translate }}</th>
+                      <th>{{ 'USER_CONFIG.LBL_CUS_DEPARTMENT' | translate }}</th>
+                      <!-- <th>{{ 'USER_CONFIG.LBL_CUS_BUYER' | translate }}</th> -->
+                      <th>{{ 'USER_CONFIG.LBL_CUS_BRAND' | translate }}</th>
+                      <th *ngIf="userAccessValidators && userAccessValidators.length > 1"></th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr *ngFor="let item of userAccessValidators;  let i = index">
+                      <td>
+                          <div class="my-input-group">     
+                              <ng-select [items]="masterUserDataAccess.masterCustomerList" appendTo="body"
+                              (open)="openCustomer()" class="width-220"
+                              (change)="changeCustomer($event, item.userAccess)"
+                              [(ngModel)]="item.userAccess.customerId"
+                              [loading]="masterUserDataAccess.masterCustomerLoading"                              
+                                bindLabel="name" bindValue="id" 
+                                placeholder="--- {{ 'COMMON.LBL_SELECT' | translate }} ---">
+                                <ng-template ng-option-tmp let-item="item">
+                                  <div class="text-wrap">{{ item.name }}</div>
+                                </ng-template>
+                              </ng-select>
+                            </div>
+                      </td>
+                      <td>
+                        <div class="my-input-group">  
+                            <ng-select appendTo="body"
+                            [loading]="masterUserDataAccess.masterOfficeLoading"
+                            [items]="masterUserDataAccess.masterOfficeList"     
+                            [(ngModel)]="item.userAccess.officeIdAccessList"
+                             [multiple]="true" [closeOnSelect]="true" [searchable]="true"
+                              bindLabel="name" bindValue="id"
+                              placeholder="--- {{ 'COMMON.LBL_SELECT' | translate }} ---"
+                               class="multiple width-220">
+                               <ng-template ng-option-tmp let-item="item">
+                                <div class="text-wrap">{{ item.name }}</div>
+                              </ng-template>
+                            </ng-select>
+                          </div>
+                    </td>
+                      <td>
+                          <div class="my-input-group">                           
+                              <ng-select appendTo="body"
+                              [loading]="masterUserDataAccess.masterServiceLoading"
+                              [items]="masterUserDataAccess.masterServiceList"
+                             (change) = disableProductCategory(item.userAccess)
+                              [(ngModel)]="item.userAccess.serviceIdAccessList"
+                               [multiple]="true" [closeOnSelect]="true" [searchable]="true"
+                                bindLabel="name" bindValue="id" 
+                                placeholder="--- {{ 'COMMON.LBL_SELECT' | translate }} ---"
+                                 class="multiple width-220">
+                                 <ng-template ng-option-tmp let-item="item">
+                                  <div class="text-wrap">{{ item.name }}</div>
+                                </ng-template>
+                              </ng-select>
+                            </div>
+                      </td>
+                      <td>
+                          <div class="my-input-group"> 
+                              <ng-select  appendTo="body"
+                              [loading]="masterUserDataAccess.masterProductCategoryLoading"
+                              [disabled]="item.userAccess.disableProductCategory"
+                              [items]="masterUserDataAccess.masterProductCategoryList"    
+                            [(ngModel)]="item.userAccess.productCategoryIdAccessList"
+                            [multiple]="true" [closeOnSelect]="true" [searchable]="true"
+                                bindLabel="name" bindValue="id" 
+                                placeholder="--- {{ 'COMMON.LBL_SELECT' | translate }} ---"
+                                class="multiple width-220">
+                                <ng-template ng-option-tmp let-item="item">
+                                  <div class="text-wrap">{{ item.name }}</div>
+                                </ng-template>
+                              </ng-select>
+                            </div>
+                      </td>
+                      <td>
+                          <div class="my-input-group">                           
+                              <ng-select appendTo="body"
+                              [loading]="masterUserDataAccess.masterRoleLoading"
+                              [items]="masterUserDataAccess.masterRoleList" 
+                              [ngClass]="{ 'is-invalid':!item.validator.isValid('roleIdAccessList')}"
+                            [(ngModel)]="item.userAccess.roleIdAccessList"
+                            [multiple]="true" [closeOnSelect]="true" [searchable]="true"
+                                bindLabel="name" bindValue="id" 
+                                placeholder="--- {{ 'COMMON.LBL_SELECT' | translate }} ---"
+                                class="multiple width-220">
+                                <ng-template ng-option-tmp let-item="item">
+                                  <div class="text-wrap">{{ item.name }}</div>
+                                </ng-template>
+                              </ng-select>
+                              <div *ngIf="!item.validator.isValid('roleIdAccessList')" class="invalid-feedback">
+                                <div *ngFor="let error of item.validator.getErrors('roleIdAccessList')">{{ error | translate }}</div>
+                              </div>
+                            </div>
+                      </td>
+                      <td>
+                        <div class="my-input-group">
+                          <ng-select appendTo="body"
+                           [loading]="item.userAccess.customerDepartmentLoading" [items]="item.userAccess.customerDepartmentList"
+                            [(ngModel)]="item.userAccess.cusDepartmentIdAccessList" [multiple]="true" [closeOnSelect]="true" [searchable]="true"
+                            bindLabel="name" bindValue="id"
+                            placeholder="--- {{(item.userAccess.customerDepartmentList && item.userAccess.customerDepartmentList.length>0? 'COMMON.LBL_SELECT':'COMMON.LBL_NO_DATA')  | translate }} ---"
+                            class="multiple width-220">
+                            <ng-template ng-option-tmp let-item="item">
+                              <div class="text-wrap">{{ item.name }}</div>
+                            </ng-template>
+                          </ng-select>
+                        </div>
+                      </td>
+                      <!-- <td>
+                        <div class="my-input-group">
+                          <ng-select appendTo="body"
+                          [loading]="item.userAccess.customerBuyerLoading" [items]="item.userAccess.customerBuyerList"
+                            [(ngModel)]="item.userAccess.cusBuyerIdAccessList" [multiple]="true" [closeOnSelect]="true" [searchable]="true"
+                            bindLabel="name" bindValue="id"
+                            placeholder="--- {{(item.userAccess.customerBuyerList && item.userAccess.customerBuyerList.length>0? 'COMMON.LBL_SELECT':'COMMON.LBL_NO_DATA')  | translate }} ---"
+                            class="multiple width-220">
+                            <ng-template ng-option-tmp let-item="item">
+                              <div class="text-wrap">{{ item.name }}</div>
+                            </ng-template>
+                          </ng-select>
+                        </div>
+                      </td> -->
+                      <td>
+                        <div class="my-input-group">
+                          <ng-select appendTo="body"
+                          [loading]="item.userAccess.customerBrandLoading" [items]="item.userAccess.customerBrandList"
+                            [(ngModel)]="item.userAccess.cusBrandIdAccessList" [multiple]="true" [closeOnSelect]="true" [searchable]="true"
+                            bindLabel="name" bindValue="id"
+                            placeholder="--- {{(item.userAccess.customerBrandList && item.userAccess.customerBrandList.length>0? 'COMMON.LBL_SELECT':'COMMON.LBL_NO_DATA')  | translate }} ---"
+                            class="multiple width-220">
+                            <ng-template ng-option-tmp let-item="item">
+                              <div class="text-wrap">{{ item.name }}</div>
+                            </ng-template>
+                          </ng-select>
+                        </div>
+                      </td>
+                      <td *ngIf="userAccessValidators && userAccessValidators.length > 1">
+                          <div class="my-input-group" >
+                              <button (click)="removeCustomerAccess(i)" class="secondary-cta small">
+                                <i class="fa fa-trash"></i>
+                              </button>
+                            </div>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+                <div class="table-action mobile-hide">
+                    <span><button class="secondary-cta x-small" (click)="addCustomerAccess()">
+                        {{ 'USER_CONFIG.LBL_ADD' | translate }}
+                      </button> </span>
+                  </div>
+              </div>
+            </div>
+  
+              <div class="form-action-container marginTop15">               
+                <button id="btnSearch" class="primary-cta small"
+                 [disabled]="saveDisable()"
+                  style="margin-right: 5px;" (click)="save()">
+                  {{ 'USER_CONFIG.LBL_SUBMIT' | translate }}
+                  <span *ngIf="saveDisable()">
+                    <i class="fa fa-refresh fa-spin" aria-hidden="true"></i>
+                  </span>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>

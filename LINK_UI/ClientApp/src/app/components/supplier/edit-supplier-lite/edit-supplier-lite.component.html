@@ -1,0 +1,238 @@
+<div class="main-wrapper">
+    <div class="wrapper dashboard-wrapper">
+        <div class="my-container">
+            <div class="master-body">
+                <div class="content-container">
+                    <div class="formPadding">
+                        <div class="row">
+                            <div class="col-sm-4 mobile-margin-top-15">
+                                <div class="my-input-group">
+                                    <label class="required">
+                                        {{(this.modelData.typeId == 2 ?
+                                        'EDIT_BOOKING.LBL_SUPPLIER_NAME':'EDIT_BOOKING.LBL_FACTORY_NAME') |
+                                        translate }}
+                                    </label>
+                                    <input [(ngModel)]="model.name" [ngClass]="{ 'is-invalid':  !validator.isValid('name')}" type="text" maxlength="300" placeholder="{{ 'EDIT_SUPPLIER.PH_NAME' | translate }}" />
+                                    <div *ngIf="!validator.isValid('name')" class="invalid-feedback">
+                                        <div *ngFor="let error of validator.getErrors('name')">{{ error | translate }}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-4 mobile-margin-top-15">
+                                <div class="my-input-group">
+                                    <label>{{ 'EDIT_SUPPLIER.LBL_LOCALLANGUAGE' | translate }}</label>
+                                    <input [(ngModel)]="model.locLanguageName" type="text" maxlength="300" placeholder="{{ 'EDIT_SUPPLIER.LBL_LOCALLANGUAGE' | translate }}">
+                                </div>
+                            </div>
+                            <div class="col-sm-4 mobile-margin-top-15">
+                                <div class="my-input-group">
+                                    <label class="required">{{ 'EDIT_SUPPLIER.LBL_EMAIL' | translate }}</label>
+                                    <input [ngClass]="{ 'is-invalid':  !validator.isValid('email')}" [(ngModel)]="model.email" type="text" maxlength="300" placeholder="{{ 'EDIT_SUPPLIER.LBL_EMAIL' | translate }}">
+                                    <div *ngIf="!validator.isValid('email')" class="invalid-feedback">
+                                        <div *ngFor="let error of validator.getErrors('email')">{{ error | translate }}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row marginTop25">
+                            <div class="col-sm-4 mobile-margin-top-15">
+                                <div class="my-input-group">
+                                    <label class="required">{{ 'EDIT_SUPPLIER.LBL_CONTACTPERSON' | translate }}</label>
+                                    <input type="text" [(ngModel)]="model.contactPersonName" [ngClass]="{ 'is-invalid':  !validator.isValid('contactPersonName')}" maxlength="300" placeholder="{{ 'EDIT_SUPPLIER.LBL_CONTACTPERSON' | translate }}">
+                                    <div *ngIf="!validator.isValid('contactPersonName')" class="invalid-feedback">
+                                        <div *ngFor="let error of validator.getErrors('contactPersonName')">{{ error | translate }}</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-4 mobile-margin-top-15" *ngIf="addressValidators.length>0">
+                                <div class="my-input-group">
+                                    <label class="required" for="">{{ 'EDIT_SUPPLIER.LBL_ZIPCODE' | translate }}</label>
+                                    <input type="text" [(ngModel)]="addressValidators[0].address.zipCode" [ngClass]="{ 'is-invalid':!addressValidators[0].validator.isValid('zipCode')}" maxlength="300" placeholder="{{ 'EDIT_SUPPLIER.LBL_ZIPCODE' | translate }}">
+                                    <div *ngIf="!addressValidators[0].validator.isValid('zipCode')" class="invalid-feedback">
+                                        <div *ngFor="let error of addressValidators[0].validator.getErrors('zipCode')">
+                                            {{ error | translate }}</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-4 mobile-margin-top-15" *ngIf="addressValidators.length>0">
+                                <div class="my-input-group">
+                                    <label class="required" for="">{{ 'EDIT_SUPPLIER.LBL_COUNTRY' | translate }}</label>
+                                    <ng-select appendTo="body" [items]="data.countryList" [multiple]="false" [closeOnSelect]="true" [searchable]="true" bindLabel="countryName" bindValue="id" [loading]="loading" [ngClass]="{ 'is-invalid':!addressValidators[0].validator.isValid('countryId')}"
+                                        placeholder="--- {{ 'EDIT_SUPPLIER.LBL_SELECT' | translate }} ---" [(ngModel)]="addressValidators[0].address.countryId" [clearable]="false" (ngModelChange)="onChangeCountry($event, addressValidators[0].address)" class="multiple">
+                                    </ng-select>
+                                    <div *ngIf="!addressValidators[0].validator.isValid('countryId')" class="invalid-feedback">
+                                        <div *ngFor="let error of addressValidators[0].validator.getErrors('countryId')">
+                                            {{ error | translate }}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row marginTop25" *ngIf="addressValidators.length>0">
+                            <div class="col-sm-6 mobile-margin-top-15">
+                                <div class="my-input-group">
+                                    <label class="required" for="">{{ 'EDIT_SUPPLIER.LBL_REGION' | translate }}</label>
+                                    <ng-select appendTo="body" [items]="addressValidators[0].address.regionList" [multiple]="false" [closeOnSelect]="true" [searchable]="true" bindLabel="name" bindValue="id" [loading]="regionloader" [ngClass]="{ 'is-invalid':!addressValidators[0].validator.isValid('regionId')}"
+                                        placeholder="--- {{ 'EDIT_SUPPLIER.LBL_SELECT' | translate }} ---" [(ngModel)]="addressValidators[0].address.regionId" [clearable]="false" (ngModelChange)="onChangeRegion($event, addressValidators[0].address)">
+                                    </ng-select>
+                                    <div *ngIf="!addressValidators[0].validator.isValid('regionId')" class="invalid-feedback">
+                                        <div *ngFor="let error of addressValidators[0].validator.getErrors('regionId')">
+                                            {{ error | translate }}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-6 mobile-margin-top-15">
+                                <div class="my-input-group">
+                                    <label class="required" for="">{{ 'EDIT_SUPPLIER.LBL_CITY' | translate }}</label>
+                                    <ng-select appendTo="body" [items]="addressValidators[0].address.cityList" [multiple]="false" [closeOnSelect]="true" [searchable]="true" bindLabel="name" bindValue="id" [loading]="cityloader" [ngClass]="{ 'is-invalid':!addressValidators[0].validator.isValid('cityId')}"
+                                        placeholder="--- {{ 'EDIT_SUPPLIER.LBL_SELECT' | translate }} ---" [(ngModel)]="addressValidators[0].address.cityId" [clearable]="false">
+                                    </ng-select>
+                                    <div *ngIf="!addressValidators[0].validator.isValid('cityId')" class="invalid-feedback">
+                                        <div *ngFor="let error of addressValidators[0].validator.getErrors('cityId')">
+                                            {{ error | translate }}</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row marginTop25" *ngIf="addressValidators.length>0">
+                            <div class="col-sm-6 mobile-margin-top-15">
+                                <div class="my-input-group">
+                                    <label class="required" for="">{{ 'EDIT_SUPPLIER.LBL_LOCALLANGUAGEADR' | translate
+                                        }}</label>
+                                    <textarea class="width-600" [(ngModel)]="addressValidators[0].address.localLanguage" [ngClass]="{ 'is-invalid':!addressValidators[0].validator.isValid('localLanguage')}" maxlength="600" placeholder="{{ 'EDIT_SUPPLIER.LBL_LOCALLANGUAGEADR' | translate }}"></textarea>
+                                    <div *ngIf="!addressValidators[0].validator.isValid('localLanguage')" class="invalid-feedback">
+                                        <div *ngFor="let error of addressValidators[0].validator.getErrors('localLanguage')">
+                                            {{ error | translate }}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-6 mobile-margin-top-15">
+                                <div class="my-input-group">
+                                    <label class="required" for="">{{ 'EDIT_BOOKING.LBL_ADDRESS_SUPPLIERFACTORY' |
+                                        translate }}</label>
+                                    <textarea class="width-600" [(ngModel)]="addressValidators[0].address.way" [ngClass]="{ 'is-invalid':!addressValidators[0].validator.isValid('way')}" maxlength="600" placeholder="{{ 'EDIT_BOOKING.LBL_ADDRESS_SUPPLIERFACTORY' | translate }}"></textarea>
+                                    <div *ngIf="!addressValidators[0].validator.isValid('way')" class="invalid-feedback">
+                                        <div *ngFor="let error of addressValidators[0].validator.getErrors('way')">{{ error | translate }}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row marginTop25" *ngIf="model.typeId==supplierType.Supplier">
+                            <div class="col-sm-6 mobile-margin-top-15">
+                                <div class="styled-checkbox-container">
+                                    <input class="styled-checkbox" id="checkbox-newfactory" type="checkbox" [(ngModel)]="model.isNewSupplier">
+                                    <label style="font-size: 13px;" for="checkbox-newfactory">
+                                        {{ 'EDIT_SUPPLIER.LBL_ISNEW_FACTORY' | translate }}
+                                        <span class="style-4 common-tooltip"
+                                            data-tooltip="please select it if you want to create the factory same as supplier">
+                                            <img class="hover" src="assets/images/red-question.png" style="width: 13px;"
+                                                alt="">
+                                        </span>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tab-container">
+                        <ul class="tab-switch-container">
+                            <li class="active" (click)="toggleTab($event, 'tab3')">{{ 'EDIT_SUPPLIER.TAB_CONTACTS' | translate }}
+                            </li>
+                        </ul>
+                        <div class="tab-content-container">
+                            <div class="tab-content active" id="tab3">
+                                <div class="table-action mobile-action desktop-hide tablet-hide">
+                                    <button class="secondary-cta x-small" (click)="addContact()">
+                                        +
+                                        {{ 'EDIT_SUPPLIER.LBL_ADD' | translate }}
+                                    </button>
+                                </div>
+                                <table class="info-table" cellspacing="0">
+                                    <thead>
+                                        <tr>
+                                            <th class="required">{{ 'EDIT_SUPPLIER.LBL_NAME' | translate }}</th>
+                                            <th class="required">{{ 'EDIT_SUPPLIER.LBL_EMAIL' | translate }}</th>
+                                            <th class="required">{{ 'EDIT_SUPPLIER.LBL_PHONE' | translate }}</th>
+                                            <th></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr *ngFor="let item of contactValidators;  let i = index">
+                                            <td>
+                                                <div class="my-input-group">
+                                                    <label class="required" for="">{{ 'EDIT_SUPPLIER.LBL_NAME' |
+                                                        translate }}</label>
+                                                    <input type="text" [(ngModel)]="item.customerContact.contactName" [ngClass]="{ 'is-invalid':!item.validator.isValid('contactName')}" maxlength="300" placeholder="{{ 'EDIT_SUPPLIER.LBL_NAME' | translate }}">
+                                                    <div *ngIf="!item.validator.isValid('contactName')" class="invalid-feedback">
+                                                        <div *ngFor="let error of item.validator.getErrors('contactName')">
+                                                            {{ error | translate }}
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div class="my-input-group">
+                                                    <label class="required" for="">{{ 'EDIT_SUPPLIER.LBL_EMAIL' |
+                                                        translate }}</label>
+                                                    <input type="text" [(ngModel)]="item.customerContact.contactEmail" [ngClass]="{ 'is-invalid':!item.validator.isValid('contactEmail')}" maxlength="300" placeholder="{{ 'EDIT_SUPPLIER.LBL_EMAIL' | translate }}">
+                                                    <div *ngIf="!item.validator.isValid('contactEmail')" class="invalid-feedback">
+                                                        <div *ngFor="let error of item.validator.getErrors('contactEmail')">
+                                                            {{ error | translate }}
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div class="my-input-group">
+                                                    <label class="required" for="">{{ 'EDIT_SUPPLIER.LBL_PHONE' |
+                                                        translate }}</label>
+                                                    <input class="width-180" type="text" [(ngModel)]="item.customerContact.phone" [ngClass]="{ 'is-invalid':!item.validator.isValid('phone')}" maxlength="50" placeholder="{{ 'EDIT_SUPPLIER.LBL_PHONE' | translate }}">
+                                                    <div *ngIf="!item.validator.isValid('phone')" class="invalid-feedback">
+                                                        <div *ngFor="let error of item.validator.getErrors('phone')">
+                                                            {{ error | translate }}
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div class="my-input-group">
+                                                    <button *ngIf="i>0" (click)="removeContact(i)" class="secondary-cta small">
+                                                        <i class="fa fa-trash"></i>
+                                                    </button>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                                <div class="table-action mobile-hide">
+                                    <span>
+                                        <button class="secondary-cta x-small" (click)="addContact()">
+                                            +
+                                            {{ 'EDIT_SUPPLIER.LBL_ADD' | translate }}
+                                        </button>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-action-container">
+                        <button class="secondary-cta small" [disabled]="loading || _saveloader" (click)="cancelSupplierORFactory()">
+                            {{ 'EDIT_BOOKING.LBL_CANCEL' | translate }}
+                        </button>
+                        <button class="primary-cta small" (click)="save()" [disabled]="loading || _saveloader">
+                            {{
+                            'EDIT_SUPPLIER.LBL_SAVE' | translate
+                            }}
+                            <span *ngIf="_saveloader">
+                                <i class="fa fa-refresh fa-spin" aria-hidden="true"></i>
+                            </span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>

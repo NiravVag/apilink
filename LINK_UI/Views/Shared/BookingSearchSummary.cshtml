@@ -1,0 +1,134 @@
+﻿
+@{
+    ViewData["Title"] = "BookingSearchSummary";
+}
+
+
+@model DTO.Inspection.BookingExportData
+
+<xls-sheet name="Inspection Search Summary">
+    <table xls-begin="A:1" style="border-style:solid">
+        <tr style="background-color:#f5f5f5;font-weight:bold;text-align:center">
+            <th>Booking No</th>
+            <th>Customer Booking No</th>
+            <th>Customer</th>
+            <th>Supplier</th>
+            <th>Factory</th>
+            <th>Apply date</th>
+            <th>API First Service Date From</th>
+            <th>API First Service Date To</th>
+            <th>API Confirm Service Date From</th>
+            <th>API Confirm Service Date To</th>
+            <th>API Inspection Date From</th>
+            <th>API Inspection Date To</th>
+            <th>Service Type</th>
+            <th>Status</th>
+            <th>Destination Country</th>
+            <th>ETD</th>
+            <th>SR-Date</th>
+            <th>Quotation Man Day</th>
+            <th>PO Number</th>
+            <th>Container Name</th>
+            <th>ProductID</th>
+            <th>CombineId</th>
+            <th>Product Description</th>
+            <th>Order Quantity</th>
+            <th>Inspected Quantity</th>
+            <th>Factory Reference</th>
+            <th>Product Category</th>
+            <th>Product Sub Category</th>
+            <th>Product Sub Category 2</th>
+            <th>Inspection Date</th>
+            <th>Report Status</th>
+            <th>Report Result</th>
+            <th>Office</th>
+            <th>CS</th>
+            <th>Quotation Status</th>
+            <th>Department</th>
+            <th>Brand</th>
+            <th>Buyer</th>
+            <th>Price Category</th>
+            <th>Collection</th>
+            <th>Factory Country</th>
+            <th>Barcode</th>
+            <th>Echopack</th>
+            <th>Picking</th>
+            <th>Created By</th>
+            @if (Model.bookingDFHeaderList != null && Model.bookingDFHeaderList.Any())
+            {
+                @foreach (var headerValue in Model.bookingDFHeaderList)
+                {
+                    <th>@headerValue</th>
+                }
+            }
+        </tr>
+        @foreach (var item in Model.bookingList)
+        {
+        <tr>
+            <td width="150px">@item.BookingId</td>
+            <td width="150px">@item.CustomerBookingNo</td>
+            <td width="250px">@item.CustomerName</td>
+            <td width="100px">@item.SupplierName</td>
+            <td width="150px">@item.FactoryName</td>
+            <td width="150px" xls-type="date">@item.ApplyDate</td>
+            <td width="150px" xls-type="date">@item.FirstServiceDateFrom</td>
+            <td width="150px" xls-type="date">@item.FirstServiceDateTo</td>
+            <td width="150px" xls-type="date">@item.ServiceStartDate</td>
+            <td width="150px" xls-type="date">@item.ServiceEndDate</td>
+            <td width="150px" xls-type="date">@item.InspectionFromDate</td>
+            <td width="150px" xls-type="date">@item.InspectionToDate</td>
+            <td width="150px">@item.ServiceType</td>
+            <td width="150px">@item.StatusName</td>
+            <td width="150px">@item.DestinationCountry</td>
+            <td width="150px">@item.Etd</td>
+            <td width="150px">@item.SRDate</td>
+            <td width="150px" xls-type="number">@item.QuotaitonManDay</td>
+            <td height="200px" width="250px">@item.PoNumber</td>
+            <td height="200px" width="250px">@item.ContainerName</td>
+            <td width="150px">@item.ProductId</td>
+            <td width="150px">@item.CombineProductId</td>
+            <td width="150px">@item.ProductDescription</td>
+            <td width="150px" align="left" xls-type="number">@item.BookingQuantity</td>
+            <td width="150px" align="left" xls-type="number">@item.InspectedQuantity</td>
+            <td width="150px">@item.FactoryReference</td>
+            <td width="150px">@Html.Raw(@item.ProductCategory)</td>
+            <td width="150px">@Html.Raw(@item.ProductSubCategory)</td>
+            <td width="150px">@Html.Raw(@item.ProductSubCategory2)</td>
+            <td width="150px">@item.InspectionDate</td>
+            <td width="150px">@item.ReportStatus</td>
+            <td width="150px">@item.ReportResult</td>
+            <td width="150px">@item.Office</td>
+            <td width="150px">@item.CSName</td>
+            <td width="150px">@item.QuotationStatusName</td>
+            <td width="150px">@item.DeptNames</td>
+            <td width="150px">@item.BrandNames</td>
+            <td width="150px">@item.BuyerNames</td>
+            <td width="150px">@item.PriceCategoryName</td>
+            <td width="150px">@item.CollectionName</td>
+            <td width="150px">@item.FactoryCountryName</td>
+            <td width="150px">@item.Barcode</td>
+            <td width="150px">@item.IsEcoPack</td>
+            <td width="150px">@item.IsPicking</td>
+            <td width="150px">@Html.Raw(@item.BookingCreatedByName)</td>
+
+            @if (item.bookingDFList != null && item.bookingDFList.Any())
+            {
+                @foreach (var dfHeaderValue in Model.bookingDFHeaderList)
+                {
+                    var dataExist = item.bookingDFList.Where(x => x.DFName == dfHeaderValue).FirstOrDefault();
+                    if (dataExist != null)
+                    {
+                        <td width="150px">@dataExist.DFValue</td>
+                    }
+                    else
+                    {
+                        <td></td>
+                    }
+
+                }
+            }
+        </tr>
+        }
+
+    </table>
+</xls-sheet>

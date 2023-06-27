@@ -1,0 +1,20 @@
+@import "~susy/sass/susy";
+
+$tablet-min-width: 768px;
+$tablet-max-width: 1366px;
+$mobile-min-width: 360px;
+$mobile-max-width: 767px;
+
+.master-search-cta-container{  
+    .column{
+        @media only screen and (min-width: $mobile-min-width) and (max-width: $mobile-max-width){
+            @include span(3 of 12);
+        }
+
+        &:last-child{
+            @media only screen and (min-width: $mobile-min-width) and (max-width: $mobile-max-width){
+                @include span(9 of 12 last);
+            }
+        }
+    }
+}

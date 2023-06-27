@@ -1,0 +1,196 @@
+<div class="main-wrapper">
+    <div class="wrapper dashboard-wrapper">
+        <div class="page-head-container whiteBackground">
+            <div class="my-container">
+                <div class="column">
+                    <h3 class="page-title">
+                        {{'PENDING_CLAIM.Title' | translate}}
+                    </h3>
+                </div>
+                <div class="column text-right d-flex align-items-start justify-content-end">
+                    <div class="filter-cta style-4 common-tooltip" *ngIf="!isFilterOpen" (click)="toggleFilterSection()" data-tooltip="filter">
+                        <img src="assets/images/cta-filter-grey.svg" alt="">
+                    </div>
+                    <div class="filter-cta style-4 active" *ngIf="isFilterOpen" (click)="toggleFilterSection()">
+                        <img src="assets/images/cta-filter-grey.svg" alt="">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="filter-container style-3" [@expandCollapse]="isFilterOpen ? 'open' : 'close'" [@.disabled]="isMobile">
+            <div class="my-container customer-dashboard-mobile-filter">
+                <div class="row">
+                    <div class="col-sm-12 col-md-12 col-lg-4 marginTop15 mobile-margin-top-15">
+                        <div class="my-input-group">
+                            <label>{{ 'PENDING_CLAIM.LBL_CLAIM_DATE' | translate }}</label>
+                        </div>
+                        <div class="my-input-group">
+                            <div class="d-flex my-input-group">
+                                <div class="calendar-wrapper flex-fill mr-2">
+                                    <input type="text" maxlength="10" readonly=readonly container="body" [(ngModel)]="model.fromDate" ngbDatepicker placeholder="{{  'PENDING_CLAIM.LBL_CLAIM_FROM_DATE'  | translate }}" [ngClass]="{ 'is-invalid':  !validator.isValid('fromDate')}" #from="ngbDatepicker"
+                                        (click)="from.toggle()">
+                                    <img src="assets/images/cta-close-grey.svg" alt="" class="close-icon" (click)="clearDateInput('fromDate');" *ngIf="model.fromDate">
+                                    <img src="assets/images/calendar-icon.svg" alt="" class="calendar-icon" (click)="from.toggle()">
+                                    <div *ngIf="!validator.isValid('fromDate')" class="invalid-feedback">
+                                        <div *ngFor="let error of validator.getErrors('fromDate')">{{ error | translate }}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="calendar-wrapper flex-fill">
+                                    <input type="text" maxlength="10" readonly=readonly container="body" [(ngModel)]="model.toDate" ngbDatepicker placeholder="{{  'PENDING_CLAIM.LBL_CLAIM_TO_DATE'  | translate }}" [ngClass]="{ 'is-invalid':  !validator.isValid('toDate')}" #to="ngbDatepicker"
+                                        (click)="to.toggle()">
+                                    <img src="assets/images/cta-close-grey.svg" alt="" class="close-icon" (click)="clearDateInput('toDate');" *ngIf="model.toDate">
+                                    <img src="assets/images/calendar-icon.svg" alt="" class="calendar-icon" (click)="to.toggle()">
+                                    <div *ngIf="!validator.isValid('toDate')" class="invalid-feedback">
+                                        <div *ngFor="let error of validator.getErrors('toDate')">{{ error | translate }}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-6 col-md-4 col-lg-4 mobile-margin-top-15">
+                        <div class="my-input-group">
+                            <div class="styled-radio-container" *ngFor="let item of masterModel.pendingClaimSearchTypeList;let idx = index">
+                                <input type="radio" class="styled-radio" id="{{item.id}}" name="radio-group" [value]="item.id" [checked]="idx==0" [(ngModel)]="model.searchTypeId" (change)="SetSearchTypemodel(item)">
+                                <label for="{{item.id}}">{{item.name}}</label>
+                            </div>
+                            <input maxlength="200" (ngModelChange)="BookingNoValidation()" [(ngModel)]="model.searchTypeText" type="text" [ngClass]="{ 'is-invalid': model.searchTypeText!='' && _customValidationForInvoiceNo}" />
+                            <div *ngIf="model.searchTypeText!='' && _customValidationForInvoiceNo" class="invalid-feedback">
+                                <div>{{ 'INVOICE_SUMMARY.MSG_BOOKINGNO_ERROR' | translate }}</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row marginTop25">
+                    <div class="col-sm-3 col-md-3 col-lg-4 mobile-margin-top-15">
+                        <div class="my-input-group">
+                            <label>{{ 'INV_DIS_SUMMARY.LBL_Customer' | translate }}</label>
+                            <ng-select bindLabel="name" bindValue="id" [multiple]="false" [items]="masterModel.customerList" [clearable]="true" [(ngModel)]="model.customerId" [virtualScroll]="true" (scrollToEnd)="getCustomerData(true)" [typeahead]="masterModel.customerInput" [minTermLength]="3"
+                                placeholder="--- {{ (masterModel.customerList!=null && masterModel.customerList.length!=0? 'COMMON.LBL_SELECT':'COMMON.LBL_NO_DATA' ) | translate }} ---" appendTo="body" [loading]="masterModel.customerLoading">
+                                <ng-template ng-option-tmp let-item="item">
+                                    <div class="text-wrap">{{ item.name }}</div>
+                                </ng-template>
+                            </ng-select>
+                        </div>
+                    </div>
+                    <div class="col-sm-3 col-md-3 col-lg-4 mobile-margin-top-15">
+                        <div class="my-input-group">
+                            <label>{{ 'PENDING_CLAIM.LBL_OFFICE' | translate }}</label>
+                            <ng-select bindLabel="name" bindValue="id" [multiple]="false" [items]="masterModel.officeList" [clearable]="true" [(ngModel)]="model.officeId" [virtualScroll]="true" placeholder="--- {{ (masterModel.officeList!=null && masterModel.officeList.length!=0? 'COMMON.LBL_SELECT':'COMMON.LBL_NO_DATA' ) | translate }} ---"
+                                appendTo="body" [loading]="masterModel.officeLoading">
+                                <ng-template ng-option-tmp let-item="item">
+                                    <div class="text-wrap">{{ item.name }}</div>
+                                </ng-template>
+                            </ng-select>
+                        </div>
+                    </div>
+                </div>
+                <div class="row marginTop25">
+                    <div class="col-12 col-sm-12 text-right mt-3 mt-sm-0">
+                        <button *ngIf="masterModel.isAccountingCreditNoteRole && selectedClaimIds && selectedClaimIds.length>0" id="btnAdd" class="primary-cta small" style="margin-right: 5px;" (click)="createCreditNote()">
+                            + {{ 'PENDING_CLAIM.LBL_CREATE_CREDIT_CLAIM' | translate }}</button> &nbsp;
+                        <button id="btnSearch" class="primary-cta small" [disabled]="searchLoading" style="margin-right: 5px;" (click)="SearchDetails()">
+                            {{ 'COMMON.LBL_SEARCH' | translate }}
+                            <span *ngIf="searchLoading">
+                                <i class="fa fa-refresh fa-spin" aria-hidden="true"></i>
+                            </span>
+                        </button>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="my-container">
+            <ng-container *ngIf="(model.items && model.items.length>0)">\
+                <div class="master-body">
+                    <div class="content-container tracking-container transparent-bg">
+                        <div class="record-count pl-0 pr-0">
+                            <div class="column">
+                                <p class="count" [innerHtml]="showPaginationText()"></p>
+                            </div>
+                        </div>
+                        <div class="table-container h-scroll">
+                            <table class="pagination-table bordered">
+                                <thead>
+                                    <tr>
+                                        <th *ngIf="masterModel.isAccountingCreditNoteRole"></th>
+                                        <th>{{ 'PENDING_CLAIM.LBL_BOOKING_NO' | translate }}</th>
+                                        <th>{{ 'PENDING_CLAIM.LBL_INVOICE_NO' | translate }}</th>
+                                        <th>{{ 'PENDING_CLAIM.LBL_CUSTOMER' | translate }}</th>
+                                        <th>{{ 'PENDING_CLAIM.LBL_CLAIM_DATE' | translate }}</th>
+                                        <th>{{ 'PENDING_CLAIM.LBL_SERVICE_DATE' | translate }}</th>
+                                        <th>{{ 'PENDING_CLAIM.LBL_SERVICE_TYPE' | translate }}</th>
+                                        <th>{{ 'PENDING_CLAIM.LBL_PRODUCT' | translate }}</th>
+                                        <th>{{ 'PENDING_CLAIM.LBL_CATEGORY' | translate }}</th>
+                                        <th>{{ 'PENDING_CLAIM.LBL_SUB_CATEGORY' | translate }}</th>
+                                        <th>{{ 'PENDING_CLAIM.LBL_OFFICE' | translate }}</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <ng-template ngFor let-iteminfo [ngForOf]="model.items" let-i="index">
+                                        <tr style="border-left: 5px solid #fff;">
+                                            <td *ngIf="masterModel.isAccountingCreditNoteRole" class="Center_Middle">
+                                                <div class="styled-checkbox-container">
+                                                    <input type="checkbox" class="styled-checkbox" id="checkbox-{{iteminfo.claimId}}" [disabled]="iteminfo.disabled" [(ngModel)]="iteminfo.selected" (change)="checkIfSameCustomer();">
+                                                    <label for="checkbox-{{iteminfo.claimId}}"></label>
+                                                </div>
+                                            </td>
+                                            <td><span> {{iteminfo.bookingNo}} </span></td>
+                                            <td>{{iteminfo.invoiceNo}}</td>
+                                            <td>{{iteminfo.customer}}</td>
+                                            <td>{{iteminfo.claimDate}}</td>
+                                            <td>{{iteminfo.serviceDate}}</td>
+                                            <td>{{iteminfo.serviceType}}</td>
+                                            <td>{{iteminfo.product}}</td>
+                                            <td>{{iteminfo.productCategory}}</td>
+                                            <td>{{iteminfo.productSubCategory}}</td>
+                                            <td>{{iteminfo.office}}</td>
+                                        </tr>
+                                    </ng-template>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="pagination-container">
+                            <div class="page-count-list">
+                                <select class="small" [(ngModel)]="selectedPageSize" (change)="SearchDetails()">
+                                    <option *ngFor="let item of pagesizeitems" [ngValue]=item>{{item}}</option>
+                                </select>
+                                <span> Records per page</span>
+                            </div>
+                            <div class="pagination-action-container text-right">
+                                <ngb-pagination [pageSize]="model.pageSize" [collectionSize]="model.totalCount" [boundaryLinks]="true" [(page)]="model.index" [maxSize]="5" (pageChange)="onPager($event)">
+                                    <ng-template ngbPaginationFirst>
+                                        <img src="assets/images/new-set/double-arrow.svg" alt="">
+                                    </ng-template>
+                                    <ng-template ngbPaginationPrevious>
+                                        <img src="assets/images/new-set/single-arrow.svg" alt="" class="left-arrow">
+                                    </ng-template>
+                                    <ng-template ngbPaginationNext>
+                                        <img src="assets/images/new-set/single-arrow.svg" alt="" class="right-arrow">
+                                    </ng-template>
+                                    <ng-template ngbPaginationLast>
+                                        <img src="assets/images/new-set/double-arrow.svg" alt="" class="right-most-arrow">
+                                    </ng-template>
+                                </ngb-pagination>
+                            </div>
+                        </div>
+
+                        <div class="centerContainerPadding" *ngIf="model.noFound">
+                            <div class="error-container">
+                                <img src="assets/images/no-result.svg" alt="" class="thumbnail">
+                                <h4 class="error-title">{{'PENDING_CLAIM.MSG_NO_ITEM_FOUND' | translate}}</h4>
+                                <p class="error-subtitle">{{'COMMON.LBL_NODATA' | translate}}</p>
+
+                                <button (click)="reset()" class="category-cta">
+                                    <img src="assets/images/reload-new.svg" alt="reload">
+                                    <span> {{'COMMON.MSG_CLEAR_SEARCH' | translate}}</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </ng-container>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,54 @@
+{  
+    "model": "InvoiceBankSaveRequest",
+    "fields": {      
+        "accountName":[
+            {
+                "type": "required",
+                "fieldType": "A",
+                "ressource": "EDIT_INV_BANK.MSG_ACC_NAME_REQUIRED"
+            }
+        ],
+        "accountNumber":[
+            {
+                "type": "required",
+                "fieldType": "A",
+                "ressource": "EDIT_INV_BANK.MSG_ACC_NUMBER_REQUIRED"
+            }
+        ],
+        "bankName":[
+            {
+                "type": "required",
+                "fieldType": "A",
+                "ressource": "EDIT_INV_BANK.MSG_BANK_NAME_REQUIRED"
+            }
+        ],
+        "bankAddress":[
+            {
+                "type": "required",
+                "fieldType": "A",
+                "ressource": "EDIT_INV_BANK.MSG_BANK_ADDRESS_REQUIRED"
+            }
+        ],
+        "swiftCode":[
+            {
+                "type": "required",
+                "fieldType": "A",
+                "ressource": "EDIT_INV_BANK.MSG_BANK_SWIFT_REQUIRED"
+            }
+        ]    ,
+        "accountCurrency":[
+            {
+                "type": "required",
+                "fieldType": "A",
+                "ressource": "EDIT_INV_BANK.MSG_BANK_CURRENCY_REQUIRED"
+            }
+        ],
+        "billingEntity":[
+            {
+                "type": "required",
+                "fieldType": "A",
+                "ressource": "EDIT_INV_BANK.MSG_BANK_BILLING_REQUIRED"
+            }
+        ] 
+    }
+}

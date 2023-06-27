@@ -1,0 +1,119 @@
+﻿
+@*@{
+    ViewData["Title"] = "QuotationSearchSummary";
+}
+
+
+@model IEnumerable<DTO.Quotation.QuotationItem>
+
+<xls-sheet name="Quotation Search Summary">
+    <table xls-begin="A:1" style="border-style:solid">
+        <tr style="background-color:#f5f5f5;font-weight:bold;text-align:center">
+            <th>Quotation Number</th>
+            <th>Booking No</th>
+            <th>Customer</th>
+            <th>Supplier</th>
+            <th>Factory</th>
+            <th>Quotation Date</th>
+            <th>Service Date</th>
+            <th>Service Type</th>
+            <th>Office</th>
+            <th>Quotation Status</th>
+            <th>Total Man Day</th>
+            <th>Inspection Cost</th>
+            <th>Discount</th>
+            <th>Travel Cost</th>
+            <th>Other Cost</th>
+            <th>Total Fees</th>
+            <th>Currency</th>
+            <th>Bill Paid By</th>
+            <th>Bill Paid By Address</th>
+            <th>Bill Paid By Contact</th>
+            <th>Api Remark</th>
+            <th>Customer Remark</th>
+            <th>Customer Legal name</th>
+            <th>Supplier Legal name</th>
+            <th>Factory Legal name</th>
+            <th>
+                Country
+            </th>
+            <th>Province</th>
+            <th>City</th>
+            <th>County</th>
+            @if (Model.Where(x => x.ServiceId == (int)Entities.Enums.Service.InspectionId).Any())
+            {
+                <th>Product ref</th>
+                <th>Po Number</th>
+                <th>Actual Insp. Date</th>
+                <th>Inspection Status</th>
+            }
+            else
+            {
+                <th>Actual Audit Date</th>
+                <th>Audit Status</th>
+            }
+            <th>Billing Entity</th>
+
+            <th>Invoice No</th>
+            <th>Invoice Date</th>
+            <th>Invoice Remarks</th>
+            <th>Payment Term</th>
+            <th>Travel Distance</th>
+            <th>Travel Time</th>
+            <th>Validated By</th>
+            <th>Validated On</th>
+        </tr>
+        @foreach (var item in Model)
+        {
+        <tr>
+            <td height="200px" width="250px">@item.QuotationId</td>
+            <td width="150px">@item.BookingNoCusBookingNo</td>
+            <td width="250px">@item.CustomerName</td>
+            <td width="100px">@item.SupplierName</td>
+            <td width="150px">@item.FactoryName</td>
+            <td width="150px" xls-type="date">@item.QuotationDate</td>
+            <td width="150px">@item.ServiceDateList</td>
+            <td width="150px">@item.ServiceType</td>
+            <td width="150px">@item.Office</td>
+            <td width="150px">@item.StatusName</td>
+            <td width="150px" xls-type="number">@item.EstimatedManDay</td>
+            <td width="150px" xls-type="number">@item.InspectionFees</td>
+            <td width="150px" xls-type="number">@(item.discount ?? 0)</td>
+            <td width="150px" xls-type="number">@item.TravelCost</td>
+            <td width="150px" xls-type="number">@item.OtherCost</td>
+            <td width="150px" xls-type="number">@item.TotalCost</td>
+            <td width="150px">@item?.ExportAdditionalInfo?.currency</td>
+            <td width="150px">@(item?.ExportAdditionalInfo?.billPaidBy ?? "-")</td>
+            <td width="250px">@(item?.ExportAdditionalInfo?.billPaidByAddress ?? "-")</td>
+            <td width="250px">@(string.IsNullOrEmpty(item?.ExportAdditionalInfo?.billPaidByContact) ? "-" : item?.ExportAdditionalInfo?.billPaidByContact)</td>
+            <td width="250px">@(item?.ExportAdditionalInfo?.apiremark ?? "-")</td>
+            <td width="150px">@(item?.ExportAdditionalInfo?.customerRemark ?? "-")</td>
+            <td width="150px">@(item?.ExportAdditionalInfo?.customerLegalName ?? "-")</td>
+            <td width="150px">@(item?.ExportAdditionalInfo?.supplierLegalName ?? "-")</td>
+            <td width="150px">@(item?.ExportAdditionalInfo?.factoryLegalName ?? "-") </td>
+            <td width="150px">@Html.Raw(item?.CountryName ?? "-")</td>
+            <td width="150px">@Html.Raw(item?.ProvinceName ?? "-")</td>
+            <td width="150px">@Html.Raw(item?.CityName ?? "-")</td>
+            <td width="150px">@Html.Raw(item?.CountyName ?? "-")</td>
+            @if (item.ServiceId == (int)Entities.Enums.Service.InspectionId)
+            {
+                <td width="150px">@(item.ProductCode)</td>
+                <td width="150px">@(item.PoNo) </td>
+            }
+            <td width="150px">@(item.ActualServiceDate) </td>
+            <td width="150px">@(item.BookingStatusList) </td>
+
+            <td width="150px">@item.BillingEntity</td>
+
+            <td width="150px">@item.InvoiceNo</td>s
+            <td width="150px">@item.InvoiceDate</td>
+            <td width="150px">@item.InvoiceRemarks</td>
+            <td width="150px">@item.PaymentTerm</td>
+            <td width="150px">@item.TravelDistance</td>
+            <td width="150px">@item.TravelTime</td>
+            <td width="150px">@item.ValidatedUserName</td>
+            <td width="150px">@item.ValidatedOn</td>
+        </tr>
+        }
+    </table>
+</xls-sheet>*@

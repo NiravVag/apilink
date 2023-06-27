@@ -1,0 +1,27 @@
+{
+ "model": "expenseclaim.model",
+  "fields": {
+    "countryId": [
+      {
+        "type": "required",
+        "fieldType": "N",
+        "ressource": "EXPENSE.MSG_COUNTRY_REQ"
+      }
+    ],
+    "expensePuropose": [
+      {
+        "type": "required",
+        "fieldType": "T",
+        "ressource": "EXPENSE.MSG_EXPURPOSE_REQ"
+      }
+    ],
+    "claimTypeId": [
+      {
+        "type": "required",
+        "fieldType": "N",
+        "ressource": "EXPENSE.MSG_CLAIMTYPE_REQ"
+      }
+    ]
+  }
+
+}

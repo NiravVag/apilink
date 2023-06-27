@@ -1,0 +1,330 @@
+<div class="main-wrapper">
+	<div class="wrapper dashboard-wrapper">
+		<div class="dashboard-side-overlay" #sideOverlay [style.height.px]="overlayHeight"></div>
+		<div class="my-container">
+			<div class="dashboard-body dashbaord-placeholder-container" *ngIf="isLoading">				
+				<div class="column" #leftColumn>
+					<div class="color-card-widget-container">
+						<div class="rect-title animate"></div>
+						<div class="color-card-widget-placeholder-container">
+							<div class="rect-card animate"></div>
+							<div class="rect-card animate"></div>
+							<div class="rect-card animate"></div>
+						</div>
+					</div>
+					<div class="graph-widget-placeholder-container">
+						<div class="graph-container">
+							<div class="thumbnail">
+								<div class="card animate"></div>
+							</div>
+							<div class="content">
+								<div class="rect"></div>
+								<div class="rect animate width80"></div>
+								<div class="rect animate width50"></div>
+							</div>
+						</div>
+					</div>
+					<div class="info-widget-placeholder-container">
+						<div class="item">
+							<div class="rect animate width80"></div>
+							<div class="rect animate width50"></div>
+						</div>
+						<div class="item">
+							<div class="rect animate width80"></div>
+							<div class="rect animate width50"></div>
+						</div>
+						<div class="item">
+							<div class="rect animate width80"></div>
+							<div class="rect animate width50"></div>
+						</div>
+					</div>
+					<div class="footer mobile-hide tablet-hide">
+						<p class="text">© 2019  All rights reserved. api - hk.com</p>
+					</div>
+				</div>
+				<div class="column">
+					<div class="status-widget-placeholder-container">
+						<div class="rect animate small"></div>
+						<div class="rect animate"></div>
+						<div class="rect animate width50"></div>
+						<div class="graph-container">
+							<div class="label-container">
+								<div class="rect animate"></div>
+								<div class="rect animate"></div>
+								<div class="rect animate"></div>
+								<div class="rect animate"></div>
+								<div class="rect animate"></div>
+							</div>
+							<div class="chart">
+								<div class="rect animate"></div>
+								<div class="rect animate width70"></div>
+								<div class="rect animate width50"></div>
+								<div class="rect animate width30"></div>
+								<div class="rect animate width10"></div>
+							</div>
+						</div>
+					</div>
+					<div class="business-card-placeholder-container">
+					</div>
+				</div>
+			</div>
+			<div class="dashboard-body" *ngIf="!isLoading">
+				<div class="applied-filter-container desktop-hide">
+					<p class="filter-opener" (click)="toggleFilterState()">Want to focus on a specific area? <img src="assets/images/red-filter.svg" class="filter-icon" alt=""></p>
+				</div>
+				<div class="column" #leftColumn>
+					<div class="color-card-widget-container">
+						<h4 class="widget-title">Nixon,</h4>
+						<p class="widget-description">Completed 18 tasks yesterday. looking to build up your task.</p>
+						<div class="color-card">
+							<img src="assets/images/pending-icon.svg" alt="pending" class="icon">
+							<h2 class="title">36</h2>
+							<div class="color-card-info">
+								<p class="subtitle">Pending</p>
+								<p class="description">Lorem ipsum dolor sit amet, conse.</p>
+							</div>
+						</div>
+						<div class="color-card blue">
+							<img src="assets/images/white-circle-tick.svg" alt="Completed" class="icon">
+							<h2 class="title">27</h2>
+							<div class="color-card-info">
+								<p class="subtitle">Completed</p>
+								<p class="description">Lorem ipsum dolor sit amet, conse.</p>
+							</div>
+						</div>
+						<div class="color-card green">
+							<img src="assets/images/issued-icon.svg" alt="Issued" class="icon">
+							<h2 class="title">34</h2>
+							<div class="color-card-info">
+								<p class="subtitle">Issued</p>
+								<p class="description">Lorem ipsum dolor sit amet, conse.</p>
+							</div>
+						</div>
+						<div class="color-card">
+							<img src="assets/images/pending-icon.svg" alt="pending" class="icon">
+							<h2 class="title">36</h2>
+							<div class="color-card-info">
+								<p class="subtitle">Pending</p>
+								<p class="description">Lorem ipsum dolor sit amet, conse.</p>
+							</div>
+						</div>
+					</div>
+					<div class="graph-widget-container">
+						<h4 class="widget-title">Work & Quality Analytics</h4>
+						<p class="widget-description">Lorem ipsum dolor sitamet, conrem ipsum dolor sitamet, conse.</p>
+						<select name="" class="days-picker">
+							<option value="">Weekly</option>
+							<option value="">Daily</option>
+							<option value="">Monthly</option>
+						</select>
+						<div class="graph-container">
+							<div class="graph-column">
+								<h2 class="count">3,837</h2>
+								<p class="text">Order Completed</p>
+								<div class="bar-container">
+									<div class="bar">
+										<span class="info-container">
+											<span class="number">03</span> Claim
+										</span>
+										<span class="color-bar"><span class="color blue" [style.width]="order.claim+'%'"></span></span>
+										<span class="percent">04%</span>
+									</div>
+									<div class="bar">
+										<span class="info-container">
+											<span class="number">03</span> Complaints
+										</span>
+										<span class="color-bar"><span class="color red" [style.width]="order.complain+'%'"></span></span>
+										<span class="percent">08%</span>
+									</div>
+								</div>
+							</div>
+							<div class="graph-column">
+								<div id="chart"></div>
+							</div>
+						</div>
+					</div>
+					<div class="info-widget-container">
+						<h4 class="widget-title">Average Time Limits</h4>
+						<p class="widget-description">Lorem ipsum dolor sitamet, conrem ipsum dolor sitamet, conse.</p>
+						<div class="info-container">
+							<div class="info-column">
+								<p class="info-title">Checked to Validated</p>
+								<span class="number">4.5</span> Hours
+							</div>
+							<div class="info-column">
+								<p class="info-title">Validated to Publish</p>
+								<span class="number red">8.2</span> Hours
+							</div>
+							<div class="info-column">
+								<p class="info-title">Checked to Publish</p>
+								<span class="number orange">11.5</span> Hours
+							</div>
+						</div>
+					</div>
+					<div class="footer mobile-hide tablet-hide">
+						<p class="text">© 2019  All rights reserved. api - hk.com</p>
+					</div>
+				</div>
+				<div class="column">
+					<div class="applied-filter-container tablet-hide mobile-hide">
+						<p class="filter-opener" (click)="toggleFilterState()">Want to focus on a specific area? <img src="assets/images/red-filter.svg" class="filter-icon" alt=""></p>
+					</div>
+					<div class="status-widget-container">
+						<h4 class="widget-title">Booking Status</h4>
+						<p class="widget-description">Lorem ipsum dolor sitamet, conrem ipsum dolorsita</p>
+						<div class="status-card-container">
+							<div class="status-card received">
+								<h4 class="number">410</h4>
+								<p class="text">RECEIVED</p>
+							</div>
+							<div class="status-card confirmed">
+								<h4 class="number">329</h4>
+								<p class="text">CONFIRMED</p>
+							</div>
+							<div class="status-card cancelled">
+								<h4 class="number">81</h4>
+								<p class="text">CANCELLED</p>
+							</div>
+							<div class="status-card validated">
+								<h4 class="number">46</h4>
+								<p class="text">VALIDATED</p>
+							</div>
+							<div class="status-card postponed">
+								<h4 class="number">21</h4>
+								<p class="text">POSTPONED</p>
+							</div>
+							<div class="status-card inspected">
+								<h4 class="number">262</h4>
+								<p class="text">INSPECTED</p>
+							</div>
+							
+							<div class="status-card postponed">
+								<h4 class="number">21</h4>
+								<p class="text">POSTPONED</p>
+							</div>
+							<div class="status-card inspected">
+								<h4 class="number">262</h4>
+								<p class="text">INSPECTED</p>
+							</div>
+						</div>
+						<div class="status-two-column-container">
+							<div class="status-column">
+								<h4 class="widget-title">Customer Status</h4>
+								<div class="customer-status-widget-container">
+									<div class="widget-column">
+										<ul class="widget-data">
+											<li>Haufang Textile Co Ltd.</li>
+											<li>Shandong Jining Ruyi Woollen</li>
+											<li>Handong Jining Ruyi Woolen pvt Ltd</li>
+											<li>Jingsu Sunshine Co Ltd</li>
+											<li>Jingsu Sunshine Co Ltd</li>
+										</ul>
+									</div>
+									<div class="widget-column">
+										<div id="barChart"></div>
+									</div>
+								</div>
+							</div>
+							<div class="status-column">
+								<h4 class="widget-title">Quotation Status</h4>
+								<div class="quotation-status-widget-container">
+									<div class="my-badge single-badge hovered">
+										<img src="assets/images/quote.svg" alt="quotation" class="icon">
+										<div class="info">
+											<p class="badge-number">Quotation</p>
+											<p class="badge-text italic">Last updated on yesterday</p>
+										</div>
+									</div>
+									<div class="double-badge-container">
+										<div class="my-badge double-badge">
+											<img src="assets/images/red-file.svg" alt="quotation" class="icon">
+											<div class="info">
+												<p class="badge-number">24</p>
+												<p class="badge-text">Pending</p>
+											</div>
+										</div>
+										<div class="my-badge double-badge">
+											<img src="assets/images/green-file.svg" alt="quotation" class="icon">
+											<div class="info">
+												<p class="badge-number">18</p>
+												<p class="badge-text">Confirmed</p>
+											</div>
+										</div>
+									</div>
+									<a href="#" class="link">View all quotations</a>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="business-card-container">
+						<div class="business-card">
+							<h4 class="title">Business Overview</h4>
+							<div class="primary-stats">
+								<img src="assets/images/black-file.svg" alt="" class="icon">
+								<div class="card-info">
+									<p class="number">6,283</p>
+									<p class="text">Total Booking</p>
+								</div>
+							</div>
+							<div class="secondary-stats">
+								<div class="stats-column">
+									<div class="stat">
+										<span class="number">127</span><span>Products</span>
+									</div>
+									<div class="stat">
+										<span class="number">87</span><span>Factories</span>
+									</div>
+								</div>
+								<div class="stats-column">
+									<div class="stat">
+										<span class="number">435</span><span>Customers</span>
+									</div>
+									<div class="stat">
+										<span class="number">96</span><span>Cities</span>
+									</div>
+								</div>
+								<div class="stats-column">
+									<div class="stat">
+										<span class="number">765</span><span>Man Days</span>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="business-card">
+							<h4 class="title">Document Updates</h4>
+							<div class="document-update-container">
+								<div class="double-badge-container">
+									<div class="my-badge double-badge hovered">
+										<img src="assets/images/quote.svg" alt="quotation" class="icon">
+										<div class="info">
+											<p class="badge-number">Invoice</p>
+											<p class="badge-text italic">updated today</p>
+										</div>
+									</div>
+									<div class="my-badge double-badge">
+										<img src="assets/images/grey-file.svg" alt="quotation" class="icon">
+										<div class="info">
+											<p class="badge-number mobile-inline">24</p>
+											<p class="badge-text mobile-inline">Other Docs</p>
+										</div>
+									</div>
+								</div>
+								<p class="small-text">Lorem ipsum dolor sitamet, conrem ipsum dolorsita</p>
+							</div>
+						</div>
+					</div>
+					<div class="footer">
+						<p class="text desktop-hide">© 2019  All rights reserved. api - hk.com</p>
+						<ul class="footer-item">
+							<li><a href="">User Guide</a></li>
+							<li><a href="">Contact</a></li>
+							<li><a href="">Help</a></li>
+							<li><a href="">Terms</a></li>
+						</ul>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<app-side-filter [toggleFilter]="filterState" (filterClosed)=toggleFilterState()></app-side-filter>

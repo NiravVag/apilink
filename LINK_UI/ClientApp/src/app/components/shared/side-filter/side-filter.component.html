@@ -1,0 +1,62 @@
+<div class="side-filter-wrapper" *ngIf="toggleFilter">
+	<div class="side-filter-container">
+		<div class="head">
+			<img src="assets/images/filter.svg" alt="filter" class="icon">
+			<div class="head-info">
+				<h4 class="title">Filter your Dashboard</h4>
+				<p class="subtitle">Select the field by which to filter</p>
+			</div>
+		</div>
+		<div class="clear-filter">
+			<p class="text">02 Filter applied</p>
+			<p class="reset"><img src="assets/images/red-close.svg" alt="close"> Reset all</p>
+		</div>
+		<div class="body">
+			<div class="filter-control">
+				<label for="">Filter By Date</label>
+				<ng-select [items]="cars" bindLabel="name" autofocus bindValue="id" [(ngModel)]="selectedPersonId" [clearable]="false" placeholder="Select"></ng-select>
+			</div>
+			<div class="filter-control">
+				<label for="">Filter by Customer</label>
+				<ng-select [items]="cars2" bindLabel="name" bindValue="id" [clearable]="false" placeholder="Select"></ng-select>
+			</div>
+			<div class="filter-control">
+				<label for="">Filter by Supplier</label>
+				<ng-select [items]="cars3" bindLabel="name" bindValue="id" [clearable]="false" placeholder="Select"></ng-select>
+			</div>
+			<div class="filter-control">
+				<label for="">Filter by Country</label>
+				<ng-select [items]="cars3" bindLabel="name" bindValue="id" [clearable]="false" placeholder="Select"></ng-select>
+			</div>
+			<div class="filter-control">
+				<label for="">Filter by Season</label>
+				<div class="checkbox-container">
+					<div class="styled-checkbox-container">
+						<input class="styled-checkbox" id="checkbox-1" type="checkbox" value="value1">
+						<label for="checkbox-1">Summer</label>
+					</div>
+					<div class="styled-checkbox-container">
+						<input class="styled-checkbox" id="checkbox-2" type="checkbox" value="value1">
+						<label for="checkbox-2">Spring</label>
+					</div>
+					<div class="styled-checkbox-container">
+						<input class="styled-checkbox" id="checkbox-3" type="checkbox" value="value1">
+						<label for="checkbox-3">Autumn</label>
+					</div>
+					<div class="styled-checkbox-container">
+						<input class="styled-checkbox" id="checkbox-4" type="checkbox" value="value1">
+						<label for="checkbox-4">Winter</label>
+					</div>
+					<div class="styled-checkbox-container">
+						<input class="styled-checkbox" id="checkbox-5" type="checkbox" value="value1">
+						<label for="checkbox-5">Summer</label>
+					</div>
+				</div>
+			</div>
+			<div class="filter-control mobile-fixed-bar">
+				<button class="secondary-cta marginRight16" (click)="toggleFilterState()">Cancel</button>
+				<button class="primary-cta">Apply</button>
+			</div>
+		</div>
+	</div>
+</div>

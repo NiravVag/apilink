@@ -1,0 +1,339 @@
+﻿@model DTO.EmailSend.EmailBody
+
+
+<style>   
+    .th-table {
+        color: black;
+        vertical-align: top;
+        font-size: 13px;
+        font-family: tahoma;
+    }
+
+    .td-table {
+        font-size: 13px;
+        font-family: tahoma;
+    }
+    .td-space {
+        padding-right: 10px;
+        padding-left: 10px;
+    }
+</style>
+<table>
+    <tr>
+        <td style="font-size:13px; font-family:tahoma;">
+            Dear All,
+            <br /><br />
+            <div style="padding-bottom: 5px; margin-bottom:5px;">
+                following are the client’s result and comments:
+            </div>
+            <br />
+            <table border="0">
+                <tr>
+                    <th class="th-table" align="left" width='24%'>
+                        Inspection#:
+                    </th>
+                    <td class="td-table">
+                        @Model.ProductList.FirstOrDefault().BookingId
+                    </td>
+                </tr>
+                <tr>
+                    <th class="th-table" align="left" width='24%'>
+                        <br />
+                        Inspection Date:
+                    </th>
+                    <td class="td-table">
+                        <br />
+                        @Model.ProductList.FirstOrDefault().ServiceDate
+                        <br />
+                    </td>
+                </tr>
+                <tr>
+                    <th class="th-table" align="left" width='24%'>
+                        <br />
+                        Customer:
+                    </th>
+                    <td class="td-table">
+                        <br />
+                        @Model.Customer
+                        <br />
+                    </td>
+                </tr>
+                <tr>
+                    <th class="th-table" align="left" width='24%'>
+                        <br />
+                        Supplier:
+                    </th>
+                    <td class="td-table">
+                        <br />
+                        <span>@Model.Supplier</span>
+                        <br />
+                    </td>
+                </tr>
+                <tr>
+                    <th class="th-table" align="left" width='24%'>
+                        <br />
+                        Factory:
+                    </th>
+                    <td class="td-table">
+                        <br />
+                        <span>@Model.Factory</span>
+                        <br />
+                    </td>
+                </tr>
+                <tr>
+                    <th class="th-table" align="left" width='24%'>
+                        <br />
+                        Factory Country:
+                    </th>
+                    <td class="td-table">
+                        <br />
+                        <span>@Model.ProductList.FirstOrDefault().Country</span>
+                        <br />
+                    </td>
+                </tr>
+                <tr>
+                    <th class="th-table" align="left" width='24%'>
+                        <br />
+                        Service Type:
+                    </th>
+                    <td class="td-table">
+                        <br />
+                        <span>@Model.ProductList.FirstOrDefault().ServiceType</span>
+                        <br />
+                    </td>
+                </tr>
+                <tr>
+                    <th class="th-table" align="left" width='24%'>
+                        <br />
+                        <span style="background-color: yellow;">
+                            Updated Date (DD/MM/YYYY) :
+                        </span>
+                    </th>
+                    <td class="td-table">
+                        <br />
+                        <span>
+                            @Model.UpdatedDate
+                        </span>
+                        <br />
+                    </td>
+                </tr>
+                <tr>
+                    <th class="th-table" align="left" width='24%'>
+                        <br />
+                        <span style="background-color: yellow;">
+                            Updated Time:
+                        </span>
+                    </th>
+                    <td class="td-table">
+                        <br />
+                        <span>
+                            @Model.UpdatedTime (UTC+8)
+                        </span>
+                        <br />
+                    </td>
+                </tr>
+
+            </table>
+            <br />
+            <table id='TblList' style="border:solid 1px #d4d0c8;border-collapse:collapse;font-size:12px; font-family:tahoma;" cellspacing='0' cellpadding='1' rules='all' align='left' border='1' cellspacing=0 cellpadding=0 width='100%'>
+                <thead>
+                    <tr>
+                        <th rowspan="2" bgcolor=#f8f4f3 style="color: black; font-size:13px;" align=center width='100px' height=35 class="td-space">Po#</th>
+                        <th rowspan="2" bgcolor=#f8f4f3 style="color: black; font-size:13px;" align=center width='100px' height=35 class="td-space">Product Ref</th>
+                        <th rowspan="2" bgcolor=#f8f4f3 style="color: black; font-size:13px;" align=center width='100px' height=35 class="td-space">Color</th>
+                        <th rowspan="2" bgcolor=#f8f4f3 style="color: black; font-size:13px;" align=center width='100px' height=35 class="td-space">Color Code</th>                        
+                            <th colspan=@Model.ColumnCount bgcolor=#f8f4f3 style="color: black; font-size:13px;" align=center width='100px' height=35>
+                                Report result
+                            </th>
+                        <th colspan="3" bgcolor=#f8f4f3 style="color: black; font-size:13px;" align=center width='100px' height=35>Customer decision</th>
+                        <th rowspan="2" bgcolor=#f8f4f3 style="color: black; font-size:13px;" align=center width='100px' height=35 class="td-space">Quantity</th>
+                        <th rowspan="2" bgcolor=#f8f4f3 style="color: black; font-size:13px;" align=center width='100px' height=35 class="td-space">Defects</th>
+                        <th rowspan="2" bgcolor=#f8f4f3 style="color: black; font-size:13px;" align=center width='100px' height=35 class="td-space">Defects Details</th>
+                        <th rowspan="2" bgcolor=#f8f4f3 style="color: black; font-size:13px;" align=center width='100px' height=35 class="td-space">Observation & Comments</th>
+
+                    </tr>
+                    <tr>
+                        @foreach (var reportHeader in @Model.ReportHeader)
+                        {
+                            <th bgcolor=#f8f4f3 style="color: black; font-size:13px;" align=center width='100px' height=35 class="td-space">@reportHeader</th>
+
+                            @*@foreach (var resultName in @reportHeader)
+                            {
+                            }*@
+                        }
+                        <th bgcolor=#f8f4f3 style="color: black; font-size:13px;" align=center width='100px' height=35 class="td-space">Final Result</th>
+                        <th bgcolor=#f8f4f3 style="color: black; font-size:13px;" align=center width='100px' height=35 class="td-space">Final Decision</th>
+                        <th bgcolor=#f8f4f3 style="color: black; font-size:13px;" align=center width='100px' height=35 class="td-space">Comments </th>
+                        <th bgcolor=#f8f4f3 style="color: black; font-size:13px;" align=center width='100px' height=35 class="td-space">Date Received </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in @Model.ProductList.Where(x => x.CombineProductId == null)
+                        .Select((value, i) => new { i = i + 1, value }))
+                    {
+                        <tr>
+                            <td align=center style="font-size: 12px;" height=30>
+                                @item.value.PoNumber
+                            </td>
+                            <td align=center style="font-size: 12px;" height=30>
+                                @item.value.ProductName
+                            </td>
+                            <td align=center style="font-size: 12px;" height=30>
+                                @item.value.Color
+                            </td>
+                            <td align=center style="font-size: 12px;" height=30>
+                                @item.value.ColorCode
+                            </td>                           
+                            @foreach (var report in item.value.ReportResultData)
+                            {
+                                <td class="td" align=center style="font-size: 12px;" height=30>
+                                    @report
+                                </td>
+                            }
+                            <td align=center style="font-size: 12px;" height=30>
+                                <span style="color:@Model.ReportList.FirstOrDefault(x => x.ReportId == @item.value.ReportId)?.ReportResultColor">
+                                    @Model.ReportList.FirstOrDefault(x => x.ReportId == @item.value.ReportId)?.ReportResult
+                                </span>
+                            </td>
+                            <td align=center style="font-size: 12px;background-color:@Model.ReportList.FirstOrDefault(x => x.ReportId == @item.value.ReportId)?.CustomerDecisionResultColor" height=30>
+                                @Model.ReportList.FirstOrDefault(x => x.ReportId == @item.value.ReportId)?.CustomerDecisionResult
+                            </td>
+                            <td align=center style="font-size: 12px;" height=30>
+                                @Model.ReportList.FirstOrDefault(x => x.ReportId == @item.value.ReportId)?.CustomerDecisionComments
+                            </td>
+                            <td align=center style="font-size: 12px;" height=30>
+                                @Model.ReportList.FirstOrDefault(x => x.ReportId == @item.value.ReportId)?.CustomerDecisionFormatDate
+                            </td>
+                            <td align=center style="font-size: 12px;" height=30>
+                                <span>Order : @item.value.OrderQty</span><br />
+                                <span>Presented : @item.value.PresentedQty</span><br />
+                                <span>Inspected : @item.value.InspectedQty</span><br />
+                            </td>
+
+                            <td align=center style="font-size: 12px;" height=30>
+                                Critical: <span style="color:red;"><b> @Model.ReportList.FirstOrDefault(x => x.ReportId == @item.value.ReportId)?.CriticalDefect</b> </span><br />
+                                Major: <span style="color:red;"><b> @Model.ReportList.FirstOrDefault(x => x.ReportId == @item.value.ReportId)?.MajorDefect </b></span><br />
+                                Minor: <span style="color:red;"><b>@Model.ReportList.FirstOrDefault(x => x.ReportId == @item.value.ReportId)?.MinorDefect </b> </span>
+                            </td>
+                            <td align=center style="font-size: 12px;" height=30>
+                                <span> critical: </span>
+                                @if (!string.IsNullOrEmpty(@Model.ReportList.FirstOrDefault(x => x.ReportId == @item.value.ReportId)?.CriticalDefects))
+                                {
+                                    <span> [@Model.ReportList.FirstOrDefault(x => x.ReportId == @item.value.ReportId)?.CriticalDefects -<span style="color:red;"><b> @Model.ReportList.FirstOrDefault(x => x.ReportId == @item.value.ReportId)?.CriticalDefect</b></span>]</span>
+                                }<br />
+                                <span> major:</span>
+                                @if (!string.IsNullOrEmpty(@Model.ReportList.FirstOrDefault(x => x.ReportId == @item.value.ReportId)?.MajorDefects))
+                                {
+                                    <span> [@Model.ReportList.FirstOrDefault(x => x.ReportId == @item.value.ReportId)?.MajorDefects - <span style="color:red;"><b> @Model.ReportList.FirstOrDefault(x => x.ReportId == @item.value.ReportId)?.MajorDefect </b></span>] </span>
+                                }<br />
+                                <span> minor:</span>
+                                @if (!string.IsNullOrEmpty(@Model.ReportList.FirstOrDefault(x => x.ReportId == @item.value.ReportId)?.MinorDefects))
+                                {
+                                    <span> [@Model.ReportList.FirstOrDefault(x => x.ReportId == @item.value.ReportId)?.MinorDefects - <span style="color:red;"><b>@Model.ReportList.FirstOrDefault(x => x.ReportId == @item.value.ReportId)?.MinorDefect </b></span>] </span>
+                                }
+                            </td>
+                            <td align=center style="font-size: 12px;" height=30>
+                                @Model.ReportList.FirstOrDefault(x => x.ReportId == @item.value.ReportId)?.Observations
+                            </td>
+                        </tr>
+                    }
+
+                    @foreach (var item in @Model.ProductList.Where(x => x.CombineProductId != null)
+                        .GroupBy(x => new { x.CombineProductId, x.BookingId }).Select((value, i) => new { i = i + 1, value }))
+                    {
+                        <tr>
+                           
+                            <td align=center style="font-size: 12px;" height=30>
+                                @item.value.Select(x => x.PoNumber).FirstOrDefault()
+                            </td>
+                            <td align=center style="font-size: 12px;" height=30>
+                                @foreach (var productName in @item.value.Select(x => x.ProductName).Distinct().ToArray())
+                                {
+                                    <span>@productName</span><br />
+                                }
+                            </td>
+                            <td align=center style="font-size: 12px;" height=30>
+                                @foreach (var productName in @item.value.Select(x => x.Color).Distinct().ToArray())
+                                {
+                                <span>@productName</span><br />
+                                }                                
+                            </td>
+                            <td align=center style="font-size: 12px;" height=30>
+                                @foreach (var productName in @item.value.Select(x => x.ColorCode).Distinct().ToArray())
+                                {
+                                <span>@productName</span><br />
+                                }                                
+                            </td>
+                            @foreach (var report in item.value.Select(x => x.ReportResultData).FirstOrDefault())
+                            {
+                                <td class="td" align=center style="font-size: 12px;" height=30>
+                                    @report
+                                </td>
+                            }
+                            <td align=center style="font-size: 12px;" height=30>
+                                <span style="color:@Model.ReportList.FirstOrDefault(x => x.ReportId == @item.value.Select(y=>y.ReportId).FirstOrDefault())?.ReportResultColor">
+                                    @Model.ReportList.FirstOrDefault(x => x.ReportId == @item.value.Select(y => y.ReportId).FirstOrDefault())?.ReportResult
+                                </span>
+                            </td>
+                            <td align=center style="font-size: 12px;background-color:@Model.ReportList.FirstOrDefault(x => x.ReportId == @item.value.Select(y=>y.ReportId).FirstOrDefault())?.CustomerDecisionResultColor" height=30>
+                                @Model.ReportList.FirstOrDefault(x => x.ReportId == @item.value.Select(y => y.ReportId).FirstOrDefault())?.CustomerDecisionResult
+                            </td>
+                            <td align=center style="font-size: 12px;" height=30>
+                                @Model.ReportList.FirstOrDefault(x => x.ReportId == @item.value.Select(y => y.ReportId).FirstOrDefault())?.CustomerDecisionComments
+                            </td>
+                            <td align=center style="font-size: 12px;" height=30>
+                                @Model.ReportList.FirstOrDefault(x => x.ReportId == @item.value.Select(y => y.ReportId).FirstOrDefault())?.CustomerDecisionFormatDate
+                            </td>
+                            <td align=center style="font-size: 12px;" height=30>
+                                <span>Order : @item.value.Select(x => x.OrderQty).FirstOrDefault()</span><br />
+                                <span>Presented : @item.value.Select(x => x.PresentedQty).FirstOrDefault()</span><br />
+                                <span>Inspected : @item.value.Select(x => x.InspectedQty).FirstOrDefault()</span><br />
+                            </td>
+
+                            <td align=center style="font-size: 12px;" height=30>
+                                Critical: <span style="color:red;"><b> @Model.ReportList.FirstOrDefault(x => x.ReportId == @item.value.Select(y => y.ReportId).FirstOrDefault())?.CriticalDefect</b> </span><br />
+                                Major: <span style="color:red;"><b> @Model.ReportList.FirstOrDefault(x => x.ReportId == @item.value.Select(y => y.ReportId).FirstOrDefault())?.MajorDefect </b></span><br />
+                                Minor: <span style="color:red;"><b>@Model.ReportList.FirstOrDefault(x => x.ReportId == @item.value.Select(y => y.ReportId).FirstOrDefault())?.MinorDefect </b> </span>
+                            </td>
+                            <td align=center style="font-size: 12px;" height=30>
+                                <span> critical: </span>
+                                @if (!string.IsNullOrEmpty(@Model.ReportList.FirstOrDefault(x => x.ReportId == @item.value.Select(y => y.ReportId).FirstOrDefault())?.CriticalDefects))
+                                {
+                                    <span> [@Model.ReportList.FirstOrDefault(x => x.ReportId == @item.value.Select(y => y.ReportId).FirstOrDefault())?.CriticalDefects -<span style="color:red;"><b> @Model.ReportList.FirstOrDefault(x => x.ReportId == @item.value.Select(y => y.ReportId).FirstOrDefault())?.CriticalDefect</b></span>]</span>
+                                }<br />
+                                <span> major:</span>
+                                @if (!string.IsNullOrEmpty(@Model.ReportList.FirstOrDefault(x => x.ReportId == @item.value.Select(y => y.ReportId).FirstOrDefault())?.MajorDefects))
+                                {
+                                    <span> [@Model.ReportList.FirstOrDefault(x => x.ReportId == @item.value.Select(y => y.ReportId).FirstOrDefault())?.MajorDefects - <span style="color:red;"><b> @Model.ReportList.FirstOrDefault(x => x.ReportId == @item.value.Select(y => y.ReportId).FirstOrDefault())?.MajorDefect </b></span>] </span>
+                                }<br />
+                                <span> minor:</span>
+                                @if (!string.IsNullOrEmpty(@Model.ReportList.FirstOrDefault(x => x.ReportId == @item.value.Select(y => y.ReportId).FirstOrDefault())?.MinorDefects))
+                                {
+                                    <span> [@Model.ReportList.FirstOrDefault(x => x.ReportId == @item.value.Select(y => y.ReportId).FirstOrDefault())?.MinorDefects - <span style="color:red;"><b>@Model.ReportList.FirstOrDefault(x => x.ReportId == @item.value.Select(y => y.ReportId).FirstOrDefault())?.MinorDefect </b></span>] </span>
+                                }
+                            </td>
+                            <td align=center style="font-size: 12px;" height=30>
+                                @Model.ReportList.FirstOrDefault(x => x.ReportId == @item.value.Select(y => y.ReportId).FirstOrDefault())?.Observations
+                            </td>
+                        </tr>
+                    }
+
+                </tbody>
+            </table>
+        </td>
+    </tr>
+    <tr>
+        <td class="td-table">
+            <br />
+            <div style="padding-bottom: 5px; margin-bottom:5px;">
+                Thanks
+            </div>
+            <div style="padding-bottom: 5px; margin-bottom:5px;">
+                SgT Team
+            </div>
+            <span style="font-style:normal;background-color:yellow;"> Note: - This receipt is auto generated email. please do not reply to this @Model.SenderEmail.</span>
+            <br />
+            <br />
+        </td>
+    </tr>
+</table>

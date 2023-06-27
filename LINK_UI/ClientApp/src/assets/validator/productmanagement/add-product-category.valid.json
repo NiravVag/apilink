@@ -1,0 +1,17 @@
+{
+    "model": "AddProductCategoryModel",
+    "fields": {
+      "name": [
+        {
+          "type": "required",
+          "ressource": "PRODUCT_CATEGORY.MSG_NAME_REQ"
+        }
+      ],
+      "businessLineId": [
+        {
+          "type": "required",
+          "ressource": "PRODUCT_CATEGORY.MSG_BUSINESSLINE_REQ"
+        }
+      ]
+    }
+}

@@ -1,0 +1,409 @@
+﻿@{
+    ViewData["Title"] = "ReportSendEmail";
+}
+@model DTO.EmailSend.EmailBody
+
+<table>
+    <tr>
+        <td style="font-size:12px; font-family:tahoma;">
+
+            <div style="padding-bottom: 5px; margin-bottom:5px;">
+                Dear @Model.RecipientName ,
+            </div>
+
+            <br />
+            @if (@Model.AttachmentList.Count > 0)
+            {
+                @if (@Model.EmailRuleData != null && @Model.EmailRuleData.ReportSendType.GetValueOrDefault() == 4)
+                {
+                    <div style="padding-bottom: 5px; margin-bottom:5px;">
+                        Please kindly find the attached inspection summary report. If you have any question about the summary, please email your assigned Customer Service executive in Cc.
+                    </div>
+                }
+                else if (@Model.EmailRuleData != null && @Model.EmailRuleData.ReportSendType.GetValueOrDefault() == 5)
+                {
+                    <div style="padding-bottom: 5px; margin-bottom:5px;">
+                        Please kindly find the attached inspection summary and reports. If you have any question about the report or summary, please email your assigned Customer Service executive in Cc.
+                    </div>
+                }
+                else
+                {
+                    <div style="padding-bottom: 5px; margin-bottom:5px;">
+                        Please kindly find the attached report. If you have any question about the report, please email your assigned Customer Service executive in Cc.
+                    </div>
+                }
+            }
+            else
+            {
+                <div style="padding-bottom: 5px; margin-bottom:5px;">
+                    Please kindly find the report below. If you have any question about the report, please email your assigned Customer Service executive in Cc.
+                </div>
+            }
+            <br />
+
+            @if (@Model.ReportSummaryLinkList.Count > 0)
+            {
+
+
+                string ReportLinks = "";
+                int dataLength = @Model.ReportSummaryLinkList.Select(x => new { x.BookingId, x.SummaryLink }).Distinct().Count();
+                int dataIndex = 1;
+
+                @foreach (var item in @Model.ReportSummaryLinkList.Select(x => new { x.BookingId, x.SummaryLink }).Distinct().ToList())
+                {
+                    if (string.IsNullOrEmpty(ReportLinks))
+                    {
+                        if (dataIndex == dataLength)
+                        {
+                            ReportLinks = "<span style='display: inline-block;'><a style='color:blue !important' href='" + @item.SummaryLink + "' target='_blank' rel='noopener noreferrer'>" + "#" + @item.BookingId + "</a></span>";
+                        }
+                        else
+                        {
+                            ReportLinks = "<span style='display: inline-block;'><a style='color:blue !important' href='" + @item.SummaryLink + "' target='_blank' rel='noopener noreferrer'>" + "#" + @item.BookingId + ",</a></span>";
+                        }
+
+                    }
+                    else
+                    {
+                        if (dataIndex == dataLength)
+                        {
+                            ReportLinks += "<span style='display: inline-block;'><a style='color:blue !important' href='" + @item.SummaryLink + "' target='_blank' rel='noopener noreferrer'>" + "#" + @item.BookingId + "</a></span>";
+                        }
+                        else
+                        {
+                            ReportLinks += "<span style='display: inline-block;'><a style='color:blue !important' href='" + @item.SummaryLink + "' target='_blank' rel='noopener noreferrer'>" + "#" + @item.BookingId + ",</a></span>";
+                        }
+
+                    }
+                    dataIndex++;
+
+                }
+
+                <div style="padding-bottom: 5px; margin-bottom:5px;">
+                    <span>Please click @Html.Raw(ReportLinks) to download the Inspection Report Summary.</span>
+                </div>
+                <br />
+            }
+
+            @*<div style="padding-bottom: 5px; margin-bottom:5px;">
+                    Please let us know if you have any enquiry.
+                </div>*@
+
+            <br />
+
+
+            @if (@Model.ProductList.Count > 0)
+            {
+                int rowIndex = 1;
+                <div style="padding-bottom: 5px; margin-bottom:5px; font-weight: bold;">
+                    Overall Results:
+                </div>
+
+                <div style="padding-bottom: 20px;margin-bottom: 20px;">
+                    <table id='TblList' style="border:solid 1px #d4d0c8;border-collapse:collapse;font-size:12px;" cellspacing='0' cellpadding='1' rules='all' align='left' border='1' width='80%'>
+                        <tr>
+                            <th bgcolor=#f8f4f3 style="color: black; font-size:12px; text-align:center" align=center width='3%' height=35> #</th>
+                            @if (@Model.ProductList.Select(x => x.BookingId).Distinct().Count() > 1)
+                            {
+                                <th bgcolor=#f8f4f3 style="color: black; font-size:12px;" align=center width='5%' height=35>Booking #</th>
+                            }
+                            <th bgcolor=#f8f4f3 style=" font-size:12px;" align=center width='5%' height=35>Product Ref</th>
+                            <th bgcolor=#f8f4f3 style=" font-size:12px;" align=center width='10%' height=35>Product Desc</th>
+                            <th bgcolor=#f8f4f3 style=" font-size:12px;" align=center width='5%' height=35>PO No</th>
+                            <th bgcolor=#f8f4f3 style=" font-size:12px;" align=center width='5%' height=35>Inspection Result</th>
+                            <th bgcolor=#f8f4f3 style=" font-size:12px;" align=center width='5%' height=35>Download Report</th>
+
+                            @if (@Model.EmailRuleData != null && @Model.EmailRuleData.IsPictureFileInEmail.GetValueOrDefault())
+                            {
+                                <th bgcolor=#f8f4f3 style=" font-size:12px;" align=center width='5%' height=35>Download Picture</th>
+                            }
+
+                        </tr>
+                        @foreach (var item in @Model.ProductList.Where(x => x.CombineProductId == null).Select((value, i) => new { i = i + 1, value }))
+                        {
+                            <tr>
+                                <td align=center style="font-size: 12px;" height=30>@rowIndex</td>
+                                @if (@Model.ProductList.Select(x => x.BookingId).Distinct().Count() > 1)
+                                {
+                                    <td align=center style="font-size: 12px;" height=30>
+                                        @item.value.BookingId
+                                    </td>
+                                }
+                                <td align=center style="font-size: 12px;" height=30>
+                                    @item.value.ProductName
+                                </td>
+
+                                <td align=center style="font-size: 12px;" height=30>
+                                    @item.value.ProductDesc
+                                </td>
+                                <td align=center style="font-size: 12px;" height=30>
+                                    @foreach (var poNumber in @item.value.PoNumberList.Distinct())
+                                    {
+                                        <span>@poNumber</span><br />
+                                    }
+                                </td>
+
+                                <td align=center style="font-size: 16px;" height=30;>
+                                    <span style="color:@Model.ReportList.FirstOrDefault(x => x.ReportId == @item.value.ReportId)?.ReportResultColor">
+                                        @Model.ReportList.FirstOrDefault(x => x.ReportId == @item.value.ReportId)?.ReportResult
+                                    </span>
+
+                                </td>
+                                <td align=center style="font-size: 12px;" height=30>
+                                    @if (!string.IsNullOrEmpty(Model.ReportList.FirstOrDefault(x => x.ReportId == item.value.ReportId)?.FinalManualReportPath))
+                                    {
+                                        <a href="@Model.ReportList.FirstOrDefault(x => x.ReportId == item.value.ReportId)?.FinalManualReportPath"
+                                           blank rel="noopener noreferrer">Download</a>
+                                    }
+                                    else
+                                    {
+                                        <a href="@Model.ReportList.FirstOrDefault(x => x.ReportId == item.value.ReportId)?.ReportLink"
+                                           blank rel="noopener noreferrer">Download</a>
+                                    }
+
+
+                                </td>
+                                @if (@Model.EmailRuleData != null && @Model.EmailRuleData.IsPictureFileInEmail.GetValueOrDefault())
+                                {
+                                    <td align=center style="font-size: 12px;" height=30>
+                                        @if (!string.IsNullOrEmpty(Model.ReportList.FirstOrDefault(x => x.ReportId == item.value.ReportId)?.ReportImagePath))
+                                        {
+                                            <a href="@Model.ReportList.FirstOrDefault(x => x.ReportId == item.value.ReportId)?.ReportImagePath"
+                                               blank rel="noopener noreferrer">Download</a>
+                                        }
+
+                                    </td>
+                                }
+
+                            </tr>
+                            rowIndex++;
+                        }
+
+                        @foreach (var item in @Model.ProductList.Where(x => x.CombineProductId != null)
+.GroupBy(x => new { x.CombineProductId, x.BookingId }).Select((value, i) => new { i = i + 1, value }))
+                        {
+                            <tr>
+                                <td align=center style="font-size: 12px;" height=30>@rowIndex</td>
+                                @if (@Model.ProductList.Select(x => x.BookingId).Distinct().Count() > 1)
+                                {
+                                    <td align=center style="font-size: 12px;" height=30>
+                                        @item.value.Select(x => x.BookingId).FirstOrDefault()
+                                    </td>
+                                }
+
+                                <td align=center style="font-size: 12px;" height=30>
+                                    @foreach (var productName in @item.value.Select(x => x.ProductName).Distinct().ToArray())
+                                    {
+                                        <span>@productName</span><br />
+                                    }
+                                </td>
+
+                                <td align=center style="font-size: 12px;" height=30>
+                                    @foreach (var productCode in @item.value.Select(x => x.ProductName).Distinct().ToArray())
+                                    {
+                                        <span>
+                                            @item.value.FirstOrDefault(x => x.ProductName == productCode).ProductDesc
+                                        </span><br />
+
+
+                                    }
+                                </td>
+
+                                <td align=center style="font-size: 12px;" height=30>
+                                    @foreach (var poNumber in @item.value.SelectMany(x => x.PoNumberList).Distinct())
+                                    {
+                                        <span>@poNumber</span><br />
+                                    }
+                                </td>
+
+                                <td align=center style="font-size: 16px; text-align:center;" height=30;>
+
+                                    <span style="color:@Model.ReportList.FirstOrDefault(x => x.ReportId ==  @item.value.Select(y=>y.ReportId).FirstOrDefault())?.ReportResultColor">
+                                        @Model.ReportList.FirstOrDefault(x => x.ReportId == @item.value.Select(y => y.ReportId).FirstOrDefault())?.ReportResult
+                                    </span>
+
+                                </td>
+                                <td align=center style="font-size: 12px;" height=30>
+                                    <a href="@Model.ReportList.FirstOrDefault(x => x.ReportId == @item.value.Select(y=>y.ReportId).FirstOrDefault())?.ReportLink"
+                                       blank rel="noopener noreferrer">Download</a>
+                                </td>
+                                @if (@Model.EmailRuleData != null && @Model.EmailRuleData.IsPictureFileInEmail.GetValueOrDefault())
+                                {
+                                    <td align=center style="font-size: 12px;" height=30>
+
+                                        @if (!string.IsNullOrEmpty(@Model.ReportList.FirstOrDefault(x => x.ReportId == @item.value.Select(y => y.ReportId).FirstOrDefault())?.ReportImagePath))
+                                        {
+
+                                            <a href="@Model.ReportList.FirstOrDefault(x => x.ReportId == @item.value.Select(y => y.ReportId).FirstOrDefault())?.ReportImagePath"
+                                               blank rel="noopener noreferrer">Download</a>
+                                        }
+                                    </td>
+                                }
+                            </tr>
+                            rowIndex++;
+                        }
+
+                    </table>
+                </div>
+                <br />
+            }
+
+
+
+            @if (@Model.ContainerList.Count > 0)
+            {
+                <div style="padding-bottom: 5px; margin-bottom:5px; font-weight: bold;">
+                    OverAll Results:
+                </div>
+
+                <div style="padding-bottom: 20px;margin-bottom: 20px;">
+                    <table id='TblList' style="border:solid 1px #d4d0c8;border-collapse:collapse;font-size:12px;" cellspacing='0' cellpadding='1' rules='all' align='left' border='1' width='80%'>
+                        <tr>
+                            <th bgcolor=#f8f4f3 style="color: black; font-size:12px; text-align:center" align=center width='3%' height=35> #</th>
+                            @if (@Model.ContainerList.Select(x => x.BookingId).Distinct().Count() > 1)
+                            {
+                                <th bgcolor=#f8f4f3 style="color: black; font-size:12px;" align=center width='5%' height=35>Booking #</th>
+                            }
+                            <th bgcolor=#f8f4f3 style="color: black; font-size:12px; text-align:center" align=center width='10%' height=35>Container Size</th>
+                            <th bgcolor=#f8f4f3 style="color: black; font-size:12px; text-align:center" align=center width='20%' height=35>PO No</th>
+                            <th bgcolor=#f8f4f3 style="color: black; font-size:12px; text-align:center" align=center width='10%' height=35>Inspection Result</th>
+                            <th bgcolor=#f8f4f3 style="color: black; font-size:12px; text-align:center" align=center width='5%'></th>
+                        </tr>
+                        @foreach (var item in @Model.ContainerList.Select((value, i) => new { i = i + 1, value }))
+                        {
+                            <tr>
+                                <td align=center style="font-size: 12px;" height=30>@item.i</td>
+                                @if (@Model.ContainerList.Select(x => x.BookingId).Distinct().Count() > 1)
+                                {
+                                    <td align=center style="font-size: 12px;" height=30>
+                                        @item.value.BookingId
+                                    </td>
+                                }
+
+                                <td align=center style="font-size: 12px;" height=30>
+                                    @item.value.ContainerNumber
+                                </td>
+                                <td align=center style="font-size: 12px;" height=30>
+                                    @foreach (var poNumber in @item.value.PoNumberList.Distinct())
+                                    {
+                                        <span>@poNumber</span><br />
+                                    }
+                                </td>
+
+                                <td align=center style="font-size: 16px; text-align:center;" height=30;>
+                                    <span style="color:@Model.ReportList.FirstOrDefault(x => x.ReportId == @item.value.ReportId)?.ReportResultColor">
+                                        @Model.ReportList.FirstOrDefault(x => x.ReportId == @item.value.ReportId)?.ReportResult
+                                    </span>
+
+                                </td>
+                                <td align=center style="font-size: 12px;" height=30>
+                                    <a href=" @Model.ReportList.FirstOrDefault(x => x.ReportId == @item.value.ReportId)?.ReportLink"
+                                       blank" rel="noopener noreferrer">Download</a>
+                                </td>
+                                @if (@Model.EmailRuleData != null && @Model.EmailRuleData.IsPictureFileInEmail.GetValueOrDefault())
+                                {
+                                    <td align=center style="font-size: 12px;" height=30>
+                                        @if (!string.IsNullOrEmpty(Model.ReportList.FirstOrDefault(x => x.ReportId == item.value.ReportId)?.ReportImagePath))
+                                        {
+                                            <a href="@Model.ReportList.FirstOrDefault(x => x.ReportId == @item.value.ReportId)?.ReportImagePath"
+                                               blank" rel="noopener noreferrer">Download</a>
+                                        }
+                                    </td>
+                                }
+                            </tr>
+
+                        }
+
+                    </table>
+                </div>
+                <br />
+            }
+
+        </td>
+    </tr>
+    @if (@Model.UserUploadFileList.Count > 0)
+    {
+        <tr>
+            <td>
+                <div contenteditable="true" style="padding-bottom: 5px; margin-bottom:5px; font-weight: bold;">
+                    Additional Files:
+                </div>
+
+                <div style="padding-bottom: 20px;margin-bottom: 20px;">
+                    <table id='TblList' style="border:solid 1px #d4d0c8;border-collapse:collapse;font-size:12px; font-family:tahoma;" cellspacing='0' cellpadding='1' rules='all' align='left' border='1' width='100%'>
+                        <tr>
+                            <th bgcolor=#f8f4f3 style="font-size:12px;text-align:center;" width='5%' height=35> #</th>
+                            <th bgcolor=#f8f4f3 style="font-size:12px;text-align:center;" width='5%' height=35>File Type</th>
+                            <th bgcolor=#f8f4f3 style="font-size:12px;text-align:center;" width='5%' height=35>File Link</th>
+
+                        </tr>
+                        @foreach (var item in @Model.UserUploadFileList.Select((value, i) => new { i = i + 1, value }))
+                        {
+                            <tr>
+                                <td align=center style="font-size: 12px;" height=30>@item.i</td>
+                                <td align=center style="font-size: 12px;" height=30>
+                                    @item.value.FileType
+                                </td>
+                                <td align=center style="font-size: 12px; text-align:center;" height=30>
+                                    <a style="color:blue !important" href="@item.value.FileLink" target="_blank" rel="noopener noreferrer">
+                                        <div style="height:100%;width:100%">
+                                            @item.value.FileName
+                                        </div>
+                                    </a>
+                                </td>
+                            </tr>
+                        }
+
+                    </table>
+                </div>
+
+
+            </td>
+
+        </tr>
+    }
+
+    <tr>
+        <td style="font-size: 12px;font-family: tahoma;">
+
+            <br />
+
+            @if (!string.IsNullOrEmpty(Model.CustomerDecisionUrl))
+            {
+                <span>click here to give the shipment release</span>
+                <br />
+                <br />
+                <div>
+                    <span><a target="_blank" style="text-decoration:none; outline: none; color: #fff; line-height: 1; font-size: 14px; padding: 12px 20px; border-radius: 4px; font-weight: normal; display: inline-block; transition: ease all 0.4s; background-color: #cd2d2f; font-size: 16px; padding: 12px 20px; " href="@Model.CustomerDecisionUrl">Give Shipment Release</a></span>
+                </div>
+
+                <br />
+            }
+
+            <div>
+                <span>Please login our&nbsp;</span><a href="https://www.linkqms.io/" style="color: blue; display: inline !important;">Link</a>&nbsp;<span>to view the report details.</span>
+            </div>
+
+            <br />
+            <div style="padding-bottom: 5px; margin-bottom:5px;">
+                <span style="font-style:normal"> Note: - This receipt is auto generated from Link QMS. Please do not reply to @Model.SenderEmail.</span>
+            </div>
+
+            <br />
+
+            @*<div style="padding-bottom: 5px; margin-bottom:5px;">
+            Regards,
+        </div>
+        <div style="padding-bottom: 5px; margin-bottom:5px;">
+            Link QMS Team
+        </div>*@
+
+        </td>
+    </tr>
+</table>
+
+
+
+
+
+

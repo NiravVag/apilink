@@ -1,0 +1,361 @@
+<div class="main-wrapper">
+    <div class="wrapper dashboard-wrapper">
+        <div class="my-container">
+            <div class="master-body">
+                <div class="title-container">
+                    <h3 class="main-title">{{ 'COMPLAINT_SUMMARY.LBL_TITLE' | translate }}
+                    </h3>
+                </div>
+                <div class="content-container quotation-container">
+                    <div [@expandCollapse]="isFilterOpen ? 'open' : 'close'"
+                        class="centerContainerPadding common-filter-container">
+                        <div class="animated-icon-container" (click)="toggleFilterSection()"
+                            *ngIf="(model.items && model.items.length>0)">
+                            <img src="assets/images/cta-close-grey.svg" alt="close">
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-3 col-md-3 col-lg-3 marginTop15">
+                                <div class="my-input-group">
+                                    <label>{{ 'COMPLAINT_SUMMARY.LBL_COMPLAINT_TYPE' | translate}}</label>
+                                    <ng-select [items]="summaryModel.complaintTypeList" [multiple]="false"
+                                        [closeOnSelect]="true" [searchable]="true" bindLabel="name" bindValue="id"
+                                        appendTo="body" (change)="changeComplaintType()"
+                                        [loading]="summaryModel.complaintTypeLoading" (clear)="clearComplaintType()"
+                                        placeholder="--- {{ 'COMMON.LBL_SELECT' | translate }} ---"
+                                        [(ngModel)]="model.complaintTypeId"
+                                        [ngClass]="{'is-invalid': !validator.isValid('complaintTypeId')}">
+                                    </ng-select>
+                                    <div *ngIf="!validator.isValid('complaintTypeId')" class="invalid-feedback">
+                                        <div *ngFor="let error of validator.getErrors('complaintTypeId')">
+                                            {{ error | translate }}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-sm-6 col-md-8 col-xl-8 mobile-margin-top-15">
+                                <div class="my-input-group" *ngIf="showBookingDateType">
+                                    <div class="styled-radio-container"
+                                        *ngFor="let item of datetypelst;let idx = index">
+                                        <input type="radio" class="styled-radio" id="{{item.id}}" name="radio-group1"
+                                            [value]="item.id" [checked]="idx === 0" [(ngModel)]="model.datetypeid"
+                                            (change)="SetSearchDatetype(item.id)">
+                                        <label for="{{item.id}}">{{item.name}}</label>
+                                    </div>
+                                </div>
+                                <div class="my-input-group" *ngIf="!showBookingDateType">
+                                    <div class="styled-radio-container"
+                                        *ngFor="let item of defaultDatetypelst;let idx = index">
+                                        <input type="radio" class="styled-radio" id="{{item.id}}" name="radio-group1"
+                                            [value]="item.id" [checked]="idx === 0" [(ngModel)]="model.datetypeid"
+                                            (change)="SetSearchDatetype(item.id)">
+                                        <label for="{{item.id}}">{{item.name}}</label>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="my-input-group col-sm-5 col-lg-3">
+                                        <div class="calendar-wrapper">
+                                            <input type="text" maxlength="10" container="body"
+                                                [ngClass]="{ 'is-invalid':  !validator.isValidIf('fromdate',IsDateValidationRequired())}"
+                                                readonly=readonly [(ngModel)]="model.fromdate" ngbDatepicker
+                                                #sdf="ngbDatepicker" (click)="sdf.toggle()">
+                                            <img src="assets/images/calendar-icon.svg" alt="" class="calendar-icon"
+                                                (click)="sdf.toggle()">
+
+                                            <img src="assets/images/cta-close-grey.svg" alt="" class="close-icon"
+                                                (click)="clearDateInput('fromdate')"
+                                                *ngIf="model.fromdate!=null||model.fromdate!=undefined">
+                                        </div>
+                                        <div *ngIf="!validator.isValidIf('fromdate',IsDateValidationRequired())"
+                                            class="invalid-feedback">
+                                            <div *ngFor="let error of validator.getErrors('fromdate')">
+                                                {{ error | translate }}</div>
+                                        </div>
+                                    </div>
+                                    <div class="my-input-group col-sm-5 col-lg-3">
+                                        <div class="calendar-wrapper">
+                                            <input type="text" maxlength="10" container="body"
+                                                [ngClass]="{ 'is-invalid':  !validator.isValidIf('todate',IsDateValidationRequired())}"
+                                                readonly=readonly [(ngModel)]="model.todate" ngbDatepicker
+                                                #sdt="ngbDatepicker" (click)="sdt.toggle()">
+                                            <img src="assets/images/calendar-icon.svg" alt="" class="calendar-icon"
+                                                (click)="sdt.toggle()">
+                                            <img src="assets/images/cta-close-grey.svg" alt="" class="close-icon"
+                                                (click)="clearDateInput('todate')"
+                                                *ngIf="model.todate!=null||model.todate!=undefined">
+                                        </div>
+                                        <div *ngIf="!validator.isValidIf('todate',IsDateValidationRequired())"
+                                            class="invalid-feedback">
+                                            <div *ngFor="let error of validator.getErrors('todate')">
+                                                {{ error | translate }}</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <div class="row marginTop15">
+                                    <div class="col-sm-3 col-md-3 col-lg-3 marginTop15">
+                                        <div class="my-input-group">
+                                            <label>{{ 'COMMON.LBL_CUSTOMER' |
+                                                translate}}</label>
+                                            <ng-select appendTo="body" [items]="summaryModel.customerList"
+                                                [virtualScroll]="true" [loading]="summaryModel.customerLoading"
+                                                bindLabel="name" bindValue="id"
+                                                placeholder="--- {{ (summaryModel.customerList!=null && summaryModel.customerList.length!=0? 'BOOKING_SUMMARY.LBL_SELECT':'BOOKING_SUMMARY.MSG_NO_DATA' ) | translate }} ---"
+                                                [typeahead]="summaryModel.customerInput" [minTermLength]="3"
+                                                [(ngModel)]="model.customerId" [multiple]="false"
+                                                (scrollToEnd)="getCustomerData(true)" #select>
+                                                <ng-template ng-option-tmp let-item="item">
+                                                    <!-- <b>{{index}} </b><span>{{item.name}}</span> -->
+                                                    <div class="text-wrap"><span>{{item.name}}</span></div>
+                                                </ng-template>
+                                            </ng-select>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-3 col-md-3 col-lg-3 marginTop15" *ngIf="showBookingDateType">
+                                        <div class="my-input-group">
+                                            <label>{{ 'COMPLAINT_SUMMARY.LBL_SERVICE' |
+                                                translate}}</label>
+                                            <ng-select [items]="summaryModel.serviceList" [multiple]="false"
+                                                [closeOnSelect]="true" [searchable]="true" bindLabel="name"
+                                                (clear)="clearService()" bindValue="id"
+                                                [loading]="summaryModel.serviceLoading" (change)="changeService()"
+                                                placeholder="--- {{ 'COMMON.LBL_SELECT' | translate }} ---"
+                                                [(ngModel)]="model.serviceId" appendTo="body"
+                                                [ngClass]="{'is-invalid': !validator.isValidIf('serviceId', model.searchtypetext || model.datetypeid == 4)}">
+                                            </ng-select>
+                                            <div *ngIf="!validator.isValidIf('serviceId', model.searchtypetext || model.datetypeid == 4)"
+                                                class="invalid-feedback">
+                                                <div *ngFor="let error of validator.getErrors('serviceId')">
+                                                    {{ error | translate }}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-8 col-md-7 col-lg-4" *ngIf="showBookingDateType">
+                                        <div class="my-input-group">
+                                            <div class="styled-radio-container"
+                                                *ngFor="let item of searchtypelst;let idx = index">
+                                                <input type="radio" class="styled-radio" id="{{item.id}}"
+                                                    name="radio-group" [value]="item.id" [checked]="idx === 0"
+                                                    [(ngModel)]="model.searchtypeid"
+                                                    (change)="SetSearchTypemodel(item.id)">
+                                                <label for="{{item.id}}">{{item.name}}</label>
+                                            </div>
+                                            <input maxlength="200" [(ngModel)]="model.searchtypetext" type="text"
+                                                [ngClass]="{ 'is-invalid': BookingNoValidation()}" />
+                                            <div *ngIf="BookingNoValidation()" class="invalid-feedback">
+                                                <div>{{ 'BOOKING_SUMMARY.MSG_BOOKINGNO_ERROR' | translate }}</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- <div class="col-sm-3 col-md-3 col-lg-3">
+                                        <div class="my-input-group">
+                                            <label>{{ 'COMPLAINT_SUMMARY.LBL_COMPLAINT_TYPE' |
+                                                translate}}</label>
+                                            <ng-select [items]="summaryModel.complaintTypeList" [multiple]="false"
+                                                [closeOnSelect]="true" [searchable]="true" bindLabel="name"
+                                                bindValue="id" appendTo="body" (change)="changeComplaintType()"
+                                                [loading]="summaryModel.complaintTypeLoading"
+                                                (clear)="clearComplaintType()"
+                                                placeholder="--- {{ 'COMMON.LBL_SELECT' | translate }} ---"
+                                                [(ngModel)]="model.complaintTypeId"
+                                                [ngClass]="{'is-invalid': !validator.isValid('complaintTypeId')}">
+                                            </ng-select>
+                                            <div *ngIf="!validator.isValid('complaintTypeId')" class="invalid-feedback">
+                                                <div *ngFor="let error of validator.getErrors('complaintTypeId')">
+                                                    {{ error | translate }}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div> -->
+                                </div>
+                            </div>
+                        </div>
+                        <div [hidden]="!toggleFormSection">
+                            <!-- *ngIf="toggleFormSection" -->
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <div class="row marginTop25">
+                                        <div class="col-sm-3 col-md-4 col-lg-3" *ngIf="showProductPoAdvSrch">
+                                            <div class="my-input-group">
+                                                <div class="styled-radio-container"
+                                                    *ngFor="let item of bookingAdvanceSearchtypelst;let idx = index">
+                                                    <input type="radio" class="styled-radio" id="{{item.id}}"
+                                                        name="radio-group2" [value]="item.id"
+                                                        (change)="SetSearchTypeText(item.id)" [checked]="true"
+                                                        [(ngModel)]="model.advancedSearchtypeid">
+                                                    <label for="{{item.id}}">{{item.name}}</label>
+                                                    <!-- [checked]="idx === 0" -->
+                                                </div>
+                                                <input type="text" maxlength="200"
+                                                    [(ngModel)]="model.advancedsearchtypetext">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row marginTop25">
+                            <div class="col-12 col-sm-6">
+                                <button class="tertiary-cta small" (click)="toggleSection()"
+                                    *ngIf="showProductPoAdvSrch">
+                                    <span class="icon" *ngIf="!toggleFormSection">+</span>
+                                    <span class="icon" *ngIf="toggleFormSection">-</span>
+                                    {{'COMMON.LBL_ADVANCED_SEARCH' | translate}}
+                                </button>
+
+                            </div>
+                            <div class="col-12 col-sm-6 text-right mt-3 mt-sm-0">
+                                <button id="btnAdd" class="secondary-cta small" style="margin-right: 5px;"
+                                    (click)="redirectRegisterPage(0)">+{{ 'COMMON.LBL_NEW' | translate }}</button>
+                                <button class="category-cta small mr-2 common-tooltip common-tooltip-top-2"
+                                    data-tooltip="Reset" (click)="reset()" [disabled]="summaryModel.searchLoading">
+                                    <img src="assets/images/reload-new.svg" alt="Reset">
+                                    <span>{{ 'COMMON.LBL_RESET' | translate}}</span>
+                                </button>
+                                <button class="secondary-cta small mr-2" (click)="export()"
+                                    [disabled]="exportDataLoading || cancelLoading"
+                                    *ngIf="model.items != null && model.items.length != 0  && !model.noFound">
+                                    <img src="assets/images/red-export.svg" alt="export">
+                                    {{ 'QUOTATION_SUMMARY.LBL_EXPORT' | translate }}
+                                    <span *ngIf="exportDataLoading">
+                                        <i class="fa fa-refresh fa-spin" aria-hidden="true"></i>
+                                    </span>
+                                </button>
+                                <button class="primary-cta small" (click)="SearchDetails()"
+                                    [disabled]="summaryModel.searchLoading"> {{
+                                    'COMMON.LBL_SEARCH' | translate }}
+                                    <span *ngIf="summaryModel.searchLoading">
+                                        <i class="fa fa-refresh fa-spin" aria-hidden="true"></i>
+                                    </span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="centerContainerPadding float-left" *ngIf="(model.items && model.items.length>0)">
+                        <div class="row">
+                            <div class="col-6 col-sm-3 col-xl-2 d-flex">
+                                <p class="search-trigger-heading" [innerHtml]="showPaginationText()"></p>
+                            </div>
+                            <div class="col-6 col-sm-9 col-xl-10 text-right">
+                                <div class="animated-icon-container" *ngIf="!isFilterOpen"
+                                    (click)="toggleFilterSection()">
+                                    <img src="assets/images/cta-search-grey.svg" alt="search">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="quotation-search-container">
+                            <div class="table-container h-scroll table-max-height-650">
+                                <table class="pagination-table simple-table bordered">
+                                    <thead>
+                                        <tr class="sticky-top-row">
+                                            <th></th>
+                                            <th class="Center_Middle width-60"></th>
+                                            <th class="width-120 sticky-left-column">{{
+                                                'COMPLAINT_SUMMARY.LBL_BOOKING_CUS_NO' | translate }}</th>
+                                            <th class="width-160">{{ 'COMMON.LBL_CUSTOMER' | translate }}
+                                            </th>
+                                            <th class="width-180">{{ 'COMPLAINT_SUMMARY.LBL_COMPLAINT_TYPE' |
+                                                translate}}</th>
+                                            <th class="width-180">{{ 'COMPLAINT_SUMMARY.LBL_SERVICE' |
+                                                translate}}</th>
+                                            <th class="width-140">{{ 'COMPLAINT_SUMMARY.LBL_COMPLAINT_DATE' |
+                                                translate}}</th>
+                                            <th class="width-100">{{ 'COMMON.LBL_SERVICEDATE_FROM_TO' |
+                                                translate }}</th>
+                                            <th class="width-100">
+                                                {{ 'COMPLAINT_SUMMARY.LBL_CREATED_BY' | translate }}</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+
+                                        <ng-template ngFor let-iteminfo [ngForOf]="model.items" let-i="index">
+                                            <tr [ngClass]="(((i+1) % 2)== 0)?'even':'odd'">
+
+                                                <td class="width40 text-center"><a
+                                                        (click)="redirectRegisterPage(iteminfo.id)"><span
+                                                            class="table-cta icon-cta common-tooltip"
+                                                            data-tooltip="Modify">
+                                                            <img src="assets/images/cta-edit.svg" alt="Modify">
+                                                        </span></a>
+                                                </td>
+
+                                                <td class="width-60">
+                                                    <a (click)="openConfirm(iteminfo.id, content)">
+                                                        <span class="table-cta icon-cta common-tooltip"
+                                                            data-tooltip="Delete">
+                                                            <img src="assets/images/cta-delete.svg" alt="Delete">
+                                                        </span>
+                                                    </a>
+                                                </td>
+                                                <td class=" wordbreak width-120 sticky-left-column">
+                                                    <a style="color: blue;" triggers="mouseenter:mouseleave"
+                                                        (click)="redirectToBookingEditPage(iteminfo.bookingId)"
+                                                        class="right-link">
+                                                        {{ iteminfo.bookingNoCustomerNo}}</a>
+
+                                                </td>
+                                                <td class="wordbreak width-140">{{iteminfo.customerName}}</td>
+                                                <td>{{iteminfo.complaintTypeName}}</td>
+                                                <td>{{iteminfo.serviceName}}</td>
+                                                <td>
+                                                    {{iteminfo.complaintDate}}</td>
+                                                <td>
+                                                    {{iteminfo.serviceDate}}</td>
+                                                <td class="width-100">{{iteminfo.createdBy}}</td>
+                                            </tr>
+
+                                        </ng-template>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <div class="pagination-container">
+                            <select class="small" [(ngModel)]="selectedPageSize" (change)="SearchDetails()">
+                                <option *ngFor="let item of pagesizeitems" [ngValue]=item>{{item}}</option>
+                            </select>
+                            <ngb-pagination (pageChange)="onPager($event)" [pageSize]="model.pageSize"
+                                [collectionSize]="model.totalCount" [(page)]="model.index" [maxSize]="5">
+                            </ngb-pagination>
+                        </div>
+                    </div>
+                    <div class="centerContainerPadding" *ngIf="model.noFound">
+                        <div class="error-container">
+                            <img src="assets/images/no-result.svg" alt="" class="thumbnail">
+                            <h4 class="error-title">{{'COMMON.LBL_No_ITEM' | translate}}</h4>
+                            <p class="error-subtitle">{{'COMMON.LBL_NODATA' | translate}}</p>
+
+                            <button (click)="reset()" class="category-cta">
+                                <img src="assets/images/reload-new.svg" alt="reload">
+                                <span> {{'COMMON.LBL_CLEAR_SEARCH' | translate}}</span></button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<ng-template #content let-modal>
+    <div class="modal-body">
+        <div class="small-model new-padding">
+            <h2 class="confirm-title"><img class="mr-2" src="assets/images/caution-red.svg" alt="">{{
+                'COMMON.LBL_CONFIRMDELETION' | translate }}</h2>
+            <p class="light">{{ 'COMPLAINT_SUMMARY.LBL_CONFIRMDEL' | translate }} </p>
+            <div class="text-right">
+                <button class="tertiary-cta small" (click)="modal.dismiss('Cross click');getId();"
+                    [disabled]="summaryModel.deleteLoading">
+                    {{ 'COMMON.LBL_CONFIRMCANCEL' | translate }}</button>
+                <button class="primary-cta small" [disabled]="summaryModel.deleteLoading" (click)="delete()">{{
+                    'COMMON.LBL_OK' | translate }}
+                    <span *ngIf="summaryModel.deleteLoading">
+                        <i class="fa fa-refresh fa-spin" aria-hidden="true"></i>
+                    </span>
+                </button>
+            </div>
+        </div>
+    </div>
+</ng-template>

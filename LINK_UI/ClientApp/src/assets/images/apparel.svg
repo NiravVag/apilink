@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 40 40">
+    <defs>
+        <style>
+            .cls-2{fill:#ff69a2}.cls-3{fill:#e23476}
+        </style>
+    </defs>
+    <g id="Group_13320" transform="translate(-255 -1395)">
+        <rect id="Rectangle_2777" width="40" height="40" fill="#f5f6f7" rx="4" transform="translate(255 1395)"/>
+        <g id="Group_12593" transform="translate(182 672)">
+            <g id="Page-1" transform="translate(81 732.184)">
+                <g id="_030---Shorts-and-Tshirts">
+                    <path id="Shape" d="M10 15.7H4.377a.413.413 0 0 1-.413-.413V5.372l-.926.928a.417.417 0 0 1-.587 0L.538 4.384a.417.417 0 0 1 0-.587L4.216.12A.417.417 0 0 1 4.505 0h8.835a.417.417 0 0 1 .289.12l3.678 3.68a.417.417 0 0 1 0 .587L15.394 6.3a.417.417 0 0 1-.587 0l-.926-.926v5.785z" class="cls-2" transform="translate(-.418)"/>
+                    <path id="Path_4500" d="M-1.436-.779v6.371L.1 5.864h7.306L5.4 3.985z" class="cls-3" transform="translate(5 9.816)"/>
+                    <path id="Shape-2" d="M35.409 40.521l-5.809 1.09a.417.417 0 0 1-.471-.277L28 37.959l-1.124 3.376a.417.417 0 0 1-.471.277l-5.814-1.091a.413.413 0 0 1-.322-.521l1.372-4.938.574-2.062h11.57l1.946 7a.413.413 0 0 1-.322.517z" class="cls-2" transform="translate(-12.057 -19.364)"/>
+                    <path id="Shape-3" d="M19.982.4a2.471 2.471 0 0 1-4.942 0 2.171 2.171 0 0 1 .037-.4h4.868a2.171 2.171 0 0 1 .037.4z" class="cls-3" transform="translate(-8.998)"/>
+                    <circle id="Oval" cx="1.033" cy="1.033" r="1.033" class="cls-3" transform="translate(19.249 17.768)"/>
+                    <circle id="Oval-2" cx="1.033" cy="1.033" r="1.033" class="cls-3" transform="translate(9.745 4.132)"/>
+                    <path id="Shape-4" d="M36.57 27.826v1.653H25v-1.653a.829.829 0 0 1 .826-.826h9.917a.829.829 0 0 1 .827.826z" class="cls-3" transform="translate(-14.842 -15.843)"/>
+                </g>
+            </g>
+            <path id="Rectangle_2766" fill="none" d="M0 0H24V24H0z" transform="translate(81 731)"/>
+        </g>
+    </g>
+</svg>

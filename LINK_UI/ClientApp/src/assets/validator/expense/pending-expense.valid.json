@@ -1,0 +1,31 @@
+{
+  "model": "pendingexpense.model",
+  "fields": {
+      "startDate": [
+          {
+              "type": "required",
+              "fieldType": "D",
+              "ressource": "AUIDT_SUMMARY.MSG_SERVICE_FROMDATE_REQ"
+          },
+          {
+              "type": "isLessOrEqual",
+              "fieldType": "D",
+              "fieldCible": "endDate",
+              "ressource": "AUIDT_SUMMARY.MSG_SERVICE_FROMDATE_GREATER_REQ"
+          }
+      ],
+      "endDate": [
+          {
+              "type": "required",
+              "fieldType": "D",
+              "ressource": "AUIDT_SUMMARY.MSG_Service_TODATE_REQ"
+          },
+          {
+              "type": "isGreatOrEqual",
+              "fieldType": "D",
+              "fieldCible": "startDate",
+              "ressource": "AUIDT_SUMMARY.MSG_Service_TODATE_LESS_REQ" 
+          }
+      ]
+  }
+}

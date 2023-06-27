@@ -1,0 +1,1456 @@
+<div class="main-wrapper">
+  <div class="wrapper dashboard-wrapper">
+    <div class="filter-bar-container" *ngIf="filterDataShown">
+      <div class="my-container" *ngIf="!isMobile">
+        <p class="heading"><img src="assets/images/new-set/applier-filter-search.svg" alt="">Search By</p>
+        <ul class="applied-filter-list">
+          <li *ngIf="model.fromdate || model.todate">
+            <span *ngIf="model.fromdate">
+              {{reportMaster.DateName}} :
+              {{model.fromdate.day}}/
+              {{model.fromdate.month}}/
+              {{model.fromdate.year}}
+            </span>
+            <span *ngIf="model.todate" class="ml-2">
+              to
+              {{model.todate.day}}/
+              {{model.todate.month}}/
+              {{model.todate.year}}
+            </span>
+          </li>
+          <li *ngIf="model.customerid && model.customerid >0">
+            <span>{{ 'BOOKING_SUMMARY.LBL_CUSTOMER' | translate }}
+              : {{reportMaster.customerName}}
+            </span>
+          </li>
+          <li *ngIf="model.supplierid && model.supplierid >0">
+            <span>{{ 'BOOKING_SUMMARY.LBL_SUPPLIER' | translate }} :
+              {{reportMaster.supplierName}}
+            </span>
+          </li>
+          <li *ngIf="model.statusidlst && model.statusidlst.length >0">
+            <span>{{ 'BOOKING_SUMMARY.LBL_STATUS' | translate }} :
+              {{reportMaster.statusNameList}}
+            </span>
+          </li>
+          <li *ngIf="model.officeidlst && model.officeidlst.length >0">
+            <span>{{'BOOKING_SUMMARY.LBL_OFFICE' | translate }} :
+              {{reportMaster.officeNameList}}
+            </span>
+          </li>
+          <li *ngIf="(model.selectedBrandIdList && model.selectedBrandIdList.length >0) ||
+              (model.selectedBuyerIdList && model.selectedBuyerIdList.length >0) ||
+              (model.serviceTypelst && model.serviceTypelst.length >0) ||
+              (model.factoryidlst && model.factoryidlst.length >0) ||
+              (model.selectedCountryIdList && model.selectedCountryIdList.length >0) ||
+              (model.selectedDeptIdList && model.selectedDeptIdList.length >0) ||
+              (model.barcode && model.barcode.length >0) || (model.advancedsearchtypetext &&
+               model.advancedsearchtypetext.length > 0) ||(model.isPicking)">
+            {{ 'COMMON.LBL_MORE' | translate}}
+            ...
+          </li>
+        </ul>
+        <span class="reset-link" (click)="Reset()">Reset</span>
+      </div>
+      <div class="my-container" *ngIf="isMobile">
+        <p class="heading"> {{filterCount}}
+          {{'COMMON.LBL_FILTER_SELECTED' | translate}}
+        </p>
+      </div>
+    </div>
+    <div class="page-head-container whiteBackground">
+      <div class="my-container">
+        <div class="column">
+          <h3 class="page-title">
+            {{ 'BOOKING_SUMMARY.LBL_INSPECTION_REPORT' | translate }}
+          </h3>
+        </div>
+        <div class="column text-right d-flex align-items-start justify-content-end">
+          <div class="custom-dropdown">
+            <span class="selected-value">{{reportMaster.selectedNumber}}</span>
+            <ul class="dropdown-list-container width-220">
+              <li *ngFor="let item of reportSearchTypeLst;let idx = index" [value]="item.id" id="{{item.id}}"
+                name="radio-group" (click)="SetSearchTypemodel(item)" [(ngModel)]="model.searchtypeid">
+                <span>({{item.shortName}})</span>
+                {{item.name}}
+              </li>
+            </ul>
+          </div>
+          <div class="my-input-group search-input inline">
+            <div class="inline position-relative">
+              <input maxlength="200" (ngModelChange)="BookingNoValidation($event)" [(ngModel)]="model.searchtypetext"
+                [placeholder]="reportMaster.selectedNumberPlaceHolder" type="text"
+                [ngClass]="{ 'is-invalid': model.searchtypetext!='' && _customvalidationforbookid}" />
+              <div class="icon-container">
+                <img (click)="getSearchDetails()" src="assets/images/new-set/search-lens.svg" alt="" class="icon"
+                  [ngClass]="{'active': reportMaster.isShowSearchLens }">
+              </div>
+            </div>
+            <span *ngIf="model.searchtypetext!='' && _customvalidationforbookid" class="invalid-feedback">
+              {{ 'BOOKING_SUMMARY.MSG_BOOKINGNO_ERROR' | translate }}
+            </span>
+          </div>
+          <div class="filter-cta style-4 common-tooltip" *ngIf="!isFilterOpen" (click)="toggleFilterSection()"
+            data-tooltip="filter">
+            <img src="assets/images/cta-filter-grey.svg" alt="">
+          </div>
+          <div class="filter-cta style-4 active" *ngIf="isFilterOpen" (click)="toggleFilterSection()">
+            <img src="assets/images/cta-filter-grey.svg" alt="">
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="filter-container style-3" [@expandCollapse]="isFilterOpen ? 'open' : 'close'" [@.disabled]="isMobile">
+      <div class="my-container customer-dashboard-mobile-filter">
+        <div class="row">
+          <div class="col-sm-12 col-md-12 col-lg-4 mobile-margin-top-15">
+            <div class="my-input-group">
+              <div class="styled-radio-container" *ngFor="let item of datetypelst;let idx = index">
+                <input type="radio" class="styled-radio" id="{{item.id}}" name="radio-group1" [value]="item.id"
+                  [checked]="true" (change)="SetSearchDatetype(item)" [(ngModel)]="model.datetypeid">
+                <label for="{{item.id}}">{{item.name}}</label>
+              </div>
+            </div>
+            <div class="my-input-group">
+              <div class="d-flex my-input-group">
+                <div class="calendar-wrapper flex-fill mr-2">
+                  <input type="text" maxlength="10" container="body"
+                    [ngClass]="{ 'is-invalid':  !validator.isValidIf('fromdate',IsDateValidationRequired())}"
+                    readonly=readonly [(ngModel)]="model.fromdate" ngbDatepicker #sdf="ngbDatepicker"
+                    (click)="sdf.toggle()">
+                  <img src="assets/images/cta-close-grey.svg" alt="" class="close-icon"
+                    (click)="clearDateInput('Fromdate');isfilterData()" *ngIf="model.fromdate">
+                  <img src="assets/images/cta-calendar-grey.svg" alt="" class="calendar-icon" (click)="sdf.toggle()">
+
+                  <div *ngIf="!validator.isValidIf('fromdate',IsDateValidationRequired())" class="invalid-feedback">
+                    <div *ngFor="let error of validator.getErrors('fromdate')">{{ error | translate }}</div>
+                  </div>
+
+                </div>
+
+                <div class="calendar-wrapper flex-fill">
+                  <input type="text" maxlength="10" container="body"
+                    [ngClass]="{ 'is-invalid':  !validator.isValidIf('todate',IsDateValidationRequired())}"
+                    readonly=readonly [(ngModel)]="model.todate" ngbDatepicker #sdt="ngbDatepicker"
+                    (click)="sdt.toggle()">
+                  <img src="assets/images/cta-close-grey.svg" alt="" class="close-icon"
+                    (click)="clearDateInput('Todate');isfilterData()" *ngIf="model.todate">
+                  <img src="assets/images/cta-calendar-grey.svg" alt="" class="calendar-icon" (click)="sdt.toggle()">
+
+                  <div *ngIf="!validator.isValidIf('todate',IsDateValidationRequired())" class="invalid-feedback">
+                    <div *ngFor="let error of validator.getErrors('todate')">{{ error | translate }}</div>
+                  </div>
+
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-sm-12 col-md-4 col-lg-3 marginTop15 mobile-margin-top-15">
+            <div class="my-input-group">
+              <label for="">{{ 'BOOKING_SUMMARY.LBL_CUSTOMER' | translate }}</label>
+              <ng-select #customer [searchable]="true" [items]="reportMaster.customerList" bindLabel="name"
+                (change)="ChangeCustomer($event);isfilterData();" (clear)="clearCustomer()" [clearable]="!_IsCustomerUser"
+                [loading]="reportMaster.customerLoading" bindValue="id" [hideSelected]="true" appendTo="body"
+                [virtualScroll]="true" (scrollToEnd)="getCustomerData(true)" [typeahead]="reportMaster.customerInput"
+                [minTermLength]="3"
+                placeholder="--- {{(reportMaster.customerList!=null && reportMaster.customerList.length!=0? 'BOOKING_SUMMARY.LBL_SELECT':'BOOKING_SUMMARY.MSG_NO_DATA')  | translate }} ---"
+                [(ngModel)]="model.customerid">
+                <ng-template ng-option-tmp let-item="item">
+                  <div class="text-wrap">{{ item.name }}</div>
+                </ng-template>
+              </ng-select>
+            </div>
+          </div>
+          <div class="col-sm-12 col-md-4 col-lg-3 mobile-margin-top-15">
+            <div class="my-input-group">
+              <div class="styled-radio-container" *ngFor="let item of supplierTypeList;let idx = index">
+                <input type="radio" class="styled-radio" id="{{item.id}}" name="radio-group3" [value]="item.id"
+                  [checked]="true" [(ngModel)]="model.supplierTypeId" (change)="changeSupplierType(item)">
+                <label for="{{item.id}}">{{item.name}}</label>
+              </div>
+            </div>
+            <div class="my-input-group">
+              <ng-select [multiple]="false" [closeOnSelect]="true" [searchable]="true" [clearable]="true"
+                (change)="ChangeSupplier($event);isfilterData();" (clear)="clearSupplier()" [hideSelected]="true"
+                [virtualScroll]="true" (scrollToEnd)="getSupplierData()" [typeahead]="reportMaster.supInput"
+                [minTermLength]="3" [loading]="reportMaster.supLoading" bindLabel="name" bindValue="id"
+                [items]="reportMaster.supplierList" appendTo="body"
+                placeholder="--- {{ (reportMaster.supplierList!=null && reportMaster.supplierList.length!=0? 'BOOKING_SUMMARY.LBL_SELECT':'BOOKING_SUMMARY.MSG_NO_DATA' ) | translate }} ---"
+                [(ngModel)]="model.supplierid">
+                <ng-template ng-option-tmp let-item="item">
+                  <div class="text-wrap">{{ item.name }}</div>
+                </ng-template>
+              </ng-select>
+            </div>
+          </div>
+          <div class="col-sm-12 col-md-4 col-lg-2 marginTop15 mobile-margin-top-15" *ngIf="_IsInternalUser">
+            <div class="my-input-group">
+              <label for="">{{ 'BOOKING_SUMMARY.LBL_OFFICE' | translate }}</label>
+              <ng-select [searchable]="true" [loading]="reportMaster.officeLoading" [items]="reportMaster.officeList"
+                (change)="isfilterData()" appendTo="body" bindLabel="name" bindValue="id" [hideSelected]="true"
+                [multiple]="true" class="multiple"
+                placeholder="--- {{(reportMaster.officeList!=null && reportMaster.officeList.length!=0? 'BOOKING_SUMMARY.LBL_SELECT':'BOOKING_SUMMARY.MSG_NO_DATA')  | translate }} ---"
+                [(ngModel)]="model.officeidlst" (change)="officeChange($event)">
+              </ng-select>
+            </div>
+          </div>
+        </div>
+        <div [hidden]="!toggleFormSection">
+          <div class="row">
+            <div class="col-sm-12">
+              <div class="row marginTop10">
+                <div class="col-sm-12 col-md-12 col-lg-3">
+                  <div class="my-input-group">
+                    <div class="styled-radio-container"
+                      *ngFor="let item of bookingAdvanceSearchtypelst;let idx = index">
+                      <input type="radio" class="styled-radio" id="{{item.id}}" name="radio-group2" [value]="item.id"
+                        (change)="SetSearchTypeText(item.id)" [checked]="true" [(ngModel)]="model.advancedSearchtypeid">
+                      <label for="{{item.id}}">{{item.name}}</label>
+                      <!-- [checked]="idx === 0" -->
+                    </div>
+                    <input type="text" maxlength="200" [(ngModel)]="model.advancedsearchtypetext"
+                      (change)="isfilterData()" placeholder="Please Enter">
+                  </div>
+                </div>
+                <div class="col-sm-12 col-md-4 col-lg-3">
+                  <div class="my-input-group marginTop10">
+                    <label for="" id="lbl_servicetype">{{'BOOKING_SUMMARY.LBL_SERVICETYPE' | translate}}</label>
+                    <ng-select [items]="reportMaster.serviceTypeList" class="multiple" multiple="true" bindLabel="name"
+                      bindValue="id" [clearable]="false" [(ngModel)]="model.serviceTypelst" appendTo="body"
+                      [loading]="reportMaster.serviceTypeLoading"
+                      placeholder=" ---{{ (reportMaster.serviceTypeList!=null && reportMaster.serviceTypeList.length!=0? 'QUOTATION_SUMMARY.LBL_SELECT':'QUOTATION_SUMMARY.MSG_NO_DATA' ) | translate }}---"
+                      (change)="isfilterData()">
+                      <ng-template ng-option-tmp let-item="item">
+                        <div class="text-wrap">{{ item.name }}</div>
+                      </ng-template>
+                    </ng-select>
+                  </div>
+                </div>
+                <div class="col-sm-12 col-md-4 col-lg-3 mobile-margin-top-15">
+                  <div class="my-input-group marginTop10">
+                    <label class="" for="">{{ 'BOOKING_SUMMARY.LBL_STATUS' | translate }}</label>
+                    <ng-select [multiple]="true" [searchable]="true" [loading]="reportMaster.statusLoading"
+                      [items]="reportMaster.bookingStatusList" class="multiple" bindLabel="name" bindValue="id"
+                      [hideSelected]="true" [disabled]="disableStatusList" appendTo="body"
+                      placeholder="--- {{ (reportMaster.bookingStatusList!=null && reportMaster.bookingStatusList.length!=0? 'BOOKING_SUMMARY.LBL_SELECT':'BOOKING_SUMMARY.MSG_NO_DATA' ) | translate }} ---"
+                      [(ngModel)]="model.statusidlst" (change)="statusChange($event);isfilterData()">
+                    </ng-select>
+                  </div>
+                </div>
+                <div class="col-sm-3 col-md-3 col-lg-3">
+                  <div class="my-input-group marginTop10">
+                    <label for="">{{ 'BOOKING_SUMMARY.LBL_FACTORY' | translate }}</label>
+                    <ng-select [multiple]="true" class="multiple" [searchable]="true"
+                      [loading]="reportMaster.facLoading" [items]="reportMaster.factoryList" bindLabel="name"
+                      bindValue="id" [hideSelected]="true" appendTo="body" [virtualScroll]="true"
+                      (scrollToEnd)="getFactoryData()" [typeahead]="reportMaster.facInput" [minTermLength]="3"
+                      [loading]="reportMaster.facLoading"
+                      placeholder="--- {{ (reportMaster.factoryList!=null && reportMaster.factoryList.length!=0? 'BOOKING_SUMMARY.LBL_SELECT':'BOOKING_SUMMARY.MSG_NO_DATA' ) | translate }} ---"
+                      [(ngModel)]="model.factoryidlst" (change)="isfilterData()">
+                      <ng-template ng-option-tmp let-item="item">
+                        <div class="text-wrap">{{ item.name }}</div>
+                      </ng-template>
+                    </ng-select>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-sm-12">
+              <div class="row marginTop10">
+                <div class="col-sm-3 col-md-3 col-lg-3">
+                  <div class="my-input-group marginTop10">
+                    <label for="">{{ 'BOOKING_SUMMARY.LBL_CUS_BRAND' | translate}}</label>
+                    <ng-select appendTo="body" [items]="reportMaster.brandList" [virtualScroll]="true"
+                      [loading]="reportMaster.brandLoading" bindLabel="name" bindValue="id"
+                      placeholder="--- {{ (reportMaster.brandList && reportMaster.brandList.length>0? 'COMMON.LBL_SELECT':'COMMON.LBL_NO_DATA' ) | translate }} ---"
+                      [typeahead]="reportMaster.brandInput" [minTermLength]="3" [(ngModel)]="model.selectedBrandIdList"
+                      [multiple]="true" class="multiple" (change)="isfilterData()" (scrollToEnd)="getBrandData()"
+                      #select>
+                      <ng-template ng-option-tmp let-item="item" let-index="index" let-search="searchTerm">
+                        <span>{{item.name}}</span>
+                      </ng-template>
+                      <ng-template ng-multi-label-tmp let-items="model.selectedBrandIdList" let-clear="clear">
+                        <div class="ng-value" *ngIf="model.selectedBrandIdList && model.selectedBrandIdList.length > 0">
+                          <span class="ng-value-label">
+                            {{model.selectedBrandIdList.length}}
+                            {{'COMMON.LBL_SELECTED' | translate }}
+                          </span>
+                        </div>
+                      </ng-template>
+                    </ng-select>
+                  </div>
+                </div>
+                <div class="col-sm-3 col-md-3 col-lg-3">
+                  <div class="my-input-group marginTop10">
+                    <label for="">{{ 'BOOKING_SUMMARY.LBL_FACTORY_COUNTRY' | translate}}</label>
+                    <ng-select appendTo="body" [items]="reportMaster.countryList" [virtualScroll]="true"
+                      [loading]="reportMaster.countryLoading" bindLabel="name" bindValue="id"
+                      placeholder="--- {{ (reportMaster.countryList!=null && reportMaster.countryList.length!=0? 'COMMON.LBL_SELECT':'COMMON.LBL_NO_DATA' ) | translate }} ---"
+                      [typeahead]="reportMaster.countryInput" [minTermLength]="3"
+                      [(ngModel)]="model.selectedCountryIdList" [multiple]="true" class="multiple"
+                      (change)="changeCountryData()" (scrollToEnd)="getCountryData()" #select>
+                      <ng-template ng-option-tmp let-item="item" let-index="index" let-search="searchTerm">
+                        <span>{{item.name}}</span>
+                      </ng-template>
+                    </ng-select>
+                  </div>
+                </div>
+                <div class="col-sm-3 col-md-3 col-lg-3">
+                  <div class="my-input-group marginTop10">
+                    <label for="">{{ 'BOOKING_SUMMARY.LBL_PROVINCE' | translate}}</label>
+                    <ng-select [items]="reportMaster.provinceList" class="multiple" multiple="true" bindLabel="name"
+                      [searchable]="true" bindValue="id" [clearable]="false" (change)="changeProvinceData()"
+                      [(ngModel)]="model.selectedProvinceIdList" [hideSelected]="true" appendTo="body"
+                      placeholder=" ---{{ (reportMaster.provinceList!=null && reportMaster.provinceList.length!=0? 'QUOTATION_SUMMARY.LBL_SELECT':'QUOTATION_SUMMARY.MSG_NO_DATA' ) | translate }}---">
+                      <ng-template ng-option-tmp let-item="item">
+                        <div class="text-wrap">{{ item.name }}</div>
+                      </ng-template>
+                    </ng-select>
+                  </div>
+                </div>
+                <div class="col-sm-3 col-md-3 col-lg-3">
+                  <div class="my-input-group marginTop10">
+                    <label for="">{{ 'BOOKING_SUMMARY.LBL_CITY' | translate}}</label>
+                    <ng-select [items]="reportMaster.cityList" class="multiple" multiple="true" bindLabel="name"
+                      [searchable]="true" bindValue="id" [clearable]="false" (change)="changeCityData()"
+                      [(ngModel)]="model.selectedCityIdList" [hideSelected]="true" appendTo="body"
+                      placeholder=" ---{{ (reportMaster.cityList!=null && reportMaster.cityList.length!=0? 'QUOTATION_SUMMARY.LBL_SELECT':'QUOTATION_SUMMARY.MSG_NO_DATA' ) | translate }}---">
+                      <ng-template ng-option-tmp let-item="item">
+                        <div class="text-wrap">{{ item.name }}</div>
+                      </ng-template>
+                    </ng-select>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-sm-12">
+              <div class="row marginTop10">
+                <div class="col-sm-3 col-md-3 col-lg-3">
+                  <div class="my-input-group marginTop10">
+                    <label for="">{{ 'BOOKING_SUMMARY.LBL_CUS_DEPARTMENT' | translate}}</label>
+                    <!-- (clear)="clearDept()" -->
+                    <ng-select appendTo="body" [items]="reportMaster.deptList" [virtualScroll]="true"
+                      [loading]="reportMaster.deptLoading" bindLabel="name" bindValue="id"
+                      placeholder="--- {{ (reportMaster.deptList && reportMaster.deptList.length>0? 'COMMON.LBL_SELECT':'COMMON.LBL_NO_DATA' ) | translate }} ---"
+                      [typeahead]="reportMaster.deptInput" [minTermLength]="3" [(ngModel)]="model.selectedDeptIdList"
+                      [multiple]="true" class="multiple" (change)="isfilterData()" (scrollToEnd)="getDeptData()"
+                      #department>
+                      <ng-template ng-option-tmp let-item="item" let-index="index" let-search="searchTerm">
+                        <span>{{item.name}}</span>
+                      </ng-template>
+                      <ng-template ng-multi-label-tmp let-items="model.selectedDeptIdList" let-clear="clear">
+                        <div class="ng-value" *ngIf="model.selectedDeptIdList && model.selectedDeptIdList.length > 0">
+                          <span class="ng-value-label">
+                            {{model.selectedDeptIdList.length}}
+                            {{'COMMON.LBL_SELECTED' | translate }}
+                          </span>
+                        </div>
+                      </ng-template>
+                    </ng-select>
+                  </div>
+                </div>
+                <div class="col-sm-3 col-md-3 col-lg-3">
+                  <div class="my-input-group marginTop10">
+                    <label for="">{{ 'BOOKING_SUMMARY.LBL_CUS_BUYER' | translate}}</label>
+                    <ng-select appendTo="body" [items]="reportMaster.buyerList" [virtualScroll]="true"
+                      [loading]="reportMaster.buyerLoading" bindLabel="name" bindValue="id"
+                      placeholder="--- {{ (reportMaster.buyerList && reportMaster.buyerList.length>0? 'COMMON.LBL_SELECT':'COMMON.LBL_NO_DATA' ) | translate }} ---"
+                      [typeahead]="reportMaster.buyerInput" [minTermLength]="3" [(ngModel)]="model.selectedBuyerIdList"
+                      [multiple]="true" class="multiple" (change)="isfilterData()" (scrollToEnd)="getBuyerData()"
+                      #select>
+                      <ng-template ng-option-tmp let-item="item" let-index="index" let-search="searchTerm">
+                        <span>{{item.name}}</span>
+                      </ng-template>
+                      <ng-template ng-multi-label-tmp let-items="model.selectedBuyerIdList" let-clear="clear">
+                        <div class="ng-value" *ngIf="model.selectedBuyerIdList && model.selectedBuyerIdList.length > 0">
+                          <span class="ng-value-label">
+                            {{model.selectedBuyerIdList.length}}
+                            {{'COMMON.LBL_SELECTED' | translate }}
+                          </span>
+                        </div>
+                      </ng-template>
+                    </ng-select>
+                  </div>
+                </div>
+                <div class="col-sm-3 col-md-3 col-lg-3 mt-2" *ngIf="_IsInternalUser || _IsCustomerUser">
+                  <div class="my-input-group">
+                    <label class="" for="">{{'BOOKING_SUMMARY.LBL_BOOKING_TYPE' | translate}}</label>
+                    <ng-select [items]="reportMaster.inspectionBookingTypes" bindLabel="name" bindValue="id"
+                      [multiple]="false" [closeOnSelect]="true" [searchable]="true" [hideSelected]="true"
+                      [(ngModel)]="model.bookingType" appendTo="body"
+                      placeholder="--- {{ (reportMaster.inspectionBookingTypes && reportMaster.inspectionBookingTypes.length>0? 'COMMON.LBL_SELECT':'COMMON.LBL_NO_DATA' ) | translate }} ---">
+                      <ng-template ng-option-tmp let-item="item">
+                        <div class="text-wrap">{{ item.name }}</div>
+                      </ng-template>
+                    </ng-select>
+                  </div>
+                </div>
+                <div class="col-sm-3 col-md-3 col-lg-1">
+                  <div class="my-input-group marginTop25">
+                    <div class="styled-checkbox-container">
+                      <input class="styled-checkbox" id="checkboxa-2" type="checkbox" [(ngModel)]="model.isPicking"
+                        (change)="isfilterData()">
+                      <label for="checkboxa-2">{{ 'BOOKING_SUMMARY.LBL_PICKING' | translate }}</label>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="col-sm-3 col-md-3 col-lg-1" *ngIf="reportMaster.entityId==reportMaster.entityAccess.AQF">
+                  <div class="my-input-group marginTop25">
+                    <div class="styled-checkbox-container">
+                      <input class="styled-checkbox" id="checkboxa-eaqf" type="checkbox" [(ngModel)]="model.isEAQF"
+                        (change)="isfilterData()">
+                      <label for="checkboxa-eaqf">{{ 'E-AQF.LBL_EAQF' | translate }}</label>
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- Advance Search starts-->
+        <div class="row filter-cta-container">
+          <div class="col-6">
+            <div class="advanced-search" (click)="toggleSection()">
+              <img class="icon" src="assets/images/expand-new.svg" alt="" *ngIf="!toggleFormSection">
+              <img class="icon" src="assets/images/collapse-new.svg" alt="" *ngIf="toggleFormSection">
+              {{'QUOTATION_SUMMARY.LBL_ADVANCED_SEARCH' | translate}}
+            </div>
+          </div>
+          <div class="col-6 text-right">
+            <button class="category-cta small mr-2 common-tooltip common-tooltip-top-2" data-tooltip="Reset"
+              [disabled]="cancelLoading" (click)="Reset()">
+              <img src="assets/images/reload-new.svg" alt="Reset">
+              <span>{{ 'COMMON.LBL_RESET' | translate}}</span>
+            </button>
+            <button class="secondary-cta small mr-2" (click)="export()" [disabled]="exportDataLoading || cancelLoading"
+              *ngIf="model.items != null && model.items.length != 0  && !model.noFound">
+              {{ 'BOOKING_SUMMARY.LBL_EXPORT' | translate }}
+              <span *ngIf="exportDataLoading">
+                <i class="fa fa-refresh fa-spin" aria-hidden="true"></i>
+              </span>
+            </button>
+            <button class="primary-cta small float-right"
+              [disabled]="searchloading || reportMaster.customerLoading || reportMaster.supLoading || reportMaster.facLoading 
+                          || reportMaster.countryLoading || cancelLoading ||
+                          reportMaster.officeLoading || reportMaster.statusLoading ||  reportMaster.bookingStatusLoading" (click)="SearchDetails()">
+              {{ 'BOOKING_SUMMARY.LBL_SEARCH_BTN' | translate }}
+              <span *ngIf="searchloading">
+                <i class="fa fa-refresh fa-spin" aria-hidden="true"></i>
+              </span>
+            </button>
+          </div>
+        </div>
+        <!-- Advance Search end-->
+      </div>
+    </div>
+
+    <div class="my-container">
+      <ng-container *ngIf="searchloading">
+        <div class="master-body">
+          <div class="content-container transparent-bg">
+            <div class="record-count pl-0 pr-0">
+            </div>
+            <div class="table-container">
+              <table class="pagination-table">
+                <thead>
+                  <tr class="sticky-top-row">
+                    <th class="width40 whitespacenormal"></th>
+                    <th class="width40 whitespacenormal"></th>
+                    <th class="width-40 whitespacenormal" *ngIf="_IsInternalUser">
+                      {{ 'BOOKING_SUMMARY.LBL_REPORT_SENT'| translate}}
+                    </th>
+                    <th class="width-100 whitespacenormal">{{ 'BOOKING_SUMMARY.LBL_BOOKINGNO' | translate }}</th>
+                    <th class="width-100 whitespacenormal">{{ 'EDIT_BOOKING.LBL_CUS_BOOKING_NO' | translate }}</th>
+                    <th class="width-180 whitespacenormal">{{ 'BOOKING_SUMMARY.LBL_CUSTOMER' | translate }}</th>
+                    <th class="width-200 whitespacenormal">{{ 'BOOKING_SUMMARY.LBL_SUPPLIER' | translate }}</th>
+                    <th class="width-180 whitespacenormal">{{ 'BOOKING_SUMMARY.LBL_FACTORY' | translate }}</th>
+                    <th class="width-100 whitespacenormal">{{ 'BOOKING_SUMMARY.LBL_SERVICEDATE_FROM_TO' | translate }}
+                    </th>
+                    <th class="width-100 whitespacenormal">{{ 'BOOKING_SUMMARY.LBL_SERVICETYPE' | translate }}</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>
+                      <div class="rect-common animate width30"></div>
+                    </td>
+                    <td>
+                      <div class="rect-common animate width30"></div>
+                    </td>
+                    <td *ngIf="_IsInternalUser">
+                      <div class="rect-common animate width20"></div>
+                    </td>
+                    <td>
+                      <div class="rect-common animate width50"></div>
+                    </td>
+                    <td>
+                      <div class="rect-common animate width30"></div>
+                    </td>
+                    <td>
+                      <div class="rect-common animate width30"></div>
+                    </td>
+                    <td>
+                      <div class="rect-common animate width30"></div>
+                    </td>
+                    <td>
+                      <div class="rect-common animate width30"></div>
+                    </td>
+                    <td>
+                      <div class="rect-common animate width30"></div>
+                    </td>
+                    <td>
+                      <div class="rect-common animate width30"></div>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>
+                      <div class="rect-common animate width30"></div>
+                    </td>
+                    <td>
+                      <div class="rect-common animate width30"></div>
+                    </td>
+                    <td *ngIf="_IsInternalUser">
+                      <div class="rect-common animate width20"></div>
+                    </td>
+                    <td>
+                      <div class="rect-common animate width50"></div>
+                    </td>
+                    <td>
+                      <div class="rect-common animate width30"></div>
+                    </td>
+                    <td>
+                      <div class="rect-common animate width30"></div>
+                    </td>
+                    <td>
+                      <div class="rect-common animate width30"></div>
+                    </td>
+                    <td>
+                      <div class="rect-common animate width30"></div>
+                    </td>
+                    <td>
+                      <div class="rect-common animate width30"></div>
+                    </td>
+                    <td>
+                      <div class="rect-common animate width30"></div>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>
+                      <div class="rect-common animate width30"></div>
+                    </td>
+                    <td>
+                      <div class="rect-common animate width30"></div>
+                    </td>
+                    <td *ngIf="_IsInternalUser">
+                      <div class="rect-common animate width20"></div>
+                    </td>
+                    <td>
+                      <div class="rect-common animate width50"></div>
+                    </td>
+                    <td>
+                      <div class="rect-common animate width30"></div>
+                    </td>
+                    <td>
+                      <div class="rect-common animate width30"></div>
+                    </td>
+                    <td>
+                      <div class="rect-common animate width30"></div>
+                    </td>
+                    <td>
+                      <div class="rect-common animate width30"></div>
+                    </td>
+                    <td>
+                      <div class="rect-common animate width30"></div>
+                    </td>
+                    <td>
+                      <div class="rect-common animate width30"></div>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>
+                      <div class="rect-common animate width30"></div>
+                    </td>
+                    <td>
+                      <div class="rect-common animate width30"></div>
+                    </td>
+                    <td *ngIf="_IsInternalUser">
+                      <div class="rect-common animate width20"></div>
+                    </td>
+                    <td>
+                      <div class="rect-common animate width50"></div>
+                    </td>
+                    <td>
+                      <div class="rect-common animate width30"></div>
+                    </td>
+                    <td>
+                      <div class="rect-common animate width30"></div>
+                    </td>
+                    <td>
+                      <div class="rect-common animate width30"></div>
+                    </td>
+                    <td>
+                      <div class="rect-common animate width30"></div>
+                    </td>
+                    <td>
+                      <div class="rect-common animate width30"></div>
+                    </td>
+                    <td>
+                      <div class="rect-common animate width30"></div>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>
+                      <div class="rect-common animate width30"></div>
+                    </td>
+                    <td>
+                      <div class="rect-common animate width30"></div>
+                    </td>
+                    <td *ngIf="_IsInternalUser">
+                      <div class="rect-common animate width20"></div>
+                    </td>
+                    <td>
+                      <div class="rect-common animate width50"></div>
+                    </td>
+                    <td>
+                      <div class="rect-common animate width30"></div>
+                    </td>
+                    <td>
+                      <div class="rect-common animate width30"></div>
+                    </td>
+                    <td>
+                      <div class="rect-common animate width30"></div>
+                    </td>
+                    <td>
+                      <div class="rect-common animate width30"></div>
+                    </td>
+                    <td>
+                      <div class="rect-common animate width30"></div>
+                    </td>
+                    <td>
+                      <div class="rect-common animate width30"></div>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </ng-container>
+      <ng-container *ngIf="(model.items && model.items.length>0); else noDataContainer">
+        <div class="master-body">
+          <div class="content-container transparent-bg report-margin-bottom">
+            <div class="record-count pl-0 pr-0">
+              <div class="column">
+                <p class="count" [innerHtml]="showPaginationText()"></p>
+              </div>
+              <div class="column text-right">
+                <ul class="table-badge-container">
+                  <li *ngFor="let status of _statuslist| slice:0:_statuslist.length" (click)="clickStatus(status.id)"
+                    [class]="status.statusColor" [ngClass]="{'active': changeStatus(status.id)}">
+                    {{status.statusName}}<span>{{status.totalCount}}</span>
+                    <img *ngIf="changeStatus(status.id)" src="assets/images/white-close.svg" alt="">
+                  </li>
+                </ul>
+              </div>
+            </div>
+            <div class="table-container">
+              <table class="pagination-table collapsed-table">
+                <thead>
+                  <tr class="sticky-top-row">
+                    <th class="width40 whitespacenormal"></th>
+                    <th class="width40 whitespacenormal"></th>
+                    <th class="width-40 whitespacenormal" *ngIf="_IsInternalUser">
+                      {{ 'BOOKING_SUMMARY.LBL_REPORT_SENT'| translate}}
+                    </th>
+                    <th class="width-100 whitespacenormal">{{ 'BOOKING_SUMMARY.LBL_BOOKINGNO' | translate }}</th>
+                    <th class="width-100 whitespacenormal">{{ 'EDIT_BOOKING.LBL_CUS_BOOKING_NO' | translate }}</th>
+                    <th class="width-200 whitespacenormal">{{ 'BOOKING_SUMMARY.LBL_CUSTOMER' | translate }}</th>
+                    <th class="width-200 whitespacenormal">{{ 'BOOKING_SUMMARY.LBL_SUPPLIER' | translate }}</th>
+                    <th class="width-200 whitespacenormal">{{ 'BOOKING_SUMMARY.LBL_FACTORY' | translate }}</th>
+                    <th class="width-100 whitespacenormal">{{ 'BOOKING_SUMMARY.LBL_SERVICEDATE_FROM_TO' | translate }}
+                    </th>
+                    <th class="width-100 whitespacenormal th-border-report">{{ 'BOOKING_SUMMARY.LBL_SERVICETYPE' |
+                      translate }}</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <ng-template ngFor let-iteminfo [ngForOf]="model.items" let-i="index">
+                    <tr [ngClass]="{ 'selected': iteminfo.isRowSelected}">
+                      <td class="width60 whitespacenormal">
+                        <div class="product-count" (click)=toggleExpandRow($event,i,iteminfo)>
+                          {{iteminfo.productCount}}
+                        </div>
+                      </td>
+                      <td class="width40 whitespacenormal" *ngIf="_IsInternalUser">
+                        <button class="category-cta small mr-2 common-tooltip common-tooltip-top-2"
+                          data-tooltip="Report Summary"
+                          (click)="RedirectToReportSummaryLink(iteminfo.reportSummaryLink)"
+                          *ngIf="iteminfo.reportSummaryLink != null && iteminfo.reportSummaryLink != '' && (iteminfo.statusId == _BookingStatus.ReportSent || _IsInternalUser)">
+                          <img src="assets/images/cta-report.svg" alt="Report Summary">
+                          <span>{{'BOOKING_SUMMARY.LBL_REPORT_SUMMARY' | translate}}</span>
+                        </button>
+                      </td>
+                      <td class="width40 whitespacenormal">
+                        <span *ngIf="iteminfo.reportDate && iteminfo.reportDate != ''">
+                          {{iteminfo.reportDate}} </span>
+                        <span class="table-cta icon-cta common-tooltip"
+                          *ngIf="iteminfo.statusId == _BookingStatus.Inspected && isDateUpdateRole"
+                          (click)="openSetStatusPopup(reportsent, iteminfo.bookingId)" data-tooltip="Update">
+                          <img src="assets/images/cta-edit.svg" alt="Update">
+                        </span>
+                      </td>
+                      <td class="width100 whitespacenormal" [attr.data-tooltip]="iteminfo.statusName">
+                        <a style="color: blue;" triggers="mouseenter:mouseleave"
+                          (click)="RedirectToEdit(iteminfo.bookingId)" class="right-link">
+                          <span class="number-badge" [class]="GetStatusColor(iteminfo.statusId)">
+                            {{iteminfo.bookingId}}
+                          </span>
+                          <span class="common-tooltip width-100"
+                            *ngIf="iteminfo.bookingType == bookingTypes.UnAnnounced"
+                            data-tooltip="un announced inspection">
+                            <img src="assets/images/un-announced.svg" alt="">
+                          </span>
+                          <span class="width-100" *ngIf="iteminfo.isEAQF">
+                            <img src="assets/images/E-AQF-Logo.svg" alt="">
+                          </span>
+                        </a>
+                      </td>
+                      <td class="width100 whitespacenormal">{{iteminfo.customerBookingNo}}</td>
+                      <td class="wordbreak width-200 whitespacenormal">{{iteminfo.customerName}}</td>
+                      <td class="wordbreak width-200 whitespacenormal">{{iteminfo.supplierName}}</td>
+                      <td class="wordbreak width-200 whitespacenormal">{{iteminfo.factoryName}}</td>
+                      <td class="width-100 wordbreak whitespacenormal"
+                        *ngIf="iteminfo.serviceDateFrom == iteminfo.serviceDateTo">
+                        {{iteminfo.serviceDateFrom}}</td>
+                      <td class="width-100 wordbreak whitespacenormal"
+                        *ngIf="iteminfo.serviceDateFrom != iteminfo.serviceDateTo">
+                        {{iteminfo.serviceDateFrom}} -
+                        {{iteminfo.serviceDateTo}}</td>
+                      <td class="width-100 wordbreak whitespacenormal td-position-report">{{iteminfo.serviceType}}</td>
+                    </tr>
+                    <ng-container *ngIf="iteminfo.serviceTypeId!=inspectionServiceType.Container">
+                      <ng-template [ngTemplateOutlet]="productListTemplate"
+                        [ngTemplateOutletContext]="{ iteminfo: iteminfo, i:i}">
+                      </ng-template>
+                    </ng-container>
+
+                    <ng-container *ngIf="iteminfo.serviceTypeId==inspectionServiceType.Container">
+                      <ng-template [ngTemplateOutlet]="containerListTemplate"
+                        [ngTemplateOutletContext]="{ iteminfo: iteminfo, i:i}">
+                      </ng-template>
+                    </ng-container>
+                  </ng-template>
+                </tbody>
+              </table>
+            </div>
+            <div class="pagination-container">
+              <div class="page-count-list">
+                <select class="small" [(ngModel)]="selectedPageSize" (change)="SearchDetails()">
+                  <option *ngFor="let item of pagesizeitems" [ngValue]=item>{{item}}</option>
+                </select>
+                <span> Records per page</span>
+              </div>
+              <div class="pagination-action-container text-right">
+                <ngb-pagination [pageSize]="model.pageSize" [collectionSize]="model.totalCount" [boundaryLinks]="true"
+                  [(page)]="model.index" [maxSize]="5" (pageChange)="onPager($event)">
+                  <ng-template ngbPaginationFirst>
+                    <img src="assets/images/new-set/double-arrow.svg" alt="">
+                  </ng-template>
+                  <ng-template ngbPaginationPrevious>
+                    <img src="assets/images/new-set/single-arrow.svg" alt="" class="left-arrow">
+                  </ng-template>
+                  <ng-template ngbPaginationNext>
+                    <img src="assets/images/new-set/single-arrow.svg" alt="" class="right-arrow">
+                  </ng-template>
+                  <ng-template ngbPaginationLast>
+                    <img src="assets/images/new-set/double-arrow.svg" alt="" class="right-most-arrow">
+                  </ng-template>
+                </ngb-pagination>
+              </div>
+            </div>
+          </div>
+        </div>
+      </ng-container>
+      <ng-template #noDataContainer>
+        <div class="master-body" *ngIf="model.noFound">
+          <div class="error-container plain page-level">
+            <img src="assets/images/no-result.svg" alt="" class="thumbnail">
+            <h4 class="error-title">{{'BOOKING_SUMMARY.MSG_NO_ITEM_FOUND' | translate}}</h4>
+            <p class="error-subtitle">{{'CS_CONFIG_SUMMARY.LBL_NODATA' | translate}}</p>
+            <button (click)="Reset()" class="secondary-cta link to-primary text-transform-initial">
+              {{'COMMON.MSG_CLEAR_SEARCH' | translate}}
+            </button>
+          </div>
+        </div>
+      </ng-template>
+    </div>
+    <div class="footer landing-footer stick-to-bottom">
+      <div class="my-container">
+        <div class="column">
+          <p class="text">{{'COMMON.LBL_RIGHTS_RESERVED' | translate}}</p>
+        </div>
+        <div class="column">
+          <img src="../assets/images/footer-logo.png" alt="logo" class="footer-logo">
+        </div>
+        <div class="column">
+          <ul class="footer-item">
+            <li><a href="">{{'COMMON.LBL_USER_GUIDE' | translate}}</a></li>
+            <li><a href="">{{'COMMON.LBL_CONTACT' | translate}}</a></li>
+            <li><a href="">{{'COMMON.LBL_HELP' | translate}}</a></li>
+            <li><a href="">{{'COMMON.LBL_TERMS' | translate}}</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<ng-template #productListTemplate let-iteminfo="iteminfo" let-i="i">
+  <tr [ngClass]="{'expandable-row': iteminfo.isPlaceHolderVisible}" [attr.data-expand-id]="'booking' + i">
+    <td colspan="14" *ngIf="iteminfo.isPlaceHolderVisible">
+      <div class="table-container child-table h-scroll table-max-height-450">
+        <table class="pagination-table">
+          <thead>
+            <tr class="sticky-top-row">
+              <th>
+
+              </th>
+              <th class="width60">
+                {{ 'BOOKING_SUMMARY.REPORT_NUMBER' | translate }}
+              </th>
+              <th>{{ 'BOOKING_SUMMARY.LBL_PRODUCT_ID' | translate }}
+              </th>
+              <th>{{ 'BOOKING_SUMMARY.LBL_PRODUCT_DESC' | translate }}
+              </th>
+              <th>PO</th>
+              <th>{{'BOOKING_SUMMARY.LBL_PRODUCT_ORDER_QTY' | translate}}</th>
+              <th>
+                {{'BOOKING_SUMMARY.LBL_PRODUCT_INSP_QTY' | translate }}
+              </th>
+              <th>{{ 'BOOKING_SUMMARY.LBL_PRODUCTCATEGORY' | translate }}
+              </th>
+              <th>{{ 'EDIT_BOOKING.LBL_PO_PRODUCT_CATEGORY_SUB2' | translate }}
+              </th>
+              <th>{{'BOOKING_SUMMARY.LBL_REPORT_INSPECTION_DATE' | translate }}</th>
+              <th>{{ 'INSPECTION_CERTIFICATE_SUMMARY.LBL_REPORT_STATUS' | translate }}
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngIf="iteminfo.isPlaceHolderVisible && (!iteminfo.productList || iteminfo.productList.length <=0)">
+              <td>
+                <div class="rect-common animate width30"></div>
+              </td>
+              <td>
+                <div class="rect-common animate width30"></div>
+              </td>
+              <td>
+                <div class="rect-common animate width30"></div>
+              </td>
+              <td>
+                <div class="rect-common animate width30"></div>
+              </td>
+              <td>
+                <div class="rect-common animate width20"></div>
+              </td>
+              <td>
+                <div class="rect-common animate width50"></div>
+              </td>
+              <td>
+                <div class="rect-common animate width20"></div>
+              </td>
+              <td>
+                <div class="rect-common animate width30"></div>
+              </td>
+              <td>
+                <div class="rect-common animate width30"></div>
+              </td>
+              <td>
+                <div class="rect-common animate width30"></div>
+              </td>
+            </tr>
+            <tr *ngIf="iteminfo.isPlaceHolderVisible && (!iteminfo.productList || iteminfo.productList.length <=0)">
+              <td>
+                <div class="rect-common animate width30"></div>
+              </td>
+              <td>
+                <div class="rect-common animate width30"></div>
+              </td>
+              <td>
+                <div class="rect-common animate width30"></div>
+              </td>
+              <td>
+                <div class="rect-common animate width30"></div>
+              </td>
+              <td>
+                <div class="rect-common animate width20"></div>
+              </td>
+              <td>
+                <div class="rect-common animate width50"></div>
+              </td>
+              <td>
+                <div class="rect-common animate width20"></div>
+              </td>
+              <td>
+                <div class="rect-common animate width30"></div>
+              </td>
+              <td>
+                <div class="rect-common animate width30"></div>
+              </td>
+              <td>
+                <div class="rect-common animate width30"></div>
+              </td>
+            </tr>
+            <ng-template ngFor let-product [ngForOf]="iteminfo.productList" let-p="index">
+              <tr [ngClass]="(product.combineProductId!=0 && (((product.combineProductId) % 2)== 0))
+                  ?'group-even':
+                  product.combineProductId!=0 ?
+                  'group-odd':''">
+                <td *ngIf="product.isParentProduct" [attr.rowspan]="product.combineProductCount">
+                  <button class="category-cta small mr-2 common-tooltip common-tooltip-top-2" data-tooltip="Download"
+                    *ngIf="product.isParentProduct && (product.reportPath || product.finalManualReportPath) && (iteminfo.statusId == _BookingStatus.ReportSent || _IsInternalUser)"
+                    (click)="RedirectToFbReport(product.reportPath,product.finalManualReportPath)">
+                    <img src="assets/images/cta-download.svg" alt="Download">
+                    <span>{{'EDIT_BOOKING.LBL_DOC_DOWNLOAD' | translate }}
+
+                    </span>
+                  </button>
+                </td>
+                <td>
+                  {{product.ReportPath }}
+                  {{product.finalManualReportPath}}
+                  {{product.reportTitle}}
+                </td>
+                <td>
+                  <div class="image-container">
+                    <img *ngIf="product.productImageUrl!=null && product.combineProductCount==1"
+                      (click)="getPreviewProductImage(product.productImageUrl,productImage)"
+                      src={{product.productImageUrl}} alt="image">
+                    <img *ngIf="product.productImageUrl==null ||  product.combineProductCount>1"
+                      src="assets/images/new-set/no-product-icon.svg" alt="image">
+                    <span class="medium">{{product.productName}}</span>
+                  </div>
+                </td>
+                <td class="medium width-180 whitespacenormal"
+                  [ngClass]="{'text-tooltip-table': product.isProductDescTooltipShow }"
+                  [attr.data-tooltip]="product.productDescription">
+                  {{product.productDescTrim}}
+                </td>
+                <td class="active-link"
+                  (click)="openProductDetail(PODataTemplate,product.id,product,null,iteminfo.serviceTypeId,iteminfo.bookingId)">
+                  <ng-container>
+                    <span class="medium">#{{product.poNumberShow}}</span>
+                    <span class="light">
+                      {{product.poNumberCountDisplay}}
+                    </span>
+                  </ng-container>
+                </td>
+                <td>
+                  <span class="highlight-badge">
+                    {{product.bookingQuantity}}
+                  </span>
+                </td>
+                <td>
+                  <span *ngIf="product.reportStatus=='Validated'"
+                    class="highlight-badge">{{product.inspectedQuantity}}</span>
+                </td>
+                <td class="width-140 whitespacenormal">
+                  <span class="medium">{{product.productCategory}}</span>
+                  <span class="d-block light">{{product.productSubCategory}}</span>
+                </td>
+                <td class="width-140 whitespacenormal">
+                  {{ product.productSubCategory2 }}
+                </td>
+                <td class="width-60">
+                  <span ngClass="{'highlight-badge':product.inspectionDate && product.inspectionDate != ''}">
+                    {{product.inspectionDate}}
+                  </span>
+                </td>
+                <td class="width-60" *ngIf="product.isParentProduct" [attr.rowspan]="product.combineProductCount">
+                  <span *ngIf="product.reportStatus=='Draft'" class="status draft">
+                    {{'BOOKING_SUMMARY.LBL_REPORT_INPROGRESS' | translate }}
+                    <span class="progress-bar"><span class="complete"></span></span>
+                  </span>
+                  <span *ngIf="product.reportStatus=='InValidated'" class="status invalid">
+                    {{'BOOKING_SUMMARY.LBL_REPORT_INVALIDATED' | translate }}
+                    <span class="progress-bar"><span class="complete"></span></span>
+                  </span>
+
+                  <span *ngIf="product.reportStatus=='Validated' && product.reportResultId==fbReportResult.Pass"
+                    class="result pass">
+                    <img src="assets/images/new-set/pass-white.svg" alt="">
+                    {{'BOOKING_SUMMARY.LBL_REPORT_PASS' | translate }}
+                  </span>
+
+                  <span class="result fail"
+                    *ngIf="product.reportStatus=='Validated' && product.reportResultId==fbReportResult.Fail">
+                    <img src="assets/images/new-set/fail-white.svg" alt="">
+                    {{'BOOKING_SUMMARY.LBL_REPORT_FAIL' | translate }}
+                  </span>
+                  <span *ngIf="product.reportStatus=='Validated' && product.reportResultId==fbReportResult.Pending"
+                    class="result pending">
+                    <img src="assets/images/new-set/pending-white.svg" alt="">
+                    {{'BOOKING_SUMMARY.LBL_REPORT_PENDING' | translate }}
+                  </span>
+                  <span class="result not-applicable"
+                    *ngIf="product.reportStatus=='Validated' && product.reportResultId==fbReportResult.Not_Applicable">
+                    <img src="assets/images/new-set/missing-white.svg" alt="">
+                    {{'BOOKING_SUMMARY.LBL_REPORT_NA' | translate }}
+                  </span>
+                  <span class="result missing"
+                    *ngIf="product.reportStatus=='Validated' && product.reportResultId==fbReportResult.Missing">
+                    <img src="assets/images/new-set/missing-white.svg" alt="">
+                    {{'BOOKING_SUMMARY.LBL_REPORT_MISSING' | translate }}
+                  </span>
+                  <span *ngIf="product.reportStatus=='Validated' && product.reportResultId==fbReportResult.Conformed"
+                    class="result pass">
+                    <img src="assets/images/new-set/pass-white.svg" alt="">
+                    {{'BOOKING_SUMMARY.LBL_REPORT_CONFORMED' | translate }}
+                  </span>
+                  <span class="result fail"
+                    *ngIf="product.reportStatus=='Validated' && product.reportResultId==fbReportResult.NotConformed">
+                    <img src="assets/images/new-set/fail-white.svg" alt="">
+                    {{'BOOKING_SUMMARY.LBL_REPORT_NOT_CONFORMED' | translate }}
+                  </span>
+                  <span *ngIf="product.reportStatus=='Validated' && product.reportResultId==fbReportResult.Delay"
+                    class="result pending">
+                    <img src="assets/images/new-set/pending-white.svg" alt="">
+                    {{'BOOKING_SUMMARY.LBL_REPORT_DELAY' | translate }}
+                  </span>
+                  <span class="result missing"
+                    *ngIf="product.reportStatus=='Validated' && product.reportResultId==fbReportResult.Note">
+                    <img src="assets/images/new-set/missing-white.svg" alt="">
+                    {{'BOOKING_SUMMARY.LBL_REPORT_NOTE' | translate }}
+                  </span>
+                </td>
+              </tr>
+            </ng-template>
+          </tbody>
+        </table>
+      </div>
+    </td>
+  </tr>
+</ng-template>
+
+<ng-template #containerListTemplate let-iteminfo="iteminfo" let-i="i">
+  <tr [ngClass]="{'expandable-row': iteminfo.isPlaceHolderVisible}" [attr.data-expand-id]="'booking' + i">
+    <td colspan="14" *ngIf="iteminfo.isPlaceHolderVisible">
+      <div class="table-container child-table h-scroll table-max-height-450">
+        <table class="pagination-table">
+          <thead>
+            <tr class="sticky-top-row">
+              <th>{{ 'BOOKING_SUMMARY.REPORT_NUMBER' | translate }}
+              </th>
+              <th>{{'EDIT_BOOKING.LBL_PRODUCT_SERIAL' | translate }}</th>
+              <th>{{'EDIT_BOOKING.LBL_CONTAINER_NAME' | translate }}</th>
+              <th>{{'EDIT_BOOKING.LBL_CONTAINER_SIZE' | translate }}</th>
+              <th>{{'EDIT_BOOKING.LBL_CONTAINER_TOTAL_BOOKING_QTY' | translate }}</th>
+              <th *ngIf="_IsInternalUser">{{'BOOKING_SUMMARY.LBL_INSPECTED_QUANTITY' | translate }}
+              </th>
+              <th>{{'BOOKING_SUMMARY.LBL_REPORT_INSPECTION_DATE' | translate }}</th>
+              <th *ngIf="(_IsInternalUser || _IsCustomerUser)">{{ 'INSPECTION_CERTIFICATE_SUMMARY.LBL_REPORT_STATUS' |
+                translate }}
+              </th>
+              <th>
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngIf="iteminfo.isPlaceHolderVisible && (!iteminfo.containerList || iteminfo.containerList.length <=0)">
+              <td>
+                <div class="rect-common animate width30"></div>
+              </td>
+              <td>
+                <div class="rect-common animate width30"></div>
+              </td>
+              <td>
+                <div class="rect-common animate width20"></div>
+              </td>
+              <td>
+                <div class="rect-common animate width50"></div>
+              </td>
+              <td>
+                <div class="rect-common animate width20"></div>
+              </td>
+              <td>
+                <div class="rect-common animate width30"></div>
+              </td>
+              <td>
+                <div class="rect-common animate width30"></div>
+              </td>
+              <td>
+                <div class="rect-common animate width30"></div>
+              </td>
+            </tr>
+            <tr *ngIf="iteminfo.isPlaceHolderVisible && (!iteminfo.containerList || iteminfo.containerList.length <=0)">
+              <td>
+                <div class="rect-common animate width40"></div>
+              </td>
+              <td>
+                <div class="rect-common animate width40"></div>
+              </td>
+              <td>
+                <div class="rect-common animate width40"></div>
+              </td>
+              <td>
+                <div class="rect-common animate width40"></div>
+              </td>
+              <td>
+                <div class="rect-common animate width40"></div>
+              </td>
+              <td>
+                <div class="rect-common animate width40"></div>
+              </td>
+              <td>
+                <div class="rect-common animate width40"></div>
+              </td>
+              <td>
+                <div class="rect-common animate width40"></div>
+              </td>
+            </tr>
+            <ng-template ngFor let-container [ngForOf]="iteminfo.containerList" let-c="index">
+              <tr>
+                <td class="width60 text-center">
+                  {{container.reportTitle}}
+                </td>
+                <td class="Center_Middle">{{c+1}}</td>
+                <td class="width-140 active-link cursor-pointer"
+                  (click)=toggleExpandRowContainer(true,container,producPOtDataTemplate,iteminfo)>
+                  {{getContainerName(container.containerId)}}
+                </td>
+                <td class="Center_Middle width-60">
+                  {{container.containerSize}}
+                </td>
+                <td class="Center_Middle width-60">
+                  {{container.totalBookingQuantity}}
+                </td>
+                <td *ngIf="_IsInternalUser" class="Center_Middle width-60">
+                  <span *ngIf="container.reportStatus=='Validated'">{{container.inspectedQuantity}}</span>
+                </td>
+                <td class="width-60">
+                  {{container.inspectionDate}}
+                </td>
+                <td class="width-60" *ngIf="(_IsInternalUser || _IsCustomerUser)">
+                  <span *ngIf="container.reportStatus=='Draft'" class="status draft">
+                    {{'BOOKING_SUMMARY.LBL_REPORT_INPROGRESS' | translate }}
+                    <span class="progress-bar"><span class="complete"></span></span>
+                  </span>
+                  <span *ngIf="container.reportStatus=='InValidated'" class="status invalid">
+                    {{'BOOKING_SUMMARY.LBL_REPORT_INVALIDATED' | translate }}
+                    <span class="progress-bar"><span class="complete"></span></span>
+                  </span>
+
+                  <span *ngIf="container.reportStatus=='Validated' && container.reportResultId==1" class="result pass">
+                    <img src="assets/images/new-set/pass-white.svg" alt="">
+                    {{'BOOKING_SUMMARY.LBL_REPORT_PASS' | translate }}
+                  </span>
+
+                  <span class="result fail" *ngIf="container.reportStatus=='Validated' && container.reportResultId==2">
+                    <img src="assets/images/new-set/fail-white.svg" alt="">
+                    {{'BOOKING_SUMMARY.LBL_REPORT_FAIL' | translate }}
+                  </span>
+                  <span *ngIf="container.reportStatus=='Validated' && container.reportResultId==3"
+                    class="result pending">
+                    <img src="assets/images/new-set/pending-white.svg" alt="">
+                    {{'BOOKING_SUMMARY.LBL_REPORT_PENDING' | translate }}
+                  </span>
+                </td>
+                <td>
+                  <button
+                    *ngIf="(container.finalReportLink || container.finalManualReportPath) && (iteminfo.statusId == _BookingStatus.ReportSent || _IsInternalUser)"
+                    class="secondary-cta x-small"
+                    (click)="RedirectToFbReport(container.finalReportLink,container.finalManualReportPath)">
+                    {{ 'EDIT_BOOKING.LBL_DOC_DOWNLOAD' | translate }}</button>
+                </td>
+              </tr>
+            </ng-template>
+          </tbody>
+        </table>
+      </div>
+    </td>
+  </tr>
+</ng-template>
+
+
+<ng-template #producPOtDataTemplate let-modal>
+  <div class="order-tracking-popup-container">
+    <ng-container *ngIf="reportMaster.isproductOrPODetails; else poDetails">
+      <button type="button" class="close" aria-describedby="modal-title" (click)="modal.dismiss('Cross click')">
+        <img src="assets/images/black-close.svg" alt="" (click)="modal.dismiss('Cross click')">
+      </button>
+      <h3 class="title">
+        Product Details<span class="number-badge pass">{{reportMaster.bookingItem.bookingId}}</span>
+      </h3>
+      <p class="subtitle">
+        Container Name :
+        {{getContainerName(reportMaster.containerItem.containerId)}}
+      </p>
+      <div class="record-count">
+        <div class="column">
+          <p class="count">Showing {{reportMaster.containerProductList.length}} records</p>
+        </div>
+        <div class="column"></div>
+      </div>
+      <div class="table-container h-scroll table-max-height-450">
+        <table class="pagination-table simple-table bordered">
+          <thead>
+            <tr class="sticky-top-row">
+              <th> {{'BOOKING_SUMMARY.LBL_PRODUCT_ID' | translate }} </th>
+              <th>{{'BOOKING_SUMMARY.LBL_PRODUCT_DESC' | translate }}</th>
+              <th *ngIf="!isQuotationPending">{{'PRODUCT_CATEGORY.TITLE' | translate}}</th>
+              <th>{{'PRODUCT_SUB_CATEGORY.TITLE' | translate}}</th>
+
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngIf="(!reportMaster.containerProductList || reportMaster.containerProductList.length <=0)">
+              <td>
+                <div class="rect-common animate width30"></div>
+              </td>
+              <td>
+                <div class="rect-common animate width30"></div>
+              </td>
+              <td>
+                <div class="rect-common animate width20"></div>
+              </td>
+              <td>
+                <div class="rect-common animate width50"></div>
+              </td>
+            </tr>
+            <tr *ngIf="(!reportMaster.containerProductList || reportMaster.containerProductList.length <=0)">
+              <td>
+                <div class="rect-common animate width40"></div>
+              </td>
+              <td>
+                <div class="rect-common animate width40"></div>
+              </td>
+              <td>
+                <div class="rect-common animate width40"></div>
+              </td>
+              <td>
+                <div class="rect-common animate width40"></div>
+              </td>
+            </tr>
+            <ng-template ngFor let-product [ngForOf]="reportMaster.containerProductList" let-p="index">
+              <tr *ngIf="(reportMaster.containerProductList && reportMaster.containerProductList.length > 0)">
+                <td (click)=toggleExpandRowProduct(false,$event,product,producPOtDataTemplate) class="active-link">
+                  <div class="image-container">
+                    <img *ngIf="product.productImageUrl!=null"
+                      (click)="getPreviewProductImage(product.productImageUrl,productImage)"
+                      src={{product.productImageUrl}} alt="image">
+                    <img *ngIf="product.productImageUrl==null" src="assets/images/new-set/no-product-icon.svg"
+                      alt="image">
+                    <span class="medium">{{product.productName}}</span>
+                  </div>
+                </td>
+
+                <td class="width-220 whitespacenormal"
+                  [ngClass]="{'text-tooltip-table': product.isProductDescTooltipShow }"
+                  [attr.data-tooltip]="product.productDescription">
+                  {{product.productDescTrim}}
+                </td>
+
+                <td class="width-140 whitespacenormal" *ngIf="!isQuotationPending">
+                  {{product.productCategory}}
+                </td>
+                <td class="width-140 whitespacenormal">
+                  {{product.productSubCategory}}
+                </td>
+
+              </tr>
+            </ng-template>
+          </tbody>
+        </table>
+      </div>
+    </ng-container>
+    <ng-template #poDetails>
+      <div class="po-details-container">
+        <div class="back-container"
+          (click)=toggleExpandRowContainer(false,reportMaster.containerItem,producPOtDataTemplate,reportMaster.bookingItem)>
+          <img src="assets/images/new-set/back-dark.svg" alt="">
+        </div>
+        <div class="info-container">
+          <button type="button" class="close" aria-describedby="modal-title" (click)="modal.dismiss('Cross click')">
+            <img src="assets/images/black-close.svg" alt="" (click)="modal.dismiss('Cross click')">
+          </button>
+          <h3 class="title">
+            PO Details<span class="number-badge pass">
+              {{reportMaster.bookingNumber}}
+            </span>
+          </h3>
+          <p class="subtitle">Container Name : {{getContainerName(reportMaster.containerItem.containerId)}}</p>
+          <p class="subtitle">Product ID : {{reportMaster.productName}}</p>
+          <div class="record-count">
+            <div class="column">
+              <p class="count">Showing {{reportMaster.containerPOList.length}} records</p>
+            </div>
+            <div class="column"></div>
+          </div>
+          <div class="table-container h-scroll table-max-height-450">
+            <table class="pagination-table simple-table bordered">
+              <thead>
+                <tr class="sticky-top-row">
+                  <th> {{'BOOKING_SUMMARY.LBL_PO_NUMBER' | translate }} </th>
+                  <th>{{'BOOKING_COMBINEORDERS.LBL_ORDERQTY' | translate}}</th>
+                  <th *ngIf="_IsInternalUser">
+                    {{'BOOKING_SUMMARY.LBL_INSPECTED_QUANTITY' | translate }}
+                  </th>
+                  <th>{{'PURCHASEORDER_SUMMARY.LBL_ETD' | translate }}</th>
+                  <th>{{'EDIT_BOOKING.LBL_DESTINATION_COUNTRY' | translate }}</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngIf="(!reportMaster.containerPOList || reportMaster.containerPOList.length <=0)">
+                  <td>
+                    <div class="rect-common animate width40"></div>
+                  </td>
+                  <td>
+                    <div class="rect-common animate width40"></div>
+                  </td>
+                  <td>
+                    <div class="rect-common animate width40"></div>
+                  </td>
+                  <td>
+                    <div class="rect-common animate width40"></div>
+                  </td>
+                  <td>
+                    <div class="rect-common animate width40"></div>
+                  </td>
+                </tr>
+                <tr *ngIf="(!reportMaster.containerPOList || reportMaster.containerPOList.length <=0)">
+                  <td>
+                    <div class="rect-common animate width40"></div>
+                  </td>
+                  <td>
+                    <div class="rect-common animate width40"></div>
+                  </td>
+                  <td>
+                    <div class="rect-common animate width40"></div>
+                  </td>
+                  <td>
+                    <div class="rect-common animate width40"></div>
+                  </td>
+                  <td>
+                    <div class="rect-common animate width40"></div>
+                  </td>
+                </tr>
+                <ng-template ngFor let-po [ngForOf]="reportMaster.containerPOList" let-p="index">
+                  <tr *ngIf="(reportMaster.containerPOList && reportMaster.containerPOList.length > 0)">
+                    <td>{{po.poNumber}}</td>
+                    <td><span class="highlight-badge">{{po.bookingQuantity}}</span></td>
+                    <td *ngIf="(_IsInternalUser || _IsCustomerUser)">
+                      <span *ngIf="po.reportStatus=='Validated'" class="highlight-badge">
+                        {{po.inspectedQuantity}}
+                      </span>
+                    </td>
+                    <td><span [ngClass]="{'highlight-badge':po.etd && po.etd != ''}">{{po.etd}}</span></td>
+                    <td>
+                      <span>{{po.destinationCountry}}</span>
+                    </td>
+                  </tr>
+                </ng-template>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </ng-template>
+  </div>
+</ng-template>
+
+<ng-template #PODataTemplate let-modal>
+  <div class="order-tracking-popup-container">
+    <div class="po-details-container">
+      <div class="info-container">
+        <button type="button" class="close" aria-describedby="modal-title" (click)="modal.dismiss('Cross click')">
+          <img src="assets/images/black-close.svg" alt="" (click)="modal.dismiss('Cross click')">
+        </button>
+        <h3 class="title">PO Details<span class="number-badge pass">{{reportMaster.bookingNumber}} </span></h3>
+        <p class="subtitle">Product ID : {{reportMaster.productId}} </p>
+        <div class="record-count">
+          <div class="column">
+            <p class="count">Showing {{reportMaster.poList.length}} records</p>
+          </div>
+          <div class="column"></div>
+        </div>
+        <div class="table-container h-scroll table-max-height-450">
+          <table class="pagination-table simple-table bordered">
+            <thead>
+              <tr class="sticky-top-row">
+                <th> {{'BOOKING_SUMMARY.LBL_PO_NUMBER' | translate }} </th>
+                <th>{{'BOOKING_COMBINEORDERS.LBL_ORDERQTY' | translate}}</th>
+                <th *ngIf="_IsInternalUser">
+                  {{'BOOKING_SUMMARY.LBL_INSPECTED_QUANTITY' | translate }}
+                </th>
+                <th>{{'PURCHASEORDER_SUMMARY.LBL_ETD' | translate }}</th>
+                <th>{{'EDIT_BOOKING.LBL_DESTINATION_COUNTRY' | translate }}</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let po of reportMaster.poList">
+                <td>{{po.poNumber}}</td>
+                <td><span class="highlight-badge">{{po.bookingQuantity}}</span></td>
+                <td *ngIf="_IsInternalUser || _IsCustomerUser">
+                  <span *ngIf="po.reportStatus=='Validated'" class="highlight-badge">{{po.inspectedQuantity}}</span>
+                </td>
+                <td><span [ngClass]="{'highlight-badge': (po.etd && po.etd != '')}">{{po.etd}}</span></td>
+                <td>
+                  <span>{{po.destinationCountry}}</span>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #reportsent let-modal>
+  <div class="modal-body">
+    <div class="small-model">
+      <h2 class="title">{{ 'COMMON.MSG_QUESTION_SURE' | translate }}</h2>
+      <p>{{ 'BOOKING_SUMMARY.MSG_CONFIRMSTATUS' | translate }}</p>
+      <div class="my-input-group">
+        <div class="marginTop15">
+          <label class="required float-left">{{ 'BOOKING_SUMMARY.LBL_REPORT_SENT_DATE' | translate }}</label>
+          <div class="calendar-wrapper">
+
+            <input type="text" maxlength="10" readonly=readonly
+              placeholder="{{ 'BOOKING_SUMMARY.LBL_REPORT_SENT_DATE' | translate }}" [(ngModel)]="model.reportDate"
+              ngbDatepicker #fd="ngbDatepicker" (click)="fd.toggle()">
+            <img src="assets/images/calendar-icon.svg" alt="" style="top:30px;" class="calendar-icon"
+              (click)="fd.toggle()">
+          </div>
+        </div>
+      </div>
+      <button class="secondary-cta" [disabled]=statusLoading (click)="modal.dismiss('Cross click');">{{
+        'COMMON.LBL_CONFIRMCANCEL' | translate }}
+      </button>
+      <button class="primary-cta" [disabled]=statusLoading (click)="setStatus();">{{ 'COMMON.LBL_OK' | translate }}
+        <span *ngIf="statusLoading">
+          <i class="fa fa-refresh fa-spin" aria-hidden="true"></i>
+        </span>
+      </button>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #productImage let-modal>
+  <div class="modal-header custom-modal-header">
+    <h4 class="modal-title" id="modal-basic-title">Photo</h4>
+    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body custom-modal-body">
+    <ngx-gallery [options]="productGalleryOptions" [images]="productGalleryImages"></ngx-gallery>
+  </div>
+</ng-template>

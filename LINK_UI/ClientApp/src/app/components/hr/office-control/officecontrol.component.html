@@ -1,0 +1,51 @@
+  <div class="main-wrapper">
+    <div class="wrapper dashboard-wrapper">
+      <div class="my-container">
+        <div class="master-body">
+          <div class="title-container">
+            <h3 class="main-title">
+              {{ 'OFFICE_CONTROL.TITLE' | translate }}
+            </h3>
+          </div>
+          <div class="content-container">
+            <h4 class="container-head">{{ 'STAFF_SUMMARY.LBL_SEARCH' | translate }}</h4>
+            <div class="formPadding">
+              <div class="row">
+                <div class=" col-sm-12">
+                  <label class="required">{{ 'OFFICE_CONTROL.LBL_STAFF' | translate }}</label>
+                  <ng-select [items]="data.staffList"
+                             [multiple]="false"
+                             [closeOnSelect]="true"
+                             [searchable]="true"
+                             bindLabel="staffName"
+                             (change)="getData()"
+                             placeholder="--- {{ 'OFFICE_CONTROL.LBL_SELECT' | translate }} ---"
+                             [(ngModel)]="currentStaff">
+                  </ng-select>
+                </div>
+              </div>
+              <div class="row">
+                <div class=" col-sm-12">
+                  <label class="required">{{ 'OFFICE_CONTROL.LBL_OFFICE' | translate }}</label>
+                  <ng-select [items]="data.locationList"
+                             [multiple]="true"
+                             [closeOnSelect]="false"
+                             [searchable]="true"
+                             bindLabel="name"
+                             placeholder="--- {{ 'OFFICE_CONTROL.LBL_SELECT' | translate }} ---"
+                             [(ngModel)]="model"
+                             class="multiple">
+                  </ng-select>
+                </div>
+              </div>
+            </div>
+            <div class="form-action-container">
+              <button class="primary-cta small" (click)="save()" [disabled]="currentStaff == null">
+                <i class="fa fa-save"></i>&nbsp;&nbsp;Save
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>

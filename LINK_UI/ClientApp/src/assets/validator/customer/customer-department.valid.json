@@ -1,0 +1,28 @@
+{
+    "model": "customerdepartment.model",
+     "fields": {
+      "customerValue": [
+        {
+          "type": "required",
+          "fieldType": "N",
+          "ressource": "CUSTOMER_DEPARTMENT.MSG_CUSTOMER_REQ"
+        }
+      ],
+       "name": [
+         {
+           "type": "required",
+           "fieldType": "N",
+           "ressource": "CUSTOMER_DEPARTMENT.MSG_NAME_REQ"
+         }
+       ],
+       "code": [
+         {
+            "type": "required",
+            "fieldType": "N",
+            "ressource": "CUSTOMER_DEPARTMENT.MSG_CODE_REQ"
+         }
+       ]
+     }
+   
+   }
+   

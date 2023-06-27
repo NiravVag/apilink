@@ -1,0 +1,12 @@
+{
+  "model": "CustomerPriceCardSummary",
+  "fields": {
+    "customerId": [
+      {
+        "type": "required",
+        "fieldType": "N",
+        "ressource": "EDIT_CUSTOMER_PRICE_CARD.MSG_CUSTOMER_REQ"
+      }
+    ]   
+  }
+}

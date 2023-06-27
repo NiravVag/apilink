@@ -1,0 +1,210 @@
+<div class="main-wrapper">
+  <div class="wrapper dashboard-wrapper">
+    <div class="my-container">
+      <div class="master-body">
+        <div class="title-container">
+          <div class="header-back-button" *ngIf="!initialloading && !savedataloading && !productChangeLoading">
+            <img src="assets/images/back-red.png" alt="back" (click)="return('inspsummary/booking-summary')">
+          </div>
+          <h3 class="main-title">{{ 'INSPECTION_CANCEL.TITLE_SPLIT_BOOKING' | translate }} - {{inspectionID}}</h3>
+        </div>
+        <div class="content-container">
+          <h4 class="container-head">{{ 'INSPECTION_CANCEL.LBL_MAIN_DETAILS' | translate }}</h4>
+          <div class="formPadding">
+            <div class="row">
+              <div class="col-sm-3 mobile-margin-top-15">
+                <div class="my-input-group">
+                  <label>{{ 'INSPECTION_CANCEL.LBL_CUSTOMER' | translate }}</label>
+                  <input disabled [(ngModel)]="bookingItem.customerName" type="text" />
+                </div>
+              </div>
+              <div class="col-sm-3 mobile-margin-top-15">
+                <div class="my-input-group">
+                  <label>{{ 'INSPECTION_CANCEL.LBL_SUPPLIER' | translate }}</label>
+                  <input disabled [(ngModel)]="bookingItem.supplierName" type="text" />
+                </div>
+              </div>
+              <div class="col-sm-3 mobile-margin-top-15">
+                <div class="my-input-group">
+                  <label>{{ 'INSPECTION_CANCEL.LBL_FACTORY' | translate }}</label>
+                  <input disabled [(ngModel)]="bookingItem.factoryName" type="text" />
+                </div>
+              </div>
+            </div>
+            <div class="row marginTop15">
+
+              <div class="col-sm-3 mobile-margin-top-15">
+                <div class="my-input-group">
+                  <label>{{ 'INSPECTION_CANCEL.LBL_SERVICEDATE_FROM' | translate }}</label>
+                  <input disabled [(ngModel)]="bookingItem.serviceDateFrom" type="text" />
+                </div>
+              </div>
+              <div class="col-sm-3 mobile-margin-top-15">
+                <div class="my-input-group">
+                  <label>{{ 'INSPECTION_CANCEL.LBL_SERVICEDATE_TO' | translate }}</label>
+                  <input disabled [(ngModel)]="bookingItem.serviceDateTo" type="text" />
+                </div>
+              </div>
+              <div class="col-sm-3 mobile-margin-top-15">
+                <div class="my-input-group">
+                  <label>Product Category</label>
+                  <input disabled [(ngModel)]="bookingItem.productCategory" type="text" />
+                </div>
+              </div>
+              <div class="col-sm-3 mobile-margin-top-15">
+                <div class="my-input-group">
+                  <label>{{ 'INSPECTION_CANCEL.LBL_SERVICETYPE' | translate }}</label>
+                  <input disabled [(ngModel)]="bookingItem.serviceType" type="text" />
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <ng-container>
+            <ng-template [ngTemplateOutlet]="productListTemplate"
+              [ngTemplateOutletContext]="{ serviceType: bookingItem.serviceType}">
+            </ng-template>
+          </ng-container>
+
+        </div>
+      </div>
+      <ng-template #cancelBooking let-modal>
+        <div class="modal-body">
+          <div class="small-model">
+            <h2 class="title">
+              {{ 'CUSTOMER_PRODUCT_SUMMARY.LBL_CONFIRMDELETION' | translate }} </h2>
+            <p> {{'INSPECTION_CANCEL.MSG_CANCEL_PRODUCTS' | translate}} </p>
+            <button class="secondary-cta" (click)="modal.dismiss('Cross click')">{{ 'COMMON.LBL_CONFIRMCANCEL' |
+              translate }}</button>
+            <button class="primary-cta" (click)="CancelBooking()">{{ 'COMMON.LBL_OK' | translate }}</button>
+          </div>
+        </div>
+      </ng-template>
+
+      <ng-template #newBooking let-modal>
+        <div class="modal-body">
+          <div class="small-model">
+            <h2 class="title">
+              {{'EDIT_BOOKING.LBL_CONFIRM_BOOKING' | translate }} </h2>
+            <p>{{'INSPECTION_CANCEL.MSG_CREATE_PRODUCTS' | translate}}</p>
+            <button class="secondary-cta" (click)="modal.dismiss('Cross click')">{{ 'COMMON.LBL_CONFIRMCANCEL' |
+              translate }}</button>
+            <button class="primary-cta" (click)="NewBooking()">{{ 'COMMON.LBL_OK' | translate }}</button>
+          </div>
+        </div>
+      </ng-template>
+    </div>
+  </div>
+</div>
+
+<ng-template #splitnewbookingsuccess let-modal>
+  <div class="modal-body">
+    <div class="small-model">
+      <h2 class="title">
+        {{ 'INSPECTION_CANCEL.LBL_NEW_BOOKING_SUCCESS_TITLE' | translate }} #{{model.bookingId}} </h2>
+      <p>{{ 'INSPECTION_CANCEL.LBL_NEW_BOOKING_SUCCESS_POPUP_INFO' | translate }}
+      </p>
+      <button class="secondary-cta" (click)="cancelSuccessSplitBooking()">{{ 'COMMON.LBL_CANCEL' | translate
+        }}</button>
+      <button class="primary-cta" (click)="newBookingEditPage()">{{ 'INSPECTION_CANCEL.LBL_EDIT_BOOKING' | translate
+        }}</button>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #productListTemplate>
+  <div class="formPadding" *ngIf="model.splitBookingProductList && model.splitBookingProductList.length>0">
+    <div class="table-container" style="overflow-y: scroll;max-height:500px;">
+      <table class="pagination-table simple-table bordered">
+        <thead>
+          <tr>
+            
+            <th class="Center_Middle">
+              <div class="styled-checkbox-container">
+                <input type="checkbox" class="styled-checkbox" id="checkboxall" [(ngModel)]="selectedAllProducts"
+                  (change)="selectAllSplitBookingProducts();" />
+                <label for="checkboxall"></label>
+              </div>
+            </th>
+            <th>{{'EDIT_BOOKING.LBL_PRODUCT_SERIAL' | translate }}</th>
+
+            <th> {{'BOOKING_SUMMARY.LBL_PO_NUMBER' | translate }} </th>
+
+            <th> {{'BOOKING_SUMMARY.LBL_PRODUCT_ID' | translate }} </th>
+            <th>{{'BOOKING_SUMMARY.LBL_PRODUCT_DESC' | translate }}</th>
+
+            <th *ngIf="model.bookingData.businessLine==_businessLine.SoftLine">{{'EDIT_BOOKING.LBL_PO_PRD_COLOR_CODE' | translate }}</th>
+            <th *ngIf="model.bookingData.businessLine==_businessLine.SoftLine">{{'EDIT_BOOKING.LBL_PO_PRD_COLOR_NAME' | translate }}</th>
+
+            <th>{{'BOOKING_COMBINEORDERS.LBL_ORDERQTY' | translate}}</th>
+
+            <th *ngIf="_IsInternalUser || _IsCustomerUser">
+              {{'BOOKING_SUMMARY.LBL_INSPECTED_QUANTITY' | translate }}</th>
+            <th>{{'PURCHASEORDER_SUMMARY.LBL_ETD' | translate }}</th>
+            <th>{{'EDIT_BOOKING.LBL_DESTINATION_COUNTRY' | translate }}</th>
+          </tr>
+        </thead>
+        <tbody>
+
+          <ng-template ngFor let-product [ngForOf]="model.splitBookingProductList" let-p="index">
+
+            <tr>
+
+
+              <td class="Center_Middle">
+                <div class="styled-checkbox-container">
+                  <input type="checkbox" class="styled-checkbox" id="checkbox-{{p}}" [(ngModel)]="product.selected"
+                    (change)="checkIfAllSplitBookingProductsSelected();">
+                  <label for="checkbox-{{p}}"></label>
+                </div>
+              </td>
+
+              <td class="Center_Middle">{{p+1}}</td>
+              <td>{{product.poName}}</td>
+
+              <td>{{product.productName}}</td>
+              <td class="width-180 wordbreak">{{product.productDescription}}</td>
+
+              <td *ngIf="model.bookingData.businessLine==_businessLine.SoftLine">{{product.colorCode}}</td>
+              <td *ngIf="model.bookingData.businessLine==_businessLine.SoftLine">{{product.colorName}}</td>
+
+              <td>{{product.bookingQuantity}}</td>
+
+
+
+              <td>{{product.etd}}</td>
+              <td>{{product.destinationCountryName}}</td>
+            </tr>
+
+            
+          </ng-template>
+
+        </tbody>
+      </table>
+    </div>
+
+  </div>
+
+  <div class="form-action-container marginTop15"
+    *ngIf="model.splitBookingProductList && model.splitBookingProductList.length>0">
+
+    <button type="button" [disabled]="initialloading || savedataloading || productChangeLoading"
+      class="secondary-cta small" (click)="openConfirm('cancelBooking',cancelBooking)">
+      {{'INSPECTION_CANCEL.BTN_CANCEL_PRODUCTS' | translate}}
+    </button>
+    <button [disabled]="initialloading || savedataloading || productChangeLoading" class="primary-cta small"
+      (click)="openConfirm('newBooking',newBooking)">
+      {{'INSPECTION_CANCEL.BTN_NEW_BOOKING' | translate}}
+      <span *ngIf="savedataloading">
+        <i class="fa fa-refresh fa-spin" aria-hidden="true"></i>
+      </span>
+    </button>
+  </div>
+
+  <div class="loader-overlay" *ngIf="initialloading || newBookingLoading">
+    <div class="loader-container">
+      <img src="assets/images/reload.svg" alt="">
+      <span>{{'COMMON.LBL_LOADER' | translate}}</span>
+    </div>
+  </div>
+</ng-template>

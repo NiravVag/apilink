@@ -1,0 +1,138 @@
+<div class="main-wrapper">
+    <div class="wrapper dashboard-wrapper">
+        <div class="my-container">
+            <div class="card-wrapper">
+                <div class="card-container">
+                    <div class="master-body m-0">
+                        <div class="title-container">
+                            <div class="header-back-button py-1 mr-3">
+                                <img src="assets/images/back-red.png" alt="back"
+                                    (click)="return('summary/qc-block-summary')">
+                            </div>
+                            {{ 'EDIT_QC_BLOCK.LBL_TITLE' | translate }}
+                            <span class="audit-id" *ngIf="model.id >0"> #{{model.id}} </span>
+                        </div>
+                    </div>
+                    <div class="row marginTop15">
+                        <div class="col-sm-3 col-md-3 col-lg-3">
+                            <div class="my-input-group">
+                                <label class="required">{{ 'EDIT_QC_BLOCK.LBL_QC' | translate }}</label>
+                                <ng-select [items]="masterData.qcList" [virtualScroll]="true"
+                                    [loading]="masterData.qcLoading" bindLabel="name" bindValue="id"
+                                    placeholder="--- {{ (masterData.qcList!=null && masterData.qcList.length!=0? 'COMMON.LBL_SELECT':'COMMON.LBL_NO_DATA') | translate }} ---"
+                                    [typeahead]="masterData.qcInput" [minTermLength]="3" appendTo="body"
+                                    [clearable]="true" [disabled]="masterData.isQCDisabled"
+                                    [(ngModel)]="model.qcId"
+                                    [ngClass]="{ 'is-invalid':  !validator.isValid('qcId')}"
+                                    [multiple]="false" (scrollToEnd)="getQCData()" #select [closeOnSelect]="false">
+                                </ng-select>
+                                <div *ngIf="!validator.isValid('qcId')" class="invalid-feedback">
+                                    <div *ngFor="let error of validator.getErrors('qcId')">
+                                        {{ error | translate }}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-3 col-md-3 col-lg-3">
+                            <div class="my-input-group">
+                                <label>{{ 'EDIT_QC_BLOCK.LBL_CUSTOMER' | translate }}</label>
+                                <ng-select [items]="masterData.customerList" [virtualScroll]="true"
+                                    [loading]="masterData.customerLoading" bindLabel="name" bindValue="id"
+                                    placeholder="--- {{ (masterData.customerList!=null && masterData.customerList.length!=0? 'COMMON.LBL_SELECT':'COMMON.LBL_NO_DATA' ) | translate }} ---"
+                                    [typeahead]="masterData.customerInput" [minTermLength]="3"
+                                    [clearable]="true" class="multiple"
+                                    [(ngModel)]="model.customerIds" [multiple]="true"
+                                    (scrollToEnd)="getCustomerData()" [closeOnSelect]="false"
+                                    #select appendTo="body">
+                                </ng-select>
+                            </div>
+                        </div>
+                        <div class="col-sm-3 col-md-3 col-lg-3">
+                            <div class="my-input-group">
+                                <label>{{ 'EDIT_QC_BLOCK.LBL_SUPPLIER' | translate }}</label>
+                                <ng-select [items]="masterData.supplierList" [virtualScroll]="true"
+                                    [loading]="masterData.supplierLoading"
+                                    [(ngModel)]="model.supplierIds" [closeOnSelect]="false" [searchable]="true"
+                                    bindLabel="name" bindValue="id" (clear)="clearSupplierSelection()"
+                                    [typeahead]="masterData.supplierInput" [minTermLength]="3" appendTo="body"
+                                    placeholder="--- {{(masterData.supplierList && masterData.supplierList.length>0? 'COMMON.LBL_SELECT':'COMMON.LBL_NO_DATA')  | translate }} ---"
+                                    (scrollToEnd)="getSupplierData()" [multiple]="true"
+                                    class="multiple"
+                                    #select>
+                                </ng-select>
+                            </div>
+                        </div>
+                        <div class="col-sm-3 col-md-3 col-lg-3">
+                            <div class="my-input-group">
+                                <label>{{ 'EDIT_QC_BLOCK.LBL_FACTORY' | translate }}</label>
+                                <ng-select [items]="masterData.factoryList" [virtualScroll]="true"
+                                    [loading]="masterData.factoryLoading" bindLabel="name" bindValue="id"
+                                    placeholder="--- {{ (masterData.factoryList!=null && masterData.factoryList.length!=0? 'COMMON.LBL_SELECT':'COMMON.LBL_NO_DATA') | translate }} ---"
+                                    [typeahead]="masterData.factoryInput" [minTermLength]="3" appendTo="body"
+                                    [clearable]="true" class="multiple" (clear)="clearFactorySelection()"
+                                    [(ngModel)]="model.factoryIds" [closeOnSelect]="false"
+                                    [multiple]="true" (scrollToEnd)="getFactoryData()" #select>
+                                </ng-select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row marginTop15">
+                        <div class="col-sm-4 col-md-4 col-lg-4">
+                            <div class="my-input-group">
+                                <label>{{ 'EDIT_QC_BLOCK.LBL_PRODUCT_CATEGORY' | translate }}</label>
+                                <ng-select [items]="masterData.productCategoryList" [virtualScroll]="true"
+                                    [loading]="masterData.productCategoryLoading" bindLabel="name" bindValue="id"
+                                    placeholder="--- {{ (masterData.productCategoryList!=null && masterData.productCategoryList.length!=0? 'COMMON.LBL_SELECT':'COMMON.LBL_NO_DATA') | translate }} ---"
+                                    [typeahead]="masterData.productCategoryInput" [minTermLength]="3" appendTo="body"
+                                    [clearable]="true" class="multiple"
+                                    [(ngModel)]="model.productCategoryIds" [closeOnSelect]="false"
+                                    (clear)="clearProductCategorySelection()"(change)="changeProductCategoryData($event)"
+                                    [multiple]="true" (scrollToEnd)="getProductCategoryData(true)" #select>
+                                </ng-select>
+                            </div>
+                        </div>
+                        <div class="col-sm-4 col-md-4 col-lg-4">
+                            <div class="my-input-group">
+                                <label>{{ 'EDIT_QC_BLOCK.LBL_PRODUCT_SUB_CATEGORY' | translate }}</label>
+                                <ng-select [items]="masterData.productCategorySubList" [virtualScroll]="true"
+                                    [loading]="masterData.productCategorySubLoading" bindLabel="name" bindValue="id"
+                                    placeholder="--- {{ (masterData.productCategorySubList!=null && masterData.productCategorySubList.length!=0? 'COMMON.LBL_SELECT':'COMMON.LBL_NO_DATA' ) | translate }} ---"
+                                    [typeahead]="masterData.productCategorySubInput" [minTermLength]="3"
+                                    [clearable]="true" class="multiple"
+                                    [(ngModel)]="model.productCategorySubIds" [multiple]="true"
+                                    (scrollToEnd)="getProductSubCategoryData(true)"
+                                    #select appendTo="body" [closeOnSelect]="false"
+                                    (clear)="clearProductSubCategorySelection()" (change)="changeProductSubCategorySelection($event)">
+                                </ng-select>
+                            </div>
+                        </div>
+                        <div class="col-sm-4 col-md-4 col-lg-4">
+                            <div class="my-input-group">
+                                <label>{{ 'EDIT_QC_BLOCK.LBL_PRODUCT_SUB_CATEGORY_2' | translate }}</label>
+                                <ng-select [items]="masterData.productCategorySub2List" [virtualScroll]="true"
+                                    [loading]="masterData.productCategorySub2Loading"
+                                    [(ngModel)]="model.productCategorySub2Ids" [closeOnSelect]="false" [searchable]="true"
+                                    bindLabel="name" bindValue="id" class="multiple" (clear)="clearProductSubCategory2Selection()"
+                                    [typeahead]="masterData.productCategorySub2Input" [minTermLength]="3" appendTo="body"
+                                    placeholder="--- {{(masterData.productCategorySub2List && masterData.productCategorySub2List.length>0? 'COMMON.LBL_SELECT':'COMMON.LBL_NO_DATA')  | translate }} ---"
+                                    (scrollToEnd)="getProductSubCategory2Data(true)" [multiple]="true" 
+                                    #select>
+                                </ng-select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-action-container" style="text-align: right;padding-top: 1%">
+                        <button [disabled]="masterData.saveLoading"
+                            class="primary-cta small" (click)="save()">
+                            {{'COMMON.LBL_SAVE' | translate}}
+                            <span *ngIf="masterData.saveLoading">
+                                <i class="fa fa-refresh fa-spin" aria-hidden="true"></i>
+                            </span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+

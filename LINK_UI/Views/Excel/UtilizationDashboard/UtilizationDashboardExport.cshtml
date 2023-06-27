@@ -1,0 +1,62 @@
+﻿
+@{
+    ViewData["Title"] = "UtilizationDashboardExport";
+}
+
+
+@model DTO.UtilizationDashboard.UtilizationExportResponse
+
+<xls-sheet name="Utilization Summary">
+    <table xls-begin="A:1" style="border-style:solid; empty-cells: show;">
+        <tr>
+            <td style="font-weight:bold">Service :</td>
+            <td width="100px">@Model.RequestFilter.Service</td>
+
+            <td width="130px" style="font-weight:bold">Service Date From :</td>
+            <td width="110px">@Model.RequestFilter.ServiceDateFrom</td>
+
+            <td width="120px" style="font-weight:bold">Service Date To :</td>
+            <td width="100px">@Model.RequestFilter.ServiceDateTo</td>
+            @if (!string.IsNullOrEmpty(@Model.RequestFilter.OfficeIdList))
+            {
+                <td style="font-weight: bold">Office :</td>
+                <td width="100px">@Model.RequestFilter.OfficeIdList</td>
+            }
+
+            @if (!string.IsNullOrEmpty(@Model.RequestFilter.CountryIdList))
+            {
+                <td width="100px" style="font-weight: bold">Country :</td>
+                <td width="100px">@Model.RequestFilter.CountryIdList</td>
+            }
+        </tr>
+        <tr>
+            <td></td>
+        </tr>
+
+        <tr style="background-color:#f5f5f5;font-weight:bold;text-align:center">
+            <th style="border-style:solid;">Location</th>
+            <th style="border-style:solid;">Man Days</th>
+            <th style="border-style:solid;">Work Days</th>
+            <th style="border-style:solid;">Leaves</th>
+            <th style="border-style:solid;">Max. Potential</th>
+            <th style="border-style:solid;">Outsource Man Days</th>
+            <th style="border-style:solid;">Utilization Rate Last Year</th>
+            <th style="border-style:solid;">Utilization Rate Current Year</th>
+        </tr>
+        @foreach (var item in Model.Data)
+        {
+            <tr>
+                <td style="border-style:solid;" width="150px">@item.Office</td>
+                <td style="border-style:solid;" width="150px">@item.HourMandDays</td>
+                <td style="border-style:solid;" width="150px">@item.WorkDays</td>
+                <td style="border-style:solid;" width="150px">@item.Leaves</td>
+                <td style="border-style:solid;" width="150px">@item.MaxPotential</td>
+                <td style="border-style:solid;" width="150px">@item.OutsourceMandays</td>
+                <td style="border-style:solid;" width="150px">@item.UtilizationRateLastYear</td>
+                <td style="border-style:solid;" width="250px">@item.UtilizationRateCurrentYear</td>
+            </tr>
+        }
+
+    </table>
+</xls-sheet>
+

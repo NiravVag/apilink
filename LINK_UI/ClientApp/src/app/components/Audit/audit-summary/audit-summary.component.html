@@ -1,0 +1,363 @@
+<div class="main-wrapper">
+  <div class="wrapper dashboard-wrapper">
+    <div class="my-container">
+      <div class="master-body">
+        <div class="title-container">
+          <h3 class="main-title"> {{ 'AUIDT_SUMMARY.TITLE' | translate }}</h3> 
+        </div>
+        <div class="content-container quotation-container">
+          <div [@expandCollapse]="isFilterOpen ? 'open' : 'close'"
+              class="centerContainerPadding common-filter-container">
+              <div class="animated-icon-container" (click)="toggleFilterSection()" *ngIf="(model.items && model.items.length>0)">
+                <img src="assets/images/cta-close-grey.svg" alt="close">
+              </div>
+              
+              <div class="row">
+                <div class="col-sm-8 col-md-8 col-lg-4">
+                  <div class="my-input-group">
+                    <div class="styled-radio-container" *ngFor="let item of searchtypelst;let idx = index">
+                      <input type="radio" class="styled-radio" id="{{item.id}}" name="radio-group" [value]="item.id"
+                         [checked]="idx === 0"
+                        (change)="SetSearchTypemodel(item.id)">
+                      <label for="{{item.id}}">{{item.name}}</label>
+                    </div>
+                    <input maxlength="200" (ngModelChange)="BookingNoValidation()" [(ngModel)]="model.searchtypetext"
+                      type="text" [ngClass]="{ 'is-invalid': model.searchtypetext!='' && _customvalidationforbookid}" />
+                    <div *ngIf="model.searchtypetext!='' && _customvalidationforbookid" class="invalid-feedback">
+                      <div>{{ 'AUIDT_SUMMARY.MSG_BOOKINGNO_ERROR' | translate }}</div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-sm-6 col-md-8 col-xl-8 mobile-margin-top-15">
+                  <div class="my-input-group">
+                    <div class="styled-radio-container" *ngFor="let item of datetypelst;let idx = index">
+                      <input type="radio" class="styled-radio" id="{{item.id}}" name="radio-group1" [value]="item.id" [checked]="idx === 0"
+                        (change)="SetSearchDatetype(item.id)">
+                      <label for="{{item.id}}">{{item.name}}</label>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="my-input-group col-sm-3 col-md-6 col-lg-3">
+                      <div class="calendar-wrapper">
+                        <input type="text" maxlength="10" container="body"
+                          [ngClass]="{ 'is-invalid':  !validator.isValidIf('fromdate',IsDateValidationRequired())}"
+                          readonly=readonly [(ngModel)]="model.fromdate" ngbDatepicker #sdf="ngbDatepicker"
+                          (click)="sdf.toggle()">
+                          <img src="assets/images/cta-close-grey.svg" alt="" class="close-icon" (click)="clearDateInput('Fromdate')" *ngIf="model.fromdate">
+                        <img src="assets/images/calendar-icon.svg" alt="" class="calendar-icon" (click)="sdf.toggle()">
+                        </div>
+                        <div *ngIf="!validator.isValidIf('fromdate',IsDateValidationRequired())" class="invalid-feedback">
+                          <div *ngFor="let error of validator.getErrors('fromdate')">{{ error | translate }}</div>
+                        </div>
+                    </div>
+                    <div class="my-input-group col-sm-3 col-md-5 col-lg-3">
+                      <div class="calendar-wrapper">
+                        <input type="text" maxlength="10" container="body"
+                          [ngClass]="{ 'is-invalid':  !validator.isValidIf('todate',IsDateValidationRequired())}"
+                          readonly=readonly [(ngModel)]="model.todate" ngbDatepicker #sdt="ngbDatepicker"
+                          (click)="sdt.toggle()">
+                          <img src="assets/images/cta-close-grey.svg" alt="" class="close-icon" (click)="clearDateInput('Todate')" *ngIf="model.todate">
+                        <img src="assets/images/calendar-icon.svg" alt="" class="calendar-icon" (click)="sdt.toggle()">
+                      </div>
+                        <div *ngIf="!validator.isValidIf('todate',IsDateValidationRequired())" class="invalid-feedback">
+                          <div *ngFor="let error of validator.getErrors('todate')">{{ error | translate }}</div>
+                        </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="row" *ngIf="toggleFormSection">
+                <div class="col-sm-12">
+              <div class="row marginTop15">
+                <div class="col-sm-3 col-md-3 col-lg-3">
+                  <div class="my-input-group">
+                    <label for="">{{ 'AUIDT_SUMMARY.LBL_CUSTOMER' | translate }}</label>
+                    <ng-select #customer [searchable]="true" [items]="data.customerList" bindLabel="name"
+                      (change)="changeCustomer($event)" [loading]="Initialloading" appendTo="body"
+                       bindValue="id" [hideSelected]="true"
+                      placeholder="--- {{(data.customerList!=null && data.customerList.length!=0? 'AUIDT_SUMMARY.LBL_SELECT':'AUIDT_SUMMARY.MSG_NO_DATA')  | translate }} ---"
+                      [(ngModel)]="model.customerid">
+                    </ng-select>
+                  </div>
+                </div>
+                <div class="col-sm-3 col-md-3 col-lg-3 mobile-margin-top-15">
+                  <div class="my-input-group">
+                    <label for="">{{ 'AUIDT_SUMMARY.LBL_SUPPLIER' | translate }}</label>
+                    <ng-select [multiple]="false" [closeOnSelect]="true" [searchable]="true"
+                      (change)="GetFactoryList($event,model.customerid)" [hideSelected]="true" [loading]=suploading bindLabel="name"
+                      bindValue="id" [items]="data.supplierList" appendTo="body"
+                      placeholder="--- {{ (data.supplierList!=null && data.supplierList.length!=0? 'AUIDT_SUMMARY.LBL_SELECT':'AUIDT_SUMMARY.MSG_NO_DATA' ) | translate }} ---"
+                      [(ngModel)]="model.supplierid">
+                    </ng-select>
+                  </div>
+                </div>
+                <div class="col-sm-3 col-md-3 col-lg-3 mobile-margin-top-15">
+                  <div class="my-input-group">
+                    <label for="">{{ 'AUIDT_SUMMARY.LBL_FACTORY' | translate }}</label>
+                    <ng-select [multiple]="true" class="multiple" [searchable]="true" [loading]="factloading"
+                      [items]="data.factoryList" bindLabel="name" bindValue="id" [hideSelected]="true" appendTo="body"
+                      placeholder="--- {{ (data.factoryList!=null && data.factoryList.length!=0? 'AUIDT_SUMMARY.LBL_SELECT':'AUIDT_SUMMARY.MSG_NO_DATA' ) | translate }} ---"
+                      [(ngModel)]="model.factoryidlst">
+                    </ng-select>
+                  </div>
+                </div>
+                <div class="col-sm-3 col-md-3 col-lg-3 mobile-margin-top-15">
+                  <div class="my-input-group">
+                    <label for="">{{ 'AUIDT_SUMMARY.LBL_STATUS' | translate }}</label>
+                    <ng-select [multiple]="true" [searchable]="true" [loading]=Initialloading [items]="data.statusList"
+                      class="multiple" bindLabel="statusName" bindValue="id" [hideSelected]="true" appendTo="body"
+                      placeholder="--- {{ (data.statusList!=null && data.statusList.length!=0? 'AUIDT_SUMMARY.LBL_SELECT':'AUIDT_SUMMARY.MSG_NO_DATA' ) | translate }} ---"
+                      [(ngModel)]="model.statusidlst">
+                    </ng-select>
+                  </div>
+                </div>
+              </div>
+              <div class="row marginTop15">
+                <div class="col-sm-3 col-md-4 col-lg-3" *ngIf="_IsInternalUser">
+                  <div class="my-input-group">
+                    <label for="">{{ 'AUIDT_SUMMARY.LBL_OFFICE' | translate }}</label>
+                    <ng-select [searchable]="true" [loading]="Initialloading" [items]="data.officeList" bindLabel="name"
+                      bindValue="id" [hideSelected]="true" [multiple]="true" class="multiple" appendTo="body"
+                      placeholder="--- {{(data.officeList!=null && data.officeList.length!=0? 'AUIDT_SUMMARY.LBL_SELECT':'AUIDT_SUMMARY.MSG_NO_DATA')  | translate }} ---"
+                      [(ngModel)]="model.officeidlst">
+                    </ng-select>
+                  </div>
+                </div>
+                <div class="col-sm-3 col-md-4 col-lg-3">
+                  <div class="my-input-group">
+                    <label for="">{{ 'AUIDT_SUMMARY.LBL_FACTORY_COUNTRY' | translate }}</label>
+                    <ng-select appendTo="body"
+                    [items]="auditMasterData.countryList" [virtualScroll]="true"
+                      [loading]="auditMasterData.countryLoading" bindLabel="name" bindValue="id"
+                      (change)="onChangeCountry($event)"
+                      placeholder="--- {{ (auditMasterData.countryList!=null && auditMasterData.countryList.length!=0? 'COMMON.LBL_SELECT':'COMMON.LBL_NO_DATA' ) | translate }} ---"
+                      [typeahead]="auditMasterData.countryInput" [minTermLength]="3"
+                      [(ngModel)]="model.factoryCountryIdList" [multiple]="true"
+                      class="multiple" (scrollToEnd)="getCountryData()" #select>
+                      <ng-template ng-option-tmp let-item="item" let-index="index"
+                        let-search="searchTerm">
+                        <span>{{item.name}}</span>
+                      </ng-template>
+                        <ng-template ng-option-tmp let-item="item">
+                            <div class="text-wrap">{{ item.name }}</div>
+                          </ng-template>
+                      <!-- <ng-template ng-multi-label-tmp
+                        let-items="model.factoryCountryIdList" let-clear="clear">
+                        <div class="ng-value"
+                          *ngIf="model.factoryCountryIdList && model.factoryCountryIdList.length > 0">
+                          <span
+                            class="ng-value-label">{{model.factoryCountryIdList.length}}
+                            {{'COMMON.LBL_SELECTED' | translate }}</span>
+                        </div>
+                      </ng-template> -->
+                    </ng-select>
+                  </div>
+                </div>
+                <div class="col-sm-3 col-md-4 col-lg-3">
+                  <div class="my-input-group">
+                    <label for="">{{ 'AUIDT_SUMMARY.LBL_AUDITOR' | translate }}</label>
+                    <ng-select [items]="_Auditorlist" [multiple]="true" class="multiple" [closeOnSelect]="false" appendTo="body" 
+                    [hideSelected]="true" [searchable]="true" bindLabel="name" bindValue="id"
+                    [loading]=Initialloading
+                    placeholder="--- {{ (_Auditorlist!=null && _Auditorlist.length>0? 'EDIT_AUDIT.LBL_SELECT':'EDIT_AUDIT.MSG_NO_DATA' ) | translate }} ---"
+                    [(ngModel)]="model.auditorIdList">
+                  </ng-select>
+                  </div>
+                </div>
+                <div class="col-sm-3 col-md-4 col-lg-3">
+                  <div class="my-input-group">
+                    <label for="">{{ 'AUIDT_SUMMARY.LBL_SERVICETYPE' | translate }}</label>
+                    <ng-select [items]="_ServiceTypeList" [multiple]="true" class="multiple" [closeOnSelect]="false" appendTo="body"
+                               [hideSelected]="true" [searchable]="true" bindLabel="name" bindValue="id"
+                               [loading]="_ServiceTypeLoading"
+                               placeholder=" --- {{ (_ServiceTypeList!=null && _ServiceTypeList.length!=0? 'COMMON.LBL_SELECT':'COMMON.LBL_NO_DATA' ) | translate }} ---"
+                               [(ngModel)]="model.serviceTypeIdList">
+                    </ng-select>
+                  </div>
+                </div>
+              </div>
+          </div>
+        </div>
+          
+              <div class="row marginTop25">
+                <div class="col-12 col-sm-6">
+                  <button class="tertiary-cta small" (click)="toggleSection()">
+                    <span class="icon" *ngIf="!toggleFormSection">+</span>
+                    <span class="icon" *ngIf="toggleFormSection">-</span>
+                    {{'QUOTATION_SUMMARY.LBL_ADVANCED_SEARCH' | translate}}
+                  </button>
+                </div>
+                <div class="col-12 col-sm-6 text-right mt-3 mt-sm-0"> 
+              <button class="secondary-cta small" (click)="export()" [disabled]="exportDataLoading"
+                *ngIf="model.items != null && model.items.length != 0  && !model.noFound"><img
+                  src="assets/images/red-export.svg" alt="export"> {{ 'AUIDT_SUMMARY.LBL_EXPORT' | translate }}
+                <span *ngIf="exportDataLoading">
+                  <i class="fa fa-refresh fa-spin" aria-hidden="true"></i>
+                </span>
+              </button>
+              &nbsp;
+                <button class="category-cta small mr-2 common-tooltip common-tooltip-top-2" data-tooltip="Reset"
+                (click)="Reset()">
+                <img src="assets/images/reload-new.svg" alt="Reset">  
+                <span>{{'COMMON.LBL_RESET'| translate}}</span>
+              </button>
+            
+              <button class="primary-cta small" [disabled]="searchloading || Initialloading || auditMasterData.countryLoading" (click)="SearchDetails()">
+                {{ 'AUIDT_SUMMARY.LBL_SEARCH_BTN' | translate }}
+                <span *ngIf="searchloading">
+                  <i class="fa fa-refresh fa-spin" aria-hidden="true"></i>
+                </span>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <div class="centerContainerPadding float-left" *ngIf="(model.items && model.items.length>0)">
+          <div class="row">
+            <div class="col-6 col-sm-3 col-xl-2 d-flex">
+              <p  class="search-trigger-heading" [innerHtml]="showPaginationText()"></p>
+            </div>
+            <div class="col-6 col-sm-9 col-xl-10 text-right">
+              <ul class="table-badge-container mobile-hide tablet-hide">
+                    <li (click)="SearchByStatus(status.id)" [ngStyle]="{'background-color': status.statusColor}"
+                    *ngFor="let status of _statuslist | slice:0:4">
+                    <span>{{status.totalCount}}</span> <span>{{status.statusName}}</span>
+                  </li>
+                  <ng-container *ngIf="_statuslist.length>4">
+                    <li class="more has-dropdown">
+                      <img src="assets/images/cta-menu-grey.svg" alt="">
+                      <ul class="cta-dropdown bottom-left">
+                        <li (click)="SearchByStatus(status.id)" [ngStyle]="{'color': status.statusColor}"
+                        *ngFor="let status of _statuslist |  slice:4:_statuslist.length">
+                        <span>{{status.totalCount}}</span> <span>{{status.statusName}}</span>
+                      </li>
+                      </ul>
+                    </li>
+                  </ng-container>
+                </ul>
+                <div class="animated-icon-container" *ngIf="!isFilterOpen" (click)="toggleFilterSection()">
+                  <img src="assets/images/cta-search-grey.svg" alt="search">
+                </div>
+              </div>
+            </div>
+            <div class="row mt-3 desktop-hide">
+							<div class="col-sm-12">
+                  <ul class="table-badge-container">
+                  <li (click)="SearchByStatus(status.id)" [ngStyle]="{'background-color': status.statusColor}"
+                  *ngFor="let status of _statuslist">
+                  <span>{{status.totalCount}}</span>{{status.statusName}}
+                  </li>
+                  </ul>
+                    </div>
+              </div>
+              <div class="quotation-search-container">
+                <div  class="table-container h-scroll table-max-height-650"> 
+                    <table class="pagination-table simple-table bordered">
+                    <thead>
+                      <tr class="sticky-top-row">
+                     <th class="width-180"></th>
+                     <!-- <th class="width-20" *ngIf="IsReportVisible(true)">{{ 'AUIDT_SUMMARY.LBL_REPORT' | translate }}</th>
+                     <th  class="width-100"*ngIf="_IsInternalUser">{{ 'AUIDT_SUMMARY.LBL_SCHEDULE' | translate }}</th> -->
+
+                    <!-- <th>{{ 'AUIDT_SUMMARY.LBL_PONO' | translate }}</th> -->
+                    <th class="width-180">{{ 'AUIDT_SUMMARY.LBL_BOOKING_CUS_NO'| translate }}</th>
+                    <th class="width-180">{{ 'AUIDT_SUMMARY.LBL_REPORTNO' | translate }}</th>
+                    <th class="width-180">{{ 'AUIDT_SUMMARY.LBL_CUSTOMER' | translate }}</th>
+                    <th class="width-180">{{ 'AUIDT_SUMMARY.LBL_SUPPLIER' | translate }}</th>
+                    <th class="width-180">{{ 'AUIDT_SUMMARY.LBL_FACTORY' | translate }}</th>
+                    <th class="width-180">{{ 'AUIDT_SUMMARY.LBL_SERVICEDATE_FROM' | translate }}</th>
+                    <th class="width-180">{{ 'AUIDT_SUMMARY.LBL_SERVICEDATE_TO' | translate }}</th>
+                    <th class="width-180">{{ 'AUIDT_SUMMARY.LBL_SERVICETYPE' | translate }}</th>
+                    <th *ngIf="_IsInternalUser" class="width-180">{{ 'AUIDT_SUMMARY.LBL_QUOTSTATUS' | translate }}</th>
+                    <th *ngIf="_IsInternalUser" class="width-180">{{ 'AUIDT_SUMMARY.LBL_OFFICE' | translate }}</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let iteminfo of model.items" style="border-left: 5px solid #fff;" [ngStyle]="{'border-left-color': GetStatusColor(iteminfo.statusId)}">
+                    <td class="Center_Middle">
+                      <span class="table-cta icon-cta common-tooltip" 
+                      (click)="RedirectPage(_auditredirectpage.Edit,iteminfo.auditId)" data-tooltip="Edit">
+                        <img src="assets/images/cta-edit.svg" alt="Edit">
+                      </span>
+
+                      <span class="table-cta icon-cta common-tooltip" *ngIf="IsReportVisible(false,iteminfo.statusId)"
+                      (click)="RedirectPage(_auditredirectpage.Report,iteminfo.auditId)" data-tooltip="Report">
+                        <img src="assets/images/cta-report.svg" alt="Report">
+                      </span>
+
+                      <span class="table-cta icon-cta common-tooltip" *ngIf="IsCancelVisible(iteminfo.statusId,iteminfo.serviceDateTo,iteminfo.bookingCreatedBy)"
+                      (click)="RedirectPage(_auditredirectpage.Cancel,iteminfo.auditId)" data-tooltip="Cancel">
+                        <img src="assets/images/cta-close.svg" alt="Cancel">
+                      </span>
+                      <span class="table-cta icon-cta common-tooltip" *ngIf="IsRescheduleVisible(iteminfo.statusId,iteminfo.serviceDateTo,iteminfo.bookingCreatedBy)"
+                      (click)="RedirectPage(_auditredirectpage.Reschedule,iteminfo.auditId)" data-tooltip="ReSchedule">
+                        <img src="assets/images/cta-schedule.svg" alt="ReSchedule">
+                      </span>
+                      <span class="table-cta icon-cta common-tooltip" *ngIf="(_IsInternalUser) && (IsScheduleAuditorVisible(iteminfo.statusId))"
+                      (click)="RedirectPage(_auditredirectpage.Schedule_Auditor,iteminfo.auditId)" data-tooltip="Schedule Auditors">
+                        <img src="assets/images/cta-leader.svg" alt="Schedule Auditors">
+                      </span>
+
+                      <!--<span class="table-cta icon-cta no-tooltip has-dropdown" data-tooltip="More"
+                      *ngIf="iteminfo.moreBtnVisible">
+                        <img src="assets/images/cta-more.svg" alt="more">
+                        <ul class="cta-dropdown bottom-right">
+                           <li *ngIf="IsCancelVisible(iteminfo.statusId,iteminfo.serviceDateTo,iteminfo.bookingCreatedBy)">
+                            <img class="icon" src="assets/images/cta-close-grey.svg" alt="">
+                            <span (click)="RedirectPage(_auditredirectpage.Cancel,iteminfo.auditId)">{{'AUIDT_SUMMARY.LBL_CANCEL' | translate}}</span>
+                          </li> -->
+                          <!-- <li *ngIf="IsRescheduleVisible(iteminfo.statusId,iteminfo.serviceDateTo,iteminfo.bookingCreatedBy)">
+                            <img class="icon" src="assets/images/cta-schedule-grey.svg" alt="">
+                            <span (click)="RedirectPage(_auditredirectpage.Reschedule,iteminfo.auditId)">{{'AUIDT_SUMMARY.LBL_POSTPONE' | translate}}</span>
+                          </li> -->
+                          
+                          <!-- <li *ngIf="(_IsInternalUser) && (IsScheduleAuditorVisible(iteminfo.statusId))">
+                            <img class="icon" src="assets/images/cta-leader-grey.svg" alt="">
+                            <span (click)="RedirectPage(_auditredirectpage.Schedule_Auditor,iteminfo.auditId)">{{ 'AUIDT_SUMMARY.LBL_SCHEDULE' | translate }}</span>
+                          </li> 
+                        </ul>
+                        </span>-->
+                    </td>
+                    <td *ngIf="iteminfo.customerBookingNo" class="text-wrap width-180">{{iteminfo.auditId}}/{{iteminfo.customerBookingNo}}</td>
+                    <td *ngIf="!iteminfo.customerBookingNo" class="width-180">{{iteminfo.auditId}}</td>
+                    <td class="width-180 text-wrap">{{iteminfo.reportNo}}</td>
+                    <td class="width-180 text-wrap">{{iteminfo.customerName}}</td>
+                    <td class="width-180 text-wrap">{{iteminfo.supplierName}}</td>
+                    <td class="width-180 text-wrap">{{iteminfo.factoryName}}</td>
+                    <td class="width-180">{{iteminfo.serviceDateFrom}}</td>
+                    <td class="width-180">{{iteminfo.serviceDateTo}}</td>
+                    <td class="width-180">{{iteminfo.serviceType}}</td>
+                    <td class="width-180" *ngIf="_IsInternalUser">{{iteminfo?.quotationStatus?.label}}</td>
+                    <td class="width-180" *ngIf="_IsInternalUser">{{iteminfo.office}}</td>
+                    
+                  </tr>
+                </tbody>
+              </table>
+              </div>
+            </div>
+            <div class="pagination-container">
+              <select class="small" [(ngModel)]="selectedPageSize" (change)="SearchDetails()">
+                <option *ngFor="let item of pagesizeitems" [ngValue]=item>{{item}}</option>
+              </select>
+              <ngb-pagination (pageChange)="onPager($event)" [pageSize]="model.pageSize"
+                [collectionSize]="model.totalCount" [(page)]="model.index" [maxSize]="5"></ngb-pagination>
+            </div>
+          </div>
+          
+
+            <div class="centerContainerPadding" *ngIf="model.noFound">
+              <div class="error-container">
+              <img src="assets/images/no-result.svg" alt="" class="thumbnail">
+              <h4 class="title">{{'AUIDT_SUMMARY.MSG_NO_ITEM_FOUND' | translate}}</h4>
+              <p class="error-subtitle">{{'CS_CONFIG_SUMMARY.LBL_NODATA' | translate}}</p>
+
+              <button (click)="Reset()" class="category-cta">
+                  <img src="assets/images/reload-new.svg" alt="reload">
+                  <span> {{'INSPECTION_CERTIFICATE_SUMMARY.MSG_CLEAR_SEARCH' | translate}}</span></button>
+              </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

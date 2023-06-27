@@ -1,0 +1,66 @@
+﻿@using DTO.Common;
+@{
+    ViewData["Title"] = "AdeoSummaryRemarks";
+}
+
+@model DTO.Kpi.ExportResult
+
+<xls-sheet name="SA_Summary_Remarks">
+    <table xls-begin="A:1" style="border-style:solid">
+        <tr style="background-color:#f5f5f5;font-weight:bold;text-align:center">
+            <th>InspectionID</th>
+            <th>Service Start Date</th>
+            <th>Service Start Date</th>
+            <th>PONo</th>
+            <th>Status</th>
+            <th>ChargeToCust/Supp</th>
+            <th>OfficeName</th>
+            <th>Supplier</th>
+            <th>Supplier code</th>
+            <th>FactoryName</th>
+            <th>customername</th>
+            <th>CustomerContact</th>
+            <th>ServiceRequest</th>
+            <th>Department</th>
+            <th>AQL Level</th>
+            <th>Item</th>
+            <th>New Item</th>
+            <th>CombineWith</th>
+            <th>Result-Conclusion</th>
+            <th>RemarkNo</th>
+            <th>Remarks</th>
+            <th>Result - Pending / Fail</th>
+            <th>Result Comment</th>
+        </tr>
+        @foreach (var item in Model.Data)
+        {
+    <tr>
+        <td width="150px">@item.BookingNo</td>
+        <td width="150px" xls-type="date" xls-format="@ApiCommonData.StandardDateFormat">@item.InspectionStartDate</td>
+        <td width="250px" xls-type="date" xls-format="@ApiCommonData.StandardDateFormat">@item.InspectionEndDate</td>
+        <td width="150px">@Html.Raw(@item.PONumber)</td>
+        <td width="150px">@item.bookingStatus</td>
+        <td width="250px">@Html.Raw(@item.PaidBy)</td>
+        <td width="250px">@Html.Raw(@item.Office)</td>
+        <td width="250px">@Html.Raw(@item.SupplierName)</td>
+        <td width="250px">@Html.Raw(@item.SupplierCode)</td>
+        <td width="250px">@Html.Raw(@item.FactoryName)</td>
+        <td width="250px">ADEO SERVICES</td>
+        <td width="250px">@Html.Raw(@item.CustomerContact)</td>
+        <td width="250px">@Html.Raw(@item.ServiceTypeName)</td>
+        <td width="250px">@Html.Raw(@item.DeptCode)</td>
+        <td width="250px">@item.AQLLevelName</td>
+        <td width="250px">@Html.Raw(@item.ProductName)</td>
+        <td width="250px">@Html.Raw(@item.NewProduct)</td>
+        <td width="150px">@item.CombineId</td>
+        <td>@Html.Raw(@item.ReportStatus)</td>
+        <td xls-type="number">@item.FBRemarkNumber</td>
+        <td width="250px">@Html.Raw(@item.ReportRemarks)</td>
+        <td width="150px">@item.FBRemarkResult</td>
+        <td width="250px">@Html.Raw(@item.FbReportComments)</td>
+    </tr>
+        }
+    </table>
+</xls-sheet>
+
+

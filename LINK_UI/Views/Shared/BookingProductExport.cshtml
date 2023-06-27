@@ -1,0 +1,69 @@
+﻿
+@{
+    ViewData["Title"] = "BookingProductExport";
+}
+
+@model List<DTO.Inspection.BookingProductsExportData>
+
+<xls-sheet name="Booking Product Summary">
+    <table xls-begin="A:1" style="border-style:solid">
+        <tr style="background-color:#f5f5f5;font-weight:bold;text-align:center">
+            <th>Product Id</th>
+            <th>Product Desc</th>
+            <th>PO No</th>
+            <th>Booking Qty</th>
+            <th>Picking Qty</th>
+            <th>AQL</th>
+            <th>Critical</th>
+            <th>Major</th>
+            <th>Minor</th>
+            <th>Sample Size</th>
+            <th>Combine Type</th>
+            <th>Unit</th>
+            <th>ETD</th>
+            <th>Destination Country</th>
+            <th>Factory Ref</th>
+            <th>Product Category</th>
+            <th>Product Sub Category</th>
+            <th>Product Sub2 Category</th>
+            <th>Barcode</th>
+            <th>Remarks</th>
+            <th>Is Echo Pack</th>
+            <th>Display Master Product</th>
+            <th>Display Child Product</th>
+            <th>New Product</th>
+            <th>Product Serial No</th>
+        </tr>
+
+        @foreach (var item in Model)
+        {
+    <tr>
+        <td width="150px">@Html.Raw(@item.ProductName)</td>
+        <td width="150px">@Html.Raw(@item.ProductDescription)</td>
+        <td width="150px">@Html.Raw(@item.PoNumber)</td>
+        <td width="150px" xls-type="number" style="text-align:center">@item.BookingQuantity</td>
+        <td width="150px" xls-type="number" style="text-align:center">@item.PickingQty</td>
+        <td width="150px">@item.Aql</td>
+        <td width="150px" xls-type="number" style="text-align:center">@item.Critical</td>
+        <td width="150px" xls-type="number" style="text-align:center">@item.Major</td>
+        <td width="150px" xls-type="number" style="text-align:center">@item.Minor</td>
+        <td width="150px" xls-type="number" style="text-align:center">@(item.CombineProductId > 0 ? item.CombineAqlQuantity : item.AqlQty)</td>
+        <td width="150px">@item.CombineProductId</td>
+        <td width="150px">@item.Unit</td>
+        <td width="150px">@item.Etd</td>
+        <td width="150px">@Html.Raw(@item.DestinationCountry)</td>
+        <td width="150px">@Html.Raw(@item.FactoryReference)</td>
+        <td width="150px">@Html.Raw(@item.ProductCategory)</td>
+        <td width="150px">@Html.Raw(@item.ProductSubCategory)</td>
+        <td width="150px">@Html.Raw(@item.ProductSubCategory2)</td>
+        <td width="150px">@Html.Raw(@item.Barcode)</td>
+        <td width="150px">@Html.Raw(@item.Remarks)</td>
+        <td width="150px">@item.IsEcoPack</td>
+        <td width="150px">@item.DisplayMaster</td>
+        <td width="150px">@Html.Raw(@item.DisplayChild)</td>
+        <td width="150px">@Html.Raw(@item.IsNewProduct)</td>
+        <td width="150px">@Html.Raw(@item.ProductSerialNo.GetValueOrDefault())</td>
+    </tr>
+        }
+    </table>
+</xls-sheet>

@@ -1,0 +1,22 @@
+﻿{{> dbimports}}
+
+namespace {{namespace}}
+{
+    public partial class {{class}} : DbContext
+    {
+{{> dbsets}}
+{{#if entity-type-errors}}
+{{#each entity-type-errors}}
+{{spaces 8}}{{{entity-type-error}}}
+{{/each}}
+
+{{/if}}
+
+{{{on-model-creating}}}
+public {{class}}(DbContextOptions<{{class}}> options)
+:base(options)
+{
+
+}
+    }
+}

@@ -1,0 +1,4 @@
+﻿CREATE TABLE QU_BillMethod (
+	Id INT NOT NULL  PRIMARY KEY, 
+	Label NVARCHAR(200)
+)

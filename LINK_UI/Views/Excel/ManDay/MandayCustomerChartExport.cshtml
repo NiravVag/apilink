@@ -1,0 +1,135 @@
+﻿
+@{
+    ViewData["Title"] = "MandayCustomerChartExport";
+}
+@using Entities.Enums;
+@model DTO.Manday.MandayCustomerChartExportResponse
+
+<style>
+    .table {
+        empty-cells: show;
+        border-style: 1px solid;
+    }
+
+    td {
+        border-style: solid;
+    }
+</style>
+
+<xls-sheet name="Customer-Manday">
+    <table xls-begin="A:1" style="border-style:solid">
+        <tr>
+            <td style="font-weight:bold">Service : </td>
+            <td width="100px">@Model.RequestFilters.Service</td>
+
+            <td width="130px" style="font-weight:bold">Service Date From :</td>
+            <td width="100px">@Model.RequestFilters.ServiceDateFrom</td>
+
+            <td width="120px" style="font-weight:bold">Service Date To :</td>
+            <td width="100px">@Model.RequestFilters.ServiceDateTo</td>
+
+            <td width="130px" style="font-weight:bold">Compared Service Date From :</td>
+            <td width="100px">@Model.RequestFilters.ComparedServiceDateFrom</td>
+
+            <td width="120px" style="font-weight:bold">Compared Service Date To :</td>
+            <td width="100px">@Model.RequestFilters.ComparedServiceDateTo</td>
+
+            @if (!string.IsNullOrEmpty(@Model.RequestFilters.CountryIdList))
+            {
+                <td width="100px" style="font-weight: bold">Country :</td>
+                <td width="100px">@Model.RequestFilters.CountryIdList</td>
+            }
+            @if (!string.IsNullOrEmpty(@Model.RequestFilters.OfficeIdList))
+            {
+                <td style="font-weight: bold">Office :</td>
+                <td width="100px">@Model.RequestFilters.OfficeIdList</td>
+            }
+            @if (!string.IsNullOrEmpty(@Model.RequestFilters.CustomerList))
+            {
+                <td style="font-weight: bold">Customer :</td>
+                <td width="100px">@Html.Raw(@Model.RequestFilters.CustomerList)</td>
+            }
+            @if (!string.IsNullOrEmpty(@Model.RequestFilters.MandayCustomerSubCountry))
+            {
+                <td width="100px" style="font-weight: bold">SubCustomer :</td>
+                <td width="100px">@Model.RequestFilters.MandayCustomerSubCountry</td>
+            }
+        </tr>
+        <tr>
+            <td></td>
+        </tr>
+        <tr style="background-color:#f5f5f5;font-weight:bold;text-align:center">
+            <th style="border-style:solid">Customer Name</th>
+            <th style="border-style:solid; text-align:center">Man Day</th>
+            <th style="border-style:solid; text-align:center">Man Day %</th>
+            @if (Model.ServiceId == (int)Service.InspectionId)
+            {
+                <th style="border-style:solid; text-align:center">Inspection</th>
+                <th style="border-style:solid; text-align:center">Report</th>
+                <th style="border-style:solid; text-align:center">Inspected Qty</th>
+                <th style="border-style:solid; text-align:center">Order Qty</th>
+                <th style="border-style:solid; text-align:center">Presented Qty</th>
+                @if (Model.IsCompareData)
+                {
+                    <th style="border-style:solid; text-align:center">Compared Manday</th>
+                    <th style="border-style:solid; text-align:center">Compared Percentage</th>
+                    <th style="border-style:solid; text-align:center">Compared Inspection</th>
+                    <th style="border-style:solid; text-align:center">Compared Report</th>
+                    <th style="border-style:solid; text-align:center">Compared Inspected Qty</th>
+                    <th style="border-style:solid; text-align:center">Compared Order Qty</th>
+                    <th style="border-style:solid; text-align:center">Compared Presented Qty</th>
+                }
+            }
+            else
+            {
+                @if (Model.IsCompareData)
+                {
+                    <th style="border-style:solid; text-align:center">Compared Manday</th>
+                    <th style="border-style:solid; text-align:center">Compared Percentage</th>
+                }
+            }
+        </tr>
+
+        @foreach (var item in Model.Data)
+        {
+            <tr>
+                <td width="250px" style="border-style:solid">@Html.Raw(@item.CustomerName)</td>
+                <td style="text-align:center; border-style:solid" xls-type="number">@item.MandayCount</td>
+                <td style="text-align:center; border-style:solid" xls-type="number">@item.Percentage</td>
+                @if (Model.ServiceId == (int)Service.InspectionId)
+                {
+                    <td style="text-align:center; border-style:solid" xls-type="number">@item.InspectionCount</td>
+                    <td style="text-align:center; border-style:solid" xls-type="number">@item.ReportCount</td>
+                    <td style="text-align:center; border-style:solid" xls-type="number">@item.InspectedQty</td>
+                    <td style="text-align:center; border-style:solid" xls-type="number">@item.OrderQty</td>
+                    <td style="text-align:center; border-style:solid" xls-type="number">@item.PresentedQty</td>
+                    @if (Model.IsCompareData)
+                    {
+                        <td style="text-align:center; border-style:solid" xls-type="number">@item.ComparedMandayCount</td>
+                        <td style="text-align:center; border-style:solid" xls-type="number">@item.ComparedPercentage</td>
+                        <td style="text-align:center; border-style:solid" xls-type="number">@item.ComparedInspectionCount</td>
+                        <td style="text-align:center; border-style:solid" xls-type="number">@item.ComparedReportCount</td>
+                        <td style="text-align:center; border-style:solid" xls-type="number">@item.ComparedInspectedQty</td>
+                        <td style="text-align:center; border-style:solid" xls-type="number">@item.ComparedOrderQty</td>
+                        <td style="text-align:center; border-style:solid" xls-type="number">@item.ComparedPresentedQty</td>
+                    }
+                }
+                else
+                {
+                    @if (Model.IsCompareData)
+                    {
+                        <td style="text-align:center; border-style:solid" xls-type="number">@item.ComparedMandayCount</td>
+                        <td style="text-align:center; border-style:solid" xls-type="number">@item.ComparedPercentage</td>
+                    }
+                }
+            </tr>
+        }
+        <tr>
+            <td style="font-weight:bold; border-style:solid; text-align:center">Total</td>
+            <td style="text-align:center; border-style:solid;text-align:center" xls-type="number">@Model.Total</td>
+            <td style="text-align:center; border-style:solid" xls-type="number">100</td>
+        </tr>
+    </table>
+</xls-sheet>
+
+

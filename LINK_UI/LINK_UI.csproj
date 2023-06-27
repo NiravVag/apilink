@@ -1,0 +1,269 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net5.0</TargetFramework>
+    <TypeScriptCompileBlocked>true</TypeScriptCompileBlocked>
+    <TypeScriptToolsVersion>Latest</TypeScriptToolsVersion>
+    <TypeScriptExperimentalDecorators>True</TypeScriptExperimentalDecorators>
+    <TypeScriptEmitDecoratorMetadata>True</TypeScriptEmitDecoratorMetadata>
+    <IsPackable>false</IsPackable>
+    <SpaRoot>ClientApp\</SpaRoot>
+    <DefaultItemExcludes>$(DefaultItemExcludes);$(SpaRoot)node_modules\**</DefaultItemExcludes>
+
+    <!-- Set this to true if you enable server-side prerendering -->
+    <BuildServerSideRenderer>false</BuildServerSideRenderer>
+    <AspNetCoreModuleName>AspNetCoreModule</AspNetCoreModuleName>
+    <AspNetCoreHostingModel>OutOfProcess</AspNetCoreHostingModel>
+    <PublishWithAspNetCoreTargetManifest>false</PublishWithAspNetCoreTargetManifest>
+    <Configurations>Debug;Release;muliServers</Configurations>
+    <LangVersion>latest</LangVersion>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <WarningLevel>0</WarningLevel>
+    <NoWarn />
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+    <WarningsAsErrors />
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='muliServers|AnyCPU'">
+    <DefineConstants>TRACE;MULTI</DefineConstants>
+  </PropertyGroup>
+
+  <ItemGroup>
+
+ <PackageReference Include="Microsoft.CodeAnalysis.Common" Version="3.8.0" />
+    <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="8.1.1" />
+	<!--<PackageReference Include="FastReport.Core" Version="2022.2.5" />
+    <PackageReference Include="FastReport.Web" Version="2022.2.5" />-->
+    <PackageReference Include="jose-jwt" Version="3.2.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="5.0.9" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="5.0.9" />
+    <PackageReference Include="Microsoft.AspNetCore.SignalR" Version="1.1.0" />
+    <PackageReference Include="Microsoft.AspNetCore.SpaServices" Version="3.1.18" />
+    <PackageReference Include="Microsoft.AspNetCore.SpaServices.Extensions" Version="5.0.9" />
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="5.0.2" />
+    <PackageReference Include="PdfSharp" Version="1.50.5147" />
+    <PackageReference Include="Serilog.AspNetCore" Version="4.1.0" />
+    <PackageReference Include="Serilog.Settings.Configuration" Version="3.2.0" />
+    <PackageReference Include="serilog.sinks.elasticsearch" Version="8.4.1" />
+    <PackageReference Include="Microsoft.CodeAnalysis.Common" Version="3.8.0" />
+    <PackageReference Include="Serilog.Sinks.RollingFile" Version="3.3.0" />
+    <PackageReference Include="Shyjus.BrowserDetector" Version="2.0.0" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.1.5" />
+    <PackageReference Include="WebPush" Version="1.0.12" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <!-- Don't publish the SPA source files, but do show them in the project files list -->
+    <Compile Remove="ClientApp\src\app\components\products\**" />
+    <Compile Remove="ClientApp\src\app\components\supplier\new-supplier\**" />
+    <Content Remove="$(SpaRoot)**" />
+    <Content Remove="ClientApp\src\app\components\products\**" />
+    <Content Remove="ClientApp\src\app\components\supplier\new-supplier\**" />
+    <EmbeddedResource Remove="ClientApp\src\app\components\products\**" />
+    <EmbeddedResource Remove="ClientApp\src\app\components\supplier\new-supplier\**" />
+    <None Remove="$(SpaRoot)**" />
+    <None Remove="ClientApp\src\app\components\products\**" />
+    <None Remove="ClientApp\src\app\components\supplier\new-supplier\**" />
+    <None Include="$(SpaRoot)**" Exclude="$(SpaRoot)node_modules\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="ClientApp\src\app\app.routing.ts" />
+    <None Remove="ClientApp\src\app\components\Audit\edit-audit\edit-audit.component.js" />
+    <None Remove="ClientApp\src\app\components\Audit\edit-audit\edit-audit.component.js.map" />
+    <None Remove="ClientApp\src\app\components\Audit\edit-audit\edit-audit.component.spec.ts" />
+    <None Remove="ClientApp\src\app\components\breadcrumb\breadcrumb.component.ts" />
+    <None Remove="ClientApp\src\app\components\common\button.component.ts" />
+    <None Remove="ClientApp\src\app\components\common\detail.component.ts" />
+    <None Remove="ClientApp\src\app\components\common\index.ts" />
+    <None Remove="ClientApp\src\app\components\common\jsonHelper.ts" />
+    <None Remove="ClientApp\src\app\components\common\linkdateformatter.ts" />
+    <None Remove="ClientApp\src\app\components\common\PopupInfo.ts" />
+    <None Remove="ClientApp\src\app\components\common\summary.component.ts" />
+    <None Remove="ClientApp\src\app\components\common\validator.ts" />
+    <None Remove="ClientApp\src\app\components\common\waiting.component.ts" />
+    <None Remove="ClientApp\src\app\components\currency\officecontrol.component.ts" />
+    <None Remove="ClientApp\src\app\components\currency\rate-matrix\ratematrix.component.ts" />
+    <None Remove="ClientApp\src\app\components\error\error.component.ts" />
+    <None Remove="ClientApp\src\app\components\expense\expense-claim-list\expense-claim-list.component.ts" />
+    <None Remove="ClientApp\src\app\components\hr\edit-staff\edit-staff.component.ts" />
+    <None Remove="ClientApp\src\app\components\hr\holiday-master\holidaymaster.component.ts" />
+    <None Remove="ClientApp\src\app\components\hr\leave-summary\leavesummary.component.ts" />
+    <None Remove="ClientApp\src\app\components\hr\office-control\officecontrol.component.ts" />
+    <None Remove="ClientApp\src\app\components\hr\staff-summary\staffsummary.component.ts" />
+    <None Remove="ClientApp\src\app\components\kpi\internal-business\internalbusiness.component.ts" />
+    <None Remove="ClientApp\src\app\components\kpi\kpi-routing.module.ts" />
+    <None Remove="ClientApp\src\app\components\kpi\kpi.module.ts" />
+    <None Remove="ClientApp\src\app\components\kpi\template-summary\templatesummary.component.ts" />
+    <None Remove="ClientApp\src\app\components\kpi\view-export\viewexport.component.ts" />
+    <None Remove="ClientApp\src\app\components\product-management\product-category-sub2\product-category-sub2-summary\product-category-sub2-summary.component.js" />
+    <None Remove="ClientApp\src\app\components\product-management\product-category-sub2\product-category-sub2-summary\product-category-sub2-summary.component.js.map" />
+    <None Remove="ClientApp\src\app\components\quotation\quotation-summary\quotationsummary.component.ts" />
+    <None Remove="ClientApp\src\app\components\supplier\edit-supplier\edit-supplier.component.js" />
+    <None Remove="ClientApp\src\app\components\supplier\edit-supplier\edit-supplier.component.js.map" />
+    <None Remove="ClientApp\src\app\components\supplier\supplier-summary\suppliersummary.component.ts" />
+    <None Remove="ClientApp\src\app\_Models\currency\currencyrate.model.ts" />
+    <None Remove="ClientApp\src\app\_Models\currency\echange-rate.model.ts" />
+    <None Remove="ClientApp\src\app\_Models\currency\ratematrix.data.model.ts" />
+    <None Remove="ClientApp\src\app\_Models\currency\ratematrix.model.ts" />
+    <None Remove="ClientApp\src\app\_Models\customer\quotation.model.js" />
+    <None Remove="ClientApp\src\app\_Models\customer\quotation.model.js.map" />
+    <None Remove="ClientApp\src\app\_Models\customer\quotation.model.ts" />
+    <None Remove="ClientApp\src\app\_Models\data-management\dm.model.ts" />
+    <None Remove="ClientApp\src\app\_Models\data-management\dm.module.model.ts" />
+    <None Remove="ClientApp\src\app\_Models\edit-staff.model.ts" />
+    <None Remove="ClientApp\src\app\_Models\expense\expenseclaim.model.ts" />
+    <None Remove="ClientApp\src\app\_Models\expense\expenseclaimlist.model.ts" />
+    <None Remove="ClientApp\src\app\_Models\header\notification.model.ts" />
+    <None Remove="ClientApp\src\app\_Models\header\task.model.ts" />
+    <None Remove="ClientApp\src\app\_Models\holidaymaster.model.ts" />
+    <None Remove="ClientApp\src\app\_Models\hr\leave-request.model.ts" />
+    <None Remove="ClientApp\src\app\_Models\hr\leave-summary.model.ts" />
+    <None Remove="ClientApp\src\app\_Models\kpi\column.model.ts" />
+    <None Remove="ClientApp\src\app\_Models\kpi\datasource.model.ts" />
+    <None Remove="ClientApp\src\app\_Models\kpi\filter.model.ts" />
+    <None Remove="ClientApp\src\app\_Models\kpi\module.model.ts" />
+    <None Remove="ClientApp\src\app\_Models\kpi\template.column.model.ts" />
+    <None Remove="ClientApp\src\app\_Models\kpi\template.filter.model.ts" />
+    <None Remove="ClientApp\src\app\_Models\kpi\template.model.ts" />
+    <None Remove="ClientApp\src\app\_Models\kpi\template.view.model.ts" />
+    <None Remove="ClientApp\src\app\_Models\menuItem.model.ts" />
+    <None Remove="ClientApp\src\app\_Models\role.model.ts" />
+    <None Remove="ClientApp\src\app\_Models\staffsummary.model.ts" />
+    <None Remove="ClientApp\src\app\_Models\summary.model.ts" />
+    <None Remove="ClientApp\src\app\_Models\supplier\edit-supplier.model.ts" />
+    <None Remove="ClientApp\src\app\_Models\user.model.ts" />
+    <None Remove="ClientApp\src\app\_Models\worker\worker.model.ts" />
+    <None Remove="ClientApp\src\app\_Services\common\worker.service.ts" />
+    <None Remove="ClientApp\src\app\_Services\currency\currency.service.ts" />
+    <None Remove="ClientApp\src\app\_Services\data-management\dm.service.ts" />
+    <None Remove="ClientApp\src\app\_Services\expense\expense.service.ts" />
+    <None Remove="ClientApp\src\app\_Services\hr.service.ts" />
+    <None Remove="ClientApp\src\app\_Services\kpi\kpi.service.ts" />
+    <None Remove="ClientApp\src\assets\validator\edit-job.valid.json" />
+    <None Remove="ClientApp\src\assets\validator\expense\expenseclaim-list.valid.json" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\BI\BI.csproj" />
+    <ProjectReference Include="..\Components.Core\Components.Core.csproj" />
+    <ProjectReference Include="..\Components.Web\Components.Web.csproj" />
+    <ProjectReference Include="..\Contracts\Contracts.csproj" />
+    <ProjectReference Include="..\DAL\DAL.csproj" />
+    <ProjectReference Include="..\EmailComponent\EmailComponent.csproj" />
+    <ProjectReference Include="..\FileGenerationComponent\FileGenerationComponent.csproj" />
+    <ProjectReference Include="..\Logger\LoggerComponent.csproj" />
+    <ProjectReference Include="..\MigraDoc.DocumentObjectModel\MigraDoc.DocumentObjectModel.csproj" />
+    <ProjectReference Include="..\MigraDoc.Rendering\MigraDoc.Rendering.csproj" />
+    <ProjectReference Include="..\PdfSharp.Charting\PdfSharp.Charting.csproj" />
+    <ProjectReference Include="..\PdfSharp\PdfSharp.csproj" />
+    <ProjectReference Include="..\RabbitMQUtility\RabbitMQUtility.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <TypeScriptCompile Include="ClientApp\src\app\app.routing.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\components\breadcrumb\breadcrumb.component.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\components\common\detail.component.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\components\common\index.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\components\common\jsonHelper.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\components\common\linkdateformatter.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\components\common\summary.component.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\components\common\validator.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\components\common\button.component.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\components\common\waiting.component.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\components\currency\exchange-rate\exchangerate.component.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\components\currency\rate-matrix\ratematrix.component.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\components\error\error.component.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\components\expense\expense-claim-list\expense-claim-list.component.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\components\hr\edit-staff\edit-staff.component.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\components\hr\holiday-master\holidaymaster.component.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\components\hr\leave-summary\leavesummary.component.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\components\hr\office-control\officecontrol.component.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\components\hr\staff-summary\staffsummary.component.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\components\kpi\internal-business\internalbusiness.component.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\components\kpi\kpi-routing.module.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\components\kpi\kpi.module.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\components\kpi\template-summary\templatesummary.component.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\components\kpi\view-export\viewexport.component.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\components\quotation\quotation-summary\quotationsummary.component.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\components\supplier\supplier-summary\suppliersummary.component.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\_Models\currency\currencyrate.model.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\_Models\currency\echange-rate.model.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\_Models\currency\ratematrix.data.model.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\_Models\currency\ratematrix.model.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\_Models\customer\quotation.model.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\_Models\data-management\dm.model.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\_Models\data-management\dm.module.model.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\_Models\expense\expenseclaim.model.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\_Models\expense\expenseclaimlist.model.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\_Models\header\notification.model.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\_Models\header\task.model.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\_Models\hr\leave-request.model.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\_Models\hr\leave-summary.model.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\_Models\kpi\column.model.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\_Models\kpi\datasource.model.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\_Models\kpi\filter.model.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\_Models\kpi\module.model.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\_Models\kpi\template.column.model.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\_Models\kpi\template.filter.model.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\_Models\kpi\template.model.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\_Models\kpi\template.view.model.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\_Models\summary.model.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\_Models\supplier\edit-supplier.model.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\_Models\worker\worker.model.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\_Services\common\worker.service.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\_Services\currency\currency.service.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\_Services\data-management\dm.service.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\_Services\expense\expense.service.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\_Services\kpi\kpi.service.ts" />
+    <TypeScriptCompile Include="ClientApp\src\assets\validator\expense\expenseclaim-list.valid.json" />
+    <TypeScriptCompile Include="ClientApp\src\assets\validator\hr\edit-job.valid.json" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="ClientApp\src\app\components\customer\customer-contact-summary\" />
+    <Folder Include="ClientApp\src\app\components\customer\edit-customer-contact\" />
+    <Folder Include="ClientApp\src\app\components\NewFolder\" />
+    <Folder Include="Views\Report_Templates\EAQF\" />
+    <Folder Include="Views\Report_Templates\SGT\" />
+    <Folder Include="wwwroot\Documents\Purchase_Order\" />
+    <Folder Include="wwwroot\tmp\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="wwwroot\Documents\Insp_Terms\API_Insp_Book_Terms12112019.pdf" />
+  </ItemGroup>
+
+  <Target Name="DebugEnsureNodeEnv" BeforeTargets="Build" Condition=" '$(Configuration)' == 'Debug' And !Exists('$(SpaRoot)node_modules') ">
+    <!-- Ensure Node.js is installed -->
+    <Exec Command="node --version" ContinueOnError="true">
+      <Output TaskParameter="ExitCode" PropertyName="ErrorCode" />
+    </Exec>
+    <Error Condition="'$(ErrorCode)' != '0'" Text="Node.js is required to build and run this project. To continue, please install Node.js from https://nodejs.org/, and then restart your command prompt or IDE." />
+    <Message Importance="high" Text="Restoring dependencies using 'npm'. This may take several minutes..." />
+   
+  </Target>
+
+  <Target Name="PublishRunWebpack" AfterTargets="ComputeFilesToPublish">
+    <!-- As part of publishing, ensure the JS resources are freshly built in production mode -->
+   
+
+    <!-- Include the newly-built files in the publish output -->
+    <ItemGroup>
+      <DistFiles Include="$(SpaRoot)dist\**; $(SpaRoot)dist-server\**" />
+      <DistFiles Include="$(SpaRoot)node_modules\**" Condition="'$(BuildServerSideRenderer)' == 'true'" />
+      <ResolvedFileToPublish Include="@(DistFiles->'%(FullPath)')" Exclude="@(ResolvedFileToPublish)">
+        <RelativePath>%(DistFiles.Identity)</RelativePath>
+        <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+      </ResolvedFileToPublish>
+    </ItemGroup>
+  </Target>
+
+  <Target Name="PreBuild" BeforeTargets="PreBuildEvent">
+  </Target>
+
+  <ProjectExtensions><VisualStudio><UserProperties ClientApp_4src_4app_4_3Services_4hr_4hr_1service_1js_1map__JSONSchema="http://json.schemastore.org/tsdrc" appsettings_1json__JSONSchema="" Views_4Shared_4PPT_4KPI_3API_1json__JSONSchema="https://gitpod.io/schemas/gitpod-schema.json" /></VisualStudio></ProjectExtensions>
+
+</Project>

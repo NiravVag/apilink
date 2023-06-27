@@ -1,0 +1,340 @@
+<div class="main-wrapper">
+    <div class="wrapper dashboard-wrapper">
+        <div class="my-container">
+            <div class="master-body">
+                <div class="title-container">
+                    <h3 class="main-title"> {{ 'SUPPLIER_SUMMARY.TITLE' | translate }}</h3>
+                </div>
+                <div class="content-container quotation-container">
+                    <div [@expandCollapse]="isFilterOpen ? 'open' : 'close'"
+                        class="centerContainerPadding common-filter-container">
+                        <div class="animated-icon-container" (click)="toggleFilterSection()"
+                            *ngIf="(model.items && model.items.length>0)">
+                            <img src="assets/images/cta-close-grey.svg" alt="close">
+                        </div>
+
+                        <div class="row">
+                            <div class="col-sm-3 col-lg-3">
+                                <div class="my-input-group">
+                                    <label class="required">{{ 'SUPPLIER_SUMMARY.LBL_TYPE' | translate }}</label>
+                                    <ng-select [items]="data.typeList" [multiple]="true" [closeOnSelect]="false"
+                                        appendTo="body" [searchable]="true" bindLabel="name" [loading]="loading"
+                                        bindValue="id" (clear)="clearSupplierDetails();"
+                                        placeholder="--- {{ 'SUPPLIER_SUMMARY.LBL_SELECT' | translate }} ---"
+                                        [(ngModel)]="model.typeValues"
+                                        [ngClass]="{ 'is-invalid': !validator.isValid('typeValues')}"
+                                        (change)="selectSupp($event)" class="multiple">
+                                    </ng-select>
+                                    <div *ngIf="!validator.isValid('typeValues')" class="invalid-feedback"
+                                        style="display:block">
+                                        <div *ngFor="let error of validator.getErrors('typeValues')">{{ error |
+                                            translate }}</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-3 col-lg-3 mobile-margin-top-15">
+                                <div class="my-input-group">
+                                    <label>{{ 'SUPPLIER_SUMMARY.LBL_COUNTRY' | translate }}</label>
+
+                                    <ng-select [items]="countryList" appendTo="body" [virtualScroll]="true"
+                                        [loading]="countryLoading" (change)="onChangeCountry($event)" class="multiple"
+                                        [multiple]="true" [(ngModel)]="model.countryValues" [closeOnSelect]="true"
+                                        [searchable]="true" bindLabel="name" bindValue="id" [typeahead]="countryInput"
+                                        [minTermLength]="4" appendTo="body"
+                                        placeholder="--- {{ 'SUPPLIER_SUMMARY.LBL_SELECT' | translate }} ---"
+                                        (scrollToEnd)="getCountryData(true)" #select>
+                                        <ng-template ng-option-tmp let-item="item">
+                                            <div class="text-wrap">{{ item.name }}</div>
+                                        </ng-template>
+                                    </ng-select>
+                                </div>
+                            </div>
+
+                            <div class="col-sm-4  col-lg-4 mobile-margin-top-15">
+                                <div class="my-input-group">
+                                    <label>{{ 'SUPPLIER_SUMMARY.LBL_NAME' | translate }}</label>
+                                    <ng-select [items]="supplierList" [virtualScroll]="true" appendTo="body"
+                                        [loading]="supplierLoading" [(ngModel)]="model.suppValues"
+                                        [closeOnSelect]="true" [searchable]="true" bindLabel="name" bindValue="id"
+                                        [typeahead]="supplierInput" [minTermLength]="3" appendTo="body"
+                                        placeholder="--- {{ 'SUPPLIER_SUMMARY.LBL_SELECT' | translate }} ---"
+                                        (scrollToEnd)="getSupplierData(true)" (clear)="clearSupplierDetails()" #select>
+                                        <ng-template ng-option-tmp let-item="item">
+                                            <div class="text-wrap">{{ item.name }}</div>
+                                        </ng-template>
+                                    </ng-select>
+                                </div>
+                            </div>
+                            <div class="col-sm-2  col-lg-2 mobile-margin-top-15" style="margin-top: 42px;">
+                                <div class="my-input-group">
+                                    <div class="styled-checkbox-container">
+                                        <input class="styled-checkbox" id="checkbox_name" type="checkbox"
+                                            (change)="checkBoxChangeEvent()" [(ngModel)]="model.isRegionalNameChecked">
+                                        <label for="checkbox_name">{{ 'SUPPLIER_SUMMARY.LBL_REGIONAL_NAME' | translate
+                                            }}</label>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row" [hidden]="!toggleFormSection">
+                            <div class="col-sm-3 col-md-3 col-lg-3">
+                                <div class="my-input-group marginTop10 select-for-filter">
+                                    <label for="">{{ 'BOOKING_SUMMARY.LBL_CUSTOMER' | translate }}</label>
+                                    <ng-select appendTo="body" [items]="summaryModel.customerList"
+                                        [virtualScroll]="true" appendTo="body" [loading]="summaryModel.customerLoading"
+                                        bindLabel="name" bindValue="id" (change)="customerChange($event)"
+                                        placeholder="--- {{ (summaryModel.customerList!=null && summaryModel.customerList.length!=0? 'COMMON.LBL_SELECT':'COMMON.LBL_NO_DATA' ) | translate }} ---"
+                                        [typeahead]="summaryModel.customerInput" [minTermLength]="3"
+                                        [(ngModel)]="model.customerId" [multiple]="false" (clear)="clearCustomer()"
+                                        (scrollToEnd)="getCustomerData()" #select>
+                                        <ng-template ng-option-tmp let-item="item">
+                                            <!-- <b>{{index}} </b><span>{{item.name}}</span> -->
+                                            <div class="text-wrap"><span>{{item.name}}</span></div>
+                                        </ng-template>
+                                    </ng-select>
+                                </div>
+                            </div>
+                            <div class="col-sm-3 col-md-3 col-lg-3">
+                                <div class="my-input-group marginTop10 select-for-filter">
+                                    <label for="">{{ 'SUPPLIER_SUMMARY.LBL_REGION' | translate }}</label>
+                                    <ng-select appendTo="body" [items]="summaryModel.provinceList"
+                                        [virtualScroll]="true" appendTo="body" [loading]="summaryModel.provinceLoading"
+                                        bindLabel="name" bindValue="id" (change)="provinceChange($event)"
+                                        placeholder="--- {{ (summaryModel.provinceList!=null && summaryModel.provinceList.length!=0? 'COMMON.LBL_SELECT':'COMMON.LBL_NO_DATA' ) | translate }} ---"
+                                        [typeahead]="summaryModel.provinceInput" [minTermLength]="3"
+                                        [(ngModel)]="model.provinceId" [multiple]="false" (clear)="clearProvince()"
+                                        (scrollToEnd)="getProvinceData()" #select>
+                                        <ng-template ng-option-tmp let-item="item">
+                                            <!-- <b>{{index}} </b><span>{{item.name}}</span> -->
+                                            <div><span>{{item.name}}</span></div>
+                                        </ng-template>
+                                    </ng-select>
+                                </div>
+                            </div>
+                            <div class="col-sm-3 col-md-3 col-lg-3">
+                                <div class="my-input-group marginTop10 select-for-filter">
+                                    <label for="">{{ 'SUPPLIER_SUMMARY.LBL_CITY' | translate }}</label>
+                                    <ng-select appendTo="body" [items]="summaryModel.cityList" [virtualScroll]="true"
+                                        appendTo="body" [loading]="summaryModel.cityLoading" bindLabel="name"
+                                        bindValue="id" (change)="cityChange($event)"
+                                        placeholder="--- {{ (summaryModel.cityList!=null && summaryModel.cityList.length!=0? 'COMMON.LBL_SELECT':'COMMON.LBL_NO_DATA' ) | translate }} ---"
+                                        [typeahead]="summaryModel.cityInput" [minTermLength]="3"
+                                        [(ngModel)]="model.cityValues" class="multiple" [multiple]="true"
+                                        (clear)="clearCity()" (scrollToEnd)="getCityData()" #select>
+                                        <ng-template ng-option-tmp let-item="item">
+                                            <!-- <b>{{index}} </b><span>{{item.name}}</span> -->
+                                            <div class="text-wrap"><span>{{item.name}}</span></div>
+                                        </ng-template>
+                                    </ng-select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row" [hidden]="!toggleFormSection">
+                            <div class="col-sm-3 col-md-3 col-lg-3">
+                                <div class="my-input-group marginTop10 select-for-filter">
+                                    <label for="">{{ 'SUPPLIER_SUMMARY.LBL_EMAIL' | translate }}</label>
+                                    <input type="text" [(ngModel)]="model.email"
+                                        [ngClass]="{ 'is-invalid':!validator.isValid('email')}" maxlength="300"
+                                        placeholder="{{ 'SUPPLIER_SUMMARY.LBL_EMAIL' | translate }}">
+                                    <div *ngIf="!validator.isValid('email')" class="invalid-feedback"
+                                        style="display:block">
+                                        <div *ngFor="let error of validator.getErrors('email')">{{ error | translate }}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-3 col-md-3 col-lg-3">
+                                <div class="my-input-group marginTop10 select-for-filter">
+                                    <label for="">{{ 'SUPPLIER_SUMMARY.LBL_PHONE' | translate }}</label>
+                                    <input [(ngModel)]="model.phoneNumber" type="text" maxlength="300"
+                                        placeholder="{{ 'SUPPLIER_SUMMARY.LBL_PHONE' | translate }}">
+                                </div>
+                            </div>
+                            <div class="col-sm-3 col-md-3 col-lg-3" *ngIf="supplierMasterData.entityId==supplierMasterData.entityAccess.AQF">
+                                <div class="my-input-group marginTop25">
+                                    <div class="styled-checkbox-container">
+                                        <input class="styled-checkbox" id="checkbox-eaqf" type="checkbox"
+                                            [(ngModel)]="model.isEAQF">
+                                        <label for="checkbox-eaqf">{{ 'E-AQF.LBL_EAQF' | translate }}</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <div class="row marginTop25">
+                            <div class="col-12 col-sm-6">
+                                <button class="tertiary-cta small" (click)="toggleSection()">
+                                    <span class="icon" *ngIf="!toggleFormSection">+</span>
+                                    <span class="icon" *ngIf="toggleFormSection">-</span>
+                                    {{'QUOTATION_SUMMARY.LBL_ADVANCED_SEARCH' | translate}}
+                                </button>
+
+                            </div>
+                            <div class="col-12 col-sm-6 text-right mt-3 mt-sm-0">
+                                <button class="secondary-cta small mr-2" (click)="export()"
+                                    [disabled]="exportDataLoading || _searchloader || loading" *ngIf="model.items != null && model.items.length != 0  && !model.noFound
+                && (model.customerId > 0 || model.suppValues > 0 ||
+                model.countryValues && model.countryValues.length > 0)">
+                                    {{ 'COMMON.LBL_EXPORT' | translate }}
+                                    <span *ngIf="exportDataLoading">
+                                        <i class="fa fa-refresh fa-spin" aria-hidden="true"></i>
+                                    </span>
+                                </button>
+
+                                <button id="btnSearch" class="primary-cta small" [disabled]="loading || _searchloader"
+                                    (click)="search()">
+                                    {{ 'SUPPLIER_SUMMARY.LBL_SEARCH' | translate }}
+                                    <span *ngIf="_searchloader">
+                                        <i class="fa fa-refresh fa-spin" aria-hidden="true"></i>
+                                    </span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="centerContainerPadding float-left" *ngIf="(model.items && model.items.length>0)">
+                        <div class="row">
+                            <div class="col-6 col-sm-4 col-xl-2 d-flex">
+                                <p class="search-trigger-heading" [innerHtml]="showPaginationText()"></p>
+                            </div>
+                            <div class="col-6 col-sm-8 col-xl-10 text-right">
+                                <div class="animated-icon-container" *ngIf="!isFilterOpen"
+                                    (click)="toggleFilterSection()">
+                                    <img src="assets/images/cta-search-grey.svg" alt="search">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="quotation-search-container">
+                            <div class="table-container h-scroll">
+                                <table class="pagination-table simple-table bordered">
+                                    <thead>
+                                        <tr>
+                                            <th class="width40"></th>
+                                            <th class="width-100"></th>
+                                            <th>{{ 'SUPPLIER_SUMMARY.LBL_NAME' | translate }}</th>
+                                            <th>{{ 'SUPPLIER_SUMMARY.LBL_TYPE' | translate }}</th>
+                                            <th>{{ 'SUPPLIER_SUMMARY.LBL_COUNTRY' | translate }}</th>
+                                            <th>{{ 'SUPPLIER_SUMMARY.LBL_REGION' | translate }}</th>
+                                            <th>{{ 'SUPPLIER_SUMMARY.LBL_CITY' | translate }}</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <ng-container *ngFor="let iteminfo of model.items">
+                                            <tr>
+                                                <td>
+
+                                                    <span *ngIf="!iteminfo.isExpand" class="expandable-trigger"
+                                                        (click)="expand(iteminfo)">+</span>
+                                                    <span class="expandable-trigger" *ngIf="iteminfo.isExpand"
+                                                        (click)="collapse(iteminfo.id)">-</span>
+                                                </td>
+                                                <td class="Center_Middle">
+                                                    <span class="table-cta icon-cta common-tooltip"
+                                                        (click)="getDetails(iteminfo.id)" data-tooltip="Edit">
+                                                        <img src="assets/images/cta-edit.svg" alt="Edit">
+                                                    </span>
+                                                    &nbsp;
+                                                    <span class="table-cta icon-cta common-tooltip"
+                                                        *ngIf="iteminfo.canBeDeleted"
+                                                        (click)="openConfirm(iteminfo.id,iteminfo.name,content)"
+                                                        data-tooltip="Delete">
+                                                        <img src="assets/images/cta-delete.svg" alt="Delete">
+                                                    </span>
+                                                </td>
+                                                <td>{{iteminfo.name}}</td>
+                                                <td>{{iteminfo.typeName}}</td>
+                                                <td>{{iteminfo.countryName}}</td>
+                                                <td>{{iteminfo.regionName}}</td>
+                                                <td>{{iteminfo.cityName}}</td>
+
+                                            </tr>
+                                            <ng-container
+                                                *ngIf="iteminfo.list != null && iteminfo.list.length > 0 && iteminfo.isExpand">
+                                                <tr *ngIf="iteminfo.isLoader">
+                                                    <td>
+                                                        <div class="table-placeholder-block animate"></div>
+                                                    </td>
+                                                    <td>
+                                                        <div class="table-placeholder-block animate"></div>
+                                                    </td>
+                                                    <td>
+                                                        <div class="table-placeholder-block animate"></div>
+                                                    </td>
+                                                    <td>
+                                                        <div class="table-placeholder-block animate"></div>
+                                                    </td>
+                                                    <td>
+                                                        <div class="table-placeholder-block animate"></div>
+                                                    </td>
+                                                    <td>
+                                                        <div class="table-placeholder-block animate"></div>
+                                                    </td>
+                                                    <td>
+                                                        <div class="table-placeholder-block animate"></div>
+                                                    </td>
+                                                </tr>
+                                                <tr *ngFor="let itemFact of iteminfo.list">
+                                                    <td></td>
+                                                    <td class="Center_Middle">
+                                                        <span class="table-cta icon-cta common-tooltip"
+                                                            (click)="getDetails(itemFact.id)" data-tooltip="Edit">
+                                                            <img src="assets/images/cta-edit.svg" alt="Edit">
+                                                        </span>
+                                                        &nbsp;
+                                                        <span class="table-cta icon-cta common-tooltip"
+                                                            *ngIf="iteminfo.list.canBeDeleted"
+                                                            (click)="openConfirm(itemFact.id,itemFact.name,content)"
+                                                            data-tooltip="Delete">
+                                                            <img src="assets/images/cta-delete.svg" alt="Delete">
+                                                        </span>
+                                                    </td>
+                                                    <td>{{itemFact.name}}</td>
+                                                    <td>{{itemFact.typeName}}</td>
+                                                    <td>{{itemFact.countryName}}</td>
+                                                    <td>{{itemFact.regionName}}</td>
+                                                    <td>{{itemFact.cityName}}</td>
+
+                                                </tr>
+                                            </ng-container>
+                                        </ng-container>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        <div class="pagination-container">
+
+                            <ngb-pagination (pageChange)="onPager($event)" [pageSize]="model.pageSize"
+                                [collectionSize]="model.totalCount" [(page)]="model.index"
+                                [maxSize]="5"></ngb-pagination>
+                        </div>
+                    </div>
+
+                    <div class="centerContainerPadding" *ngIf="model.noFound">
+                        <div class="error-container">
+                            <img src="assets/images/no-result.svg" alt="" class="thumbnail">
+                            <h4 class="title">{{ 'SUPPLIER_SUMMARY.LBL_NOITEMS' | translate }}</h4>
+                            <p class="error-subtitle">{{'CS_CONFIG_SUMMARY.LBL_NODATA' | translate}}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<ng-template #content let-modal>
+    <div class="modal-body">
+        <div class="small-model">
+            <h2 class="title">{{ 'SUPPLIER_SUMMARY.LBL_CONFIRMDELETION' | translate }}</h2>
+            <p>{{ 'SUPPLIER_SUMMARY.MSG_CONFRMDELETE' | translate }} <strong>{{modelRemove.name}}</strong></p>
+            <button class="secondary-cta" (click)="modal.dismiss('Cross click')">{{ 'COMMON.LBL_CONFIRMCANCEL' |
+                translate
+                }}</button>
+            <button class="primary-cta" (click)="deleteSupplier(modelRemove);">{{ 'COMMON.LBL_OK' | translate
+                }}</button>
+
+        </div>
+    </div>
+</ng-template>

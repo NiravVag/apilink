@@ -1,0 +1,33 @@
+{
+    "model": "SubjectConfigModel",
+    "fields": {
+        "templateName": [
+            {
+                "type": "required",
+                "fieldType": "D",
+                "ressource": "EMAIL_SUBJECT_CONFIG.MSG_TEMPLATE_REQ"
+            }
+        ],
+        "emailTypeId": [
+            {
+                "type": "required",
+                "fieldType": "D",
+                "ressource": "EMAIL_SUBJECT_CONFIG.MSG_EMAIL_TYPE_REQ"
+            }
+        ],
+        "delimiterId": [
+            {
+                "type": "required",
+                "fieldType": "D",
+                "ressource": "EMAIL_SUBJECT_CONFIG.MSG_DELIMITER_REQ"
+            }
+        ],
+        "moduleId": [
+            {
+                "type": "required",
+                "fieldType": "D",
+                "ressource": "EMAIL_SUBJECT_CONFIG.MSG_MODULE_REQ"
+            }
+        ]
+    }
+}

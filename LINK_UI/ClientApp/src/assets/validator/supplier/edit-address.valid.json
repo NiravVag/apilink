@@ -1,0 +1,90 @@
+{
+  "model": "edit-supplier.model",
+  "fields": {
+    "countryId": [
+      {
+        "type": "required",
+        "fieldType": "N",
+        "ressource": "EDIT_SUPPLIER.MSG_COUNTRY_REQ"
+      }
+    ],
+    "regionId": [
+      {
+        "type": "required",
+        "fieldType": "N",
+        "ressource": "EDIT_SUPPLIER.MSG_REGION_REQ"
+      }
+    ],
+    "cityId": [
+      {
+        "type": "required",
+        "fieldType": "N",
+        "ressource": "EDIT_SUPPLIER.MSG_CITY_REQ"
+      }
+    ],
+    "addressType": [
+      {
+        "type": "required",
+        "fieldType": "N",
+        "ressource": "EDIT_CUSTOMER.MSG_ADDRESSTYPE_REQ"
+      }
+    ],
+    "address": [
+      {
+        "type": "required",
+        "fieldType": "N",
+        "ressource": "EDIT_CUSTOMER.MSG_ADDRESS_REQ"
+      }
+    ],
+    "boxPost": [
+      {
+        "type": "required",
+        "fieldType": "N",
+        "ressource": "EDIT_CUSTOMER.MSG_BOXPOST_REQ"
+      }
+    ],
+    "zipCode": [
+      {
+        "type": "required",
+        "fieldType": "T",
+        "ressource": "EDIT_SUPPLIER.MSG_ZIPCODE_REQ"
+      }
+    ],
+    "way": [
+      {
+        "type": "required",
+        "fieldType": "T",
+        "ressource": "EDIT_SUPPLIER.MSG_ADDRESS_REQ"
+      }
+    ],
+    "localLanguage": [
+      {
+        "type": "required",
+        "fieldType": "T",
+        "ressource": "EDIT_SUPPLIER.MSG_LOCALLANG_REQ"
+      }
+    ],
+    "townId": [
+      {
+        "type": "required",
+        "fieldType": "N",
+        "ressource": "EDIT_SUPPLIER.MSG_TOWN_REQ"
+      }
+    ],
+    "countyId": [
+      {
+        "type": "required",
+        "fieldType": "N",
+        "ressource": "EDIT_SUPPLIER.MSG_COUNTY_REQ"
+      }
+    ],
+    "addressTypeId": [
+      {
+        "type": "required",
+        "fieldType": "N",
+        "ressource": "EDIT_SUPPLIER.MSG_OFFICE_REQ"
+      }
+    ]
+  }
+
+}

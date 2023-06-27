@@ -1,0 +1,38 @@
+﻿
+@{
+    ViewData["Title"] = "EmailSendSummary";
+}
+
+@model DTO.EmailSend.EmailSendSummaryResponse
+
+<xls-sheet name="Email Send Search Summary">
+    <table xls-begin="A:1" style="border-style:solid">
+        <tr style="background-color:#f5f5f5;font-weight:bold;text-align:center">
+            <th>Booking No</th>
+            <th>Customer Booking No</th>
+            <th>Customer</th>
+            <th>Supplier</th>
+            <th>Factory</th>
+            <th>Service From Date</th>
+            <th>Service To Date</th>
+            <th>Service Type</th>
+            <th>Office</th>
+        </tr>
+        @foreach (var item in Model.Data)
+        {
+        <tr>
+            <td width="150px" xls-type="number">@item.BookingId</td>
+            <td width="150px">@item.CustomerBookingNo</td>
+            <td width="250px">@Html.Raw(@item.CustomerName)</td>
+            <td width="100px">@Html.Raw(@item.SupplierName)</td>
+            <td width="150px">@Html.Raw(@item.FactoryName)</td>
+            <td width="150px" xls-type="date">@item.ServiceFromDate</td>
+            <td width="150px" xls-type="date">@item.ServiceToDate</td>
+            <td width="150px">@Html.Raw(@item.ServiceType)</td>
+            <td width="150px">@Html.Raw(@item.Office)</td>
+        </tr>
+        }
+
+    </table>
+</xls-sheet>
+

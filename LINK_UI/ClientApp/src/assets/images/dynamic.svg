@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+    <defs>
+        <style>
+            .cls-2{fill:none;stroke:#9299b0;stroke-linecap:round;stroke-linejoin:round}
+        </style>
+    </defs>
+    <g id="Group_17850" transform="translate(-55 -470)">
+        <path id="Rectangle_5382" fill="none" d="M0 0H24V24H0z" transform="translate(55 470)"/>
+        <g id="pie-chart" transform="translate(55 470.002)">
+            <path id="Path_8625" d="M21.21 15.89A10 10 0 1 1 8 2.83" class="cls-2"/>
+            <path id="Path_8626" d="M22 12A10 10 0 0 0 12 2v10z" class="cls-2"/>
+        </g>
+    </g>
+</svg>

@@ -1,0 +1,5 @@
+﻿CREATE TABLE [dbo].[ES_SU_DataType]
+(
+	Id INT PRIMARY KEY IDENTITY(1,1),
+	Data NVARCHAR(20)
+)

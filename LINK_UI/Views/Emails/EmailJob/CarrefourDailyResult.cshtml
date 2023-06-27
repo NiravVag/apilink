@@ -1,0 +1,48 @@
+﻿@{
+    ViewData["Title"] = "CarrefourDailyResultSendEmail";
+}
+
+@model DTO.ScheduleJob.ScheduleJobCarrfourDailyResultEmailResponse
+
+<style>
+    .th-table {
+        color: black;
+        vertical-align: top;
+        font-size: 13px;
+        font-family: tahoma;
+    }
+
+    .td-table {
+        font-size: 13px;
+        font-family: tahoma;
+    }
+</style>
+<table>
+    <tr>
+        <td style="font-size:13px; font-family:tahoma;">
+            Dear All,
+            <br /><br />
+            <div style="padding-bottom: 5px; margin-bottom:5px;">
+                Please find enclosed the daily report list.
+            </div>
+            <br />
+            <div style="padding-bottom: 5px; margin-bottom:5px;">
+               If any questions,Please contact Sophie and Holiday as usual.
+            </div>
+            <br />
+
+        </td>
+    </tr>
+
+    <tr>
+        <td class="td-table">
+            <br />
+            <div style="padding-bottom: 5px; margin-bottom:5px;">
+                Best Regards,
+            </div>
+            <div style="padding-bottom: 5px; margin-bottom:5px;">
+                API Inspection Team
+            </div>
+        </td>
+    </tr>
+</table>

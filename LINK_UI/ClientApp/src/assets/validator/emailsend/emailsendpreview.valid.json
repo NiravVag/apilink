@@ -1,0 +1,40 @@
+{
+    "model": "EmailTempModelData",
+    "fields": {
+        "toMailArray": [
+            {
+                "type": "required",
+                "fieldType": "A",
+                "ressource": "COMMON.MSG_CUSTOMER_REQUIRED"
+            }
+        ],
+        "ccMailArray": [
+            {
+                "type": "required",
+                "fieldType": "A",
+                "ressource": "COMMON.MSG_CUSTOMER_REQUIRED"
+            }
+        ],
+        "emailSubject": [
+            {
+                "type": "required",
+                "fieldType": "A",
+                "ressource": "COMMON.MSG_CUSTOMER_REQUIRED"
+            }
+        ],
+        "emailBody": [
+            {
+                "type": "required",
+                "fieldType": "A",
+                "ressource": "COMMON.MSG_CUSTOMER_REQUIRED"
+            }
+        ],
+        "emailId": [
+            {
+                "type": "required",
+                "fieldType": "D",
+                "ressource": "COMMON.MSG_CUSTOMER_REQUIRED"
+            }
+        ]
+    }
+}

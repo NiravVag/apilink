@@ -1,0 +1,25 @@
+{
+    "model": "EditCSAllocationModel.model",
+    "fields": {
+        "customerId": [{
+            "type": "required",
+            "fieldType": "N",
+            "ressource": "CS_ALLOCATION.MSG_CUSTOMER_REQ"
+        }],
+        "serviceIds": [{
+            "type": "required",
+            "fieldType": "A",
+            "ressource": "CS_ALLOCATION.MSG_SERVICE_REQ"
+        }],
+        "userIds": [{
+            "type": "required",
+            "fieldType": "A",
+            "ressource": "CS_ALLOCATION.MSG_STAFF_REQ"
+        }],
+        "officeIds": [{
+          "type": "required",
+          "fieldType": "A",
+          "ressource": "CS_ALLOCATION.MSG_OFFICE_REQ"
+      }]
+    }
+}

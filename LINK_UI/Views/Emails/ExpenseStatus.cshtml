@@ -1,0 +1,51 @@
+﻿@model (DTO.Expense.ExpenseClaim, string)
+
+<table>
+    <tr>
+        <td style="font-size:13px; font-family:tahoma;">
+            Dear @Model.Item1.Name,
+            <br /><br />
+            Your expense claim " @Model.Item1.ClaimNo " has been @Model.Item1.Status. Click  <a href="@Model.Item2">here</a> to view expense details.
+            <br /><br />
+            Please see the below details.
+            <br /><br />
+            <table id='TblList' style="border:solid 1px #d4d0c8;border-collapse:collapse;font-size:12px; font-family:tahoma;" cellspacing='0' cellpadding='1' rules='all' align='left' border='1' cellspacing=0 cellpadding=0 width='100%'>
+                <tr>
+                    <td bgcolor=#BD0031 style="color: #ffffff; font-size:13px;" align=center width='10%' height=35>Claim No.</td>
+                    <td bgcolor=#BD0031 style="color: #ffffff; font-size:13px;" align=center width='10%' height=35>Employee</td>
+                    <td bgcolor=#BD0031 style="color: #ffffff; font-size:13px;" align=center width='10%' height=35>Expense Amt.</td>
+                    <td bgcolor=#BD0031 style="color: #ffffff; font-size:13px;" align=center width='10%' height=35>Food Allowance</td>
+                    <td bgcolor=#BD0031 style="color: #ffffff; font-size:13px;" align=center width='10%' height=35>Tot.Amt.</td>
+                    <td bgcolor=#BD0031 style="color: #ffffff; font-size:13px;" align=center width='10%' height=35>Payroll Currency</td>
+                    <td bgcolor=#BD0031 style="color: #ffffff; font-size:13px;" align=center width='10%' height=35>Exp. Status</td>
+                    @if (Model.Item1.StatusId == (int)Entities.Enums.ExpenseClaimStatus.Rejected)
+                    {
+                        <td bgcolor=#BD0031 style="color: #ffffff; font-size:13px;" align=center width='30%' height=35>Reason</td>
+                    }
+                </tr>
+                <tr>
+                    <td align=center style="font-size: 12px;" height=30>@Model.Item1.ClaimNo</td>
+                    <td align=center style="font-size: 12px;" height=30>@Model.Item1.Name</td>
+                    <td align=center style="font-size: 12px;" height=30>@Model.Item1.ExpenseAmout</td>
+                    <td align=center style="font-size: 12px;" height=30>@Model.Item1.FoodAllowance</td>
+                    <td align=center style="font-size: 12px;" height=30>@Model.Item1.TotalAmount</td>
+                    <td align=center style="font-size: 12px;" height=30>@Model.Item1.CurrencyName</td>
+                    <td align=center style="font-size: 12px;" height=30>@Model.Item1.Status</td>
+                    @if (Model.Item1.StatusId == (int)Entities.Enums.ExpenseClaimStatus.Rejected)
+                    {
+                        <td align=center style="font-size: 12px;" height=30>@Model.Item1.Comment</td>
+                    }
+                </tr>
+            </table>
+
+        </td>
+    </tr>
+</table>
+<br />
+<br />
+    Thanks
+<br />
+    IT-Team
+<br />
+<br />
+<span style="font-style:italic"> Note: - This receipt is auto generated from Link. Please do not reply to this message.</span>

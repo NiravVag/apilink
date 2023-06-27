@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="120" height="120" viewBox="0 0 120 120">
+    <defs>
+        <style>
+            .cls-3{fill:#d6e3f0;font-size:100px;font-family:DINCondensed-Bold,DIN Condensed;font-weight:700}.cls-4{fill:#ccdbe8}
+        </style>
+    </defs>
+    <g id="Group_10931" data-name="Group 10931" transform="translate(-773 -182)">
+        <path id="Rectangle_2234" fill="none" d="M0 0H120V120H0z" data-name="Rectangle 2234" transform="translate(773 182)"/>
+        <ellipse id="Ellipse_585" cx="59" cy="2.5" fill="#eff6fc" data-name="Ellipse 585" rx="59" ry="2.5" transform="translate(775 268)"/>
+        <text id="_0" class="cls-3" data-name="0" transform="translate(814.327 271)">
+            <tspan x="0" y="0">0</tspan>
+        </text>
+        <path id="Path_3223" d="M15.334 3.846a.8.8 0 0 0-1.124 0l-1.846 1.846L9.875 3.2l1.846-1.846A.8.8 0 0 0 10.6.233L8.751 2.079l-.642-.642-.6-.6a.8.8 0 1 0-1.127 1.122l.04.04-2.448 2.449a5.06 5.06 0 0 0-.517 6.539L.233 14.21c-.31.31-.509.933-.2 1.244.155.155.661.841.661.841a6.556 6.556 0 0 1 1.133-1.431c.973-1.047 2.753-2.752 2.753-2.752a5.015 5.015 0 0 0 2.967.962 5.02 5.02 0 0 0 3.573-1.48l2.449-2.449.04.04a.795.795 0 1 0 1.123-1.125l-1.244-1.244 1.846-1.846a.8.8 0 0 0 0-1.124z" class="cls-4" data-name="Path 3223" transform="rotate(85 279.757 609.934)"/>
+        <text id="_4" class="cls-3" data-name="4" transform="translate(775 270)">
+            <tspan x="0" y="0">4</tspan>
+        </text>
+        <text id="_4-2" class="cls-3" data-name="4" transform="translate(853.653 270)">
+            <tspan x="0" y="0">4</tspan>
+        </text>
+        <path id="Path_3225" fill="none" stroke="#ccdbe8" stroke-width="2px" d="M-1407.071 3102.66c-1.291 0-15.458 4-16.1 12.979 0 .012.257 6.672-8.561 10.253s15.537 1.778 19.366 4.136c7.521 4.634 3.776-1.989 9.681-4.136 2.563-.932 3.879.7 5.55 2.167 1.659 1.441 4.168 3.8 4.939 4.07" data-name="Path 3225" transform="translate(2245 -2848)"/>
+        <path id="Path_3224" d="M11.482 1.067l-1.99 2.092a4.62 4.62 0 0 0-5.977.474L1.277 5.871l-.037-.037A.727.727 0 0 0 .213 6.862l6.6 6.6a.727.727 0 1 0 1.028-1.028l-.033-.034 2.238-2.238a4.626 4.626 0 0 0 .473-5.977l2.947-2.946z" class="cls-4" data-name="Path 3224" transform="rotate(85 292.22 553.198)"/>
+    </g>
+</svg>

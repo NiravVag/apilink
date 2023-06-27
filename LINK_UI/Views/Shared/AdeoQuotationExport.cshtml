@@ -1,0 +1,198 @@
+﻿
+@{
+    ViewData["Title"] = "AdeoQuotationExport";
+}
+
+@model DTO.Quotation.QuotationExport
+
+<style>
+    .table1 {
+        empty-cells: show;
+        border-style: 1px solid;
+    }
+    td {
+        border-style: solid;
+    }
+</style>
+
+<xls-sheet name="Quotation Information">
+    <table xls-begin="A:1" style="border-style:solid">
+        <tr style="font-weight:bold;text-align:center">
+            <th width="150px" style="font-weight:bold;"><b>quotation format</b></th>
+        </tr>
+        <tr style="font-weight:bold;text-align:center">
+            <th width="150px" style="font-weight:bold;"><b>quotation information</b></th>
+        </tr>
+        <tr>
+            <td style="border-style:solid">Lab Code</td>
+            <td style="border-style:solid" width="150px" colspan="4">API-Inspection</td>
+        </tr>
+        <tr>
+            <td style="border-style:solid">quotation number note</td>
+            <td style="border-style:solid" colspan="4">@Model.BookingId</td>
+        </tr>
+        <tr>
+            <td style="border-style:solid">quotation date</td>
+            <td style="border-style:solid" colspan="4" xls-type="date">@Model.QuotationDate</td>
+        </tr>
+        <tr>
+            <td style="border-style:solid">service mode</td>
+            <td style="border-style:solid" colspan="4">Inspection-@Model.CustomeServiceTypeName</td>
+        </tr>
+        <tr>
+            <td style="border-style:solid">service mode note</td>
+            <td style="border-style:solid" colspan="4"></td>
+        </tr>
+        <tr>
+            <td style="border-style:solid">Adeo PS</td>
+            <td style="border-style:solid" colspan="4">@Html.Raw(@Model.DepartmentName)</td>
+        </tr>
+        <tr>
+            <td style="border-style:solid">supplier code</td>
+            <td style="border-style:solid" colspan="4">@Html.Raw(@Model.SupplierCode)</td>
+        </tr>
+        <tr>
+            <td style="border-style:solid">supplier</td>
+            <td style="border-style:solid" colspan="4">@Html.Raw(@Model.SupplierName)</td>
+        </tr>
+        <tr>
+            <td style="border-style:solid">factory code</td>
+            <td style="border-style:solid" colspan="4">@Html.Raw(@Model.FactoryCode)</td>
+        </tr>
+        <tr>
+            <td style="border-style:solid">factory</td>
+            <td style="border-style:solid" colspan="4"> @Html.Raw(Model.FactoryName) </td>
+        </tr>
+        <tr>
+            <td style="border-style:solid">inspecction location</td>
+            <td style="border-style:solid" colspan="4">@Html.Raw(@Model.InspectionLocation)</td>
+        </tr>
+        <tr>
+            <td style="border-style:solid">inspection period</td>
+            <td style="border-style:solid">from</td>
+            <td style="border-style:solid" xls-type="date">@Model.ServiceFromDate</td>
+            <td style="border-style:solid">to</td>
+            <td style="border-style:solid" xls-type="date">@Model.ServiceToDate</td>
+        </tr>
+        <tr>
+            <td style="border-style:solid">product description</td>
+            <td style="border-style:solid" colspan="4">@Html.Raw(@Model.ProductDescription)</td>
+        </tr>
+        <tr>
+            <td style="border-style:solid">sampling plan</td>
+            <td style="border-style:solid" colspan="4">@Model.Sampling</td>
+        </tr>
+        <tr>
+            <td style="border-style:solid">product quantity</td>
+            <td style="border-style:solid" colspan="4" xls-type="number">@Model.ProductQuantity</td>
+        </tr>
+    </table>
+    <table xls-begin="A:20" class="table1" style="empty-cells: show;">
+        <tr>
+            <th style="font-weight:bold;">QC cost breakdown</th>
+        </tr>
+         <tr>
+            <td></td>
+            <td style="border-style:solid">unit Price</td>
+            <td style="border-style:solid">quantity</td>
+            <td style="border-style:solid">subtotal</td>
+        </tr>
+        <tr>
+            <td style="border-style:solid">inspection</td>
+            <td style="border-style:solid" xls-type="number">@Model.QuotationUnitPrice</td>
+            <td style="border-style:solid" xls-type="number">@Model.ManDay</td>
+            <td style="border-style:solid" xls-type="number">@Model.TotalPrice</td>
+        </tr>
+        <tr>
+            <td style="border-style:solid">travel</td>
+            <td style="border-style:solid"></td>
+            <td style="border-style:solid"></td>
+            <td style="border-style:solid" xls-type="number">@Model.TravelCost</td>
+        </tr>
+        <tr>
+            <td style="border-style:solid">transport</td>
+            <td style="border-style:solid"></td>
+            <td style="border-style:solid"></td>
+            <td style="border-style:solid" xls-type="number">@Model.Transportcost</td>
+        </tr>
+        <tr>
+            <td style="border-style:solid">hotel</td>
+            <td style="border-style:solid"></td>
+            <td style="border-style:solid"></td>
+            <td style="border-style:solid" xls-type="number">@Model.HotelCost</td>
+        </tr>
+        <tr>
+            <td style="border-style:solid">OT</td>
+            <td style="border-style:solid"></td>
+            <td style="border-style:solid"></td>
+            <td style="border-style:solid" xls-type="number">0</td>
+        </tr>
+        <tr>
+            <td style="border-style:solid">other</td>
+            <td style="border-style:solid"></td>
+            <td style="border-style:solid"></td>
+            <td style="border-style:solid" xls-type="number">@Model.OtherCost</td>
+        </tr>
+        <tr>
+            <td style="border-style:solid">cost before tax</td>
+            <td style="border-style:solid"></td>
+            <td style="border-style:solid"></td>
+            <td style="border-style:solid" xls-type="number">@Model.TotalCost</td>
+        </tr>
+        <tr>
+            <td style="border-style:solid">VAT(6%)</td>
+            <td style="border-style:solid"></td>
+            <td style="border-style:solid"></td>
+            <td style="border-style:solid" xls-type="number">0</td>
+        </tr>
+        <tr>
+            <td style="border-style:solid">Total cost</td>
+            <td style="border-style:solid"></td>
+            <td style="border-style:solid"></td>
+            <td style="border-style:solid" xls-type="number">@Model.TotalCost</td>
+        </tr>
+        </table>
+    <table xls-begin="A:32">
+        <tr>
+            <th style="font-weight:bold;" width="150px">PO information</th>
+            <th width="150px">Total Sample Size</th>
+            <th style="border-style:solid" width="150px" xls-type="number">@Model.TotalSamplingSize</th>
+        </tr>
+        <tr>
+            <th style="border-style:solid" width="150px">po number</th>
+            <th style="border-style:solid" width="150px">Category</th>
+            <th style="border-style:solid" width="150px">Testing Mode</th>
+            <th style="border-style:solid" width="150px">supplier Code</th>
+            <th style="border-style:solid" width="150px">supplier name</th>
+            <th style="border-style:solid" width="150px">factory name</th>
+            <th style="border-style:solid" width="150px">unit price</th>
+            <th style="border-style:solid" width="150px">Manday quantity</th>
+            @*<th style="border-style:solid" width="150px">quantity</th>
+            <th style="border-style:solid" width="150px">sample size</th>*@
+            <th style="border-style:solid" width="200px">inspection/audit start date</th>
+            <th style="border-style:solid" width="150px">SR date</th>
+            <th style="border-style:solid" width="150px">Real ETD</th>
+            <th style="border-style:solid" width="150px">cost per order</th>
+        </tr>
+        @foreach (var item in Model.PoInformation)
+        {
+    <tr>
+        <td style="border-style:solid">@Html.Raw(@item.PONumber)</td>
+        <td style="border-style:solid">@Model.CustomeServiceTypeName</td>
+        <td style="border-style:solid">Inspection</td>
+        <td style="border-style:solid">@Html.Raw(@Model.SupplierCode)</td>
+        <td style="border-style:solid">@Html.Raw(@Model.SupplierName)</td>
+        <td style="border-style:solid">@Html.Raw(@Model.FactoryName)</td>
+        <td style="border-style:solid" xls-type="number">@Model.QuotationUnitPrice</td>
+        <td style="border-style:solid" xls-type="number">@item.Manday</td>
+        @*<td style="border-style:solid" xls-type="number">@item.POQuantity</td>
+        <td style="border-style:solid" xls-type="number">@item.SamplingSize</td>*@
+        <td style="border-style:solid" xls-type="date">@Model.ServiceFromDate</td>
+        <td style="border-style:solid"></td>
+        <td style="border-style:solid"></td>
+        <td style="border-style:solid" xls-type="number">@item.CostPerOrder</td>
+    </tr>
+        }
+    </table>
+</xls-sheet>
+

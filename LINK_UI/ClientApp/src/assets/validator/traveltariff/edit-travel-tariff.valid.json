@@ -1,0 +1,90 @@
+{  
+    "model": "TravelTariffSaveRequest",
+    "fields": {      
+        "startPort":[
+            {
+                "type": "required",
+                "fieldType": "A",
+                "ressource": "EDIT_TRAVEL_TARIFF.MSG_STARTPORT_REQ"
+            }
+        ],
+        "townId":[
+            {
+              "type": "required",
+              "fieldType": "N",
+              "ressource": "EDIT_TRAVEL_TARIFF.MSG_TOWN_REQ"
+            }
+        ],
+        "startDate":[
+            {
+                "type": "required",
+                "fieldType": "D",
+                "ressource": "EDIT_TRAVEL_TARIFF.MSG_STARTDATE_REQ"
+            },
+            {
+                "type": "isLessOrEqual",
+                "fieldType": "D",
+                "fieldCible": "endDate",
+                "ressource": "EDIT_BOOKING.MSG_SERVICE_FROMDATE_GREATER_REQ"
+            }
+        ],
+        "endDate":[
+            {
+                "type": "required",
+                "fieldType": "D",
+                "ressource": "EDIT_TRAVEL_TARIFF.MSG_ENDDATE_REQ"
+            },
+            {
+                "type": "isGreatOrEqual",
+                "fieldType": "D",
+                "fieldCible": "startDate",
+                "ressource": "EDIT_BOOKING.MSG_Service_TODATE_LESS_REQ"
+            }
+        ],
+        "travelTariff":[
+            {
+                "type": "required",
+                "fieldType": "A",
+                "ressource": "EDIT_TRAVEL_TARIFF.MSG_TRAVEL_TARIFF_REQ"
+            }
+        ],
+        "travelCurrency":[
+            {
+                "type": "required",
+                "fieldType": "A",
+                "ressource": "EDIT_TRAVEL_TARIFF.MSG_TRAVEL_CURRENCY_REQ"
+            }
+        ],
+        "countryId": [
+            {
+              "type": "required",
+              "fieldType": "N",
+              "ressource": "EDIT_TRAVEL_TARIFF.MSG_COUNTRY_REQ"
+            }
+          ],
+          "provinceId": [
+            {
+              "type": "required",
+              "fieldType": "N",
+              "ressource": "EDIT_TRAVEL_TARIFF.MSG_REGION_REQ"
+            }
+          ],
+          "cityId": [
+            {
+              "type": "required",
+              "fieldType": "N",
+              "ressource": "EDIT_TRAVEL_TARIFF.MSG_CITY_REQ"
+            }
+          ],
+          "countyId": [
+            {
+              "type": "required",
+              "fieldType": "N",
+              "ressource": "EDIT_TRAVEL_TARIFF.MSG_COUNTY_REQ"
+            }
+        ]      
+    }
+}
+
+
+ 

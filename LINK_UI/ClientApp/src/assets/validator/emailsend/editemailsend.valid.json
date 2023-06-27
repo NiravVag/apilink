@@ -1,0 +1,26 @@
+{
+    "model": "EmailSendFileUpload",
+    "fields": {
+        "bookingIds": [
+            {
+                "type": "required",
+                "fieldType": "D",
+                "ressource": "COMMON.MSG_BOOKING_NUMBER_REQUIRED"
+            }
+        ],
+        "fileTypeId": [
+            {
+                "type": "required",
+                "fieldType": "D",
+                "ressource": "COMMON.MSG_FILE_TYPE_REQUIRED"
+            }
+        ],
+        "invoiceId": [
+            {
+                "type": "required",
+                "fieldType": "D",
+                "ressource": "COMMON.MSG_InvoiceId_REQUIRED"
+            }
+        ]
+    }
+}

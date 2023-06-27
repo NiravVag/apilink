@@ -1,0 +1,12 @@
+{
+    "model": "EmailConfigSummaryModel",
+    "fields": {
+        "customerId": [
+            {
+                "type": "required",
+                "fieldType": "D",
+                "ressource": "COMMON.MSG_CUSTOMER_REQUIRED"
+            }
+        ]
+    }
+}

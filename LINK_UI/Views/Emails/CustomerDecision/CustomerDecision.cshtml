@@ -1,0 +1,265 @@
+﻿@model DTO.EmailSend.EmailBody
+
+<style>
+    .th-table {
+        color: black;
+        vertical-align: top;
+        font-size: 13px;
+        font-family: tahoma;
+    }
+
+    .td-table {
+        font-size: 13px;
+        font-family: tahoma;
+    }
+
+    .div-style {
+        padding-bottom: 5px;
+        margin-bottom: 5px;
+    }
+</style>
+
+<table>
+    <tr>
+        <td style="font-size:13px; font-family:tahoma;">
+            Dear All
+            <br /><br />
+            <div class="div-style">
+                Following are the details for your reference:
+            </div>
+            <br />
+            @if (@Model.ProductList.Count > 0)
+            {
+                int rowIndex = 1;
+                <div style="padding-bottom: 5px; margin-bottom:5px; font-weight: bold;">
+                    Customer Decision:
+                </div>
+
+                <div style="padding-bottom: 20px;margin-bottom: 20px;">
+                    <table id='TblList' style="border:solid 1px #d4d0c8;border-collapse:collapse;font-size:12px;" cellspacing='0' cellpadding='1' rules='all' align='left' border='1' width='100%'>
+                        <tr>
+                            <th bgcolor=#f8f4f3 style="color: black; font-size:12px; text-align:center" align=center width='3%' height=35> #</th>
+                            @if (@Model.ProductList.Select(x => x.BookingId).Distinct().Count() > 1)
+                            {
+                                <th bgcolor=#f8f4f3 style="color: black; font-size:12px;" align=center width='30px' height=35>Booking #</th>
+                            }
+                            <th bgcolor=#f8f4f3 style=" font-size:12px;" align=center width='30px' height=35>Product Ref</th>
+                            <th bgcolor=#f8f4f3 style=" font-size:12px;" align=center width='30px' height=35>Product Desc</th>
+                            <th bgcolor=#f8f4f3 style=" font-size:12px;" align=center width='30px' height=35>PO No</th>
+                            <th bgcolor=#f8f4f3 style=" font-size:12px;" align=center width='15px' height=35>Inspection Result</th>
+                            <th bgcolor=#f8f4f3 style=" font-size:12px;" align=center width='15px' height=35>Customer Decision</th>
+                            <th bgcolor=#f8f4f3 style=" font-size:12px;" align=center width='15px' height=35>Customer Comment</th>
+
+
+                        </tr>
+                        @foreach (var item in @Model.ProductList.Where(x => x.CombineProductId == null).Select((value, i) => new { i = i + 1, value }))
+                        {
+                    <tr>
+                        <td align=center style="font-size: 12px;" height=30>@rowIndex</td>
+                        @if (@Model.ProductList.Select(x => x.BookingId).Distinct().Count() > 1)
+                        {
+                            <td align=center style="font-size: 12px;" height=30>
+                                @item.value.BookingId
+                            </td>
+                        }
+                        <td align=center style="font-size: 12px;" height=30>
+                            @item.value.ProductName
+                        </td>
+
+                        <td align=center style="font-size: 12px;" height=30>
+                            @item.value.ProductDesc
+                        </td>
+                        <td align=center style="font-size: 12px;" height=30>
+                            @foreach (var poNumber in @item.value.PoNumberList.Distinct())
+                            {
+                                <span>@poNumber</span><br />
+                            }
+                        </td>
+
+                        <td align=center style="font-size: 16px;" height=30;>
+                            <a style="color:@Model.ReportList.FirstOrDefault(x => x.ReportId == @item.value.ReportId)?.ReportResultColor"
+                               href="@Model.ReportList.FirstOrDefault(x => x.ReportId == @item.value.ReportId)?.ReportLink"
+                               blank" rel="noopener noreferrer">
+                                <div>
+                                    @Model.ReportList.FirstOrDefault(x => x.ReportId == @item.value.ReportId)?.ReportResult
+                                </div>
+                            </a>
+                        </td>
+                        <td align=center style="font-size: 16px;" height=30;>
+                            <div>
+                                <span style="color:@Model.ReportList.FirstOrDefault(x => x.ReportId == @item.value.ReportId)?.CustomerDecisionResultColor">
+                                    @Model.ReportList.FirstOrDefault(x => x.ReportId == @item.value.ReportId)?.CustomerDecisionResult
+                                </span>
+                            </div>
+                        </td>
+                        <td align=center style="font-size: 12px;" height=30>
+                            @Model.ReportList.FirstOrDefault(x => x.ReportId == @item.value.ReportId)?.CustomerDecisionComments
+                        </td>
+                    </tr>
+                            rowIndex++;
+                        }
+
+                        @foreach (var item in @Model.ProductList.Where(x => x.CombineProductId != null)
+         .GroupBy(x => new { x.CombineProductId, x.BookingId }).Select((value, i) => new { i = i + 1, value }))
+                        {
+                    <tr>
+                        <td align=center style="font-size: 12px;" height=30>@rowIndex</td>
+                        @if (@Model.ProductList.Select(x => x.BookingId).Distinct().Count() > 1)
+                        {
+                            <td align=center style="font-size: 12px;" height=30>
+                                @item.value.Select(x => x.BookingId).FirstOrDefault()
+                            </td>
+                        }
+
+                        <td align=center style="font-size: 12px;" height=30>
+                            @foreach (var productName in @item.value.Select(x => x.ProductName).Distinct().ToArray())
+                            {
+                                <span>@productName</span><br />
+                            }
+                        </td>
+
+                        <td align=center style="font-size: 12px;" height=30>
+                            @foreach (var productCode in @item.value.Select(x => x.ProductName).Distinct().ToArray())
+                            {
+                                <span>
+                                    @item.value.FirstOrDefault(x => x.ProductName == productCode).ProductDesc
+                                </span><br />
+
+
+                            }
+                        </td>
+
+                        <td align=center style="font-size: 12px;" height=30>
+                            @foreach (var poNumber in @item.value.SelectMany(x => x.PoNumberList).Distinct())
+                            {
+                                <span>@poNumber</span><br />
+                            }
+                        </td>
+
+                        <td align=center style="font-size: 16px; text-align:center;" height=30;>
+                            <a style="color:@Model.ReportList.FirstOrDefault(x => x.ReportId ==  @item.value.Select(y=>y.ReportId).FirstOrDefault())?.ReportResultColor"
+                               href="@Model.ReportList.FirstOrDefault(x => x.ReportId == @item.value.Select(y=>y.ReportId).FirstOrDefault())?.ReportLink"
+                               blank" rel="noopener noreferrer">
+                                <div style="height:100%";>
+                                    @Model.ReportList.FirstOrDefault(x => x.ReportId == @item.value.Select(y => y.ReportId).FirstOrDefault())?.ReportResult
+                                </div>
+                            </a>
+                        </td>
+                        <td align=center style="font-size: 16px;" height=30;>
+                            <div>
+                                <span style="color:@Model.ReportList.FirstOrDefault(x => x.ReportId ==  @item.value.Select(y=>y.ReportId).FirstOrDefault())?.CustomerDecisionResultColor">
+                                    @Model.ReportList.FirstOrDefault(x => x.ReportId == @item.value.Select(y => y.ReportId).FirstOrDefault())?.CustomerDecisionResult</span>
+                            </div>
+                        </td>
+                        <td align=center style="font-size: 12px;" height=30>
+                            @Model.ReportList.FirstOrDefault(x => x.ReportId == @item.value.Select(y => y.ReportId).FirstOrDefault())?.CustomerDecisionComments
+                        </td>
+                    </tr>
+                            rowIndex++;
+                        }
+
+                    </table>
+                </div>
+                <br />
+            }
+
+
+
+            @if (@Model.ContainerList.Count > 0)
+            {
+                <div style="padding-bottom: 5px; margin-bottom:5px; font-weight: bold;">
+                    Customer Decision:
+                </div>
+
+                <div style="padding-bottom: 20px;margin-bottom: 20px;">
+                    <table id='TblList' style="border:solid 1px #d4d0c8;border-collapse:collapse;font-size:12px;" cellspacing='0' cellpadding='1' rules='all' align='left' border='1' width='100%'>
+                        <tr>
+                            <th bgcolor=#f8f4f3 style="color: black; font-size:12px; text-align:center" align=center width='3%' height=35> #</th>
+                            @if (@Model.ContainerList.Select(x => x.BookingId).Distinct().Count() > 1)
+                            {
+                                <th bgcolor=#f8f4f3 style="color: black; font-size:12px;" align=center width='30px' height=35>Booking #</th>
+                            }
+                            <th bgcolor=#f8f4f3 style=" font-size:12px;" width='15px' height=35>Container Size</th>
+                            <th bgcolor=#f8f4f3 style=" font-size:12px;" width='30px' height=35>PO No</th>
+                            <th bgcolor=#f8f4f3 style=" font-size:12px;" width='15px' height=35>Inspection Result</th>
+                            <th bgcolor=#f8f4f3 style=" font-size:12px;" align=center width='15px' height=35>Customer Decision</th>
+                            <th bgcolor=#f8f4f3 style=" font-size:12px;" align=center width='15px' height=35>Customer Comment</th>
+                        </tr>
+                        @foreach (var item in @Model.ContainerList.Select((value, i) => new { i = i + 1, value }))
+                        {
+                    <tr>
+                        <td align=center style="font-size: 12px;" height=30>@item.i</td>
+                        @if (@Model.ContainerList.Select(x => x.BookingId).Distinct().Count() > 1)
+                        {
+                            <td align=center style="font-size: 12px;" height=30>
+                                @item.value.BookingId
+                            </td>
+                        }
+
+                        <td align=center style="font-size: 12px;" height=30>
+                            @item.value.ContainerNumber
+                        </td>
+                        <td align=center style="font-size: 12px;" height=30>
+                            @foreach (var poNumber in @item.value.PoNumberList.Distinct())
+                            {
+                                <span>@poNumber</span><br />
+                            }
+                        </td>
+
+                        <td align=center style="font-size: 16px; text-align:center;" height=30;>
+                            <a style="color:@Model.ReportList.FirstOrDefault(x => x.ReportId == @item.value.ReportId)?.ReportResultColor" href=" @Model.ReportList.FirstOrDefault(x => x.ReportId == @item.value.ReportId)?.ReportLink"
+                               blank" rel="noopener noreferrer">
+                                @Model.ReportList.FirstOrDefault(x => x.ReportId == @item.value.ReportId)?.ReportResult
+
+                            </a>
+                        </td>
+                        <td align=center style="font-size: 16px;" height=30;>
+                            <div>
+                                <span style="color:@Model.ReportList.FirstOrDefault(x => x.ReportId == @item.value.ReportId)?.CustomerDecisionResultColor">
+                                    @Model.ReportList.FirstOrDefault(x => x.ReportId == @item.value.ReportId)?.CustomerDecisionResult
+                                </span>
+
+                            </div>
+                        </td>
+                        <td align=center style="font-size: 16px;" height=30>
+                            @Model.ReportList.FirstOrDefault(x => x.ReportId == @item.value.ReportId)?.CustomerDecisionComments
+                        </td>
+                    </tr>
+
+                        }
+
+                    </table>
+                </div>
+                <br />
+            }
+        </td>
+    </tr>
+    <br />
+    <tr>
+        <td class="td-table">
+            <div style="padding-bottom: 5px;margin-bottom:5px;">
+                Please login our <a href="https://www.linkqms.io/">Link</a> to view the updated status & details.
+            </div>
+        </td>
+
+    </tr>
+
+
+
+    <tr>
+        <td class="td-table">
+            <br />
+            <div class="div-style">
+                Thanks
+            </div>
+            <div class="div-style">
+                API-Team
+            </div>
+            <br />
+            <span style="font-style:normal"> Note: - This receipt is auto generated from Link QMS. Please do not reply to @Model.SenderEmail.</span>
+            <br />
+            <br />
+
+        </td>
+    </tr>
+</table>

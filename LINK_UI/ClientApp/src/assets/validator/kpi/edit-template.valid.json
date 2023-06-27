@@ -1,0 +1,34 @@
+{
+  "model": "template.model",
+  "fields": {
+    "submodule": [
+      {
+        "type": "required",
+        "fieldType": "T",
+        "ressource": "TEMPLATE_SUMMARY.MSG_SUBMODULE_REQ"
+      }
+    ],
+    "module": [
+      {
+        "type": "required",
+        "fieldType": "T",
+        "ressource": "TEMPLATE_SUMMARY.MSG_MODULE_REQ"
+      }
+    ],
+    "name": [
+      {
+        "type": "required",
+        "ressource": "EDIT_TEMPLATE.MSG_NAME_REQ"
+      }
+    ],
+    "templateColumnList": [
+      {
+        "type": "required",
+        "fieldType": "A",
+        "ressource": "EDIT_TEMPLATE.MSG_COLUMNLIST_REQ"
+      }
+    ]
+
+  }
+
+}

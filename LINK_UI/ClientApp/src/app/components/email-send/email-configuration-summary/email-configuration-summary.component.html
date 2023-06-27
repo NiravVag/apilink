@@ -1,0 +1,370 @@
+<div class="main-wrapper">
+    <div class="wrapper dashboard-wrapper">
+        <div class="my-container">
+            <div class="master-body">
+                <div class="title-container">
+                    <h3 class="main-title">
+                        {{ 'EMAIL_CONFIGURATION_SUMMARY.LBL_TITLE' | translate }}</h3>
+                </div>
+                <div class="content-container quotation-container">
+                    <div [@expandCollapse]="isFilterOpen ? 'open' : 'close'"
+                        class="centerContainerPadding common-filter-container">
+                        <div class="animated-icon-container" (click)="toggleFilterSection()"
+                            *ngIf="(model.items && model.items.length>0)">
+                            <img src="assets/images/cta-close-grey.svg" alt="close">
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-4 col-md-4 col-lg-4">
+                                <div class="my-input-group marginTop10 select-for-filter">
+                                    <label>{{ 'EMAIL_CONFIGURATION_SUMMARY.LBL_CUSTOMER' | translate }}</label>
+                                    <ng-select [virtualScroll]="true" bindLabel="name" bindValue="id"
+                                    [minTermLength]="3" appendTo="body"
+                                    [items]="masterModel.customerList" [loading]="masterModel.customerLoading"
+                                        placeholder="--- {{ (masterModel.customerList!=null && masterModel.customerList.length!=0? 'COMMON.LBL_SELECT':'COMMON.LBL_NO_DATA' ) | translate }} ---"
+                                        [typeahead]="masterModel.customerInput"
+                                        (change)="changeCustomer($event)"
+                                        [(ngModel)]="model.customerId"
+                                        (clear)="clearCustomer()"
+                                        (scrollToEnd)="getCustomerData()" #select>
+                                        <ng-template ng-option-tmp let-item="item">
+                                            <div class="text-wrap"><span>{{item.name}}</span></div>
+                                        </ng-template>
+                                    </ng-select>
+                                </div>
+                            </div>
+                            <div class="col-sm-4 col-md-4 col-lg-4">
+                                <div class="my-input-group marginTop10 select-for-filter">
+                                    <label for="">{{'EMAIL_CONFIGURATION.LBL_ES_TYPE' | translate}}</label>
+                                    <ng-select appendTo="body" [items]="masterModel.esTypeList"
+                                        [loading]="masterModel.esTypeLoading" bindLabel="name" bindValue="id"
+                                        placeholder="--- {{ (masterModel.esTypeList && masterModel.esTypeList.length>0? 'COMMON.LBL_SELECT':'COMMON.LBL_NO_DATA' ) | translate }} ---"
+                                         [(ngModel)]="model.typeId">
+                                         <ng-template ng-option-tmp let-item="item">
+                                            <div class="text-wrap"><span>{{item.name}}</span></div>
+                                        </ng-template>
+                                    </ng-select>
+                                </div>
+                            </div>
+                            <div class="col-sm-3 col-md-3 col-lg-3">
+                                <div class="my-input-group marginTop10 select-for-filter">
+                                    <label>{{ 'EMAIL_CONFIGURATION_SUMMARY.LBL_SERVICE_TYPE' | translate }}</label>
+                                    <ng-select appendTo="body" [items]="masterModel.serviceTypeList"
+                                    [loading]="masterModel.serviceTypeLoading" bindLabel="name" bindValue="id"
+                                    placeholder="--- {{ (masterModel.serviceTypeList && masterModel.serviceTypeList.length>0? 'COMMON.LBL_SELECT':'COMMON.LBL_NO_DATA' ) | translate }} ---"
+                                    [(ngModel)]="model.serviceTypeIdList" class="multiple" [multiple] = "true">
+
+                                    <ng-template ng-option-tmp let-item="item">
+                                        <div class="text-wrap"><span>{{item.name}}</span></div>
+                                    </ng-template>
+                                </ng-select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row" [hidden]="!toggleFormSection">
+                            <div class="col-sm-4 col-md-4 col-lg-4">
+                                <div class="my-input-group marginTop10 select-for-filter">
+                                    <label>{{ 'EMAIL_CONFIGURATION_SUMMARY.LBL_DEPARTMENT' | translate }}</label>
+                                    <ng-select appendTo="body" [items]="masterModel.departmentList" [virtualScroll]="true"
+								[loading]="masterModel.departmentLoading" bindLabel="name" bindValue="id"
+								placeholder="--- {{ (masterModel.departmentList && masterModel.departmentList.length>0? 'COMMON.LBL_SELECT':'COMMON.LBL_NO_DATA' ) | translate }} ---"
+								[typeahead]="masterModel.departmentInput" [minTermLength]="3" (clear)="clearDepartment()"
+								[(ngModel)]="model.departmentIdList" [multiple]="true" class="multiple"
+								(scrollToEnd)="getDeptData()" #select>
+
+                                <ng-template ng-option-tmp let-item="item">
+                                    <div class="text-wrap"><span>{{item.name}}</span></div>
+                                </ng-template>
+							</ng-select>
+                                </div>
+                            </div>
+                            <div class="col-sm-4 col-md-4 col-lg-4">
+                                <div class="my-input-group marginTop10 select-for-filter">
+                                    <label>{{ 'EMAIL_CONFIGURATION_SUMMARY.LBL_BRAND' | translate }}</label>
+                                    <ng-select appendTo="body" [items]="masterModel.brandList" [virtualScroll]="true"
+								[loading]="masterModel.brandLoading" bindLabel="name" bindValue="id"
+								placeholder="--- {{ (masterModel.brandList && masterModel.brandList.length>0? 'COMMON.LBL_SELECT':'COMMON.LBL_NO_DATA' ) | translate }} ---"
+								[typeahead]="masterModel.brandInput" [minTermLength]="3" (clear)="clearBrand()"
+								[(ngModel)]="model.brandIdList" [multiple]="true" class="multiple"
+								(scrollToEnd)="getBrandData()" #select>
+
+                                <ng-template ng-option-tmp let-item="item">
+                                    <div class="text-wrap"><span>{{item.name}}</span></div>
+                                </ng-template>
+							</ng-select>
+                                </div>
+                            </div>
+                            <div class="col-sm-4 col-md-4 col-lg-4">
+                                <div class="my-input-group marginTop10 select-for-filter">
+                                    <label>{{ 'EMAIL_CONFIGURATION_SUMMARY.LBL_OFFICE' | translate }}</label>
+                                    <ng-select appendTo="body" [items]="masterModel.officeList"
+                                    [loading]="masterModel.officeLoading" bindLabel="name" bindValue="id"
+                                    placeholder="--- {{ (masterModel.officeList && masterModel.officeList.length>0? 'COMMON.LBL_SELECT':'COMMON.LBL_NO_DATA' ) | translate }} ---"
+                                     [(ngModel)]="model.officeIdList" class="multiple" [multiple]="true">
+                                    <ng-template ng-option-tmp let-item="item">
+                                        <div class="text-wrap"><span>{{item.name}}</span></div>
+                                    </ng-template>
+                                </ng-select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row" [hidden]="!toggleFormSection">
+                            <div class="col-sm-4 col-md-4 col-lg-4">
+                                <div class="my-input-group marginTop10 select-for-filter">
+                                    <label>{{ 'EMAIL_CONFIGURATION_SUMMARY.LBL_FACTORY_COUNTRY' | translate }}</label>
+                                    <ng-select [virtualScroll]="true" bindLabel="name" bindValue="id"
+                                    class="multiple"
+                                    [minTermLength]="3" #select appendTo="body"
+                                    [clearable]="true"
+                                    [items]="masterModel.factoryCountryList" [loading]="masterModel.factoryCountryLoading"
+                                        placeholder="--- {{ (masterModel.factoryCountryList!=null && masterModel.factoryCountryList.length!=0? 'COMMON.LBL_SELECT':'COMMON.LBL_NO_DATA' ) | translate }} ---"
+                                        [typeahead]="masterModel.factoryCountryInput" (clear)="clearCountry()"
+                                        [(ngModel)]="model.factoryCountryIdList" [multiple]="true"
+                                        (scrollToEnd)="getCountryData()">
+                                        <ng-template ng-option-tmp let-item="item">
+                                            <div class="text-wrap"><span>{{item.name}}</span></div>
+                                        </ng-template>
+                                    </ng-select>
+                                </div>
+                            </div>
+                            <div class="col-sm-4 col-md-4 col-lg-4">
+                                <div class="my-input-group marginTop10 select-for-filter">
+                                    <label>{{ 'EMAIL_CONFIGURATION_SUMMARY.LBL_PRODUCT_CATEGORY' | translate }}</label>
+                                    <ng-select appendTo="body" [items]="masterModel.productCategoryList"
+                                    [loading]="masterModel.productCategoryLoading" bindLabel="name" bindValue="id"
+                                    placeholder="--- {{ (masterModel.productCategoryList && masterModel.productCategoryList.length>0? 'COMMON.LBL_SELECT':'COMMON.LBL_NO_DATA' ) | translate }} ---"
+                                     [(ngModel)]="model.productCategoryIdList" class="multiple" [multiple] = "true">
+
+                                    <ng-template ng-option-tmp let-item="item">
+                                        <div class="text-wrap"><span>{{item.name}}</span></div>
+                                    </ng-template>
+                                </ng-select>
+                                </div>
+                            </div>
+                            <div class="col-sm-4 col-md-4 col-lg-4">
+                                <div class="my-input-group marginTop10 select-for-filter">
+                                    <label>{{ 'EMAIL_CONFIGURATION_SUMMARY.LBL_API_RESULT' | translate }}</label>
+                                    <ng-select appendTo="body" [items]="masterModel.apiResultList"
+                                    [loading]="masterModel.apiResultLoading" bindLabel="name" bindValue="id"
+                                    placeholder="--- {{ (masterModel.apiResultList && masterModel.apiResultList.length>0? 'COMMON.LBL_SELECT':'COMMON.LBL_NO_DATA' ) | translate }} ---"
+                                     [(ngModel)]="model.resultIdList" class="multiple" [multiple] = "true">
+
+                                    <ng-template ng-option-tmp let-item="item">
+                                        <div class="text-wrap"><span>{{item.name}}</span></div>
+                                    </ng-template>
+                                </ng-select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row" [hidden]="!toggleFormSection">
+                            <div class="col-sm-4 col-md-4 col-lg-4">
+                                <div class="my-input-group marginTop10 select-for-filter">
+                                    <label>{{ 'EMAIL_CONFIGURATION_SUMMARY.LBL_SERVICE' | translate }}</label>
+                                    <ng-select appendTo="body" [items]="masterModel.serviceList"
+                                        [loading]="masterModel.serviceLoading" bindLabel="name" bindValue="id"
+                                        placeholder="--- {{ (masterModel.serviceList && masterModel.serviceList.length>0? 'COMMON.LBL_SELECT':'COMMON.LBL_NO_DATA' ) | translate }} ---"
+                                         [(ngModel)]="model.serviceId" (change)="changeService()"
+                                    [ngClass]="{ 'is-invalid':  !validator.isValid('serviceId')}">
+                                        <ng-template ng-option-tmp let-item="item">
+                                            <div class="text-wrap"><span>{{item.name}}</span></div>
+                                        </ng-template>
+                                    </ng-select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row marginTop25">
+                            <div class="col-6 col-sm-6">
+                                <button class="tertiary-cta small" (click)="toggleSection()">
+                                    <span class="icon" *ngIf="!toggleFormSection">+</span>
+                                    <span class="icon" *ngIf="toggleFormSection">-</span>
+                                    {{'COMMON.LBL_ADVANCED_SEARCH' | translate}}
+                                </button>
+
+                            </div>
+                            <div class="col-6 col-sm-6 text-right mt-3 mt-sm-0">
+                                <button class="category-cta small mr-2 common-tooltip common-tooltip-top-2"
+                                    data-tooltip="Reset" [disabled]="masterModel.searchLoading" (click)="reset()">
+                                    <img src="assets/images/reload-new.svg" alt="Reset">
+                                    <span>{{'COMMON.LBL_RESET'| translate}}</span>
+                                </button>
+                                <button id="btnAdd" class="secondary-cta small"
+                                    (click)="NavigatenewPath('emailconfig/config')">
+                                    + {{ 'COMMON.LBL_NEW' | translate }}
+                                </button>
+                                &nbsp;
+                                <button class="primary-cta small" [disabled]="masterModel.searchLoading"
+                                    (click)="SearchDetails()"> {{ 'COMMON.LBL_SEARCH' | translate }}
+                                    <span *ngIf="masterModel.searchLoading">
+                                        <i class="fa fa-refresh fa-spin" aria-hidden="true"></i>
+                                    </span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="centerContainerPadding float-left" *ngIf="(model.items && model.items.length>0)">
+                        <div class="row">
+                            <div class="col-6 col-sm-3 col-xl-2 d-flex">
+                                <p class="search-trigger-heading" [innerHtml]="showPaginationText()"></p>
+                            </div>
+                            <div class="col-6 col-sm-9 col-xl-10 text-right">
+                                <div class="animated-icon-container" *ngIf="!isFilterOpen"
+                                    (click)="toggleFilterSection()">
+                                    <img src="assets/images/cta-search-grey.svg" alt="search">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row mt-3 desktop-hide">
+                            <div class="col-sm-12">
+
+                            </div>
+                        </div>
+
+                        <div class="quotation-search-container">
+                            <div class="table-container h-scroll table-max-height-550">
+                                <table class="pagination-table simple-table bordered">
+                                    <thead>
+                                        <tr class="sticky-top-row">
+                                            <th class="width-20">{{'COMMON.LBL_MODIFY' | translate}}</th>
+                                            <th class="width-20">{{'COMMON.LBL_COPY' | translate}}</th>
+                                            <th class="width-20">{{'COMMON.LBL_DELETE' | translate}}</th>
+                                            <th class="width-100">{{'EMAIL_CONFIGURATION_SUMMARY.LBL_CUSTOMER' | translate}}
+                                            </th>
+                                            <th class="width-100">{{'EMAIL_CONFIGURATION_SUMMARY.LBL_SERVICE_TYPE' | translate }}
+                                            </th>
+                                            <th class="width-100">{{'EMAIL_CONFIGURATION_SUMMARY.LBL_REPORT_SEND_TYPE' | translate }}
+                                            </th>
+                                            <th class="width-100">{{'EMAIL_CONFIGURATION.LBL_ES_TYPE' | translate }}
+                                            </th>
+                                            <th class="width-100">{{'EMAIL_CONFIGURATION_SUMMARY.LBL_SERVICE' | translate }}
+                                            </th>
+                                            <th class="width-100">{{'EMAIL_CONFIGURATION_SUMMARY.LBL_REPORT_IN_EMAIL' | translate }}
+                                            </th>
+                                            <th class="width-100">
+                                                {{'EMAIL_CONFIGURATION_SUMMARY.LBL_OFFICE' | translate
+                                                }}</th>
+                                            <th class="width-100">
+                                                {{'EMAIL_CONFIGURATION_SUMMARY.LBL_FACTORY_COUNTRY' | translate
+                                                }}</th>
+                                            <th class="width-100">
+                                                {{'EMAIL_CONFIGURATION_SUMMARY.LBL_DEPARTMENT' | translate
+                                                }}</th>
+                                            <th class="width-100">
+                                                {{'EMAIL_CONFIGURATION_SUMMARY.LBL_BRAND' | translate
+                                                }}</th>
+                                            <th class="width-100">
+                                                {{'EMAIL_CONFIGURATION_SUMMARY.LBL_PRODUCT_CATEGORY' | translate
+                                                }}</th>
+                                            <th class="width-100">
+                                                {{'EMAIL_CONFIGURATION_SUMMARY.LBL_API_RESULT' | translate
+                                                }}</th>
+                                            <th class="width-100">{{'COMMON.LBL_CREATED_BY' | translate}}</th>
+                                            <th class="width-100">{{'COMMON.LBL_CREATED_ON' | translate}}</th>
+                                            <th class="width-100">{{'COMMON.LBL_UPDATED_BY' | translate}}</th>
+                                            <th class="width-100">{{'COMMON.LBL_UPDATED_ON' | translate}}</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <ng-template ngFor let-iteminfo [ngForOf]="model.items" let-i="index">
+                                            <tr [ngClass]="(((i+1) % 2)== 0)?'even':'odd'">
+                                                <td class="Center_Middle width-20"><a
+                                                        (click)="redirectRegisterPage(iteminfo.emailConfigId,1)"><span
+                                                            class="table-cta icon-cta common-tooltip"
+                                                            data-tooltip="Modify">
+                                                            <img src="assets/images/cta-edit.svg" alt="Modify">
+                                                        </span></a>
+                                                </td>
+                                                <td class="Center_Middle width-20"><a
+                                                    (click)="redirectRegisterPage(iteminfo.emailConfigId,0)"><span
+                                                        class="table-cta icon-cta common-tooltip"
+                                                        data-tooltip="Copy">
+                                                        <img src="assets/images/cta-combine.svg" alt="Copy">
+                                                    </span></a>
+                                            </td>
+                                                <td class="Center_Middle width-20"><a
+                                                        (click)="openConfirm(iteminfo.emailConfigId, content)">
+                                                        <span class="table-cta icon-cta common-tooltip"
+                                                            data-tooltip="Delete">
+                                                            <img src="assets/images/cta-delete.svg" alt="Delete">
+                                                        </span>
+                                                    </a>
+                                                </td>
+                                                <td class="width-100">{{iteminfo.customerName}}</td>
+                                                <td class="width-100">{{iteminfo.serviceTypeName}}</td>
+                                                <td class="width-100">{{iteminfo.reportSendType}}</td>
+                                                <td class="width-100">{{iteminfo.emailTypeName}}</td>
+                                                <td class="width-100">{{iteminfo.service}}</td>
+                                                <td class="width-100">{{iteminfo.reportinemail}}</td>
+                                                <td class="width-100">{{iteminfo.officeName}}</td>
+                                                <td class="width-100">{{iteminfo.factoryCountryName}}</td>
+                                                <td class="width-100">{{iteminfo.departmentName}}</td>
+                                                <td class="width-100">{{iteminfo.brandName}}</td>
+                                                <td class="width-100">{{iteminfo.productCategoryName}}</td>
+                                                <td class="width-100">{{iteminfo.resultName}}</td>
+                                                <td class="width-100">{{iteminfo.createdBy}}</td>
+                                                <td class="width-100">{{iteminfo.createdOn}}</td>
+                                                <td class="width-100">{{iteminfo.updatedBy}}</td>
+                                                <td class="width-100">{{iteminfo.updatedOn}}</td>
+                                            </tr>
+                                        </ng-template>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <div class="pagination-container">
+                            <select class="small" [(ngModel)]="selectedPageSize" (change)="SearchDetails()">
+                                <option *ngFor="let item of pagesizeitems" [ngValue]=item>{{item}}</option>
+                            </select>
+                            <ngb-pagination (pageChange)="onPager($event)" [pageSize]="model.pageSize"
+                                [collectionSize]="model.totalCount" [(page)]="model.index" [maxSize]="5">
+                            </ngb-pagination>
+                        </div>
+                    </div>
+                    <div class="centerContainerPadding" *ngIf="model.noFound">
+                        <div class="error-container">
+                            <img src="assets/images/no-result.svg" alt="" class="thumbnail">
+                            <h4 class="error-title">{{'COMMON.LBL_No_ITEM' | translate}}
+                            </h4>
+                            <p class="error-subtitle">{{'COMMON.LBL_NODATA' | translate}}</p>
+
+                            <button (click)="reset()" class="category-cta">
+                                <img src="assets/images/reload-new.svg" alt="reload">
+                                <span> {{'COMMON.MSG_CLEAR_SEARCH' | translate}}</span></button>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+<ng-template #content let-modal>
+    <div class="modal-body">
+        <div class="small-model new-padding">
+            <h2 class="confirm-title"><img class="mr-2" src="assets/images/caution-red.svg" alt="">{{ 'EMAIL_CONFIGURATION_SUMMARY.LBL_CONFIRMDELETION' | translate }}</h2>
+            <p class="light">{{ 'EMAIL_CONFIGURATION_SUMMARY.MSG_QUESTION_SURE' | translate }} </p>
+            <div class="text-right">
+                <button class="tertiary-cta small" (click)="modal.dismiss('Cross click');getId();" [disabled]="masterModel.deleteLoading">
+                    {{ 'COMMON.LBL_CONFIRMCANCEL' | translate }}</button>
+                <button class="primary-cta small" [disabled]="masterModel.deleteLoading" (click)="delete();">{{ 'COMMON.LBL_OK' | translate }}
+                    <span *ngIf="masterModel.deleteLoading">
+                        <i class="fa fa-refresh fa-spin" aria-hidden="true"></i>
+                    </span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+        <!-- <div class="modal-body">
+            <div class="small-model">
+                <h2 class="title">{{ 'COMMON.LBL_CONFIRMDELETION' | translate }} </h2>
+                <p>{{ 'COMMON.MSG_QUESTION_SURE' | translate }}</p>
+                <button class="secondary-cta" (click)="modal.dismiss('Cross click');getId();"
+                [disabled]="masterModel.deleteLoading">
+                {{ 'COMMON.LBL_CONFIRMCANCEL' | translate }}</button>
+                <button class="primary-cta" [disabled]="masterModel.deleteLoading" (click)="delete();">{{ 'COMMON.LBL_OK' | translate }}
+                    <span *ngIf="masterModel.deleteLoading">
+                        <i class="fa fa-refresh fa-spin" aria-hidden="true"></i>
+                    </span>
+                </button>
+            </div>
+        </div> -->
+</ng-template>

@@ -1,0 +1,16 @@
+{
+    "extends": "../tsconfig.json",
+    "angularCompilerOptions": {
+      "entryModule": "app/app.server.module#AppServerModule"
+    }
+,
+  "files": [
+    "main.ts"
+  ],
+  "include": [
+    "src/**/*.d.ts"
+  ],
+  "compilerOptions": {
+    "target": "es2016"
+  }
+}

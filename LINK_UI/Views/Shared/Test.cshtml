@@ -1,0 +1,64 @@
+﻿
+@{
+    ViewData["Title"] = "View";
+}
+
+<xls-sheet name="SheetTest">
+    <table xls-begin="A:1">
+        <tr>
+            <td style="border-style:solid;color:#E5622A;background-color:#5CCA48;font-weight:bold;width:100px">Test titre</td>
+            <td style="border-style:solid;color:#E5622A">Test 4</td>
+            <td style="border-style:solid;font-size:14px">Test 5</td>
+            <td style="border-style:solid;overflow-wrap:break-word">Test 6 very long message  i need to check the wrap for this text</td>
+            <td style="border-style:solid"></td>
+            <td style="border-style:solid">广东奥马电器股份有限公司-一分厂</td>
+        </tr>
+    </table>
+    <table xls-begin="U:1">
+        <tr>
+            <td style="border-style:solid" rowspan="9" width="250px" xls-type ="picture">
+                <img src= "@Url.Content("~/ClientApp/dist/assets/img/logo-lg.png")"  />  
+            </td>
+        </tr>
+    </table>
+    <table xls-begin="D:5" style="border-style:solid">
+        <tr>
+            <th>Test 1</th>
+            <th>Test 2</th>
+            <th>Test 3</th>
+        </tr>
+        <tr>
+            <td>Test 4</td>
+            <td>Test 5</td>
+            <td>Test 6</td>
+        </tr>
+        <tr>
+            <td colspan="2" style="text-align:center">Test 7</td>
+            <td style="background-color:#4286f4">Test 8</td>
+        </tr>
+        <tr>
+            <td style="vertical-align:middle" rowspan="2">Test 9</td>
+            <td xls-type="number" xls-ref ="x">1.256</td>
+            <td xls-type="number" xls-ref ="y">1.253</td>
+            <td xls-type="number" xls-form ="[x]+[y]" xls-format ="0.00" ></td>
+        </tr>
+        <tr>
+            <td style="border-style:solid;background-color:#5CCA48">Test 12</td>
+            <td style="border-style:solid">Test 13</td>
+        </tr>
+    </table>
+
+    <table  xls-begin="J:5" style="border-style:solid">
+        <tr>
+            <td>A</td>
+            <td>B</td>
+            <td>C</td>
+        </tr>
+        <tr>
+            <td>D</td>
+            <td>E</td>
+            <td>F</td>
+        </tr>
+    </table>
+
+</xls-sheet>

@@ -1,0 +1,54 @@
+{
+    "model": "EditWorkLoadMatrixModel",
+    "fields": {
+        "name": [
+            {
+                "fieldType": "N",
+                "type": "required",
+                "ressource": "INTERNAL_PRODUCT.MSG_NAME_REQ"
+            }
+        ],
+        "productCategoryId": [
+            {
+                "type": "required",
+                "fieldType": "N",
+                "ressource": "INTERNAL_PRODUCT.MSG_CAT_REQ"
+            }
+        ],
+        "productSubCategoryId": [
+            {
+                "type": "required",
+                "fieldType": "N",
+                "ressource": "INTERNAL_PRODUCT.MSG_SUB_CAT_REQ"
+            }
+        ],
+        "productSubCategory2Id": [
+            {
+                "type": "required",
+                "fieldType": "N",
+                "ressource": "PRODUCT_CATEGORY_SUB3.MSG_SUB_CAT2_REQ"
+            }
+        ],
+        "productSubCategory3Id": [
+            {
+                "type": "required",
+                "fieldType": "N",
+                "ressource": "PRODUCT_CATEGORY_SUB3.MSG_SUB_CAT3_REQ"
+            }
+        ],
+        "preparationTime": [
+          {
+            "type": "required",
+            "fieldType": "N",
+            "ressource": "PRODUCT_CATEGORY_SUB3.MSG_PREP_TIME"
+          }
+        ],
+        "eightHourSampleSize": [
+          {
+            "type": "required",
+            "fieldType": "N",
+            "ressource": "PRODUCT_CATEGORY_SUB3.MSG_8h_SS"
+          }
+        ]
+    }
+}

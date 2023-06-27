@@ -1,0 +1,38 @@
+{
+    "model": "InspectionBookingsummarymodel",
+    "fields": {
+        "fromdate": [
+            {
+                "type": "required",
+                "fieldType": "D",
+                "ressource": "AUIDT_SUMMARY.MSG_SERVICE_FROMDATE_REQ"
+            },
+            {
+                "type": "isLessOrEqual",
+                "fieldType": "D",
+                "fieldCible": "todate",
+                "ressource": "AUIDT_SUMMARY.MSG_SERVICE_FROMDATE_GREATER_REQ"
+            }
+        ],
+        "todate": [
+            {
+                "type": "required",
+                "fieldType": "D",
+                "ressource": "AUIDT_SUMMARY.MSG_Service_TODATE_REQ"
+            },
+            {
+                "type": "isGreatOrEqual",
+                "fieldType": "D",
+                "fieldCible": "fromdate",
+                "ressource": "AUIDT_SUMMARY.MSG_Service_TODATE_LESS_REQ" 
+            }
+        ],
+        "customerid":[
+          {
+            "type": "required",
+            "fieldType": "N",
+            "ressource": "QUOTATION_SUMMARY.MSG_CUSTOMER_REQ"
+          }
+        ]
+    }
+}

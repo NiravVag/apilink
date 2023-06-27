@@ -1,0 +1,13 @@
+﻿CREATE TABLE [dbo].[Cu_REF_BrandPriority](
+	[Id] [int] IDENTITY(1,1) NOT NULL,
+	[Name] [nvarchar](50) NULL,
+	[Active] [int] NULL,
+	[Sort] [int] NULL,
+ CONSTRAINT [PK_Cu_REF_BrandPriority] PRIMARY KEY CLUSTERED 
+(
+	[Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+
+ALTER TABLE [dbo].[Cu_REF_BrandPriority] ADD  CONSTRAINT [DF_Cu_REF_BrandPriority_Active]  DEFAULT ((1)) FOR [Active]

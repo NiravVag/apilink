@@ -1,0 +1,75 @@
+{
+    "model": "TravelMatrixModel",
+    "fields": {
+        "travelCurrencyId": [
+            {
+                "type": "required",
+                "fieldType": "N",
+                "ressource": "TRAVEL_MATRIX.MSG_TRAVEL_CURRENCY_REQUIRED"
+            }            
+        ],
+        "sourceCurrencyId": [
+            {
+                "type": "required",
+                "fieldType": "N",
+                "ressource": "TRAVEL_MATRIX.MSG_SOURCE_CURRENCY_REQUIRED"
+            }            
+        ],
+        "fixExchangeRate": [
+            {
+                "type": "required",
+                "fieldType": "NP",
+                "ressource": "TRAVEL_MATRIX.MSG_FIXED_RATE_REQUIRED"
+            }            
+        ],
+        "inspPortId": [
+            {
+                "type": "required",
+                "fieldType": "N",
+                "ressource": "TRAVEL_MATRIX.MSG_INSP_PORT_REQUIRED"
+            }            
+        ],
+        "customerId": [
+            {
+                "type": "required",
+                "fieldType": "N",
+                "ressource": "TRAVEL_MATRIX.MSG_CUSTOMER_REQUIRED"
+            }            
+        ],
+        "cityId":[
+            {
+                "type": "required",
+                "fieldType": "N",
+                "ressource": "TRAVEL_MATRIX.MSG_CITY_REQUIRED"
+            }
+        ],
+        "provinceId":[
+            {
+                "type": "required",
+                "fieldType": "N",
+                "ressource": "TRAVEL_MATRIX.MSG_PROVICE_REQUIRED"
+            }
+        ],
+        "countyId":[
+            {
+                "type": "required",
+                "fieldType": "N",
+                "ressource": "TRAVEL_MATRIX.MSG_COUNTY_REQUIRED"
+            }
+        ],
+        "countryId":[
+            {
+                "type": "required",
+                "fieldType": "N",
+                "ressource": "TRAVEL_MATRIX.MSG_COUNTRY_REQUIRED"
+            }
+        ],
+        "tariffTypeId":[
+            {
+                "type": "required",
+                "fieldType": "N",
+                "ressource": "TRAVEL_MATRIX.MSG_TARIFF_TYPE_REQUIRED"
+            }
+        ]    
+    }
+}

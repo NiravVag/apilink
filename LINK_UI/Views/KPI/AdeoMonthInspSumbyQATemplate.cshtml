@@ -1,0 +1,64 @@
+﻿
+@{
+    ViewData["Title"] = "AdeoMonthInspSumbyQATemplate";
+}
+
+@model DTO.Kpi.ExportResult
+
+<xls-sheet name="MonthInspSumByQA">
+    <table xls-begin="A:1" style="border-style:solid">
+        <tr style="background-color:#f5f5f5;font-weight:bold;text-align:center">
+            <th>QA</th>
+            <th>PSI Report No.</th>
+            <th>Inspection date</th>
+            <th>Department</th>
+            <th>PSI result</th>
+            <th>SupplierName</th>
+            <th>Supplier Code</th>
+            <th>Product</th>
+            <th>Reason</th>
+            <th>Next step</th>
+            <th>Detail reason</th>
+            <th>Lab</th>
+            <th>Month</th>
+            <th>Customer Decision</th>
+            <th>Customer Decision Comment</th>
+        </tr>
+        @foreach (var item in Model.Data)
+        {
+            <tr>
+                <td width="150px">@Html.Raw(@item.CustomerContact)</td>
+                <td width="150px">@item.BookingNo</td>
+                <td width="250px">@item.InspectionReportDate</td>
+                <td width="150px">@Html.Raw(@item.DeptCode)</td>
+
+                @if (@item.ReportStatus?.ToLower() == "missing")
+                {
+                    <td width="150px">Fail</td>
+                }
+                else
+                {
+                    <td width="150px">@item.ReportResult</td>
+                }
+
+                <td width="250px">@Html.Raw(@item.SupplierName)</td>
+                <td width="150px">@item.SupplierCode</td>
+                <td></td>
+                <td></td>
+                @if (item.ReinspectionId != 0)
+                {
+                    <td width="150px">@item.ReinspectionId</td>
+                }
+                else
+                {
+                    <td width="150px">@item.BookingNo</td>
+                }
+                <td>@Html.Raw(@item.ReportRemarks)</td>
+                <td>API</td>
+                <td width="150px">@item.Month</td>
+                <td width="150px">@item.CustomerDecision</td>
+                <td width="200px">@item.CustomerDecisionComments</td>
+            </tr>
+        }
+    </table>
+</xls-sheet>

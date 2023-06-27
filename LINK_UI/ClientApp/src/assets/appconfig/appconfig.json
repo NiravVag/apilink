@@ -1,0 +1,38 @@
+{
+  "APP": {
+    "APISERVER": "https://localhost:5001/",
+    "FILESERVER": "https://localhost:44342/",
+    "DEV": true
+  },
+  "TCF": {
+    "userAuthentication": "api/auth/token",
+    "tcfList": "Red",
+    "tcfLanding": "api/project/",
+    "tcfPageInfo": "api/tcf/page/",
+    "tcfScope": "api/tcf/scope/",
+    "tcfScopeDetail": "api/tcf/standard/details/",
+    "standardList": "api/project/standard/",
+    "issuerList": "api/document/issuer/",
+    "typeList": "api/document/type/",
+    "tcfStatusList": "api/stage",
+    "tcfDepartmentList": "api/buyer/department",
+    "downloadAllDocument": "api/project/all/document/download/",
+    "downloadAllValidDocument": "api/project/document/download/",
+    "downloadTCFReport": "api/project/report/download/",
+    "validateTCF": "api/tcf/validate/",
+    "documentTCFList": "api/project/list/",
+    "documentDetailList": "api/tcf/document/list/",
+    "dashBoardStatusList": "api/project/dashboard",
+    "rejectedAnalysisData": "/api/tcf/standard/attachment/dashboard",
+    "rejectedRate": "api/reject/rate/dashboard",
+    "supplierScoreBoard": "api/first/document/dashboard",
+    "specificDocument": "api/download/attachment/",
+    "tcfScopeDashBoardData": "api/tcf/scope/dashboard",
+    "tcfProductImageUpload": "api/project/images/upload/",
+    "tcfInProgress": "api/project/inprogress/dashboard",
+    "supplierScoreDocReceived": "api/tcf/standard/received/document",
+    "supplierScoreDocProvide": "api/tcf/standard/supplier/document/uploader",
+    "supplierScoreDocReviewed": "api/tcf/standard/review/document",
+    "supplierScoreList": "api/tcf/supplier/score/dashboard"
+  }
+}

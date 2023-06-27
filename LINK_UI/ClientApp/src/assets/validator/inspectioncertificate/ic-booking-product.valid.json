@@ -1,0 +1,12 @@
+{
+    "model": "InspectionCertificateBookingRequest",
+    "fields": {
+        "shipmentQty": [
+            {
+                "type": "required",
+                "fieldType": "N",
+                "ressource": "EDIT_INSPECTION_CERTIFICATE.MSG_VALID_SHIPMENT_QTY"
+            }            
+        ]
+    }
+}

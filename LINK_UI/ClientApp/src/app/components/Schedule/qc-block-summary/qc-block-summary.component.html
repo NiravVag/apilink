@@ -1,0 +1,237 @@
+<div class="main-wrapper">
+    <div class="wrapper dashboard-wrapper">
+        <div class="page-head-container whiteBackground">
+            <div class="my-container">
+                <div class="column">
+                    <h3 class="page-title">
+                        {{ 'QC_BLOCK_SUMMARY.LBL_TITLE' | translate }}</h3>
+                </div>
+                <div class="column text-right d-flex align-items-start justify-content-end">
+                    <div class="filter-cta style-4 common-tooltip" *ngIf="!isFilterOpen" (click)="toggleFilterSection()"
+                        data-tooltip="filter">
+                        <img src="assets/images/cta-filter-grey.svg" alt="">
+                    </div>
+                    <div class="filter-cta style-4 active" *ngIf="isFilterOpen" (click)="toggleFilterSection()">
+                        <img src="assets/images/cta-filter-grey.svg" alt="">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="filter-container style-3" [@expandCollapse]="isFilterOpen ? 'open' : 'close'">
+            <div class="my-container customer-dashboard-mobile-filter">
+                <div class="row">
+                    <div class="col-sm-3 col-md-4 col-lg-3">
+                        <div class="my-input-group">
+                            <label>{{ 'QC_BLOCK_SUMMARY.LBL_OFFICE' | translate }}</label>
+                            <ng-select [items]="masterModel.officeList" [virtualScroll]="true"
+                                [loading]="masterModel.officeLoading" bindLabel="name" bindValue="id"
+                                placeholder="--- {{ (masterModel.officeList!=null && masterModel.officeList.length!=0? 'COMMON.LBL_SELECT':'COMMON.LBL_NO_DATA') | translate }} ---"
+                                [typeahead]="masterModel.officeInput" [minTermLength]="3" appendTo="body"
+                                [clearable]="true" class="multiple" [(ngModel)]="model.officeIds"
+                                (change)="changeOffice($event)" [multiple]="true" (scrollToEnd)="getOfficeData()"
+                                [closeOnSelect]="false" #select (clear)="clearOffice()">
+                            </ng-select>
+                        </div>
+                    </div>
+                    <div class="col-sm-3 col-md-3 col-lg-3">
+                        <div class="my-input-group">
+                            <label>{{ 'QC_BLOCK_SUMMARY.LBL_QC' | translate }}</label>
+                            <ng-select [items]="masterModel.qcList" [virtualScroll]="true"
+                                [loading]="masterModel.qcLoading" bindLabel="name" bindValue="id"
+                                placeholder="--- {{ (masterModel.qcList!=null && masterModel.qcList.length!=0? 'COMMON.LBL_SELECT':'COMMON.LBL_NO_DATA') | translate }} ---"
+                                [typeahead]="masterModel.qcInput" [minTermLength]="3" appendTo="body"
+                                [clearable]="true" class="multiple" [(ngModel)]="model.qcIds" [multiple]="true"
+                                (scrollToEnd)="getQCData()" [closeOnSelect]="false" #select (clear)="clearQC()">
+                            </ng-select>
+                        </div>
+                    </div>
+                </div>
+                <div class="row filter-cta-container">
+                    <div class="col-6">
+                    </div>
+
+                    <div class="col-6 text-right">
+
+                        <button class="category-cta small mr-2 common-tooltip common-tooltip-top-2"
+                            data-tooltip="Reset" [disabled]="masterModel.exportDataLoading || masterModel.searchLoading || 
+                            masterModel.officeLoading || masterModel.qcLoading" (click)="Reset()">
+                            <img src="assets/images/reload-new.svg" alt="Reset">
+                            <span>{{'COMMON.LBL_RESET'| translate}}</span>
+                        </button>
+                        <button id="btnAdd" class="secondary-cta small"
+                            (click)="NavigatenewPath('qcblock/edit-qc-block')">
+                            + {{
+                            'COMMON.LBL_NEW' | translate
+                            }}
+                        </button>
+                        &nbsp;
+                        <button class="secondary-cta small mr-2" (click)="export()"
+                            [disabled]="masterModel.exportDataLoading"
+                            *ngIf="model.items != null && model.items.length != 0  && !model.noFound">
+                            <img src="assets/images/red-export.svg" alt="export">
+                            {{ 'COMMON.LBL_EXPORT' | translate }}
+                            <span *ngIf="masterModel.exportDataLoading">
+                                <i class="fa fa-refresh fa-spin" aria-hidden="true"></i>
+                            </span>
+                        </button>
+                        <button class="secondary-cta small mr-2" (click)="deleteQCBlock()"
+                            [disabled]="masterModel.deleteLoading"
+                            *ngIf="model.items != null && model.items.length != 0  && !model.noFound &&
+                            masterModel.isQCBlockSelected">
+                            {{ 'COMMON.LBL_DELETE' | translate }}
+                            <span *ngIf="masterModel.deleteLoading">
+                                <i class="fa fa-refresh fa-spin" aria-hidden="true"></i>
+                            </span>
+                        </button>
+                        <button class="primary-cta small" [disabled]="masterModel.exportDataLoading || masterModel.searchLoading || 
+                            masterModel.officeLoading || masterModel.qcLoading" (click)="SearchDetails()"> {{
+                            'COMMON.LBL_SEARCH' | translate }}
+                            <span *ngIf="masterModel.searchLoading">
+                                <i class="fa fa-refresh fa-spin" aria-hidden="true"></i>
+                            </span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="my-container">
+            <ng-container *ngIf="(model.items && model.items.length>0)">
+                <div class="master-body">
+                    <div class="content-container tracking-container transparent-bg">
+                        <div class="record-count pl-0 pr-0">
+                            <div class="column">
+                                <p class="count" [innerHtml]="showPaginationText()"></p>
+                            </div>
+                        </div>
+                        <div class="table-container">
+                            <table class="pagination-table bordered">
+                                <thead>
+                                    <tr class="sticky-top-row">
+                                        <th class="width-60 Center_Middle">
+                                            <div class="styled-checkbox-container">
+                                                <input class="styled-checkbox"
+                                                    id="checkbookid-all" type="checkbox"
+                                                    [(ngModel)]="masterModel.selectAllCheckbox"
+                                                    (ngModelChange)="changeCheckBoxSelectAll()">
+                                                <label for="checkbookid-all"></label>
+                                            </div>
+                                        </th>
+                                        <!-- {{'COMMON.LBL_DELETE' | translate}} -->
+                                        <th class="width-60">{{'COMMON.LBL_MODIFY' | translate}}</th>
+
+                                        <th class="width-100">{{'QC_BLOCK_SUMMARY.LBL_QC' | translate }}</th>
+                                        <th class="width-160 whitespacenormal wordbreak">
+                                            {{'QC_BLOCK_SUMMARY.LBL_CUSTOMER' | translate }}</th>
+                                        <th class="width-160 whitespacenormal wordbreak">
+                                            {{'QC_BLOCK_SUMMARY.LBL_SUPPLIER' | translate }}</th>
+                                        <th class="width-160 whitespacenormal wordbreak">
+                                            {{'QC_BLOCK_SUMMARY.LBL_FACTORY' | translate}}</th>
+                                        <th class="width-160 whitespacenormal wordbreak">
+                                            {{'QC_BLOCK_SUMMARY.LBL_PRODUCT_CATEGORY' |
+                                            translate}}</th>
+                                        <th class="width-140">{{'QC_BLOCK_SUMMARY.LBL_PRODUCT_SUB_CATEGORY' |
+                                            translate}}</th>
+                                        <th class="width-140">{{'QC_BLOCK_SUMMARY.LBL_PRODUCT_SUB_CATEGORY_2' |
+                                            translate}}</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+
+                                    <ng-template ngFor let-iteminfo [ngForOf]="model.items" let-i="index">
+                                        <tr [ngClass]="(((i+1) % 2)== 0)?'even':'odd'">
+                                            <td class="Center_Middle">
+                                                <div class="styled-checkbox-container">
+                                                    <input class="styled-checkbox"
+                                                        id="checkbookid-{{iteminfo.qcBlockId}}" type="checkbox"
+                                                        [(ngModel)]="iteminfo.isDeleteRow"
+                                                        (ngModelChange)="changeCheckBoxModel(iteminfo)">
+                                                    <label for="checkbookid-{{iteminfo.qcBlockId}}"></label>
+                                                </div>
+                                            </td>
+                                            <td class="Center_Middle"><a
+                                                    (click)="redirectToEdit(iteminfo.qcBlockId)"><span
+                                                        class="table-cta icon-cta common-tooltip"
+                                                        data-tooltip="Modify">
+                                                        <img src="assets/images/cta-edit.svg" alt="Modify">
+                                                    </span></a>
+                                            </td>
+                                            <td class="sticky-left-column">{{iteminfo.qcName}}</td>
+                                            <td class="width-160 whitespacenormal wordbreak">
+                                                {{iteminfo.customerNames}}</td>
+                                            <td class="width-160 whitespacenormal wordbreak">
+                                                {{iteminfo.supplierNames}}</td>
+                                            <td class="width-160 whitespacenormal wordbreak">
+                                                {{iteminfo.factoryNames}}</td>
+                                            <td class="width-160 whitespacenormal wordbreak">
+                                                {{iteminfo.productCategoryNames}}</td>
+                                            <td>{{iteminfo.productCategorySubNames}}</td>
+                                            <td>{{iteminfo.productCategorySub2Names}}</td>
+                                        </tr>
+                                    </ng-template>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="pagination-container">
+                            <div class="page-count-list">
+                                <select class="small" [(ngModel)]="selectedPageSize" (change)="SearchDetails()">
+                                    <option *ngFor="let item of pagesizeitems" [ngValue]=item>{{item}}</option>
+                                </select>
+                                <span> Records per page</span>
+                            </div>
+                            <div class="pagination-action-container text-right">
+                                <ngb-pagination [pageSize]="model.pageSize" [collectionSize]="model.totalCount"
+                                    [boundaryLinks]="true" [(page)]="model.index" [maxSize]="5"
+                                    (pageChange)="onPager($event)">
+                                    <ng-template ngbPaginationFirst>
+                                        <img src="assets/images/new-set/double-arrow.svg" alt="">
+                                    </ng-template>
+                                    <ng-template ngbPaginationPrevious>
+                                        <img src="assets/images/new-set/single-arrow.svg" alt="" class="left-arrow">
+                                    </ng-template>
+                                    <ng-template ngbPaginationNext>
+                                        <img src="assets/images/new-set/single-arrow.svg" alt="" class="right-arrow">
+                                    </ng-template>
+                                    <ng-template ngbPaginationLast>
+                                        <img src="assets/images/new-set/double-arrow.svg" alt=""
+                                            class="right-most-arrow">
+                                    </ng-template>
+                                </ngb-pagination>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </ng-container>
+            <ng-container *ngIf="model.noFound">
+                <div class="master-body">
+                    <div class="error-container plain page-level">
+                        <img src="assets/images/no-result.svg" alt="" class="thumbnail">
+                        <h4 class="error-title">{{'COMMON.LBL_No_ITEM' | translate}}</h4>
+                        <p class="error-subtitle">{{'COMMON.LBL_NODATA' | translate}}</p>
+
+                        <button (click)="Reset()" class="category-cta">
+                            <img src="assets/images/reload-new.svg" alt="reload">
+                            <span> {{'COMMON.MSG_CLEAR_SEARCH' | translate}}</span></button>
+                    </div>
+                </div>
+            </ng-container>
+        </div>
+        <div class="footer landing-footer stick-to-bottom">
+            <div class="my-container">
+                <div class="column">
+                    <p class="text">{{'COMMON.LBL_RIGHTS_RESERVED' | translate}}</p>
+                </div>
+                <div class="column">
+                    <img src="../assets/images/footer-logo.png" alt="logo" class="footer-logo">
+                </div>
+                <div class="column">
+                    <ul class="footer-item">
+                        <li><a href="">{{'COMMON.LBL_USER_GUIDE' | translate}}</a></li>
+                        <li><a href="">{{'COMMON.LBL_CONTACT' | translate}}</a></li>
+                        <li><a href="">{{'COMMON.LBL_HELP' | translate}}</a></li>
+                        <li><a href="">{{'COMMON.LBL_TERMS' | translate}}</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

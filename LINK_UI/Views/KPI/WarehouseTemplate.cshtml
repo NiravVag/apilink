@@ -1,0 +1,60 @@
+﻿@using DTO.Common; 
+@{
+    ViewData["Title"] = "WarehouseTemplate";
+}
+
+@model DTO.Kpi.ExportResult
+
+<xls-sheet name="Warehouse">
+    <table xls-begin="A:1" style="border-style:solid">
+        <tr style="background-color:#f5f5f5;font-weight:bold;text-align:center">
+            <th>Department Name</th>
+            <th>Inspection No</th>
+            <th>QC Name</th>
+            <th>Product Category</th>
+            <th>Customer</th>
+            <th>Factory</th>
+
+            <th>Product Description</th>
+            <th>Po Quantity</th>
+            <th>NoOfManDay</th>
+
+            <th>Factory City</th>
+            <th>Report Result</th>
+
+            <th>Report Remarks</th>
+            <th> Service Data from</th>
+            <th> Service Data To</th>
+            <th>Product Name</th>
+            <th>Factory Country</th>
+
+            <th>Status</th>
+        </tr>
+        @foreach (var item in Model.Data)
+        {
+        <tr>
+            <td width="150px">@item.DeptCode</td>
+            <td width="150px" xls-type="number">@item.BookingNo</td>
+            <td width="150px">@Html.Raw(@item.QcmName)</td>
+            <td width="150px">@Html.Raw(@item.ProductCategory)</td>
+            <td width="150px">@Html.Raw(@item.CustomerName)</td>
+            <td width="150px">@Html.Raw(@item.FactoryName)</td>
+
+            <td width="150px">@Html.Raw(@item.ProductDescription)</td>
+            <td width="150px" xls-type="number">@item.ShipmentQty</td>
+            <td width="150px" xls-type="number">@item.ManDay</td>
+
+            <td width="150px">@Html.Raw(@item.FactoryCity)</td>
+            <td width="150px">@item.ReportResult</td>
+
+            <td width="150px">@Html.Raw(@item.ReportRemarks)</td>
+            <td width="150px" xls-type="date" xls-format="@ApiCommonData.StandardDateFormat">@item.InspectionStartDate</td>
+            <td width="150px" xls-type="date" xls-format="@ApiCommonData.StandardDateFormat">@item.InspectionEndDate</td>
+            <td width="150px">@item.ProductName</td>
+            <td width="150px">@item.FactoryCountry</td>
+
+            <td width="150px">@item.bookingStatus</td>
+        </tr>
+        }
+        </table>
+</xls-sheet>

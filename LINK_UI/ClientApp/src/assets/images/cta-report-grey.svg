@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" id="Component_30_5" width="16" height="16" data-name="Component 30 – 5" viewBox="0 0 16 16">
+    <defs>
+        <style>
+            .cls-2{fill:#afbbcb}.cls-3{fill:#fff}
+        </style>
+    </defs>
+    <path id="Rectangle_1130" fill="none" d="M0 0H16V16H0z" data-name="Rectangle 1130"/>
+    <g id="noun_Document_504765" transform="translate(-7.149 1.678)">
+        <path id="Path_2823" d="M19.437 13.531h-8.576a1.167 1.167 0 0 1-1.166-1.166V1.166A1.167 1.167 0 0 1 10.861 0h6.669a.4.4 0 0 1 .282.116l2.674 2.671a.4.4 0 0 1 .116.282v9.3a1.168 1.168 0 0 1-1.165 1.162z" class="cls-2" data-name="Path 2823" transform="translate(0 -.001)"/>
+        <path id="Path_2824" d="M68.054 3.814h-2.938a.438.438 0 0 1-.438-.438V.437a.438.438 0 0 1 .748-.31l2.939 2.939a.438.438 0 0 1-.31.748zm-2.5-.876H67l-1.446-1.444z" class="cls-2" data-name="Path 2824" transform="translate(-47.89)"/>
+        <path id="Path_2825" d="M31.527 75.929H26.15a.444.444 0 0 1 0-.876h5.377a.444.444 0 0 1 0 .876z" class="cls-3" data-name="Path 2825" transform="translate(-13.689 -64.961)"/>
+        <path id="Path_2826" d="M31.527 58.282H26.15a.444.444 0 0 1 0-.876h5.377a.444.444 0 0 1 0 .876z" class="cls-3" data-name="Path 2826" transform="translate(-13.689 -49.687)"/>
+        <path id="Path_2827" d="M31.527 40.635H26.15a.444.444 0 0 1 0-.876h5.377a.444.444 0 0 1 0 .876z" class="cls-3" data-name="Path 2827" transform="translate(-13.689 -34.413)"/>
+    </g>
+</svg>

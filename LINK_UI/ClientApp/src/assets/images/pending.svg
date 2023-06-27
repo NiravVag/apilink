@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16">
+    <defs>
+        <style>
+            .cls-2{fill:#ff5626;stroke:#ff5626;stroke-width:.3px}
+        </style>
+    </defs>
+    <g id="Group_2933" transform="translate(-23.979 -681.978)">
+        <path id="Rectangle_941" fill="none" d="M0 0H16V16H0z" transform="translate(23.979 681.978)"/>
+        <g id="Group_1647" transform="translate(26.979 684.978)">
+            <g id="Group_1646" transform="translate(0 0)">
+                <circle id="Ellipse_376" cx="1.256" cy="1.256" r="1.256" class="cls-2" transform="translate(4.113)"/>
+                <circle id="Ellipse_377" cx=".754" cy=".754" r=".754" class="cls-2" transform="translate(4.616 9.231)"/>
+                <circle id="Ellipse_378" cx="1.13" cy="1.13" r="1.13" class="cls-2" transform="translate(1.152 1.403)"/>
+                <circle id="Ellipse_379" cx=".628" cy=".628" r=".628" class="cls-2" transform="translate(7.827 8.078)"/>
+                <circle id="Ellipse_380" cx="1.005" cy="1.005" r="1.005" class="cls-2" transform="translate(0 4.616)"/>
+                <circle id="Ellipse_381" cx=".502" cy=".502" r=".502" class="cls-2" transform="translate(9.231 5.118)"/>
+                <path id="Path_1291" d="M4.319 19.463a.879.879 0 1 0 1.243 0 .878.878 0 0 0-1.243 0z" class="cls-2" transform="translate(-2.658 -11.378)"/>
+                <circle id="Ellipse_382" cx=".377" cy=".377" r=".377" class="cls-2" transform="translate(8.078 2.157)"/>
+            </g>
+        </g>
+    </g>
+</svg>

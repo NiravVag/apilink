@@ -1,0 +1,437 @@
+<div class="main-wrapper">
+    <div class="wrapper header-border sticky">
+        <div class="my-container landing-container">
+            <div class="header">
+                <div class="column"></div>
+                <div class="column">
+                    <ul class="navigation-second">
+                        <li class="product-dropdown-wrapper">
+                            <ng-select [items]="entityList" bindLabel="name" bindValue="id" (change)="entityChange($event)" [loading]="entityAccessLoading" [clearable]="false" placeholder="Select" [searchable]="false" [ngModel]="selectedEntity">
+                                <ng-template ng-label-tmp let-item="item">
+                                    <img src="assets/images/{{item.image}}" class="logo-image" alt="">
+                                </ng-template>
+                                <ng-template ng-option-tmp let-item="item" let-index="index" let-search="searchTerm">
+                                    <img src="assets/images/{{item.image}}" class="logo-image" alt="">
+                                </ng-template>
+                            </ng-select>
+                        </li>
+                        <li class="last" [ngClass]="{'active': showUserPanel}">
+                            <div id="userTrigger" class="user-info" (click)="toggle()">
+                                <img [src]="photourl" alt="user" class="user-thumb">
+                                <div class="info-text">
+                                    <p class="text">{{currentUser.fullName}}</p>
+                                </div>
+                                <img src="assets/images/grey-arrow.svg" alt="" class="drop-icon">
+                            </div>
+                            <div class="submenu device-hide" [ngClass]="{'active': showUserPanel}" id="userContainer">
+                                <ul>
+                                    <li>
+                                        <a [routerLink]="['/api/changepassword']">
+                                            <img src="assets/images/setting.svg" alt="settings" class="icon">{{ 'HEADER.LBL_CHANGEPASSWD' | translate }}
+                                        </a>
+                                    </li>
+                                    <li *ngIf="_userTypeId != _internalusertype">
+                                        <a (click)="redirectToProfilePage()">
+                                            <img src="assets/images/user.svg" alt="profile" class="icon">{{ 'USER_PROFILE.TITLE' | translate }}
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a (click)="signOut()">
+                                            <img src="assets/images/logout.svg" alt="logout" class="icon">{{ 'HEADER.LBL_SIGNOUT' | translate }}
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="landing-wrapper">
+        <div class="my-container">
+            <div class="feature-container dashbaord-placeholder-container new-landing-placeholder-container" *ngIf="selectedEntity==apiEntityAccess.SGT">
+                <div class="column sgt-card-container">
+                    <img src="../assets/images/sgt-landing-logo.svg" class="logo">
+                    <h4 class="title">{{ 'HEADER.LBL_SGT_TITLE_1' | translate }}</h4>
+                    <ul class="feature-list">
+                        <li class="feature-list-item">
+                            <img src="../assets/images/visibility.svg" class="feature-icon">
+                            <span class="feature-content">{{ 'HEADER.LBL_SGT_TITLE_2' | translate }}</span>
+                        </li>
+                        <li class="feature-list-item">
+                            <img src="../assets/images/dynamic.svg" class="feature-icon">
+                            <span class="feature-content">{{ 'HEADER.LBL_SGT_TITLE_3' | translate }}</span>
+                        </li>
+                        <li class="feature-list-item">
+                            <img src="../assets/images/textile.svg" class="feature-icon">
+                            <span class="feature-content">{{ 'HEADER.LBL_SGT_TITLE_4' | translate }}</span>
+                        </li>
+                        <li class="feature-list-item">
+                            <img src="../assets/images/roi.svg" class="feature-icon">
+                            <span class="feature-content">{{ 'HEADER.LBL_SGT_TITLE_5' | translate }}</span>
+                        </li>
+                        <li class="feature-list-item">
+                            <img src="../assets/images/lab-icon.svg" class="feature-icon">
+                            <span class="feature-content">{{ 'HEADER.LBL_SGT_TITLE_6' | translate }} </span>
+                        </li>
+                    </ul>
+                    <div class="cta-feature-container">
+                        <div class="column">
+                            <img src="../assets/images/blog.svg" class="blog-icon">
+                            <p class="cta-content">{{ 'HEADER.LBL_SGT_TITLE_8' | translate }}</p>
+                        </div>
+                        <div class="column">
+                            <p class="cta-content"> {{ 'HEADER.LBL_SGT_TITLE_7' | translate }} <sup> {{ 'HEADER.LBL_SGT_TITLE_9' |
+                  translate }}</sup> {{ 'HEADER.LBL_SGT_TITLE_10' | translate }}</p>
+                            <div class="get-app">
+                                <a target="_blank" href="https://apps.apple.com/in/app/sgtlink/id1498430081"><img src="../assets/images/download-app.png" class="google-app"></a>
+                                <a target="_blank" href="https://play.google.com/store/apps/details?id=com.sgtapp"><img src="../assets/images/google-play-store.png" class="google-app"></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- column placeholder start -->
+
+                <div class="column" *ngIf="false">
+                    <div class="rect-common animate width20 mb-5"></div>
+                    <div class="rect-common animate width80"></div>
+                    <div class="rect-common animate width80 mb-5"></div>
+                    <div class="rect-common animate width50"></div>
+                    <div class="rect-common animate width30"></div>
+                    <div class="rect-common animate width20"></div>
+                    <div class="rect-common animate width20"></div>
+                    <div class="cta-feature-container">
+                        <div class="rect-common animate width50"></div>
+                    </div>
+                </div>
+
+                <!-- column placeholder end -->
+
+                <div class="feature-card-container sgt-card-container">
+                    <div class="card-row">
+                        <div (click)="Redirect(apiServiceEnum.Inspection)" [ngClass]="{ 'active': checkUserHasAccess(apiServiceEnum.Inspection)}" class="feature-card">
+                            <img src="assets/images/sgt-inspection.svg" alt="" class="card-icon">
+                            <h4 class="card-title">{{ 'HEADER.LBL_INSPECTION' | translate }}</h4>
+                            <p class="text">{{ 'HEADER.LBL_INSPECTION_SUB_TITLE' | translate }}</p>
+                            <button *ngIf="checkUserHasAccess(apiServiceEnum.Inspection)" class="secondary-cta">{{ 'HEADER.LBL_VIEW' |
+                translate }}</button>
+                            <button *ngIf="!checkUserHasAccess(apiServiceEnum.Inspection)" class="secondary-cta">{{
+                'HEADER.LBL_LEARN_MORE' | translate }}</button>
+                        </div>
+                        <div (click)="Redirect(apiServiceEnum.Audit)" class="feature-card" [ngClass]="{ 'active': checkUserHasAccess(apiServiceEnum.Audit)}">
+                            <img src="assets/images/sgt-audit-card.svg" alt="" class="card-icon">
+                            <h4 class="card-title">{{ 'HEADER.LBL_AUDIT' | translate }}</h4>
+                            <p class="text">{{ 'HEADER.LBL_AUDIT_SUB_TITLE' | translate }}</p>
+                            <button *ngIf="checkUserHasAccess(apiServiceEnum.Audit)" class="secondary-cta">{{ 'HEADER.LBL_VIEW' |
+                translate }}</button>
+                            <button *ngIf="!checkUserHasAccess(apiServiceEnum.Audit)" class="secondary-cta">{{ 'HEADER.LBL_LEARN_MORE'
+                | translate }}</button>
+                        </div>
+                    </div>
+                    <div class="card-row">
+                        <div (click)="Redirect('')" class="feature-card" [ngClass]="{ 'active': checkUserHasAccess(apiServiceEnum.LabTesting)}">
+                            <!-- active-card lab-test-card -->
+                            <img src="assets/images/lab-test-card.svg" alt="" class="card-icon">
+                            <h4 class="card-title">{{ 'HEADER.LBL_LAB' | translate }}</h4>
+                            <p class="text">{{ 'HEADER.LBL_LAB_SUB_TITLE' | translate }}</p>
+                            <button *ngIf="checkUserHasAccess(apiServiceEnum.LabTesting)" class="secondary-cta">{{ 'HEADER.LBL_VIEW' |
+                translate }}</button>
+                            <button *ngIf="!checkUserHasAccess(apiServiceEnum.LabTesting)" class="secondary-cta">{{
+                'HEADER.LBL_LEARN_MORE' | translate }}</button>
+                        </div>
+                        <div (click)="Redirect(apiServiceEnum.Tcf)" class="feature-card" [ngClass]="{ 'active': checkUserHasAccess(apiServiceEnum.Tcf)}">
+                            <!-- active-card tcf-card -->
+                            <img src="assets/images/tcf-card.svg" alt="" class="card-icon">
+                            <h4 class="card-title">{{ 'HEADER.LBL_TCF' | translate }}</h4>
+                            <p class="text">{{ 'HEADER.LBL_TCF_SUB_TITLE' | translate }}</p>
+                            <button *ngIf="checkUserHasAccess(apiServiceEnum.Tcf)" class="secondary-cta">{{ 'HEADER.LBL_VIEW' |
+                translate }}</button>
+                            <button *ngIf="!checkUserHasAccess(apiServiceEnum.Tcf)" class="secondary-cta">{{ 'HEADER.LBL_LEARN_MORE' |
+                translate }}</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- card placeholder start -->
+
+                <div class="feature-card-container sgt-card-container" *ngIf="selectedEntity==apiEntityAccess.AQF">
+                    <div class="row">
+                        <div class="feature-card animate placeholder-card"></div>
+                        <div class="feature-card animate placeholder-card"></div>
+                    </div>
+                    <div class="row">
+                        <div class="feature-card animate placeholder-card"></div>
+                        <div class="feature-card animate placeholder-card"></div>
+                    </div>
+                </div>
+
+                <!-- card placeholder end -->
+
+
+                <div class="cta-feature-container">
+                    <div class="column">
+                        <img src="../assets/images/blog.svg" class="blog-icon">
+                        <p class="cta-content">Visit our blog for the latest industry news</p>
+                    </div>
+                    <hr>
+                    <div class="column">
+                        <p class="cta-content">Download the AQF Link <sup>TM</sup> mobile app</p>
+                        <div class="get-app">
+                            <a target="_blank" href="https://apps.apple.com/in/app/sgtlink/id1498430081"><img src="../assets/images/download-app.png" class="google-app"></a>
+                            <a target="_blank" href="https://play.google.com/store/apps/details?id=com.sgtapp"><img src="../assets/images/google-play-store.png" class="google-app"></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="feature-container" *ngIf="selectedEntity==apiEntityAccess.AQF">
+                <div class="column aqf-card-container">
+                    <img src="../assets/images/landing-logo-2.png" class="logo logo-icon">
+                    <h4 class="title">{{ 'HEADER.LBL_AQF_TITLE_1' | translate }}</h4>
+                    <ul class="feature-list">
+                        <li class="feature-list-item">
+                            <img src="../assets/images/visibility.svg" class="feature-icon">
+                            <span class="feature-content">{{ 'HEADER.LBL_AQF_TITLE_2' | translate }}</span>
+                        </li>
+                        <li class="feature-list-item">
+                            <img src="../assets/images/dynamic.svg" class="feature-icon">
+                            <span class="feature-content">{{ 'HEADER.LBL_AQF_TITLE_3' | translate }}</span>
+                        </li>
+                        <li class="feature-list-item">
+                            <img src="../assets/images/customer-goods.svg" class="feature-icon">
+                            <span class="feature-content">{{ 'HEADER.LBL_AQF_TITLE_4' | translate }}</span>
+                        </li>
+                        <li class="feature-list-item">
+                            <img src="../assets/images/checkbox.svg" class="feature-icon">
+                            <span class="feature-content">{{ 'HEADER.LBL_AQF_TITLE_5' | translate }}</span>
+                        </li>
+                        <li class="feature-list-item">
+                            <img src="../assets/images/layer.svg" class="feature-icon">
+                            <span class="feature-content">{{ 'HEADER.LBL_AQF_TITLE_6' | translate }}</span>
+                        </li>
+                    </ul>
+                    <!-- <div class="cta-feature-container">
+            <div class="column">
+              <img src="../assets/images/blog.svg" class="blog-icon">
+              <p class="cta-content">{{ 'HEADER.LBL_AQF_TITLE_7' | translate }}</p>
+            </div>
+            <div class="column">
+              <p class="cta-content">
+                {{ 'HEADER.LBL_AQF_TITLE_8' | translate }}
+                <sup>{{ 'HEADER.LBL_AQF_TITLE_9' | translate }}</sup>{{ 'HEADER.LBL_AQF_TITLE_10' | translate }}
+              </p>
+              <div class="get-app">
+                <img src="../assets/images/download-app.png" class="google-app">
+                <img src="../assets/images/google-play-store.png" class="google-app">
+              </div>
+            </div>
+          </div> -->
+                </div>
+                <div class="feature-card-container aqf-card-container">
+                    <div class="card-row">
+                        <div (click)="Redirect(apiServiceEnum.Inspection)" [ngClass]="{ 'active': checkUserHasAccess(apiServiceEnum.Inspection)}" class="feature-card">
+                            <img src="assets/images/aqf-inspection.svg" alt="" class="card-icon">
+                            <h4 class="card-title">{{ 'HEADER.LBL_INSPECTION' | translate }}</h4>
+                            <p class="text">{{ 'HEADER.LBL_INSPECTION_SUB_TITLE' | translate }}</p>
+                            <button *ngIf="checkUserHasAccess(apiServiceEnum.Inspection)" class="secondary-cta">{{ 'HEADER.LBL_VIEW' |
+                translate }}</button>
+                            <button *ngIf="!checkUserHasAccess(apiServiceEnum.Inspection)" class="secondary-cta">{{
+                'HEADER.LBL_LEARN_MORE' | translate }}</button>
+                        </div>
+                        <div (click)="Redirect(apiServiceEnum.Audit)" class="feature-card" [ngClass]="{ 'active': checkUserHasAccess(apiServiceEnum.Audit)}">
+                            <img src="assets/images/audit-card.svg" alt="" class="card-icon">
+                            <h4 class="card-title">{{ 'HEADER.LBL_AUDIT' | translate }}</h4>
+                            <p class="text">{{ 'HEADER.LBL_AUDIT_SUB_TITLE' | translate }}</p>
+                            <button *ngIf="checkUserHasAccess(apiServiceEnum.Audit)" class="secondary-cta">{{ 'HEADER.LBL_VIEW' |
+                translate }}</button>
+                            <button *ngIf="!checkUserHasAccess(apiServiceEnum.Audit)" class="secondary-cta">{{ 'HEADER.LBL_LEARN_MORE'
+                | translate }}</button>
+                        </div>
+                    </div>
+                    <div class="card-row">
+                        <div (click)="Redirect('')" class="feature-card" [ngClass]="{ 'active': checkUserHasAccess(apiServiceEnum.LabTesting)}">
+                            <!-- active-card lab-test-card -->
+                            <img src="assets/images/lab-test-card.svg" alt="" class="card-icon">
+                            <h4 class="card-title">{{ 'HEADER.LBL_LAB' | translate }}</h4>
+                            <p class="text">{{ 'HEADER.LBL_LAB_SUB_TITLE' | translate }}</p>
+                            <button *ngIf="checkUserHasAccess(apiServiceEnum.LabTesting)" class="secondary-cta">{{ 'HEADER.LBL_VIEW' |
+                translate }}</button>
+                            <button *ngIf="!checkUserHasAccess(apiServiceEnum.LabTesting)" class="secondary-cta">{{
+                'HEADER.LBL_LEARN_MORE' | translate }}</button>
+                        </div>
+                        <div (click)="Redirect(apiServiceEnum.Tcf)" class="feature-card" [ngClass]="{ 'active': checkUserHasAccess(apiServiceEnum.Tcf)}">
+                            <!-- active-card tcf-card -->
+                            <img src="assets/images/tcf-card.svg" alt="" class="card-icon">
+                            <h4 class="card-title">{{ 'HEADER.LBL_TCF' | translate }}</h4>
+                            <p class="text">{{ 'HEADER.LBL_TCF_SUB_TITLE' | translate }}</p>
+                            <button *ngIf="checkUserHasAccess(apiServiceEnum.Tcf)" class="secondary-cta">{{ 'HEADER.LBL_VIEW' |
+                translate }}</button>
+                            <button *ngIf="!checkUserHasAccess(apiServiceEnum.Tcf)" class="secondary-cta">{{ 'HEADER.LBL_LEARN_MORE' |
+                translate }}</button>
+                        </div>
+                    </div>
+                </div>
+                <!-- <div class="cta-feature-container">
+          <div class="column">
+            <img src="../assets/images/blog.svg" class="blog-icon">
+            <p class="cta-content">Visit our blog for the latest industry news</p>
+          </div>
+          <hr>
+          <div class="column">
+            <p class="cta-content">Download the SgT Link <sup>TM</sup> mobile app</p>
+            <div class="get-app">
+              <a target="_blank" href="https://apps.apple.com/in/app/sgtlink/id1498430081"><img src="../assets/images/download-app.png" class="google-app"></a>
+              <a target="_blank" href="https://play.google.com/store/apps/details?id=com.sgtapp"><img src="../assets/images/google-play-store.png" class="google-app"></a>
+             </div>
+          </div>
+        </div> -->
+            </div>
+            <div class="feature-container" *ngIf="selectedEntity==apiEntityAccess.API">
+                <div class="column api-card-container">
+                    <img src="../assets/images/api-logo-icon.png" class="api-logo">
+                    <h4 class="title">{{ 'HEADER.LBL_API_TITLE_1' | translate }}</h4>
+                    <ul class="feature-list">
+                        <li class="feature-list-item">
+                            <img src="../assets/images/visibility.svg" class="feature-icon">
+                            <span class="feature-content">{{ 'HEADER.LBL_API_TITLE_2' | translate }}</span>
+                        </li>
+                        <li class="feature-list-item">
+                            <img src="../assets/images/dynamic.svg" class="feature-icon">
+                            <span class="feature-content">{{ 'HEADER.LBL_API_TITLE_3' | translate }}</span>
+                        </li>
+                        <li class="feature-list-item">
+                            <img src="../assets/images/toys.svg" class="feature-icon">
+                            <span class="feature-content">{{ 'HEADER.LBL_API_TITLE_4' | translate }}</span>
+                        </li>
+                        <li class="feature-list-item">
+                            <img src="../assets/images/roi.svg" class="feature-icon">
+                            <span class="feature-content">{{ 'HEADER.LBL_API_TITLE_5' | translate }}</span>
+                        </li>
+                        <li class="feature-list-item">
+                            <img src="../assets/images/lab-icon.svg" class="feature-icon">
+                            <span class="feature-content">{{ 'HEADER.LBL_API_TITLE_6' | translate }} </span>
+                        </li>
+                    </ul>
+                    <div class="cta-feature-container">
+                        <div class="column">
+                            <img src="../assets/images/blog.svg" class="blog-icon">
+                            <p class="cta-content">{{ 'HEADER.LBL_API_TITLE_7' | translate }}</p>
+                        </div>
+                        <div class="column">
+                            <p class="cta-content">{{ 'HEADER.LBL_API_TITLE_8' | translate }} <sup>{{ 'HEADER.LBL_API_TITLE_9' |
+                  translate }}</sup> {{ 'HEADER.LBL_API_TITLE_10' | translate }}</p>
+                            <div class="get-app">
+                                <a target="_blank" href="https://apps.apple.com/in/app/apilink/id1518371172"><img src="../assets/images/download-app.png" class="google-app"></a>
+                                <a target="_blank" href="https://play.google.com/store/apps/details?id=com.apihk.apilink"><img src="../assets/images/google-play-store.png" class="google-app"></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="feature-card-container api-card-container">
+                    <div class="card-row">
+                        <div (click)="Redirect(apiServiceEnum.Inspection)" [ngClass]="{ 'active': checkUserHasAccess(apiServiceEnum.Inspection)}" class="feature-card">
+                            <img src="assets/images/api-inspection.svg" alt="" class="card-icon">
+                            <h4 class="card-title">{{ 'HEADER.LBL_INSPECTION' | translate }}</h4>
+                            <p class="text">{{ 'HEADER.LBL_INSPECTION_SUB_TITLE' | translate }}</p>
+                            <button *ngIf="checkUserHasAccess(apiServiceEnum.Inspection)" class="secondary-cta">{{ 'HEADER.LBL_VIEW' |
+                translate }}</button>
+                            <button *ngIf="!checkUserHasAccess(apiServiceEnum.Inspection)" class="secondary-cta">{{
+                'HEADER.LBL_LEARN_MORE' | translate }}</button>
+                        </div>
+                        <div (click)="Redirect(apiServiceEnum.Audit)" class="feature-card" [ngClass]="{ 'active': checkUserHasAccess(apiServiceEnum.Audit)}">
+                            <img src="assets/images/audit-card.svg" alt="" class="card-icon">
+                            <h4 class="card-title">{{ 'HEADER.LBL_AUDIT' | translate }}</h4>
+                            <p class="text">{{ 'HEADER.LBL_AUDIT_SUB_TITLE' | translate }}</p>
+                            <button *ngIf="checkUserHasAccess(apiServiceEnum.Audit)" class="secondary-cta">{{ 'HEADER.LBL_VIEW' |
+                translate }}</button>
+                            <button *ngIf="!checkUserHasAccess(apiServiceEnum.Audit)" class="secondary-cta">{{ 'HEADER.LBL_LEARN_MORE'
+                | translate }}</button>
+                        </div>
+                    </div>
+                    <div class="card-row">
+                        <div (click)="Redirect('')" class="feature-card" [ngClass]="{ 'active': checkUserHasAccess(apiServiceEnum.LabTesting)}">
+                            <!-- active-card lab-test-card -->
+                            <img src="assets/images/lab-test-card.svg" alt="" class="card-icon">
+                            <h4 class="card-title">{{ 'HEADER.LBL_LAB' | translate }}</h4>
+                            <p class="text">{{ 'HEADER.LBL_LAB_SUB_TITLE' | translate }}</p>
+                            <button *ngIf="checkUserHasAccess(apiServiceEnum.LabTesting)" class="secondary-cta">{{ 'HEADER.LBL_VIEW' |
+                translate }}</button>
+                            <button *ngIf="!checkUserHasAccess(apiServiceEnum.LabTesting)" class="secondary-cta">{{
+                'HEADER.LBL_LEARN_MORE' | translate }}</button>
+                        </div>
+                        <div (click)="Redirect(apiServiceEnum.Tcf)" class="feature-card" [ngClass]="{ 'active': checkUserHasAccess(apiServiceEnum.Tcf)}">
+                            <!-- active-card tcf-card -->
+                            <img src="assets/images/tcf-card.svg" alt="" class="card-icon">
+                            <h4 class="card-title">{{ 'HEADER.LBL_TCF' | translate }}</h4>
+                            <p class="text">{{ 'HEADER.LBL_TCF_SUB_TITLE' | translate }}</p>
+                            <button *ngIf="checkUserHasAccess(apiServiceEnum.Tcf)" class="secondary-cta">{{ 'HEADER.LBL_VIEW' |
+                translate }}</button>
+                            <button *ngIf="!checkUserHasAccess(apiServiceEnum.Tcf)" class="secondary-cta">{{ 'HEADER.LBL_LEARN_MORE' |
+                translate }}</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="cta-feature-container">
+                    <div class="column">
+                        <img src="../assets/images/blog.svg" class="blog-icon">
+                        <p class="cta-content">Visit our blog for the latest industry news</p>
+                    </div>
+                    <hr>
+                    <div class="column">
+                        <p class="cta-content">Download the API Link <sup>TM</sup> mobile app</p>
+                        <div class="get-app">
+                            <a target="_blank" href="https://apps.apple.com/in/app/sgtlink/id1498430081"><img src="../assets/images/download-app.png" class="google-app"></a>
+                            <a target="_blank" href="https://play.google.com/store/apps/details?id=com.apihk.apilink"><img src="../assets/images/google-play-store.png" class="google-app"></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="main-footer-container" *ngIf="selectedEntity==apiEntityAccess.AQF">
+        <div class="footer-column">
+            <p>Copyright ® {{year}} – China Quality Focus Ltd, Hong Kong. All Rights Reserved</p>
+        </div>
+        <div class="footer-column">
+            <div><a target="_blank" href="https://www.asiaqualityfocus.com/">AQF Website</a></div>
+            <div><a href="#">Contact</a></div>
+            <div><a href="#">Terms & Conditions</a></div>
+        </div>
+        <div class="footer-column">
+            <img src="../assets/images/footer-new-logo.png" alt="">
+        </div>
+    </div>
+    <div class="main-footer-container" *ngIf="selectedEntity==apiEntityAccess.SGT">
+        <div class="footer-column">
+            <p>Copyright ® {{year}} - SgT Limited, Hong Kong. All Rights Reserved.</p>
+        </div>
+        <div class="footer-column">
+            <div><a target="_blank" href="https://www.sgtgroup.net/en/">SgT Website</a></div>
+            <div><a href="#">Contact</a></div>
+            <div><a href="#">Terms & Conditions</a></div>
+        </div>
+        <div class="footer-column">
+            <img src="../assets/images/footer-new-logo.png" alt="">
+        </div>
+    </div>
+    <div class="main-footer-container" *ngIf="selectedEntity==apiEntityAccess.API">
+        <div class="footer-column">
+            <p>Copyright ® {{year}} – Asia Pacific Inspection Ltd, Hong Kong. All Rights Reserved</p>
+        </div>
+        <div class="footer-column">
+            <div><a target="_blank" href="https://www.api-hk.com/">API Website</a></div>
+            <div><a href="#">Contact</a></div>
+            <div><a href="#">Terms & Conditions</a></div>
+        </div>
+        <div class="footer-column">
+            <img src="../assets/images/footer-new-logo.png" alt="">
+        </div>
+    </div>
+    <div class="loader-overlay" *ngIf="pageLoading">
+        <div class="loader-container">
+            <img src="assets/images/reload.svg" alt="">
+            <span>{{'COMMON.LBL_LOADER' | translate}}</span>
+        </div>
+    </div>
+</div>

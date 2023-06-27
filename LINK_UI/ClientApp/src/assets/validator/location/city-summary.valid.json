@@ -1,0 +1,12 @@
+{
+    "model": "Citysummarymodel",
+    "fields": {
+        "Countryvalues": [
+            {
+                "type": "required",
+                "fieldType": "N",
+                "ressource": "CITY_SUMMARY.MSG_COUNTRY_REQ"
+            }
+        ]
+    }
+}

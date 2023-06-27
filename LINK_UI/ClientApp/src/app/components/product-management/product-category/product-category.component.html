@@ -1,0 +1,113 @@
+<div class="main-wrapper">
+    <div class="wrapper dashboard-wrapper">
+        <div class="my-container">
+            <div class="master-body">
+                <div class="title-container">
+                    <h3 class="main-title">{{ 'PRODUCT_CATEGORY.LBL_PRODUCT' | translate }}</h3>
+                </div>
+                <div class="content-container quotation-container">
+                    <div  class="centerContainerPadding common-filter-container">
+                        
+                            <div class="row">
+                                <div class="col-sm-6 col-md-4 col-lg-4">
+                                    <div class="my-input-group">
+                                        <input [(ngModel)]="modelAdd.id" hidden />
+                                        <label class="required">{{ 'PRODUCT_CATEGORY.LBL_PRODUCT' | translate }}</label>
+                                        <input [(ngModel)]="modelAdd.name"
+                                            [ngClass]="{ 'is-invalid':  !validator.isValid('name')}" type="text"
+                                            maxlength="300"
+                                            placeholder="{{ 'PRODUCT_CATEGORY.PH_NAME' | translate }}" />
+                                        <div *ngIf="!validator.isValid('name')" class="invalid-feedback">
+                                            <div *ngFor="let error of validator.getErrors('name')">
+                                                {{ error | translate }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-sm-6 col-md-4 col-lg-4">
+                                    <div class="my-input-group">
+                                        <label class="control-label required">{{ 'PRODUCT_CATEGORY.LBL_BUSINESSLINE' | translate }}</label>
+                                        <ng-select [items]="businessLineData" [multiple]="false" appendTo="body"
+                                        [closeOnSelect]="true" [searchable]="true" bindLabel="name" bindValue="id"
+                                        [loading]="loading"
+                                        placeholder="{{ 'PRODUCT_CATEGORY.PH_BUSINESSLINE' | translate }}"
+                                        [(ngModel)]="modelAdd.businessLineId"
+                                        [ngClass]="{'is-invalid': !validator.isValid('businessLineId')}" >
+                                        </ng-select>
+                                        <div *ngIf="!validator.isValid('businessLineId')" class="invalid-feedback">
+                                            <div *ngFor="let error of validator.getErrors('businessLineId')">    
+                                                {{ error | translate }}</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        
+                    
+                    <div class="row marginTop25">
+                        <div class="col-12 col-sm-12 text-right mt-3 mt-sm-0"> 
+                            <button class="secondary-cta small" [hidden]="isNewItem" (click)="refresh()">
+                                {{ 'COMMON.LBL_CONFIRMCANCEL' | translate }}
+                            </button>
+                            &nbsp;
+                            <button class="primary-cta small" (click)="save()" [disabled]="saveloading || loading">
+                                {{ isNewItem ? ('COMMON.LBL_SUBMIT' | translate) : ('COMMON.LBL_UPDATE' | translate) }}
+                                <span *ngIf="saveloading">
+                                        <i class="fa fa-refresh fa-spin" aria-hidden="true"></i>
+                                      </span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                    <div class="centerContainerPadding float-left">
+                        <div class="quotation-search-container">
+                            <div class="table-container h-scroll table-max-height-400">
+                                <table class="pagination-table simple-table bordered">
+                                <thead>
+                                  <tr class="sticky-top-row">
+                                    <th class="width-100"></th>
+                                        <th>{{ 'PRODUCT_CATEGORY.LBL_PRODUCT' | translate }}</th>
+                                        <th>{{ 'PRODUCT_CATEGORY.LBL_BUSINESSLINE' | translate }}</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr *ngFor="let item of modelsummary.items">
+                                        <td class="Center_Middle">
+                                            <span class="table-cta icon-cta common-tooltip" 
+                                            (click)="openEdit(item)" data-tooltip="Edit">
+                                            <img src="assets/images/cta-edit.svg" alt="Edit">
+                                        </span>
+                                         &nbsp;
+                                            <span class="table-cta icon-cta common-tooltip" 
+                                            (click)="openConfirm(item,content)" data-tooltip="Delete">
+                                                <img src="assets/images/cta-delete.svg" alt="Delete">
+                                            </span>
+                                        </td>
+                                        <td>{{item.name}}</td>
+                                        <td>{{item.businessLine}}</td>
+                                        
+                                    </tr>
+                                </tbody>
+                            </table>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="pagination-container">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<ng-template #content let-modal>
+    <div class="modal-body">
+        <div class="small-model">
+            <h2 class="title">{{ 'COMMON.LBL_CONFIRMDELETION' | translate }}</h2>
+        <p>{{ 'PRODUCT_CATEGORY.MSG_CONFRMDELETE' | translate }} <strong>{{modelRemove.name}} ?</strong></p>
+            <button class="secondary-cta" (click)="modal.dismiss('Cross click')">{{ 'COMMON.LBL_CONFIRMCANCEL' | translate }}</button>
+           <button class="primary-cta" (click)="deleteProductCategory(modelRemove);">{{ 'COMMON.LBL_OK' | translate }}</button>
+
+        </div>
+    </div>
+</ng-template>

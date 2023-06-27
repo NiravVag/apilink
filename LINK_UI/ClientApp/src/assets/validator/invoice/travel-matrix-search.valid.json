@@ -1,0 +1,12 @@
+{
+    "model": "TravelMatrixSummary",
+    "fields": {
+        "countryId": [
+            {
+                "type": "required",
+                "fieldType": "N",
+                "ressource": "TRAVEL_MATRIX.MSG_COUNTRY_REQUIRED"
+            }            
+        ]
+    }
+}

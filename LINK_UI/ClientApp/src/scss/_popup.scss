@@ -1,0 +1,796 @@
+.mailer-popup{
+
+	.modal-dialog{
+		width: 96%;
+		max-width: 96%;
+
+		@media only screen and (min-width: $tablet-min-width) and (max-width: $tablet-max-width){
+			width: 94%;
+			max-width: 90%;
+		}
+
+		@media only screen and (min-width: $mobile-min-width) and (max-width: $mobile-max-width){
+			width: 94%;
+			max-width: 100%;
+		}
+	}
+
+	.mail-container{
+		display: flex;
+
+		@media only screen and (min-width: $mobile-min-width) and (max-width: $mobile-max-width){
+			flex-direction: column;
+		}
+
+		.column{
+			flex: 1;
+			display: flex;
+			cursor: pointer;
+			position: relative;
+			flex-direction: column;
+
+			&:first-child{
+				flex: 0.4;
+				height: 90vh;
+				max-height: 100vh;
+
+				@media only screen and (min-width: $tablet-min-width) and (max-width: $tablet-max-width){
+					width: 42%;
+					height: 70vh;
+				}
+
+				@media only screen and (min-width: $mobile-min-width) and (max-width: $mobile-max-width){
+					max-height: 260px;
+				}
+			}
+
+			.close-btn{
+				top: 20px;
+				right: 20px;
+				position: absolute;
+			}
+
+			.mail-popup-title{
+				font-size: 24px;
+				color: $primary-color;
+				font-family: $roboto-medium;
+				margin: 34px 34px 20px;
+
+				@media only screen and (min-width: $tablet-min-width) and (max-width: $tablet-max-width){
+					margin: 34px 14px 20px;
+				}
+
+				@media only screen and (min-width: $mobile-min-width) and (max-width: $mobile-max-width){
+					font-size: 16px;
+					margin: 20px 14px 11px;
+				}
+			}
+
+			&:last-child{
+				padding: 60px 34px 34px;
+				background-color: #fbfbfc;
+
+				@media only screen and (min-width: $tablet-min-width) and (max-width: $tablet-max-width){
+					padding: 60px 14px 14px;
+					width: 58%;
+				}
+
+				@media only screen and (min-width: $mobile-min-width) and (max-width: $mobile-max-width){
+					padding: 19px 18px 25px;
+				}
+			}
+
+			.mail-list-container{
+				display: flex;
+				overflow-y: scroll;
+				flex-direction: column;
+
+				&::-webkit-scrollbar-track{
+					border-radius: 10px;
+					background-color: #F5F5F5;
+				}
+
+				&::-webkit-scrollbar{
+					width: 8px;
+					background-color: #F5F5F5;
+				}
+
+				&::-webkit-scrollbar-thumb{
+					border-radius: 10px;
+					background-color: #eee;
+				}
+
+				.mail-item{
+					display: flex;
+					padding: 15px 34px;
+
+					@media only screen and (min-width: $tablet-min-width) and (max-width: $tablet-max-width){
+						padding: 15px 14px;
+					}
+
+					@media only screen and (min-width: $mobile-min-width) and (max-width: $mobile-max-width){
+						padding: 10px 15px;
+					}
+
+					&.active{
+						background-color: #edf0f4;
+					}
+
+					&.error{
+						background-color: #fbebeb;
+					}
+
+					.checkbox-container{
+						margin-right: 10px;
+
+						@media only screen and (min-width: $mobile-min-width) and (max-width: $mobile-max-width){
+							margin-right: 6px;
+						}
+					}
+					
+					.mail-content{
+						display: flex;
+						flex-direction: column;
+
+						.mail-head{
+							font-size: 16px;
+							color: $primary-color;
+							margin-bottom: 12px;
+							font-family: $roboto-medium;
+
+							@media only screen and (min-width: $mobile-min-width) and (max-width: $mobile-max-width){
+								font-size: 12px;
+								margin-bottom: 10px;
+							}
+						}
+
+						.mail-body{
+							margin: 0;
+							font-size: 14px;
+							color: #707275;
+
+							@media only screen and (min-width: $mobile-min-width) and (max-width: $mobile-max-width){
+								font-size: 12px;
+							}
+						}
+					}
+				}
+			}
+
+			.submission{
+				display: flex;
+
+				a{
+					font-size: 14px;
+					color: $brand-color;
+					font-weight: bold;
+					text-decoration: none;
+				}
+			}
+
+			.attachment-count{
+				font-size: 12px;
+				font-weight: 500;
+				color: #a0a1a3;
+				margin-top: 14px;
+				margin-bottom: 10px;
+				font-family: $roboto-medium;
+			}
+
+			.mailer-attachment-container{
+				display: flex;
+				height: 150px;
+				overflow-y: scroll;
+				flex-direction: column;
+
+				&::-webkit-scrollbar-track{
+					border-radius: 10px;
+					background-color: #F5F5F5;
+				}
+
+				&::-webkit-scrollbar{
+					width: 8px;
+					background-color: #F5F5F5;
+				}
+
+				&::-webkit-scrollbar-thumb{
+					border-radius: 10px;
+					background-color: #eee;
+				}
+
+				.attachment-container{
+					display: flex;
+					margin-bottom: 10px;
+
+					@media only screen and (min-width: $mobile-min-width) and (max-width: $mobile-max-width){
+						margin-bottom: 4px;
+					}
+
+					&:last-child{
+						margin-bottom: 0px;
+					}
+					
+					.attachment{
+						display: flex;
+						flex: 1;
+						border-radius: 2px;
+						align-items: center;
+						justify-content: space-between;
+						background-color: #eceff4;
+						padding: 12px 20px;
+						margin-right: 10px;
+
+						@media only screen and (min-width: $mobile-min-width) and (max-width: $mobile-max-width){
+							margin-top: 2px;
+							margin-right: 6px;
+							padding: 6px 20px;
+						}
+						
+						.attached-file{
+							display: flex;
+							align-items: center;
+
+							.icon{
+								height: 22px;
+								margin-right: 10px;
+
+								@media only screen and (min-width: $mobile-min-width) and (max-width: $mobile-max-width){
+									width: 19px;
+									height: 19px;
+									margin-right: 13px;
+								}
+							}
+
+							.name{
+								font-size: 12px;
+								font-weight: 500;
+								color: $primary-color;
+								margin-bottom: 0;
+								font-family: $roboto-medium;
+							}
+
+							span{
+								color: #a0a1a3;
+							}
+						}
+
+						a{
+							img{
+								width: 11px;
+							}
+						}
+					}
+				}
+			}
+
+			.cta-container{
+				display: flex;
+				margin-top: 34px;
+				justify-content: flex-end;
+			}
+		}
+	}
+}
+
+.customer-decision-popup-container{
+
+	@media only screen and (min-width: $mobile-min-width) and (max-width: $mobile-max-width){
+		left: 0;
+		right: 0;
+		bottom: 0;
+		background-color: $white;
+		position: fixed !important;
+		-webkit-border-top-left-radius: 20px;
+		-webkit-border-top-right-radius: 20px;
+		-moz-border-radius-topleft: 20px;
+		-moz-border-radius-topright: 20px;
+		border-top-left-radius: 20px;
+		border-top-right-radius: 20px;
+	}
+
+	.small-model{
+		
+		.customer-head{
+			display: flex;
+			flex-direction: column;
+			padding: 32px 50px 16px 32px;
+
+			@media only screen and (min-width: $mobile-min-width) and (max-width: $mobile-max-width){
+				padding: 32px 32px 16px;
+			}
+
+			.sub-head{
+				display: flex;
+				align-items: center;
+
+				.title{
+					color: $primary-color;
+					font-size: 20px;
+					font-weight: 500;
+					margin-bottom: 0;
+					margin-right: 8px;
+					font-family: $roboto-medium;
+
+					@media only screen and (min-width: $mobile-min-width) and (max-width: $mobile-max-width){
+						font-size: 16px;
+					}
+				}
+
+				.customer-id{
+					display: flex;
+					align-items: center;
+					font-size: 12px;
+					color: #0085cc;
+					font-weight: 500;
+					padding: 4px 8px;
+					border-radius: 24px;
+					font-family: $roboto-medium;
+					background-color: #e5f6ff;
+				}
+			}
+
+			.subheading{
+				font-size: 14px;
+				color: #717276;
+				margin-top: 4px;
+				margin-bottom: 0;
+				font-family: $roboto-regular;
+			}
+		}
+	}
+
+	.customer-decision-popup{
+
+		ul{
+			margin: 0;
+			padding: 0;
+			list-style-type: none;
+
+			li{
+				display: flex;
+				cursor: pointer;
+				margin-top: 1px;
+				padding: 6px 32px;
+				align-items: center;
+				justify-content: space-between;
+
+				&:first-child{
+					margin-top: 0;
+				}
+
+				&.active{
+					background-color: #e5f6ff;
+				}
+
+				.styled-radio-container{
+					padding: 0;
+
+					label{
+						margin: 0;
+
+						&:before{
+							margin: 0;
+						}
+					}
+				}
+			}
+		}
+
+		.decision-input-container{
+			padding: 16px 34px 32px;
+		}
+
+		.comment{
+			margin-bottom: 0;
+		}
+
+		.text-section{
+			margin-top: 4px;
+		}
+
+		.check-email-container{
+			display: flex;
+			align-items: center;
+
+			.email-text{
+				font-size: 12px;
+				color: #414348;
+				font-weight: 500;
+				margin-left: 8px;
+				font-family: $roboto-medium;
+			}
+		}
+
+		.submit{
+			display: flex;
+			margin-top: 12px;
+			justify-content: flex-end;
+		}
+	}
+}
+
+.order-tracking-wrapper{
+
+	.modal-dialog{
+		width: 390px;
+
+		@media only screen and (min-width: $mobile-min-width) and (max-width: $mobile-max-width){
+			width: 100%;
+		}
+	}
+}
+
+.stick-to-bottom{
+
+	.modal-dialog{
+
+		@media only screen and (min-width: $mobile-min-width) and (max-width: $mobile-max-width){
+			bottom: 0;
+			margin: 0;
+			width: 100%;
+			position: absolute;
+		}
+
+		.modal-content{
+
+			@media only screen and (min-width: $mobile-min-width) and (max-width: $mobile-max-width){
+				border-bottom-left-radius: 0;
+				border-bottom-right-radius: 0;
+			}
+		}
+	}
+}
+
+.product-detail-wrapper{
+
+	.modal-dialog{
+		max-width: 810px;
+	}
+
+	.record-count{
+		padding-left: 0 !important;
+	}
+}
+
+.order-tracking-popup-container{
+	padding: 32px;
+	position: relative;
+
+	@media only screen and (min-width: $mobile-min-width) and (max-width: $mobile-max-width){
+		padding: 16px;
+	}
+
+	.po-details-container{
+		display: flex;
+
+		.back-container{
+			margin-right: 12px;
+
+			img{
+				cursor: pointer;
+			}
+		}
+
+		.info-container{
+			flex: 1;
+		}
+	}
+
+	.table-container{
+		margin-bottom: 32px;
+	}
+
+	.close{
+		top: 32px;
+		width: 16px;
+		right: 32px;
+		cursor: pointer;
+		position: absolute;
+
+		@media only screen and (min-width: $mobile-min-width) and (max-width: $mobile-max-width){
+			top: 20px;
+			right: 20px;
+		}
+	}
+
+	.title{
+		color: $primary-color;
+		font-size: 20px;
+		margin-bottom: 4px;
+		font-family: $roboto-medium;
+
+		@media only screen and (min-width: $mobile-min-width) and (max-width: $mobile-max-width){
+			font-size: 18px;
+		}
+
+		span{
+			margin-left: 8px;
+		}
+	}
+
+	.subtitle{
+		margin: 0;
+		color: #717276;
+		font-size: 14px;
+		font-family: $roboto-regular;
+	}
+
+	.record-count{
+
+		.count{
+			color: $primary-color;
+		}
+	}
+
+	.order-timeline{
+		display: flex;
+		margin-top: 24px;
+		position: relative;
+		flex-direction: column;
+
+		&:before{
+			top: 6px;
+			left: 5px;
+			z-index: 1;
+			width: 1px;
+			content: '';
+			height: 89%;
+			position: absolute;
+			border-left: 1px dashed #b7c3d1;
+		}
+
+		.timeline-block{
+			z-index: 10;
+			display: flex;
+			margin-bottom: 24px;
+			align-items: baseline;
+
+			&.inactive{
+
+				.status-title{
+					color: #a0a1a3 !important;
+				}
+
+				.light{
+					color: #d0d0d1;
+				}
+			}
+
+			&:last-child{
+				position: relative;
+
+				&:before{
+					top: 6px;
+					left: 4px;
+					width: 1px;
+					z-index: -1;
+					content: '';
+					height: 100%;
+					position: absolute;
+					border-left: 2px solid $white;
+				}
+			}
+
+			.status{
+				flex: 0.1;
+
+				span{
+					width: 12px;
+					height: 12px;
+					display: block;
+					border-radius: 100%;
+				}
+
+				.complete{
+					background-color: #24c11e;
+				}
+
+				.pending{
+					background-color: $secondary-brand-color;
+				}
+
+				.inactive{
+					background-color: #edf0f4;
+				}
+			}
+
+			.info{
+				flex: 1;
+
+				.status-title{
+					color: $primary-color;
+					font-size: 16px;
+					margin-bottom: 8px;
+					font-family: $roboto-medium;
+
+					@media only screen and (min-width: $mobile-min-width) and (max-width: $mobile-max-width){
+						font-size: 14px;
+					}
+				}
+
+				.light{
+					color: #a0a1a3;
+					font-size: 14px;
+					font-family: $roboto-regular;
+
+					@media only screen and (min-width: $mobile-min-width) and (max-width: $mobile-max-width){
+						font-size: 12px;
+					}
+				}
+
+				.highlight-badge{
+					font-size: 14px;
+				}
+			}
+
+			.missing{
+				color: #0089ff;
+			}
+		}
+	}
+}
+
+.delete-popup-container{
+	padding: 32px;
+
+	@media only screen and (min-width: $mobile-min-width) and (max-width: $mobile-max-width){
+		padding: 16px;
+	}
+
+	.content{
+		display: flex;
+		margin-bottom: 24px;
+
+		img{}
+
+		.title-container{
+			flex: 1;
+			display: flex;
+			margin-left: 16px;
+			flex-direction: column;
+
+			h3{
+				color: $primary-color;
+				font-size: 20px;
+				margin-bottom: 8px;
+				font-family: $roboto-medium;
+			}
+
+			p{
+				margin: 0;
+				color: #717276;
+				font-size: 14px;
+				font-family: $roboto-regular;
+			}
+		}
+	}
+}
+
+.add-booking-product-wrapper{
+
+	.modal-dialog{
+		width: 70%;
+		max-width: 70%;
+
+		@media only screen and (min-width: $tablet-min-width) and (max-width: $tablet-max-width){
+			width: 90%;
+			max-width: 90%;
+		}
+
+		@media only screen and (min-width: $mobile-min-width) and (max-width: $mobile-max-width){
+			width: auto;
+			max-width: inherit;
+		}
+	}
+
+	.common-popup-container{
+		padding: 32px;
+	}
+
+	.add-attachment-container{
+		margin-top: 4px;
+		cursor: pointer;
+		display: inline-block;
+
+		.add-file{
+			color: #717276;
+			font-size: 14px;
+			margin-left: 8px;
+			font-family: $roboto-medium;
+		}
+	}
+
+	.cta-container{
+		display: flex;
+		margin-top: 25px;
+		justify-content: flex-end;
+	}
+}
+
+.upload-image-wrapper{
+
+	.modal-dialog{
+		width: 50%;
+		max-width: 50%;
+	}
+
+	.common-popup-container{
+		padding: 32px;
+	}
+
+	.image-upload-container{
+		display: flex;
+		align-items: center;
+		margin-top: 16px;
+
+		.uploading-process{
+			margin-left: 13px;
+			margin-right: 20px;
+
+			.upload-text{
+				font-size: 12px;
+				color: $primary-color;
+				margin-bottom: 0;
+				font-family: $roboto-regular;
+			}
+
+			.progress-bar{
+				width: 100%;
+				height: 6px;
+				margin-top: 2px;
+				border-radius: 3px;
+				background-color: $secondary-brand-light-color;
+
+				.complete{
+					height: 6px;
+					border-radius: 3px;
+					background-color: $secondary-brand-color;
+				}
+			}
+		}
+	}
+
+	.cta-container{
+		display: flex;
+		margin-top: 16px;
+		justify-content: flex-end;
+	}
+}
+
+.common-popup-container{
+
+	.close{
+		top: 32px;
+		width: 16px;
+		right: 32px;
+		cursor: pointer;
+		position: absolute;
+
+		@media only screen and (min-width: $mobile-min-width) and (max-width: $mobile-max-width){
+			top: 20px;
+			right: 20px;
+		}
+	}
+
+	.title{
+		color: $primary-color;
+		font-size: 20px;
+		margin-bottom: 4px;
+		font-family: $roboto-medium;
+
+		@media only screen and (min-width: $mobile-min-width) and (max-width: $mobile-max-width){
+			font-size: 18px;
+		}
+
+		span{
+			margin-left: 8px;
+		}
+	}
+
+	.subtitle{
+		margin: 0;
+		color: #717276;
+		font-size: 14px;
+		font-family: $roboto-regular;
+	}
+}

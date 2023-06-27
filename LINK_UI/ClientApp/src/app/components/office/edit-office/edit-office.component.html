@@ -1,0 +1,191 @@
+<div class="main-wrapper">
+  <div class="wrapper dashboard-wrapper">
+    <div class="my-container">
+      <div class="master-body">
+        <div class="title-container">
+            <div class="header-back-button" *ngIf="fromSummary && !loading && !intialiseloading">
+                <img src="assets/images/back-red.png" alt="back" (click)="this.return('office/office-summary');">
+                </div>
+          <h3 class="main-title">
+            {{model.id==null?('EDIT_OFFICE.LBL_ADD' | translate):('EDIT_OFFICE.LBL_EDIT' | translate)}}&nbsp; {{
+                    'EDIT_OFFICE.TITLE' |
+                       translate
+                       }}
+          </h3>
+        </div>
+        <div class="content-container">
+          <h4 class="container-head">{{ 'EDIT_OFFICE.LBL_DETAILS' | translate }}</h4>
+          <div class="formPadding">
+            <div class="row">
+              <div class="col-sm-3">
+                <div class="my-input-group">
+                  <label class="required">{{ 'EDIT_OFFICE.LBL_OFFICE' | translate }}</label>
+                  <input maxlength="200" [(ngModel)]="model.name"
+                    placeholder="{{ 'EDIT_OFFICE.PH_OFFICE_NAME' | translate }}" type="text"
+                    [ngClass]="{'is-invalid': !validator.isValid('name')}" />
+                  <div *ngIf="!validator.isValid('name')" class="invalid-feedback">
+                    <div *ngFor="let error of validator.getErrors('name')">{{ error | translate }}</div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-sm-3 mobile-margin-top-15">
+                <div class="my-input-group">
+                  <label>{{ 'EDIT_OFFICE.LBL_OFFICE_CODE' | translate }}</label>
+                  <input maxlength="200" [(ngModel)]="model.officecode"
+                    placeholder="{{ 'EDIT_OFFICE.PH_OFFICE_CODE' | translate }}" type="text" />
+                </div>
+              </div>
+              <div class="col-sm-3 mobile-margin-top-15">
+                <div class="my-input-group">
+                  <label>{{ 'EDIT_OFFICE.LBL_OFFICE_FAX_NO' | translate }}</label>
+                  <input maxlength="200" [(ngModel)]="model.fax"
+                    placeholder="{{ 'EDIT_OFFICE.PH_OFFICE_FAX_NO' | translate }}" type="text" />
+                </div>
+              </div>
+              <div class="col-sm-3 mobile-margin-top-15">
+                <div class="my-input-group">
+                  <label>{{ 'EDIT_OFFICE.LBL_OFFICE_TEL_NO' | translate }}</label>
+                  <input maxlength="200" [(ngModel)]="model.tel"
+                    placeholder="{{ 'EDIT_OFFICE.PH_OFFICE_TEL_NO' | translate }}" type="text" />
+                </div>
+              </div>
+            </div>
+            <div class="row marginTop15">
+              <div class="col-sm-3 mobile-margin-top-15">
+                <div class="my-input-group">
+                  <label>{{ 'EDIT_OFFICE.LBL_OFFICE_ZIP_CODE' | translate }}</label>
+                  <input [(ngModel)]="model.zipcode" placeholder="{{ 'EDIT_OFFICE.PH_OFFICE_ZIP_CODE' | translate }}"
+                    type="number" />
+                </div>
+              </div>
+              <div class="col-sm-3 mobile-margin-top-15">
+                  <div class="my-input-group">
+                    <label>{{ 'EDIT_OFFICE.LBL_OFFICE_EMAIL' | translate }}</label>
+                    <input [(ngModel)]="model.email" #email [ngClass]="{ 'is-invalid': !validator.isValid('email')}"
+                      maxlength="100" placeholder="{{ 'EDIT_OFFICE.PH_OFFICE_EMAIL' | translate }}" type="text" />
+                    <div *ngIf="!validator.isValid('email')" class="invalid-feedback">
+                      <div *ngFor="let error of validator.getErrors('email')">{{ error | translate }}</div>
+                    </div>
+                  </div>
+                </div>
+              <div class="col-sm-3 mobile-margin-top-15">
+                <div class="my-input-group">
+                  <label class="required">{{ 'EDIT_OFFICE.LBL_OFFICE_ADDRESS1' | translate }}</label>
+                  <textarea maxlength="500" [(ngModel)]="model.address"
+                    placeholder="{{ 'EDIT_OFFICE.PH_OFFICE_ADDRESS1' | translate }}"
+                    [ngClass]="{'is-invalid': !validator.isValid('address')}">
+                   </textarea>
+                  <div *ngIf="!validator.isValid('address')" class="invalid-feedback">
+                    <div *ngFor="let error of validator.getErrors('address')">{{ error | translate }}</div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-sm-3 mobile-margin-top-15">
+                <div class="my-input-group">
+                  <label class="required">{{ 'EDIT_OFFICE.LBL_OFFICE_ADDRESS2' | translate }}</label>
+                  <textarea maxlength="500" [(ngModel)]="model.address2"
+                    placeholder="{{ 'EDIT_OFFICE.PH_OFFICE_ADDRESS2' | translate }}"
+                    [ngClass]="{'is-invalid': !validator.isValid('address2')}">
+                      </textarea>
+                  <div *ngIf="!validator.isValid('address2')" class="invalid-feedback">
+                    <div *ngFor="let error of validator.getErrors('address2')">{{ error | translate }}</div>
+                  </div>
+                </div>
+              </div>
+            
+            </div>
+            <div class="row marginTop15">
+              <div class="col-sm-3 mobile-margin-top-15">
+                <div class="my-input-group">
+                  <label class="required">{{ 'EDIT_OFFICE.LBL_OFFICE_TYPE' | translate }}</label>
+                  <select [(ngModel)]="model.locationTypeId"
+                    [ngClass]="{'is-invalid': !validator.isValid('locationTypeId')}">
+                    <option value="0">--- {{ 'EDIT_OFFICE.LBL_SELECT' | translate }}---</option>
+                    <option *ngFor="let item of data.locationTypeList" [ngValue]=item.id>{{item.name}}</option>
+                  </select>
+                  <div *ngIf="!validator.isValid('locationTypeId')" class="invalid-feedback">
+                    <div *ngFor="let error of validator.getErrors('locationTypeId')">{{ error | translate }}</div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-sm-3 mobile-margin-top-15">
+                <div class="my-input-group">
+                  <label>{{ 'EDIT_OFFICE.LBL_HEAD_OFFICE' | translate }}</label>
+                  <select [(ngModel)]="model.headoffice">
+                    <option value="0">--- {{ 'EDIT_OFFICE.LBL_SELECT' | translate }}---</option>
+                    <option *ngFor="let item of data.officeList" [ngValue]=item.id>{{item.name}}</option>
+                  </select>
+                </div>
+              </div>
+              <div class="col-sm-3 mobile-margin-top-15">
+                <div class="my-input-group">
+                  <label class="required">{{ 'EDIT_OFFICE.LBL_COUNTRY' | translate }}</label>
+                  <select [(ngModel)]="model.countryId" (ngModelChange)="onChange($event)" class="form-control"
+                    [ngClass]="{'is-invalid': !validator.isValid('countryId')}">
+                    <option value="0">--- {{ 'EDIT_OFFICE.LBL_SELECT' | translate }}---</option>
+                    <option *ngFor="let item of data.countryList" [ngValue]=item.id>{{item.countryName}}</option>
+                  </select>
+                  <div *ngIf="!validator.isValid('countryId')" class="invalid-feedback">
+                    <div *ngFor="let error of validator.getErrors('countryId')">{{ error | translate }}</div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-sm-3 mobile-margin-top-15">
+                <div class="my-input-group">
+                  <label class="required">{{ 'EDIT_OFFICE.LBL_CITY' | translate }}</label>
+                  <select [(ngModel)]="model.cityId" class="form-control"
+                    [ngClass]="{'is-invalid': !validator.isValid('cityId')}">
+                    <option value="0">--- {{ 'EDIT_OFFICE.LBL_SELECT' | translate }}---</option>
+                    <option *ngFor="let item of cityList" [ngValue]=item.id>{{item.name}}</option>
+                  </select>
+                  <div *ngIf="!validator.isValid('cityId')" class="invalid-feedback">
+                    <div *ngFor="let error of validator.getErrors('cityId')">{{ error | translate }}</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="row marginTop15">
+              <div class="col-sm-3 mobile-margin-top-15 ">
+                <div class="my-input-group">
+                  <label class="required">{{ 'EDIT_OFFICE.LBL_OPERATION_COUNTRIES' | translate }}</label>
+                  <ng-select class="multiple"
+                    [ngClass]="{ 'is-invalid': !validator.isValid('operationcountries')}"
+                    [items]="data.countryList" [hideSelected]="true" [multiple]="true" [closeOnSelect]="false"
+                    [loading]="loading" [searchable]="true" [closeOnSelect]="false" bindLabel="countryName"
+                    bindValue="id" [(ngModel)]="model.operationcountries"
+                    placeholder="--- {{ 'EDIT_OFFICE.LBL_SELECT' | translate }} ---">
+                  </ng-select>
+                  <div *ngIf="!validator.isValid('operationcountries')" class="invalid-feedback" style="display:block">
+                    <div *ngFor="let error of validator.getErrors('operationcountries')">{{ error | translate }}</div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-sm-3 mobile-margin-top-15">
+                <div class="my-input-group">
+                  <label>{{ 'EDIT_OFFICE.LBL_OFFICE_COMMENT' | translate }}</label>
+                  <textarea maxlength="500" [(ngModel)]="model.comment"
+                    placeholder="{{ 'EDIT_OFFICE.PH_OFFICE_COMMENT' | translate }}">
+                        </textarea>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="form-action-container">
+         
+            <button class="category-cta small mr-2 common-tooltip common-tooltip-top-2" data-tooltip="Reset"
+            [disabled]="loading || intialiseloading" (click)="Reset()">
+              <img src="assets/images/reload-new.svg" alt="Reset">
+              <span>{{'COMMON.LBL_RESET'| translate}}</span>
+            </button>
+            <button class="primary-cta small" [disabled]="loading || intialiseloading" (click)="save()">
+              {{ 'EDIT_OFFICE.LBL_SAVE' | translate }}
+              <span *ngIf="loading">
+                <i class="fa fa-refresh fa-spin" aria-hidden="true"></i>
+              </span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

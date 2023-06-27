@@ -1,0 +1,18 @@
+{
+    "model":"EditProvincemodel",
+    "fields": {
+        "name": [
+            {
+                "type": "required",
+                "ressource": "EDIT_PROVINCE.MSG_REGION_NAME_REQ"
+            }
+        ],
+        "countryid": [
+            {
+              "type": "required",
+              "fieldType": "N",
+              "ressource": "EDIT_PROVINCE.MSG_COUNTRY_NAME_REQ"
+            }
+          ]
+    }
+}

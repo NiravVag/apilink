@@ -1,0 +1,9 @@
+﻿
+CREATE TABLE  HR_Profile
+(
+	Id INT NOT NULL IDENTITY(1,1) PRIMARY KEY,
+	ProfileName NVARCHAR(200) NOT NULL,
+	Active BIT NOT NULL,
+	[EntityId] INT NULL, 
+	FOREIGN KEY([EntityId]) REFERENCES [AP_Entity](Id)
+)

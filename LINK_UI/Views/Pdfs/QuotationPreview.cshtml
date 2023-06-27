@@ -1,0 +1,22 @@
+﻿
+<pdf-title>Test Quotation</pdf-title>
+<pdf-header style="border-color:black; border-style:solid">
+    <pdf-container>
+        <img src="@Url.Content("~/ClientApp/dist/assets/img/logo-lg.png")" />
+        <pdf-container>
+            ASIA PACIFIC INSPECTION LTD \n
+            Room 506-508, Laford Centre, 838 Lai Chi Kok Road, \n
+            Cheung Sha Wan, Kowloon, Hong Kong \n
+            Tel: +852-3719 8611    Fax: +852-2377 0028 \n
+            E-mail: api@api-hk.com     Home Page:http://www.api-hk.com
+        </pdf-container>
+    </pdf-container>
+</pdf-header>
+<pdf-page style="text-align:left;vertical-align:middle">
+    Test quotation text
+</pdf-page>
+
+<pdf-footer>
+    <pdf-container>%DATE%</pdf-container>
+    <pdf-container>%PAGE%</pdf-container>
+</pdf-footer>

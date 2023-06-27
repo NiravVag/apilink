@@ -1,0 +1,20 @@
+<div class="file-upload-container" (click)="inputFileUpload($event)" [ngStyle]="{'display': Bigupload?'flex':'none'}">
+	<img src="assets/images/new-set/upload-big.svg" class="upload-icon">
+	<div class="upload-here">
+		<h3 class="upload-title">Upload files here</h3>
+		<p class="upload-content drop-file">Drop files to upload, <span>or select file to upload</span></p>
+	</div>
+	<input type="file" name="fileHandler" multiple="multiple" style="display: none;" [(ngModel)]="inputFiles"
+		(change)="inputFileUpload($event)" #fileHandler>
+</div>
+
+<div class="custom-file-uploader " *ngIf="!Bigupload">
+	<div class="CustomFileupload">
+		<img [src]="[SmallUploadImage]" alt="">
+		<div class="text">
+			<p class="title">{{SmallUploadTitle}}</p>
+			<p class="small-title">{{SmallUploadSubTitle}}</p>
+			<button class="primary-cta small"  >{{SmallUploadButtonText}}</button>
+		</div>
+	</div>
+</div>

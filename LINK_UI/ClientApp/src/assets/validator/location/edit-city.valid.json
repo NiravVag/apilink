@@ -1,0 +1,32 @@
+{
+    "model":"EditCitymodel",
+    "fields": {
+        "name": [
+            {
+                "type": "required",
+                "ressource": "EDIT_CITY.MSG_CITY_NAME_REQ"
+            }
+        ],
+        "provinceid": [
+            {
+              "type": "required",
+              "fieldType": "N",
+              "ressource": "EDIT_CITY.MSG_REGION_NAME_REQ"
+            }
+          ],
+          "officeid": [
+            {
+              "type": "required",
+              "fieldType": "N",
+              "ressource": "EDIT_CITY.MSG_OFF_REQ"
+            }
+          ],
+          "zoneid": [
+            {
+              "type": "required",
+              "fieldType": "N",
+              "ressource": "EDIT_CITY.MSG_ZONE_REQ"
+            }
+          ]
+    }
+}

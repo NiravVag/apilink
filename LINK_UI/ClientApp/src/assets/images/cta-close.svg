@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16">
+    <g id="Component_26_3" data-name="Component 26 – 3" opacity="0.8">
+        <path id="Rectangle_1103" fill="none" d="M0 0H16V16H0z" data-name="Rectangle 1103"/>
+        <g id="noun_cancel_1146436" transform="translate(2.277 2.576)">
+            <path id="Path_2815" fill="#cd2d2f" d="M44.937 43.462a.679.679 0 0 1 0 .983l-.492.492a.679.679 0 0 1-.983 0L39.424 40.9l-4.038 4.038a.679.679 0 0 1-.983 0l-.492-.492a.679.679 0 0 1 0-.983l4.038-4.038-4.038-4.038a.679.679 0 0 1 0-.983l.492-.492a.679.679 0 0 1 .983 0l4.038 4.038 4.038-4.038a.679.679 0 0 1 .983 0l.492.492a.679.679 0 0 1 0 .983L40.9 39.424z" data-name="Path 2815" transform="translate(-33.7 -33.7)"/>
+        </g>
+    </g>
+</svg>
